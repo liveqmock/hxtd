@@ -1,0 +1,569 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=gb2312" />
+<meta name="keywords" content="" />
+<meta name="description" content="" />
+<title></title>
+<link href="css/css.css" rel="stylesheet" type="text/css" />
+<script type="text/javascript" src="js/jquery.min.js"></script>
+<script>
+//初始化
+var def="1";
+function mover(object){
+  //主菜单
+  var mm=document.getElementById("m_"+object);
+  mm.className="m_li_a";
+  //初始主菜单先隐藏效果
+  if(def!=0){
+    var mdef=document.getElementById("m_"+def);
+    mdef.className="m_li";
+  }
+  //子菜单
+  var ss=document.getElementById("s_"+object);
+  ss.style.display="inline-block";
+  //初始子菜单先隐藏效果
+  if(def!=0){
+    var sdef=document.getElementById("s_"+def);
+    sdef.style.display="none";
+  }
+}
+
+function mout(object){
+  //主菜单
+  var mm=document.getElementById("m_"+object);
+  mm.className="m_li";
+  //初始主菜单还原效果
+  if(def!=0){
+    var mdef=document.getElementById("m_"+def);
+    mdef.className="m_li_a";
+  }
+  //子菜单
+  var ss=document.getElementById("s_"+object);
+  ss.style.display="none";
+  //初始子菜单还原效果
+  if(def!=0){
+    var sdef=document.getElementById("s_"+def);
+    sdef.style.display="inline-block";
+  }
+}
+</script>
+<script type="text/javascript">
+ function show_hiddendiv(){
+ 	document.getElementById("hidden_div").style.display='block';
+ 	document.getElementById("_strHref").href='javascript:hidden_showdiv();';
+ 	document.getElementById("_strSpan").innerHTML="高级搜索";
+ }
+ function hidden_showdiv(){
+ 	document.getElementById("hidden_div").style.display='none';
+ 	document.getElementById("_strHref").href='javascript:show_hiddendiv();';
+ 	document.getElementById("_strSpan").innerHTML="高级搜索";
+ }
+</script>
+<script type="text/javascript">
+    var stripe = function() {
+        var tables = document.getElementsByTagName("table");    
+        for(var x=0;x!=tables.length;x++){
+            var table = tables[x];
+            if (! table) { return; }
+            var tbodies = table.getElementsByTagName("tbody");            
+            for (var h = 0; h < tbodies.length; h++) {
+                var even = true;
+                var trs = tbodies[h].getElementsByTagName("tr");                
+                for (var i = 0; i < trs.length; i++) {
+                    trs[i].onmouseover=function(){
+                        this.className += " ruled"; return false
+                    }
+                    trs[i].onmouseout=function(){
+                        this.className = this.className.replace("ruled", ""); return false
+                    }
+                    if(even)
+                        trs[i].className += " even";
+                    even = !even;
+                }
+            }
+        }
+    }
+    window.onload = stripe;
+    </script>
+</head>
+<body style="background:#f9f9f9;">
+	<div class="top">
+		<div class="fl logo"><a href="#"><img src="images/logo.png" alt="" /></a></div>
+		<div class="wrap">
+			<div class="user_mes">
+				<span>今天是04月11日，欢迎您 老板（总经理）</span>  
+				<a href="szym.html" class="frie">设置</a>
+			</div>
+			<div class="menu">
+			
+				<div id="menu">
+					<ul class="nav">
+
+						<li id="m_1" class='m_li_a'><a href="javascript:void(0)">工作台</a></li>
+
+						<li id="m_2" class='m_li' onmouseover='mover(2);' onmouseout='mout(2);'><a href="#">市场营销</a></li>
+
+						<li id="m_3" class='m_li' onmouseover='mover(3);' onmouseout='mout(3);'><a href="#">客户管理</a></li>
+
+						<li id="m_4" class='m_li' onmouseover='mover(4);' onmouseout='mout(4);'><a href="#">项目管理</a></li>
+
+						<li id="m_5" class='m_li' onmouseover='mover(5);' onmouseout='mout(5);'><a href="#">订单管理</a></li>
+
+						<li id="m_6" class='m_li' onmouseover='mover(6);' onmouseout='mout(6);'><a href="#">财务管理</a></li>
+
+						<li id="m_7" class='m_li' onmouseover='mover(7);' onmouseout='mout(7);'><a href="#">销售管理</a></li>
+
+						<li id="m_8" class='m_li' onmouseover='mover(8);' onmouseout='mout(8);'><a href="#">报表管理</a></li>
+
+						<li id="m_9" class='m_li' onmouseover='mover(9);' onmouseout='mout(9);'><a href="#">销售管理</a></li>
+
+					</ul>
+				</div>
+				<div >
+				   <ul class="smenu">
+					 <li style="padding-left:29px;" id="s_1" class='s_li_a'>
+						<ul style="display:none;" class="second_nav">
+							<li><a href="lby.html">市场营销</a></li>
+							<li><a href="lby.html">市场营销</a></li>
+							<li><a href="lby.html">市场营销</a></li>
+							<li><a href="lby.html">市场营销</a></li>
+							<li><a href="lby.html">市场营销</a></li>
+						 </ul>
+					</li>
+					 <li style="padding-left:93px;" id="s_2" class='s_li' onmouseover='mover(2);' onmouseout='mout(2);'>
+						 <ul class="second_nav">
+							<li><a href="lby.html">市场营销</a></li>
+							<li><a href="lby.html">市场营销</a></li>
+							<li><a href="lby.html">市场营销</a></li>
+							<li><a href="lby.html">市场营销</a></li>
+							<li><a href="lby.html">市场营销</a></li>
+						 </ul>
+					 </li>
+					 <li style="padding-left:187px;" id="s_3" class='s_li' onmouseover='mover(3);' onmouseout='mout(3);'>
+						<ul class="second_nav">
+							<li><a href="lby.html">市场营销</a></li>
+							<li><a href="lby.html">市场营销</a></li>
+							<li><a href="lby.html">市场营销</a></li>
+							<li><a href="lby.html">市场营销</a></li>
+							<li><a href="lby.html">市场营销</a></li>
+						 </ul>
+					 </li>
+					 <li style="padding-left:281px;" id="s_4" class='s_li' onmouseover='mover(4);' onmouseout='mout(4);'>
+						<ul class="second_nav">
+							<li><a href="lby.html">市场营销</a></li>
+							<li><a href="lby.html">市场营销</a></li>
+							<li><a href="lby.html">市场营销</a></li>
+							<li><a href="lby.html">市场营销</a></li>
+							<li><a href="lby.html">市场营销</a></li>
+						 </ul>
+					 </li>
+					 <li style="padding-left:375px;" id="s_5" class='s_li' onmouseover='mover(5);' onmouseout='mout(5);'>
+						<ul class="second_nav">
+							<li><a href="lby.html">市场营销</a></li>
+							<li><a href="lby.html">市场营销</a></li>
+							<li><a href="lby.html">市场营销</a></li>
+							<li><a href="lby.html">市场营销</a></li>
+							<li><a href="lby.html">市场营销</a></li>
+						 </ul>
+					 </li>
+					 <li style="padding-left:469px;" id="s_6" class='s_li' onmouseover='mover(6);' onmouseout='mout(6);'>
+						<ul class="second_nav">
+							<li><a href="lby.html">市场营销</a></li>
+							<li><a href="lby.html">市场营销</a></li>
+							<li><a href="lby.html">市场营销</a></li>
+							<li><a href="lby.html">市场营销</a></li>
+							<li><a href="lby.html">市场营销</a></li>
+						 </ul>
+					 </li>
+					 <li style="padding-left:563px;" id="s_7" class='s_li' onmouseover='mover(7);' onmouseout='mout(7);'>
+						 <ul class="second_nav">
+							<li><a href="lby.html">市场营销</a></li>
+							<li><a href="lby.html">市场营销</a></li>
+							<li><a href="lby.html">市场营销</a></li>
+							<li><a href="lby.html">市场营销</a></li>
+							<li><a href="lby.html">市场营销</a></li>
+						 </ul>
+					 </li>
+					  <li style="padding-left:657px;" id="s_8" class='s_li' onmouseover='mover(8);' onmouseout='mout(8);'>
+						 <ul class="second_nav">
+							<li><a href="lby.html">市场营销</a></li>
+							<li><a href="lby.html">市场营销</a></li>
+							<li><a href="lby.html">市场营销</a></li>
+							<li><a href="lby.html">市场营销</a></li>
+							<li><a href="lby.html">市场营销</a></li>
+						 </ul>
+					 </li>
+					  <li style="padding-left:748px;" id="s_9" class='s_li' onmouseover='mover(9);' onmouseout='mout(9);'>
+						 <ul class="second_nav lastnav">
+							<li><a href="lby.html">市场营销</a></li>
+							<li><a href="lby.html">市场营销</a></li>
+							<li><a href="lby.html">市场营销</a></li>
+							<li><a href="lby.html">市场营销</a></li>
+							<li><a href="lby.html">市场营销</a></li>
+						 </ul>
+					 </li>
+				   </ul>
+				</div>
+			</div>
+		</div>
+	<div class="clear"></div>
+	</div>
+	<div class="clear"></div>
+<div class="broad">
+	<div class="fl nav_title" ><span class="curve">当前位置：<span>客户管理</span> > <span>客户</span><!-- > <span class="colorBlue">客户详细信息</span>--></span></div>
+	<div class="fr arrow">
+		
+		<script language="javascript">
+		<!--
+		function showmenu(){menu1.style.visibility = "visible";	}
+		function hidmenu(){menu1.style.visibility = "hidden";}
+		document.onclick = hidmenu;
+		-->
+		
+		</script>
+		<a href="javascript:showmenu()" class="adds" ><img src="images/adds.png" alt="" /></a>
+		<div id="menu1" >
+			<a href="#">新增客户</a>
+			<a href="#">新增联系人</a>
+			<a href="#">新增联系记录</a>
+			<a href="#">新增销售机会</a>
+			<a href="#">新增报价单</a>
+			<a href="#">新增合同订单</a>
+			<a href="#">新增进货单</a>
+		</div>
+		<div class="tm"><a href=""><img src="images/talls.png" alt="" /></a><a href=""><img src="images/malls.png" alt="" /></a></div>
+	</div>
+</div>
+<div class="search">
+	<dl class="menu3">
+		<dd>
+			<ul>
+				<li class="w100">客户名称：</li>
+				<li class="liw"><input type="text" name="" id="" /></li>
+				<li class="w100">所在地：</li>
+				<li class="liw"><input type="text" name="" id="" /></li>
+				<li class="w60">电话：</li>
+				<li class="liw"><input type="text" name="" id="" /></li>
+				<li class="w80">行业：</li>
+				<li class="liw"><input type="text" name="" id="" /></li>
+				<div class="clear"></div>
+			</ul>
+			<div class="clear"></div>
+		<div class="sea_btn">	
+		<a href="" class="fl chaxun">查询</a><div class="clear"></div></div>	
+		<div class="sea_btn"><a id=_strHref href="javascript:show_hiddendiv();" class="fl gjss"><span id=_strSpan>高级搜索</span></span></a><div class="clear"></div></div>
+		<div class="clear"></div>
+		</dd>
+		<dd style="DISPLAY: none" id="hidden_div">
+			<ul>
+				<li class="w100">创建开始时间：</li>
+				<li class="liw"><input type="text" name="" id="" /></li>
+				<li class="w100">创建结束时间：</li>
+				<li class="liw"><input type="text" name="" id="" /></li>
+				<li class="w60">创造者：</li>
+				<li class="liw"><input type="text" name="" id="" /></li>
+				<li class="w80">线索来源：</li>
+				<li class="liw"><input type="text" name="" id="" /></li>
+				<div class="clear"></div>
+			</ul>
+			<div class="clear"></div>
+		</dd>
+	</dl>
+</div>
+<div class="content" style="background:#f5f5f5;height:42px;padding:0;">
+	<div class="fl list_top" ><a href="" class="blue_btn">删除</a><a href="" class="blue_btn">刷新</a><a href="" class="green_btn">新建客户</a><a href="" class="green_btn">导入客户</a></div>
+	
+	<div class="clear"></div>
+</div>
+<div class="content" style="margin:0px 20px 0 20px;border-top:none;">
+	<table cellspacing="1" class="tablesorter">
+		<thead>
+			<tr>
+				<td><input type="checkbox" name="" id="" /></td>
+				<td>客户所有者 </td>
+				<td>客户名</td>
+				<td>所在省份</td>
+				<td>城市</td>
+				<td>客户类型</td>
+				<td style="position:relative;">创建时间
+					<ul>
+						<li><a href=""><img src="images/tr_top.png" alt="" /></a></li>
+						<li><a href=""><img src="images/tr_down.png" alt="" /></a></li>
+					</ul>
+				</td>
+				<td>创建者</td>
+				<td>线索来源</td>
+				<td>行业</td>
+				<td>参加过的市场活动</td>
+				<td>
+					操作
+				</td>
+			</tr>
+		</thead>
+		<tbody>
+			<tr>
+				<td><input type="checkbox" name="" id="" checked="selected"/></td>
+				<td>客户所有者 </td>
+				<td class="usered">客户名</td>
+				<td>所在省份</td>
+				<td>城市</td>
+				<td>客户类型</td>
+				<td>创建时间</td>
+				<td>创建者</td>
+				<td>线索来源</td>
+				<td>行业</td>
+				<td>参加过的市场活动</td>
+				<td width="68"><ul>
+						<li><a href=""><img src="images/tallssed.png" alt="" /></a></li>
+						<li><a href=""><img src="images/editimged.png" alt="" /></a></li>
+						<li><a href=""><img src="images/deleteimged.png" alt="" /></a></li>
+						<div class="clear"></div>
+					</ul>
+				</td>
+			</tr>
+			<tr>
+				<td><input type="checkbox" name="" id="" /></td>
+				<td>客户所有者 </td>
+				<td class="usered">客户名</td>
+				<td>所在省份</td>
+				<td>城市</td>
+				<td>客户类型</td>
+				<td>创建时间</td>
+				<td>创建者</td>
+				<td>线索来源</td>
+				<td>行业</td>
+				<td>参加过的市场活动</td>
+				<td width="68"><ul>
+						<li><a href=""><img src="images/tallss.png" alt="" /></a></li>
+						<li><a href=""><img src="images/editimg.png" alt="" /></a></li>
+						<li><a href=""><img src="images/deleteimg.png" alt="" /></a></li>
+						<div class="clear"></div>
+					</ul>
+				</td>
+			</tr>
+			<tr>
+				<td><input type="checkbox" name="" id="" /></td>
+				<td>客户所有者 </td>
+				<td class="usered">客户名</td>
+				<td>所在省份</td>
+				<td>城市</td>
+				<td>客户类型</td>
+				<td>创建时间</td>
+				<td>创建者</td>
+				<td>线索来源</td>
+				<td>行业</td>
+				<td>参加过的市场活动</td>
+				<td width="68"><ul>
+						<li><a href=""><img src="images/tallss.png" alt="" /></a></li>
+						<li><a href=""><img src="images/editimg.png" alt="" /></a></li>
+						<li><a href=""><img src="images/deleteimg.png" alt="" /></a></li>
+						<div class="clear"></div>
+					</ul>
+				</td>
+			</tr>
+			<tr>
+				<td><input type="checkbox" name="" id="" /></td>
+				<td>客户所有者 </td>
+				<td class="usered">客户名</td>
+				<td>所在省份</td>
+				<td>城市</td>
+				<td>客户类型</td>
+				<td>创建时间</td>
+				<td>创建者</td>
+				<td>线索来源</td>
+				<td>行业</td>
+				<td>参加过的市场活动</td>
+				<td width="68"><ul>
+						<li><a href=""><img src="images/tallss.png" alt="" /></a></li>
+						<li><a href=""><img src="images/editimg.png" alt="" /></a></li>
+						<li><a href=""><img src="images/deleteimg.png" alt="" /></a></li>
+						<div class="clear"></div>
+					</ul>
+				</td>
+			</tr>
+			<tr>
+				<td><input type="checkbox" name="" id="" /></td>
+				<td>客户所有者 </td>
+				<td class="usered">客户名</td>
+				<td>所在省份</td>
+				<td>城市</td>
+				<td>客户类型</td>
+				<td>创建时间</td>
+				<td>创建者</td>
+				<td>线索来源</td>
+				<td>行业</td>
+				<td>参加过的市场活动</td>
+				<td width="68"><ul>
+						<li><a href=""><img src="images/tallss.png" alt="" /></a></li>
+						<li><a href=""><img src="images/editimg.png" alt="" /></a></li>
+						<li><a href=""><img src="images/deleteimg.png" alt="" /></a></li>
+						<div class="clear"></div>
+					</ul>
+				</td>
+			</tr>
+			<tr>
+				<td><input type="checkbox" name="" id="" /></td>
+				<td>客户所有者 </td>
+				<td class="usered">客户名</td>
+				<td>所在省份</td>
+				<td>城市</td>
+				<td>客户类型</td>
+				<td>创建时间</td>
+				<td>创建者</td>
+				<td>线索来源</td>
+				<td>行业</td>
+				<td>参加过的市场活动</td>
+				<td width="68"><ul>
+						<li><a href=""><img src="images/tallss.png" alt="" /></a></li>
+						<li><a href=""><img src="images/editimg.png" alt="" /></a></li>
+						<li><a href=""><img src="images/deleteimg.png" alt="" /></a></li>
+						<div class="clear"></div>
+					</ul>
+				</td>
+			</tr>
+			<tr>
+				<td><input type="checkbox" name="" id="" /></td>
+				<td>客户所有者 </td>
+				<td class="usered">客户名</td>
+				<td>所在省份</td>
+				<td>城市</td>
+				<td>客户类型</td>
+				<td>创建时间</td>
+				<td>创建者</td>
+				<td>线索来源</td>
+				<td>行业</td>
+				<td>参加过的市场活动</td>
+				<td width="68"><ul>
+						<li><a href=""><img src="images/tallss.png" alt="" /></a></li>
+						<li><a href=""><img src="images/editimg.png" alt="" /></a></li>
+						<li><a href=""><img src="images/deleteimg.png" alt="" /></a></li>
+						<div class="clear"></div>
+					</ul>
+				</td>
+			</tr>
+			<tr>
+				<td><input type="checkbox" name="" id="" /></td>
+				<td>客户所有者 </td>
+				<td class="usered">客户名</td>
+				<td>所在省份</td>
+				<td>城市</td>
+				<td>客户类型</td>
+				<td>创建时间</td>
+				<td>创建者</td>
+				<td>线索来源</td>
+				<td>行业</td>
+				<td>参加过的市场活动</td>
+				<td width="68"><ul>
+						<li><a href=""><img src="images/tallss.png" alt="" /></a></li>
+						<li><a href=""><img src="images/editimg.png" alt="" /></a></li>
+						<li><a href=""><img src="images/deleteimg.png" alt="" /></a></li>
+						<div class="clear"></div>
+					</ul>
+				</td>
+			</tr>
+			<tr>
+				<td><input type="checkbox" name="" id="" /></td>
+				<td>客户所有者 </td>
+				<td class="usered">客户名</td>
+				<td>所在省份</td>
+				<td>城市</td>
+				<td>客户类型</td>
+				<td>创建时间</td>
+				<td>创建者</td>
+				<td>线索来源</td>
+				<td>行业</td>
+				<td>参加过的市场活动</td>
+				<td width="68"><ul>
+						<li><a href=""><img src="images/tallss.png" alt="" /></a></li>
+						<li><a href=""><img src="images/editimg.png" alt="" /></a></li>
+						<li><a href=""><img src="images/deleteimg.png" alt="" /></a></li>
+						<div class="clear"></div>
+					</ul>
+				</td>
+			</tr>
+			<tr>
+				<td><input type="checkbox" name="" id="" /></td>
+				<td>客户所有者 </td>
+				<td class="usered">客户名</td>
+				<td>所在省份</td>
+				<td>城市</td>
+				<td>客户类型</td>
+				<td>创建时间</td>
+				<td>创建者</td>
+				<td>线索来源</td>
+				<td>行业</td>
+				<td>参加过的市场活动</td>
+				<td width="68"><ul>
+						<li><a href=""><img src="images/tallss.png" alt="" /></a></li>
+						<li><a href=""><img src="images/editimg.png" alt="" /></a></li>
+						<li><a href=""><img src="images/deleteimg.png" alt="" /></a></li>
+						<div class="clear"></div>
+					</ul>
+				</td>
+			</tr>
+			<tr>
+				<td><input type="checkbox" name="" id="" /></td>
+				<td>客户所有者 </td>
+				<td class="usered">客户名</td>
+				<td>所在省份</td>
+				<td>城市</td>
+				<td>客户类型</td>
+				<td>创建时间</td>
+				<td>创建者</td>
+				<td>线索来源</td>
+				<td>行业</td>
+				<td>参加过的市场活动</td>
+				<td width="68"><ul>
+						<li><a href=""><img src="images/tallss.png" alt="" /></a></li>
+						<li><a href=""><img src="images/editimg.png" alt="" /></a></li>
+						<li><a href=""><img src="images/deleteimg.png" alt="" /></a></li>
+						<div class="clear"></div>
+					</ul>
+				</td>
+			</tr>
+			
+		</tbody>
+	</table>
+	<table cellspacing="1" class="tablesorter">
+	<tr>
+		<td>
+			<div class="fl">
+				每页条数
+				<select name="" id="">
+					<option value="">1</option>
+					<option value="">2</option>
+					<option value="">3</option>
+					<option value="">4</option>
+					<option value="">5</option>
+					<option value="">6</option>
+					<option value="">7</option>
+					<option value="">8</option>
+					<option value="">9</option>
+					<option value="">10</option>
+				</select>
+			</div>
+			<div class="clear"></div>
+			<ul class="fynew">
+				<li>|</li>
+				<li><a href=""><img src="images/lbtn.png" alt="" /></a></li>
+				<li><a href=""><img src="images/llbtn.png" alt="" /></a></li>
+				<li>|</li>
+				<li>第<input type="text" name="" id="" class=""/>共4页</li>
+				<li>|</li>
+				<li><a href=""><img src="images/rbtn.png" alt="" /></a></li>
+				<li><a href=""><img src="images/rrbtn.png" alt="" /></a></li>
+				<li>|</li>
+				<li><a href=""><img src="images/gengxi.png" alt="" /></a></li>
+			</ul>
+			<div class="fr" style="margin-right:10px;">显示1到10，共34记录</div>
+		</td>
+	</tr>
+	</table>
+</div>
+<div class="foot">
+<p>版权所有：</p>
+</div>
+
+</body>
+</html>

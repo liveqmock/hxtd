@@ -1,0 +1,323 @@
+﻿<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=gb2312" />
+<meta name="keywords" content="" />
+<meta name="description" content="" />
+<title></title>
+<link href="css/css.css" rel="stylesheet" type="text/css" />
+<script type="text/javascript" src="js/jquery.min.js"></script>
+<script>
+//初始化
+var def="1";
+function mover(object){
+  //主菜单
+  var mm=document.getElementById("m_"+object);
+  mm.className="m_li_a";
+  //初始主菜单先隐藏效果
+  if(def!=0){
+    var mdef=document.getElementById("m_"+def);
+    mdef.className="m_li";
+  }
+  //子菜单
+  var ss=document.getElementById("s_"+object);
+  ss.style.display="block";
+  //初始子菜单先隐藏效果
+  if(def!=0){
+    var sdef=document.getElementById("s_"+def);
+    sdef.style.display="none";
+  }
+}
+
+function mout(object){
+  //主菜单
+  var mm=document.getElementById("m_"+object);
+  mm.className="m_li";
+  //初始主菜单还原效果
+  if(def!=0){
+    var mdef=document.getElementById("m_"+def);
+    mdef.className="m_li_a";
+  }
+  //子菜单
+  var ss=document.getElementById("s_"+object);
+  ss.style.display="none";
+  //初始子菜单还原效果
+  if(def!=0){
+    var sdef=document.getElementById("s_"+def);
+    sdef.style.display="block";
+  }
+}
+</script>
+</head>
+<body style="background:#f9f9f9;">
+<div class="top">
+	<div class="fl logo"><a href="#"><img src="images/logo.png" alt="" /></a></div>
+		<div class="wrap">
+			<div class="user_mes">
+				<span>今天是04月11日，欢迎您 老板（总经理）</span>  
+				<a href="szym.html" class="frie">设置</a>
+			</div>
+			<div class="menu">
+			
+				<div id="menu">
+					<ul class="nav">
+
+						<li id="m_1" class='m_li_a'><a href="index.html">工作台</a></li>
+
+						<li id="m_2" class='m_li' onmouseover='mover(2);' onmouseout='mout(2);'><a href="#">市场营销</a></li>
+
+						<li id="m_3" class='m_li' onmouseover='mover(3);' onmouseout='mout(3);'><a href="#">客户管理</a></li>
+
+						<li id="m_4" class='m_li' onmouseover='mover(4);' onmouseout='mout(4);'><a href="#">项目管理</a></li>
+
+						<li id="m_5" class='m_li' onmouseover='mover(5);' onmouseout='mout(5);'><a href="#">订单管理</a></li>
+
+						<li id="m_6" class='m_li' onmouseover='mover(6);' onmouseout='mout(6);'><a href="#">财务管理</a></li>
+
+						<li id="m_7" class='m_li' onmouseover='mover(7);' onmouseout='mout(7);'><a href="#">销售管理</a></li>
+
+						<li id="m_8" class='m_li' onmouseover='mover(8);' onmouseout='mout(8);'><a href="#">报表管理</a></li>
+
+						<li id="m_9" class='m_li' onmouseover='mover(9);' onmouseout='mout(9);'><a href="#">销售管理</a></li>
+
+					</ul>
+				</div>
+				<div >
+				   <ul class="smenu">
+					 <li style="padding-left:29px;" id="s_1" class='s_li_a'>
+						<ul style="display:none;" class="second_nav">
+							<li><a href="lby.html">市场营销</a></li>
+							<li><a href="lby.html">市场营销</a></li>
+							<li><a href="lby.html">市场营销</a></li>
+							<li><a href="lby.html">市场营销</a></li>
+							<li><a href="lby.html">市场营销</a></li>
+						 </ul>
+					</li>
+					 <li style="padding-left:93px;" id="s_2" class='s_li' onmouseover='mover(2);' onmouseout='mout(2);'>
+						 <ul class="second_nav">
+							<li><a href="lby.html">市场营销</a></li>
+							<li><a href="lby.html">市场营销</a></li>
+							<li><a href="lby.html">市场营销</a></li>
+							<li><a href="lby.html">市场营销</a></li>
+							<li><a href="lby.html">市场营销</a></li>
+						 </ul>
+					 </li>
+					 <li style="padding-left:187px;" id="s_3" class='s_li' onmouseover='mover(3);' onmouseout='mout(3);'>
+						<ul class="second_nav">
+							<li><a href="lby.html">市场营销</a></li>
+							<li><a href="lby.html">市场营销</a></li>
+							<li><a href="lby.html">市场营销</a></li>
+							<li><a href="lby.html">市场营销</a></li>
+							<li><a href="lby.html">市场营销</a></li>
+						 </ul>
+					 </li>
+					 <li style="padding-left:281px;" id="s_4" class='s_li' onmouseover='mover(4);' onmouseout='mout(4);'>
+						<ul class="second_nav">
+							<li><a href="lby.html">市场营销</a></li>
+							<li><a href="lby.html">市场营销</a></li>
+							<li><a href="lby.html">市场营销</a></li>
+							<li><a href="lby.html">市场营销</a></li>
+							<li><a href="lby.html">市场营销</a></li>
+						 </ul>
+					 </li>
+					 <li style="padding-left:375px;" id="s_5" class='s_li' onmouseover='mover(5);' onmouseout='mout(5);'>
+						<ul class="second_nav">
+							<li><a href="lby.html">市场营销</a></li>
+							<li><a href="lby.html">市场营销</a></li>
+							<li><a href="lby.html">市场营销</a></li>
+							<li><a href="lby.html">市场营销</a></li>
+							<li><a href="lby.html">市场营销</a></li>
+						 </ul>
+					 </li>
+					 <li style="padding-left:469px;" id="s_6" class='s_li' onmouseover='mover(6);' onmouseout='mout(6);'>
+						<ul class="second_nav">
+							<li><a href="lby.html">市场营销</a></li>
+							<li><a href="lby.html">市场营销</a></li>
+							<li><a href="lby.html">市场营销</a></li>
+							<li><a href="lby.html">市场营销</a></li>
+							<li><a href="lby.html">市场营销</a></li>
+						 </ul>
+					 </li>
+					 <li style="padding-left:563px;" id="s_7" class='s_li' onmouseover='mover(7);' onmouseout='mout(7);'>
+						 <ul class="second_nav">
+							<li><a href="lby.html">市场营销</a></li>
+							<li><a href="lby.html">市场营销</a></li>
+							<li><a href="lby.html">市场营销</a></li>
+							<li><a href="lby.html">市场营销</a></li>
+							<li><a href="lby.html">市场营销</a></li>
+						 </ul>
+					 </li>
+					  <li style="padding-left:657px;" id="s_8" class='s_li' onmouseover='mover(8);' onmouseout='mout(8);'>
+						 <ul class="second_nav">
+							<li><a href="lby.html">市场营销</a></li>
+							<li><a href="lby.html">市场营销</a></li>
+							<li><a href="lby.html">市场营销</a></li>
+							<li><a href="lby.html">市场营销</a></li>
+							<li><a href="lby.html">市场营销</a></li>
+						 </ul>
+					 </li>
+					  <li style="padding-left:748px;" id="s_9" class='s_li' onmouseover='mover(9);' onmouseout='mout(9);'>
+						 <ul class="second_nav lastnav">
+							<li><a href="lby.html">市场营销</a></li>
+							<li><a href="lby.html">市场营销</a></li>
+							<li><a href="lby.html">市场营销</a></li>
+							<li><a href="lby.html">市场营销</a></li>
+							<li><a href="lby.html">市场营销</a></li>
+						 </ul>
+					 </li>
+				   </ul>
+				</div>
+			</div>
+		</div>
+	<div class="clear"></div>
+</div>
+<div class="clear"></div>
+<div class="broad">
+	<div class="fl nav_title" ><span class="curve">当前位置：<span>客户管理</span> > <span>客户</span> > <span class="colorBlue">客户详细信息</span></span></div>
+	<div class="fr arrow">
+		<div class="tm1"><a href="" class="kehu">新建用户</a><a href="" class="kehu">导入客户</a></div>
+		<script language="javascript">
+		<!--
+		function showmenu(){menu1.style.visibility = "visible";	}
+		function hidmenu(){menu1.style.visibility = "hidden";}
+		document.onclick = hidmenu;
+		-->
+		</script>
+		<a href="javascript:showmenu()" class="adds" style="right:35px"><img src="images/addss.png" alt="" /></a>
+		<div id="menu1" style="left:73px;">
+			<a href="#">新增客户</a>
+			<a href="#">新增联系人</a>
+			<a href="#">新增联系记录</a>
+			<a href="#">新增销售机会</a>
+			<a href="#">新增报价单</a>
+			<a href="#">新增合同订单</a>
+			<a href="#">新增进货单</a>
+		</div>
+	</div>
+</div>
+<div class="content">
+	<div class="ct_title">
+		<span class="fl ttname">客户详细信息</span>
+		<div class="fr edit_sc"><a href="" class="bianji">编辑</a><a href="" class="shanchu">删除</a></div>
+		<div class="clear"></div>
+	</div>
+	<div class="baocun">
+		<a href="">保存</a>
+		<a href="">保存并新建</a>
+		<a href="">取消</a>
+		<div class="clear"></div>
+	</div>
+	<table style="width:100%;" class="table140421">
+		<tr style="display:none;">
+			<td width="30%"></td>
+			<td width="20%"></td>
+			<td width="30%"></td>
+			<td width="20%"></td>
+		</tr>
+		<tr>
+			<td colspan="4" class="pl20 color6 fwb bdn">基本信息：</td>
+		</tr>
+		<tr>
+			<td class="tar bghui pr10">客户所有者：</td>
+			<td class="bghb pl10 fwb color0">陈小龙-数据中心</td>
+			<td class="tar bghui pr10">客户名：</td>
+			<td class="bghb pl10">吴心</td>
+		</tr>
+		<tr>
+			<td class="tar bghui pr10">客户类型：</td>
+			<td class="bghb pl10 color1 fwb">电信</td>
+			<td class="tar bghui pr10">公司名：</td>
+			<td class="bghb pl10">北京星华科技有限公司</td>
+		</tr>
+		<tr>
+			<td class="tar bghui pr10">公司所有权：</td>
+			<td class="bghb pl10">无</td>
+			<td class="tar bghui pr10">邮编：</td>
+			<td class="bghb pl10">100085</td>
+		</tr>
+		<tr>
+			<td class="tar bghui pr10">电话：</td>
+			<td class="bghb pl10">136454863223</td>
+			<td class="tar bghui pr10">手机：</td>
+			<td class="bghb pl10">36454863223</td>
+		</tr>
+		<tr>
+			<td class="tar bghui pr10">传真：</td>
+			<td class="bghb pl10">51254536</td>
+			<td class="tar bghui pr10">行业：</td>
+			<td class="bghb pl10">互联网</td>
+		</tr>
+		<tr>
+			<td class="tar bghui pr10">风险等级：</td>
+			<td class="bghb pl10">低</td>
+			<td class="tar bghui pr10"></td>
+			<td class="bghb pl10"></td>
+		</tr>
+		<tr>
+			<td class="tar bghui pr10">创建人：</td>
+			<td class="bghb pl10">吴经理</td>
+			<td class="tar bghui pr10">创建时间：</td>
+			<td class="bghb pl10">2014-10-21 11：11 上午</td>
+		</tr>
+		<tr>
+			<td class="tar bghui pr10">修改人：</td>
+			<td class="bghb pl10">王传</td>
+			<td class="tar bghui pr10">修改时间：</td>
+			<td class="bghb pl10">2014-10-22 15：00 下午</td>
+		</tr>
+		<tr>
+			<td colspan="4" class="pl20 color6 fwb bdn">地址：</td>
+			
+		</tr>
+		<tr>
+			<td class="tar bghui pr10">客户所在地：</td>
+			<td class="bghb pl10 fwb color0">北京</td>
+			<td class="tar bghui pr10">详细地址：</td>
+			<td class="bghb pl10">北京市海淀区中关村东路54号</td>
+		</tr>
+		<tr>
+			<td colspan="4" class="pl20 color6 fwb bdn">证件信息:</td>
+			
+		</tr>
+		<tr>
+			<td class="tar bghui pr10">证件类型：</td>
+			<td class="bghb pl10">身份证</td>
+			<td class="tar bghui pr10"></td>
+			<td class="bghb pl10"></td>
+		</tr>
+		<tr>
+			<td colspan="4" class="pl20 color6 fwb bdn">账号信息：</td>
+			
+		</tr>
+		<tr>
+			<td class="tar bghui pr10">开户行：</td>
+			<td class="bghb pl10">民生银行</td>
+			<td class="tar bghui pr10"></td>
+			<td class="bghb pl10"></td>
+		</tr>
+		<tr>
+			<td class="tar bghui pr10">账号：</td>
+			<td class="bghb pl10">213545456456787654543654354</td>
+			<td class="tar bghui pr10"></td>
+			<td class="bghb pl10"></td>
+		</tr>
+		<tr>
+			<td colspan="4">
+			<div style="float:left;margin:20px 0" class="pl20 color6 fwb bdn">备注：</div>
+			<textarea name="" id="" style="width:90%;height:155px;margin:20px 20px;background:none;border:1px solid #e0e0e0;" ></textarea>
+			</td>
+		</tr>
+	</table>
+	<div class="baocun mb40">
+		<a href="">保存</a>
+		<a href="">保存并新建</a>
+		<a href="">取消</a>
+		<div class="clear"></div>
+	</div>
+</div>
+
+<div class="foot">
+<p>版权所有：</p>
+</div>
+</body>
+</html>

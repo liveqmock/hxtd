@@ -1,0 +1,25 @@
+<Resource
+  name="hxtd"
+  description="hxtd Database"
+  auth="Container"
+  type="javax.sql.DataSource"
+  driverClassName="com.mysql.jdbc.Driver"
+  url="jdbc:mysql://localhost:3306/hxtd?characterEncoding=utf-8"
+  username="root"
+  password=""
+  maxActive="3000"
+  maxIdle="20"
+  maxWait="10000"/>
+
+<Resource
+  name="hxtd_server"
+  description="hxtd Database"
+  auth="Container"
+  type="javax.sql.DataSource"
+  driverClassName="com.mysql.jdbc.Driver"
+  url="jdbc:mysql://192.168.111.141:3306/hxtd?characterEncoding=utf-8"
+  username="bhdc001admin"
+  password="baihuizhadmin"
+  maxActive="3000"
+  maxIdle="20"
+  maxWait="10000"/>

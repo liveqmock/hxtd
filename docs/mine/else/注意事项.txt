@@ -1,0 +1,11 @@
+关于由本地迁往服务器的配置更改
+1.日志的配置路径//TODO 基于开发环境的配置，server|local的自动探测，个人与公司电脑的路径配置
+
+关于Tomcat 7
+1.org.apache.jasper.compiler.TldLocationsCache tldScanJar
+tomcat.util.scan.DefaultJarScanner.jarsToSkip=\
+spring*.jar,slf4j*.jar,aspectjrt*.jar,jboss*.jar,mysql*.jar,aopalliance*.jar,aspectjweaver*.jar,jandex*.jar,antlr*.jar,jackson*.jar,logback*.jar,commons*.jar,dom4j*.jar,xml-apis*.jar,access-bridge*.jar,jaccess*.jar,sunec*.jar,zipfs*.jar,javassist*.jar,sunmscapi*.jar\
+
+
+关于个人maven项目与项目组非maven项目
+1.jar包同步问题

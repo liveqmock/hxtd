@@ -1,0 +1,172 @@
+1.转换为Maven项目
+2.处理servlet-api包提示
+3.
+SLF4J: Class path contains multiple SLF4J bindings.
+SLF4J: Found binding in [jar:file:/E:/project/company/hxtd/target/hxtd/WEB-INF/lib/logback-classic-1.0.13.jar!/org/slf4j/impl/StaticLoggerBinder.class]
+SLF4J: Found binding in [jar:file:/E:/project/company/hxtd/target/hxtd/WEB-INF/lib/slf4j-log4j12-1.6.6.jar!/org/slf4j/impl/StaticLoggerBinder.class]
+4.关于从sql文件执行导致数据乱码
+5.关于字段备注格式化
+6.关于台式电脑与笔记本电脑环境同步
+6.1.settings.jar
+7.关于power designer
+7.1.表备注生成数据库乱码
+7.2.字段备注
+7.3.索引
+8.关于restful风格请求
+8.1./system/menu/{id}无法表示查看和删除
+9.关于注释
+9.1.
+10.关于springmvc
+10.1.@RequestParam(value = "user")
+
+
+11.关于字典，字典类型和字典值的确认
+12.关于property-placeholder location路径
+13.用户登录，异常准确信息提示
+14.关于菜单与功能，菜单点击时显示的功能
+15.更新数据库文档
+16.画图
+17.关于title
+
+18.初始化菜单功能数据
+19.关于笔记本从ideal内SQL文件执行乱码
+
+用户管理
+1.初始化组织数据
+2.初始化组织类型字典
+3.设置 SM_ORG.PARENT_ORG_ID 允许为空，没有默认值
+ALTER TABLE hxtd.sm_org MODIFY COLUMN PARENT_ORG_ID INT NULL;
+ALTER TABLE hxtd.sm_org MODIFY PARENT_ORG_ID INT;
+4.设置 SM_ORG.STATUS 允许为空，没有默认值
+ALTER TABLE hxtd.sm_org MODIFY STATUS INT;
+ALTER TABLE hxtd.sm_org MODIFY COLUMN STATUS INT NULL;
+5.组织的父子元素筛选
+使用层级编码来表示，使用ORDER来表示
+6.通用的条件筛选类
+
+关于url的规则
+所有到jsp页面的请求以.do*结尾
+
+按内容分为frame|self
+frame指当前页面被框架页面嵌套
+self指仅显示当前页面
+
+按权限分为menu|comp
+menu表示从菜单发起的请求
+comp表示从组件发起的请求
+
+总计共2*2=4种
+menuframe,menuself,compframe,compself
+对于comp只存在self的请求，不存在compframe，然后剩下三种，并进行简化
+menuframe do
+menuself  doself
+compself  docomp
+
+
+-------14-5-9-------------
+1.关于修改页和查看页
+1.1.使用两个页面
+1.2.使用样式控制
+2.关于保存、保存并新建
+
+3.标题
+4.菜单栏默认选中
+5.菜单存储
+6.功能存储
+7.缓存变量更新，用户退出
+8.全局JS变量
+9.到页面的请求和执行功能的请求
+10.权限的控制方式
+
+-------14-5-11-------------
+1.菜单
+1.1.菜单显示位置
+1.1.1.是否显示改为显示位置
+ ALTER TABLE hxtd.sm_menu CHANGE IS_SHOW SHOW_LOCATION_ID INT;
+1.1.2.显示位置改为关联表
+ALTER TABLE hxtd.sm_menu DROP SHOW_LOCATION_ID;
+CREATE TABLE `sm_menu_showlocation` (
+  `MENU_ID` int(11) NOT NULL COMMENT '菜单主键编号',
+  `SHOW_LOCATION_ID` int(11) NOT NULL COMMENT '显示位置字典',
+  PRIMARY KEY (`MENU_ID`,`SHOW_LOCATION_ID`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='菜单显示位置关联表';
+1.2.菜单默认功能
+ALTER TABLE hxtd.sm_menu ADD FUNCTION_ID int NOT NULL;
+ALTER TABLE hxtd.sm_menu CHANGE FUNCTION_ID TRIGGER_ID INT;
+2.请求及功能
+2.1.添加权限级别字段
+ALTER TABLE hxtd.sm_function ADD PRIVILEGE_LEVEL_ID int NOT NULL;
+2.2.添加字典类型
+
+-------14-5-12-------------
+1.hibernate级联加载
+2.功能编号规则
+2.1.拟定6位，例如:010101，前2位表示一级菜单，中间2位表示二级菜单，后两位表示功能
+2.2.系统管理1,、工作台2、市场营销3、客户管理4、项目管理5、订单管理6、财务管理7、销售管理8、报表管理9
+2.3.系统管理下二级菜单，字典管理1、组织管理2、菜单管理3、用户管理4、角色管理5、功能管理6、组件管理7，其他二级菜单未定
+2.4.查询1、新增2、查看3、修改4、删除5，其他待定
+
+判断功能时，功能直接在页面写死，或者配置一个属性文件system.user.add=010102，保存在界面上
+
+-------14-5-13---------
+1.分页Pagination<T>
+1.1.分页查询 PaginationSearch<Map<String,Object>> extends Pagination
+1.2.分页列表 PaginationList<List<T>> extends Pagination
+
+2.通用查询
+  1.处理和实体类直接关联的String类型字段
+  2.处理和实体类直接关联的其他类型字段
+  3.关于空字符串和空格字符串参数的处理
+  4.关于日期的处理
+
+2.2.后台解析成searchParams(Map<String,Object>)
+
+--------------------2014-05-29--------------------
+1.次日早晨登录会报异常，com.mysql.jdbc.exceptions.jdbc4.CommunicationsException: The last packet successfully received from the server was 57,459,589 milliseconds ago.  The last packet sent successfully to the server was 57,459,589 milliseconds ago. is longer than the server configured value of 'wait_timeout'. You should consider either expiring and/or testing connection validity before use in your application, increasing the server configured values for client timeouts, or using the Connector/J connection property 'autoReconnect=true' to avoid this problem.
+2.组织支持级别自动扩展
+3.线索字典040101缺失
+4.授权从session中取值
+5.全面的功能检查
+6.离线查询改为hql查询
+7.关于字段的填写说明，必填、长度等等
+8.权限控制
+9.权限测试
+10.组织和用户合并
+11.分页统一
+12.支持单页面多分页
+
+--------------------2014-06-17--------------------
+1.组织修改报错
+
+2.测试
+
+
+列表页中文本左对齐,数字右对齐
+详情页,修改"当前位置:当前位置： 市场营销 > 市场活动 > 查看
+统一使用下拉框
+如果没有数据的模块,给出提示"没有数据"
+
+1.关于一个页面多个功能时，功能的判断
+2.导入
+
+
+导出步骤
+1.配置application.namedesc.properties
+2.配置application.export.properties
+3.列表页加入导出按钮，可从用户列表页拷贝，然后修改uri属性
+4.添加绑定导出事件Grid().init().bindExport()
+5.后台使用“带条件导出”方法，参考UserController.exportCondition，
+注意Search.decodeValue(searchParams)方法，此方法用来防止中文参数乱码
+
+--------------------2014-06-19--------------------
+1.菜单新增后，未在菜单栏显示
+2.修改菜单栏显示位置，对菜单也没有影响
+3.删除菜单后，应该转至登录页
+
+
+
+
+
+
+
+

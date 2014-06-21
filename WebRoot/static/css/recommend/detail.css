@@ -1,0 +1,23 @@
+@charset "utf-8";
+/* CSS Document */
+.time_close1{ top:-22px; left:80px;}
+.time_close2{ top:-22px; left:210px;}
+.h_pr1{width:1px; height:1px; position:relative; display:block;}
+.w99b{ width:99%;}
+.w95b{ width:95%;}
+.id_table1 li{float:left;}
+.id_table2{border-collapse: collapse;
+    border-spacing: 0;}
+.id_table2 th{ font-size:14px;}
+.id_table2 tr{ height:40px;}
+.id_table2 tr:hover{ color:#e28d1f;}
+.id_table2 tr:hover th{ color:#222;}
+.id_table2 tr:hover a{ color:#e28d1f;}
+.id_table2 tr td a{ color:#222222; text-decoration:underline;}
+.id_table2 tr{ text-align:center;}
+.id_table2 tr td{ padding-left:2px; padding-right:2px;}
+.id_ul1 li{ float:left; margin-right:10px;}
+.id_table3 tr{ background-color:#fff; height:40px;}
+.id_table4 tr{ background-color:#fff; height:200px;}
+
+

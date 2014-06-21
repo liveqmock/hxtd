@@ -1,0 +1,40 @@
+package com.baihui.hxtd.soa.system.dao;
+
+import org.springframework.stereotype.Repository;
+
+import com.baihui.hxtd.soa.base.orm.hibernate.HibernateDAOImpl;
+import com.baihui.hxtd.soa.system.entity.Message;
+import com.baihui.hxtd.soa.system.entity.UserMessage;
+/**
+ * 
+ * 功能描述：系统消息和用户关系表持久化层
+ * @author huizijing
+ * @company 北京市百会纵横科技有限公司
+ * @copyright (版权)  本文件归属 北京市百会纵横科技有限公司 
+ * @since (该版本支持的 JDK 版本) ： 1.6 
+ * @ClassName: com.baihui.hxtd.soa.system.dao.MessageDao.java
+ * @version (版本) 1.0
+ * @date 2014-6-6
+ */
+@Repository
+public class UserMessageDao extends HibernateDAOImpl<UserMessage, Long>{
+
+	public void saveUserMessage(UserMessage userMessage) {
+		save(userMessage);
+		
+	}
+	/**
+	 * 根据id得到系统消息
+	 * @param id
+	 * @return Message
+	 */
+	public UserMessage getById(Long id) {
+		StringBuffer hql=new StringBuffer("from UserMessage userMessage ");
+        hql.append("left join fetch userMessage.message ");
+        hql.append("left join fetch userMessage.message.creater ");
+        hql.append("left join fetch userMessage.user ");
+        hql.append("where userMessage.id=? ");
+		return findUnique(hql.toString(), id);
+	}
+
+}

@@ -1,0 +1,18 @@
+/* CSS Document */
+
+.foder{width:200px;margin:0 auto;position:relative;top:0;left:0;overflow:auto;}
+.pack {background-position: 0px -204px;}
+.packC {background-position: 0px -226px;}
+.open{background-position: 0px -26px;}
+.close{background-position: 0px 0px;}
+.btn{width:14px;height:14px;display:block;background-image: url(../images/btn_icon.png);float:left;margin-top:10px;}
+.none{display:none;}
+.block{display:block;}
+.ful{list-style-type: none;padding-left:22px;margin-left:0px;}
+.ful li{position:relative;font-size:12px;line-height:32px;}
+.ftext{margin-left:5px;}
+.fcont {font-family: Arail;margin-left:10px;}
+
+.top_title{background:url(../images/left_top_tbg.png) repeat-x;height:29px; line-height:29px;padding-left:20px;}
+
+

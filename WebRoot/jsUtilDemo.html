@@ -1,0 +1,99 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=gb2312" />
+<meta name="keywords" content="" />
+<meta name="description" content="" />
+<title>JS 测试页面</title>
+
+<!--公共部分-->
+<script type="text/javascript" src="js/jquery.min.js"></script>
+<script type="text/javascript" src="js/js-util.js"></script>
+<script>
+var alertMsg = "onclick=jsUtil.alert(msg,title,width,height)";
+var confirmMsg = "onclick=jsUtil.confirm(title,yseFunction,title,width,height);";
+function yesFun(){
+}
+var zNodes =[
+		{id:1, pId:0, name:"菜单1", open:true},
+		{id:2, pId:1, name:"子菜单1", open:false},
+		{id:11, pId:2, name:"子子菜单1", open:false,value:"子子菜单1"},
+		{id:11, pId:2, name:"子子菜单2", open:false,value:"子子菜单2"},
+		{id:11, pId:2, name:"子子菜单3", open:false,value:"子子菜单3"},
+		{id:11, pId:2, name:"子子菜单4", open:false,value:"子子菜单4"},
+
+		{id:3, pId:1, name:"子菜单2", open:false,value:"子菜单2"},
+		{id:4, pId:1, name:"子菜单3", open:false,value:"子菜单3"},
+		{id:5, pId:1, name:"子菜单4", open:false,value:"子菜单4"},
+		{id:6, pId:1, name:"子菜单5", open:false,value:"子菜单5"},
+		{id:7, pId:1, name:"子菜单6", open:false,value:"子菜单6"},
+		{id:8, pId:1, name:"子菜单7", open:false,value:"子菜单7"},
+		{id:9, pId:1, name:"子菜单8", open:false,value:"子菜单8"},
+		{id:10, pId:1, name:"子菜单9", open:false,value:"子菜单9"},
+		{id:11, pId:1, name:"子菜单10", open:false,value:"子菜单10"},
+		{id:12, pId:1, name:"子菜单11", open:false,value:"子菜单11"}
+	];
+function chileNodeFun(treeNode){
+	$("#easyTree").val(treeNode.value);
+}
+
+$(function(){
+	jsUtil.datepicker("#datepicker");//#datepicker
+	jsUtil.easyTree.init(zNodes,chileNodeFun);
+	
+	$("#easyTree").click(function(){
+		jsUtil.easyTree.show("#easyTree");
+	});
+});
+</script>
+</head>
+<body>
+<button id="opener" onclick="jsUtil.alert(alertMsg,title,600,200);">alert调用</button><br/>
+<button id="opener" onclick="jsUtil.confirm(confirmMsg,yesFun,title,600,200);">confirm调用</button><br/>
+
+<input type="text" id="datepicker"/>
+<div class="demo-description">
+<p>关于日历组件，使用jquery选择器来批量或者单个绑定文本框</p>
+<p ><font style="color:blue;">$(function(){<br/>
+	&nbsp&nbsp&nbsp&nbspjsUtil.datepicker("#datepicker");//#datepicker选择器<br/>
+});</font></p>
+
+
+
+<div ><input type="text" id="easyTree" /></div>
+<div style="clear:both;"></div>
+<div ><p>给文本框绑定显示的树菜单：<br/>
+<font style="color:blue;">$(function(){<br/>
+	&nbsp&nbsp&nbsp&nbspjsUtil.easyTree.init(zNodes,chileNodeFun);<br/>
+	&nbsp&nbsp&nbsp&nbsp$("#easyTree").click(function(){//给文本框绑定点击事件<br/>
+		&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbspjsUtil.easyTree.show("#easyTree");//点击时触发<br/>
+	&nbsp&nbsp&nbsp&nbsp});<br/>
+});<br/>
+//zNode参数：集合数组，必要参数【id：唯一标识，pid：父ID 标示是哪一个节点的子节点】<br/>
+var zNodes =[<br/>
+		&nbsp&nbsp&nbsp&nbsp{id:1, pId:0, name:"菜单1", open:true},<br/>
+		&nbsp&nbsp&nbsp&nbsp{id:2, pId:1, name:"子菜单1", open:false},<br/>
+		&nbsp&nbsp&nbsp&nbsp{id:11, pId:2, name:"子子菜单1", open:false,value:"子子菜单1"},<br/>
+		&nbsp&nbsp&nbsp&nbsp{id:11, pId:2, name:"子子菜单2", open:false,value:"子子菜单2"},<br/>
+		&nbsp&nbsp&nbsp&nbsp{id:11, pId:2, name:"子子菜单3", open:false,value:"子子菜单3"},<br/>
+		&nbsp&nbsp&nbsp&nbsp{id:11, pId:2, name:"子子菜单4", open:false,value:"子子菜单4"},<br/>
+		&nbsp&nbsp&nbsp&nbsp{id:3, pId:1, name:"子菜单2", open:false,value:"子菜单2"},<br/>
+		&nbsp&nbsp&nbsp&nbsp{id:4, pId:1, name:"子菜单3", open:false,value:"子菜单3"},<br/>
+		&nbsp&nbsp&nbsp&nbsp{id:5, pId:1, name:"子菜单4", open:false,value:"子菜单4"},<br/>
+		&nbsp&nbsp&nbsp&nbsp{id:6, pId:1, name:"子菜单5", open:false,value:"子菜单5"},<br/>
+		&nbsp&nbsp&nbsp&nbsp{id:7, pId:1, name:"子菜单6", open:false,value:"子菜单6"},<br/>
+		&nbsp&nbsp&nbsp&nbsp{id:8, pId:1, name:"子菜单7", open:false,value:"子菜单7"},<br/>
+		&nbsp&nbsp&nbsp&nbsp{id:9, pId:1, name:"子菜单8", open:false,value:"子菜单8"},<br/>
+		&nbsp&nbsp&nbsp&nbsp{id:10, pId:1, name:"子菜单9", open:false,value:"子菜单9"},<br/>
+		&nbsp&nbsp&nbsp&nbsp{id:11, pId:1, name:"子菜单10", open:false,value:"子菜单10"},<br/>
+		&nbsp&nbsp&nbsp&nbsp{id:12, pId:1, name:"子菜单11", open:false,value:"子菜单11"}];<br/>
+		//childNodeFun参数：当点击没有子节点的节点时触发的方法法（treeNode对象，zNodes数组中对应的对象）<br/>
+	function chileNodeFun(treeNode){<br/>
+	&nbsp&nbsp&nbsp&nbsp$("#easyTree").val(treeNode.value);<br/>
+}
+</font></p></div>
+
+</div>
+</body>
+</html>
+</html>

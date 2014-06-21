@@ -1,0 +1,27 @@
+*{ margin:0;padding:0 }
+body{ font-size:12px; font-family:Tahoma; color:#000000; margin:0; padding:0;height:100%;background:#f1f1f1;}
+ul{ list-style-type:none;}
+a{ text-decoration:none;}
+img{ border:none}
+.field{ margin:10px;}
+.field label{ float:left;padding:6px;}
+.field input.text{ border:1px solid #c5c5c5;padding:6px;}
+.field .button{ border:none;width:94px;height:28px;cursor:pointer;}
+.side_switch{ width:13px;height:29px;position:absolute;left:15%;z-index:2;top:160px;cursor:pointer;background:url(../images/close_side_ico.png) no-repeat left center;}
+.side_switchl{ width:13px;height:29px;position:absolute;z-index:2;top:160px;display:none;cursor:pointer;background:url(../images/close_side_icol.png) no-repeat left center;border:1px solid #cfcfcf;}
+
+/*left*/
+.left{ float:left; border:#cfcfcf 1px solid; margin:20px 0px 20px 20px; height:auto; width:16%; position:absolute; bottom:22px; top:140px;}
+
+/*right*/
+.right{ width:82%;height:100%;min-height:800px\9;float:right;display:inline-block;}
+
+/*iframe width 100%*/
+.right_body{ height:100%;margin:20px 20px 20px 15px;border:1px solid #cfcfcf;}
+
+.gnl{ height:35px;line-height:35px;background:#eaeaea;border-bottom:1px solid #cfcfcf;}
+.gnl_btn li{ float:left;margin-left:25px;height:35px;line-height:35px;}
+.gnl_btn li a{ display:inline-block;height:35px;line-height:35px;overflow:hidden;background:url(../images/btn_icon.png) no-repeat;padding-left:15px;}
+.gnl_btn li a.tianjia{ background-position:0 -39px;}
+.gnl_btn li a.shanchu{ background-position:0 -63px;}
+.gnl_btn li a.daochu{ background-position:0 -89px;}

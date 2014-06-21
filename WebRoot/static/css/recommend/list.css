@@ -1,0 +1,15 @@
+@charset "utf-8";
+/* CSS Document */
+.time_close1{ top:-22px; left:80px;}
+.time_close2{ top:-22px; left:210px;}
+.h_pr1{width:1px; height:1px; position:relative; display:block;}
+.w99b{ width:99%;}
+.id_table1 li{float:left;}
+.id_table2{border-collapse: collapse;
+    border-spacing: 0;}
+.id_table2 th{ font-size:14px;}
+.id_table2 tr{ height:40px;}
+.id_table2 tr td{ text-align:center;}
+.id_ul1 li{ float:left; margin-right:10px;}
+
+

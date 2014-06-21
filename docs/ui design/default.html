@@ -1,0 +1,675 @@
+﻿<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>tqphp</title>
+<link rel="stylesheet" type="text/css" href="css/admin_style.css" />
+<script src="js/jquery-1.4.4.min.js"></script>
+<script src="js/iframe.js"></script>
+<link href="css/css.css" rel="stylesheet" type="text/css" />
+<script type="text/javascript">
+    var stripe = function() {
+        var tables = document.getElementsByTagName("table");    
+        for(var x=0;x!=tables.length;x++){
+            var table = tables[x];
+            if (! table) { return; }
+            var tbodies = table.getElementsByTagName("tbody");            
+            for (var h = 0; h < tbodies.length; h++) {
+                var even = true;
+                var trs = tbodies[h].getElementsByTagName("tr");                
+                for (var i = 0; i < trs.length; i++) {
+                    trs[i].onmouseover=function(){
+                        this.className += " ruled"; return false
+                    }
+                    trs[i].onmouseout=function(){
+                        this.className = this.className.replace("ruled", ""); return false
+                    }
+                    if(even)
+                        trs[i].className += " even";
+                    even = !even;
+                }
+            }
+        }
+    }
+    window.onload = stripe;
+    </script>
+	<script type="text/javascript">
+$(document).ready(function() {
+	jQuery.jqtab = function(tabtit,tabcon) {
+		$(tabcon).hide();
+		$(tabtit+" li:first").addClass("thistab").show(); 
+		$(tabcon+":first").show();
+	
+		$(tabtit+" li").click(function() {
+			$(tabtit+" li").removeClass("thistab");
+			$(this).addClass("thistab"); 
+			$(tabcon).hide(); 
+			var activeTab = $(this).find("a").attr("tab"); 
+			$("#"+activeTab).fadeIn(); 
+			return false;
+		});
+		
+	};
+	/*调用方法如下：*/
+	$.jqtab("#tabs",".tab_con");
+	
+});
+</script>
+</head>
+<body class="right_body">
+	<div class="body">
+	<div id="tabbox">
+
+    <ul class="tabs" id="tabs">
+       <li><a href="" tab="tab1" class="lbtnbg"><span class="cbtnbg"><span class="rbtnbg">置贴管理</span></span></a></li>
+       <li><a href="" tab="tab2" class="lbtnbg"><span class="cbtnbg"><span class="rbtnbg">置贴管理</span></span></a></li>
+       <li><a href="" tab="tab3" class="lbtnbg"><span class="cbtnbg"><span class="rbtnbg">置贴管理</span></span></a></li>
+       <li><a href="" tab="tab4"class="lbtnbg"><span class="cbtnbg"><span class="rbtnbg">置贴管理</span></span></a></li>
+	   <div class="clear"></div>
+    </ul>
+    <ul class="tab_conbox">
+        <li id="tab1" class="tab_con">
+           <div class="content" style="margin:0;border-top:none;">
+		<div class="gnl">
+			<ul class="gnl_btn">
+				<li><a href="" class="tianjia">添加</a></li>
+				<li><a href="" class="shanchu">删除</a></li>
+				<li><a href="" class="daochu">导出excel</a></li>
+			</ul>
+		</div>
+	<table cellspacing="1" class="tablesorter">
+		<thead class="thead1">
+			<tr>
+				<td><input type="checkbox" name="" id="" /></td>
+				<td>序号 </td>
+				<td class="usered">帖子</td>
+				<td>内容</td>
+				<td>标题</td>
+				<td>地址</td>
+				
+			</tr>
+		</thead>
+		<tbody>
+			<tr>
+				<td><input type="checkbox" name="" id="" checked="selected"/></td>
+				<td>01 </td>
+				<td class="usered">电信</td>
+				<td>北京市</td>
+				<td>北京</td>
+				<td>直销最总用户购买</td>
+				
+			</tr>
+			<tr>
+				<td><input type="checkbox" name="" id="" checked="selected"/></td>
+				<td>01 </td>
+				<td class="usered">电信</td>
+				<td>北京市</td>
+				<td>北京</td>
+				<td>直销最总用户购买</td>
+				
+			</tr>
+			<tr>
+				<td><input type="checkbox" name="" id="" checked="selected"/></td>
+				<td>01 </td>
+				<td class="usered">电信</td>
+				<td>北京市</td>
+				<td>北京</td>
+				<td>直销最总用户购买</td>
+				
+			</tr>
+			<tr>
+				<td><input type="checkbox" name="" id="" checked="selected"/></td>
+				<td>01 </td>
+				<td class="usered">电信</td>
+				<td>北京市</td>
+				<td>北京</td>
+				<td>直销最总用户购买</td>
+				
+			</tr><tr>
+				<td><input type="checkbox" name="" id="" checked="selected"/></td>
+				<td>01 </td>
+				<td class="usered">电信</td>
+				<td>北京市</td>
+				<td>北京</td>
+				<td>直销最总用户购买</td>
+				
+			</tr>
+			<tr>
+				<td><input type="checkbox" name="" id="" checked="selected"/></td>
+				<td>01 </td>
+				<td class="usered">电信</td>
+				<td>北京市</td>
+				<td>北京</td>
+				<td>直销最总用户购买</td>
+				
+			</tr>
+			<tr>
+				<td><input type="checkbox" name="" id="" checked="selected"/></td>
+				<td>01 </td>
+				<td class="usered">电信</td>
+				<td>北京市</td>
+				<td>北京</td>
+				<td>直销最总用户购买</td>
+				
+			</tr>
+			<tr>
+				<td><input type="checkbox" name="" id="" checked="selected"/></td>
+				<td>01 </td>
+				<td class="usered">电信</td>
+				<td>北京市</td>
+				<td>北京</td>
+				<td>直销最总用户购买</td>
+				
+			</tr>
+			<tr>
+				<td><input type="checkbox" name="" id="" checked="selected"/></td>
+				<td>01 </td>
+				<td class="usered">电信</td>
+				<td>北京市</td>
+				<td>北京</td>
+				<td>直销最总用户购买</td>
+				
+			</tr>
+			<tr>
+				<td><input type="checkbox" name="" id="" checked="selected"/></td>
+				<td>01 </td>
+				<td class="usered">电信</td>
+				<td>北京市</td>
+				<td>北京</td>
+				<td>直销最总用户购买</td>
+				
+			</tr>
+		</tbody>
+	</table>
+	<table cellspacing="1" class="tablesorter">
+	<tr>
+		<td>
+			<div class="fl list_right">
+				<select name="" id="">
+					<option value="">1</option>
+					<option value="">2</option>
+					<option value="">3</option>
+					<option value="">4</option>
+					<option value="">5</option>
+					<option value="">6</option>
+					<option value="">7</option>
+					<option value="">8</option>
+					<option value="">9</option>
+					<option value="">10</option>
+				</select>
+			</div>
+			<div class="clear"></div>
+			<ul class="fynew">
+				<li>|</li>
+				<li><a href=""><img src="images/lbtn.png" alt="" /></a></li>
+				<li><a href=""><img src="images/llbtn.png" alt="" /></a></li>
+				<li>|</li>
+				<li>第<input type="text" name="" id="" class=""/>共4页</li>
+				<li>|</li>
+				<li><a href=""><img src="images/rbtn.png" alt="" /></a></li>
+				<li><a href=""><img src="images/rrbtn.png" alt="" /></a></li>
+				<li>|</li>
+				<li><a href=""><img src="images/gengxi.png" alt="" /></a></li>
+			</ul>
+			<div class="fr" style="margin-right:10px;">显示1到10，共34记录</div>
+		</td>
+	</tr>
+	</table>
+</div>
+        </li>
+            
+        <li id="tab2" class="tab_con">
+        	<div class="content" style="margin:0;border-top:none;">
+		<div class="gnl">
+			<ul class="gnl_btn">
+				<li><a href="" class="tianjia">添加</a></li>
+				<li><a href="" class="shanchu">删除</a></li>
+				<li><a href="" class="daochu">导出excel</a></li>
+			</ul>
+		</div>
+	<table cellspacing="1" class="tablesorter">
+		<thead class="thead1">
+			<tr>
+				<td><input type="checkbox" name="" id="" /></td>
+				<td>序号 </td>
+				<td class="usered">帖子</td>
+				<td>内容</td>
+				<td>标题</td>
+				<td>地址</td>
+				
+			</tr>
+		</thead>
+		<tbody>
+			<tr>
+				<td><input type="checkbox" name="" id="" checked="selected"/></td>
+				<td>01 </td>
+				<td class="usered">电信</td>
+				<td>北京市</td>
+				<td>北京</td>
+				<td>直销最总用户购买</td>
+				
+			</tr>
+			<tr>
+				<td><input type="checkbox" name="" id="" checked="selected"/></td>
+				<td>01 </td>
+				<td class="usered">电信</td>
+				<td>北京市</td>
+				<td>北京</td>
+				<td>直销最总用户购买</td>
+				
+			</tr>
+			<tr>
+				<td><input type="checkbox" name="" id="" checked="selected"/></td>
+				<td>01 </td>
+				<td class="usered">电信</td>
+				<td>北京市</td>
+				<td>北京</td>
+				<td>直销最总用户购买</td>
+				
+			</tr>
+			<tr>
+				<td><input type="checkbox" name="" id="" checked="selected"/></td>
+				<td>01 </td>
+				<td class="usered">电信</td>
+				<td>北京市</td>
+				<td>北京</td>
+				<td>直销最总用户购买</td>
+				
+			</tr><tr>
+				<td><input type="checkbox" name="" id="" checked="selected"/></td>
+				<td>01 </td>
+				<td class="usered">电信</td>
+				<td>北京市</td>
+				<td>北京</td>
+				<td>直销最总用户购买</td>
+				
+			</tr>
+			<tr>
+				<td><input type="checkbox" name="" id="" checked="selected"/></td>
+				<td>01 </td>
+				<td class="usered">电信</td>
+				<td>北京市</td>
+				<td>北京</td>
+				<td>直销最总用户购买</td>
+				
+			</tr>
+			<tr>
+				<td><input type="checkbox" name="" id="" checked="selected"/></td>
+				<td>01 </td>
+				<td class="usered">电信</td>
+				<td>北京市</td>
+				<td>北京</td>
+				<td>直销最总用户购买</td>
+				
+			</tr>
+			<tr>
+				<td><input type="checkbox" name="" id="" checked="selected"/></td>
+				<td>01 </td>
+				<td class="usered">电信</td>
+				<td>北京市</td>
+				<td>北京</td>
+				<td>直销最总用户购买</td>
+				
+			</tr>
+			<tr>
+				<td><input type="checkbox" name="" id="" checked="selected"/></td>
+				<td>01 </td>
+				<td class="usered">电信</td>
+				<td>北京市</td>
+				<td>北京</td>
+				<td>直销最总用户购买</td>
+				
+			</tr>
+			<tr>
+				<td><input type="checkbox" name="" id="" checked="selected"/></td>
+				<td>01 </td>
+				<td class="usered">电信</td>
+				<td>北京市</td>
+				<td>北京</td>
+				<td>直销最总用户购买</td>
+				
+			</tr>
+		</tbody>
+	</table>
+	<table cellspacing="1" class="tablesorter">
+	<tr>
+		<td>
+			<div class="fl list_right">
+				<select name="" id="">
+					<option value="">1</option>
+					<option value="">2</option>
+					<option value="">3</option>
+					<option value="">4</option>
+					<option value="">5</option>
+					<option value="">6</option>
+					<option value="">7</option>
+					<option value="">8</option>
+					<option value="">9</option>
+					<option value="">10</option>
+				</select>
+			</div>
+			<div class="clear"></div>
+			<ul class="fynew">
+				<li>|</li>
+				<li><a href=""><img src="images/lbtn.png" alt="" /></a></li>
+				<li><a href=""><img src="images/llbtn.png" alt="" /></a></li>
+				<li>|</li>
+				<li>第<input type="text" name="" id="" class=""/>共4页</li>
+				<li>|</li>
+				<li><a href=""><img src="images/rbtn.png" alt="" /></a></li>
+				<li><a href=""><img src="images/rrbtn.png" alt="" /></a></li>
+				<li>|</li>
+				<li><a href=""><img src="images/gengxi.png" alt="" /></a></li>
+			</ul>
+			<div class="fr" style="margin-right:10px;">显示1到10，共34记录</div>
+		</td>
+	</tr>
+	</table>
+</div>
+        </li>
+    
+        <li id="tab3" class="tab_con">
+        	<div class="content" style="margin:0;border-top:none;">
+		<div class="gnl">
+			<ul class="gnl_btn">
+				<li><a href="" class="tianjia">添加</a></li>
+				<li><a href="" class="shanchu">删除</a></li>
+				<li><a href="" class="daochu">导出excel</a></li>
+			</ul>
+		</div>
+	<table cellspacing="1" class="tablesorter">
+		<thead class="thead1">
+			<tr>
+				<td><input type="checkbox" name="" id="" /></td>
+				<td>序号 </td>
+				<td class="usered">帖子</td>
+				<td>内容</td>
+				<td>标题</td>
+				<td>地址</td>
+				
+			</tr>
+		</thead>
+		<tbody>
+			<tr>
+				<td><input type="checkbox" name="" id="" checked="selected"/></td>
+				<td>01 </td>
+				<td class="usered">电信</td>
+				<td>北京市</td>
+				<td>北京</td>
+				<td>直销最总用户购买</td>
+				
+			</tr>
+			<tr>
+				<td><input type="checkbox" name="" id="" checked="selected"/></td>
+				<td>01 </td>
+				<td class="usered">电信</td>
+				<td>北京市</td>
+				<td>北京</td>
+				<td>直销最总用户购买</td>
+				
+			</tr>
+			<tr>
+				<td><input type="checkbox" name="" id="" checked="selected"/></td>
+				<td>01 </td>
+				<td class="usered">电信</td>
+				<td>北京市</td>
+				<td>北京</td>
+				<td>直销最总用户购买</td>
+				
+			</tr>
+			<tr>
+				<td><input type="checkbox" name="" id="" checked="selected"/></td>
+				<td>01 </td>
+				<td class="usered">电信</td>
+				<td>北京市</td>
+				<td>北京</td>
+				<td>直销最总用户购买</td>
+				
+			</tr><tr>
+				<td><input type="checkbox" name="" id="" checked="selected"/></td>
+				<td>01 </td>
+				<td class="usered">电信</td>
+				<td>北京市</td>
+				<td>北京</td>
+				<td>直销最总用户购买</td>
+				
+			</tr>
+			<tr>
+				<td><input type="checkbox" name="" id="" checked="selected"/></td>
+				<td>01 </td>
+				<td class="usered">电信</td>
+				<td>北京市</td>
+				<td>北京</td>
+				<td>直销最总用户购买</td>
+				
+			</tr>
+			<tr>
+				<td><input type="checkbox" name="" id="" checked="selected"/></td>
+				<td>01 </td>
+				<td class="usered">电信</td>
+				<td>北京市</td>
+				<td>北京</td>
+				<td>直销最总用户购买</td>
+				
+			</tr>
+			<tr>
+				<td><input type="checkbox" name="" id="" checked="selected"/></td>
+				<td>01 </td>
+				<td class="usered">电信</td>
+				<td>北京市</td>
+				<td>北京</td>
+				<td>直销最总用户购买</td>
+				
+			</tr>
+			<tr>
+				<td><input type="checkbox" name="" id="" checked="selected"/></td>
+				<td>01 </td>
+				<td class="usered">电信</td>
+				<td>北京市</td>
+				<td>北京</td>
+				<td>直销最总用户购买</td>
+				
+			</tr>
+			<tr>
+				<td><input type="checkbox" name="" id="" checked="selected"/></td>
+				<td>01 </td>
+				<td class="usered">电信</td>
+				<td>北京市</td>
+				<td>北京</td>
+				<td>直销最总用户购买</td>
+				
+			</tr>
+		</tbody>
+	</table>
+	<table cellspacing="1" class="tablesorter">
+	<tr>
+		<td>
+			<div class="fl list_right">
+				<select name="" id="">
+					<option value="">1</option>
+					<option value="">2</option>
+					<option value="">3</option>
+					<option value="">4</option>
+					<option value="">5</option>
+					<option value="">6</option>
+					<option value="">7</option>
+					<option value="">8</option>
+					<option value="">9</option>
+					<option value="">10</option>
+				</select>
+			</div>
+			<div class="clear"></div>
+			<ul class="fynew">
+				<li>|</li>
+				<li><a href=""><img src="images/lbtn.png" alt="" /></a></li>
+				<li><a href=""><img src="images/llbtn.png" alt="" /></a></li>
+				<li>|</li>
+				<li>第<input type="text" name="" id="" class=""/>共4页</li>
+				<li>|</li>
+				<li><a href=""><img src="images/rbtn.png" alt="" /></a></li>
+				<li><a href=""><img src="images/rrbtn.png" alt="" /></a></li>
+				<li>|</li>
+				<li><a href=""><img src="images/gengxi.png" alt="" /></a></li>
+			</ul>
+			<div class="fr" style="margin-right:10px;">显示1到10，共34记录</div>
+		</td>
+	</tr>
+	</table>
+</div>
+        </li>
+    
+        <li id="tab4" class="tab_con">
+        	<div class="content" style="margin:0;border-top:none;">
+		<div class="gnl">
+			<ul class="gnl_btn">
+				<li><a href="" class="tianjia">添加</a></li>
+				<li><a href="" class="shanchu">删除</a></li>
+				<li><a href="" class="daochu">导出excel</a></li>
+			</ul>
+		</div>
+	<table cellspacing="1" class="tablesorter">
+		<thead class="thead1">
+			<tr>
+				<td><input type="checkbox" name="" id="" /></td>
+				<td>序号 </td>
+				<td class="usered">帖子</td>
+				<td>内容</td>
+				<td>标题</td>
+				<td>地址</td>
+				
+			</tr>
+		</thead>
+		<tbody>
+			<tr>
+				<td><input type="checkbox" name="" id="" checked="selected"/></td>
+				<td>01 </td>
+				<td class="usered">电信</td>
+				<td>北京市</td>
+				<td>北京</td>
+				<td>直销最总用户购买</td>
+				
+			</tr>
+			<tr>
+				<td><input type="checkbox" name="" id="" checked="selected"/></td>
+				<td>01 </td>
+				<td class="usered">电信</td>
+				<td>北京市</td>
+				<td>北京</td>
+				<td>直销最总用户购买</td>
+				
+			</tr>
+			<tr>
+				<td><input type="checkbox" name="" id="" checked="selected"/></td>
+				<td>01 </td>
+				<td class="usered">电信</td>
+				<td>北京市</td>
+				<td>北京</td>
+				<td>直销最总用户购买</td>
+				
+			</tr>
+			<tr>
+				<td><input type="checkbox" name="" id="" checked="selected"/></td>
+				<td>01 </td>
+				<td class="usered">电信</td>
+				<td>北京市</td>
+				<td>北京</td>
+				<td>直销最总用户购买</td>
+				
+			</tr><tr>
+				<td><input type="checkbox" name="" id="" checked="selected"/></td>
+				<td>01 </td>
+				<td class="usered">电信</td>
+				<td>北京市</td>
+				<td>北京</td>
+				<td>直销最总用户购买</td>
+				
+			</tr>
+			<tr>
+				<td><input type="checkbox" name="" id="" checked="selected"/></td>
+				<td>01 </td>
+				<td class="usered">电信</td>
+				<td>北京市</td>
+				<td>北京</td>
+				<td>直销最总用户购买</td>
+				
+			</tr>
+			<tr>
+				<td><input type="checkbox" name="" id="" checked="selected"/></td>
+				<td>01 </td>
+				<td class="usered">电信</td>
+				<td>北京市</td>
+				<td>北京</td>
+				<td>直销最总用户购买</td>
+				
+			</tr>
+			<tr>
+				<td><input type="checkbox" name="" id="" checked="selected"/></td>
+				<td>01 </td>
+				<td class="usered">电信</td>
+				<td>北京市</td>
+				<td>北京</td>
+				<td>直销最总用户购买</td>
+				
+			</tr>
+			<tr>
+				<td><input type="checkbox" name="" id="" checked="selected"/></td>
+				<td>01 </td>
+				<td class="usered">电信</td>
+				<td>北京市</td>
+				<td>北京</td>
+				<td>直销最总用户购买</td>
+				
+			</tr>
+			<tr>
+				<td><input type="checkbox" name="" id="" checked="selected"/></td>
+				<td>01 </td>
+				<td class="usered">电信</td>
+				<td>北京市</td>
+				<td>北京</td>
+				<td>直销最总用户购买</td>
+				
+			</tr>
+		</tbody>
+	</table>
+	<table cellspacing="1" class="tablesorter">
+	<tr>
+		<td>
+			<div class="fl list_right">
+				<select name="" id="">
+					<option value="">1</option>
+					<option value="">2</option>
+					<option value="">3</option>
+					<option value="">4</option>
+					<option value="">5</option>
+					<option value="">6</option>
+					<option value="">7</option>
+					<option value="">8</option>
+					<option value="">9</option>
+					<option value="">10</option>
+				</select>
+			</div>
+			<div class="clear"></div>
+			<ul class="fynew">
+				<li>|</li>
+				<li><a href=""><img src="images/lbtn.png" alt="" /></a></li>
+				<li><a href=""><img src="images/llbtn.png" alt="" /></a></li>
+				<li>|</li>
+				<li>第<input type="text" name="" id="" class=""/>共4页</li>
+				<li>|</li>
+				<li><a href=""><img src="images/rbtn.png" alt="" /></a></li>
+				<li><a href=""><img src="images/rrbtn.png" alt="" /></a></li>
+				<li>|</li>
+				<li><a href=""><img src="images/gengxi.png" alt="" /></a></li>
+			</ul>
+			<div class="fr" style="margin-right:10px;">显示1到10，共34记录</div>
+		</td>
+	</tr>
+	</table>
+</div>
+        </li>
+    </ul>   
+</div>
+	
+	</div>
+</body>
+</html>

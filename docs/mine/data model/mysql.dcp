@@ -1,0 +1,9 @@
+[ConnectionProfile]
+ConnectionType=JDBC
+Dbms=MySQL
+DisableBind=0
+Driver=com.mysql.jdbc.Driver
+JarFiles=C:\Users\xiayouxue\.m2\repository\mysql\mysql-connector-java\5.1.30\mysql-connector-java-5.1.30.jar
+LogId=root
+TrimSpaces=0
+URL=jdbc:mysql://localhost:3306/hxtd

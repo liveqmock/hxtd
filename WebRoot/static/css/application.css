@@ -1,0 +1,35 @@
+.template {
+    display: none;
+}
+
+.message {
+    color: green;
+    font-weight: bold;
+    font-size: 1.5em;
+    text-align: center;
+    padding-top: .5em;
+}
+
+.remark {
+    text-align: left;
+    font-weight: bold;
+    font-size: 15px;
+}
+
+.toviewpage {
+    text-decoration: underline;
+}
+
+input.error {
+    border: 1px solid red
+}
+
+label.error {
+    padding-left: 18px;
+    color: red;
+}
+
+td.sortable {
+    position: relative;
+    min-width: 50px;
+}

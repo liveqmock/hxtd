@@ -14,7 +14,7 @@
     <title>菜单管理</title>
 
     <link rel="stylesheet" href="${ctx}/static/css/application.css" type="text/css"/>
-    <link rel="stylesheet" href="${ctx}/static/css/recommend/empower.css" type="text/css" />
+    <link rel="stylesheet" href="${ctx}/static/css/recommend/empower.css" type="text/css"/>
 
     <link rel="stylesheet" href="${ctx}/static/component/zTree_v3/css/zTreeStyle.css" type="text/css"/>
     <script type="text/javascript" src="${ctx}/static/component/zTree_v3/js/jquery.ztree.core-3.5.js"></script>
@@ -28,11 +28,11 @@
     <script type="text/javascript">
         $(function () {
 
-            var grid = new Grid().init({paginationActive: false});
+            var grid = new Grid().init({paginationActive: false, deleteCallback: Grid.deleteSynTree(window.ztree, $("[name=id]"))});
 
-            var ztree = jsUtil.menuTree({
-                data:${menuTree},
-                selectedId:${parentId},
+            window.ztree = jsUtil.menuTree({
+                data:${menuTree==null?"":menuTree},
+                selectedId: "${parentId}",
                 ztreeOptions: {
                     edit: {
                         enable: true,
@@ -40,17 +40,11 @@
                         showRenameBtn: false
                     },
                     callback: {
-                        beforeClick: function (treeId, treeNode) {
-                            var selectedNodes = ztree.getSelectedNodes();
-                            var isClickSelf = $.inArray(treeNode, selectedNodes) > -1;
-                            if (isClickSelf) {
-                                ztree.cancelSelectedNode(selectedNodes[0]);
-                                $("[name=id]").val("");
-                                var $add = $(".add");
-                                $add.attr("href", $add.attr("href").split("=").shift() + "=");
-                            }
-                            return !isClickSelf;
-                        },
+                        beforeClick: $.Ztree.switchSelected(function () {
+                            $("[name=id]").val("");
+                            var $add = $(".add");
+                            $add.attr("href", $add.attr("href").split("=").shift() + "=");
+                        }),
                         onClick: function (event, treeId, treeNode) {
                             $("[name=id]").val(treeNode.id);
                             var $add = $(".add");

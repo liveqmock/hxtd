@@ -55,5 +55,24 @@
 
     });
 
+    $.Ztree = function () {}
+
+    $.extend($.Ztree, {
+        /**是否点击当前节点*/
+        isClickSelf: function (ztree, treeNode) {
+            return $.inArray(treeNode, ztree.getSelectedNodes()) > -1;
+        },
+        /**切换选中状态*/
+        switchSelected: function (callback) {
+            var _this = this;
+            return function (ztreeId, treeNode) {
+                var ztree = $.fn.zTree.getZTreeObj(ztreeId);
+                var isClickSelf = _this.isClickSelf(ztree, treeNode);
+                isClickSelf && (ztree.cancelSelectedNode() || callback.apply(this, [ztree, treeNode]));
+                return !isClickSelf;
+            };
+        }
+    });
+
 
 })(jQuery);

@@ -10,12 +10,11 @@
 <c:set var="ctx" value="${pageContext.request.contextPath}"/>
 <link rel="stylesheet" href="${ctx}/static/css/recommend/detail.css" type="text/css"/>
 <link rel="stylesheet" href="${ctx}/static/css/application.css" type="text/css"/>
-<script type="text/javascript" src="${ctx}/static/js/jquery-json.2.4.js"></script>
 <script type="text/javascript" src="${ctx}/static/js/jquery-jtemplates.js"></script>
 <script type="text/javascript" src="${ctx}/static/js/js-util.common.js"></script>
 <script type="text/javascript">
 $(function(){
-	new Grid().init({ containerSelector: 'memoircontainer' });
+	new Grid().init({ containerSelector: '.memoircontainer' });
 	$(".contactrecords").click(function(){
 		iframeRemoir('add', '');
 	});
@@ -55,7 +54,17 @@ function iframeRemoir(act, id){
 	<form action="${ctx}/common/memoir/query.do" onsubmit="return false;">
 		<input type="hidden" name="moduleId" value="${moduleId}"/>
 		<input type="hidden" name="moduleType" value="${moduleType}"/>
-		<tags:paginationparams page="${page}"></tags:paginationparams>
+		<c:choose>
+			<c:when test="${page}">
+				<tags:paginationparams page="${page}"></tags:paginationparams>
+			</c:when>
+			<c:otherwise>
+				<input type="hidden" value="0" name="hibernatePageNo"/>
+				<input type="hidden" value="10" name="hibernatePageSize"/>
+				<input type="hidden" value="modifiedTime" name="hibernateOrderBy"/>
+				<input type="hidden" value="desc" name="hibernateOrder"/>
+			</c:otherwise>
+		</c:choose>
 	</form>
 	<table class="cb id_table2 w pr35">
 		<tr>
@@ -89,6 +98,35 @@ function iframeRemoir(act, id){
 	    </tr>
 	    {#/for} 
 	</textarea>
-	<%@include file="/WEB-INF/template/sort.jsp" %>
-	<%@include file="/WEB-INF/template/pagination.jsp" %>
+	<textarea id="template-sort" class="template template-sort">
+    <span>{$T.name}</span>
+    <span class="margin0 block_inline ml5 vm">
+        <a href="javascript:void(0)" class="globle_img block order {$T.descClass}" order="desc"></a>
+        <a href="javascript:void(0)" class="globle_img block mt3 order {$T.ascClass}" order="asc"></a>
+    </span>
+	</textarea>
+	<textarea id="template-pagination" class="template template-pagination">
+    <ul class="id_ul1 block  fl cb paginationbar" forform="{$T.formSelector}">
+        <li class="mt3">每页条数</li>
+        <li>
+            <select class="page-size" forformfield="{$T.pageSizeSelector}">
+                {#foreach [10,20,50,100] as pageSize}
+                <option value="{$T.pageSize}"
+                {$T.hibernatePageSize==$T.pageSize?"selected":""}>{$T.pageSize}</option>
+                {#/for}
+            </select>
+        </li>
+        <li class="mt3 cp"><a class="page-first">首页</a></li>
+        <li><a href="javascript:void(0)" class="block prev globle_img page-pre" title="上一页"></a></li>
+        <li class="pr">
+            <input type="text" class="pa fenye_ipt_text page-no" pageno="{$T.hibernatePageNo}" value="{$T.hibernatePageNo}"/>
+            <a href="javascript:void(0)" class="fenye_go globle_img block page-anyone"></a>
+        </li>
+        <li class="mt3">共<label class="page-totalpages">{$T.totalPages}</label>页</li>
+        <li><a href="javascript:void(0)" class="next globle_img block page-next" title="下一页"></a></li>
+        <li class="mt3 cp"><a class="page-last">末页</a></li>
+        <li><a href="javascript:void(0)" class="fenye_break globle_img block page-rel" title="刷新"></a></li>
+    </ul>
+    <p class="fr mr35">显示{$T.startRow}到{Math.min($T.endRow,$T.totalCount)}条，共{$T.totalCount}条</p>
+	</textarea>
 </div>

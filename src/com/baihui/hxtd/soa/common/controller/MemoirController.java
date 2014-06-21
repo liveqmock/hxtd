@@ -61,8 +61,7 @@ public class MemoirController {
 	  * findPage(查询模块相关联系纪要)
 	  * @Description: 查询模块相关联系纪要
 	  * @param request HttpServletRequest
-	  * @param pageNumber 当前页
-	  * @param pageSize 分页大小
+	  * @param page 分页
 	  * @param moduleId 模块主键id
 	  * @param moduleType 模块类型
 	  * @param out PrintWriter
@@ -70,16 +69,10 @@ public class MemoirController {
 	 */
 	@RequestMapping(value = "/query.do")
 	public void query(HttpServletRequest request,
-			@RequestParam(value = "pageNo", defaultValue = "1") int pageNumber,
-            @RequestParam(value = "pageSize", defaultValue = "10") int pageSize, 
+			HibernatePage<Memoir> page,
 			@RequestParam(value = "moduleId") Long moduleId,
 			@RequestParam(value = "moduleType") Long moduleType,
 			PrintWriter out) throws IOException {
-		/************分页查询*****************/
-		HibernatePage<Memoir> page = new HibernatePage<Memoir>(pageNumber, pageSize);
-		page.setHibernateOrderBy("modifiedTime");
-        page.setHibernateOrder("desc");
-		
         /************分页查询*****************/
 		memoirService.findPage(moduleId, moduleType, page);
 		

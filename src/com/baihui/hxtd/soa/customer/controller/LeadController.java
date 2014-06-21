@@ -84,9 +84,8 @@ public class LeadController {
 	@RequestMapping(value = "/toQueryPage.do")
 	public String toQueryPage(Model model) {
 		logger.info("LeadController.toQueryPage跳转线索列表页");
-		List<Dictionary> dict = dictionaryService.findChildren("040101");
 		model.addAttribute("page",new HibernatePage<Lead>().order("desc").orderBy("modifiedTime"));
-		model.addAttribute("dict",dict);
+		setDefaultDict(model);
 		return "/customer/lead/list";
 	}
 

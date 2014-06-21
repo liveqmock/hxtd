@@ -15,7 +15,7 @@ var jsUtil = {
 		if(projectName=="/hxtd"){
 			return (localhostPaht + projectName);
 		}
-			return localhostPaht;
+		return localhostPaht;
 	},
 	init:function(){ 
 		//动态加载有时会使页面上的js代码的效果失效，改用直接加载
@@ -83,9 +83,6 @@ var jsUtil = {
 	confirm:function(msg,yesFun,title,width,height){
 		DIALOG.text(msg);
 		var config = jsUtil.getDialogConfig(title,width,height);
-		// if(!yesFun){
-		// 	return null;
-		// }
 		config.buttons={"确定":function(){
 				DIALOG.dialog( "close" );
 				yesFun();
@@ -97,16 +94,17 @@ var jsUtil = {
 	},
 	datepicker:function(rep){
 		var path = jsUtil.getRootPath();
-		$.getScript(path+ "/static/js/ui/jquery.ui.datepicker.js",function(){
-			$.datepicker.regional['zh-CN'] = {
-				closeText : '关闭',
+		$.getScript(path+ "/static/js/ui/jquery.ui.datepicker.js", function(){
+			var txtObj;
+			$(rep).datepicker({//datepicker本地化
+				showButtonPanel: true,
+				closeText : '清空',
+				currentText: '今天',
 				prevText : '&#x3c;上月',
 				nextText : '下月&#x3e;',
 				currentText : '今天',
-				monthNames : [ '一月', '二月', '三月', '四月', '五月', '六月', '七月', '八月',
-						'九月', '十月', '十一月', '十二月' ],
-				monthNamesShort : [ '一', '二', '三', '四', '五', '六', '七', '八',
-						'九', '十', '十一', '十二' ],
+				monthNames : [ '一月', '二月', '三月', '四月', '五月', '六月', '七月', '八月', '九月', '十月', '十一月', '十二月' ],
+				monthNamesShort : [ '一', '二', '三', '四', '五', '六', '七', '八', '九', '十', '十一', '十二' ],
 				dayNames : [ '星期日', '星期一', '星期二', '星期三', '星期四', '星期五', '星期六' ],
 				dayNamesShort : [ '周日', '周一', '周二', '周三', '周四', '周五', '周六' ],
 				dayNamesMin : [ '日', '一', '二', '三', '四', '五', '六' ],
@@ -115,49 +113,31 @@ var jsUtil = {
 				firstDay : 1,
 				isRTL : false,
 				showMonthAfterYear : true,
-				yearSuffix : '年'
-			};  
-        $.datepicker.setDefaults($.datepicker.regional['zh-CN']);
-        var time = $(rep);
-			if (time.length != 2) {
-				time.datepicker();
-			} else {
-				var begin = time[0];
-				var end = time[1];
-				var setting_begin = {
-					showAnim : '',
-					numberOfMonths : 1,
-					beforeShow : function(input, inst) {
-						var myDate = new Date();
-						var m = myDate.getMonth() + 1;
-						var dateNow = myDate.getFullYear() + "-" + m + "-"
-								+ myDate.getDate();
-						var end = $(end).val();
-						var max;
-						if (!end) {
-							max = dateNow;
-						} else {
-							max = dateNow < end ? dateNow : end;
+				yearSuffix : '年',
+				maxDate: 0, //设置最大时间界限
+				onSelect: function(selectedDate){
+					var sltObj = this, index = 0, option = "minDate";
+					$(rep).each(function(i, obj){
+						if(sltObj == obj){
+							if(i % 2 == 1){
+								option = "maxDate";
+								index = i - 1;
+							}else{
+								option = "minDate";
+								index = i + 1;
+							}
+							return false;
 						}
-						$(this).datepicker("option", "maxDate", max);
-					}
-				};
-				var setting_end = {
-					showAnim : '',
-					numberOfMonths : 1,
-					beforeShow : function(input, inst) {
-						var myDate = new Date();
-						var m = myDate.getMonth() + 1;
-						var dateNow = myDate.getFullYear() + "-" + m + "-"
-								+ myDate.getDate();
-						$(this).datepicker("option", "maxDate", dateNow);
-						var min = $(begin).val();
-						$(this).datepicker("option", "minDate", min);
-					}
-				};
-				$(begin).datepicker(setting_begin);
-				$(end).datepicker(setting_end);
-			}
+					});
+					$(rep).eq(index).datepicker("option", option, selectedDate);
+			    },
+			    beforeShow: function(input, inst){
+			    	txtObj = input;
+			    }
+			});
+			$(".ui-datepicker-close").live("click", function(){
+				txtObj.value = '';//清空
+			});
 		});
 	},
 	datepickerNotNow:function(rep){

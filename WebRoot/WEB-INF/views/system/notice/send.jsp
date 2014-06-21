@@ -53,8 +53,8 @@ function clearInputVal(obj){//清除
             <div class="clear"></div>
         </div>
         <div class="baocun">
-            <c:if test="${VM_ALL!=null}">
-                <div class="message">${VM_ALL}</div>
+            <c:if test="${VM_BUSINESS!=null}">
+                <div class="message">${VM_BUSINESS}</div>
             </c:if>
 
             <div class="clear"></div>

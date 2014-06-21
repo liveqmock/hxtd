@@ -53,22 +53,10 @@ Grid.prototype = {
         }
         return this;
     },
-    /**设置分页*/
-    setPagination: function () {
-        if (this.options.paginationActive) {
-            var _this = this;
-            $(this.container).bind("pagination", function (event, page) {
-                _this.renderPagination(page);
-                _this.bindPagination();
-                _this.setPaginationbarHiddenOnePage();
-            });
-        }
-        return this;
-    },
     /**加载表格*/
     loadGrid: function (options) {
         var _this = this;
-        this.clearGrid();
+        this.clearGrid().clearPagination();
 
         options = $.extend(true, {
             ajaxArgs: [this.formAction, function (result) {
@@ -79,11 +67,6 @@ Grid.prototype = {
             }, null, this.form.formSerialize()]
         }, options);
         RcmsAjax.ajax.apply(RcmsAjax, options.ajaxArgs);
-        return this;
-    },
-    /**清除表格内容*/
-    clearGrid: function () {
-        this.list.empty();
         return this;
     },
     /**加载表格附带禁用按钮功能*/
@@ -120,11 +103,20 @@ Grid.prototype = {
         button.bind("click", button.data("click"));
         return this;
     },
+    /**清除表格内容*/
+    clearGrid: function () {
+        this.list.empty();
+        return this;
+    },
+    /**含有数据*/
+    hasData: function (data) {
+        var result = data.result || data.list;
+        return result && result.length > 0;
+    },
     /**渲染列表*/
     renderList: function (data) {
         var options = this.options;
-        var result = data.result || data.list;
-        if (!result || result.length == 0) {
+        if (!this.hasData(data)) {
             var resultTemplate = "<tr><td colspan='{$T.colspan}' align='center'><b>没有符合条件的数据</b></td></tr>";
             var data = {colspan: this.header.children().length};
             $(options.resultSelector, this.container).setTemplate(resultTemplate).processTemplate(data);
@@ -169,8 +161,8 @@ Grid.prototype = {
                 ids.each(function () {values.push(this.value);});
                 _this.disableButton($this);
                 RcmsAjax.ajax($this.attr("uri"), function () {
-                    if (_this.options.deleteSomeCallback) {
-                        var isContinue = _this.options.deleteSomeCallback(values);
+                    if (_this.options.deleteCallback) {
+                        var isContinue = _this.options.deleteCallback(values);
                         isContinue != false && _this.loadGridWithDisable({button: $this});
                     } else {
                         _this.loadGridWithDisable({button: $this});
@@ -186,7 +178,17 @@ Grid.prototype = {
         var _this = this;
         $(this.options.deleteOneSelector, this.container).live("click", function () {
             var $this = $(this);
-            jsUtil.confirm("确定要删除吗？", function () {RcmsAjax.ajax($this.attr("uri"), function () {_this.loadGrid();});});
+            jsUtil.confirm("确定要删除吗？", function () {
+                var url = $this.attr("uri");
+                RcmsAjax.ajax(url, function () {
+                    if (_this.options.deleteCallback) {
+                        var isContinue = _this.options.deleteCallback([$.URL.jsonParamsByUrl(url).id]);
+                        isContinue != false && _this.loadGrid();
+                    } else {
+                        _this.loadGrid();
+                    }
+                });
+            });
         });
         return this;
     },
@@ -312,13 +314,6 @@ Grid.prototype = {
         });
         return this;
     },
-    /**渲染分页*/
-    renderPagination: function (data) {
-        var options = this.options;
-        this.paginationContainer.setTemplateElement(options.paginationTemplateId).processTemplate(data);
-        this.setPaginationElements();
-        return this;
-    },
     /**设置分页元素*/
     setPaginationElements: function () {
         var options = this.options;
@@ -327,6 +322,32 @@ Grid.prototype = {
         this.pageNo = parseInt($(options.noSelector, this.pagination).attr("pageno"));
         this.totalPages = parseInt($(options.totalPagesSelector).text());
 
+        return this;
+    },
+    /**设置分页*/
+    setPagination: function () {
+        if (this.options.paginationActive) {
+            var _this = this;
+            $(this.container).bind("pagination", function (event, page) {
+                var result = page.result || page.list;
+                if (result.length >= _this.options.paginationCountLimit) {
+                    _this.renderPagination(page);
+                    _this.bindPagination();
+                }
+            });
+        }
+        return this;
+    },
+    /**清除表格内容*/
+    clearPagination: function () {
+        this.paginationContainer.empty();
+        return this;
+    },
+    /**渲染分页*/
+    renderPagination: function (data) {
+        var options = this.options;
+        this.paginationContainer.setTemplateElement(options.paginationTemplateId).processTemplate(data);
+        this.setPaginationElements();
         return this;
     },
     /**绑定分页事件*/
@@ -382,13 +403,6 @@ Grid.prototype = {
 
         $(options.refreshSelector, pagination).bind("click", function () {_this.loadGrid()});
 
-        return this;
-    },
-    /**设置选项一页数据时隐藏分页栏*/
-    setPaginationbarHiddenOnePage: function () {
-        if (this.options.paginationbarHiddenOnePage) {
-            this.paginationContainer[this.pageNo > 1 ? "show" : "hide"]();
-        }
         return this;
     },
     /**渲染排序*/
@@ -469,8 +483,8 @@ Grid.defaults = {
     resultSelector: ".list",
     resultTemplateId: "template-tbody",
 
-    paginationActive: true,
-    paginationbarHiddenOnePage: false,//仅显示一页数据时，隐藏分页栏
+    paginationActive: true,//是否启用分页
+    paginationCountLimit: 1,//分页的最低限制条数
     paginationContainerSelector: ".pagination",
     paginationTemplateId: "template-pagination",
     paginationSelector: ".paginationbar",
@@ -501,7 +515,7 @@ Grid.defaults = {
     checkAllSelector: ".checkall",
     checkItemSelector: ".checkitem",
     deleteSomeSelector: ".deletesome",
-    deleteSomeCallback: null,
+    deleteCallback: null,
     deleteOneSelector: ".delete",
     authorizationSelector: ".authorization",
     resetPasswordSelector: ".resetpassword",
@@ -509,6 +523,32 @@ Grid.defaults = {
     disableSelector: ".disable",
     exportSelector: ".export",
     exportFiledSelector: "[name^=search]"
+}
+
+/**删除数据后同步左侧树回调函数*/
+Grid.deleteSynTree = function (ztree, jqele) {
+    return function (ids) {
+        if (!ids || ids.length == 0) {
+            return true;
+        }
+
+        var node;
+        for (var i = 0; i < ids.length; i++) {
+            node = ztree.getNodeByParam("id", ids[i]);
+            ztree.removeNode(node);
+        }
+
+        if (node.pId) {
+            node = ztree.getNodeByParam("id", node.pId);
+        } else {
+            node = ztree.getNodes()[0];
+        }
+
+        ztree.selectNode(node);
+        jqele.val(node.id);
+
+        return true;
+    };
 }
 
 /**绑定选择所有事件*/

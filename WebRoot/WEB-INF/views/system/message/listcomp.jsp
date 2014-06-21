@@ -16,6 +16,7 @@ function onCheck(e, treeId, treeNode) {
 	nodes = zTree.getCheckedNodes(), node;
 	for(var i=0; i<nodes.length; i++){
 		node = nodes[i];
+		node.url="${ctx}/system/user/toQueryUser.comp?orgId="+node.id;
 		if(node.type == 'user'){//判断是用户
 			names = (names==undefined? '' : names + ',') + node.name;
 			ids = (ids==undefined? '' : ids + ',') + node.id;
@@ -33,6 +34,7 @@ $(document).ready(function(){
 		data: {
 			simpleData: {
 				enable: true
+				
 			}
 		},
 		callback: {

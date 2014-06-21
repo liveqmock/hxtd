@@ -1,5 +1,6 @@
 package com.baihui.hxtd.soa.project.service;
 
+import java.util.List;
 import java.util.Map;
 
 import javax.annotation.Resource;
@@ -107,6 +108,19 @@ public class SupplierService {
         supplierDao.delete(id);
     }
 
+    public List<Supplier> export(Map<String, Object> searchParams) throws NoSuchFieldException {
+        DetachedCriteria criteria = DetachedCriteria.forClass(Supplier.class);
+        criteria.add(Restrictions.eq("isDeleted", false));
+        criteria.setFetchMode("creator", FetchMode.JOIN);
+        criteria.setFetchMode("modifier", FetchMode.JOIN);
+        criteria.setFetchMode("type", FetchMode.JOIN);
+        criteria.setFetchMode("province", FetchMode.JOIN);
+        criteria.setFetchMode("city", FetchMode.JOIN);
+        criteria.setFetchMode("county", FetchMode.JOIN);
+        Map<String, SearchFilter> filters = Search.parse(searchParams);
+        Search.buildCriteria(filters, criteria, Supplier.class);
+        return supplierDao.find(criteria,3000);
+    }
 
 	public Logger getLogger() {
 		return logger;

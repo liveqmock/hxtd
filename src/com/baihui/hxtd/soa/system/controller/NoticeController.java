@@ -254,14 +254,14 @@ public class NoticeController {
 
         logger.info("检查文件是否为空");
         if (file.getSize() == 0) {
-            modelMap.addAttribute(Constant.VM_ALL, "未选择导入文件");
+            modelMap.addAttribute(Constant.VM_BUSINESS, "未选择导入文件");
             return "forward:/system/notice/toImportPage.do";
         }
 
         logger.info("检查文件扩展名");
         String extension = FilenameUtils.getExtension(file.getOriginalFilename());
         if (!"xls,xlsx".contains(extension)) {
-            modelMap.addAttribute(Constant.VM_ALL, "不支持的文件类型");
+            modelMap.addAttribute(Constant.VM_BUSINESS, "不支持的文件类型");
             return "forward:/system/notice/toImportPage.do";
         }
 
@@ -286,7 +286,7 @@ public class NoticeController {
         noticeService.add(notices);
 
         logger.info("添加操作提示");
-        model.addFlashAttribute(Constant.VM_ALL, "导入成功");
+        model.addFlashAttribute(Constant.VM_BUSINESS, "导入成功");
 
         logger.info("重定向至“{}”", redirectUri);
         return "redirect:" + redirectUri;

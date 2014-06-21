@@ -121,4 +121,13 @@ public class UserDao extends HibernateDAOImpl<User, Long> {
         String hql = "update User user set user.storeStatus.id=01040402 where user.isManager=true";
         return batchExecute(hql);
     }
+
+    /**
+     * 更新所有用户数据存储状态
+     */
+    public int updateAllStoreStatus() {
+        logger.info("更新所有用户数据存储状态");
+        String hql = "update User user set user.storeStatus.id=01040402";
+        return batchExecute(hql);
+    }
 }

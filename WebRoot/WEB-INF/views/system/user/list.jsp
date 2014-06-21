@@ -64,12 +64,12 @@
                 <input type="hidden" name="organizationId" value="${organizationId}"/>
                 <table class="fl mt5 w">
                     <tr>
-                        <td class="f14" align="right" width="7%">用户名称：</td>
-                        <td class="f14" align="left" width="13%"><input type="text" name="search_LIKE_name" value="${name}" class="text_input1"/></td>
-                        <td class="f14" align="right" width="7%">真实姓名：</td>
-                        <td class="f14" align="left" width="18%"><input type="text" name="search_LIKE_realName" value="${realName}" class="text_input1"/></td>
-                        <td class="f14" align="right" width="7%">激活：</td>
-                        <td class="f14" align="left" width="13%">
+                        <td class="f14" align="right" width="6%">用户名称：</td>
+                        <td class="f14" align="left" width="16%"><input type="text" name="search_LIKE_name" value="${name}" class="text_input1"/></td>
+                        <td class="f14" align="right" width="6%">真实姓名：</td>
+                        <td class="f14" align="left" width="16%"><input type="text" name="search_LIKE_realName" value="${realName}" class="text_input1"/></td>
+                        <td class="f14" align="right" width="6%">激活：</td>
+                        <td class="f14" align="left" width="16%">
                             <div class="pr">
                                 <select name="search_EQ_isActive" class="select2 pr">
                                     <option value="">全部</option>
@@ -78,8 +78,8 @@
                                 </select>
                             </div>
                         </td>
-                        <td width="15%">
-                            <a href="javascript:void(0)" class="reset block dump_btn globle_img fr mr35"></a>
+                        <td width="8%">
+                            <a href="javascript:void(0)" class="reset block dump_btn globle_img fr "></a>
                             <a href="javascript:void(0)" class="block c_white lh25 fr mr10 submit"><b class="allbtn_l block fl"></b><b class="allbtn_r pr13 block fl w_auto f14">查&nbsp;&nbsp;询</b></a>
                         </td>
                     </tr>
@@ -113,11 +113,14 @@
                         <c:if test="${VS_HAS_FUNCTIONS.userDisable}">
                             <li><a href="javascript:void(0)" uri="${ctx}/system/user/disable.do" class="block c_white lh25 mr10 disable"><b class="allbtn_l block fl"></b><b class="allbtn_r pr13 block fl w_auto f14">禁&nbsp;用</b></a></li>
                         </c:if>
+                    </ul>
+
+                    <ul class="fr id_table1 mt10 ml10">
                         <c:if test="${VS_HAS_FUNCTIONS.userImport}">
-                            <li><a href="${ctx}/system/user/toImportPage.do" class="block c_white lh25 mr10 import"><b class="allbtn_l block fl"></b><b class="allbtn_r pr13 block fl w_auto f14">导&nbsp;入</b></a></li>
+                            <li><a href="${ctx}/system/user/toImportPage.do" class="leading_in globle_img block_inline mr10" title="导入"></a></li>
                         </c:if>
                         <c:if test="${VS_HAS_FUNCTIONS.userExport}">
-                            <li><a href="javascript:void(0)" uri="${ctx}/system/user/export.do?TYPE=pagination" class="block c_white lh25 mr10 export"><b class="allbtn_l block fl"></b><b class="allbtn_r pr13 block fl w_auto f14">导&nbsp;出</b></a></li>
+                            <li><a href="javascript:void(0)" uri="${ctx}/system/user/export.do?TYPE=pagination" class="leading_out globle_img block_inline mr10" title="导出"></a></li>
                         </c:if>
                     </ul>
                 </div>

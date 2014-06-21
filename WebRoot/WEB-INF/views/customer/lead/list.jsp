@@ -9,25 +9,16 @@
 <c:set var="ctx" value="${pageContext.request.contextPath}" />
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
 <html>
-	<head>
-		<title>线索列表</title>
-		<link rel="stylesheet" href="${ctx}/static/css/application.css"
-			type="text/css" />
-		<link rel="stylesheet" href="${ctx}/static/css/recommend/detail.css"
-			type="text/css" />
-		<script type="text/javascript"
-			src="${ctx}/static/js/jquery-json.2.4.js">
-</script>
-		<script type="text/javascript"
-			src="${ctx}/static/js/jquery-jtemplates.js">
-</script>
-		<script type="text/javascript"
-			src="${ctx}/static/js/js-util.common.js">
-</script>
-		<script type="text/javascript"
-			src="${ctx}/static/js/scrollTitle.js?v=1">
-</script>
-		<script type="text/javascript">
+<head>
+<title>线索列表</title>
+<link rel="stylesheet" href="${ctx}/static/css/application.css" type="text/css" />
+<link rel="stylesheet" href="${ctx}/static/css/recommend/detail.css" type="text/css" />
+<script type="text/javascript" src="${ctx}/static/js/jquery-json.2.4.js"></script>
+<script type="text/javascript" src="${ctx}/static/js/jquery-jtemplates.js"></script>
+<script type="text/javascript" src="${ctx}/static/js/js-util.common.js"></script>
+<script type="text/javascript" src="${ctx}/static/js/scrollTitle.js?v=1"></script>
+<script type="text/javascript" src="${ctx}/static/js/pacs.js"></script>
+<script type="text/javascript">
 $(function() {
 	jsUtil.datepicker(".time");//加载时间控件
 	/**
@@ -57,8 +48,7 @@ $(function() {
 		title = "所有者";
 		jsUtil.dialogIframe(url, title, 800, 465, convOwner);
 	});
-	//给刷新按钮绑定重新加载的事件
-	$("#reload").click(load);
+	new PCAS("province","city","county");
 	//首次加载数据
 	grid = new Grid().init().bindExport();
 	
@@ -100,6 +90,7 @@ function childFun(node) {//树菜单子节点点击时事件
 }
 function reset() {
 	$("#form")[0].reset();
+	$(".time").val("");
 }
 </script>
 	</head>
@@ -116,15 +107,13 @@ function reset() {
 							<input type="text" class="text_input1" name="search_LIKE_name"
 								id="name" value="" />
 						</td>
-						<td class="f14" align="right" width="7%">修改时间：</td>
-    <td class="f14" align="left" width="18%">
-    			<div class="pr vm">
-	    			<a href="javascript:;" class="pa time_closenone1" onclick="javascript:$(this).nextAll().eq(1).val('');"></a>
-	    			<a href="javascript:;" class="pa time_closenone2" onclick="javascript:$(this).nextAll().eq(1).val('');"></a>
-	    			<input class="text_input2 input_close globle_img time" name="search_GTE_modifiedTime" type="text" readonly/>
-	    			-<input class="text_input2 input_close globle_img time" name="search_LTE_modifiedTime" type="text" readonly/>
-    			</div>
-    </td>
+						<td class="f14" align="right" width="7%">
+							邮箱：
+						</td>
+						<td class="f14" align="left" width="13%">
+							<input type="text" class="text_input1" name="search_LIKE_email"
+								id="name" value="" />
+						</td>
 						<td class="f14" align="right" width="7%">
 							线索来源：
 						</td>
@@ -133,24 +122,108 @@ function reset() {
 								<option value="">
 									--全部--
 								</option>
-								<c:forEach items="${dict}" var="d">
+								<c:forEach items="${source}" var="d">
 									<option value="${d.id}">
 										${d.key}
 									</option>
 								</c:forEach>
 							</select>
 						</td>
-						<td width="15%">
+						<td class="f14" align="right" width="7%">
+							修改时间：
+						</td>
+						<td class="f14" align="left" width="18%">
+							<div class="pr vm">
+								<a href="javascript:;" class="pa time_closenone1"
+									onclick="javascript:$(this).nextAll().eq(1).val('');"></a>
+								<a href="javascript:;" class="pa time_closenone2"
+									onclick="javascript:$(this).nextAll().eq(1).val('');"></a>
+								<input class="text_input2 input_close globle_img time"
+									name="search_GTE_modifiedTime" type="text" readonly />-<input class="text_input2 input_close globle_img time"
+									name="search_LTE_modifiedTime" type="text" readonly />
+							</div>
+						</td>
+						<td width="8%">
 							<a href="javascript:void(0)"
-								class="ml35 block c_white lh25 submit"><b
+								class=" block c_white lh25 submit"><b
 								class="allbtn_l block fl"></b><b
-								class="allbtn_r pr13 block fl w_auto f14">查&nbsp&nbsp询</b>
-							</a>
+								class="allbtn_r pr13 block fl w_auto f14">查&nbsp&nbsp询</b> </a>
 							<a href="javascript:formReset()"
 								class="reset block dump_btn globle_img fl ml10"></a>
 						</td>
-						<td class="f14" align="right" width="7%"></td>
-						<td class="f14" align="left" width="13%"></td>
+					</tr>
+					<tr>
+						<td class="f14" align="right" width="7%">
+							手机：
+						</td>
+						<td class="f14" align="left" width="13%">
+							<input type="text" class="text_input1" name="search_LIKE_mobile"
+								id="name" value="" />
+						</td>
+						<td class="f14" align="right" width="7%">
+							线索状态：
+						</td>
+						<td class="f14" align="left" width="13%">
+							<select name="search_EQ_status.id" class="select2">
+								<option value="">
+									--全部--
+								</option>
+								<c:forEach items="${status}" var="d">
+									<option value="${d.id}">
+										${d.key}
+									</option>
+								</c:forEach>
+							</select>
+						</td>
+						<td class="f14" align="right" width="7%">
+							行业：
+						</td>
+						<td class="f14" align="left" width="13%">
+							<select name="search_EQ_industry.id" class="select2">
+								<option value="">
+									--全部--
+								</option>
+								<c:forEach items="${industry}" var="d">
+									<option value="${d.id}">
+										${d.key}
+									</option>
+								</c:forEach>
+							</select>
+						</td>
+						<td class="f14" align="right" width="7%">
+							创建时间：
+						</td>
+						<td class="f14" align="left" width="18%">
+							<div class="pr vm">
+								<a href="javascript:;" class="pa time_closenone1"
+									onclick="javascript:$(this).nextAll().eq(1).val('');"></a>
+								<a href="javascript:;" class="pa time_closenone2"
+									onclick="javascript:$(this).nextAll().eq(1).val('');"></a>
+								<input class="text_input2 input_close globle_img time"
+									name="search_GTE_createdTime" type="text" readonly />-<input class="text_input2 input_close globle_img time"
+									name="search_LTE_createdTime" type="text" readonly />
+							</div>
+						</td>
+					</tr>
+					<tr>
+						<td class="f14" align="right" width="7%">
+							省：
+						</td>
+						<td class="f14" align="left" width="13%">
+							<select id="province" name="search_EQ_province.id" class="select2"></select>
+						</td>
+						<td class="f14" align="right" width="7%">
+							市：
+						</td>
+						<td class="f14" align="left" width="13%">
+							<select id="city" name="search_EQ_city.id" class="select2"></select>
+						</td>
+						<td class="f14" align="right" width="7%">
+							区/县：
+						</td>
+						<td class="f14" align="left" width="13%">
+							<select id="county" name="search_EQ_county.id" class="select2"></select>
+						</td>
 					</tr>
 				</table>
 				<tags:paginationparams page="${page}"></tags:paginationparams>
@@ -170,8 +243,7 @@ function reset() {
 								<a href="javascript:;" uri="${ctx}/customer/lead/delete.do"
 									class="deletesome block c_white lh25"><b
 									class="allbtn_l block fl"></b><b
-									class="allbtn_r pr13 block fl w_auto f14">删&nbsp;&nbsp;除</b>
-								</a>
+									class="allbtn_r pr13 block fl w_auto f14">删&nbsp;&nbsp;除</b> </a>
 							</li>
 						</c:if>
 						<c:if test="${VS_HAS_FUNCTIONS.leadAdd}">
@@ -179,29 +251,25 @@ function reset() {
 								<a href="${ctx}/customer/lead/toAddPage.do"
 									class="block c_white lh25 ml10"><b
 									class="allbtn_l block fl"></b><b
-									class="allbtn_r pr13 block fl w_auto f14">新&nbsp;&nbsp;增</b>
-								</a>
+									class="allbtn_r pr13 block fl w_auto f14">新&nbsp;&nbsp;增</b> </a>
 							</li>
 						</c:if>
 						<li>
 							<a href="javascript:;" class="submit block c_white lh25 ml10"><b
 								class="allbtn_l block fl"></b><b
-								class="allbtn_r pr13 block fl w_auto f14">刷&nbsp;&nbsp;新</b>
-							</a>
+								class="allbtn_r pr13 block fl w_auto f14">刷&nbsp;&nbsp;新</b> </a>
 						</li>
 						<li>
 							<a href="javascript:void(0)" id="modifyOwner"
 								class="block c_white lh25 ml10"><b class="allbtn_l block fl"></b><b
-								class="allbtn_r pr13 block fl w_auto f14">更改所有者</b>
-							</a>
+								class="allbtn_r pr13 block fl w_auto f14">更改所有者</b> </a>
 						</li>
 						<li>
 							<a href="javascript:void(0)"
 								uri="${ctx}/customer/lead/export.do?TYPE=pagination"
-								class="block c_white ml10 lh25 mr10 export">
-								<b class="allbtn_l block fl"></b>
-								<b class="allbtn_r pr13 block fl w_auto f14">导&nbsp;出</b>
-							</a>
+								class="block c_white ml10 lh25 mr10 export"> <b
+								class="allbtn_l block fl"></b> <b
+								class="allbtn_r pr13 block fl w_auto f14">导&nbsp;出</b> </a>
 						</li>
 						<!--<a href="javascript:void(0)" id="transfer" class="blue_btn">转换</a>
 		<a href="javascript:void(0)" id="import" class="blue_btn">导入</a>
@@ -233,7 +301,7 @@ function reset() {
 						<th>
 							银行卡类型
 						</th>
-						<th>
+						<th width="4%">
 							状态
 						</th>
 						<th width="12%" class="sortable orderby" orderby="createdTime">
@@ -275,7 +343,7 @@ function reset() {
 						<th>
 							银行卡类型
 						</th>
-						<th>
+						<th width="4%">
 							状态
 						</th>
 						<th width="12%" class="sortable orderby" orderby="createdTime">

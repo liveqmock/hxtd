@@ -134,10 +134,8 @@ function clearInputVal(obj){//清除
 		<tr>
 			<td  align="right" width="15%">证件类型：</td>
 			<td align="left">
-			<!-- <input name="cardType" type="text" value="${customer.cardType.key }"/>
-				<input name="cardType.id" type="hidden" value="${customer.cardType.id }" style="display:none;"/> -->
 				<select name="cardType.id" class="select1 pr">
-				<option value="-1">--无--</option>
+				<option value="040303">--无--</option>
 					<c:forEach items="${cardType}" var="cardType">
 				       <option value="${cardType.id }"
 						<c:if test="${customer.cardType.id==cardType.id }">
@@ -153,7 +151,7 @@ function clearInputVal(obj){//清除
 				<!--<input name="" type="text" value="${customer.riskGrade.key }"/>
 				<input name="riskGrade.id" type="text" value="${customer.riskGrade.id }" style="display:none;"/>-->
 				<select name="riskGrade.id" class="select1 pr">
-				<option value="-1">--无--</option>
+				<option value="040304">--无--</option>
 					<c:forEach items="${riskGrade}" var="riskGrade">
 				       <option value="${riskGrade.id }"
 						<c:if test="${customer.riskGrade.id==riskGrade.id }">
@@ -186,7 +184,7 @@ function clearInputVal(obj){//清除
 			<td  align="right" width="15%">开户银行：</td>
 			<td align="left">
 				<select name="openBank.id" class="select1 pr">
-				<option value="-1">--无--</option>
+				<option value="040307">--无--</option>
 					<c:forEach items="${openBank}" var="openBank">
 				       <option value="${openBank.id }"
 						<c:if test="${customer.openBank.id==openBank.id }">
@@ -208,7 +206,7 @@ function clearInputVal(obj){//清除
 			<td  align="right" width="15%">所有权：</td>
 			<td align="left">
 			<select name="ownerShip.id" class="select1 pr ">
-				<option value="-1">--无--</option>
+				<option value="040306">--无--</option>
 					<c:forEach items="${ownerShip}" var="ownerShip">
 				       <option value="${ownerShip.id }"
 						<c:if test="${customer.ownerShip.id==ownerShip.id }">
@@ -235,8 +233,10 @@ function clearInputVal(obj){//清除
 				</c:forEach>
 				</select>
 			</td>
-			<td  align="right" width="15%"></td>
-			<td align="left"></td>
+			<td  align="right" width="15%"><span class="w_red">*&nbsp;</span>邮箱：</td>
+			<td align="left">
+			<input name="email" type="text" value="${customer.email}" class="text_input3 required"/>
+			</td>
 		</tr></table>
 		<h1 class="f14 fbnone ml40 pt10">地址信息</h1>
 		<table class="cb id_table3 w95b bg_c_white margin0 mt10">

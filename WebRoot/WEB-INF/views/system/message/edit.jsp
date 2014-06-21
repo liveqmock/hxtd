@@ -83,9 +83,7 @@ function clearInputVal(obj){//清除
             <td align="right" width="15%" ><span class="w_red">*&nbsp;</span>系统消息内容：</td>
                 <td align="left">
                     
-                    <textarea name="content" class="required" style="width:90%;height:300px;border:1px solid #e0e0e0; margin:5px 0px">
-                    ${userMessage.message.content}
-</textarea>
+                    <textarea name="content" class="required" style="width:90%;height:300px;border:1px solid #e0e0e0; margin:5px 0px">${userMessage.message.content}</textarea>
                    
                </td>
            </tr>

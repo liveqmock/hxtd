@@ -33,7 +33,7 @@ function PCAS(){
     PCAS.SetP(this)
 };
 PCAS.SetP=function(PCA){
-	PCA.SelP.options.add(new Option(SPT,"-1"));
+	PCA.SelP.options.add(new Option(SPT,""));
 	RcmsAjax.ajaxNoMsg(jsUtil.getRootPath()+"/common/pcas/getRoot.docomp",function(result){
 		var list = result.result.list;
 		for (i = 0; i < list.length; i++) {
@@ -48,7 +48,7 @@ PCAS.SetP=function(PCA){
 PCAS.SetC=function(PCA){
 	var pid =$(PCA.SelP).val();
     PCA.SelC.length = 0;
-    PCA.SelC.options.add(new Option(SCT, "-1"));
+    PCA.SelC.options.add(new Option(SCT, ""));
     RcmsAjax.ajaxNoMsg(jsUtil.getRootPath()+"/common/pcas/getChildren.docomp",function(result){
     	var list = result.result.list;
 		for (i = 0; i < list.length; i++) {
@@ -65,7 +65,7 @@ PCAS.SetC=function(PCA){
 PCAS.SetA=function(PCA){
 	var pid =$(PCA.SelC).val();
     PCA.SelA.length = 0;
-    PCA.SelA.options.add(new Option(SAT, "-1"));
+    PCA.SelA.options.add(new Option(SAT, ""));
 	RcmsAjax.ajaxNoMsg(jsUtil.getRootPath()+"/common/pcas/getChildren.docomp",function(result){
 		var list = result.result.list;
 		for(i = 0; i < list.length; i++){

@@ -39,6 +39,7 @@ function Datepicker() {
 	this._unselectableClass = "ui-datepicker-unselectable"; // The name of the unselectable cell marker class
 	this._currentClass = "ui-datepicker-current-day"; // The name of the current day marker class
 	this._dayOverClass = "ui-datepicker-days-cell-over"; // The name of the day hover marker class
+	this._clearClass = "ui-datepicker-close"; //The name of the clear button class
 	this.regional = []; // Available regional settings, indexed by language code
 	this.regional[""] = { // Default regional settings
 		closeText: "Done", // Display text for close link
@@ -951,6 +952,10 @@ $.extend(Datepicker.prototype, {
 			inst.selectedDay = date.getDate();
 			inst.drawMonth = inst.selectedMonth = date.getMonth();
 			inst.drawYear = inst.selectedYear = date.getFullYear();
+			
+			/* click today selected current date to input */
+			this._setDateDatepicker(target, date);
+			this._selectDate(id, this._getDateDatepicker(target)); 
 		}
 		this._notifyChange(inst);
 		this._adjustDate(target);

@@ -15,24 +15,40 @@
 		attachment.query();
 	})
 </script>
-
+<input id="id" type="hidden" value="${id}">
 <c:if test="${query}">
-<input type="hidden" id="id" value="${id}"/>
-<div class="fr mt20">
-<h1 class="f14 fbnone mb10">附件列表</h1>
-<div class=" bg_c_white w470 d_bgw">
-<c:if test="${upload}">
-	<a href="javascript:attachment.upload()">上传附件</a>
-</c:if>
-<h1 class="cb pt20 pl10 fbnone">已上传：</h1>
-<table class="cb fbnone w440 margin0 pt10 bg_c_f3f3f3 mt20 id_table2">
-<tr class="fbnone">
-<th width="33%">名称</th>
-<th width="33%">类型</th>
-<th width="33%">操作</th>
-</tr>
-<tbody id="attBody"></tbody>
-</table>
-</div>
+<h1 class="f14 fbnone ml40">附件列表</h1>
+<div class="w95b  bg_c_white margin0">
+	<div class="w70b margin0 mt10 pt10 mb10">
+		<c:if test="${upload}">
+		<a href="javascript:attachment.upload();" class="block c_white lh25 fl ml10"> <b
+			class="allbtn_l block fl"></b><b
+			class="allbtn_r pr13 block fl w_auto f14">上传附件</b></a>
+		</c:if>
+	</div>
+	<br />
+	<h1 class="w70b margin0 fbnone f12 mt10 block">
+		已上传：
+	</h1>
+	<b class="w70b f_line2 block margin0"></b>
+
+	<table class="cb id_table3 w70b margin0 mt10 mb10">
+		<tr>
+			<th width="25%">
+				附件名称
+			</th>
+			<th width="25%">
+				类型
+			</th>
+			<th width="25%">
+				上传时间
+			</th>
+			<th width="25%">
+				操作
+			</th>
+		</tr>
+		<tbody id="attBody"></tbody>
+
+	</table>
 </div>
 </c:if>

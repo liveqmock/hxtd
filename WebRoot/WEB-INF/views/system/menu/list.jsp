@@ -8,14 +8,17 @@
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
 <%@ taglib prefix="tags" tagdir="/WEB-INF/tags" %>
 <c:set var="ctx" value="${pageContext.request.contextPath}"/>
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
 <html>
 <head>
     <title>菜单管理</title>
 
     <link rel="stylesheet" href="${ctx}/static/css/application.css" type="text/css"/>
-    <link rel="stylesheet" href="${ctx}/static/css/recommend/empower.css" type="text/css"/>
+    <link rel="stylesheet" href="${ctx}/static/css/recommend/empower.css" type="text/css" />
+
     <link rel="stylesheet" href="${ctx}/static/component/zTree_v3/css/zTreeStyle.css" type="text/css"/>
     <script type="text/javascript" src="${ctx}/static/component/zTree_v3/js/jquery.ztree.core-3.5.js"></script>
+    <script type="text/javascript" src="${ctx}/static/component/zTree_v3/js/jquery.ztree.exedit-3.5.js"></script>
 
     <script type="text/javascript" src="${ctx}/static/js/jquery-json.2.4.js"></script>
     <script type="text/javascript" src="${ctx}/static/js/jquery-jtemplates.js"></script>
@@ -31,6 +34,11 @@
                 data:${menuTree},
                 selectedId:${parentId},
                 ztreeOptions: {
+                    edit: {
+                        enable: true,
+                        showRemoveBtn: false,
+                        showRenameBtn: false
+                    },
                     callback: {
                         beforeClick: function (treeId, treeNode) {
                             var selectedNodes = ztree.getSelectedNodes();
@@ -48,11 +56,26 @@
                             var $add = $(".add");
                             $add.attr("href", $add.attr("href").split("=").shift() + "=" + treeNode.id);
                             grid.loadGrid();
+                        },
+                        beforeDrop: function (treeId, treeNodes, targetNode, moveType) {
+                            var isBrother = treeNodes[0].parentTId == targetNode.parentTId;
+                            if (!isBrother) {
+                                jsUtil.alert("只能在同级节点之间移动，不能跨越上级节点！");
+                            }
+                            return  isBrother;
+                        },
+                        onDrop: function (event, treeId, treeNodes, targetNode, moveType) {
+                            var $id = $("[name=id]");
+                            RcmsAjax.ajax("${ctx}/system/menu/move.doself", function () {
+                                $id.val(targetNode.pId);
+                                grid.loadGrid();
+                            }, null, $.param({sourceId: treeNodes[0].id, targetId: targetNode.id, moveType: moveType}));
                         }
                     }
                 }
             });
-        });
+        })
+        ;
     </script>
 </head>
 <body>

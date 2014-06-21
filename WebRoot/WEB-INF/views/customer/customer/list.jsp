@@ -19,9 +19,17 @@
 <script type="text/javascript" src="${ctx}/static/js/jquery-jtemplates.js"></script>
 <script type="text/javascript" src="${ctx}/static/js/js-util.common.js"></script>
 <script type="text/javascript" src="${ctx}/static/js/scrollTitle.js?v=1"></script>
-
+<script type="text/javascript" src="${ctx}/static/js/pacs.js"></script>
 <script type="text/javascript">
         $(function () {
+     
+     //获得省市县代码，加载三级联动name="search_EQ_source.id"
+	var province = 'search_EQ_province.id';
+	var city = 'search_EQ_city.id';
+	var county = 'search_EQ_county.id';
+	//修改为根据ID选择组件，之前用name选择组件当name中出现“.”时有问题
+	new PCAS("province","city","county",province,city,county);
+     
       /**
 	  * 单击更改所有者按钮时执行
 	  */
@@ -104,22 +112,31 @@ function convOwner(){
    <form id="form" action="${ctx}/customer/customer/query.do" onsubmit="return false;">
    <table class="fl mt5 w">
 	<tr>
-	<td class="f14" align="right" width="7%">客户名称：</td>
-	<td class="f14" align="left" width="13%"><input type="text" id="cname"  name="search_LIKE_name" value="${name }" /></td>
-	<td class="f14" align="right" width="7%">客户类型：</td>
-	<td class="f14" align="left" width="13%">
+	<td class="f14" align="right" width="6%">客户名称：</td>
+	<td class="f14" align="left" width="16%"><input type="text" id="cname" class="text_input1" name="search_LIKE_name" value="${name }" /></td>
+	<td class="f14" align="right" width="6%">客户类型：</td>
+	<td class="f14" align="left" width="16%">
 	<select name="search_EQ_type.id" class="select2">
      	<option value="">--全部--</option>
-     	<c:forEach items="${type}" var="t">
+     	<c:forEach items="${cType}" var="t">
      		<option value="${t.id}">${t.key}</option>
      	</c:forEach>
     </select>
 	</td>
-	<td class="f14" align="right" width="7%">修改时间：</td>
+	<td class="f14" align="right" width="6%">客户来源：</td>
+	<td class="f14" align="left" width="16%">
+	<select name="search_EQ_source.id" class="select2">
+     	<option value="">--全部--</option>
+     	<c:forEach items="${source}" var="s">
+     		<option value="${s.id}">${s.key}</option>
+     	</c:forEach>
+    </select>
+	</td>
+    <td class="f14" align="right" width="7%">创建时间：</td>
     <td class="f14" align="left" width="18%">
     <div class="pr vm"><a href="javascript:;" class="pa time_closenone1"title="清空"  onclick="javascript:$(this).nextAll().eq(1).val('');"></a>
     <a href="javascript:;" class="pa time_closenone2"title="清空"  onclick="javascript:$(this).nextAll().eq(1).val('');"></a>
-     <input class="text_input2 input_close globle_img time" name="search_GTE_modifiedTime" type="text" />-<input class="text_input2 input_close globle_img time" name="search_LTE_modifiedTime" type="text" />
+     <input class="text_input2 input_close globle_img time" name="search_GTE_createdTime" type="text" />-<input class="text_input2 input_close globle_img time" name="search_LTE_createdTime" type="text" />
     </div>
     </td>
 	<td width="15%">
@@ -127,12 +144,44 @@ function convOwner(){
 	 <a href="javascript:void(0)" class="block c_white lh25 fr mr10 submit">
 	<b class="allbtn_l block fl"></b>
 	<b class="allbtn_r pr13 block fl w_auto f14">
-	
 	查&nbsp;&nbsp;询</b></a>
-	 
 	</td>
-	<td class="f14" align="right" width="7%"></td>
-    <td class="f14" align="left" width="13%"></td>
+	</tr>
+	<tr>
+	<td class="f14" align="right" width="6%">邮箱：</td>
+    <td class="f14" align="left" width="16%"><input type="text" class="text_input1"id="cemail"  name="search_LIKE_email" value="${email }" /></td>
+	<td class="f14" align="right" width="6%">手机：</td>
+    <td class="f14" align="left" width="16%"><input class="text_input1"type="text" id="cmobile"  name="search_LIKE_mobile" value="${mobile }" /></td>
+	
+	<td class="f14" align="right" width="7%">行业：</td>
+	<td class="f14" align="left" width="13%">
+	<select name="search_EQ_industry.id" class="select2">
+     	<option value="">--全部--</option>
+     	<c:forEach items="${industry}" var="industry">
+     		<option value="${industry.id}">${industry.key}</option>
+     	</c:forEach>
+    </select>
+	</td>
+	
+    
+	<td class="f14" align="right" width="7%">修改时间：</td>
+    <td class="f14" align="left" width="18%">
+    <div class="pr vm"><a href="javascript:;" class="pa time_closenone1"title="清空"  onclick="javascript:$(this).nextAll().eq(1).val('');"></a>
+    <a href="javascript:;" class="pa time_closenone2"title="清空"  onclick="javascript:$(this).nextAll().eq(1).val('');"></a>
+     <input class="text_input2 input_close globle_img time" name="search_GTE_modifiedTime" type="text" />-<input class="text_input2 input_close globle_img time" name="search_LTE_modifiedTime" type="text" />
+    </div>
+    </td>
+	</tr>
+	<tr>
+	<td class="f14" align="right" width="6%">省：</td>
+	<td class="f14" align="left" width="16%">
+	<select id="province" name="province.id" class="select2"></select></td>
+	<td class="f14" align="right" width="6%">市：</td>
+	<td class="f14" align="left" width="16%">
+	<select id="city" name="city.id" class="select2"></select></td>
+	<td class="f14" align="right" width="6%">县：</td>
+	<td class="f14" align="left" width="16%">
+	<select id="county" name="county.id" class="select2"></select></td>
 	</tr>
     </table>
      <tags:paginationparams page="${page}"></tags:paginationparams>
@@ -147,14 +196,14 @@ function convOwner(){
         <ul class="fl id_table1 mt10 ml10">
         
          <li>
-         <a href="javascript:void(0)" uri="${ctx}/customer/customer/delete.do" class="block c_white lh25 fr mr10 submit deletesome">
+         <a href="javascript:void(0)" uri="${ctx}/customer/customer/delete.do" class="block c_white lh25 fr mr10  deletesome">
          <b class="allbtn_l block fl"></b>
          <b class="allbtn_r pr13 block fl w_auto f14 ">删&nbsp;&nbsp;除</b>
          </a>
          </li>
          <li><a href="${ctx}/customer/customer/toAddPage.do" class="block c_white lh25 mr10"><b class="allbtn_l block fl"></b><b class="allbtn_r pr13 block fl w_auto f14">新&nbsp;&nbsp;增</b></a></li>
-         <li><a href="javascript:void(0)" id="reload" class="block c_white lh25 mr10"><b class="allbtn_l block fl"></b><b class="allbtn_r pr13 block fl w_auto f14">刷&nbsp;&nbsp;新</b></a> </li>
          <li><a href="javascript:void(0)" id="modifyOwner" class="block c_white lh25 mr10"><b class="allbtn_l block fl"></b><b class="allbtn_r pr13 block fl w_auto f14">更改所有者</b></a></li>
+         <li><a href="javascript:void(0)" id="reload" class="block c_white lh25 mr10"><b class="allbtn_l block fl"></b><b class="allbtn_r pr13 block fl w_auto f14">刷&nbsp;&nbsp;新</b></a> </li>
          <li><a href="javascript:void(0)" uri="${ctx}/customer/customer/export.do?TYPE=pagination" class="block c_white lh25 mr10 export"><b class="allbtn_l block fl"></b><b class="allbtn_r pr13 block fl w_auto f14">导&nbsp;&nbsp;出</b></a></li>
 		</ul>
 		</div>
@@ -163,19 +212,19 @@ function convOwner(){
 <div id="title" style="display: none;background-color: #f5f5f6;" class=" ml35 mr35">
 <table class="cb id_table2 w" >
 				<tr >
-                    <th width="5% " ><input  type="checkbox"  id="id" class="checkall"/></th>
-					<th width="8% ">客户名称 </th>
-					<th  width="7% " >客户所有者</th>
-					<th width="7% " >客户类型</th>
-					<th width="7% ">公司名称</th>
+                    <th width="4% " ><input  type="checkbox"  id="id" class="checkall"/></th>
+					<th width="10% ">客户名称 </th>
+					<th  width="9% " >客户所有者</th>
+					<th width="9% " >客户类型</th>
+					<th width="9% ">公司名称</th>
 					
-					<th  width="8% ">手机</th>
-					<th  width="8% ">电话</th>
-					<th width="7% " >创建者</th>
-					<th width="13%" class="sortable orderby" orderby="createdTime" ><span class="fl ml35">创建时间</span><span class="fl ml10"></th>
-					<th width="7% " >修改者</th>
-					<th width="13%"  class="sortable orderby" orderby="modifiedTime" >修改时间</th>
-					<th width="13%" align="center">操作</th>
+					<th  width="9% ">手机</th>
+					<th  width="9% ">电话</th>
+					<th width="9% " >创建者</th>
+					<th width="11%" class="sortable orderby" orderby="createdTime" ><span class="fl ml35">创建时间</span><span class="fl ml10"></th>
+					<th width="9% " >修改者</th>
+					<th width="11%"  class="sortable orderby" orderby="modifiedTime" >修改时间</th>
+					<th width="11%" align="center">操作</th>
 				</tr>
 			
 		</table>
@@ -184,19 +233,19 @@ function convOwner(){
 
         <table class="cb id_table2 w pr35" id="table">
 				<tr id="recordDiv"align="left">
-                    <th width="5% " ><input  type="checkbox"  id="id" class="checkall"/></th>
+                    <th width="4% " ><input  type="checkbox"  id="id" class="checkall"/></th>
 					<th width="8% ">客户名称 </th>
-					<th  width="7% " >客户所有者</th>
-					<th width="7% " >客户类型</th>
-					<th width="7% ">公司名称</th>
+					<th  width="8% " >客户所有者</th>
+					<th width="8% " >客户类型</th>
+					<th width="10% ">公司名称</th>
 					
-					<th  width="8% ">手机</th>
-					<th  width="8% ">电话</th>
-					<th width="7% " >创建者</th>
+					<th  width="10% ">手机</th>
+					<th  width="10% ">电话</th>
+					<th width="8% " >创建者</th>
 					<th width="13%" class="sortable orderby" orderby="createdTime" ><span class="fl ml35">创建时间</span><span class="fl ml10"></th>
-					<th width="7% " >修改者</th>
+					<th width="8% " >修改者</th>
 					<th width="13%"  class="sortable orderby" orderby="modifiedTime" >修改时间</th>
-					<th width="13%" align="center">操作</th>
+					<th width="11%" align="center">操作</th>
 				</tr>
 			<tbody id="tbody" class="list">	</tbody>
 		</table>
@@ -223,7 +272,7 @@ function convOwner(){
                 <td>{$T.row.modifier.realName}</td>
                  <td>{$T.row.modifiedTime}</td>
                 <td align="center">
-                <a href="${ctx}/customer/customer/toViewPage.do?id={$T.row.id}" title="查看" class=" block_inline s_detail_btn globle_img ml10"></a>
+                <a href="${ctx}/customer/customer/toViewPage.do?id={$T.row.id}" title="详情" class=" block_inline s_detail_btn globle_img ml10"></a>
                 <a href="${ctx}/customer/customer/toViewPage.do?id={$T.row.id}&type=edit" title="编辑" class=" block_inline s_edit_btn globle_img ml10"></a>
                 <a href="javascript:void(0)" uri="${ctx}/customer/customer/delete.do?id={$T.row.id}" title="删除" class=" block_inline s_dump_btn globle_img ml10 delete"></a>
                 </td>

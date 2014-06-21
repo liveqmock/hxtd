@@ -1,7 +1,9 @@
 package com.baihui.hxtd.soa.system.controller.interceptor;
 
 import com.baihui.hxtd.soa.base.Constant;
+import com.baihui.hxtd.soa.base.utils.RequestUtil;
 import com.baihui.hxtd.soa.system.entity.Dictionary;
+import com.baihui.hxtd.soa.util.JsonDto;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.web.servlet.ModelAndView;
@@ -40,10 +42,18 @@ public class IdentityAuthenticationInterceptor extends HandlerInterceptorAdapter
 
         logger.debug("检查session中是否存储变量“{}”", Constant.VS_SESSION_CHECK);
         if (request.getSession().getAttribute(Constant.VS_SESSION_CHECK) == null) {
-            String loginUrl = request.getContextPath() + this.loginUrl;
-            logger.debug("未存储，认证未通过，重定向至登录页面“{}”", loginUrl);
-            request.getSession().setAttribute(Constant.VM_ERROR, "用户未登录或已过期，请重新登录");
-            response.sendRedirect(loginUrl);
+            if (RequestUtil.isAjax(request)) {
+                JsonDto jsonDto = new JsonDto("您太长时间没有操作，请重新登录！");
+                jsonDto.setSessionIsTimeOut(true);
+                String result = jsonDto.toString();
+                logger.debug("是一个Ajax请求，返回JSON对象“{}”", result);
+                response.getWriter().write(result);
+            } else {
+                String loginUrl = request.getContextPath() + this.loginUrl;
+                logger.debug("未存储，认证未通过，重定向至登录页面“{}”", loginUrl);
+                request.getSession().setAttribute(Constant.VM_ERROR, "用户未登录或已过期，请重新登录");
+                response.sendRedirect(loginUrl);
+            }
             return false;
         }
         logger.debug("已存储，认证通过");

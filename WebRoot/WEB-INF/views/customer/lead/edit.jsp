@@ -27,6 +27,7 @@
 <script type="text/javascript" src="${ctx}/static/js/jquery.validate.js"></script>
 <script type="text/javascript" src="${ctx}/static/js/jquery.metadata.js"></script>
 <script type="text/javascript" src="${ctx}/static/js/validator.js"></script>
+<script type="text/javascript" src="${ctx}/static/js/pacs.js"></script>
 <script type="text/javascript">
 $(function(){
 	$("#saveAndAdd").click(function(){
@@ -41,6 +42,12 @@ $(function(){
 			$("#form").submit();
 		}
 	});
+	//获得省市县代码，加载三级联动
+	var province = '${lead.province.id}';
+	var city = '${lead.city.id}';
+	var county = '${lead.county.id}';
+	//修改为根据ID选择组件，之前用name选择组件当name中出现“.”时有问题
+	new PCAS("province","city","county",province,city,county);
 });
 function searchData(action){//搜索弹出框
 	var url, title;
@@ -164,8 +171,6 @@ function clearInputVal(obj){//清除
                 </td>
             </tr>
             <tr>
-                <td align="right">详细地址：</td>
-                <td align="left"><input type="text" name="address" value="${lead.address }" class="text_input3"/></td>
                 <td align="right"><span class="w_red">*&nbsp;</span>行业：</td>
                 <td align="left">
                 <select name="industry.id" class="select1 pr requiredSelect">
@@ -179,6 +184,21 @@ function clearInputVal(obj){//清除
                 </td>
             </tr>
         </table>
+        <h1 class="f14 fbnone ml40 pt10">地址信息</h1>
+		<table class="cb id_table3 w95b bg_c_white margin0 mt10">
+			<tr>
+				<td width="15%" align="right">省份：</td>
+				<td align="left"><select id="province" name="province.id" class="select1"></select></td>
+				<td width="15%" align="right">城市：</td>
+				<td align="left"><select id="city" name="city.id" class="select1"></select></td>
+			</tr>
+			<tr>
+				<td align="right">区县：</td>
+				<td align="left"><select id="county" name="county.id" class="select1"></select></td>
+				<td align="right">详细地址：</td>
+				<td align="left"><input name="address" type="text" value="${lead.address}" class="text_input3"/></td>
+			</tr>
+		</table>
         <h1 class="f14 fbnone ml40 pt10">描述信息</h1>
         <table class="cb id_table4 w95b bg_c_white margin0 mt10">
             <tr>

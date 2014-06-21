@@ -29,21 +29,10 @@
                 click: function (event, treeId, treeNode) {
                     $("[name=id]").val(treeNode.id);
                     grid.loadGrid();
-                }});
-
-            var grid = new Grid().init({
-                deleteSomeCallback: function (ids) {
-                    for (var i = 0; i < ids.length; i++) {
-                        ztree.removeNode(ztree.getNodeByParam("id", ids[i]));
-                    }
-                    var node = ztree.getNodes()[0];
-                    ztree.selectNode(node);
-                    $("[name=id]").val(node.id);
-                    return true;
                 }
-            }).bindAuthorization();
+            });
 
-
+            window.grid = new Grid().init({deleteCallback: Grid.deleteSynTree(ztree, $("[name=id]"))}).bindAuthorization();
         })
     </script>
 </head>

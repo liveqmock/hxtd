@@ -63,10 +63,11 @@
             <tr>
                 <td align="right" width="15%" valign="top">备注：</td>
                 <td align="left" width="85%" valign="top">
-                <div class="w85b">${project.remark }</div></td>
+                <div class="w85b">${com.remark }</div></td>
             </tr>
 
         </table>
+        <tag:attachment view="true" upload="true" module="supplier" query="true" down="true" id="${com.id}"></tag:attachment>
         <div class=" h40"></div>
     </div>
     <div class="cb block h40 margin0 mt10" style="width:350px;">

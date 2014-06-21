@@ -62,21 +62,52 @@ public class TierSerials {
     }
 
     /**
-     * 获取级别增长值
+     * 获取完整的级别
      */
-    public static long getIncrease(long serial, int length) {
-        int tierIncrease = getTierIncrease(length);
-        int increase = tierIncrease;
-        int level = 0;
-        while (serial % tierIncrease == 0) {
-            serial = serial / tierIncrease;
-            level++;
-        }
-        return (long) Math.pow(increase, level);
+    public static int getFullLevel(long serial, int length) {
+        int serialLength = String.valueOf(serial).length();
+        int differ = serialLength % length == 0 ? 0 : 1;
+        return serialLength / length + differ;
     }
 
     /**
-     * 获取上级序列号
+     * 获取级别差值
+     */
+    public static int getLevelDiffer(long serial, int length) {
+        int level = 0;
+        int tierIncrease = getTierIncrease(length);
+        long current = serial;
+        while (current % tierIncrease == 0) {
+            current = current / tierIncrease;
+            level++;
+        }
+        return level;
+    }
+
+    /**
+     * 获取级别差值
+     */
+    public static int getLevel(long serial, int length) {
+        return getFullLevel(serial, length) - getLevelDiffer(serial, length);
+    }
+
+    /**
+     * 获取级别增长值
+     */
+    public static long getIncrease(long serial, int length) {
+        return (long) Math.pow(getTierIncrease(length), getLevelDiffer(serial, length));
+    }
+
+    /**
+     * 获取上级序号值
+     */
+    public static Long getParent(long serial, int length) {
+        long increase = getIncrease(serial, length) * getTierIncrease(length);
+        return serial / increase * increase;
+    }
+
+    /**
+     * 获取上级序号值
      */
     public static List<Long> getParents(long serial, int length) {
         List<Long> serials = new ArrayList<Long>();
@@ -104,19 +135,8 @@ public class TierSerials {
         return serials;
     }
 
-    public static Long getMinChild(long serial, int length) {
-        int increase = getTierIncrease(length);
-        return serial + serial / increase;
-    }
-
-    public static Long getMaxChild(long serial, int length) {
-        int increase = getTierIncrease(length);
-        return serial + serial / increase * (increase - 1);
-    }
-
-
     /**
-     * 获取上级序列号
+     * 获取上级序号值
      */
     public static List<Long> getParentsUntil(long serial, long until, int length) {
         List<Long> serials = getParents(serial, length);
@@ -125,6 +145,21 @@ public class TierSerials {
             serials.remove(i);
         }
         return serials;
+    }
+
+    /**
+     * 获取最小的子序号
+     */
+    public static Long getMinChild(long serial, int length) {
+        return serial + getIncrease(serial, length) / getTierIncrease(length);
+    }
+
+    /**
+     * 获取最大的子序号
+     */
+    public static Long getMaxChild(long serial, int length) {
+        int tierIncrease = getTierIncrease(length);
+        return serial + getIncrease(serial, length) / tierIncrease * (tierIncrease - 1);
     }
 
 

@@ -11,7 +11,7 @@
         <li class="mt3">每页条数</li>
         <li>
             <select class="page-size" forformfield="{$T.pageSizeSelector}">
-                {#foreach [5,10,20,30,40,50] as pageSize}
+                {#foreach [10,20,50,100] as pageSize}
                 <option value="{$T.pageSize}"
                 {$T.hibernatePageSize==$T.pageSize?"selected":""}>{$T.pageSize}</option>
                 {#/for}

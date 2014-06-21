@@ -1,7 +1,7 @@
 @charset "utf-8";
 /* CSS Document */
 
-.big_bg{background: url(../../images/big_gb.jpg) fixed center center no-repeat;   background-size: cover;  width: 100%;}
+.big_bg{background: url(../../images/big_bg.jpg) fixed center center no-repeat;   background-size: cover;  width: 100%;}
 .slogin_white{ background:url(../../images/login_leftbg.png) repeat-x; width:342px; height:164px;}
 .big_whtie{ background:url(../../images/login_white.png) no-repeat; width:454px; height:511px;}
 

@@ -124,15 +124,17 @@
 
     <!--log4jdbc -->
     <logger name="jdbc.sqlonly" level="DEBUG">
-        <appender-ref ref="rootConsole"/>
         <appender-ref ref="rootRollingSql"/>
         <appender-ref ref="businessSqlRollingSql"/>
     </logger>
 
     <logger name="com.baihui" level="DEBUG">
-        <appender-ref ref="rootConsole"/>
         <appender-ref ref="businessRollingSql"/>
         <appender-ref ref="businessSqlRollingSql"/>
+    </logger>
+
+    <logger name="com.baihui" level="ERROR">
+        <appender-ref ref="rootConsole"/>
     </logger>
 
 </configuration>

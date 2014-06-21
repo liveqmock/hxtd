@@ -32,8 +32,8 @@
 
             <div class="ie_head">
                 <h1 class="f14 fbnone mt10 ml10 fl">角色详细信息</h1>
-                <c:if test="${VM_ALL!=null}">
-                    <div class="message">${VM_ALL}</div>
+                <c:if test="${VM_BUSINESS!=null}">
+                    <div class="message">${VM_BUSINESS}</div>
                 </c:if>
             </div>
         </div>

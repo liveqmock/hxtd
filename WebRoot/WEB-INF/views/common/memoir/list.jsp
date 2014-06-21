@@ -1,11 +1,8 @@
-<%--
-  功能描述：沟通纪要组件列表页
-  User: lihua
-  Date:2014/5/6
---%>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<%@ taglib prefix="tags" tagdir="/WEB-INF/tags" %>
 <c:set var="ctx" value="${pageContext.request.contextPath}"/>
+<link rel="stylesheet" href="${ctx}/static/css/recommend/detail.css" type="text/css"/>
 <link rel="stylesheet" href="${ctx}/static/css/application.css" type="text/css"/>
 <script type="text/javascript" src="${ctx}/static/js/jquery-json.2.4.js"></script>
 <script type="text/javascript" src="${ctx}/static/js/jquery-jtemplates.js"></script>
@@ -13,7 +10,7 @@
 <script type="text/javascript">
 $(function(){
 	$("#moduleId").val($("#hide_id").val());
-	jsUtil.loadGrid().bindDeleteOne().bindAuthorization().bindQuery().bindPagination().renderSort().bindSort();
+	new Grid().init();
 	$(".contactrecords").click(function(){
 		iframeRemoir('add', '');
 	});
@@ -37,7 +34,6 @@ function iframeRemoir(act, id){
 				DIALOG.dialog("close");
 			} else {
 				if($("#dialogIframe")[0].contentWindow.submitRemoir()){
-					//jsUtil.loadGrid();
 					$(".page-rel").click();//刷新列表
 					DIALOG.dialog("close");
 				}
@@ -49,55 +45,45 @@ function iframeRemoir(act, id){
 	});
 }
 </script>
- <div class="ct_title">
-	<span class="fl ttname">联系纪要</span>
-	<div class="clear"></div>
-</div>
-<div class="" style="background:#f5f5f5;height:42px;padding:0;">
-	<div class="fl list_top" >
-		<a href="javascript:void(0)" style="" class="green_btn contactrecords">新增</a>
-	</div>
-	<div class="clear"></div>
-</div>
-<form action="${ctx}/common/memoir/query.do" onsubmit="return false;">
-<input type="hidden" name="moduleId" id="moduleId"/>
-<input type="hidden" id="moduleType" name="moduleType" value="11010104"/>
-</form>
-<div class="" style="border-top:none;">
-	<table cellspacing="1" class="tablesorter" id="table">
-		<thead>
-			<tr>
-				<td>联系纪要</td>
-				<td>下次联系时间</td>
-				<td>下次联系要点</td>
-				<td>沟通者</td>
-				<td>操作</td>
-			</tr>
-		</thead>
-		<tbody id="tbody" class="list"></tbody>
+<h1 class="f14 fbnone ml40">联系纪要</h1>
+<div class="listcontainer w95b bg_c_white margin0 mt10">
+	<form action="${ctx}/common/memoir/query.do" onsubmit="return false;">
+		<input type="hidden" name="moduleId" id="moduleId"/>
+		<input type="hidden" id="moduleType" name="moduleType" value="11010104"/>
+		<tags:paginationparams page="${page}"></tags:paginationparams>
+	</form>
+	<table class="cb id_table2 w pr35">
+		<tr>
+		    <th>联系纪要</th>
+		    <th>下次联系时间</th>
+		    <th>下次联系要点</th>
+		    <th>沟通者</th>
+		    <th align="center">操作</th>
+		</tr>
+		<tbody class="list"></tbody>
 	</table>
-	<div class="pagination"></div>
-	<!-- 联系人列表模板 -->
-    <textarea id="template-tbody" class="template template-tbody">
-        {#foreach $T.result as row}
-        <tr>
-            <td>{$T.row.summary}</td>
-            <td>{$T.row.nextContactTime}</td>
-            <td>{$T.row.nextContactPoints}</td>
-            <td>{$T.row.employee.name}</td>
-            <td width="68">
-                <ul>
-                    <li><a href="javascript:void(0);"><img src="${ctx}/static/images/tallssed.png" alt="" onclick="iframeRemoir('view',{$T.row.id});"/></a></li>
-                    <li><a href="javascript:void(0);"><img src="${ctx}/static/images/editimged.png" alt="" onclick="iframeRemoir('edit',{$T.row.id});"/></a></li>
-                    <li><a href="javascript:void(0);"><img src="${ctx}/static/images/deleteimged.png" alt="" class="delete" uri="${ctx}/common/memoir/delete.do?id={$T.row.id}"/></a></li>
-                    <div class="clear"></div>
-                </ul>
-            </td>
-        </tr>
-        {#/for}
-    </textarea>
-    <c:if test=""></c:if>
-    <%@include file="/WEB-INF/template/sort.jsp" %>
-    <%@include file="/WEB-INF/template/pagination.jsp" %>
+	<div class="cb ml35 mt20 h40 pagination"></div>
+	<textarea id="template-tbody" class="template template-tbody">
+	    {#foreach $T.result as row}
+	    <tr class="{$T.row$index%2==1?'':'bg_c_blue'} w">
+           <td>{$T.row.summary}</td>
+           <td>{$T.row.nextContactTime}</td>
+           <td>{$T.row.nextContactPoints}</td>
+           <td>{$T.row.employee.name}</td>
+           <td align="center">
+             <c:if test="${VS_HAS_FUNCTIONS.marketactivityView}">
+                 <a class="block_inline s_detail_btn globle_img ml10" onclick="iframeRemoir('view',{$T.row.id});" title="详情"></a>
+             </c:if>
+             <c:if test="${VS_HAS_FUNCTIONS.marketactivityModify}">
+                 <a class="block_inline s_edit_btn globle_img ml10" onclick="iframeRemoir('edit',{$T.row.id});" title="编辑"></a>
+             </c:if>
+             <c:if test="${VS_HAS_FUNCTIONS.marketactivityDelete}">
+                 <a href="javascript:;" class="block_inline s_dump_btn globle_img ml10 delete" uri="${ctx}/common/memoir/delete.do?id={$T.row.id}" title="删除"></a>
+             </c:if>
+           </td>
+	    </tr>
+	    {#/for} 
+	</textarea>
+	<%@include file="/WEB-INF/template/sort.jsp" %>
+	<%@include file="/WEB-INF/template/pagination.jsp" %>
 </div>
- 

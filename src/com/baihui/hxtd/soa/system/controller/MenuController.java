@@ -6,6 +6,7 @@ import com.baihui.hxtd.soa.base.utils.mapper.HibernateAwareObjectMapper;
 import com.baihui.hxtd.soa.base.utils.mapper.JsonMapper;
 import com.baihui.hxtd.soa.base.utils.ztree.TreeNodeConverter;
 import com.baihui.hxtd.soa.common.controller.model.ListModel;
+import com.baihui.hxtd.soa.common.service.CommonService;
 import com.baihui.hxtd.soa.system.entity.Dictionary;
 import com.baihui.hxtd.soa.system.entity.Menu;
 import com.baihui.hxtd.soa.system.entity.User;
@@ -39,7 +40,7 @@ import java.util.List;
 @RequestMapping(value = "/system/menu")
 @SessionAttributes(value = {Constant.VS_USER_ID, Constant.VS_USER_NAME, Constant.VS_USER,
         Constant.VS_ORG_ID, Constant.VS_ORG_ORDER_MIN, Constant.VS_ORG_ORDER_MAX, Constant.VS_ORG,
-        Constant.VS_MENUS,  Constant.VS_FUNCTIONS, Constant.VS_COMPONENTS})
+        Constant.VS_MENUS, Constant.VS_FUNCTIONS, Constant.VS_COMPONENTS})
 @SuppressWarnings("unchecked")
 public class MenuController {
 
@@ -53,6 +54,9 @@ public class MenuController {
 
     @Resource
     private FunctionService functionService;
+
+    @Resource
+    private CommonService commonService;
 
     /**
      * 转至查询页面
@@ -95,7 +99,6 @@ public class MenuController {
         return HibernateAwareObjectMapper.DEFAULT.writeValueAsString(jsonDto);
     }
 
-
     /**
      * 存储表单初始化数据
      */
@@ -109,6 +112,10 @@ public class MenuController {
         List<Dictionary> showLocations = dictionaryService.findChildren("010202");
         model.addAttribute("showLocations", showLocations);
         logger.debug("显示位置长度“{}”", showLocations.size());
+
+        List<Menu> menus = (List<Menu>) model.get(Constant.VS_MENUS);
+        String menuTree = JsonMapper.nonEmptyMapper().toJson(TreeNodeConverter.convert(menus));
+        model.addAttribute("menuTree", menuTree);
 
         model.addAttribute("functions", functionService.findBase());
     }
@@ -124,6 +131,7 @@ public class MenuController {
 
         logger.info("存储表单默认值");
         Menu menu = new Menu();
+        menu.setIsActive(true);
         menu.setIsLeaf(true);
         if (parentId != null) {
             menu.setParent(menuService.get(parentId));
@@ -157,7 +165,7 @@ public class MenuController {
         menuService.add(menu);
 
         logger.info("添加操作提示");
-        model.addFlashAttribute(Constant.VM_ALL, "新增成功");
+        model.addFlashAttribute(Constant.VM_BUSINESS, "新增成功");
 
         redirectUri = String.format(redirectUri, menu.getId());
         logger.info("重定向至“{}”", redirectUri);
@@ -170,6 +178,10 @@ public class MenuController {
     @RequestMapping(value = "/toViewPage.do")
     public String toViewPage(Long id, ModelMap model) {
         logger.info("转至查看页面");
+
+        List<Menu> menus = (List<Menu>) model.get(Constant.VS_MENUS);
+        String menuTree = JsonMapper.nonEmptyMapper().toJson(TreeNodeConverter.convert(menus));
+        model.addAttribute("menuTree", menuTree);
 
         logger.info("存储表单默认值");
         Menu menu = menuService.get(id);
@@ -218,7 +230,7 @@ public class MenuController {
         menuService.modify(menu);
 
         logger.info("添加操作提示");
-        model.addFlashAttribute(Constant.VM_ALL, "修改成功");
+        model.addFlashAttribute(Constant.VM_BUSINESS, "修改成功");
 
         redirectUri = String.format(redirectUri, menu.getId());
         logger.info("重定向至“{}”", redirectUri);
@@ -239,4 +251,24 @@ public class MenuController {
         jsonDto.setSuccessFlag(true);
         return jsonDto.toString();
     }
+
+    /**
+     * 移动
+     * A移动到B，即取代B的位置
+     * 1.兄弟节点间移动
+     * 1.1.上移
+     * 1.2.下移
+     * 2.跨父节点移动
+     */
+    @ResponseBody
+    @RequestMapping("/move.doself")
+    public JsonDto move(ModelMap modelMap, Long sourceId, Long targetId, String moveType) {
+        logger.info("移动");
+        commonService.move("Menu", sourceId, targetId, moveType);
+        commonService.moveSynSession((List<Menu>) modelMap.get(Constant.VS_MENUS), sourceId, targetId);
+        JsonDto jsonDto = new JsonDto("成功");
+        jsonDto.setSuccessFlag(true);
+        return jsonDto;
+    }
+
 }

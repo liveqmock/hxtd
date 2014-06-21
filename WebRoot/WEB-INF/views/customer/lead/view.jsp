@@ -66,8 +66,8 @@
                 <td align="left">${lead.fax }</td>
             </tr>
             <tr>
-                <td align="right">详细地址：</td>
-                <td align="left">${lead.address }</td>
+                <td align="right">线索来源：</td>
+                <td align="left">${lead.source.key }</td>
                 <td align="right">邮箱：</td>
                 <td align="left">${lead.email }</td>
             </tr>
@@ -86,8 +86,12 @@
             <tr>
                 <td align="right">邮编：</td>
                 <td align="left">${lead.postCode }</td>
-                <td align="right">线索来源：</td>
-                <td align="left">${lead.source.key }</td>
+                <td align="right">地区：</td>
+                <td align="left">${lead.province.name}&nbsp;${lead.city.name}&nbsp;${lead.county.name}&nbsp;</td>
+            </tr>
+            <tr>
+            	<td align="right">详细地址：</td>
+                <td align="left">${lead.address }</td>
             </tr>
         </table>
         <h1 class="f14 fbnone ml40 pt10">描述信息</h1>

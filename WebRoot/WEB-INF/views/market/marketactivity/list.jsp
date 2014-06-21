@@ -22,10 +22,10 @@ $(function(){
     <form id="form" action="${ctx}/market/marketactivity/query.do" onsubmit="return false;">
     <table class="fl mt5 w">
     	<tr>
-    		<td class="f14" align="right" width="7%">活动名称：</td>
-    		<td class="f14" align="left"  width="13%"><input type="text" class="text_input1" name="search_LIKE_name"/></td>
-    		<td class="f14" align="right" width="7%">活动类型：</td>
-    		<td class="f14" align="left" width="13%">
+    		<td class="f14" align="right" width="6%">活动名称：</td>
+    		<td class="f14" align="left"  width="16%"><input type="text" class="text_input1" name="search_LIKE_name"/></td>
+    		<td class="f14" align="right" width="6%">活动类型：</td>
+    		<td class="f14" align="left" width="16%">
     			<select name="search_EQ_dic.id" class="select2">
 					<option value="">全部</option>
 					<c:forEach items="${dicType}" var="dic">
@@ -33,8 +33,8 @@ $(function(){
 					</c:forEach>
 				</select>
     		</td>
-    		<td class="f14" align="right" width="7%">活动状态：</td>
-    		<td class="f14" align="left" width="13%">
+    		<td class="f14" align="right" width="6%">活动状态：</td>
+    		<td class="f14" align="left" width="16%">
     			<select name="search_EQ_status.id" class="select2">
 					<option value="">全部</option>
 					<c:forEach items="${dicStatus}" var="dic">
@@ -42,22 +42,44 @@ $(function(){
 					</c:forEach>
 				</select>
     		</td>
-    		<td class="f14" align="right" width="7%">创建时间：</td>
-    		<td class="f14" align="left" width="18%">
+    		<td class="f14" align="right" width="6%">举办时间：</td>
+    		<td class="f14" align="left" width="16%">
     			<div class="pr vm">
-	    			<a href="javascript:;" class="pa time_closenone1" onclick="javascript:$(this).nextAll().eq(1).val('');"></a>
-	    			<a href="javascript:;" class="pa time_closenone2" onclick="javascript:$(this).nextAll().eq(1).val('');"></a>
-	    			<input class="text_input2 input_close globle_img time" name="search_GTE_createdTime" type="text" readonly/>
-	    			-<input class="text_input2 input_close globle_img time" name="search_LTE_createdTime" type="text" readonly/>
+	    			<a href="javascript:;" class="pa time_closenone1"></a>
+	    			<a href="javascript:;" class="pa time_closenone2"></a>
+	    			<input class="text_input2 input_close globle_img time" name="search_GTE_beginDate" type="text" readonly/>-<input class="text_input2 input_close globle_img time" name="search_LTE_endDate" type="text" readonly/>
     			</div>
     		</td>
-    		<td width="15%">
+    		<td width="8%">
     			<a href="javascript:;" class="reset block dump_btn globle_img fr ml10"></a>
     			<a href="javascript:;" class="block c_white lh25 fr ml10 submit">
     				<b class="allbtn_l block fl"></b>
     				<b class="allbtn_r pr13 block fl w_auto f14">查&nbsp;&nbsp;询</b>
     			</a>
     		</td>
+    	</tr>
+    	<tr>
+    		<td class="f14" align="right">创建时间：</td>
+    		<td class="f14" align="left">
+    			<div class="pr vm">
+	    			<a href="javascript:;" class="pa time_closenone1"></a>
+	    			<a href="javascript:;" class="pa time_closenone2"></a>
+	    			<input class="text_input2 input_close globle_img time" name="search_GTE_createdTime" type="text" readonly/>-<input class="text_input2 input_close globle_img time" name="search_LTE_createdTime" type="text" readonly/>
+    			</div>
+    		</td>
+    		<td class="f14" align="right">修改时间：</td>
+    		<td class="f14" align="left">
+    			<div class="pr vm">
+	    			<a href="javascript:;" class="pa time_closenone1"></a>
+	    			<a href="javascript:;" class="pa time_closenone2"></a>
+	    			<input class="text_input2 input_close globle_img time" name="search_GTE_modifiedTime" type="text" readonly/>-<input class="text_input2 input_close globle_img time" name="search_LTE_modifiedTime" type="text" readonly/>
+    			</div>
+    		</td>
+    		<td class="f14" align="right"></td>
+    		<td class="f14" align="left"></td>
+    		<td class="f14" align="right"></td>
+    		<td class="f14" align="left"></td>
+    		<td></td>
     	</tr>
     </table>
     <div class="cb"></div>

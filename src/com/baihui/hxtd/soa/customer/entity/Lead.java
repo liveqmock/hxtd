@@ -12,127 +12,161 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
+import com.baihui.hxtd.soa.common.entity.PCAS;
 import com.baihui.hxtd.soa.system.entity.Dictionary;
 import com.baihui.hxtd.soa.system.entity.User;
 import com.fasterxml.jackson.annotation.JsonFormat;
 
 /**
  * 线索实体类
- *
+ * 
  * @author luoxiaoli
  * @date 2014/5/12
  */
 
+
+/**
+ * 功能描述：
+ * @see: 与该类相关的类，写出具体的路径：包括完整的包名和类名.java
+ * @author ruisong.luan 
+ * @company 北京市百会纵横科技有限公司
+ * @copyright (版权)  本文件归属 北京市百会纵横科技有限公司 
+ * @since (该版本支持的 JDK 版本) ： 1.5 
+ * @ClassName: com.baihui.hxtd.soa.customer.entity.Lead.java
+ * @version (版本) 
+ * @date 2014-6-20 下午03:15:25
+ * @modify (修改)
+ *  
+ *  
+ * 
+ */
 @Entity
 @Table(name = "LEAD")
 public class Lead {
-	
+
 	/**
 	 * 序列化
 	 */
 	private static final long serialVersionUID = 1L;
 
-	/**线索ID */
+	/** 线索ID */
 	@Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "ID")
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	@Column(name = "ID")
 	private Long id;
-	
+
 	/** 线索所有者 */
 	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "OWNER")
 	private User owner;
-	
-	/**公司名称 */
+
+	/** 公司名称 */
 	@Column(name = "COMPANY")
 	private String company;
-	
-	/** 姓名*/
+
+	/** 姓名 */
 	@Column(name = "NAME", length = 64, nullable = false)
 	private String name;
-	
-	/**部门 */
+
+	/** 部门 */
 	@Column(name = "DEPARTMENT", length = 64)
 	private String department;
-	
-	/**职位 */
+
+	/** 职位 */
 	@Column(name = "POSITION", length = 64)
 	private String position;
-	
-	/**邮箱 */
+
+	/** 邮箱 */
 	@Column(name = "EMAIL", length = 64)
 	private String email;
-	
-	/**电话 */
+
+	/** 电话 */
 	@Column(name = "PHONE", length = 32)
 	private String phone;
-	
-	/**传真 */
+
+	/** 传真 */
 	@Column(name = "FAX", length = 32)
 	private String fax;
-	
-	/**手机 */
+
+	/** 手机 */
 	@Column(name = "MOBILE", length = 32, nullable = false)
 	private String mobile;
-	
-	/**线索来源 */
-	 @ManyToOne(fetch = FetchType.LAZY)
-	 @JoinColumn(name = "SOURCE")
+
+	/** 线索来源 */
+	@ManyToOne(fetch = FetchType.LAZY)
+	@JoinColumn(name = "SOURCE")
 	private Dictionary source;
-	
-	 /**线索状态 */
+
+	/** 线索状态 */
 	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "STATUS")
 	private Dictionary status;
-	
-	/**证件类型 */
+
+	/** 证件类型 */
 	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "CARD_TYPE")
 	private Dictionary cardType;
-	
-	/**证件号码 */
+
+	/** 证件号码 */
 	@Column(name = "CARD_NUM", length = 64)
 	private String cardNum;
-	
-	/**行业 */
+
+	/** 行业 */
 	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "INDUSTRY")
 	private Dictionary industry;
-	
-	/**邮编 */
-	@Column(name = "POST_CODE", length = 16 )
+
+	/** 邮编 */
+	@Column(name = "POST_CODE", length = 16)
 	private String postCode;
-	
-	/**详细地址 */
+	/**
+	 * 省
+	 */
+	@ManyToOne(fetch = FetchType.LAZY)
+	@JoinColumn(name = "PROVINCE")
+	private PCAS province;
+	/**
+	 * 市
+	 */
+	@ManyToOne(fetch = FetchType.LAZY)
+	@JoinColumn(name = "CITY")
+	private PCAS city;
+	/**
+	 * 区/县
+	 */
+	@ManyToOne(fetch = FetchType.LAZY)
+	@JoinColumn(name = "COUNTY")
+	private PCAS county;
+	/** 详细地址 */
 	@Column(name = "ADDRESS", length = 256)
 	private String address;
-	
-	/**备注 */
+
+	/** 备注 */
 	@Column(name = "REMARK", length = 512)
 	private String remark;
-	
-	/**创建者 */
+
+	/** 创建者 */
 	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "CREATOR_ID", updatable = false)
 	private User creator;
-	
-	/**创建时间 */
+
+	/** 创建时间 */
 	@JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss", timezone = "GMT+08:00")
 	@Column(name = "CREATED_TIME")
 	private Date createdTime;
-	
-	/**修改者 */
+
+	/** 修改者 */
 	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "MODIFIER_ID")
 	private User modifier;
-	
-	/**最终修改时间 */
+
+	/** 最终修改时间 */
 	@JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss", timezone = "GMT+08:00")
 	@Column(name = "MODIFIED_TIME")
 	private Date modifiedTime;
 
 	@Column(name = "IS_DELETED", nullable = false, updatable = false)
-    private Boolean isDeleted = false;
+	private Boolean isDeleted = false;
 
 	public Boolean getIsDeleted() {
 		return isDeleted;
@@ -141,7 +175,7 @@ public class Lead {
 	public void setIsDeleted(Boolean isDeleted) {
 		this.isDeleted = isDeleted;
 	}
-	
+
 	public Long getId() {
 		return id;
 	}
@@ -222,7 +256,6 @@ public class Lead {
 		this.mobile = mobile;
 	}
 
-
 	public String getCardNum() {
 		return cardNum;
 	}
@@ -230,7 +263,6 @@ public class Lead {
 	public void setCardNum(String cardNum) {
 		this.cardNum = cardNum;
 	}
-
 
 	public String getPostCode() {
 		return postCode;
@@ -319,7 +351,29 @@ public class Lead {
 	public void setIndustry(Dictionary industry) {
 		this.industry = industry;
 	}
-	
-	
-	
+
+	public PCAS getProvince() {
+		return province;
+	}
+
+	public void setProvince(PCAS province) {
+		this.province = province;
+	}
+
+	public PCAS getCity() {
+		return city;
+	}
+
+	public void setCity(PCAS city) {
+		this.city = city;
+	}
+
+	public PCAS getCounty() {
+		return county;
+	}
+
+	public void setCounty(PCAS county) {
+		this.county = county;
+	}
+
 }

@@ -1,9 +1,11 @@
 package com.baihui.hxtd.soa.system.controller.interceptor;
 
 import com.baihui.hxtd.soa.base.Constant;
+import com.baihui.hxtd.soa.base.utils.RequestUtil;
 import com.baihui.hxtd.soa.system.entity.Dictionary;
 import com.baihui.hxtd.soa.system.entity.Function;
 import com.baihui.hxtd.soa.system.service.FunctionService;
+import com.baihui.hxtd.soa.util.JsonDto;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.web.servlet.ModelAndView;
@@ -56,7 +58,14 @@ public class AuthorityFilterFunctionInterceptor extends HandlerInterceptorAdapte
         List<Function> functions = (List<Function>) request.getSession().getAttribute(Constant.VS_FUNCTIONS);
         if (!functions.contains(function)) {
             logger.debug("没有对应功能，检查不通过，重定向至没有访问权限页面“{}”", invalidURI);
-            response.sendRedirect(invalidURI);
+            if (RequestUtil.isAjax(request)) {
+                JsonDto jsonDto = new JsonDto("没有对应功能");
+                String result = jsonDto.toString();
+                logger.debug("是一个Ajax请求，返回JSON对象“{}”", result);
+                response.getWriter().write(result);
+            } else {
+                response.sendRedirect(invalidURI);
+            }
             return false;
         }
         logger.debug("含有对应功能，检查通过");

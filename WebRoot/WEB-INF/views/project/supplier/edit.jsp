@@ -39,7 +39,7 @@ $(function(){
 		}
 	});
 	
-	jsUtil.renderRequiredFromInput();
+	//jsUtil.renderRequiredFromInput();
 	//获得省市县代码，加载三级联动
 	var province = '${com.province.id}';
 	var city = '${com.city.id}';
@@ -73,9 +73,9 @@ $(function(){
         <h1 class="f14 fbnone ml40 pt10">基本信息</h1>
         <table class="cb id_table3 w95b bg_c_white margin0 mt10">
             <tr>
-                <td align="right" width="15%">供应商名：</td>
+                <td align="right" width="15%"><span class="w_red">*&nbsp;</span>供应商名：</td>
                 <td align="left"><input type="text" name="name" value="${com.name}" class="text_input3 required"></td>
-                <td align="right" width="15%"><span class="w_red">*&nbsp;</span>供应商类型：</td>
+                <td align="right" width="15%"><span class="w_red">*&nbsp;</span><span class="w_red">*&nbsp;</span>供应商类型：</td>
                 <td align="left">
                 <select name="type.id" class="select1 pr requiredSelect">
                 	<option value="-1">--请选择--</option>

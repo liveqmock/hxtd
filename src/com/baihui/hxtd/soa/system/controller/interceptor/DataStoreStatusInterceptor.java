@@ -1,7 +1,9 @@
 package com.baihui.hxtd.soa.system.controller.interceptor;
 
 import com.baihui.hxtd.soa.base.Constant;
+import com.baihui.hxtd.soa.base.utils.RequestUtil;
 import com.baihui.hxtd.soa.system.service.UserService;
+import com.baihui.hxtd.soa.util.JsonDto;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.web.servlet.ModelAndView;
@@ -40,8 +42,16 @@ public class DataStoreStatusInterceptor extends HandlerInterceptorAdapter {
             String logoutUrl = request.getContextPath() + this.logoutUrl;
             logger.debug("延迟状态，检查未通过。重定向至退出请求“{}”", logoutUrl);
             //TODO 无法给出错误提示，退出时会清除session，重新设计接口，通过参数传参
-            request.getSession().setAttribute(Constant.VM_ERROR, "权限已更新，强制退出系统");
-            response.sendRedirect(logoutUrl);
+            request.getSession().setAttribute(Constant.VM_ERROR, "权限已更新，请重新登录系统");
+            if (RequestUtil.isAjax(request)) {
+                JsonDto jsonDto = new JsonDto("用户权限已更新，请重新登录系统");
+                String result = jsonDto.toString();
+                logger.debug("是一个Ajax请求，返回JSON对象“{}”", result);
+                response.getWriter().write(result);
+            } else {
+//                request.setAttribute(Constant.VM_GLOBAL, "用户权限已更新，请重新登录系统");
+                response.sendRedirect(logoutUrl);
+            }
             return false;
         }
         logger.debug("最新状态，检查通过");

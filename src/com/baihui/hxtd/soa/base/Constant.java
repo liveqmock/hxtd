@@ -12,6 +12,9 @@ public class Constant {
     /**功能编码*/
     public final static String VC_FUNCTION_CODES = "VC_FUNCTION_CODES";
 
+    /**组件编码*/
+    public final static String VC_COMPONENT_CODES = "VC_COMPONENT_CODES";
+
     /**名称描述*/
     public final static String VC_NAMEDESCS = "VC_NAMEDESCS";
 
@@ -71,6 +74,9 @@ public class Constant {
     /**Boolean型可判断的功能*/
     public final static String VS_HAS_FUNCTIONS = "VS_HAS_FUNCTIONS";
 
+    /**Boolean型可判断的组件*/
+    public final static String VS_HAS_COMPONENTS = "VS_HAS_COMPONENTS";
+
     /**功能编号列表*/
     public final static String VS_FUNCTION_CODES = "VS_FUNCTION_CODES";
 
@@ -100,11 +106,8 @@ public class Constant {
     /**菜单列表，显示在首页当前位置*/
     public final static String VR_TITLE_MENUS = "VR_TITLE_MENUS";
 
-    /**一级菜单，显示在首页当前位置*/
-    public final static String VR_TITLE_FIRST_MENU = "VR_TITLE_FIRST_MENU";
-
     /**最后菜单*/
-    public final static String VR_TITLE_LAST_MENU = "VR_TITLE_LAST_MENU";
+    public final static String VR_LAST_MENU = "VR_LAST_MENU";
 
     /**功能，每次请求对应的功能*/
     public final static String VR_FUNCTION = "VR_FUNCTION";
@@ -120,10 +123,14 @@ public class Constant {
 
 
 
-    /**信息变量定义 提示*/
-    public final static String VM_ALL = "VM_ALL";
+    /*信息变量定义*/
+    /**全局信息*/
+    public final static String VM_GLOBAL = "VM_GLOBAL";
 
-    /**信息变量定义 错误*/
+    /**业务信息*/
+    public final static String VM_BUSINESS = "VM_BUSINESS";
+
+    /**错误信息*/
     public final static String VM_ERROR = "VM_ERROR";
 
 

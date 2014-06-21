@@ -75,34 +75,103 @@ function formReset() {
 				onsubmit="return false;">
 				<table class="fl mt5 w">
 					<tr>
-						<td class="f14" align="right" width="7%">
+						<td class="f14" align="right" width="6%">
 							项目名：
 						</td>
-						<td class="f14" align="left" width="13%">
+						<td class="f14" align="left" width="16%">
 							<input type="text" name="search_LIKE_name" id="name"
 								class="text_input1" value="" />
 						</td>
-						<td class="f14" align="right" width="7%">
-							修改时间：
+						<td class="f14" align="right" width="6%">
+							项目编号：
 						</td>
-						<td class="f14" align="left" width="18%">
-							<input class="text_input2 input_close globle_img time"
-								name="search_GTE_modifiedTime" type="text" />
-							-
-							<input class="text_input2 input_close globle_img time"
-								name="search_LTE_modifiedTime" type="text" />
+						<td class="f14" align="left" width="16%">
+							<input type="text" name="search_LIKE_code" id="name"
+								class="text_input1" value="" />
 						</td>
-						<td width="15%">
+						<td class="f14" align="right" width="6%">
+							供应商：
+						</td>
+						<td class="f14" align="left" width="16%">
+							<input type="text" name="search_LIKE_supplier.name" id="name"
+								class="text_input1" value="" />
+						</td>
+						<td class="f14" align="right" width="6%">
+							支付方式：
+						</td>
+						<td class="f14" align="left" width="16%">
+							<input type="text" name="search_LIKE_payType" id="name"
+								class="text_input1" value="" />
+						</td>
+						<td width="8%">
 							<a href="javascript:void(0)"
-								class="ml35 block c_white lh25 submit"><b
+								class="block c_white lh25 submit"><b
 								class="allbtn_l block fl"></b><b
 								class="allbtn_r pr13 block fl w_auto f14">查&nbsp&nbsp询</b>
 							</a>
 							<a href="javascript:formReset()"
 								class="reset block dump_btn globle_img fl ml10"></a>
 						</td>
-						<td class="f14" align="right" width="7%"></td>
-						<td class="f14" align="left" width="13%"></td>
+					</tr>
+					<tr>
+						<td class="f14" align="right" width="6%">
+							融资额度：
+						</td>
+						<td class="f14" align="left" width="16%">
+							<input class="text_input2"
+								name="search_GTE_financeLimit" type="text" />-<input class="text_input2"
+								name="search_LTE_financeLimit" type="text" />
+						</td>
+						<td class="f14" align="right" width="6%">
+							融资周期：
+						</td>
+						<td class="f14" align="left" width="16%">
+							<input class="text_input2"
+								name="search_GTE_financeCycle" type="text" />-<input class="text_input2"
+								name="search_LTE_financeCycle" type="text" />
+						</td>
+						<td class="f14" align="right" width="6%">
+							收益率%：
+						</td>
+						<td class="f14" align="left" width="16%">
+							<input class="text_input2"
+								name="search_GTE_er" type="text" />-<input class="text_input2"
+								name="search_LTE_er" type="text" />
+						</td>
+						<td class="f14" align="right" width="6%">
+							赎回率%：
+						</td>
+						<td class="f14" align="left" width="16%">
+							<input class="text_input2"
+								name="search_GTE_aer" type="text" />-<input class="text_input2"
+								name="search_LTE_aer" type="text" />
+						</td>
+					</tr>
+					<tr>
+						<td class="f14" align="right" width="6%">
+							开放时间：
+						</td>
+						<td class="f14" align="left" width="16%">
+							<input class="text_input2 input_close globle_img time"
+								name="search_GTE_beginTime" type="text" />-<input class="text_input2 input_close globle_img time"
+								name="search_LTE_beginTime" type="text" />
+						</td>
+						<td class="f14" align="right" width="6%">
+							创建时间：
+						</td>
+						<td class="f14" align="left" width="16%">
+							<input class="text_input2 input_close globle_img time"
+								name="search_GTE_createdTime" type="text" />-<input class="text_input2 input_close globle_img time"
+								name="search_LTE_createdTime" type="text" />
+						</td>
+						<td class="f14" align="right" width="6%">
+							修改时间：
+						</td>
+						<td class="f14" align="left" width="16%">
+							<input class="text_input2 input_close globle_img time"
+								name="search_GTE_modifiedTime" type="text" />-<input class="text_input2 input_close globle_img time"
+								name="search_LTE_modifiedTime" type="text" />
+						</td>
 					</tr>
 				</table>
 				<tags:paginationparams page="${page}"></tags:paginationparams>

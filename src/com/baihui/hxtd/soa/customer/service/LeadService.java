@@ -48,6 +48,9 @@ public class LeadService {
 				+ " left join fetch lead.status "
 				+ " left join fetch lead.cardType "
 				+ " left join fetch lead.industry "
+				+ "left join fetch lead.province "
+				+ "left join fetch lead.city " 
+				+ "left join fetch lead.county " 
 				+ " left join fetch lead.owner " + " where lead.id=?";
 		return leadDao.findUnique(hql, id);
 	}

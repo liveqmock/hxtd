@@ -30,6 +30,7 @@ public class InitApplicationConstant implements StartupListener {
         logger.info("应用启动完成后，初始化Application中常量");
         ServletContext servletContext = event.getServletContext();
         loadFunctionCode(servletContext);
+        loadComponentCode(servletContext);
         loadNameDesc(servletContext);
         loadImportExport(servletContext);
     }
@@ -47,6 +48,22 @@ public class InitApplicationConstant implements StartupListener {
             servletContext.setAttribute(Constant.VC_FUNCTION_CODES, functionCodes);
         } catch (IOException e) {
             throw new RuntimeException("加载功能编码配置文件异常", e);
+        }
+    }
+
+    /**
+     * 加载组件编码配置
+     */
+    private void loadComponentCode(ServletContext servletContext) {
+        logger.info("加载组件编码配置");
+        Properties properties = new Properties();
+        try {
+            properties.load(getClass().getResourceAsStream("/application.component.code.properties"));
+            BidiMap componentCodes = new DualHashBidiMap(properties);
+            logger.debug("组件编码数目“{}”", properties.entrySet().size());
+            servletContext.setAttribute(Constant.VC_COMPONENT_CODES, componentCodes);
+        } catch (IOException e) {
+            throw new RuntimeException("加载组件编码配置文件异常", e);
         }
     }
 

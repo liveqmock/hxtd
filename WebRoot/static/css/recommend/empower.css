@@ -19,6 +19,18 @@
 .id_table2 tr td{ text-align:center;}
 .id_ul1 li{ float:left; margin-right:10px;}
 .id_table3 li{ float:left; margin-right:10px;}
-.id_ul2 li{ float:left; line-height:30px; margin-right:15px;}
+.id_ul2 li{ float:left; line-height:30px; margin-right:15px; margin-top:10px; position:relative;}
 .id_ul2 li a{ display:block; color:#222; line-height:28px;border:2px solid #E28D1F; padding-left:10px; padding-right:10px; text-align:center; height:30px;}
-.id_ul2 li a:hover a{ background-position:-49px -19px; width:15px; height:14px;}
+.id_ul2 li:hover span{ background-position:-49px -19px; width:15px; height:14px; display:block; top:-5px; right:-5px; position:absolute; cursor:pointer;}
+
+.id_ul3 li{ float:left; line-height:30px; margin-right:15px; margin-top:10px; position:relative;}
+.id_ul3 li a{ display:block; color:#222; line-height:28px;border:1px solid #336699; padding-left:10px; padding-right:10px; text-align:center; height:30px;}
+.id_ul3 li:hover span{ background-position:-49px -19px; width:15px; height:14px; display:block; top:-5px; right:-5px; position:absolute; cursor:pointer;}
+.id_ul4 li{ float:left; width:16%; margin-top:5px; margin-bottom:5px;}
+.id_ul4 li a{ height:25px;line-height:25px; color:#222; text-align:center; padding-left:10px; padding-right:10px;}
+.id_ul4{ width:86.2%;}
+.allnoright{ background:url(../../images/allnoright.png) no-repeat; width:35px; height:35px; }
+.allright{ background:url(../../images/allright.png) no-repeat; width:35px; height:35px; }
+
+.allnoright2{ background:url(../../images/allnoright_2.png) no-repeat; width:20px; height:20px; }
+.allright2{ background:url(../../images/allright_2.png) no-repeat; width:20px; height:20px; }

@@ -102,16 +102,16 @@ function clearInputVal(obj){//清除
 	<h1 class="f14 fbnone ml40 pt10">基本信息</h1>
 	<table class="cb id_table3 w95b bg_c_white margin0 mt10">
 		<tr>
-			<td width="15%" align="right">产品名称：</td>
+			<td width="15%" align="right"><span class="w_red">*&nbsp;</span>产品名称：</td>
 			<td align="left"><input name="name" type="text" value="${product.name}" class="text_input3"/></td>
-			<td width="15%" align="right">产品编号：</td>
+			<td width="15%" align="right"><span class="w_red">*&nbsp;</span>产品编号：</td>
 			<td align="left"><input name="code" type="text" value="${product.code}" class="text_input3" readonly/></td>
 		</tr>
 		<tr>
 			<td align="right">产品类型：</td>
 			<td align="left">
 				<select name="type.id" class="select1">
-				 	<option value="">请选择</option>
+				 	<option value="">--无--</option>
 				 	<c:forEach items="${dicType}" var="d">
 				 		<option value="${d.id}" 
 				 		<c:if test="${d.id==product.type.id}">
@@ -121,12 +121,12 @@ function clearInputVal(obj){//清除
 				 	</c:forEach>
 				 </select>
 			</td>
-			<td align="right">所属项目：</td>
+			<td align="right"><span class="w_red">*&nbsp;</span>所属项目：</td>
 			<td align="left">
 				<input type="text" id="txt_project" name="projectname" value="${product.project.name}" readonly class="text_input3"/>
 				<input type="hidden"id="hide_project_id" name="project.id" value="${product.project.id}"/>
-				<img src="${ctx}/static/images/search.png" alt="" title="搜索项目" onclick="searchData('project');"/>
-				<img src="${ctx}/static/images/clear.png" alt="" title="清除" onclick="clearInputVal(this);"/>
+				<i class="s_inquiry globle_img block_inline ml5 vm cp" title="搜索项目" onclick="searchData('project');"></i>
+				<i class="dump_btn globle_img block_inline ml5 vm cp" title="清除" onclick="clearInputVal(this);"></i>
 			</td>
 		</tr>
 		<tr>
@@ -157,13 +157,19 @@ function clearInputVal(obj){//清除
 		</tr>
 		<tr>
 			<td align="right">销售开始日期：</td>
-			<td align="left"><input id="start" name=saleBeginTime type="text" value="${activity.saleBeginTime}" class="text_input3"/></td>
-			<td align="right">销售结束日期：</td>
-			<td align="left"><input id="end" name="saleEndTime" type="text" value="${product.saleEndTime}" readonly class="text_input3"/></td>
-		</tr>
-		<tr>
+			<td align="left">
+				<a href="javascript:;" class="pa time_closenone1"></a>
+				<input id="start" name=saleBeginTime type="text" value="${activity.saleBeginTime}" class="text_input3 input_close1" readonly/>
+			</td>
 			<td align="right">赎回赔率%：</td>
 			<td align="left"><input name="redeemRate" type="text" value="${product.redeemRate}" class="right text_input3"/></td>
+		</tr>
+		<tr>
+			<td align="right">销售结束日期：</td>
+			<td align="left">
+				<a href="javascript:;" class="pa time_closenone1"></a>
+				<input id="end" name="saleEndTime" type="text" value="${product.saleEndTime}" readonly class="text_input3 input_close1"/>
+			</td>
 			<td align="right">赎回公式：</td>
 			<td align="left"><input name="redeemFormula" type="text" value="${product.redeemFormula}" class="text_input3"/></td>
 		</tr>

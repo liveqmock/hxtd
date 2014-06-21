@@ -93,8 +93,8 @@ function clearInputVal(obj){//清除
 	<h1 class="f14 fbnone ml40 pt10">基本信息</h1>
 	<table class="cb id_table3 w95b bg_c_white margin0 mt10">
 		<tr>
-			<td width="15%" align="right">活动所有者：</td>
-			<td align="left">
+			<td width="15%" align="right"><span class="w_red">*&nbsp;</span>活动所有者：</td>
+			<td align="left"> 
 				<input name="sponsorname" type="text" value="${activity.sponsor.realName}" readonly="readonly" class="text_input3"/>
 				<input type="hidden" name="sponsor.id"/>
 			</td>
@@ -125,35 +125,37 @@ function clearInputVal(obj){//清除
 			<td align="right">开始日期：</td>
 			<td align="left">
 				<fmt:formatDate value="${activity.beginDate}" pattern="yyyy-MM-dd" var="beginDate"/>
-				<input type="text" id="start" name="beginDate" value="${beginDate}" readonly="readonly" class="text_input3"/>
+				<a href="javascript:;" class="pa time_closenone1"></a>
+				<input type="text" id="start" name="beginDate" value="${beginDate}" readonly="readonly" class="text_input3 input_close1"/>
 			</td>
+			<td align="right">预计成本：</td>
+			<td align="left"><input name="predictCost" type="text" value="${activity.predictCost }" class="text_input3"/></td>
+		</tr>
+		<tr>
 			<td align="right">结束日期：</td>
 			<td align="left">
 				<fmt:formatDate value="${activity.endDate}" pattern="yyyy-MM-dd" var="endDate"/>
-				<input type="text" id="end" name="endDate" value="${endDate}" readonly="readonly" class="text_input3"/>
+				<a href="javascript:;" class="pa time_closenone1"></a>
+				<input type="text" id="end" name="endDate" value="${endDate}" readonly="readonly" class="text_input3 input_close1"/>
 			</td>
-		</tr>
-		<tr>
-			<td align="right">预计成本：</td>
-			<td align="left"><input name="predictCost" type="text" value="${activity.predictCost }" class="text_input3"/></td>
 			<td align="right">实际成本：</td>
 			<td align="left"><input type="text" name="realityCost" value="${activity.realityCost }" class="text_input3"/></td>
 		</tr>
 		<tr>
 			<td align="right">预期效果：</td>
 			<td align="left"><input name="expectEffect" type="text" value="${activity.expectEffect }" class="text_input3"/></td>
-			<td align="right">期望成功率%：</td>
-			<td align="left"><input type="text" name="expectSuccessRate" value="${activity.expectSuccessRate }" class="text_input3"/></td>
-		</tr>
-		<tr>
 			<td align="right">活动次数：</td>
 			<td align="left"><input name="times" type="text" value="${activity.times }" class="text_input3"/></td>
+		</tr>
+		<tr>
+			<td align="right">期望成功率%：</td>
+			<td align="left"><input type="text" name="expectSuccessRate" value="${activity.expectSuccessRate }" class="text_input3"/></td>
 			<td align="right"><span class="w_red">*&nbsp;</span>负责人：</td>
 			<td align="left">
 				<input type="text" id="txt_boss" name="bossname" value="${activity.bossHead.name }" readonly="readonly" class="text_input3"/>
 				<input type="hidden"id="hide_boss_id" name="bossHead.id" value="${activity.bossHead.id }"/>
-				<img src="${ctx}/static/images/search.png" alt="" title="搜索责任人" onclick="searchData('boss');"/>
-				<img src="${ctx}/static/images/clear.png" alt="" title="清除" onclick="clearInputVal(this);"/>
+				<i class="s_inquiry globle_img block_inline ml5 vm cp" title="搜索责任人" onclick="searchData('boss');"></i>
+				<i class="dump_btn globle_img block_inline ml5 vm cp" title="清除" onclick="clearInputVal(this);"></i>
 			</td>
 		</tr>
 		</table>

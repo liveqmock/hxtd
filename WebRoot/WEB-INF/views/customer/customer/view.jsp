@@ -21,7 +21,7 @@
 	<h1 class="f14 fbnone mt10 ml10 fl">客户详细信息</h1>
 	    <ul class="fr id_table1 mt10 ml10">
 		<li><a href="${ctx }/customer/customer/toViewPage.do?type=edit&id=${customer.id}" class="block c_white lh25 mr10"><b class="allbtn_l block fl"></b><b class="allbtn_r pr13 block fl w_auto f14">编&nbsp;&nbsp;辑</b></a></li>
-		<li><a href="javascript:history.go(-1)" class="block c_white lh25 mr10"><b class="allbtn_l block fl"></b><b class="allbtn_r pr13 block fl w_auto f14">返&nbsp;&nbsp;回</b></a></li>
+		<li><a href="${ctx }/customer/customer/toQueryPage.do" class="block c_white lh25 mr10"><b class="allbtn_l block fl"></b><b class="allbtn_r pr13 block fl w_auto f14">返&nbsp;&nbsp;回</b></a></li>
 		</ul>
 	 </div>
 	 <b class="table_headr globle_img block fl"></b>
@@ -50,7 +50,7 @@
 		<tr>
 			<td align="right" width="15%">风险等级：</td>
 			<td align="left">${customer.riskGrade.key }</td>
-			<td align="right" width="15%">证件类新：</td>
+			<td align="right" width="15%">证件类型：</td>
 			<td align="left">${customer.cardType.key }</td>
 		</tr>
 		<tr>

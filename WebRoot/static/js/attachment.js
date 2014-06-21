@@ -29,6 +29,7 @@ attachment.array2Html=function(result){
 		var att = list[i];
 		table.push('<tr><td  align="center">'+att.name+'</td>');
 		table.push('<td align="center">'+att.dict.key+'</td>');
+		table.push('<td align="center">'+att.createdTime+'</td>');
 		table.push('<td align="center">' );
 		if(attachment.setting.down){
 			table.push('<a href="javascript:attachment.download('+att.id+');" class=" block_inline s_download globle_img""></a>' );

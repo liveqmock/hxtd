@@ -26,9 +26,15 @@
          //加载时间控件
             jsUtil.datepicker(".time");
             
-        $(function () {
+        $(function() {
             var grid = new Grid().init().bindExport();
         });
+        
+        //给刷新按钮绑定重新加载的事件
+        $(function (){
+            $("#reload").click(load);
+        });
+            
     </script>
 </head>
 <body>
@@ -72,12 +78,13 @@
     <b class="table_headl globle_img block fl"></b>
         <div class="fl table_headc fl w99b">
         <ul class="fl id_table1 mt10 ml10">
+        <li>  <c:if test="${VS_HAS_FUNCTIONS.messageDelete}">
+        <a href="javascript:void(0)" uri="${ctx}/system/message/delete.do"  class="block c_white lh25 fr mr10  deletesome">
+        <b class="allbtn_l block fl"></b><b class="allbtn_r pr13 block fl w_auto f14 ">删&nbsp;&nbsp;除</b></a></c:if></li>
         <li> <c:if test="${VS_HAS_FUNCTIONS.messageAdd}">
         <a href="${ctx}/system/message/toAddPage.do"  class="block c_white lh25 mr10">
         <b class="allbtn_l block fl"></b><b class="allbtn_r pr13 block fl w_auto f14">新&nbsp;&nbsp;增</b></a></c:if></li>
-        <li>  <c:if test="${VS_HAS_FUNCTIONS.messageDelete}">
-        <a href="javascript:void(0)" uri="${ctx}/system/message/delete.do"  class="block c_white lh25 fr mr10 submit deletesome">
-        <b class="allbtn_l block fl"></b><b class="allbtn_r pr13 block fl w_auto f14 ">删&nbsp;&nbsp;除</b></a></c:if></li>
+        <li><a href="javascript:void(0)" id="reload" class="block c_white lh25 mr10"><b class="allbtn_l block fl"></b><b class="allbtn_r pr13 block fl w_auto f14">刷&nbsp;&nbsp;新</b></a> </li>
        <li><a href="javascript:void(0)" uri="${ctx}/system/message/export.do?TYPE=pagination&ty=recived" class="block c_white lh25 mr10 export"><b class="allbtn_l block fl"></b><b class="allbtn_r pr13 block fl w_auto f14">导&nbsp;&nbsp;出</b></a></li>
 		
         </ul>
@@ -101,25 +108,25 @@
 <div id="title" style="display: none;background-color: #f5f5f6;" class=" ml35 mr35">
 					<table  class="cb id_table2 w">
 					<tr >
-                <th width="10%"><input type="checkbox" class="checkall"/></th>
-                <th width="24%">系统消息名称</th>
-                <th width="15%">发送者</th>
-                <th width="11%" class="sortable orderby" orderby="createdTime">接收时间</th>
-                <th width="15%">接收者</th>
-                <th width="10%">读取状态</th>
-                <th align="center" width="15%">操作</th>
+                <th width="5%"><input type="checkbox" class="checkall"/></th>
+                <th width="34%">系统消息名称</th>
+                <th width="19%">发送者</th>
+                <th width="19%" class="sortable orderby" orderby="createdTime">接收时间</th>
+                <th width="19%">接收者</th>
+                
+                <th align="center" width="12%">操作</th>
                      </tr>
                        </table>
 </div>
         <table class="cb id_table2 w pr35">
             <tr id="recordDiv">
-                <th width="10%"><input type="checkbox" class="checkall"/></th>
-                <th width="24%">系统消息名称</th>
-                <th width="15%">发送者</th>
-                <th width="11%" class="sortable orderby" orderby="createdTime">接收时间</th>
-                <th width="15%">接收者</th>
-                <th width="10%">读取状态</th>
-                <th align="center" width="15%">操作</th>
+                <th width="5%"><input type="checkbox" class="checkall"/>&nbsp;&nbsp;&nbsp;&nbsp;</th>
+                <th width="34%">系统消息名称</th>
+                <th width="19%">发送者</th>
+                <th width="19%" class="sortable orderby" orderby="createdTime">接收时间</th>
+                <th width="19%">接收者</th>
+                
+                <th align="center" width="12%">操作</th>
             </tr>
             <tbody class="list"></tbody>
         </table>
@@ -128,7 +135,10 @@
         <textarea id="template-tbody" class="template template-tbody">
             {#foreach $T.result as row}
             <tr class="{$T.row$index%2==1?'':'bg_c_blue w'}">
-                <td align="center"><input type="checkbox" name="id" class="checkitem" value="{$T.row.id}"/></td>
+                <td >
+                <input type="checkbox" name="id" class="checkitem" value="{$T.row.id}"/>
+                <i class="{$T.row.status?'have_read globle_img block_inline':'no_read globle_img block_inline'}"></i>
+                </td>
              <td align="left">
                    <c:choose>
                 		<c:when test="${VS_HAS_FUNCTIONS.messageView}">
@@ -140,13 +150,13 @@
                 <td align="left">{$T.row.message.creater.realName}</td>
                 <td>{$T.row.createdTime}</td>
                 <td>{$T.row.user.realName}</td>
-                <td>{$T.row.status?"已读":"未读"}</td>
+               
                 <td align="left">
                         <c:if test="${VS_HAS_FUNCTIONS.messageView}">
-                            <a href="${ctx}/system/message/toViewPage.do?id={$T.row.id}"title="查看" class=" block_inline s_detail_btn globle_img ml10"></a>
+                            <a href="${ctx}/system/message/toViewPage.do?id={$T.row.id}"title="详情" class=" block_inline s_detail_btn globle_img ml10"></a>
                         </c:if>    
                         <c:if test="${VS_HAS_FUNCTIONS.messageModify}">
-                            <a href="${ctx}/system/message/toViewPage.do?id={$T.row.id}&type=edit" title="回复" class=" block_inline s_edit_btn globle_img ml10"></a>
+                            <a href="${ctx}/system/message/toViewPage.do?id={$T.row.id}&type=edit" title="回复" class=" block_inline s_reply globle_img ml10"></a>
                         </c:if>
                         <c:if test="${VS_HAS_FUNCTIONS.messageDelete}">
                             <a href="javascript:void(0)" class=" block_inline s_dump_btn globle_img ml10 delete" title="删除" uri="${ctx}/system/message/delete.do?id={$T.row.id}"></a>

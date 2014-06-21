@@ -79,14 +79,14 @@
 <b class="table_headl globle_img block fl"></b>
      <div class="fl table_headc fl w99b">
                     <ul class="fl id_table1 mt10 ml10">
-                     <c:if test="${VS_HAS_FUNCTIONS.noticeAdd}">
-                            <li><a href="${ctx}/system/notice/toAddPage.do?parentId=${parentId}" class="block c_white lh25 add mr10"><b class="allbtn_l block fl"></b><b class="allbtn_r pr13 block fl w_auto f14">新&nbsp;增</b></a></li>
-                        </c:if>
                         <c:if test="${VS_HAS_FUNCTIONS.noticeDelete}">
                             <li>
-                            <a  href="javascript:void(0)" uri="${ctx}/system/notice/delete.do" class="block c_white lh25 fr mr10 submit deletesome">
+                            <a  href="javascript:void(0)" uri="${ctx}/system/notice/delete.do" class="block c_white lh25 fr mr10  deletesome">
                             <b class="allbtn_l block fl"></b>
                             <b class="allbtn_r pr13 block fl w_auto f14">删&nbsp;除</b></a></li>
+                        </c:if>
+                     <c:if test="${VS_HAS_FUNCTIONS.noticeAdd}">
+                            <li><a href="${ctx}/system/notice/toAddPage.do?parentId=${parentId}" class="block c_white lh25 add mr10"><b class="allbtn_l block fl"></b><b class="allbtn_r pr13 block fl w_auto f14">新&nbsp;增</b></a></li>
                         </c:if>
                          
                        <li><a href="javascript:void(0)" uri="${ctx}/system/notice/export.do?TYPE=pagination" class="block c_white lh25 mr10 export"><b class="allbtn_l block fl"></b><b class="allbtn_r pr13 block fl w_auto f14">导&nbsp;&nbsp;出</b></a></li>
@@ -143,13 +143,13 @@
                 <td >{$T.row.deadTime}</td>
                 <td align="center">
                         <c:if test="${VS_HAS_FUNCTIONS.noticeView}">
-                        <a href="${ctx}/system/notice/toViewPage.do?id={$T.row.id}" class=" block_inline s_detail_btn globle_img ml10"></a>
+                        <a href="${ctx}/system/notice/toViewPage.do?id={$T.row.id}" title="详情" class=" block_inline s_detail_btn globle_img ml10"></a>
                         </c:if>
                         <c:if test="${VS_HAS_FUNCTIONS.noticeModify}">
-                         <a href="${ctx}/system/notice/toViewPage.do?id={$T.row.id}&type=edit" class=" block_inline s_edit_btn globle_img ml10"></a>
+                         <a href="${ctx}/system/notice/toViewPage.do?id={$T.row.id}&type=edit" title="编辑" class=" block_inline s_edit_btn globle_img ml10"></a>
                         </c:if>
                         <c:if test="${VS_HAS_FUNCTIONS.noticeDelete}">
-                         <a href="javascript:void(0)"  uri="${ctx}/system/notice/delete.do?id={$T.row.id}" class=" block_inline s_dump_btn globle_img ml10 delete"></a>
+                         <a href="javascript:void(0)"  uri="${ctx}/system/notice/delete.do?id={$T.row.id}" title="删除"class=" block_inline s_dump_btn globle_img ml10 delete"></a>
                         </c:if>
                        
                 </td>

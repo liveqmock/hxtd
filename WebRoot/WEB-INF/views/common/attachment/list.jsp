@@ -47,8 +47,8 @@
       </td>
       <td class="f14" align="right" width="7%">上传时间：</td>
       <td class="f14" align="left"width="18%" >
-      <div class="pr vm"><a href="javascript:;" class="pa time_closenone1" onclick="javascript:$(this).nextAll().eq(1).val('');"></a>
-      <a href="javascript:;" class="pa time_closenone2" onclick="javascript:$(this).nextAll().eq(1).val('');"></a>
+      <div class="pr vm"><a href="javascript:;" class="pa time_closenone1"  title="清空" onclick="javascript:$(this).nextAll().eq(1).val('');"></a>
+      <a href="javascript:;" class="pa time_closenone2" title="清空" onclick="javascript:$(this).nextAll().eq(1).val('');"></a>
       <input class="text_input2 input_close globle_img time" name="search_GTE_createdTime" type="text" />-<input class="text_input2 input_close globle_img time" name="search_LTE_createdTime" type="text" />
          </div>
          </td>  
@@ -77,11 +77,11 @@
 <b class="table_headl globle_img block fl"></b>
 <div class="fl table_headc fl w99b">
         <ul class="fl id_table1 mt10 ml10">
-         <li>   <c:if test="${VS_HAS_FUNCTIONS.attachmentAdd}"><a href="${ctx}/common/attachment/toAddPage.do" class="block c_white lh25 mr10"><b class="allbtn_l block fl"></b><b class="allbtn_r pr13 block fl w_auto f14">新&nbsp;&nbsp;增</b></a></c:if></li>
          <li>   <c:if test="${VS_HAS_FUNCTIONS.attachmentDelete}">
-         <a href="javascript:void(0)" uri="${ctx}/common/attachment/delete.do" class="block c_white lh25 fr mr10 submit deletesome">
+         <a href="javascript:void(0)" uri="${ctx}/common/attachment/delete.do" class="block c_white lh25 fr mr10  deletesome">
          <b class="allbtn_l block fl "></b>
          <b class="allbtn_r pr13 block fl w_auto f14">删&nbsp;&nbsp;除</b></a> </c:if></li>
+         <li>   <c:if test="${VS_HAS_FUNCTIONS.attachmentAdd}"><a href="${ctx}/common/attachment/toAddPage.do" class="block c_white lh25 mr10"><b class="allbtn_l block fl"></b><b class="allbtn_r pr13 block fl w_auto f14">新&nbsp;&nbsp;增</b></a></c:if></li>
         </ul>
 </div>
 <b class="table_headr globle_img block fl"></b>
@@ -132,7 +132,7 @@
                 <td >{$T.row.modifiedTime}</td>
                 <td align="center">
                     <ul>
-                    <li><a href="${ctx}/common/attach/toViewPage.do?id={$T.row.id}" class="block_inline s_detail_btn globle_img ml10"></a></li>
+                    <li><a href="${ctx}/common/attach/toViewPage.do?id={$T.row.id}" title="详情"class="block_inline s_detail_btn globle_img ml10"></a></li>
                         
                         <c:if test="${VS_HAS_FUNCTIONS.attachmentView}">
                             <li><a href="${ctx}/common/attach/toViewPage.do?id={$T.row.id}"><img src="${ctx}/static/images/tallssed.png" alt=""/></a></li>

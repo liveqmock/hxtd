@@ -55,7 +55,7 @@ public class FunctionService {
         logger.info("获得请求功能");
         logger.debug("url“{}”", url);
         DetachedCriteria criteria = DetachedCriteria.forClass(Function.class);
-        criteria.createAlias("menu", "menu", JoinType.INNER_JOIN);
+        criteria.createAlias("menu", "menu", JoinType.LEFT_OUTER_JOIN);
         criteria.createAlias("menu.parent", "parentMenu", JoinType.LEFT_OUTER_JOIN);
         criteria.setFetchMode("privilegeLevel", FetchMode.JOIN);
         criteria.setFetchMode("menu", FetchMode.JOIN);

@@ -120,8 +120,8 @@ public class MessageController {
 	@RequestMapping("/toQueryPage.do")
 	public String toQueryPage(@RequestParam(value = "pageNo", defaultValue = "1") int pageNumber,
             @RequestParam(value = "pageSize", defaultValue = "10") int pageSize,
-            @RequestParam(value = "pageOrderBy", defaultValue = "createdTime") String orderBy,
-            @RequestParam(value = "pageOrder", defaultValue = "desc") String order,
+            @RequestParam(value = "pageOrderBy", defaultValue = "status") String orderBy,
+            @RequestParam(value = "pageOrder", defaultValue = "asc") String order,
             @RequestParam(value = "type", defaultValue = "recived") String type,
             Model model) {
 		logger.info("MessageController.toQueryPage跳转系统消息列表页");

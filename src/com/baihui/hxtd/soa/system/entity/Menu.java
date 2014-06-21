@@ -1,13 +1,17 @@
 package com.baihui.hxtd.soa.system.entity;
 
 
+import com.baihui.hxtd.soa.common.entity.Orderable;
+import com.baihui.hxtd.soa.common.entity.TreeNode;
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 
 import javax.persistence.*;
 import java.io.Serializable;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.List;
 
 /**
  * 菜单实体类
@@ -18,7 +22,7 @@ import java.util.*;
 @Entity
 @Table(name = "SM_MENU")
 @SuppressWarnings("serial")
-public class Menu implements Serializable, Cloneable, Comparable<Menu> {
+public class Menu implements Serializable, Cloneable, TreeNode<Menu> {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -82,7 +86,7 @@ public class Menu implements Serializable, Cloneable, Comparable<Menu> {
 
     @JsonBackReference
     @OneToMany(mappedBy = "parent", cascade = CascadeType.REMOVE)
-    private Set<Menu> children = new HashSet<Menu>();
+    private List<Menu> children = new ArrayList<Menu>();
 
     @JsonIgnore
     @ManyToOne(fetch = FetchType.LAZY)
@@ -100,9 +104,10 @@ public class Menu implements Serializable, Cloneable, Comparable<Menu> {
         this.id = id;
     }
 
+
     @Override
-    public int compareTo(Menu menu) {
-        return (int) (getOrder() - menu.getOrder());
+    public int compareTo(Orderable orderable) {
+        return (int) (getOrder() - orderable.getOrder());
     }
 
     @Override
@@ -248,11 +253,11 @@ public class Menu implements Serializable, Cloneable, Comparable<Menu> {
         this.parent = parent;
     }
 
-    public Set<Menu> getChildren() {
+    public List<Menu> getChildren() {
         return children;
     }
 
-    public void setChildren(Set<Menu> children) {
+    public void setChildren(List<Menu> children) {
         this.children = children;
     }
 

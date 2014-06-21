@@ -73,13 +73,13 @@
     <b class="table_headl globle_img block fl"></b>
         <div class="fl table_headc fl w99b">
         <ul class="fl id_table1 mt10 ml10">
-        <li> <c:if test="${VS_HAS_FUNCTIONS.messageAdd}"><a href="${ctx}/system/message/toAddPage.do"  class="block c_white lh25 mr10"><b class="allbtn_l block fl"></b><b class="allbtn_r pr13 block fl w_auto f14">新&nbsp;&nbsp;增</b></a></c:if></li>
         <li>  <c:if test="${VS_HAS_FUNCTIONS.messageDelete}">
-        <a href="javascript:void(0)" uri="${ctx}/system/message/delete.do"  class="block c_white lh25 fr mr10 submit deletesome">
+        <a href="javascript:void(0)" uri="${ctx}/system/message/delete.do"  class="block c_white lh25 fr mr10  deletesome">
         <b class="allbtn_l block fl"></b>
         <b class="allbtn_r pr13 block fl w_auto f14 ">删&nbsp;&nbsp;除</b>
         </a>
         </c:if></li>
+        <li> <c:if test="${VS_HAS_FUNCTIONS.messageAdd}"><a href="${ctx}/system/message/toAddPage.do"  class="block c_white lh25 mr10"><b class="allbtn_l block fl"></b><b class="allbtn_r pr13 block fl w_auto f14">新&nbsp;&nbsp;增</b></a></c:if></li>
          <li><a href="javascript:void(0)" uri="${ctx}/system/message/export.do?TYPE=pagination" class="block c_white lh25 mr10 export"><b class="allbtn_l block fl"></b><b class="allbtn_r pr13 block fl w_auto f14">导&nbsp;&nbsp;出</b></a></li>
 		
        </ul>
@@ -105,22 +105,22 @@
 <div id="title" style="display: none;background-color: #f5f5f6;" class=" ml35 mr35">
 					<table  class="cb id_table2 w">
 				<tr>
-				<th width="10%"><input type="checkbox" class="checkall"/></th>
-                <th width="20%">系统消息名称</th>
-                <th width="15%">发送者</th>
-                <th width="11%" class="sortable orderby" orderby="createdTime">发送时间</th>
-                <th width="15%">接收者</th>
-                <th align="center"width="20%">操作</th>
+				<th align="left" width="7%"><input type="checkbox" class="checkall"/></th>
+                <th width="34%">系统消息名称</th>
+                <th width="19%">发送者</th>
+                <th width="19%" class="sortable orderby" orderby="createdTime">发送时间</th>
+                <th width="19%">接收者</th>
+                <th align="center"width="12%">操作</th>
                 </tr>
 					</table></div>
         <table class="cb id_table2 w pr35">
             <tr id="recordDiv">
-                <th width="10%"><input type="checkbox" class="checkall"/></th>
-                <th width="20%">系统消息名称</th>
-                <th width="15%">发送者</th>
-                <th width="11%" class="sortable orderby" orderby="createdTime">发送时间</th>
-                <th width="15%">接收者</th>
-                <th align="center"width="20%">操作</th>
+                <th width="5%"><input type="checkbox" class="checkall"/></th>
+                <th width="34%">系统消息名称</th>
+                <th width="19%">发送者</th>
+                <th width="19%" class="sortable orderby" orderby="createdTime">发送时间</th>
+                <th width="19%">接收者</th>
+                <th align="center"width="12%">操作</th>
             </tr>
             <tbody class="list"></tbody>
         </table>
@@ -144,7 +144,7 @@
                 <td align="center">
                     
                         <c:if test="${VS_HAS_FUNCTIONS.messageView}">
-                            <a href="${ctx}/system/message/toViewPage.do?id={$T.row.id}" title="查看" class=" block_inline s_detail_btn globle_img  ml10"></a>
+                            <a href="${ctx}/system/message/toViewPage.do?id={$T.row.id}" title="详情" class=" block_inline s_detail_btn globle_img  ml10"></a>
                         </c:if>    
                         <c:if test="${VS_HAS_FUNCTIONS.messageModify}">
                             <a href="${ctx}/system/message/toViewPage.do?id={$T.row.id}&type=add" title="再次发送" class=" block_inline s_edit_btn globle_img ml10"></a>

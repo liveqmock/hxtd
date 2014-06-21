@@ -3,7 +3,7 @@ var RcmsAjax = {};
 RcmsAjax.global = {
 	timer: 0,
 	pointDiv : '',
-	showTime : 4000
+	showTime : 2000
 }
 // 通过ready函数缓冲加载
 $(function(){
@@ -16,16 +16,31 @@ $(function(){
 	RcmsAjax.global.pointDiv = $('#point4Ajax', window.top.document);
 });
 
+
 RcmsAjax.bgColor = {
 	start : '#FDBB74',
 	success : '#A6E290',
 	error : '#FB6542'
 }
 
+RcmsAjax.bgImage = {
+	start : 'wite.jpg.gif',
+	success : 'wite_right.png',
+	error : 'wite_fulse.png'
+}
+
+RcmsAjax.msgDiv = {
+	begin : '<div class="zzc"><img width="50" height="51" class="fl mt20 ml10" src="'+jsUtil.getRootPath()+'/static/images/',
+	middle : '" /><p class="fr mr35 mt40">',
+	end : '</p></div>'
+}
+
+
+
 RcmsAjax.msg = {
-	start : '数据传输中',
-	success : '数据请求成功',
-	error : '数据请求失败'
+	start : '数据请求中......',
+	success : '数据请求成功！',
+	error : '数据请求失败！'
 }
 
 // ajax的全局属性控制
@@ -99,7 +114,7 @@ RcmsAjax._ajax =  function (_excuteMsgFlag, _url, _successCallBack, _completeCal
 						showMsg(result);
 					}
 					window.focus();
-					alert("您太长时间没有操作，请重新登录!");
+//					alert("您太长时间没有操作，请重新登录!");
 					return false;
 				}
 				if (_excuteMsgFlag) {
@@ -147,19 +162,7 @@ RcmsAjax._ajax =  function (_excuteMsgFlag, _url, _successCallBack, _completeCal
 function showMsg(data){
 	var _successflag = data.successFlag;
 	var _message = data.message;
-	var showColor = '';
-	if(_successflag){
-		showColor = RcmsAjax.bgColor.success;
-		if(!_message){
-			_message = RcmsAjax.msg.success;
-		}
-	}else{
-		showColor = RcmsAjax.bgColor.error;
-		if(!_message){
-			_message = RcmsAjax.msg.error;
-		}
-	}
-	_showMsg(_message, showColor);
+	_showMsg(_getPointDivHtmlByStatusMsg(_successflag, _message));
 }
 
 /**
@@ -167,7 +170,7 @@ function showMsg(data){
  * @memberOf {TypeName} 
  */
 function _beforeSend4Msg(_beforeMsg){
-	_showProcessMsg(_beforeMsg);
+	_showProcessMsg(_getPointDivHtmlByStatusMsg(null, _beforeMsg, true));
 }
 
 /**
@@ -184,7 +187,7 @@ function _stop(){
  * @param {Object} _errorMsg
  */
 function _error4Msg(_errorMsg){
-	_showMsgByTime(_errorMsg, RcmsAjax.bgColor.error);
+	_showMsgByTime(_getPointDivHtmlByStatusMsg(false, _errorMsg));
 }
 
 /**
@@ -195,7 +198,7 @@ function _start4Msg(_startMsg){
 	if(!_startMsg){
 		_startMsg = RcmsAjax.msg.start;
 	}
-	_showMsgByTime(_startMsg, RcmsAjax.bgColor.start);
+	_showMsgByTime(_getPointDivHtmlByStatusMsg(null, _startMsg, true));
 }
 
 /**
@@ -206,7 +209,7 @@ function _success4Msg(_successMsg){
 	if(!_successMsg){
 		_successMsg = RcmsAjax.msg.success;
 	}
-	_showMsgByTime(_successMsg, RcmsAjax.bgColor.success);
+	_showMsgByTime(_getPointDivHtmlByStatusMsg(true, _successMsg));
 }
 
 /**
@@ -216,7 +219,7 @@ function _success4Msg(_successMsg){
 function _showProcessMsg(msg){
 	RcmsAjax.global.pointDiv.html(msg);
 	var leftPos = (window.top.document.documentElement.clientWidth-RcmsAjax.global.pointDiv.width())/2;
-	RcmsAjax.global.pointDiv.css({"background":RcmsAjax.bgColor.start, "left":leftPos}).slideDown('fast');
+	RcmsAjax.global.pointDiv.css({ "left":leftPos}).slideDown('fast');
 }
 
 /**
@@ -224,8 +227,8 @@ function _showProcessMsg(msg){
  * @param {Object} msg
  * @param {Object} bgcolor
  */
-function _showMsg(msg, bgcolor){
-	_showMsgByTime(msg, bgcolor);
+function _showMsg(msg){
+	_showMsgByTime(msg);
 }
 
 /**
@@ -234,13 +237,13 @@ function _showMsg(msg, bgcolor){
  * @param {Object} msg
  * @param {Object} showTime
  */
-function _showMsgByTime(msg, bgcolor, _showTime, _speed){
+function _showMsgByTime(msg, _showTime, _speed){
 	RcmsAjax.global.pointDiv.html(msg);
 	if(!_showTime){
 		_showTime = RcmsAjax.global.showTime;
 	}
 	var leftPos = (window.top.document.documentElement.clientWidth-RcmsAjax.global.pointDiv.width())/2;
-	RcmsAjax.global.pointDiv.css({"background":bgcolor, "left":leftPos}).slideDown('normal');
+	RcmsAjax.global.pointDiv.css({ "left":leftPos}).slideDown('normal');
 }
 
 
@@ -251,4 +254,28 @@ function _hide(speed){
 		}
 		RcmsAjax.global.pointDiv.slideUp(speed);
 	}
+}
+
+function _getPointDivHtmlByStatusMsg(_successflag, _message, _isStart){
+	var msgDivImage = '';
+	if(_isStart){
+		if(_message){
+			msgDivImage = RcmsAjax.bgImage.start;
+		}
+		_message = RcmsAjax.msg.start;
+	}else{
+		if(_successflag){
+			msgDivImage = RcmsAjax.bgImage.success;
+			if(!_message){
+				_message = RcmsAjax.msg.success;
+			}
+		}else{
+			msgDivImage = RcmsAjax.bgImage.error;
+			if(!_message){
+				_message = RcmsAjax.msg.error;
+			}
+		}
+	}
+	
+	return RcmsAjax.msgDiv.begin + msgDivImage + RcmsAjax.msgDiv.middle + _message + RcmsAjax.msgDiv.end;
 }

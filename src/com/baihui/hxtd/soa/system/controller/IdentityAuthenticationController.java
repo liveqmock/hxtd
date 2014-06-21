@@ -6,7 +6,10 @@ import com.baihui.hxtd.soa.base.utils.ReflectionUtils;
 import com.baihui.hxtd.soa.base.utils.mapper.HibernateAwareObjectMapper;
 import com.baihui.hxtd.soa.base.utils.serial.TierSerial;
 import com.baihui.hxtd.soa.base.utils.serial.TierSerials;
-import com.baihui.hxtd.soa.system.entity.*;
+import com.baihui.hxtd.soa.system.entity.Component;
+import com.baihui.hxtd.soa.system.entity.Function;
+import com.baihui.hxtd.soa.system.entity.Menu;
+import com.baihui.hxtd.soa.system.entity.User;
 import com.baihui.hxtd.soa.system.service.*;
 import org.apache.commons.collections.BidiMap;
 import org.slf4j.Logger;
@@ -87,6 +90,8 @@ public class IdentityAuthenticationController {
      */
     @RequestMapping(value = "/login.doself", method = RequestMethod.POST)
     public String login(HttpServletRequest request, User user, RedirectAttributes model) throws IOException, CloneNotSupportedException {
+        Long startTime = System.currentTimeMillis();
+
         logger.info("登录系统");
 
         logger.debug("用户名“{}”", user.getName());
@@ -139,19 +144,13 @@ public class IdentityAuthenticationController {
         List<Menu> menus = menuService.findValid(persistUser);
         menus = menuService.fullParent(menus);
         session.setAttribute(Constant.VS_MENUS, menus);
-        List<Role> roles = roleService.findValid(persistUser);
-        session.setAttribute(Constant.VS_ROLES, roles);
         List<Function> functions = functionService.findValid(persistUser);
         session.setAttribute(Constant.VS_FUNCTIONS, functions);
         List<Component> components = componentService.findValid(persistUser);
         session.setAttribute(Constant.VS_COMPONENTS, components);
 
-        List<String> functionCodes = ReflectionUtils.invokeGetterMethod(functions, "code");
-        session.setAttribute(Constant.VS_FUNCTION_CODES, functionCodes);
-        List<String> componentCodes = ReflectionUtils.invokeGetterMethod(components, "code");
-        session.setAttribute(Constant.VS_COMPONENT_CODES, componentCodes);
-
         BidiMap functionNameCodes = (BidiMap) session.getServletContext().getAttribute(Constant.VC_FUNCTION_CODES);
+        List<String> functionCodes = ReflectionUtils.invokeGetterMethod(functions, "code");
         Map<String, Boolean> hasFunctions = new HashMap<String, Boolean>();
         for (Object key : functionNameCodes.keySet()) {
             String value = (String) functionNameCodes.get(key);
@@ -159,6 +158,14 @@ public class IdentityAuthenticationController {
         }
         session.setAttribute(Constant.VS_HAS_FUNCTIONS, hasFunctions);
 
+        BidiMap componentNameCodes = (BidiMap) session.getServletContext().getAttribute(Constant.VC_COMPONENT_CODES);
+        List<String> componentCodes = ReflectionUtils.invokeGetterMethod(components, "code");
+        Map<String, Boolean> hasComponents = new HashMap<String, Boolean>();
+        for (Object key : componentNameCodes.keySet()) {
+            String value = (String) componentNameCodes.get(key);
+            hasComponents.put((String) key, componentCodes.contains(String.valueOf(value)));
+        }
+        session.setAttribute(Constant.VS_HAS_COMPONENTS, hasFunctions);
 
         menuService.toTriggerUrl(menus);
         List<Menu> activeMenus = menuService.findActive(menus);
@@ -173,7 +180,6 @@ public class IdentityAuthenticationController {
         List<Menu> menubarSecoundMenus = menuService.findByLevel(menubarMenus, 2);
         session.setAttribute(Constant.VS_MENUBAR_SECOUND_MENUS, menuService.groupByParentId(menubarSecoundMenus));
 
-
         logger.info("session中存储脚本信息");
         Map<String, Object> jsSession = new HashMap<String, Object>();
         jsSession.put("userId", persistUser.getId());
@@ -185,15 +191,13 @@ public class IdentityAuthenticationController {
         session.setAttribute(Constant.VS_JS_GLOBALINFO, jsSessionJson);
         logger.debug("基本脚本信息“{}”->“{}”", Constant.VS_JS_GLOBALINFO, jsSessionJson);
 
-        //TODO 导致已读取数据更改后被更新，原因不明
         userService.resetDataStoreStatus(persistUser.getId());
 
         logger.info("初始化系统首页");
-        String url = activeMenus.get(0).getUrl();
-        if (url == null) {
-            url = activeMenus.get(0).getChildren().iterator().next().getUrl();
-        }
-        logger.info("默认按父子菜单URL规则（父菜单URL有值则取父菜单，否则取子菜单）重定向至第一个菜单“{}”", url);
+        String url = menuService.findIndexUrl(activeMenus);
+
+        long timeDiffer = System.currentTimeMillis() - startTime;
+        logger.info("登录耗时“{}.{}”", timeDiffer / 1000, timeDiffer % 1000);
         return "redirect:" + url;
     }
 

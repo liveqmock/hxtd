@@ -76,8 +76,8 @@ function clearInputVal(obj){//清除
 			<td align="left">
 				<input id="txt_owner" type="text" value="${contact.owner.realName}" readonly="readonly" class="text_input3"/>
 				<input id="hide_owner_id" type="hidden" name="owner.id" value="${contact.owner.id}"/>
-				<img src="${ctx}/static/images/search.png" alt="" title="搜索所有者" onclick="searchData('owner');"/>
-				<img src="${ctx}/static/images/clear.png" alt="" title="清除" onclick="clearInputVal(this);"/>
+				<i class="s_inquiry globle_img block_inline ml5 vm cp" title="搜索所有者" onclick="searchData('owner');"></i>
+				<i class="dump_btn globle_img block_inline ml5 vm cp" title="清除" onclick="clearInputVal(this);"></i>
 			</td>
 			<td width="15%" align="right">线索来源：</td>
 			<td align="left">
@@ -96,8 +96,8 @@ function clearInputVal(obj){//清除
 			<td align="left">
 				<input id="txt_customer" type="text" value="${contact.customer.name}" readonly="readonly" class="text_input3"/>
 				<input id="hide_customer_id" name="customer.id" type="hidden" value="${contact.customer.id}"/>
-				<img src="${ctx}/static/images/search.png" alt="" title="搜索客户" onclick="searchData('customer');"/>
-				<img src="${ctx}/static/images/clear.png" alt="" title="清除" onclick="clearInputVal(this);"/>
+				<i class="s_inquiry globle_img block_inline ml5 vm cp" title="搜索客户" onclick="searchData('customer');"></i>
+				<i class="dump_btn globle_img block_inline ml5 vm cp" title="清除" onclick="clearInputVal(this);"></i>
 			</td>
 		</tr>
 		<tr>
@@ -105,8 +105,8 @@ function clearInputVal(obj){//清除
 			<td align="left">
 				<input id="txt_supplier" type="text" value="${contact.supplier.name}" readonly="readonly" class="text_input3"/>
 				<input id="hide_supplier_id" name="supplier.id" type="hidden" value="${contact.supplier.id}"/>
-				<img src="${ctx}/static/images/search.png" alt="" title="搜索供应商" onclick="searchData('supplier');"/>
-				<img src="${ctx}/static/images/clear.png" alt="" title="清除" onclick="clearInputVal(this);"/>
+				<i class="s_inquiry globle_img block_inline ml5 vm cp" title="搜索供应商" onclick="searchData('supplier');"></i>
+				<i class="dump_btn globle_img block_inline ml5 vm cp" title="清除" onclick="clearInputVal(this);"></i>
 			</td>
 			<td align="right">邮箱：</td>
 			<td align="left"><input type="text" name="email" value="${contact.email}" class="text_input3"/></td>

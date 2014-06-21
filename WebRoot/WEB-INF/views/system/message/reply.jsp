@@ -18,14 +18,11 @@
 </style>
     <link href="${ctx}/static/css/stressing/detail.css" rel="stylesheet" type="text/css" />
     <link rel="stylesheet" href="${ctx}/static/css/application.css" type="text/css"/>
-    <script type="text/javascript" src="${ctx}/static/js/js-util.common.js"></script>
-    <script type="text/javascript" src="${ctx}/static/js/js-util.js"></script>
+  
     <script type="text/javascript" src="${ctx}/static/js/jquery.validate.js"></script>
     <script type="text/javascript" src="${ctx}/static/js/jquery.metadata.js"></script>
     <script type="text/javascript" src="${ctx}/static/js/validator.js"></script>
-    <script>$(function () {jsUtil.bindSave();});</script>
-    
-<script type="text/javascript" src="${ctx}/static/js/pacs.js"></script>
+
 <script type="text/javascript"> 
 $(function(){//初始化 
 	$("#save").click(function(){
@@ -68,14 +65,13 @@ function clearInputVal(obj){//清除
             <tr>
                 <td align="right" width="15%"><span class="w_red">*&nbsp;</span>回复标题：</td>
                 <td align="left">
-                <input type="text" class="{required:true,messages:{required:'（*必填选项）'}}" name="title" value=""/></td>
+                <input type="text" class="required" name="title" value=""/></td>
             </tr>
             <tr>
             <td align="right" width="15%"><span class="w_red">*&nbsp;</span>回复内容：</td>
                 <td align="left">
                     
-                    <textarea name="content" class="required"style="width:90%;height:300px;border:1px solid #e0e0e0; margin:5px 0px">
-                    </textarea>
+                    <textarea name="content" class="required"style="width:90%;height:300px;border:1px solid #e0e0e0; margin:5px 0px"></textarea>
                    
                </td>
            </tr>

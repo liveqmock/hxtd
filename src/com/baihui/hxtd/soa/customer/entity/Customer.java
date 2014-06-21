@@ -157,6 +157,13 @@ public class Customer implements Serializable {
 	private Date modifiedTime;
 
 	/**
+	 * 邮箱
+	 */
+	@Column(name = "EMAIL")
+	private String email;
+	
+	
+	/**
 	 * 
 	 */
 	@Column(name = "IS_DELETED",updatable=false)
@@ -391,6 +398,14 @@ public class Customer implements Serializable {
 
 	public void setCounty(PCAS county) {
 		this.county = county;
+	}
+
+	public String getEmail() {
+		return email;
+	}
+
+	public void setEmail(String email) {
+		this.email = email;
 	}
 
 

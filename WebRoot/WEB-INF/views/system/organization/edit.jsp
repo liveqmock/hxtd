@@ -33,8 +33,8 @@
 
             <div class="fl table_headc fl w99b">
                 <h1 class="f14 fbnone mt10 ml10 fl">组织详细信息</h1>
-                <c:if test="${VM_ALL!=null}">
-                    <div class="message">${VM_ALL}</div>
+                <c:if test="${VM_BUSINESS!=null}">
+                    <div class="message">${VM_BUSINESS}</div>
                 </c:if>
             </div>
             <b class="table_headr globle_img block fl"></b>

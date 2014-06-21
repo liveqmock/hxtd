@@ -163,7 +163,7 @@ public class DataController {
         roleService.add(role);
 
         logger.info("添加操作提示");
-        model.addFlashAttribute(Constant.VM_ALL, "新增成功");
+        model.addFlashAttribute(Constant.VM_BUSINESS, "新增成功");
 
         redirectUri = String.format(redirectUri, role.getId());
         logger.info("重定向至“{}”", redirectUri);
@@ -223,7 +223,7 @@ public class DataController {
         roleService.modify(role);
 
         logger.info("添加操作提示");
-        model.addFlashAttribute(Constant.VM_ALL, "修改成功");
+        model.addFlashAttribute(Constant.VM_BUSINESS, "修改成功");
 
         redirectUri = String.format(redirectUri, role.getId());
         logger.info("重定向至“{}”", redirectUri);
@@ -287,7 +287,7 @@ public class DataController {
         roleService.authorization(id, functionIds, componentIds);
 
         logger.info("添加操作提示");
-        model.addFlashAttribute(Constant.VM_ALL, "授权成功");
+        model.addFlashAttribute(Constant.VM_BUSINESS, "授权成功");
 
         redirectUri = String.format(redirectUri, id);
         return "redirect:" + redirectUri;

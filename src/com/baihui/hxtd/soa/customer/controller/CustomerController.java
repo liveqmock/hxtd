@@ -96,7 +96,7 @@ public class CustomerController {
 	 * @return
 	 */
 	@RequestMapping("/toQueryPage.do")
-	public String toQueryPage(ModelMap  model) {
+	public String toQueryPage(Model  model) {
 		logger.info("CustomerController.toQueryPage跳转客户列表页");
 		List<Dictionary> dict = dictionaryService.findChildren("040301");
 		//HibernatePage<Customer> page = new HibernatePage<Customer>(pageNumber, pageSize);
@@ -113,7 +113,7 @@ public class CustomerController {
 		sb.append("]");
 		model.addAttribute("page",new HibernatePage<Customer>().order("desc").orderBy("modifiedTime"));
 		model.addAttribute("dict",sb.toString());
-		model.addAttribute("type", dict);
+		getDictionary(model);
 		return "/customer/customer/list";
 	}
 

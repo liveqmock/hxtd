@@ -1,19 +1,11 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<%@ taglib prefix="tag" tagdir="/WEB-INF/tags" %>
 <c:set var="ctx" value="${pageContext.request.contextPath}"/>
 <html>
 <head>
 <title>联系人信息</title>
 <link rel="stylesheet" href="${ctx}/static/css/recommend/detail.css" type="text/css"></link>
-<script type="text/javascript" src="${ctx}/static/js/attachment.js"></script>
-<script type="text/javascript">
-var currFun = {queryCode:'050106',uploadCode:'050107',viewCode:'050108',downCode:'050109',rep:'#attQ',id:'${contact.id}'};
-$(function(){
-	attachment.init(currFun)
-	attachment.query();
-});
-function openUpload(){}
-</script>
 </head>
 <body>
 <div class="ml35 mr35 mt20 block cb cb">
@@ -23,6 +15,7 @@ function openUpload(){}
 	<b class="b4"></b>
 	<div class="ie_head">
 		<h1 class="f14 fbnone mt10 ml10 fl">联系人详情信息</h1>
+		<input type="hidden" id="hide_id" value="${contact.id}"/>
 		<ul class="fr id_table1 mt10 ml10">
 			<li>
 			<c:if test="${VS_HAS_FUNCTIONS.contactModify}">
@@ -103,6 +96,8 @@ function openUpload(){}
 			<td align="left" valign="top"><div class="w85b">${contact.remark}</div></td>
 		</tr>
 	</table>
+	<tag:attachment view="true" upload="true" module="contact" query="true" down="true" id="${contact.id}"></tag:attachment>
+	<tag:memoir view="true" edit="true" query="true" delete="true" moduleType="11010104" moduleId="${contact.id}"></tag:memoir>
 	<div class="h40"></div>
 </div>
 </body>

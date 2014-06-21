@@ -1,6 +1,7 @@
 package com.baihui.hxtd.soa.system.controller;
 
 import com.baihui.hxtd.soa.base.Constant;
+import com.baihui.hxtd.soa.base.utils.RequestUtil;
 import com.baihui.hxtd.soa.util.JsonDto;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
@@ -34,8 +35,7 @@ public class ErrorController {
         logger.error("捕获到异常", exception);
 
         logger.info("返回失败结果");
-        String requestType = request.getHeader("X-Requested-With");
-        if ("XMLHttpRequest".equals(requestType)) {
+        if (RequestUtil.isAjax(request)) {
             JsonDto jsonDto = new JsonDto("操作失败");
             String result = jsonDto.toString();
             logger.debug("是一个Ajax请求，返回JSON对象“{}”", result);
@@ -47,7 +47,7 @@ public class ErrorController {
         if (StringUtils.isBlank(errorForwardUri)) {
             errorForwardUri = "/error/500.do";
         }
-        request.setAttribute(Constant.VM_ALL, exception.getMessage());
+        request.setAttribute(Constant.VM_BUSINESS, exception.getMessage());
         logger.debug("是一个常规请求，转至“{}”页面", errorForwardUri);
         request.getRequestDispatcher(errorForwardUri).forward(request, response);
     }

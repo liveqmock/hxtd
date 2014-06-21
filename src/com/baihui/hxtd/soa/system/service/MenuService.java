@@ -4,8 +4,11 @@ import com.baihui.hxtd.soa.base.orm.hibernate.HibernatePage;
 import com.baihui.hxtd.soa.base.utils.UrlUtil;
 import com.baihui.hxtd.soa.base.utils.serial.TierSerial;
 import com.baihui.hxtd.soa.base.utils.serial.TierSerials;
+import com.baihui.hxtd.soa.common.dao.CommonDao;
+import com.baihui.hxtd.soa.system.dao.DictionaryDao;
 import com.baihui.hxtd.soa.system.dao.FunctionDao;
 import com.baihui.hxtd.soa.system.dao.MenuDao;
+import com.baihui.hxtd.soa.system.dao.UserDao;
 import com.baihui.hxtd.soa.system.entity.Function;
 import com.baihui.hxtd.soa.system.entity.Menu;
 import com.baihui.hxtd.soa.system.entity.User;
@@ -36,6 +39,9 @@ public class MenuService {
 
     private String typeNormalValue = "01040102";
 
+    //    @Value(value = "${system.function.privilegelevel.authority}")
+    private String privilegelevelAuthorityValue = "01060103";
+
 
     @Resource
     private MenuDao menuDao;
@@ -43,6 +49,11 @@ public class MenuService {
     @Resource
     private FunctionDao functionDao;
 
+    @Resource
+    private UserDao userDao;
+
+    @Resource
+    private DictionaryDao dictionaryDao;
 
     /**
      * 查找有效的菜单
@@ -189,6 +200,27 @@ public class MenuService {
     }
 
     /**
+     * 查找首页url
+     */
+    public String findIndexUrl(Collection<Menu> menus) {
+        logger.info("查找首页url");
+
+        String url = null;
+        for (Menu menu : menus) {
+            if (menu.getIsLeaf()) {
+                url = menu.getUrl();
+                break;
+            }
+        }
+
+        if (url == null) {
+            throw new RuntimeException("未找到首页url");
+        }
+
+        return url;
+    }
+
+    /**
      * 按父节点主键编号分组
      * 1.以父节点主键编号为Key，子节点集合为Value
      */
@@ -234,7 +266,7 @@ public class MenuService {
         logger.info("转换菜单触发功能的URL为toPage形式");
         for (Menu menu : menus) {
             Function trigger = menu.getTrigger();
-            if (trigger != null) {
+            if (trigger != null && trigger.getUrl() != null) {
                 trigger = trigger.clone();
                 trigger.setUrl(UrlUtil.toPage(trigger.getUrl()));
                 menu.setTrigger(trigger);
@@ -352,7 +384,7 @@ public class MenuService {
         logger.debug("编号默认为空");
         menu.setIsLeaf(true);
         Menu parent = menu.getParent();
-        if (parent == null) {
+        if (parent == null || parent.getId() != null) {
             menu.setLevel(1);
             Long order = getMaxChildOrder(null, 1);
             TierSerial tierSerial = TierSerials.parse(order, 2);
@@ -406,6 +438,7 @@ public class MenuService {
             function.setId(null);
             function.setName(persistFunction.getName());
             function.setUrl(url + persistFunction.getUrl());
+            function.setPrivilegeLevel(dictionaryDao.getByValue(privilegelevelAuthorityValue));
             function.setMenu(menu);
             function.setCreator(menu.getCreator());
             function.setModifier(menu.getModifier());
@@ -416,6 +449,8 @@ public class MenuService {
 
         menu.setTrigger(trigger);
         menuDao.save(menu);
+
+        userDao.updateManagerStoreStatus();
     }
 
     /**
@@ -455,6 +490,8 @@ public class MenuService {
         logger.debug("修改时间为当前时间“{}”", menu.getModifiedTime());
 
         menuDao.update(menu);
+
+        userDao.updateAllStoreStatus();
     }
 
     /**
@@ -464,6 +501,8 @@ public class MenuService {
     public void delete(Long... ids) {
         logger.info("删除");
         menuDao.delete(ids);
+
+        userDao.updateAllStoreStatus();
     }
 
 }

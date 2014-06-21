@@ -1,11 +1,14 @@
 
 package com.baihui.hxtd.soa.project.controller;
 
+import java.io.IOException;
 import java.util.List;
 import java.util.Map;
 
 import javax.annotation.Resource;
+import javax.servlet.ServletContext;
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -19,7 +22,9 @@ import org.springside.modules.web.Servlets;
 
 import com.baihui.hxtd.soa.base.Constant;
 import com.baihui.hxtd.soa.base.orm.hibernate.HibernatePage;
+import com.baihui.hxtd.soa.base.utils.ImportExport;
 import com.baihui.hxtd.soa.base.utils.Search;
+import com.baihui.hxtd.soa.customer.entity.Lead;
 import com.baihui.hxtd.soa.project.entity.Supplier;
 import com.baihui.hxtd.soa.project.service.SupplierService;
 import com.baihui.hxtd.soa.system.entity.Dictionary;
@@ -249,5 +254,33 @@ public class SupplierController {
         model.addAttribute("jsondata", jsonDto.toString());
         
         return "/project/supplier/listcomp";
+    }
+    
+    
+    /**
+     * 导出分页数据
+     * 1.在分页列表上根据当前条件进行导出
+     */
+    @RequestMapping(value = "/export.do", params = "TYPE=pagination")
+    public void exportPagination(HttpServletRequest request, Long organizationId, HibernatePage<Lead> page, ModelMap modelMap, HttpServletResponse response) throws NoSuchFieldException, IOException {
+        logger.info("导出excel文件");
+
+        logger.info("解析页面查询条件");
+        Map<String, Object> searchParams = Servlets.getParametersStartingWith(request, "search_");
+        Search.clearBlankValue(searchParams);
+        Search.decodeValue(searchParams);
+        Search.toRangeDate(searchParams, "createTime");
+        logger.debug("查询条件数目“{}”", searchParams.size());
+
+        logger.info("获取对象集合");
+        if (organizationId == null) {
+            organizationId = (Long) modelMap.get(Constant.VS_ORG_ID);
+        }
+        List<Supplier> supplier = supplierService.export(searchParams);
+        logger.debug("列表信息数目“{}”", supplier.size());
+
+        logger.info("转换成excel文件并输出");
+        ServletContext servletContext = request.getSession().getServletContext();
+        ImportExport.exportExcel(response, servletContext, "supplier", supplier).write(response.getOutputStream());
     }
 }

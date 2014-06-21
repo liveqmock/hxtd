@@ -339,6 +339,7 @@ public class Search {
      * 2.支持当前类关联对象字段的自动数据类型转换
      * 3.字段名完全匹配类中的字段名称
      * 4.支持自动创建别名
+     * 5.存在别名重复的bug
      */
     public static DetachedCriteria buildCriteria(Map<String, SearchFilter> filters, DetachedCriteria criteria, Class clazz) throws NoSuchFieldException {
         Set<String> aliasNames = new HashSet<String>();
@@ -351,7 +352,7 @@ public class Search {
                 String[] fieldNames = fieldName.split("\\.");
                 for (int i = 0; i < fieldNames.length - 1; i++) {
                     fieldBelongClass = fieldBelongClass.getDeclaredField(fieldNames[i]).getType();
-                    String classAliasName = StringUtils.uncapitalize(fieldBelongClass.getSimpleName());
+                    String classAliasName = StringUtils.uncapitalize(fieldNames[i]);
                     if (!aliasNames.contains(classAliasName)) {
                         criteria.createAlias(fieldBelongClassAliasName + "." + fieldNames[i], classAliasName);
                         aliasNames.add(classAliasName);

@@ -27,12 +27,13 @@
         <c:choose>
         <c:when test="${userMessage.type}">
            <li><a href="${ctx }/system/message/toViewPage.do?id=${param.id}&type=add" class="block c_white lh25 mr10"><b class="allbtn_l block fl"></b><b class="allbtn_r pr13 block fl w_auto f14 ">再次发送</b></a></li>
+           <li><a href="${ctx }/system/message/toQueryPage.do?type=send" class="block c_white lh25 mr10"><b class="allbtn_l block fl"></b><b class="allbtn_r pr13 block fl w_auto f14 ">返&nbsp;&nbsp;回</b></a></li>
         </c:when>
         <c:otherwise>
             <li> <c:if test="${VS_HAS_FUNCTIONS.messageModify}"><a href="${ctx }/system/message/toViewPage.do?id=${param.id}&type=edit" class="block c_white lh25 mr10"><b class="allbtn_l block fl"></b><b class="allbtn_r pr13 block fl w_auto f14 ">回&nbsp;&nbsp;复</b></a></c:if></li>
+           <li><a href="${ctx }/system/message/toQueryPage.do" class="block c_white lh25 mr10"><b class="allbtn_l block fl"></b><b class="allbtn_r pr13 block fl w_auto f14 ">返&nbsp;&nbsp;回</b></a></li>
         </c:otherwise>
         </c:choose>
-           <li><a href="javascript:history.back()" class="block c_white lh25 mr10"><b class="allbtn_l block fl"></b><b class="allbtn_r pr13 block fl w_auto f14 ">返&nbsp;&nbsp;回</b></a></li>
         </ul>
     </div>  
 	<b class="table_headr globle_img block fl"></b>

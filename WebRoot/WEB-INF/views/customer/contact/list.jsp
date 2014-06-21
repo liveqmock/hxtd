@@ -10,9 +10,11 @@
 <script type="text/javascript" src="${ctx}/static/js/jquery-jtemplates.js"></script>
 <script type="text/javascript" src="${ctx}/static/js/js-util.common.js"></script>
 <script type="text/javascript" src="${ctx}/static/js/scrollTitle.js?v=1"></script>
+<script type="text/javascript" src="${ctx}/static/js/pacs.js"></script>
 <script type="text/javascript">
 $(function(){
 	jsUtil.datepicker(".time");
+	new PCAS("province","city","county");
 	new Grid().init().bindAuthorization();
 });
 </script>
@@ -22,28 +24,55 @@ $(function(){
     <form id="form" action="${ctx}/customer/contact/query.do" onsubmit="return false;">
     <table class="fl mt5 w">
     	<tr>
-    		<td class="f14" align="right" width="7%">联系人：</td>
-    		<td class="f14" align="left"  width="13%"><input type="text" class="text_input1" name="search_LIKE_name"/></td>
-    		<td class="f14" align="right" width="7%">邮箱：</td>
-    		<td class="f14" align="left" width="13%"><input type="text" class="text_input1" name="search_LIKE_email"/></td>
-    		<td class="f14" align="right" width="7%">电话：</td>
-    		<td class="f14" align="left" width="13%"><input type="text" class="text_input1" name="search_LIKE_phone"/></td>
-    		<td class="f14" align="right" width="7%">修改时间：</td>
-    		<td class="f14" align="left" width="18%">
-    			<div class="pr vm">
-	    			<a href="javascript:;" class="pa time_closenone1" onclick="javascript:$(this).nextAll().eq(1).val('');"></a>
-	    			<a href="javascript:;" class="pa time_closenone2" onclick="javascript:$(this).nextAll().eq(1).val('');"></a>
-	    			<input class="text_input2 input_close globle_img time" name="search_GTE_modifiedTime" type="text" readonly/>
-	    			-<input class="text_input2 input_close globle_img time" name="search_LTE_modifiedTime" type="text" readonly/>
-    			</div>
-    		</td>
-    		<td width="15%">
+    		<td class="f14" align="right" width="6%">联系人：</td>
+    		<td class="f14" align="left"  width="16%"><input type="text" class="text_input1" name="search_LIKE_name"/></td>
+    		<td class="f14" align="right" width="6%">手机：</td>
+    		<td class="f14" align="left" width="16%"><input type="text" class="text_input1" name="search_LIKE_mobile"/></td>
+    		<td class="f14" align="right" width="6%">电话：</td>
+    		<td class="f14" align="left" width="16%"><input type="text" class="text_input1" name="search_LIKE_phone"/></td>
+    		<td class="f14" align="right" width="6%">邮箱：</td>
+    		<td class="f14" align="left" width="16%"><input type="text" class="text_input1" name="search_LIKE_email"/></td>
+    		<td width="8%">
     			<a href="javascript:;" class="reset block dump_btn globle_img fr ml10"></a>
     			<a href="javascript:;" class="block c_white lh25 fr ml10">
     				<b class="allbtn_l block fl"></b>
     				<b class="allbtn_r pr13 block fl w_auto f14 submit">查&nbsp;&nbsp;询</b>
     			</a>
     		</td>
+    	</tr>
+    	<tr>
+    		<td class="f14" align="right" width="6%">省份：</td>
+    		<td class="f14" align="left"  width="16%"><select id="province" name="search_EQ_province.id" class="select2"></select></td>
+    		<td class="f14" align="right" width="6%">城市：</td>
+    		<td class="f14" align="left" width="16%"><select id="city" name="search_EQ_city.id" class="select2"></select></td>
+    		<td class="f14" align="right" width="6%">区县：</td>
+    		<td class="f14" align="left" width="16%"><select id="county" name="search_EQ_county.id" class="select2"></select></td>
+    		<td class="f14" align="right" width="6%">创建时间：</td>
+    		<td class="f14" align="left" width="16%">
+    			<div class="pr vm">
+	    			<a href="javascript:;" class="pa time_closenone1"></a>
+	    			<a href="javascript:;" class="pa time_closenone2"></a>
+	    			<input class="text_input2 input_close globle_img time" name="search_GTE_createdTime" type="text" readonly/>-<input class="text_input2 input_close globle_img time" name="search_LTE_createdTime" type="text" readonly/>
+    			</div>
+    		</td>
+    		<td width="8%"></td>
+    	</tr>
+    	<tr>
+    		<td class="f14" align="right" width="6%">修改时间：</td>
+    		<td class="f14" align="left" width="16%">
+    			<div class="pr vm">
+	    			<a href="javascript:;" class="pa time_closenone1"></a>
+	    			<a href="javascript:;" class="pa time_closenone2"></a>
+	    			<input class="text_input2 input_close globle_img time" name="search_GTE_modifiedTime" type="text" readonly/>-<input class="text_input2 input_close globle_img time" name="search_LTE_modifiedTime" type="text" readonly/>
+    			</div>
+    		</td>
+    		<td class="f14" align="right" width="6%"></td>
+    		<td class="f14" align="left"  width="16%"></td>
+    		<td class="f14" align="right" width="6%"></td>
+    		<td class="f14" align="left" width="16%"></td>
+    		<td class="f14" align="right" width="6%"></td>
+    		<td class="f14" align="left" width="16%"></td>
+    		<td width="8%"></td>
     	</tr>
     </table>
     <div class="cb"></div>

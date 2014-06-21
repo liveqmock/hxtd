@@ -1,7 +1,7 @@
 package com.baihui.hxtd.soa.system.controller.interceptor;
 
 import com.baihui.hxtd.soa.base.Constant;
-import com.baihui.hxtd.soa.base.utils.Search;
+import com.baihui.hxtd.soa.base.utils.RequestUtil;
 import com.baihui.hxtd.soa.base.utils.UrlUtil;
 import com.baihui.hxtd.soa.base.utils.mapper.HibernateAwareObjectMapper;
 import com.baihui.hxtd.soa.system.entity.Function;
@@ -40,6 +40,11 @@ public class DataStoreInterceptor extends HandlerInterceptorAdapter {
         logger.info("数据存储");
         logger.debug("客户端请求“{}”", request.getRequestURI());
 
+        if (RequestUtil.isAjax(request)) {
+            logger.info("是一个ajax请求，跳过数据存储");
+            return true;
+        }
+
         String uri = request.getRequestURI().replaceFirst(request.getContextPath(), "");
         Function function = (Function) request.getAttribute(Constant.VR_FUNCTION);
         if (function == null) {
@@ -63,9 +68,7 @@ public class DataStoreInterceptor extends HandlerInterceptorAdapter {
         logger.debug("菜单栏位置对应的一级菜单“{}”->“{}”", Constant.VR_FIRST_MENU, firstMenu.getName());
         request.setAttribute(Constant.VR_TITLE_MENUS, menus);
         logger.debug("菜单集合数目“{}”", menus.size());
-        request.setAttribute(Constant.VR_TITLE_FIRST_MENU, firstMenu);
-        logger.debug("根节点菜单“{}”", firstMenu.getName());
-        request.setAttribute(Constant.VR_TITLE_LAST_MENU, lastMenu);
+        request.setAttribute(Constant.VR_LAST_MENU, lastMenu);
         logger.debug("叶子节点菜单“{}”", lastMenu.getName());
         Function cloneFunction = function.clone();
         cloneFunction.setUrl(UrlUtil.toPage(function.getUrl()));
@@ -90,6 +93,12 @@ public class DataStoreInterceptor extends HandlerInterceptorAdapter {
         String jsRequestJson = "window.baseInfo=window.baseInfo||{};window.baseInfo.request=" + HibernateAwareObjectMapper.DEFAULT.writeValueAsString(jsRequest);
         request.setAttribute(Constant.VR_JS_GLOBALINFO, jsRequestJson);
         logger.debug("脚本信息“{}”", jsRequestJson);
+
+        Long interceptorStartTime = (Long) request.getAttribute("interceptorStartTime");
+        if (interceptorStartTime != null) {
+            long timeDiffer = System.currentTimeMillis() - interceptorStartTime;
+            logger.info("拦截器耗时“{}.{}”", timeDiffer / 1000, timeDiffer % 1000);
+        }
 
         return super.preHandle(request, response, handler);
     }

@@ -18,6 +18,8 @@ import com.baihui.hxtd.soa.base.orm.hibernate.HibernatePage;
 import com.baihui.hxtd.soa.base.utils.Search;
 import com.baihui.hxtd.soa.project.dao.SupplierDao;
 import com.baihui.hxtd.soa.project.entity.Supplier;
+import com.baihui.hxtd.soa.system.dao.UserDao;
+import com.baihui.hxtd.soa.system.service.DataShift;
 
 /**
  * 功能描述：供应商模块service层
@@ -41,7 +43,9 @@ public class SupplierService {
 	@Resource
 	private SupplierDao supplierDao;
 	
-	
+
+	@Resource
+	private UserDao userDao;
 	 /**
      * findPage(分页查询组件列表)
      *
@@ -53,12 +57,14 @@ public class SupplierService {
      * @Title: getAll
      */
     @Transactional(readOnly = true)
-    public HibernatePage<Supplier> findPage(Map<String, Object> searchParams, HibernatePage<Supplier> page) throws NoSuchFieldException {
+    public HibernatePage<Supplier> findPage(Map<String, Object> searchParams,DataShift dataShift, HibernatePage<Supplier> page) throws NoSuchFieldException {
         DetachedCriteria criteria = DetachedCriteria.forClass(Supplier.class);
         criteria.add(Restrictions.eq("isDeleted", false));
         criteria.setFetchMode("creator", FetchMode.JOIN);
         criteria.setFetchMode("modifier", FetchMode.JOIN);
         criteria.setFetchMode("type", FetchMode.JOIN);
+        criteria.setFetchMode("owner", FetchMode.JOIN);
+        userDao.visibleData(criteria, dataShift);
         Map<String, SearchFilter> filters = Search.parse(searchParams);
         Search.buildCriteria(filters, criteria, Supplier.class);
         return supplierDao.findPage(page, criteria);
@@ -77,6 +83,7 @@ public class SupplierService {
         logger.info("查询单个组件信息{}", id);
         String hql = "select supplier from Supplier supplier  " +
         				"left join fetch supplier.type " +
+        				"left join fetch supplier.owner " +
         				"left join fetch supplier.province " +
         				"left join fetch supplier.city " +
         				"left join fetch supplier.county where supplier.id = ?";
@@ -108,15 +115,16 @@ public class SupplierService {
         supplierDao.delete(id);
     }
 
-    public List<Supplier> export(Map<String, Object> searchParams) throws NoSuchFieldException {
-        DetachedCriteria criteria = DetachedCriteria.forClass(Supplier.class);
-        criteria.add(Restrictions.eq("isDeleted", false));
+    public List<Supplier> export(Map<String, Object> searchParams,DataShift dataShift) throws NoSuchFieldException {
+    	DetachedCriteria criteria = DetachedCriteria.forClass(Supplier.class);
         criteria.setFetchMode("creator", FetchMode.JOIN);
+        criteria.setFetchMode("owner", FetchMode.JOIN);
         criteria.setFetchMode("modifier", FetchMode.JOIN);
         criteria.setFetchMode("type", FetchMode.JOIN);
         criteria.setFetchMode("province", FetchMode.JOIN);
         criteria.setFetchMode("city", FetchMode.JOIN);
         criteria.setFetchMode("county", FetchMode.JOIN);
+        userDao.visibleData(criteria, dataShift);
         Map<String, SearchFilter> filters = Search.parse(searchParams);
         Search.buildCriteria(filters, criteria, Supplier.class);
         return supplierDao.find(criteria,3000);

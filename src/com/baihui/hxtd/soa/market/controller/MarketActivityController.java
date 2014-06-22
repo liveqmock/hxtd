@@ -5,10 +5,13 @@ import java.io.IOException;
 import java.io.PrintWriter;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.List;
 import java.util.Map;
 
 import javax.annotation.Resource;
+import javax.servlet.ServletContext;
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 
 import org.springframework.beans.propertyeditors.CustomDateEditor;
 import org.springframework.stereotype.Controller;
@@ -26,11 +29,13 @@ import org.springside.modules.web.Servlets;
 
 import com.baihui.hxtd.soa.base.Constant;
 import com.baihui.hxtd.soa.base.orm.hibernate.HibernatePage;
+import com.baihui.hxtd.soa.base.utils.ImportExport;
 import com.baihui.hxtd.soa.base.utils.Search;
 import com.baihui.hxtd.soa.base.utils.mapper.HibernateAwareObjectMapper;
 import com.baihui.hxtd.soa.market.entity.MarketActivity;
 import com.baihui.hxtd.soa.market.service.MarketActivityService;
 import com.baihui.hxtd.soa.system.entity.User;
+import com.baihui.hxtd.soa.system.service.DataShift;
 import com.baihui.hxtd.soa.system.service.DictionaryService;
 import com.baihui.hxtd.soa.util.JsonDto;
 
@@ -48,7 +53,7 @@ import com.baihui.hxtd.soa.util.JsonDto;
  */
 @Controller
 @RequestMapping(value = "/market/marketactivity")
-@SessionAttributes(value = { Constant.VS_USER_ID, Constant.VS_USER})
+@SessionAttributes(value = { Constant.VS_USER_ID, Constant.VS_USER, Constant.VS_DATASHIFT})
 public class MarketActivityController {
 
 	//IOC注入
@@ -88,13 +93,15 @@ public class MarketActivityController {
     @RequestMapping(value = "/query.do")
     public void anscyQuery(HttpServletRequest request,
     		HibernatePage<MarketActivity> page,
+    		ModelMap model,
             PrintWriter out) throws NoSuchFieldException, IOException {
 		/************获取查询条件**************/
 		Map<String, Object> searchParams = Servlets.getParametersStartingWith(request, "search_");
         Search.clearBlankValue(searchParams);
+        DataShift dataShift = (DataShift) model.get(Constant.VS_DATASHIFT);
         
         /************分页查询*****************/
-        marketActivityService.findPage(searchParams, page);
+        marketActivityService.findPage(searchParams, dataShift, page);
         
         /************json转换****************/
         JsonDto json = new JsonDto();
@@ -227,6 +234,28 @@ public class MarketActivityController {
 		json.setSuccessFlag(true);
 		
 		return json.toString();
+	}
+	
+	/**
+	  * exportPagination(列表页导出数据)
+	  * @Description: 导出3000条市场活动记录
+	  * @param request HttpServletRequest
+	  * @param response HttpServletResponse
+	  * @param modelMap ModelMap
+	  * @throws NoSuchFieldException,IOException
+	 */
+	@RequestMapping(value = "/export.do", params = "TYPE=pagination")
+	public void exportPagination(HttpServletRequest request,
+			HttpServletResponse response,
+			ModelMap modelMap) throws NoSuchFieldException, IOException{
+		Map<String, Object> searchParams = Servlets.getParametersStartingWith(request, "search_");
+        Search.clearBlankValue(searchParams);
+        
+        DataShift dataShift = (DataShift) modelMap.get(Constant.VS_DATASHIFT);
+        List<MarketActivity> marketActivityLst = marketActivityService.export(searchParams, dataShift);
+        
+        ServletContext servletContext = request.getSession().getServletContext();
+        ImportExport.exportExcel(response, servletContext, "marketactivity", marketActivityLst).write(response.getOutputStream());
 	}
 	
 	/**

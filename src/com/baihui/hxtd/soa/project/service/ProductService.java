@@ -1,5 +1,6 @@
 package com.baihui.hxtd.soa.project.service;
 
+import java.util.List;
 import java.util.Map;
 
 import javax.annotation.Resource;
@@ -15,6 +16,8 @@ import com.baihui.hxtd.soa.base.orm.hibernate.HibernatePage;
 import com.baihui.hxtd.soa.base.utils.Search;
 import com.baihui.hxtd.soa.project.dao.ProductDao;
 import com.baihui.hxtd.soa.project.entity.Product;
+import com.baihui.hxtd.soa.system.dao.UserDao;
+import com.baihui.hxtd.soa.system.service.DataShift;
 
 /**
  * 功能描述：产品(基金)模块service层
@@ -36,16 +39,20 @@ public class ProductService {
 	 */
 	@Resource
 	private ProductDao productDao;
+	@Resource
+	private UserDao userDao;
 
 	 /**
      * findPage(分页查询产品列表)
      * @param searchParams 过滤条件
      * @param page 分页
+     * @param dataShift 数据筛选
      * @return HibernatePage<Product> 列表结果集
 	 * @throws NoSuchFieldException 
      */
     @Transactional(readOnly = true)
     public HibernatePage<Product> findPage(Map<String, Object> searchParams, 
+    		DataShift dataShift,
     		HibernatePage<Product> page) throws NoSuchFieldException {
         DetachedCriteria criteria = DetachedCriteria.forClass(Product.class);
         criteria.setFetchMode("type", FetchMode.JOIN);//产品分类
@@ -54,11 +61,46 @@ public class ProductService {
         criteria.setFetchMode("creator", FetchMode.JOIN);//创建者
         criteria.add(Restrictions.eq("isDeleted", false));// 过滤已删除
         
-        Map<String, SearchFilter> filters = Search.parse(searchParams);
-        Search.buildCriteria(filters, criteria, Product.class);
+        DataAuthFliter(criteria, searchParams, dataShift);
         
         return productDao.findPage(page, criteria);
     }
+    
+    /**
+     * export(导出产品3000条)
+     * @param searchParams 过滤条件
+     * @param dataShift 数据筛选
+     * @return List<Product> 返回数据
+     * @throws NoSuchFieldException
+    */
+   public List<Product> export(Map<String, Object> searchParams,
+   		DataShift dataShift) throws NoSuchFieldException {
+   		DetachedCriteria criteria = DetachedCriteria.forClass(Product.class);
+   		criteria.add(Restrictions.eq("isDeleted", false));
+   		criteria.setFetchMode("type", FetchMode.JOIN);//产品分类
+        criteria.setFetchMode("saleUnit", FetchMode.JOIN);//期限单位
+        criteria.setFetchMode("project", FetchMode.JOIN);//项目
+        criteria.setFetchMode("creator", FetchMode.JOIN);//创建者
+       
+   		DataAuthFliter(criteria, searchParams, dataShift);
+       
+       	return productDao.find(criteria, 3000);
+   }
+   
+   /**
+    * DataAuthFliter(数据级权限过滤)
+    * @param criteria 
+    * @param searchParams 过滤条件
+    * @param dataShift 数据权限
+    * @throws NoSuchFieldException
+   */
+   private void DataAuthFliter(DetachedCriteria criteria,
+   		Map<String, Object> searchParams,
+   		DataShift dataShift) throws NoSuchFieldException {
+   	 	Map<String, SearchFilter> filters = Search.parse(searchParams);
+   	 	userDao.visibleData(criteria, dataShift);
+        Search.buildCriteria(filters, criteria, Product.class);
+   }
     
     /**
      * get(根据ID查询产品信息)

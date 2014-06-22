@@ -5,15 +5,15 @@
 <html>
 <head>
 <title>市场活动列表</title>
-<link rel="stylesheet" href="${ctx}/static/css/recommend/detail.css" type="text/css"/>
-<link href="${ctx}/static/css/application.css" rel="stylesheet" type="text/css"/>
-<script type="text/javascript" src="${ctx}/static/js/jquery-jtemplates.js"></script>
-<script type="text/javascript" src="${ctx}/static/js/js-util.common.js"></script>
+<link href="${ctx}/static/css/recommend/detail.css?v=1" rel="stylesheet" type="text/css"/>
+<link href="${ctx}/static/css/application.css?v=1" rel="stylesheet" type="text/css"/>
+<script type="text/javascript" src="${ctx}/static/js/jquery-jtemplates.js?v=1"></script>
+<script type="text/javascript" src="${ctx}/static/js/js-util.common.js?v=1"></script>
 <script type="text/javascript" src="${ctx}/static/js/scrollTitle.js?v=1"></script>
 <script type="text/javascript">
 $(function(){
-	jsUtil.datepicker(".time");
-	new Grid().init().bindAuthorization();
+	jsUtil.datepicker(".time");// 绑定日历
+	new Grid().init().bindExport(); // 生成Gird
 });
 </script>
 </head>
@@ -47,7 +47,9 @@ $(function(){
     			<div class="pr vm">
 	    			<a href="javascript:;" class="pa time_closenone1"></a>
 	    			<a href="javascript:;" class="pa time_closenone2"></a>
-	    			<input class="text_input2 input_close globle_img time" name="search_GTE_beginDate" type="text" readonly/>-<input class="text_input2 input_close globle_img time" name="search_LTE_endDate" type="text" readonly/>
+	    			<input class="text_input2 input_close globle_img time" name="search_GTE_beginDate" 
+	    				type="text" readonly/>-<input class="text_input2 input_close globle_img time" name="search_LTE_endDate" 
+	    				type="text" readonly/>
     			</div>
     		</td>
     		<td width="8%">
@@ -64,7 +66,9 @@ $(function(){
     			<div class="pr vm">
 	    			<a href="javascript:;" class="pa time_closenone1"></a>
 	    			<a href="javascript:;" class="pa time_closenone2"></a>
-	    			<input class="text_input2 input_close globle_img time" name="search_GTE_createdTime" type="text" readonly/>-<input class="text_input2 input_close globle_img time" name="search_LTE_createdTime" type="text" readonly/>
+	    			<input class="text_input2 input_close globle_img time" name="search_GTE_createdTime" 
+	    				type="text" readonly/>-<input class="text_input2 input_close globle_img time" name="search_LTE_createdTime" 
+	    				type="text" readonly/>
     			</div>
     		</td>
     		<td class="f14" align="right">修改时间：</td>
@@ -72,7 +76,9 @@ $(function(){
     			<div class="pr vm">
 	    			<a href="javascript:;" class="pa time_closenone1"></a>
 	    			<a href="javascript:;" class="pa time_closenone2"></a>
-	    			<input class="text_input2 input_close globle_img time" name="search_GTE_modifiedTime" type="text" readonly/>-<input class="text_input2 input_close globle_img time" name="search_LTE_modifiedTime" type="text" readonly/>
+	    			<input class="text_input2 input_close globle_img time" name="search_GTE_modifiedTime" 
+	    				type="text" readonly/>-<input class="text_input2 input_close globle_img time" name="search_LTE_modifiedTime" 
+	    				type="text" readonly/>
     			</div>
     		</td>
     		<td class="f14" align="right"></td>
@@ -108,6 +114,13 @@ $(function(){
 						</a>
 					</li>
 				</c:if>
+				<li>
+					<a href="javascript:;" uri="${ctx}/market/marketactivity/export.do?TYPE=pagination" 
+						class="block c_white ml10 lh25 mr10 export">
+						<b class="allbtn_l block fl"></b>
+						<b class="allbtn_r pr13 block fl w_auto f14">导&nbsp;出</b>
+					</a>
+				</li>
 			</ul>
 		</div>
 	</div>
@@ -165,13 +178,16 @@ $(function(){
            <td>{$T.row.createdTime}</td>
            <td align="center">
              <c:if test="${VS_HAS_FUNCTIONS.marketactivityView}">
-                 <a href="${ctx}/market/marketactivity/toViewPage.do?id={$T.row.id}" class="block_inline s_detail_btn globle_img ml10" title="详情"></a>
+                 <a href="${ctx}/market/marketactivity/toViewPage.do?id={$T.row.id}" 
+                 	class="block_inline s_detail_btn globle_img ml10" title="详情"></a>
              </c:if>
              <c:if test="${VS_HAS_FUNCTIONS.marketactivityModify}">
-                 <a href="${ctx}/market/marketactivity/toModifyPage.do?id={$T.row.id}" class="block_inline s_edit_btn globle_img ml10" title="编辑"></a>
+                 <a href="${ctx}/market/marketactivity/toModifyPage.do?id={$T.row.id}" 
+                 	class="block_inline s_edit_btn globle_img ml10" title="编辑"></a>
              </c:if>
              <c:if test="${VS_HAS_FUNCTIONS.marketactivityDelete}">
-                 <a href="javascript:void(0);" class="block_inline s_dump_btn globle_img ml10 delete" uri="${ctx}/market/marketactivity/delete.do?id={$T.row.id}" title="删除"></a>
+                 <a href="javascript:void(0);" class="block_inline s_dump_btn globle_img ml10 delete"
+                 	uri="${ctx}/market/marketactivity/delete.do?id={$T.row.id}" title="删除"></a>
              </c:if>
            </td>
 	    </tr>

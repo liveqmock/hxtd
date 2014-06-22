@@ -1,7 +1,7 @@
 <%--
   功能描述：编辑客户
-  User: xiaoli.luo
-  Date:2014/5/6
+  User: huizijing
+  Date:2014/5/24
 --%>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
@@ -10,13 +10,12 @@
 <html>
 <head>
 <title>客户编辑页</title>
-
 <link href="${ctx}/static/css/stressing/detail.css" rel="stylesheet" type="text/css" />
-  <script type="text/javascript" src="${ctx}/static/js/jquery.metadata.js"></script>
-   <script type="text/javascript" src="${ctx}/static/js/jquery.validate.js"></script>
-    <script type="text/javascript" src="${ctx}/static/js/validator.js"></script>
+<script type="text/javascript" src="${ctx}/static/js/jquery.metadata.js"></script>
+<script type="text/javascript" src="${ctx}/static/js/jquery.validate.js"></script>
+<script type="text/javascript" src="${ctx}/static/js/validator.js"></script>
 <script type="text/javascript" src="${ctx}/static/js/pacs.js"></script>
-  
+<script type="text/javascript">${applicationScope.VC_PCAS}</script>
 <script type="text/javascript">
 $(function(){
 	$("#save").click(function(){
@@ -41,8 +40,7 @@ $(function(){
 });
 </script>
 <script type="text/javascript"> 
-
-    function searchData(action){//搜索弹出框
+function searchData(action){//搜索弹出框
 	var url, title;
 	if(action == "owner"){
 		url = "${ctx}/system/user/toQueryPage.comp";
@@ -87,10 +85,10 @@ function clearInputVal(obj){//清除
 		<tr>
 			<td  align="right" width="15%"><span class="w_red">*&nbsp;</span>客户所有者：</td>
 			<td align="left">
-			<input class="text_input3 required" id="txt_owner" type="text" value="${customer.owner.name }"/>
-			<input id="hide_owner_id" name="owner.id" type="text" value="${customer.owner.id }" style="display:none;"/>
-			<img src="${ctx}/static/images/search.png" alt="" title="搜索所有者" onclick="searchData('owner');"/>
-			<img src="${ctx}/static/images/clear.png" alt="" title="清除" onclick="clearInputVal(this);"/>
+				<input id="txt_owner" type="text" value="${customer.owner.realName}" readonly="readonly" class="text_input3"/>
+				<input id="hide_owner_id" type="hidden" name="owner.id" value="${customer.owner.id}"/>
+				<i class="s_inquiry globle_img block_inline ml5 vm cp" title="搜索所有者" onclick="searchData('owner');"></i>
+				<i class="dump_btn globle_img block_inline ml5 vm cp" title="清除" onclick="clearInputVal(this);"></i>
 			</td>
 			<td  align="right" width="15%"><span class="w_red">*&nbsp;</span>客户类型：</td>
 			<td align="left">
@@ -256,7 +254,7 @@ function clearInputVal(obj){//清除
 		<tr>
 			<td  align="right" width="15%" valign="top">备注：</td>
 			<td  align="left" width="85%" valign="top">
-				<textarea  name="remark" class="remarks_input1" >${customer.remark }</textarea>
+				<input  name="remark" class="remarks_input1" >${customer.remark }</textarea>
 			</td>
 		</tr>
 	</table>

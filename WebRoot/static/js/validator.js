@@ -74,7 +74,10 @@ jQuery.validator.addMethod("requiredSelect", function (value, element) {
 jQuery.validator.addMethod("ruleUrl", function (value, element) {
     return this.optional(element) || /^(\/[a-zA-Z]+)+\.(do|doself|docomp)$/.test(value);
 }, "请输入规则的调用入口，如：/system/user/add.do");
-
+jQuery.validator.addMethod("amount", function(val, element){
+	var reg = /^\d+(\.\d+)?$/;
+	return this.optional(element)||(reg.test(val));
+}, "*只能输入整数或小数");
 
 /**
  * 唯一性验证

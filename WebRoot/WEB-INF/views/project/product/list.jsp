@@ -2,18 +2,17 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ taglib prefix="tags" tagdir="/WEB-INF/tags" %>
 <c:set var="ctx" value="${pageContext.request.contextPath}"/>
-<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
 <html>
 <head>
 <title>产品列表</title>
-<link rel="stylesheet" href="${ctx}/static/css/recommend/detail.css" type="text/css"/>
-<link rel="stylesheet" href="${ctx}/static/css/application.css" type="text/css"/>
-<script type="text/javascript" src="${ctx}/static/js/jquery-jtemplates.js"></script>
-<script type="text/javascript" src="${ctx}/static/js/js-util.common.js"></script>
+<link href="${ctx}/static/css/recommend/detail.css?v=1" rel="stylesheet" type="text/css"/>
+<link href="${ctx}/static/css/application.css?v=1" rel="stylesheet" type="text/css"/>
+<script type="text/javascript" src="${ctx}/static/js/jquery-jtemplates.js?v=1"></script>
+<script type="text/javascript" src="${ctx}/static/js/js-util.common.js?v=1"></script>
 <script type="text/javascript" src="${ctx}/static/js/scrollTitle.js?v=1"></script>
 <script type="text/javascript">
 $(function(){
-	new Grid().init().bindAuthorization();
+	new Grid().init().bindExport();// 生成Grid
 });
 </script>
 </head>
@@ -65,6 +64,12 @@ $(function(){
 						</a>
 					</li>
 				</c:if>
+				<li>
+					<a href="javascript:;" uri="${ctx}/project/product/export.do?TYPE=pagination" class="block c_white ml10 lh25 mr10 export">
+						<b class="allbtn_l block fl"></b>
+						<b class="allbtn_r pr13 block fl w_auto f14">导&nbsp;出</b>
+					</a>
+				</li>
 			</ul>
 		</div>
 	</div>
@@ -110,7 +115,8 @@ $(function(){
 	        <td>{$T.row.code}</td>
 	        <td>
 	            <c:choose>
-	                <c:when test="${VS_HAS_FUNCTIONS.productView}"><a href="${ctx}/project/product/toViewPage.do?id={$T.row.id}" class="toviewpage">{$T.row.name}</a></c:when>
+	                <c:when test="${VS_HAS_FUNCTIONS.productView}"><a href="${ctx}/project/product/toViewPage.do?id={$T.row.id}" 
+	                	class="toviewpage">{$T.row.name}</a></c:when>
 	                <c:otherwise>{$T.row.name}</c:otherwise>
 	            </c:choose>
 	        </td>
@@ -123,13 +129,16 @@ $(function(){
 	        <td>{$T.row.creator.realName}</td>
 	        <td>
               <c:if test="${VS_HAS_FUNCTIONS.productView}">
-                  <a href="${ctx}/project/product/toViewPage.do?id={$T.row.id}" class="block_inline s_dump_btn globle_img ml10" title="详情"></a>
+                  <a href="${ctx}/project/product/toViewPage.do?id={$T.row.id}" 
+                  	class="block_inline s_dump_btn globle_img ml10" title="详情"></a>
               </c:if>
               <c:if test="${VS_HAS_FUNCTIONS.productModify}">
-                  <a href="${ctx}/project/supplier/toModifyPage.do?id={$T.row.id}" class="block_inline s_edit_btn globle_img ml10" title="编辑"></a>
+                  <a href="${ctx}/project/supplier/toModifyPage.do?id={$T.row.id}" 
+                  	class="block_inline s_edit_btn globle_img ml10" title="编辑"></a>
               </c:if>
               <c:if test="${VS_HAS_FUNCTIONS.productDelete}">
-                  <a href="javascript:;" uri="${ctx}/project/product/delete.do?id={$T.row.id}" class="block_inline s_detail_btn globle_img ml10 delete" title="删除"></a>
+                  <a href="javascript:;" uri="${ctx}/project/product/delete.do?id={$T.row.id}" 
+                  	class="block_inline s_detail_btn globle_img ml10 delete" title="删除"></a>
               </c:if>
 	        </td>
 	    </tr>

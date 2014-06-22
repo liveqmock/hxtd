@@ -7,18 +7,14 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
 <c:set var="ctx" value="${pageContext.request.contextPath}"/>
-
 <html>
 <head>
-
-    <link href="${ctx}/static/css/stressing/detail.css" rel="stylesheet" type="text/css" />
-    <script type="text/javascript" src="${ctx}/static/js/jquery.metadata.js"></script>
-   <script type="text/javascript" src="${ctx}/static/js/jquery.validate.js"></script>
-    <script type="text/javascript" src="${ctx}/static/js/validator.js"></script>
-    
+<link href="${ctx}/static/css/stressing/detail.css" rel="stylesheet" type="text/css" />
+<script type="text/javascript" src="${ctx}/static/js/jquery.metadata.js"></script>
+<script type="text/javascript" src="${ctx}/static/js/jquery.validate.js"></script>
+<script type="text/javascript" src="${ctx}/static/js/validator.js"></script>
 <script type="text/javascript" src="${ctx}/static/js/pacs.js"></script>
 <script type="text/javascript"> 
-
 $(function(){
 	$("#save").click(function(){
 		if($("#form").valid()){
@@ -33,9 +29,8 @@ $(function(){
 	});
 });
 
-
-
-function searchData(action){//搜索弹出框
+//搜索弹出框
+function searchData(action){
 	var url, title;
 	if(action == "org"){
 		url = "${ctx}/system/user/toQueryUser.comp";
@@ -88,14 +83,13 @@ function clearInputVal(obj){//清除
                 <td align="left">
 				<input id="txt_owner" class="text_input3 required"type="text" "/>
 				<input id="hide_owner_id" name="userId" type="hidden" />
-				<img src="${ctx}/static/images/search.png" alt="" title="搜索所有者" onclick="searchData('org');"/>
-				<img src="${ctx}/static/images/clear.png" alt="" title="清除" onclick="clearInputVal(this);"/>
+				<i class="s_inquiry globle_img block_inline ml5 vm cp" title="搜索所有者" onclick="searchData('org');"></i>
+				<i class="dump_btn globle_img block_inline ml5 vm cp" title="清除" onclick="clearInputVal(this);"></i>
 				</td>
            </tr>
-          
         </table>
 		<div class=" h40"></div>
-         </div>
+       </div>
         <div class="cb block h40 margin0 mt10" style="width:350px;">
 		<ul class="id_table1 cb">
 		<li><a id="save" href="javascript:;" class="block c_white lh25 mr10"><b class="allbtn_l block fl"></b><b class="allbtn_r pr13 block fl w_auto f14 ">发&nbsp;&nbsp;送</b></a></li>

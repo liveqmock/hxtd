@@ -59,38 +59,39 @@
 					${com.name }
 				</td>
 				<td align="right" width="15%">
+					所有者：
+				</td>
+				<td align="left">
+					${com.owner.realName }
+				</td>
+			</tr>
+			<tr>
+				<td align="right" width="15%">
 					供应商类型：
 				</td>
 				<td align="left">
 					${com.type.key}
 				</td>
-			</tr>
-			<tr>
 				<td align="right">
 					电话：
 				</td>
 				<td align="left">
 					${com.phone}
 				</td>
+				
+			</tr>
+			<tr>
 				<td align="right">
 					手机：
 				</td>
 				<td align="left">
 					${com.mobile}
 				</td>
-			</tr>
-			<tr>
 				<td align="right">
 					邮箱：
 				</td>
 				<td align="left">
 					${com.email}
-				</td>
-				<td align="right">
-					传真：
-				</td>
-				<td align="left">
-					${com.fax }
 				</td>
 			</tr>
 			<tr>
@@ -100,6 +101,14 @@
 				<td align="left">
 					${com.province.name}&nbsp;${com.city.name}&nbsp;${com.county.name}&nbsp;
 				</td>
+				<td align="right">
+					传真：
+				</td>
+				<td align="left">
+					${com.fax }
+				</td>
+			</tr>
+			<tr>
 				<td align="right">
 					详细地址：
 				</td>

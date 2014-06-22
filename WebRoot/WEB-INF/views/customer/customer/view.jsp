@@ -1,10 +1,11 @@
 <%--
   功能描述：客户详情
-  User: xiaoli.luo
-  Date:2014/5/19
+  User: huizijing
+  Date:2014/5/24
 --%>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<%@taglib prefix="tag" tagdir="/WEB-INF/tags" %>
 <c:set var="ctx" value="${pageContext.request.contextPath}"/>
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
 <html>
@@ -13,7 +14,6 @@
 <link href="${ctx}/static/css/stressing/detail.css" rel="stylesheet" type="text/css" />
 </head>
 <body>
-
 <div class="cb"></div>
 	<div class="ml35 mr35 mt20 block cb cb">
 	<b class="table_headl globle_img block fl"></b>
@@ -26,18 +26,15 @@
 	 </div>
 	 <b class="table_headr globle_img block fl"></b>
 	</div>
-	
-	
 	<div class="baocun">
 		<div class="clear"></div>
 	</div>
-	
 	<div class="ml35 mr35 bg_c_blue cb">
 	<h1 class="f14 fbnone ml40 pt10">基本信息</h1>
 	<table class="cb id_table3 w95b bg_c_white margin0 mt10">
 		<tr>
 			<td align="right" width="15%">客户所有者：</td>
-			<td align="left">${customer.owner.name }</td>
+			<td align="left">${customer.owner.realName }</td>
 			<td align="right" width="15%">客户名：</td>
 			<td align="left">${customer.name }</td>
 		</tr>
@@ -97,7 +94,6 @@
 			<td align="right" width="15%">县:</td>
 			<td align="left">${customer.county.name}</td>
 		</tr>
-		
 		<tr>
 			<td align="right" width="15%">详细地址：</td>
 			<td align="left">${customer.address}</td>
@@ -124,12 +120,13 @@
 			${customer.remark }</div></td>
 		</tr>
 	</table>
+	<tag:attachment view="true" upload="true" module="customer" query="true" down="true" id="${costomer.id}"></tag:attachment>
+	<tag:memoir view="true" edit="true" query="true" delete="true" moduleType="11010102" moduleId="${customer.id}"></tag:memoir>
 	<div class=" h40"></div>
     </div>
-    
-    
-    
-
-	
+    <div class="cb block h40 margin0 mt10" style="width:350px;">
+        <ul class="id_table1 cb">
+        </ul>
+    </div>
 </body>
 </html>

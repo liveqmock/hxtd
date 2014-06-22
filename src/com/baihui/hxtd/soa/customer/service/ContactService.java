@@ -1,5 +1,6 @@
 package com.baihui.hxtd.soa.customer.service;
 
+import java.util.List;
 import java.util.Map;
 
 import javax.annotation.Resource;
@@ -14,6 +15,8 @@ import com.baihui.hxtd.soa.base.orm.hibernate.HibernatePage;
 import com.baihui.hxtd.soa.base.utils.Search;
 import com.baihui.hxtd.soa.customer.dao.ContactDao;
 import com.baihui.hxtd.soa.customer.entity.Contact;
+import com.baihui.hxtd.soa.system.dao.UserDao;
+import com.baihui.hxtd.soa.system.service.DataShift;
 
 /**
  * 功能描述：供应商模块service层
@@ -36,7 +39,9 @@ public class ContactService {
 	 */
 	@Resource
 	private ContactDao contactDao;
-
+	@Resource
+	private UserDao userDao;
+	
 	 /**
      * findPage(分页查询组件列表)
      * @param findPage
@@ -45,16 +50,49 @@ public class ContactService {
      * @throws NoSuchFieldException
      */
     @Transactional(readOnly = true)
-    public HibernatePage<Contact> findPage(Map<String, Object> searchParams, 
+    public HibernatePage<Contact> findPage(Map<String, Object> searchParams,
+    		DataShift dataShift,
     		HibernatePage<Contact> page) throws NoSuchFieldException {
         DetachedCriteria criteria = DetachedCriteria.forClass(Contact.class);
         criteria.add(Restrictions.eq("isDeleted", false));// 过滤已删除
         
-		Map<String, SearchFilter> filters = Search.parse(searchParams);// 构建参数
-		Search.buildCriteria(filters, criteria, Contact.class);
+        DataAuthFliter(criteria, searchParams, dataShift);
 		
         return contactDao.findPage(page, criteria);
     }
+    
+    /**
+     * export(导出联系人3000条)
+     * @param searchParams 过滤条件
+     * @param dataShift 数据筛选
+     * @return List<Contact> 返回数据
+     * @throws NoSuchFieldException
+    */
+   public List<Contact> export(Map<String, Object> searchParams,
+   		DataShift dataShift) throws NoSuchFieldException {
+   		DetachedCriteria criteria = DetachedCriteria.forClass(Contact.class);
+   		criteria.add(Restrictions.eq("isDeleted", false));
+       
+   		DataAuthFliter(criteria, searchParams, dataShift);
+       
+       	return contactDao.find(criteria, 3000);
+   }
+   
+   /**
+    * DataAuthFliter(数据级权限过滤)
+    * @param criteria 
+    * @param searchParams 过滤条件
+    * @param dataShift 数据权限
+    * @throws NoSuchFieldException
+   */
+   private void DataAuthFliter(DetachedCriteria criteria,
+   		Map<String, Object> searchParams,
+   		DataShift dataShift) throws NoSuchFieldException {
+   	 	Map<String, SearchFilter> filters = Search.parse(searchParams);
+   	 	userDao.visibleData(criteria, dataShift);
+        Search.buildCriteria(filters, criteria, Contact.class);
+   }
+    
 
     /**
      * get(根据ID查询组件信息)
@@ -93,5 +131,4 @@ public class ContactService {
     public void delete(long... id) {
         contactDao.delete(id);
     }
-
 }

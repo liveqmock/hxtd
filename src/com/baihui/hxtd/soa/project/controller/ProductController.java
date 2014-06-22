@@ -5,10 +5,13 @@ import java.io.IOException;
 import java.io.PrintWriter;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.List;
 import java.util.Map;
 
 import javax.annotation.Resource;
+import javax.servlet.ServletContext;
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 
 import org.springframework.beans.propertyeditors.CustomDateEditor;
 import org.springframework.stereotype.Controller;
@@ -26,12 +29,14 @@ import org.springside.modules.web.Servlets;
 
 import com.baihui.hxtd.soa.base.Constant;
 import com.baihui.hxtd.soa.base.orm.hibernate.HibernatePage;
+import com.baihui.hxtd.soa.base.utils.ImportExport;
 import com.baihui.hxtd.soa.base.utils.Search;
 import com.baihui.hxtd.soa.base.utils.mapper.HibernateAwareObjectMapper;
 import com.baihui.hxtd.soa.project.entity.Product;
 import com.baihui.hxtd.soa.project.service.ProductService;
 import com.baihui.hxtd.soa.system.DictionaryConstant;
 import com.baihui.hxtd.soa.system.entity.User;
+import com.baihui.hxtd.soa.system.service.DataShift;
 import com.baihui.hxtd.soa.system.service.DictionaryService;
 import com.baihui.hxtd.soa.util.JsonDto;
 
@@ -49,7 +54,7 @@ import com.baihui.hxtd.soa.util.JsonDto;
  */
 @Controller
 @RequestMapping(value = "/project/product")
-@SessionAttributes(value = { Constant.VS_USER_ID, Constant.VS_USER})
+@SessionAttributes(value = { Constant.VS_USER_ID, Constant.VS_USER, Constant.VS_DATASHIFT })
 public class ProductController {
 
 	//IOC注入
@@ -83,18 +88,21 @@ public class ProductController {
 	  * @Description: 分页异步加载数据
 	  * @param request HttpServletRequest
 	  * @param page 分页
+	  * @param model ModelMap
 	  * @throws NoSuchFieldException 字段异常
 	 */
     @RequestMapping(value = "/query.do")
     public void anscyQuery(HttpServletRequest request,
     		HibernatePage<Product> page,
+    		ModelMap model,
             PrintWriter out) throws NoSuchFieldException, IOException {
 		/************获取查询条件**************/
 		Map<String, Object> searchParams = Servlets.getParametersStartingWith(request, "search_");
         Search.clearBlankValue(searchParams);
         
+        DataShift dataShift = (DataShift) model.get(Constant.VS_DATASHIFT);
         /************分页查询*****************/
-        productService.findPage(searchParams, page);
+        productService.findPage(searchParams, dataShift, page);
         
         /************json转换****************/
         JsonDto json = new JsonDto();
@@ -194,8 +202,7 @@ public class ProductController {
 	 */
 	@RequestMapping(value = "/toViewPage.do")
 	public String toViewPage(Long id, Model model) {
-		Product activity = productService.get(id);
-		model.addAttribute("product", activity);
+		model.addAttribute("product", productService.get(id));
 		
 		return "/project/product/view";
 	}
@@ -216,6 +223,28 @@ public class ProductController {
 		json.setSuccessFlag(true);
 		
 		return json.toString();
+	}
+	
+	/**
+	  * exportPagination(列表页导出数据)
+	  * @Description: 导出3000条产品记录
+	  * @param request HttpServletRequest
+	  * @param response HttpServletResponse
+	  * @param modelMap ModelMap
+	  * @throws NoSuchFieldException,IOException
+	 */
+	@RequestMapping(value = "/export.do", params = "TYPE=pagination")
+	public void exportPagination(HttpServletRequest request,
+			HttpServletResponse response,
+			ModelMap modelMap) throws NoSuchFieldException, IOException{
+		Map<String, Object> searchParams = Servlets.getParametersStartingWith(request, "search_");
+		Search.clearBlankValue(searchParams);
+      
+		DataShift dataShift = (DataShift) modelMap.get(Constant.VS_DATASHIFT);
+		List<Product> productLst = productService.export(searchParams, dataShift);
+      
+		ServletContext servletContext = request.getSession().getServletContext();
+		ImportExport.exportExcel(response, servletContext, "product", productLst).write(response.getOutputStream());
 	}
 	
 	/**

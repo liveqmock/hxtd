@@ -72,7 +72,7 @@ Grid.prototype = {
         this.form.attr("uri", this.formAction);
         this.formPageOrderBy = $(this.options.formPageOrderBySelector, this.container);
         this.formPageOrder = $(this.options.formPageOrderSelector, this.container);
-
+		
         this.list = this.container.find(this.options.resultSelector);
         this.table = this.list.parents("table");
         this.header = this.table.find("tr:first");

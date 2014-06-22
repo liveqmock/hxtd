@@ -5,7 +5,7 @@
 <html>
 <head>
 <title>市场活动信息</title>
-<link rel="stylesheet" href="${ctx}/static/css/recommend/detail.css" type="text/css"></link>
+<link href="${ctx}/static/css/recommend/detail.css?v=1" type="text/css" rel="stylesheet"></link>
 </head>
 <body>
 <div class="ml35 mr35 mt20 block cb cb">

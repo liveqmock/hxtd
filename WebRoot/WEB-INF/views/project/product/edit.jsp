@@ -5,22 +5,22 @@
 <html>
 <head>
 <title>产品</title>
-<link rel="stylesheet" href="${ctx}/static/css/recommend/detail.css" type="text/css"></link>
-<script type="text/javascript" src="${ctx}/static/js/jquery.validate.js"></script>
-<script type="text/javascript" src="${ctx}/static/js/jquery.metadata.js"></script>
-<script type="text/javascript" src="${ctx}/static/js/validator.js"></script>
-<script type="text/javascript" src="${ctx}/static/js/ui/jquery.ui.datepicker.js"></script>
+<link href="${ctx}/static/css/recommend/detail.css?v=1" rel="stylesheet" type="text/css"></link>
+<script type="text/javascript" src="${ctx}/static/js/jquery.validate.js?v=1"></script>
+<script type="text/javascript" src="${ctx}/static/js/jquery.metadata.js?v=1"></script>
+<script type="text/javascript" src="${ctx}/static/js/validator.js?v=1"></script>
+<script type="text/javascript" src="${ctx}/static/js/ui/jquery.ui.datepicker.js?v=1"></script>
 <script type="text/javascript">
 $(function(){
-	$(".add").click(function(){
+	$(".add").click(function(){// 表单验证
 		if($("#form").valid()){
 			form.action = form.action + "?redirectUri=" + encodeURI($(this).attr("redirecturi"));
 			form.submit();
 		}
 		return false;
 	});
-	var dates=$("#start,#end");//日期选择设置
-	dates.datepicker({
+	var $dates = $("#start,#end");// 日历设置
+	$dates.datepicker({
 		closeText : '关闭',
 		prevText : '&#x3c;上月',
 		nextText : '下月&#x3e;',
@@ -39,26 +39,21 @@ $(function(){
 		minDate: 0,
 	    onSelect: function(selectedDate){
 	       var option = this.id == "start" ? "minDate" : "maxDate";
-	       dates.not(this).datepicker("option", option, selectedDate);
+	       $dates.not(this).datepicker("option", option, selectedDate);
 	    }
 	});
+	$(".clear").click(function(){// 清除
+		$(this).prevAll("input").val('');
+	});
 });
-function searchData(action){//搜索弹出框
-	var url, title;
-	if(action == "project"){
-		url = "${ctx}/project/project/toQueryPage.comp";
-		title = "项目列表";
-	}
-	jsUtil.dialogIframe(url, title, 800, 465, function(){//确定回调
-		var ckObj = $(":checked", window.frames["dialogIframe"].document);
-		if(ckObj.length > 0){
-			$("#txt_" + action).val(ckObj.parent().next().text());
-			$("#hide_" + action +"_id").val(ckObj.val());
+function searchData(action){// 搜索弹出框
+	jsUtil.dialogIframe("${ctx}/project/project/toQueryPage.comp", "项目列表", 800, 465, function(){// 确定回调
+		var $ckObj = $(":checked", window.frames["dialogIframe"].document);
+		if($ckObj.length > 0){
+			$("#txt_" + action).val($ckObj.parent().next().text());
+			$("#hide_" + action +"_id").val($ckObj.val());
 		}
 	});
-}
-function clearInputVal(obj){//清除
-	$(obj).prevAll("input").val('');
 }
 </script>
 </head>
@@ -102,7 +97,7 @@ function clearInputVal(obj){//清除
 				<input type="text" id="txt_project" name="projectname" value="${product.project.name}" readonly class="text_input3 required"/>
 				<input type="hidden"id="hide_project_id" name="project.id" value="${product.project.id}"/>
 				<i class="s_inquiry globle_img block_inline ml5 vm cp" title="搜索项目" onclick="searchData('project');"></i>
-				<i class="dump_btn globle_img block_inline ml5 vm cp" title="清除" onclick="clearInputVal(this);"></i>
+				<i class="dump_btn globle_img block_inline ml5 vm cp clear" title="清除"></i>
 			</td>
 		</tr>
 		<tr>
@@ -135,7 +130,8 @@ function clearInputVal(obj){//清除
 			<td align="right"><span class="w_red">*&nbsp;</span>销售开始日期：</td>
 			<td align="left">
 				<a href="javascript:;" class="pa time_closenone1"></a>
-				<input id="start" name=saleBeginTime type="text" value="${activity.saleBeginTime}" class="text_input3 input_close1 required" readonly/>
+				<input id="start" name=saleBeginTime type="text" value="${activity.saleBeginTime}" 
+					class="text_input3 input_close1 required" readonly/>
 			</td>
 			<td align="right">赎回赔率%：</td>
 			<td align="left"><input name="redeemRate" type="text" value="${product.redeemRate}" class="right text_input3 amount"/></td>
@@ -144,7 +140,8 @@ function clearInputVal(obj){//清除
 			<td align="right"><span class="w_red">*&nbsp;</span>销售结束日期：</td>
 			<td align="left">
 				<a href="javascript:;" class="pa time_closenone1"></a>
-				<input id="end" name="saleEndTime" type="text" value="${product.saleEndTime}" readonly class="text_input3 input_close1 required"/>
+				<input id="end" name="saleEndTime" type="text" value="${product.saleEndTime}" readonly 
+					class="text_input3 input_close1 required"/>
 			</td>
 			<td align="right">赎回公式：</td>
 			<td align="left"><input name="redeemFormula" type="text" value="${product.redeemFormula}" class="text_input3"/></td>
@@ -154,7 +151,8 @@ function clearInputVal(obj){//清除
 	<table class="cb id_table4 w95b bg_c_white margin0 mt10">
 		<tr>
 			<td align="right" width="15%" valign="top">备注：</td>
-			<td align="left" width="85%" valign="top"><textarea name="remark" class="remarks_input1" style="resize: none;">${product.remark}</textarea></td>
+			<td align="left" width="85%" valign="top"><textarea name="remark" 
+				class="remarks_input1" style="resize: none;">${product.remark}</textarea></td>
 		</tr>
 	</table>
 	<div class="h40"></div>

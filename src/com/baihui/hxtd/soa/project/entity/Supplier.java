@@ -51,6 +51,12 @@ public class Supplier {
 	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "TYPE")
 	private Dictionary type;
+	/** 
+	 * 供应商所有者 
+	 */
+	@ManyToOne(fetch = FetchType.LAZY)
+	@JoinColumn(name = "OWNER")
+	private User owner;
 	/**
 	 * 电话
 	 */
@@ -261,6 +267,14 @@ public class Supplier {
 
 	public void setEmail(String email) {
 		this.email = email;
+	}
+
+	public User getOwner() {
+		return owner;
+	}
+
+	public void setOwner(User owner) {
+		this.owner = owner;
 	}
 
 }

@@ -5,17 +5,18 @@
 <html>
 <head>
 <title>联系人列表</title>
-<link rel="stylesheet" href="${ctx}/static/css/recommend/detail.css" type="text/css"/>
-<link href="${ctx}/static/css/application.css" rel="stylesheet" type="text/css"/>
-<script type="text/javascript" src="${ctx}/static/js/jquery-jtemplates.js"></script>
-<script type="text/javascript" src="${ctx}/static/js/js-util.common.js"></script>
+<link href="${ctx}/static/css/recommend/detail.css?v=1" rel="stylesheet" type="text/css"/>
+<link href="${ctx}/static/css/application.css?v=1" rel="stylesheet" type="text/css"/>
+<script type="text/javascript" src="${ctx}/static/js/jquery-jtemplates.js?v=1"></script>
+<script type="text/javascript" src="${ctx}/static/js/js-util.common.js?v=1"></script>
 <script type="text/javascript" src="${ctx}/static/js/scrollTitle.js?v=1"></script>
-<script type="text/javascript" src="${ctx}/static/js/pacs.js"></script>
+<script type="text/javascript" src="${ctx}/static/js/pacs.js?v=1"></script>
+<script type="text/javascript">${applicationScope.VC_PCAS}</script>
 <script type="text/javascript">
 $(function(){
-	jsUtil.datepicker(".time");
-	new PCAS("province","city","county");
-	new Grid().init().bindAuthorization();
+	jsUtil.datepicker(".time");// 加载日历 
+	new PCAS("province","city","county");// 加载省市县 
+	new Grid().init().bindExport();// 生成Grid
 });
 </script>
 </head>
@@ -25,7 +26,7 @@ $(function(){
     <table class="fl mt5 w">
     	<tr>
     		<td class="f14" align="right" width="6%">联系人：</td>
-    		<td class="f14" align="left"  width="16%"><input type="text" class="text_input1" name="search_LIKE_name"/></td>
+    		<td class="f14" align="left" width="16%"><input type="text" class="text_input1" name="search_LIKE_name"/></td>
     		<td class="f14" align="right" width="6%">手机：</td>
     		<td class="f14" align="left" width="16%"><input type="text" class="text_input1" name="search_LIKE_mobile"/></td>
     		<td class="f14" align="right" width="6%">电话：</td>
@@ -52,7 +53,9 @@ $(function(){
     			<div class="pr vm">
 	    			<a href="javascript:;" class="pa time_closenone1"></a>
 	    			<a href="javascript:;" class="pa time_closenone2"></a>
-	    			<input class="text_input2 input_close globle_img time" name="search_GTE_createdTime" type="text" readonly/>-<input class="text_input2 input_close globle_img time" name="search_LTE_createdTime" type="text" readonly/>
+	    			<input class="text_input2 input_close globle_img time" name="search_GTE_createdTime" 
+	    				type="text" readonly/>-<input class="text_input2 input_close globle_img time" name="search_LTE_createdTime" 
+	    				type="text" readonly/>
     			</div>
     		</td>
     		<td width="8%"></td>
@@ -63,7 +66,9 @@ $(function(){
     			<div class="pr vm">
 	    			<a href="javascript:;" class="pa time_closenone1"></a>
 	    			<a href="javascript:;" class="pa time_closenone2"></a>
-	    			<input class="text_input2 input_close globle_img time" name="search_GTE_modifiedTime" type="text" readonly/>-<input class="text_input2 input_close globle_img time" name="search_LTE_modifiedTime" type="text" readonly/>
+	    			<input class="text_input2 input_close globle_img time" name="search_GTE_modifiedTime" 
+	    				type="text" readonly/>-<input class="text_input2 input_close globle_img time" name="search_LTE_modifiedTime" 
+	    				type="text" readonly/>
     			</div>
     		</td>
     		<td class="f14" align="right" width="6%"></td>
@@ -101,6 +106,13 @@ $(function(){
 						</a>
 					</li>
 				</c:if>
+				<li>
+					<a href="javascript:;" uri="${ctx}/customer/contact/export.do?TYPE=pagination" 
+						class="block c_white ml10 lh25 mr10 export">
+						<b class="allbtn_l block fl"></b>
+						<b class="allbtn_r pr13 block fl w_auto f14">导&nbsp;出</b>
+					</a>
+				</li>
 			</ul>
 		</div>
 	</div>
@@ -152,13 +164,16 @@ $(function(){
            <td>{$T.row.modifiedTime}</td>
            <td>
              <c:if test="${VS_HAS_FUNCTIONS.contactView}">
-                 <a href="${ctx}/customer/contact/toViewPage.do?id={$T.row.id}" class="block_inline s_detail_btn globle_img ml10" title="详情"></a>
+                 <a href="${ctx}/customer/contact/toViewPage.do?id={$T.row.id}" 
+                 	class="block_inline s_detail_btn globle_img ml10" title="详情"></a>
              </c:if>
              <c:if test="${VS_HAS_FUNCTIONS.contactModify}">
-                 <a href="${ctx}/customer/contact/toModifyPage.do?id={$T.row.id}" class="block_inline s_edit_btn globle_img ml10" title="编辑"></a>
+                 <a href="${ctx}/customer/contact/toModifyPage.do?id={$T.row.id}" 
+                 	class="block_inline s_edit_btn globle_img ml10" title="编辑"></a>
              </c:if>
              <c:if test="${VS_HAS_FUNCTIONS.contactDelete}">
-                 <a href="javascript:void(0);" class="block_inline s_dump_btn globle_img ml10 delete" uri="${ctx}/customer/contact/delete.do?id={$T.row.id}" title="删除"></a>
+                 <a href="javascript:void(0);" class="block_inline s_dump_btn globle_img ml10 delete" 
+                 	uri="${ctx}/customer/contact/delete.do?id={$T.row.id}" title="删除"></a>
              </c:if>
            </td>
 	    </tr>

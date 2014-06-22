@@ -35,6 +35,7 @@ import com.baihui.hxtd.soa.customer.entity.Customer;
 import com.baihui.hxtd.soa.customer.service.CustomerService;
 import com.baihui.hxtd.soa.system.entity.Dictionary;
 import com.baihui.hxtd.soa.system.entity.User;
+import com.baihui.hxtd.soa.system.service.DataShift;
 import com.baihui.hxtd.soa.system.service.DictionaryService;
 import com.baihui.hxtd.soa.util.JsonDto;
 
@@ -46,9 +47,7 @@ import com.baihui.hxtd.soa.util.JsonDto;
  * @date 2014/5/20
  */
 @Controller
-@SessionAttributes(value = {Constant.VS_USER_ID, Constant.VS_USER_NAME, Constant.VS_USER,
-        Constant.VS_ORG_ID, Constant.VS_DATASHIFT, Constant.VS_ORG,
-        Constant.VS_MENUS, Constant.VS_ROLES, Constant.VS_FUNCTIONS, Constant.VS_COMPONENTS})
+@SessionAttributes(value = {Constant.VS_DATASHIFT,Constant.VS_USER})
 @RequestMapping(value = "/customer/customer")
 public class CustomerController {
 
@@ -84,7 +83,8 @@ public class CustomerController {
 		Search.toRangeDate(searchParams, "modifiedTime");
 		Search.toRangeDate(searchParams, "createdTime");
 		logger.info("添加默认的查询条件");
-		page = customerService.findPage(searchParams, page);
+		DataShift dataShift = (DataShift) model.get(Constant.VS_DATASHIFT);
+		page = customerService.findPage(searchParams, page,dataShift);
 		JsonDto json = new JsonDto();
 		json.setResult(page);
 		return json.toString();
@@ -256,7 +256,7 @@ public class CustomerController {
         HibernatePage<Customer> page=new HibernatePage<Customer>(pageNumber, pageSize);
         page.setHibernateOrderBy(orderBy);
         page.setHibernateOrder(order);
-        customerService.findPage(searchParams, page);
+        //customerService.findPage(searchParams, page);
         
         JsonDto jsonDto = new JsonDto();
         jsonDto.setResult(page);

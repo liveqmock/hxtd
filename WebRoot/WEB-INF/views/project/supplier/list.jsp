@@ -217,6 +217,9 @@ function formReset() {
 							供应商名
 						</th>
 						<th>
+							所有者
+						</th>
+						<th>
 							供应商类型
 						</th>
 						<th>
@@ -255,6 +258,9 @@ function formReset() {
 							</th>
 							<th>
 								供应商名
+							</th>
+							<th>
+								所有者
 							</th>
 							<th>
 								供应商类型
@@ -304,6 +310,7 @@ function formReset() {
                         <c:otherwise>{$T.row.name}</c:otherwise>
                     </c:choose>
                 </td>
+                <td>{$T.row.owner.realName}</td>
                 <td>{$T.row.type.key}</td>
                 <td>{$T.row.phone}</td>
                 <td>{$T.row.mobile}</td>

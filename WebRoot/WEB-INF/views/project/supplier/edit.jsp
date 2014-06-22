@@ -49,6 +49,26 @@ $(function(){
 	new PCAS("province","city","county",province,city,county);
 	
 });
+function searchData(action){//搜索弹出框
+	var url, title;
+	if(action == "owner"){
+		url = "${ctx}/system/user/toQueryPage.comp";
+		title = "所有者";
+	}else if(action == "customer"){
+		url = "${ctx}/customer/customer/toQueryPage.comp";
+		title = "客户";
+	}else if(action == "supplier"){
+		url = "${ctx}/project/supplier/toQueryPage.comp";
+		title = "供应商";
+	}
+	jsUtil.dialogIframe(url, title, 800, 465, function(){//确定回调
+		var ckObj = $(":checked", window.frames["dialogIframe"].document);
+		if(ckObj.length > 0){
+			$("#txt_" + action).val(ckObj.parent().next().text());
+			$("#hide_" + action +"_id").val(ckObj.val());
+		}
+	});
+}
 </script>
 </head>
 <body>
@@ -83,7 +103,19 @@ $(function(){
 						class="text_input3 required">
 				</td>
 				<td align="right" width="15%">
-					<span class="w_red">*&nbsp;</span><span class="w_red">*&nbsp;</span>供应商类型：
+					<span class="w_red">*&nbsp;</span>所有者：
+				</td>
+				<td align="left">
+					<input type="text" id="text_owner" value="${com.owner.realName}"
+						class="text_input3 required" onclick="searchData('owner')" readonly>
+					<input type="hidden" id="hide_owner" value="${com.owner.id}"/>
+				</td>
+			</tr>
+
+			<tr>	
+				
+				<td align="right" width="15%">
+					<span class="w_red">*&nbsp;</span>供应商类型：
 				</td>
 				<td align="left">
 					<select name="type.id" class="select1 pr requiredSelect">
@@ -100,9 +132,7 @@ $(function(){
 						</c:forEach>
 					</select>
 				</td>
-			</tr>
-
-			<tr>
+			
 				<td align="right">
 					电话：
 				</td>
@@ -110,6 +140,8 @@ $(function(){
 					<input type="text" name="phone" value="${com.phone}"
 						class="text_input3 isPhone">
 				</td>
+			</tr>
+			<tr>
 				<td align="right">
 					手机：
 				</td>
@@ -117,9 +149,9 @@ $(function(){
 					<input type="text" name="mobile" value="${com.mobile}"
 						class="text_input3 isMobile">
 				</td>
-			</tr>
+			
 
-			<tr>
+			
 				<td align="right">
 					传真：
 				</td>
@@ -127,6 +159,8 @@ $(function(){
 					<input type="text" name="fax" value="${com.fax}"
 						class="text_input3 isTel">
 				</td>
+			</tr>
+			<tr>
 				<td align="right">
 					供应商邮箱：
 				</td>

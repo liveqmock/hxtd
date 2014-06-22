@@ -4,23 +4,27 @@
 <html>
 <head>
 <title>联系人信息</title>
-<link rel="stylesheet" href="${ctx}/static/css/recommend/detail.css" type="text/css"></link>
-<script type="text/javascript" src="${ctx}/static/js/jquery.validate.js"></script>
-<script type="text/javascript" src="${ctx}/static/js/jquery.metadata.js"></script>
-<script type="text/javascript" src="${ctx}/static/js/pacs.js"></script>
-<script type="text/javascript" src="${ctx}/static/js/validator.js"></script>
+<link href="${ctx}/static/css/recommend/detail.css?v=1" type="text/css" rel="stylesheet"></link>
+<script type="text/javascript" src="${ctx}/static/js/jquery.validate.js?v=1"></script>
+<script type="text/javascript" src="${ctx}/static/js/jquery.metadata.js?v=1"></script>
+<script type="text/javascript" src="${ctx}/static/js/validator.js?v=1"></script>
+<script type="text/javascript" src="${ctx}/static/js/pacs.js?v=1"></script>
+<script type="text/javascript">${applicationScope.VC_PCAS}</script>
 <script type="text/javascript">
-$(function(){//初始化 
+$(function(){// 初始化 
 	new PCAS("province","city","county",'${contact.province.id}','${contact.city.id}','${contact.county.id}');
-	$(".add").click(function(){
+	$(".add").click(function(){// 表单验证
 		if($("#form").valid()){
 			form.action = form.action + "?redirectUri=" + encodeURI($(this).attr("redirecturi"));
 			form.submit();
 		}
 		return false;
 	});
+	$(".clear").click(function(){// 清除
+		$(this).prevAll("input").val('');
+	});
 });
-function searchData(action){//搜索弹出框
+function searchData(action){// 搜索弹出框
 	var url, title;
 	if(action == "owner"){
 		url = "${ctx}/system/user/toQueryPage.comp";
@@ -32,16 +36,13 @@ function searchData(action){//搜索弹出框
 		url = "${ctx}/project/supplier/toQueryPage.comp";
 		title = "供应商";
 	}
-	jsUtil.dialogIframe(url, title, 800, 465, function(){//确定回调
-		var ckObj = $(":checked", window.frames["dialogIframe"].document);
-		if(ckObj.length > 0){
-			$("#txt_" + action).val(ckObj.parent().next().text());
-			$("#hide_" + action +"_id").val(ckObj.val());
+	jsUtil.dialogIframe(url, title, 800, 465, function(){// 确定回调
+		var $ckObj = $(":checked", window.frames["dialogIframe"].document);
+		if($ckObj.length > 0){
+			$("#txt_" + action).val($ckObj.parent().next().text());
+			$("#hide_" + action +"_id").val($ckObj.val());
 		}
 	});
-}
-function clearInputVal(obj){//清除
-	$(obj).prevAll("input").val('');
 }
 </script>
 </head>
@@ -66,7 +67,7 @@ function clearInputVal(obj){//清除
 				<input id="txt_owner" type="text" value="${contact.owner.realName}" readonly="readonly" class="text_input3"/>
 				<input id="hide_owner_id" type="hidden" name="owner.id" value="${contact.owner.id}"/>
 				<i class="s_inquiry globle_img block_inline ml5 vm cp" title="搜索所有者" onclick="searchData('owner');"></i>
-				<i class="dump_btn globle_img block_inline ml5 vm cp" title="清除" onclick="clearInputVal(this);"></i>
+				<i class="dump_btn globle_img block_inline ml5 vm cp clear" title="清除"></i>
 			</td>
 			<td width="15%" align="right">线索来源：</td>
 			<td align="left">
@@ -86,7 +87,7 @@ function clearInputVal(obj){//清除
 				<input id="txt_customer" type="text" value="${contact.customer.name}" readonly="readonly" class="text_input3"/>
 				<input id="hide_customer_id" name="customer.id" type="hidden" value="${contact.customer.id}"/>
 				<i class="s_inquiry globle_img block_inline ml5 vm cp" title="搜索客户" onclick="searchData('customer');"></i>
-				<i class="dump_btn globle_img block_inline ml5 vm cp" title="清除" onclick="clearInputVal(this);"></i>
+				<i class="dump_btn globle_img block_inline ml5 vm cp clear" title="清除"></i>
 			</td>
 		</tr>
 		<tr>
@@ -95,7 +96,7 @@ function clearInputVal(obj){//清除
 				<input id="txt_supplier" type="text" value="${contact.supplier.name}" readonly="readonly" class="text_input3"/>
 				<input id="hide_supplier_id" name="supplier.id" type="hidden" value="${contact.supplier.id}"/>
 				<i class="s_inquiry globle_img block_inline ml5 vm cp" title="搜索供应商" onclick="searchData('supplier');"></i>
-				<i class="dump_btn globle_img block_inline ml5 vm cp" title="清除" onclick="clearInputVal(this);"></i>
+				<i class="dump_btn globle_img block_inline ml5 vm cp clear" title="清除"></i>
 			</td>
 			<td align="right">邮箱：</td>
 			<td align="left"><input type="text" name="email" value="${contact.email}" class="text_input3 email"/></td>

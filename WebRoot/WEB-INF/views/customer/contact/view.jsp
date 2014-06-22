@@ -5,7 +5,7 @@
 <html>
 <head>
 <title>联系人信息</title>
-<link rel="stylesheet" href="${ctx}/static/css/recommend/detail.css" type="text/css"></link>
+<link href="${ctx}/static/css/recommend/detail.css?v=1" type="text/css" rel="stylesheet"></link>
 </head>
 <body>
 <div class="ml35 mr35 mt20 block cb cb">
@@ -19,7 +19,8 @@
 		<ul class="fr id_table1 mt10 ml10">
 			<li>
 			<c:if test="${VS_HAS_FUNCTIONS.contactModify}">
-				<a href="${ctx}/customer/contact/toModifyPage.do?id=${contact.id}" class="block c_white lh25 mr10">
+				<a href="${ctx}/customer/contact/toModifyPage.do?id=${contact.id}" 
+					class="block c_white lh25 mr10">
 					<b class="allbtn_l block fl"></b>
 					<b class="allbtn_r pr13 block fl w_auto f14">编&nbsp;&nbsp;辑</b>
 				</a>
@@ -96,8 +97,10 @@
 			<td align="left" valign="top"><div class="w85b">${contact.remark}</div></td>
 		</tr>
 	</table>
-	<tag:attachment view="true" upload="true" module="contact" query="true" down="true" id="${contact.id}"></tag:attachment>
-	<tag:memoir view="true" edit="true" query="true" delete="true" moduleType="11010104" moduleId="${contact.id}"></tag:memoir>
+	<tag:attachment view="true" upload="true" module="contact" query="true" 
+		down="true" id="${contact.id}"></tag:attachment>
+	<tag:memoir view="true" edit="true" query="true" delete="true" 
+		moduleType="11010104" moduleId="${contact.id}"></tag:memoir>
 	<div class="h40"></div>
 </div>
 </body>

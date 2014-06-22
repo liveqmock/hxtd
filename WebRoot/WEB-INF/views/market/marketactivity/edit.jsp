@@ -5,21 +5,21 @@
 <html>
 <head>
 <title>市场活动信息</title>
-<link rel="stylesheet" href="${ctx}/static/css/recommend/detail.css" type="text/css"></link>
-<script type="text/javascript" src="${ctx}/static/js/jquery.validate.js"></script>
-<script type="text/javascript" src="${ctx}/static/js/jquery.metadata.js"></script>
-<script type="text/javascript" src="${ctx}/static/js/validator.js"></script>
-<script type="text/javascript" src="${ctx}/static/js/ui/jquery.ui.datepicker.js"></script>
+<link href="${ctx}/static/css/recommend/detail.css?v=1" type="text/css" rel="stylesheet"></link>
+<script type="text/javascript" src="${ctx}/static/js/jquery.validate.js?v=1"></script>
+<script type="text/javascript" src="${ctx}/static/js/jquery.metadata.js?v=1"></script>
+<script type="text/javascript" src="${ctx}/static/js/validator.js?v=1"></script>
+<script type="text/javascript" src="${ctx}/static/js/ui/jquery.ui.datepicker.js?v=1"></script>
 <script type="text/javascript">
 $(function(){
-	$(".add").click(function(){
+	$(".add").click(function(){// 表单验证
 		if($("#form").valid()){
 			form.action = form.action + "?redirectUri=" + encodeURI($(this).attr("redirecturi"));
 			form.submit();
 		}
 		return false;
 	});
-	var dates=$("#start,#end");//日期选择设置
+	var dates=$("#start,#end");// 日历设置
 	dates.datepicker({
 		closeText : '关闭',
 		prevText : '&#x3c;上月',
@@ -42,23 +42,18 @@ $(function(){
 	       dates.not(this).datepicker("option", option, selectedDate);
 	    }
 	});
+	$(".clear").click(function(){// 清除
+		$(this).prevAll("input").val('');
+	});
 });
 function searchData(action){//搜索弹出框
-	var url, title;
-	if(action == "boss"){
-		url = "${ctx}/system/user/toQueryPage.comp";
-		title = "发起者";
-	}
-	jsUtil.dialogIframe(url, title, 800, 465, function(){//确定回调
-		var ckObj = $(":checked", window.frames["dialogIframe"].document);
-		if(ckObj.length > 0){
-			$("#txt_" + action).val(ckObj.parent().next().text());
-			$("#hide_" + action +"_id").val(ckObj.val());
+	jsUtil.dialogIframe("${ctx}/system/user/toQueryPage.comp", "发起者", 800, 465, function(){// 确定回调
+		var $ckObj = $(":checked", window.frames["dialogIframe"].document);
+		if($ckObj.length > 0){
+			$("#txt_" + action).val($ckObj.parent().next().text());
+			$("#hide_" + action +"_id").val($ckObj.val());
 		}
 	});
-}
-function clearInputVal(obj){//清除
-	$(obj).prevAll("input").val('');
 }
 </script>
 </head>
@@ -134,13 +129,15 @@ function clearInputVal(obj){//清除
 		</tr>
 		<tr>
 			<td align="right">期望成功率%：</td>
-			<td align="left"><input type="text" name="expectSuccessRate" value="${activity.expectSuccessRate }" class="text_input3 amount"/></td>
+			<td align="left"><input type="text" name="expectSuccessRate" value="${activity.expectSuccessRate }" 
+				class="text_input3 amount"/></td>
 			<td align="right"><span class="w_red">*&nbsp;</span>负责人：</td>
 			<td align="left">
-				<input type="text" id="txt_boss" name="bossname" value="${activity.bossHead.name }" readonly="readonly" class="text_input3 required"/>
+				<input type="text" id="txt_boss" name="bossname" value="${activity.bossHead.name }" readonly="readonly"
+					 class="text_input3 required"/>
 				<input type="hidden"id="hide_boss_id" name="bossHead.id" value="${activity.bossHead.id }"/>
 				<i class="s_inquiry globle_img block_inline ml5 vm cp" title="搜索责任人" onclick="searchData('boss');"></i>
-				<i class="dump_btn globle_img block_inline ml5 vm cp" title="清除" onclick="clearInputVal(this);"></i>
+				<i class="dump_btn globle_img block_inline ml5 vm cp clear" title="清除"></i>
 			</td>
 		</tr>
 		</table>
@@ -148,7 +145,8 @@ function clearInputVal(obj){//清除
 		<table class="cb id_table4 w95b bg_c_white margin0 mt10">
 			<tr>
 				<td align="right" width="15%" valign="top">备注：</td>
-				<td align="left" width="85%" valign="top"><textarea name="remark" class="remarks_input1" style="resize: none;">${activity.remark}</textarea></td>
+				<td align="left" width="85%" valign="top"><textarea name="remark" class="remarks_input1"
+					style="resize: none;">${activity.remark}</textarea></td>
 			</tr>
 		</table>
 	<div class="h40"></div>

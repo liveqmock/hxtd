@@ -18,6 +18,7 @@ import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.SessionAttributes;
 import org.springside.modules.web.Servlets;
 
 import com.baihui.hxtd.soa.base.Constant;
@@ -29,11 +30,13 @@ import com.baihui.hxtd.soa.project.entity.Supplier;
 import com.baihui.hxtd.soa.project.service.SupplierService;
 import com.baihui.hxtd.soa.system.entity.Dictionary;
 import com.baihui.hxtd.soa.system.entity.User;
+import com.baihui.hxtd.soa.system.service.DataShift;
 import com.baihui.hxtd.soa.system.service.DictionaryService;
 import com.baihui.hxtd.soa.util.JsonDto;
 
 @Controller
 @RequestMapping(value = "/project/supplier")
+@SessionAttributes(value = {Constant.VS_DATASHIFT})
 public class SupplierController {
 	
 	 private Logger logger = LoggerFactory.getLogger(this.getClass());
@@ -57,7 +60,7 @@ public class SupplierController {
 	@RequestMapping(value = "/query.do",produces = "text/text;charset=UTF-8")
 	@ResponseBody
 	public String query(HibernatePage<Supplier> page,
-								HttpServletRequest request) throws NoSuchFieldException{
+								HttpServletRequest request,ModelMap model) throws NoSuchFieldException{
 		logger.info("SupplierController.query查询组件列表");
 		Map<String, Object> searchParams = Servlets.getParametersStartingWith(
 				request, "search_");
@@ -65,7 +68,8 @@ public class SupplierController {
 		Search.toRangeDate(searchParams, "modifiedTime");
 		Search.toRangeDate(searchParams, "createdTime");
 		logger.info("添加默认的查询条件");
-		page = supplierService.findPage(searchParams, page);
+		DataShift dataShift = (DataShift) model.get(Constant.VS_DATASHIFT);		
+		page = supplierService.findPage(searchParams,dataShift, page);
 		JsonDto json = new JsonDto();
 		json.setResult(page);
 		return json.toString();
@@ -250,7 +254,7 @@ public class SupplierController {
      * 1.在分页列表上根据当前条件进行导出
      */
     @RequestMapping(value = "/export.do", params = "TYPE=pagination")
-    public void exportPagination(HttpServletRequest request, Long organizationId, HibernatePage<Lead> page, ModelMap modelMap, HttpServletResponse response) throws NoSuchFieldException, IOException {
+    public void exportPagination(HttpServletRequest request,  ModelMap model, HttpServletResponse response) throws NoSuchFieldException, IOException {
         logger.info("导出excel文件");
 
         logger.info("解析页面查询条件");
@@ -259,12 +263,8 @@ public class SupplierController {
         Search.decodeValue(searchParams);
         Search.toRangeDate(searchParams, "createTime");
         logger.debug("查询条件数目“{}”", searchParams.size());
-
-        logger.info("获取对象集合");
-        if (organizationId == null) {
-            organizationId = (Long) modelMap.get(Constant.VS_ORG_ID);
-        }
-        List<Supplier> supplier = supplierService.export(searchParams);
+        DataShift dataShift = (DataShift) model.get(Constant.VS_DATASHIFT);		
+        List<Supplier> supplier = supplierService.export(searchParams,dataShift);
         logger.debug("列表信息数目“{}”", supplier.size());
 
         logger.info("转换成excel文件并输出");

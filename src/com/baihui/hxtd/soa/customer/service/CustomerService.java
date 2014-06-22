@@ -22,8 +22,10 @@ import com.baihui.hxtd.soa.base.utils.serial.TierSerial;
 import com.baihui.hxtd.soa.base.utils.serial.TierSerials;
 import com.baihui.hxtd.soa.customer.dao.CustomerDao;
 import com.baihui.hxtd.soa.customer.entity.Customer;
+import com.baihui.hxtd.soa.system.dao.UserDao;
 import com.baihui.hxtd.soa.system.entity.Notice;
 import com.baihui.hxtd.soa.system.entity.User;
+import com.baihui.hxtd.soa.system.service.DataShift;
 import com.baihui.hxtd.soa.util.JsonDto;
 
 /**
@@ -44,12 +46,14 @@ public class CustomerService {
 
 	@Resource
 	private CustomerDao customerDao;
+	 @Resource
+	    private UserDao userDao;
 	private Integer exportCounts = 5000;
 	/**
      * 分页查找
      */
     @Transactional(readOnly = true)
-    public HibernatePage<Customer> findPage(Map<String, Object> searchParams, HibernatePage<Customer> page) throws NoSuchFieldException {
+    public HibernatePage<Customer> findPage(Map<String, Object> searchParams, HibernatePage<Customer> page,DataShift dataShift) throws NoSuchFieldException {
         logger.info("分页查找客户");
         DetachedCriteria criteria = DetachedCriteria.forClass(Customer.class);
         criteria.setFetchMode("owner", FetchMode.JOIN);
@@ -64,6 +68,7 @@ public class CustomerService {
 		criteria.setFetchMode("county", FetchMode.JOIN);
 		criteria.setFetchMode("creator", FetchMode.JOIN);
 		criteria.setFetchMode("modifier", FetchMode.JOIN);
+		userDao.visibleData(criteria, dataShift);
 		searchParams.put("EQ_isDeleted", false);
         Map<String, SearchFilter> filters = Search.parse(searchParams);
         Search.buildCriteria(filters, criteria, Customer.class);

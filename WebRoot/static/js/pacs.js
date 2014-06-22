@@ -56,10 +56,13 @@ PCAS.SetC=function(PCA){
 			if (PCA.DefC == option.id)
 				PCA.SelC[i+1].selected = true
 			}
+		if (PCA.SelA)
+			PCAS.SetA(PCA)
     	},null,'pid='+pid);
+    }else{
+	    if (PCA.SelA)
+			PCAS.SetA(PCA)
     }
-    if (PCA.SelA)
-		PCAS.SetA(PCA)
 };
 PCAS.SetA=function(PCA){
 	var pid =$(PCA.SelC).val();

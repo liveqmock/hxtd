@@ -1,5 +1,6 @@
 package com.baihui.hxtd.soa.market.service;
 
+import java.util.List;
 import java.util.Map;
 
 import javax.annotation.Resource;
@@ -15,6 +16,8 @@ import com.baihui.hxtd.soa.base.orm.hibernate.HibernatePage;
 import com.baihui.hxtd.soa.base.utils.Search;
 import com.baihui.hxtd.soa.market.dao.MarketActivityDao;
 import com.baihui.hxtd.soa.market.entity.MarketActivity;
+import com.baihui.hxtd.soa.system.dao.UserDao;
+import com.baihui.hxtd.soa.system.service.DataShift;
 
 /**
  * 功能描述：供应商模块service层
@@ -34,6 +37,8 @@ public class MarketActivityService {
 	//private Logger logger = LoggerFactory.getLogger(MarketActivityService.class);
 	@Resource
 	private MarketActivityDao marketActivityDao;
+	@Resource
+	private UserDao userDao;
 
 	/**
 	 * findPage(分页查询市场活动列表、非全model)
@@ -43,15 +48,16 @@ public class MarketActivityService {
 	 * @throws 字段异常
 	 */
 	@Transactional(readOnly = true)
-	public HibernatePage<MarketActivity> findPage(Map<String, Object> searchParams, HibernatePage<MarketActivity> page)
+	public HibernatePage<MarketActivity> findPage(Map<String, Object> searchParams, 
+			DataShift dataShift,
+			HibernatePage<MarketActivity> page)
 			throws NoSuchFieldException {
 		DetachedCriteria criteria = DetachedCriteria.forClass(MarketActivity.class);
 		criteria.setFetchMode("dic", FetchMode.JOIN);// 活动类型
 		criteria.setFetchMode("status", FetchMode.JOIN);// 活动状态
 		criteria.add(Restrictions.eq("isDeleted", false));// 过滤已删除
 		
-		Map<String, SearchFilter> filters = Search.parse(searchParams);// 构建参数
-		Search.buildCriteria(filters, criteria, MarketActivity.class);
+		DataAuthFliter(criteria, searchParams, dataShift);
 
 		return marketActivityDao.findPage(page, criteria);
 	}
@@ -86,5 +92,38 @@ public class MarketActivityService {
      */
     public void delete(long... id) {
     	marketActivityDao.delete(id);
+    }
+    
+    /**
+      * export(导出市场活动3000条)
+      * @param searchParams 过滤条件
+      * @return List<MarketActivity> 返回数据
+      * @throws NoSuchFieldException
+     */
+    public List<MarketActivity> export(Map<String, Object> searchParams,
+    		DataShift dataShift) throws NoSuchFieldException {
+    	DetachedCriteria criteria = DetachedCriteria.forClass(MarketActivity.class);
+    	criteria.add(Restrictions.eq("isDeleted", false));
+        criteria.setFetchMode("dic", FetchMode.JOIN);
+        criteria.setFetchMode("status", FetchMode.JOIN);
+        
+        DataAuthFliter(criteria, searchParams, dataShift);
+        
+        return marketActivityDao.find(criteria, 3000);
+    }
+    
+    /**
+     * DataAuthFliter(数据级权限过滤)
+     * @param criteria 
+     * @param searchParams 过滤条件
+     * @param dataShift 数据权限
+     * @throws NoSuchFieldException
+    */
+    private void DataAuthFliter(DetachedCriteria criteria,
+    		Map<String, Object> searchParams,
+    		DataShift dataShift) throws NoSuchFieldException {
+    	 Map<String, SearchFilter> filters = Search.parse(searchParams);
+    	 userDao.visibleData(criteria, dataShift);
+         Search.buildCriteria(filters, criteria, MarketActivity.class);
     }
 }

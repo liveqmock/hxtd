@@ -8,10 +8,13 @@ import java.util.List;
 import java.util.Map;
 
 import javax.annotation.Resource;
+import javax.servlet.ServletContext;
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -22,12 +25,14 @@ import org.springside.modules.web.Servlets;
 
 import com.baihui.hxtd.soa.base.Constant;
 import com.baihui.hxtd.soa.base.orm.hibernate.HibernatePage;
+import com.baihui.hxtd.soa.base.utils.ImportExport;
 import com.baihui.hxtd.soa.base.utils.Search;
 import com.baihui.hxtd.soa.base.utils.mapper.HibernateAwareObjectMapper;
 import com.baihui.hxtd.soa.customer.entity.Contact;
 import com.baihui.hxtd.soa.customer.service.ContactService;
 import com.baihui.hxtd.soa.system.entity.Dictionary;
 import com.baihui.hxtd.soa.system.entity.User;
+import com.baihui.hxtd.soa.system.service.DataShift;
 import com.baihui.hxtd.soa.system.service.DictionaryService;
 import com.baihui.hxtd.soa.util.JsonDto;
 
@@ -45,7 +50,7 @@ import com.baihui.hxtd.soa.util.JsonDto;
  */
 @Controller
 @RequestMapping(value = "/customer/contact")
-@SessionAttributes(value = { Constant.VS_USER_ID })
+@SessionAttributes(value = { Constant.VS_USER_ID, Constant.VS_DATASHIFT })
 public class ContactController {
 
 	//private Logger logger = LoggerFactory.getLogger(this.getClass());
@@ -76,19 +81,23 @@ public class ContactController {
 	  * query(异步分页查询)
 	  * @Description: 异步查询联系人数据
 	  * @param page 分页查询结果集
+	  * @param model ModelMap
 	  * @param out PrintWriter
 	  * @throws NoSuchFieldException,IOException
 	 */
 	@RequestMapping(value = "/query.do")
 	public void query(HttpServletRequest request,
 			HibernatePage<Contact> page,
+			ModelMap model,
             PrintWriter out) throws NoSuchFieldException, IOException {
 		/************获取查询条件**************/
 		Map<String, Object> searchParams = Servlets.getParametersStartingWith(request, "search_");
         Search.clearBlankValue(searchParams);
         
+        DataShift dataShift = (DataShift) model.get(Constant.VS_DATASHIFT);
+        
         /************分页查询*****************/
-        contactService.findPage(searchParams, page);
+        contactService.findPage(searchParams, dataShift, page);
         
         /************json转换****************/
         JsonDto json = new JsonDto();
@@ -240,6 +249,28 @@ public class ContactController {
 		json.setSuccessFlag(true);
 		
 		return json.toString();
+	}
+	
+	/**
+	  * exportPagination(列表页导出数据)
+	  * @Description: 导出3000条联系人记录
+	  * @param request HttpServletRequest
+	  * @param response HttpServletResponse
+	  * @param modelMap ModelMap
+	  * @throws NoSuchFieldException,IOException
+	 */
+	@RequestMapping(value = "/export.do", params = "TYPE=pagination")
+	public void exportPagination(HttpServletRequest request,
+			HttpServletResponse response,
+			ModelMap modelMap) throws NoSuchFieldException, IOException{
+		Map<String, Object> searchParams = Servlets.getParametersStartingWith(request, "search_");
+		Search.clearBlankValue(searchParams);
+       
+		DataShift dataShift = (DataShift) modelMap.get(Constant.VS_DATASHIFT);
+		List<Contact> contactLst = contactService.export(searchParams, dataShift);
+       
+		ServletContext servletContext = request.getSession().getServletContext();
+		ImportExport.exportExcel(response, servletContext, "contact", contactLst).write(response.getOutputStream());
 	}
 
 	/**

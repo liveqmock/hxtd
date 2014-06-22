@@ -70,21 +70,6 @@
 
 <!--列表开始-->
     <div class="ml35 mr35 mt20 block cb cb">
-    <b class="table_headl globle_img block fl"></b>
-        <div class="fl table_headc fl w99b">
-        <ul class="fl id_table1 mt10 ml10">
-        <li>  <c:if test="${VS_HAS_FUNCTIONS.messageDelete}">
-        <a href="javascript:void(0)" uri="${ctx}/system/message/delete.do"  class="block c_white lh25 fr mr10  deletesome">
-        <b class="allbtn_l block fl"></b>
-        <b class="allbtn_r pr13 block fl w_auto f14 ">删&nbsp;&nbsp;除</b>
-        </a>
-        </c:if></li>
-        <li> <c:if test="${VS_HAS_FUNCTIONS.messageAdd}"><a href="${ctx}/system/message/toAddPage.do"  class="block c_white lh25 mr10"><b class="allbtn_l block fl"></b><b class="allbtn_r pr13 block fl w_auto f14">新&nbsp;&nbsp;增</b></a></c:if></li>
-         <li><a href="javascript:void(0)" uri="${ctx}/system/message/export.do?TYPE=pagination" class="block c_white lh25 mr10 export"><b class="allbtn_l block fl"></b><b class="allbtn_r pr13 block fl w_auto f14">导&nbsp;&nbsp;出</b></a></li>
-		
-       </ul>
-        </div>
-        <b class="table_headr globle_img block fl"></b>
     </div>
     
     <div class="ml35 mr35">
@@ -100,7 +85,17 @@
 <b class="h_tabbtn_l w25 block fl"></b>
 <b class="h_tabbtn_r c_white pr25 w_auto f14 block fr lh32 cp id_nav pr">已发信息</b>
 </li>
-
+<ul class="fr id_table1  ml10">
+        <li>  <c:if test="${VS_HAS_FUNCTIONS.messageDelete}">
+        <a href="javascript:void(0)" uri="${ctx}/system/message/delete.do"  class="block c_white lh25 fr mr10  deletesome">
+        <b class="allbtn_l block fl"></b><b class="allbtn_r pr13 block fl w_auto f14 ">删&nbsp;&nbsp;除</b></a></c:if></li>
+        <li> <c:if test="${VS_HAS_FUNCTIONS.messageAdd}">
+        <a href="${ctx}/system/message/toAddPage.do"  class="block c_white lh25 mr10">
+        <b class="allbtn_l block fl"></b><b class="allbtn_r pr13 block fl w_auto f14">新&nbsp;&nbsp;增</b></a></c:if></li>
+        <li><a href="javascript:void(0)" id="reload" class="block c_white lh25 mr10"><b class="allbtn_l block fl"></b><b class="allbtn_r pr13 block fl w_auto f14">刷&nbsp;&nbsp;新</b></a> </li>
+       <li><a href="javascript:void(0)" uri="${ctx}/system/message/export.do?TYPE=pagination&ty=recived" class="block c_white lh25 mr10 export"><b class="allbtn_l block fl"></b><b class="allbtn_r pr13 block fl w_auto f14">导&nbsp;&nbsp;出</b></a></li>
+		
+        </ul>
 </ul>
 <div id="title" style="display: none;background-color: #f5f5f6;" class=" ml35 mr35">
 					<table  class="cb id_table2 w">

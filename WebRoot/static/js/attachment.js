@@ -45,5 +45,4 @@ attachment.array2Html=function(result){
 attachment.upload=function(){
 		var url = jsUtil.getRootPath()+"/"+attachment.setting.module+"/attachment/upload.comp";
 		jsUtil.dialogIframe(url,"预览",500,600,null,attachment.query)
-		$("#dialog").bind('dialogbeforeclose', attachment.query);
 };

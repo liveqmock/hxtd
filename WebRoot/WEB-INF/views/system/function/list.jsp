@@ -111,38 +111,37 @@ function formReset(){
 					onsubmit="return false;">
 					<table class="fl mt5 w">
 						<tr>
-							<td class="f14" align="right" width="9%">
+							<td class="f14" align="right" width="6%">
 								功能编号：
 							</td>
-							<td class="f14" align="left" width="18%">
+							<td class="f14" align="left" width="16%">
 								<input type="text" name="search_LIKE_code" id="code"
 									class="text_input1" value="" />
 							</td>
-							<td class="f14" align="right" width="9%">
+							<td class="f14" align="right" width="6%">
 								功能名：
 							</td>
-							<td class="f14" align="left" width="18%">
+							<td class="f14" align="left" width="16%">
 								<input type="text" name="search_LIKE_name" id="name"
 									class="text_input1" value="" />
 							</td>
-							<td class="f14" align="right" width="9%">
+							<td class="f14" align="right" width="6%">
 								调用入口：
 							</td>
-							<td class="f14" align="left" width="18%">
+							<td class="f14" align="left" width="16%">
 								<input type="text" name="search_LIKE_url" id="url"
 									class="text_input1" value="" />
 								<input type="hidden" id="menu_id" name="search_EQ_menu.id" />
 							</td>
-							<td width="15%">
+							<td width="8%">
 								<a href="javascript:void(0)"
-									class="ml35 block c_white lh25 submit"><b
+									class=" block c_white lh25 submit"><b
 									class="allbtn_l block fl"></b><b
 									class="allbtn_r pr13 block fl w_auto f14">查&nbsp&nbsp询</b>
 								</a>
 								<a href="javascript:formReset()"
 									class="reset block dump_btn globle_img fl ml10"></a>
 							</td>
-							<td class="f14" align="right" width="7%"></td>
 						</tr>
 						<tags:paginationparams page="${page}"></tags:paginationparams>
 					</table>

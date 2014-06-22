@@ -25,6 +25,7 @@ $(function(){
 			fileTypeDesc:'文件格式有误',
 			fileSizeLimit:"5MB",
 			buttonText:"浏览...",
+			simUploadLimit: 5,
 			hideButton:true,
 			width:80,
 			height:20,
@@ -35,7 +36,8 @@ $(function(){
 				 var dictId=$("#dict").val();
 				 var data = moduleId+","+dictId;
                  $('#att').uploadify("settings", "formData", { 'data': data});
-             }
+             },
+             'onUploadSuccess' : parent.attachment.query  
 	});
 });
 function upload(){
@@ -44,7 +46,7 @@ function upload(){
 		$("#type").text("请选择一个类型");	
 	}else{
 		$("#type").text("");	
-		$('#att').uploadify('upload');
+		$('#att').uploadify('upload', '*');
 	}
 }
 function stop(){

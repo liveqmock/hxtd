@@ -33,7 +33,6 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import java.io.IOException;
-import java.io.PrintWriter;
 import java.util.List;
 import java.util.Map;
 
@@ -46,7 +45,7 @@ import java.util.Map;
 @Controller
 @RequestMapping(value = "/system/user")
 @SessionAttributes(value = {Constant.VS_USER_ID, Constant.VS_USER_NAME, Constant.VS_USER,
-        Constant.VS_ORG_ID, Constant.VS_ORG_ORDER_MIN, Constant.VS_ORG_ORDER_MAX, Constant.VS_ORG,
+        Constant.VS_ORG_ID, Constant.VS_ORG, Constant.VS_DATASHIFT,
         Constant.VS_MENUS, Constant.VS_ROLES, Constant.VS_FUNCTIONS, Constant.VS_COMPONENTS})
 @SuppressWarnings("unchecked")
 public class UserController {
@@ -88,14 +87,13 @@ public class UserController {
         Organization organization = (Organization) model.get(Constant.VS_ORG);
         List<Organization> organizations = organizationService.findChildrenById(organization.getId());
         organizations.add(organization);
-        model.addAttribute("organizationTree", JsonMapper.nonEmptyMapper().toJson(TreeNodeConverter.convert(organizations)));
+        String organizationTree = JsonMapper.nonEmptyMapper().toJson(TreeNodeConverter.convert(organizations));
+        model.addAttribute("organizationTree", organizationTree);
 
         logger.info("存储表单默认值");
-        Long organizationId = (Long) model.get(Constant.VS_ORG_ID);
-        model.addAttribute("organizationId", organizationId);
-        Long organizationOrder = (Long) model.get(Constant.VS_ORG_ORDER_MIN);
-        model.addAttribute("organizationOrder", organizationOrder);
-        logger.debug("组织主键编号“{}”", organizationId);
+        model.addAttribute("organizationId", organization.getId());
+        model.addAttribute("organizationOrder", organization.getOrder());
+        logger.debug("组织主键编号“{}”", organization.getId());
 
         page.setHibernateOrderBy("modifiedTime");
         page.setHibernateOrder("desc");
@@ -106,7 +104,7 @@ public class UserController {
 
     @ResponseBody
     @RequestMapping(value = "/query.do")
-    public String query(HttpServletRequest request, Long organizationId, HibernatePage<User> page) throws NoSuchFieldException, JsonProcessingException {
+    public String query(HttpServletRequest request, Long organizationId, HibernatePage<User> page, ModelMap modelMap) throws NoSuchFieldException, JsonProcessingException {
         logger.info("查询用户信息");
 
         logger.info("解析页面查询条件");
@@ -117,9 +115,8 @@ public class UserController {
         logger.debug("查询条件数目“{}”", searchParams.size());
 
         logger.info("查询分页列表信息");
-        page = userService.findPage(searchParams, page, organizationId);
+        page = userService.findPage(searchParams, page, (User) modelMap.get(Constant.VS_USER), organizationId);
         logger.debug("列表信息数目“{}”", page.getResult().size());
-
 
         logger.info("转换为TDO格式");
         JsonDto jsonDto = new JsonDto();
@@ -148,8 +145,7 @@ public class UserController {
         model.addAttribute("jobsituations", jobsituation);
         logger.debug("工作状态数目“{}”", jobsituation.size());
 
-        Long orderMin = (Long) model.get(Constant.VS_ORG_ORDER_MIN);
-        List<Organization> organizations = organizationService.findSector(orderMin, organizationOrder);
+        List<Organization> organizations = organizationService.findSector((Long) model.get(Constant.VS_ORG_ID), organizationOrder);
         model.addAttribute("organizationTree", JsonMapper.nonEmptyMapper().toJson(TreeNodeConverter.convert(organizations)));
     }
 
@@ -209,8 +205,8 @@ public class UserController {
         logger.info("存储表单默认值");
         User user = userService.getById(id);
 
-        Long orderMin = (Long) model.get(Constant.VS_ORG_ORDER_MIN);
-        List<Organization> organizations = organizationService.findSector(orderMin, user.getOrganization().getOrder());
+        Organization organization = (Organization) model.get(Constant.VS_ORG);
+        List<Organization> organizations = organizationService.findSector(organization.getOrder(), user.getOrganization().getOrder());
         model.addAttribute("organizationTree", JsonMapper.nonEmptyMapper().toJson(TreeNodeConverter.convert(organizations)));
 
         model.addAttribute("user", user);
@@ -490,21 +486,10 @@ public class UserController {
      */
     @RequestMapping(value = "/toQueryPage.comp")
     public String toOwnerLstPage(
-            @RequestParam(value = "pageNo", defaultValue = "1") int pageNumber,
-            @RequestParam(value = "pageSize", defaultValue = "10") int pageSize,
-            @RequestParam(value = "pageOrderBy", defaultValue = "createTime") String orderBy,
-            @RequestParam(value = "order", defaultValue = "asc") String order,
-            HttpServletRequest request, ModelMap model) throws NoSuchFieldException {
-        Map<String, Object> searchParams = Servlets.getParametersStartingWith(request, "search_");
-        Search.clearBlankValue(searchParams);
-        HibernatePage<User> page = new HibernatePage<User>(pageNumber, pageSize);
-        page.setHibernateOrderBy(orderBy);
-        page.setHibernateOrder(order);
-        page = userService.findPage(searchParams, page, (Long) model.get(Constant.VS_ORG_ID));
-
-        JsonDto jsonDto = new JsonDto();
-        jsonDto.setResult(page);
-        model.addAttribute("jsondata", jsonDto);
+            HibernatePage<User> page,
+            ModelMap model) {
+        model.addAttribute("page", page);
+        model.addAttribute("orgId", model.get(Constant.VS_ORG_ID));
 
         return "/system/user/listcomp";
     }

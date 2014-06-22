@@ -47,7 +47,7 @@ import com.baihui.hxtd.soa.util.JsonDto;
  */
 @Controller
 @SessionAttributes(value = {Constant.VS_USER_ID, Constant.VS_USER_NAME, Constant.VS_USER,
-        Constant.VS_ORG_ID, Constant.VS_ORG_ORDER_MIN, Constant.VS_ORG_ORDER_MAX, Constant.VS_ORG,
+        Constant.VS_ORG_ID, Constant.VS_DATASHIFT, Constant.VS_ORG,
         Constant.VS_MENUS, Constant.VS_ROLES, Constant.VS_FUNCTIONS, Constant.VS_COMPONENTS})
 @RequestMapping(value = "/customer/customer")
 public class CustomerController {

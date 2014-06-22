@@ -17,6 +17,10 @@ public class ListModel<T> extends Result{
 		this.list = list;
 	}
 	
+	public ListModel(List<T> list){
+		this.list=list;
+	}
 	
-	
+	public ListModel(){
+	}
 }

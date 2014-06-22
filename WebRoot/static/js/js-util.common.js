@@ -2,6 +2,59 @@ window.jsUtil = window.jsUtil || {};
 
 function Grid() {}
 
+Grid.defaults = {
+    containerSelector: ".listcontainer",
+
+    formSelector: "form",
+    formPageNoSelector: "[name=hibernatePageNo]",
+    formPageSizeSelector: "[name=hibernatePageSize]",
+    formPageOrderBySelector: "[name=hibernateOrderBy]",
+    formPageOrderSelector: "[name=hibernateOrder]",
+    resultSelector: ".list",
+    resultTemplateId: "template-tbody",
+
+    paginationActive: true,//是否启用分页
+    paginationCountLimit: 1,//分页的最低限制条数
+    paginationContainerSelector: ".pagination",
+    paginationTemplateId: "template-pagination",
+    paginationSelector: ".paginationbar",
+    sizeSelector: ".page-size",
+    toPageSelector: ".pagenobar",
+    firstSelector: ".page-first",
+    preSelector: ".page-pre",
+    noSelector: ".page-no",
+    anyoneSelector: ".page-anyone",
+    nextSelector: ".page-next",
+    lastSelector: ".page-last",
+    refreshSelector: ".page-rel",
+    totalPagesSelector: ".page-totalpages",
+
+    sortableSelector: ".sortable",
+    orderBySelector: ".orderby",
+    orderSelector: ".order",
+    sortAscUnselectedClass: "sort_btm",
+    sortAscSelectedClass: "sort_btm_orange",
+    sortDescUnselectedClass: "sort_top",
+    sortDescSelectedClass: "sort_top_orange",
+    sortableTemplateId: "template-sort",
+
+    enableButtonClass: ["allbtn_l", "allbtn_r"],
+    disableButtonClass: ["allbtnno_l", "allbtnno_r"],
+    submitSelector: ".submit",
+    resetSelector: ".reset",
+    checkAllSelector: ".checkall",
+    checkItemSelector: ".checkitem",
+    deleteSomeSelector: ".deletesome",
+    deleteCallback: null,
+    deleteOneSelector: ".delete",
+    authorizationSelector: ".authorization",
+    resetPasswordSelector: ".resetpassword",
+    enableSelector: ".enable",
+    disableSelector: ".disable",
+    exportSelector: ".export",
+    exportFiledSelector: "[name^=search]"
+}
+
 Grid.prototype = {
     /**初始化对象*/
     init: function (options) {
@@ -470,59 +523,6 @@ Grid.prototype = {
         $(this.options.resetSelector, this.container).click(function () {_this.form[0].reset();});
         return this;
     }
-}
-
-Grid.defaults = {
-    containerSelector: ".listcontainer",
-
-    formSelector: "form",
-    formPageNoSelector: "[name=hibernatePageNo]",
-    formPageSizeSelector: "[name=hibernatePageSize]",
-    formPageOrderBySelector: "[name=hibernateOrderBy]",
-    formPageOrderSelector: "[name=hibernateOrder]",
-    resultSelector: ".list",
-    resultTemplateId: "template-tbody",
-
-    paginationActive: true,//是否启用分页
-    paginationCountLimit: 1,//分页的最低限制条数
-    paginationContainerSelector: ".pagination",
-    paginationTemplateId: "template-pagination",
-    paginationSelector: ".paginationbar",
-    sizeSelector: ".page-size",
-    toPageSelector: ".pagenobar",
-    firstSelector: ".page-first",
-    preSelector: ".page-pre",
-    noSelector: ".page-no",
-    anyoneSelector: ".page-anyone",
-    nextSelector: ".page-next",
-    lastSelector: ".page-last",
-    refreshSelector: ".page-rel",
-    totalPagesSelector: ".page-totalpages",
-
-    sortableSelector: ".sortable",
-    orderBySelector: ".orderby",
-    orderSelector: ".order",
-    sortAscUnselectedClass: "sort_btm",
-    sortAscSelectedClass: "sort_btm_orange",
-    sortDescUnselectedClass: "sort_top",
-    sortDescSelectedClass: "sort_top_orange",
-    sortableTemplateId: "template-sort",
-
-    enableButtonClass: ["allbtn_l", "allbtn_r"],
-    disableButtonClass: ["allbtnno_l", "allbtnno_r"],
-    submitSelector: ".submit",
-    resetSelector: ".reset",
-    checkAllSelector: ".checkall",
-    checkItemSelector: ".checkitem",
-    deleteSomeSelector: ".deletesome",
-    deleteCallback: null,
-    deleteOneSelector: ".delete",
-    authorizationSelector: ".authorization",
-    resetPasswordSelector: ".resetpassword",
-    enableSelector: ".enable",
-    disableSelector: ".disable",
-    exportSelector: ".export",
-    exportFiledSelector: "[name^=search]"
 }
 
 /**删除数据后同步左侧树回调函数*/

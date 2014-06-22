@@ -111,9 +111,8 @@ public class HibernateDAOImpl<T, PK extends Serializable> implements
      */
     public void delete(final PK id) {
         Assert.notNull(id, "id不能为空");
-        String hql = "update " + entityClass.getSimpleName() + " entity" +
-                " set entity.isDeleted=true where entity.id =?";
-        batchExecute(hql, id);
+        String hql = String.format("update %s entity set entity.isDeleted=true, entity.modifiedTime=? where entity.id =?", entityClass.getSimpleName());
+        batchExecute(hql, new Date(), id);
         logger.debug("delete entity {},id is {}", entityClass.getSimpleName(), id);
     }
 
@@ -122,9 +121,8 @@ public class HibernateDAOImpl<T, PK extends Serializable> implements
      */
     public void delete(final PK... ids) {
         Assert.notNull(ids, "id不能为空");
-        String hql = "update " + entityClass.getSimpleName() + " entity" +
-                " set entity.isDeleted=true where entity.id in (:id)";
-        getSession().createQuery(hql).setParameterList("id", ids).executeUpdate();
+        String hql = String.format("update %s entity set entity.isDeleted=true, entity.modifiedTime=:modifyTime where entity.id in (:id)", entityClass.getSimpleName());
+        getSession().createQuery(hql).setParameter("modifyTime", new Date()).setParameterList("id", ids).executeUpdate();
         logger.debug("delete entity {},id is {}", entityClass.getSimpleName(), ids);
     }
 
@@ -224,7 +222,7 @@ public class HibernateDAOImpl<T, PK extends Serializable> implements
      *
      * @param criteria 离线查询条件
      */
-    public <X> List<X> find(final DetachedCriteria criteria,int limit) {
+    public <X> List<X> find(final DetachedCriteria criteria, int limit) {
         Criteria executableCriteria = criteria.getExecutableCriteria(getSession());
         executableCriteria.setMaxResults(limit);
         return (List<X>) executableCriteria.list();

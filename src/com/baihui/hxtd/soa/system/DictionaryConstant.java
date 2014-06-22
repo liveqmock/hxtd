@@ -57,5 +57,13 @@ public class DictionaryConstant {
 	/**期限单位*/
 	public final static String VC_DEADLINEUNIT = "期限单位";
 
+    /**用户数据存储状态*/
+    public final static String USER_STORESTATUS = "010404";
+    /**最新的*/
+    public final static String USER_STORESTATUS_NEWEST = "01040401";
+    /**延迟的*/
+    public final static String USER_STORESTATUS_DELAYED = "01040402";
+
+
 
 }

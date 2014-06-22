@@ -2,8 +2,9 @@ package com.baihui.hxtd.soa.system.dao;
 
 
 import com.baihui.hxtd.soa.base.orm.hibernate.HibernateDAOImpl;
-import com.baihui.hxtd.soa.base.utils.serial.TierSerials;
+import com.baihui.hxtd.soa.system.DictionaryConstant;
 import com.baihui.hxtd.soa.system.entity.User;
+import com.baihui.hxtd.soa.system.service.DataShift;
 import org.apache.commons.lang3.Range;
 import org.apache.commons.lang3.StringUtils;
 import org.hibernate.Criteria;
@@ -22,38 +23,47 @@ import java.util.List;
  * @date 2014/4/24
  */
 @Repository
+@SuppressWarnings("unchecked")
 public class UserDao extends HibernateDAOImpl<User, Long> {
 
     /**
-     * 可访问的数据
+     * 权限内数据
      * 1.当前用户
      * 2.下级组织
      */
-    public static Criterion visibleData(String userAlias, String orgAlias, User user) {
-        Criterion id = Restrictions.eq(userAlias + ".id", user.getId());
-        Range<Long> range = TierSerials.getYoungerRange(user.getOrganization().getOrder(), 2);
-        Criterion order = Restrictions.between(orgAlias + ".order", range.getMinimum(), range.getMaximum());
+    private Criterion priviData(DataShift dataShift) {
+        Criterion id = Restrictions.eq(dataShift.getUserAlias() + ".id", dataShift.getUserId());
+        Range<Long> range = dataShift.getOrderRange();
+        Criterion order = Restrictions.between(dataShift.getOrganizationAlias() + ".order", range.getMinimum(), range.getMaximum());
         return Restrictions.or(id, order);
     }
 
     /**
-     * 可访问的数据
+     * 权限内数据
      * 1.当前用户
      * 2.下级组织
      */
-    public static Criterion visibleData(User user) {
-        return visibleData("creator", "organization", user);
+    public DetachedCriteria priviData(DetachedCriteria criteria, DataShift dataShift) {
+        //数据管理员不做限制
+        if (dataShift.getIsDataManager()) {
+            return criteria;
+        }
+
+        criteria.createAlias(dataShift.getUserFieldName(), dataShift.getUserAlias());
+        criteria.createAlias(dataShift.getUserAlias() + "." + dataShift.getOrganizationFieldName(), dataShift.getOrganizationAlias());
+        criteria.add(priviData(dataShift));
+        return criteria;
     }
 
     /**
      * 可访问的数据
      * 1.当前用户
      * 2.下级组织
+     * 3.未删除
      */
-    public static DetachedCriteria visibleData(DetachedCriteria criteria, User user) {
-        criteria.createAlias("creator", "creator");
-        criteria.createAlias("creator.organization", "organization");
-        criteria.add(visibleData(user));
+    public DetachedCriteria visibleData(DetachedCriteria criteria, DataShift dataShift) {
+        priviData(criteria, dataShift);
+        criteria.add(Restrictions.eq("isDeleted", false));
         return criteria;
     }
 
@@ -124,11 +134,11 @@ public class UserDao extends HibernateDAOImpl<User, Long> {
     /**
      * 更新用户数据存储状态通过主键编号
      */
-    public int updateStoreStatusById(Long id, Long storeStatusId) {
+    public int updateStoreStatusById(Long id, String storeStatusValue) {
         logger.info("更新用户数据存储状态通过主键编号");
         logger.debug("主键编号“{}”", id);
-        String hql = "update User user set user.storeStatus.id=? where user.id=?";
-        return batchExecute(hql, storeStatusId, id);
+        String hql = "update User user set user.storeStatus=(select dic from Dictionary dic where dic.value=?) where user.id=?";
+        return batchExecute(hql, storeStatusValue, id);
     }
 
     /**
@@ -137,7 +147,7 @@ public class UserDao extends HibernateDAOImpl<User, Long> {
      */
     public int resetDataStoreStatusById(Long id) {
         logger.info("重置用户的数据存储状态");
-        return updateStoreStatusById(id, Long.parseLong("01040401"));
+        return updateStoreStatusById(id, DictionaryConstant.USER_STORESTATUS_NEWEST);
     }
 
     /**
@@ -146,7 +156,7 @@ public class UserDao extends HibernateDAOImpl<User, Long> {
      */
     public int updateDataStoreStatusById(Long id) {
         logger.info("更新用户的数据存储状态");
-        return updateStoreStatusById(id, Long.parseLong("01040402"));
+        return updateStoreStatusById(id, DictionaryConstant.USER_STORESTATUS_DELAYED);
     }
 
     /**
@@ -154,8 +164,8 @@ public class UserDao extends HibernateDAOImpl<User, Long> {
      */
     public int updateManagerStoreStatus() {
         logger.info("更新管理员用户数据存储状态");
-        String hql = "update User user set user.storeStatus.id=01040402 where user.isManager=true";
-        return batchExecute(hql);
+        String hql = "update User user set user.storeStatus=(select dic from Dictionary dic where dic.value=?) where user.isManager=true";
+        return batchExecute(hql, DictionaryConstant.USER_STORESTATUS_DELAYED);
     }
 
     /**
@@ -163,7 +173,7 @@ public class UserDao extends HibernateDAOImpl<User, Long> {
      */
     public int updateAllStoreStatus() {
         logger.info("更新所有用户数据存储状态");
-        String hql = "update User user set user.storeStatus.id=01040402";
-        return batchExecute(hql);
+        String hql = "update User user set user.storeStatus=(select dic from Dictionary dic where dic.value=?)";
+        return batchExecute(hql, DictionaryConstant.USER_STORESTATUS_DELAYED);
     }
 }

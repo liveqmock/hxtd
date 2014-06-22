@@ -12,7 +12,6 @@ import com.baihui.hxtd.soa.system.entity.Menu;
 import com.baihui.hxtd.soa.system.entity.User;
 import com.baihui.hxtd.soa.system.service.*;
 import org.apache.commons.collections.BidiMap;
-import org.apache.commons.lang3.Range;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Controller;
@@ -28,7 +27,6 @@ import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 import java.io.IOException;
-import java.util.Comparator;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -42,7 +40,7 @@ import java.util.Map;
 @Controller
 @RequestMapping
 @SessionAttributes(value = {Constant.VS_USER_ID, Constant.VS_USER_NAME, Constant.VS_USER,
-        Constant.VS_ORG_ID, Constant.VS_ORG_ORDER_MIN, Constant.VS_ORG_ORDER_MAX, Constant.VS_ORG,
+        Constant.VS_ORG_ID, Constant.VS_DATASHIFT, Constant.VS_ORG,
         Constant.VS_MENUBAR_FIRST_MENUS, Constant.VS_FUNCTIONS, Constant.VS_COMPONENTS})
 public class IdentityAuthenticationController {
 
@@ -126,23 +124,14 @@ public class IdentityAuthenticationController {
 
         logger.info("session中存储信息");
         session.setAttribute(Constant.VS_USER_ID, persistUser.getId());
-        logger.debug("用户编号“{}”->“{}”", Constant.VS_USER_ID, persistUser.getId());
         session.setAttribute(Constant.VS_USER_NAME, persistUser.getName());
-        logger.debug("用户名“{}”->“{}”", Constant.VS_USER_NAME, persistUser.getName());
         session.setAttribute(Constant.VS_USER, persistUser);
-        logger.debug("用户“{}”->“{}”", Constant.VS_USER, persistUser.getId());
         session.setAttribute(Constant.VS_ORG_ID, persistUser.getOrganization().getId());
-        logger.debug("组织编号“{}”->“{}”", Constant.VS_ORG_ID, persistUser.getOrganization().getId());
-        Long order = persistUser.getOrganization().getOrder();
-        session.setAttribute(Constant.VS_ORG_ORDER_RANGE, TierSerials.getYoungerRange(order, orgTierLength));
-        session.setAttribute(Constant.VS_ORG_ORDER_MIN, order);
-        logger.debug("组织序号最小值“{}”->“{}”", Constant.VS_ORG_ORDER_MIN, order);
-        TierSerial tierSerial = TierSerials.parse(order, orgTierLength);
-        long max = order + tierSerial.getIncrease() - 1;
-        session.setAttribute(Constant.VS_ORG_ORDER_MAX, max);
-        logger.debug("组织序号最大值“{}”->“{}”", Constant.VS_ORG_ORDER_MAX, max);
         session.setAttribute(Constant.VS_ORG, persistUser.getOrganization());
-        logger.debug("组织“{}”->“{}”", Constant.VS_ORG, persistUser.getOrganization().getId());
+
+        Long order = persistUser.getOrganization().getOrder();
+        DataShift dataShift = new DataShift(roleService.isDataManager(persistUser), persistUser.getId(), TierSerials.getYoungerRange(order, orgTierLength));
+        session.setAttribute(Constant.VS_DATASHIFT, dataShift);
 
         List<Menu> menus = menuService.findValid(persistUser);
         menus = menuService.fullParent(menus);
@@ -184,15 +173,18 @@ public class IdentityAuthenticationController {
         session.setAttribute(Constant.VS_MENUBAR_SECOUND_MENUS, menuService.groupByParentId(menubarSecoundMenus));
 
         logger.info("session中存储脚本信息");
+        Map<String, Object> jsInfo = new HashMap<String, Object>();
+        jsInfo.put("ctx", request.getContextPath());
         Map<String, Object> jsSession = new HashMap<String, Object>();
         jsSession.put("userId", persistUser.getId());
         jsSession.put("userName", persistUser.getName());
         jsSession.put("orgId", persistUser.getOrganization().getId());
         jsSession.put("ctx", request.getContextPath());
+        jsInfo.put("session", jsSession);
 
-        String jsSessionJson = "window.baseInfo=window.baseInfo||{};window.baseInfo.session=" + HibernateAwareObjectMapper.DEFAULT.writeValueAsString(jsSession);
-        session.setAttribute(Constant.VS_JS_GLOBALINFO, jsSessionJson);
-        logger.debug("基本脚本信息“{}”->“{}”", Constant.VS_JS_GLOBALINFO, jsSessionJson);
+        String jsInfoStr = "window.baseInfo=" + HibernateAwareObjectMapper.DEFAULT.writeValueAsString(jsInfo);
+        session.setAttribute(Constant.VS_JS_GLOBALINFO, jsInfoStr);
+        logger.debug("基本脚本信息“{}”->“{}”", Constant.VS_JS_GLOBALINFO, jsInfoStr);
 
         userService.resetDataStoreStatus(persistUser.getId());
 

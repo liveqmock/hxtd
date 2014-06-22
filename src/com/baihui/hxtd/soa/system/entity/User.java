@@ -41,7 +41,7 @@ public class User implements Serializable, Cloneable {
     private Boolean isActive;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "STORE_STATUS")
+    @JoinColumn(name = "STORE_STATUS", updatable = false)
     private Dictionary storeStatus;
 
     @Column(name = "USER_NAME", length = 32, nullable = false)

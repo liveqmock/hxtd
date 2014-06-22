@@ -1,5 +1,5 @@
 jQuery.extend(jQuery.validator.messages, {
-    required: "必选字段",
+    required: "必填字段",
     remote: "请修正该字段",
     email: "邮箱格式错误",
     url: "请输入合法的网址",
@@ -33,11 +33,10 @@ jQuery.validator.addMethod("byteRangeLength",
         return this.optional(element)
             || (length >= param[0] && length <= param[1]);
     }, "请确保输入的值在3-15个字节之间(一个中文字算2个字节)");
-
 // 身份证号码验证       
 jQuery.validator.addMethod("isIdCardNo", function (value, element) {
     return this.optional(element) || isIdCardNo(value);
-}, "请正确输入您的身份证号码");
+}, "身份证号码格式错误");
 
 // 手机号码验证       
 jQuery.validator.addMethod("isMobile", function (value, element) {
@@ -64,7 +63,7 @@ jQuery.validator.addMethod("isPhone", function (value, element) {
 jQuery.validator.addMethod("isZipCode", function (value, element) {
     var tel = /^[0-9]{6}$/;
     return this.optional(element) || (tel.test(value));
-}, "请正确填写您的邮政编码");
+}, "邮政编码格式错误");
 
 //必选下拉列表验证
 jQuery.validator.addMethod("requiredSelect", function (value, element) {

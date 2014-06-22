@@ -1,17 +1,24 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
+<%@ taglib prefix="tags" tagdir="/WEB-INF/tags" %>
 <c:set var="ctx" value="${pageContext.request.contextPath}"/>
 <html>
 <head>
-<title>用户列表页</title>
-<link rel="stylesheet" href="${ctx}/static/css/css.css" type="text/css"></link>
+<title>客户组件列表</title>
+<link rel="stylesheet" href="${ctx}/static/css/public/common.css" type="text/css"/>
+<link rel="stylesheet" href="${ctx}/static/css/public/reset.css" type="text/css"/>
+<link rel="stylesheet" href="${ctx}/static/css/recommend/detail.css" type="text/css"/>
+<link href="${ctx}/static/css/application.css" rel="stylesheet" type="text/css"/>
 <script type="text/javascript" src="${ctx}/static/js/jquery.min.js"></script>
-<script type="text/javascript" src="${ctx}/static/js/jquery.tmpl.js"></script>
+<script type="text/javascript" src="${ctx}/static/js/jquery.form.js"></script>
+<script type="text/javascript" src="${ctx}/static/js/js-util.js"></script>
+<script type="text/javascript" src="${ctx}/static/js/commonAjax.js"></script>
+<script type="text/javascript" src="${ctx}/static/js/jquery-jtemplates.js"></script>
+<script type="text/javascript" src="${ctx}/static/js/js-util.common.js"></script>
 <script type="text/javascript">
 $(function(){
-	$(".list").empty();
-	$("#customerTemplates").tmpl(${jsondata}.result.result).appendTo('#lst');
+	new Grid().init().bindAuthorization();
 	$(".list tr").live({
 		click: function(){
 			var $ck = $(this).find(":radio"), ck = $ck.get(0);
@@ -29,26 +36,27 @@ $(function(){
 </script>
 </head>
 <body>
-<form name="user" action="${ctx}/system/user/query.do" onsubmit="return false;">
-    <div class="search" style="margin: 0px">
-        <dl class="menu3">
-            <dd>
-                <ul>
-                    <li class="w100">客户名称：</li>
-                    <li class="liw"><input type="text" name="search_LIKE_name" value="${name}"/></li>
-                    <div class="clear"></div>
-                </ul>
-                <div class="clear"></div>
-                <div class="sea_btn" style="float: right;">
-                    <a href="javascript:void(0)" class="fl chaxun submit">查询</a>
-                    <div class="clear"></div>
-                </div>
-                <div class="clear"></div>
-            </dd>
-        </dl>
-    </div>
-</form>
-    <table cellspacing="0" class="tablesorter">
+<div class="listcontainer">
+	<form name="user" action="${ctx}/system/user/query.do" onsubmit="return false;">
+	<table class="fl mt5 w">
+    	<tr>
+    		<td class="f14" align="right" width="12%">客户名称：</td>
+    		<td class="f14" align="left" width="16%"><input type="text" name="search_LIKE_name" value="${name}" class="text_input1"/></td>
+    		<td>
+    			<a href="javascript:;" class="reset block dump_btn globle_img fr ml10"></a>
+    			<a href="javascript:;" class="block c_white lh25 fr ml10 submit">
+    				<b class="allbtn_l block fl"></b>
+    				<b class="allbtn_r pr13 block fl w_auto f14">查&nbsp;&nbsp;询</b>
+    			</a>
+    		</td>
+    		<td class="f14" align="right"></td>
+    		<td class="f14" align="left"></td>
+    	</tr>
+    </table>
+    <div class="cb"></div>
+    <tags:paginationparams page="${page}"></tags:paginationparams>
+	</form>
+    <table class="cb id_table2 w pr35">
         <tr>
             <td width="5%"></td>
             <td width="25%">客户名称</td>
@@ -58,19 +66,24 @@ $(function(){
         </tr>
    </table>
    <div style="height: 270px; overflow: hidden; overflow-y:auto; background: #fff">
-   <table cellspacing="0" class="tablesorter">
-        <!-- 列表模板 -->
-        <script id="customerTemplates" type="text/x-jquery-tmpl">
-			<tr>
-        		<td width="5%"><input name="ck" type="radio" value="${'${'}id}"/></td>
-        		<td width="25%">${'${'}name}</td>
-        		<td width="25%">${'${'}phone}</td>
-        		<td width="20%">${'${'}cardNum}</td>
-        		<td width="20%">${'${'}createdTime}</td>
-    		</tr>
-    	</script>
+   <table class="cb id_table2 w pr35">
         <tbody id="lst" class="list"></tbody>
-    </table>
+   </table>
+   <div class="cb ml35 mt20 h40 pagination"></div>
+   <textarea id="template-tbody" class="template template-tbody">
+	    {#foreach $T.result as row}
+	    <tr class="{$T.row$index%2==1?'':'bg_c_blue'} w">
+           <td><input type="radio" name="ck" value="{$T.row.id}"/></td>
+           <td>{$T.row.name}</td>
+           <td>{$T.row.phone}</td>
+           <td>{$T.row.cardNum}</td>
+           <td>{$T.row.createdTime}</td>
+	    </tr>
+	    {#/for} 
+	</textarea>
+	<%@include file="/WEB-INF/template/sort.jsp" %>
+	<%@include file="/WEB-INF/template/pagination.jsp" %>
     </div>
+</div>
 </body>
 </html>

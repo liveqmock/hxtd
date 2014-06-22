@@ -7,26 +7,11 @@
 <title>市场活动信息</title>
 <link rel="stylesheet" href="${ctx}/static/css/recommend/detail.css" type="text/css"></link>
 <script type="text/javascript" src="${ctx}/static/js/jquery.validate.js"></script>
+<script type="text/javascript" src="${ctx}/static/js/jquery.metadata.js"></script>
+<script type="text/javascript" src="${ctx}/static/js/validator.js"></script>
 <script type="text/javascript" src="${ctx}/static/js/ui/jquery.ui.datepicker.js"></script>
-<style type="text/css">
-	input.error { border: 1px solid red; }
-	label.error { padding-left: 18px; color: red; }
-	img { cursor:pointer; }
-</style>
 <script type="text/javascript">
-$(function(){//初始化 
-	$("#form").validate({
-		rules: {
-			name: { required: true },
-			bossname: { required: true },
-			times: { required: true, digits:true },
-		},
-		messages: {
-			name: { required: "*请输入活动名称"},
-			bossname: { required: "*请选择负责人"},
-			times: { required: "*请输入整数", digits: "*只能输入整数"}
-		}
-	});
+$(function(){
 	$(".add").click(function(){
 		if($("#form").valid()){
 			form.action = form.action + "?redirectUri=" + encodeURI($(this).attr("redirecturi"));
@@ -110,7 +95,7 @@ function clearInputVal(obj){//清除
 		</tr>
 		<tr>
 			<td align="right"><span class="w_red">*&nbsp;</span>活动名称：</td>
-			<td align="left"><input name="name" type="text" value="${activity.name}" class="text_input3"/></td>
+			<td align="left"><input name="name" type="text" value="${activity.name}" class="text_input3 required"/></td>
 			<td align="right">状态：</td>
 			<td align="left">
 				<select name="status.id" class="select1 pr">
@@ -129,7 +114,7 @@ function clearInputVal(obj){//清除
 				<input type="text" id="start" name="beginDate" value="${beginDate}" readonly="readonly" class="text_input3 input_close1"/>
 			</td>
 			<td align="right">预计成本：</td>
-			<td align="left"><input name="predictCost" type="text" value="${activity.predictCost }" class="text_input3"/></td>
+			<td align="left"><input name="predictCost" type="text" value="${activity.predictCost }" class="text_input3 amount"/></td>
 		</tr>
 		<tr>
 			<td align="right">结束日期：</td>
@@ -139,20 +124,20 @@ function clearInputVal(obj){//清除
 				<input type="text" id="end" name="endDate" value="${endDate}" readonly="readonly" class="text_input3 input_close1"/>
 			</td>
 			<td align="right">实际成本：</td>
-			<td align="left"><input type="text" name="realityCost" value="${activity.realityCost }" class="text_input3"/></td>
+			<td align="left"><input type="text" name="realityCost" value="${activity.realityCost }" class="text_input3 amount"/></td>
 		</tr>
 		<tr>
 			<td align="right">预期效果：</td>
 			<td align="left"><input name="expectEffect" type="text" value="${activity.expectEffect }" class="text_input3"/></td>
 			<td align="right">活动次数：</td>
-			<td align="left"><input name="times" type="text" value="${activity.times }" class="text_input3"/></td>
+			<td align="left"><input name="times" type="text" value="${activity.times }" class="text_input3 digits"/></td>
 		</tr>
 		<tr>
 			<td align="right">期望成功率%：</td>
-			<td align="left"><input type="text" name="expectSuccessRate" value="${activity.expectSuccessRate }" class="text_input3"/></td>
+			<td align="left"><input type="text" name="expectSuccessRate" value="${activity.expectSuccessRate }" class="text_input3 amount"/></td>
 			<td align="right"><span class="w_red">*&nbsp;</span>负责人：</td>
 			<td align="left">
-				<input type="text" id="txt_boss" name="bossname" value="${activity.bossHead.name }" readonly="readonly" class="text_input3"/>
+				<input type="text" id="txt_boss" name="bossname" value="${activity.bossHead.name }" readonly="readonly" class="text_input3 required"/>
 				<input type="hidden"id="hide_boss_id" name="bossHead.id" value="${activity.bossHead.id }"/>
 				<i class="s_inquiry globle_img block_inline ml5 vm cp" title="搜索责任人" onclick="searchData('boss');"></i>
 				<i class="dump_btn globle_img block_inline ml5 vm cp" title="清除" onclick="clearInputVal(this);"></i>

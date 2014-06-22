@@ -71,4 +71,4 @@
     </ul>
 </div>
 <!--当前页及功能条结束-->
-<div id="point4Ajax" style="padding:5px;position: fixed;z-index:100;top:40%;left:0;border-radius:4px;-moz-border-radius:4px;-webkit-border-radius:4px;-o-border-radius:4px; display:block;"></div>
+<div id="point4Ajax" style="padding:5px;position: fixed;z-index:101;top:40%;left:0;border-radius:4px;-moz-border-radius:4px;-webkit-border-radius:4px;-o-border-radius:4px; display:block;"></div>

@@ -11,10 +11,6 @@
 <html>
 <head>
     <title>公告详细信息</title>
-   <style type="text/css">
-	input.error { border: 1px solid red }
-	label.error { padding-left: 18px; color: red; }
-   </style>
     <link href="${ctx}/static/css/stressing/detail.css" rel="stylesheet" type="text/css" />
     <script type="text/javascript" src="${ctx}/static/js/jquery.validate.js"></script>
     <script type="text/javascript" src="${ctx}/static/js/validator.js"></script>

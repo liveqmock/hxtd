@@ -18,6 +18,8 @@ import com.baihui.hxtd.soa.base.orm.hibernate.HibernatePage;
 import com.baihui.hxtd.soa.base.utils.Search;
 import com.baihui.hxtd.soa.customer.dao.LeadDao;
 import com.baihui.hxtd.soa.customer.entity.Lead;
+import com.baihui.hxtd.soa.system.dao.UserDao;
+import com.baihui.hxtd.soa.system.service.DataShift;
 
 /**
  * 
@@ -38,6 +40,9 @@ public class LeadService {
 
 	@Resource
 	private LeadDao leadDao;
+	
+	@Resource
+	private UserDao userDao;
 
 	/**
 	 * 根据id查询Lead对象
@@ -82,39 +87,35 @@ public class LeadService {
 	 * 分页查找
 	 */
 	@Transactional(readOnly = true)
-	public HibernatePage<Lead> findPage(Map<String, Object> searchParams,
+	public HibernatePage<Lead> findPage(Map<String, Object> searchParams,DataShift dataShift,
 			HibernatePage<Lead> page) throws NoSuchFieldException {
 		logger.info("分页查找线索");
-		DetachedCriteria criteria = DetachedCriteria.forClass(Lead.class);
-		criteria.add(Restrictions.eq("isDeleted", false));
-		criteria.setFetchMode("source", FetchMode.JOIN);
-		criteria.setFetchMode("status", FetchMode.JOIN);
-		criteria.setFetchMode("industry", FetchMode.JOIN);
-		criteria.setFetchMode("cardType", FetchMode.JOIN);
-		criteria.setFetchMode("owner", FetchMode.JOIN);
-		criteria.setFetchMode("creator", FetchMode.JOIN);
-		criteria.setFetchMode("modifier", FetchMode.JOIN);
-		Map<String, SearchFilter> filters = Search.parse(searchParams);
-		Search.buildCriteria(filters, criteria, Lead.class);
+		DetachedCriteria criteria = biuldQuery(searchParams,dataShift,Lead.class);
 		return leadDao.findPage(page, criteria);
 	}
-
-	public List<Lead> export(Map<String, Object> searchParams)
+	
+	public List<Lead> export(Map<String, Object> searchParams,DataShift dataShift)
 			throws NoSuchFieldException {
-		DetachedCriteria criteria = DetachedCriteria.forClass(Lead.class);
-		criteria.add(Restrictions.eq("isDeleted", false));
-		criteria.setFetchMode("source", FetchMode.JOIN);
-		criteria.setFetchMode("status", FetchMode.JOIN);
-		criteria.setFetchMode("industry", FetchMode.JOIN);
-		criteria.setFetchMode("cardType", FetchMode.JOIN);
-		criteria.setFetchMode("owner", FetchMode.JOIN);
-		criteria.setFetchMode("creator", FetchMode.JOIN);
-		criteria.setFetchMode("modifier", FetchMode.JOIN);
-		Map<String, SearchFilter> filters = Search.parse(searchParams);
-		Search.buildCriteria(filters, criteria, Lead.class);
+		DetachedCriteria criteria = biuldQuery(searchParams,dataShift,Lead.class);
 		return leadDao.find(criteria, 3000);
 	}
 
+	
+	@SuppressWarnings("unchecked")
+	private DetachedCriteria biuldQuery(Map<String, Object> searchParams,DataShift dataShift,Class entityClass) throws NoSuchFieldException{
+		DetachedCriteria criteria = DetachedCriteria.forClass(entityClass);
+		criteria.setFetchMode("source", FetchMode.JOIN);
+		criteria.setFetchMode("status", FetchMode.JOIN);
+		criteria.setFetchMode("industry", FetchMode.JOIN);
+		criteria.setFetchMode("cardType", FetchMode.JOIN);
+		criteria.setFetchMode("owner", FetchMode.JOIN);
+		criteria.setFetchMode("creator", FetchMode.JOIN);
+		criteria.setFetchMode("modifier", FetchMode.JOIN);
+		Map<String, SearchFilter> filters = Search.parse(searchParams);
+		userDao.visibleData(criteria, dataShift);
+		Search.buildCriteria(filters, criteria, entityClass);
+		return criteria;
+	}
 	/**
 	 * delete(删除线索信息)
 	 * 
@@ -135,6 +136,14 @@ public class LeadService {
 
 	public void setLeadDao(LeadDao leadDao) {
 		this.leadDao = leadDao;
+	}
+
+	public UserDao getUserDao() {
+		return userDao;
+	}
+
+	public void setUserDao(UserDao userDao) {
+		this.userDao = userDao;
 	}
 
 }

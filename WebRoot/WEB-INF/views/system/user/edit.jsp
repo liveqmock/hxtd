@@ -110,7 +110,7 @@
                             <td align="right" width="15%">性别：</td>
                             <td align="left">
                                 <c:forEach items="${sexs}" var="item">
-                                    <label><input type="radio" name="sex" value="${item.id}" ${item.id==user.sex.id?"checked":""}>${item.key}</label>
+                                    <label><input type="radio" name="sex.id" value="${item.id}" ${item.id==user.sex.id?"checked":""}>${item.key}</label>
                                 </c:forEach>
                             </td>
                         </tr>

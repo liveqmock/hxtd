@@ -11,7 +11,7 @@ $(function(){
 	//如果没有，追加一个到body的底部
 	var div = $('#point4Ajax');
 	if(div.length <= 0){
-		$('body').append('<div id="point4Ajax" style="padding:5px;position:absolute;z-index:99999;top:0;left:0;border-radius:4px;-moz-border-radius:4px;-webkit-border-radius:4px;-o-border-radius:4px;"></div>');
+		$('body').append('<div id="point4Ajax" style="padding:5px;position: fixed;z-index:101;top:40%;left:0;border-radius:4px;-moz-border-radius:4px;-webkit-border-radius:4px;-o-border-radius:4px; display:block;"></div>');
 	}
 	RcmsAjax.global.pointDiv = $('#point4Ajax', window.top.document);
 });
@@ -114,7 +114,6 @@ RcmsAjax._ajax =  function (_excuteMsgFlag, _url, _successCallBack, _completeCal
 						showMsg(result);
 					}
 					window.focus();
-//					alert("您太长时间没有操作，请重新登录!");
 					return false;
 				}
 				if (_excuteMsgFlag) {
@@ -134,7 +133,7 @@ RcmsAjax._ajax =  function (_excuteMsgFlag, _url, _successCallBack, _completeCal
 						showMsg(result);
 					}
 					window.focus();
-					alert("您太长时间没有操作，请重新登录!");
+//					alert("您太长时间没有操作，请重新登录!");
 					return false;
 				}
 				if (_excuteMsgFlag) {

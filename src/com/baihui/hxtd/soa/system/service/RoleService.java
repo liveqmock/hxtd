@@ -1,5 +1,6 @@
 package com.baihui.hxtd.soa.system.service;
 
+import com.baihui.hxtd.soa.base.Constant;
 import com.baihui.hxtd.soa.base.orm.hibernate.HibernatePage;
 import com.baihui.hxtd.soa.base.utils.Search;
 import com.baihui.hxtd.soa.system.dao.RoleDao;
@@ -10,7 +11,6 @@ import com.baihui.hxtd.soa.system.entity.Role;
 import com.baihui.hxtd.soa.system.entity.User;
 import org.hibernate.FetchMode;
 import org.hibernate.criterion.DetachedCriteria;
-import org.hibernate.criterion.Restrictions;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
@@ -60,12 +60,11 @@ public class RoleService {
      * 分页查找
      */
     @Transactional(readOnly = true)
-    public HibernatePage<Role> findPage(Map<String, Object> searchParams, HibernatePage<Role> page) throws NoSuchFieldException {
+    public HibernatePage<Role> findPage(Map<String, Object> searchParams, HibernatePage<Role> page, DataShift dataShift) throws NoSuchFieldException {
         logger.info("分页查找");
         DetachedCriteria criteria = DetachedCriteria.forClass(Role.class);
         criteria.setFetchMode("type", FetchMode.JOIN);
-        criteria.add(Restrictions.eq("isDeleted", false));
-
+        userDao.visibleData(criteria, dataShift);
         Map<String, SearchFilter> filters = Search.parse(searchParams);
         Search.buildCriteria(filters, criteria, Role.class);
         return roleDao.findPage(page, criteria);
@@ -119,6 +118,24 @@ public class RoleService {
         roleDao.delete(ids);
     }
 
+
+    /**
+     * 是否数据管理员
+     */
+    @Transactional(readOnly = true)
+    public boolean isDataManager(User user) {
+        logger.info("是否数据管理员");
+
+        if (user.getIsManager()) {
+            return true;
+        }
+
+        String hql = "select count(role.id)" +
+                " from Role role" +
+                " inner join role.owners owner" +
+                " where owner.id=? and role.code=?";
+        return (Long) roleDao.findUnique(hql, user.getId(), Constant.ROLE_MANAGER_CODE) > 0;
+    }
 
     /**
      * 查找有效角色

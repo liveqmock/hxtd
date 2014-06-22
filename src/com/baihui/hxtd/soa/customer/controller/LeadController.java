@@ -18,6 +18,7 @@ import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.SessionAttributes;
 import org.springside.modules.web.Servlets;
 
 import com.baihui.hxtd.soa.base.Constant;
@@ -26,8 +27,8 @@ import com.baihui.hxtd.soa.base.utils.ImportExport;
 import com.baihui.hxtd.soa.base.utils.Search;
 import com.baihui.hxtd.soa.customer.entity.Lead;
 import com.baihui.hxtd.soa.customer.service.LeadService;
-import com.baihui.hxtd.soa.system.entity.Dictionary;
 import com.baihui.hxtd.soa.system.entity.User;
+import com.baihui.hxtd.soa.system.service.DataShift;
 import com.baihui.hxtd.soa.system.service.DictionaryService;
 import com.baihui.hxtd.soa.util.JsonDto;
 
@@ -40,6 +41,7 @@ import com.baihui.hxtd.soa.util.JsonDto;
  */
 @Controller
 @RequestMapping(value = "/customer/lead")
+@SessionAttributes(value = {Constant.VS_DATASHIFT})
 public class LeadController {
 	
 	private Logger logger = LoggerFactory.getLogger(this.getClass());
@@ -61,7 +63,7 @@ public class LeadController {
 	@ResponseBody
 	@RequestMapping(value = "/query.do", produces = "text/text;charset=UTF-8")
 	public String query(HibernatePage<Lead> page,// 
-			HttpServletRequest request) throws NoSuchFieldException {
+			HttpServletRequest request,ModelMap model) throws NoSuchFieldException {
 		
 		logger.info("LeadController.query查询线索列表");
 		Map<String, Object> searchParams = Servlets.getParametersStartingWith(
@@ -70,7 +72,8 @@ public class LeadController {
 		Search.toRangeDate(searchParams, "modifiedTime");
 		Search.toRangeDate(searchParams, "createdTime");
 		logger.info("添加默认的查询条件");
-		page = leadService.findPage(searchParams, page);
+		DataShift dataShift = (DataShift) model.get(Constant.VS_DATASHIFT);
+		page = leadService.findPage(searchParams,dataShift, page);
 		JsonDto json = new JsonDto();
 		json.setResult(page);
 		return json.toString();
@@ -219,7 +222,7 @@ public class LeadController {
      * 1.在分页列表上根据当前条件进行导出
      */
     @RequestMapping(value = "/export.do", params = "TYPE=pagination")
-    public void exportPagination(HttpServletRequest request, Long organizationId, HibernatePage<Lead> page, ModelMap modelMap, HttpServletResponse response) throws NoSuchFieldException, IOException {
+    public void exportPagination(HttpServletRequest request, ModelMap model, HttpServletResponse response) throws NoSuchFieldException, IOException {
         logger.info("导出excel文件");
 
         logger.info("解析页面查询条件");
@@ -228,12 +231,8 @@ public class LeadController {
         Search.decodeValue(searchParams);
         Search.toRangeDate(searchParams, "createTime");
         logger.debug("查询条件数目“{}”", searchParams.size());
-
-        logger.info("获取对象集合");
-        if (organizationId == null) {
-            organizationId = (Long) modelMap.get(Constant.VS_ORG_ID);
-        }
-        List<Lead> leads = leadService.export(searchParams);
+        DataShift dataShift = (DataShift) model.get(Constant.VS_DATASHIFT);
+        List<Lead> leads = leadService.export(searchParams,dataShift);
         logger.debug("列表信息数目“{}”", leads.size());
 
         logger.info("转换成excel文件并输出");

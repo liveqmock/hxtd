@@ -6,23 +6,12 @@
 <title>联系人信息</title>
 <link rel="stylesheet" href="${ctx}/static/css/recommend/detail.css" type="text/css"></link>
 <script type="text/javascript" src="${ctx}/static/js/jquery.validate.js"></script>
+<script type="text/javascript" src="${ctx}/static/js/jquery.metadata.js"></script>
 <script type="text/javascript" src="${ctx}/static/js/pacs.js"></script>
-<style type="text/css">
-	input.error { border: 1px solid red }
-	label.error { padding-left: 18px; color: red; }
-	img { cursor:pointer; }
-</style>
+<script type="text/javascript" src="${ctx}/static/js/validator.js"></script>
 <script type="text/javascript">
 $(function(){//初始化 
 	new PCAS("province","city","county",'${contact.province.id}','${contact.city.id}','${contact.county.id}');
-	$("#form").validate({
-		rules: {
-			name: { required: true }
-		},
-		messages: {
-			name: { required: "*请输入联系人名"}
-		}
-	});
 	$(".add").click(function(){
 		if($("#form").valid()){
 			form.action = form.action + "?redirectUri=" + encodeURI($(this).attr("redirecturi"));
@@ -91,7 +80,7 @@ function clearInputVal(obj){//清除
 		</tr>
 		<tr>
 			<td align="right"><span class="w_red">*&nbsp;</span>联系人名：</td>
-			<td align="left"><input name="name" type="text" value="${contact.name}" class="text_input3"/></td>
+			<td align="left"><input name="name" type="text" value="${contact.name}" class="text_input3 required"/></td>
 			<td align="right">客户名：</td>
 			<td align="left">
 				<input id="txt_customer" type="text" value="${contact.customer.name}" readonly="readonly" class="text_input3"/>
@@ -109,7 +98,7 @@ function clearInputVal(obj){//清除
 				<i class="dump_btn globle_img block_inline ml5 vm cp" title="清除" onclick="clearInputVal(this);"></i>
 			</td>
 			<td align="right">邮箱：</td>
-			<td align="left"><input type="text" name="email" value="${contact.email}" class="text_input3"/></td>
+			<td align="left"><input type="text" name="email" value="${contact.email}" class="text_input3 email"/></td>
 		</tr>
 		<tr>
 			<td align="right">部门：</td>
@@ -119,15 +108,15 @@ function clearInputVal(obj){//清除
 		</tr>
 		<tr>
 			<td align="right">电话：</td>
-			<td align="left"><input name="phone" type="text" value="${contact.phone}" class="text_input3"/></td>
+			<td align="left"><input name="phone" type="text" value="${contact.phone}" class="text_input3 isPhone"/></td>
 			<td align="right">传真：</td>
-			<td align="left"><input type="text" name="fax" value="${contact.fax}" class="text_input3"/></td>
+			<td align="left"><input type="text" name="fax" value="${contact.fax}" class="text_input3 isTel"/></td>
 		</tr>
 		<tr>
 			<td align="right">手机：</td>
-			<td align="left"><input name="mobile" type="text" value="${contact.mobile}" class="text_input3"/></td>
+			<td align="left"><input name="mobile" type="text" value="${contact.mobile}" class="text_input3 isMobile"/></td>
 			<td align="right">邮编：</td>
-			<td align="left"><input name="postCode" type="text" value="${contact.postCode}" class="text_input3"/></td>
+			<td align="left"><input name="postCode" type="text" value="${contact.postCode}" class="text_input3 isZipCode"/></td>
 		</tr>
 	</table>
 	<h1 class="f14 fbnone ml40 pt10">地址信息</h1>

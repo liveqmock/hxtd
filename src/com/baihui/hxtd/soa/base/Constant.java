@@ -24,6 +24,8 @@ public class Constant {
     /**导入导出*/
     public final static String VC_IMPORTEXPORTS = "VC_IMPORTEXPORTS";
 
+    /**省份集合*/
+    public final static String VC_PCAS = "VC_PCAS";
 
     /*session中变量定义*/
     /**用户编号*/
@@ -41,20 +43,11 @@ public class Constant {
     /**组织*/
     public final static String VS_ORG = "VS_ORG";
 
-    /**组织序号区间*/
-    public final static String VS_ORG_ORDER_RANGE = "VS_ORG_ORDER_RANGE";
-
-    /**组织最小序号*/
-    public final static String VS_ORG_ORDER_MIN = "VS_ORG_ORDER_MIN";
-
-    /**组织最大序号*/
-    public final static String VS_ORG_ORDER_MAX = "VS_ORG_ORDER_MAX";
+    /**数据级筛选*/
+    public final static String VS_DATASHIFT = "VS_DATASHIFT";
 
     /**菜单列表*/
     public final static String VS_MENUS = "VS_MENUS";
-
-    /**标题栏菜单列表*/
-    public final static String VS_TITLEBAR_MENUS = "VS_TITLEBAR_MENUS";
 
     /**标题栏一级菜单列表*/
     public final static String VS_TITLEBAR_FIRST_MENUS = "VS_TITLEBAR_FIRST_MENUS";
@@ -80,14 +73,8 @@ public class Constant {
     /**Boolean型可判断的组件*/
     public final static String VS_HAS_COMPONENTS = "VS_HAS_COMPONENTS";
 
-    /**功能编号列表*/
-    public final static String VS_FUNCTION_CODES = "VS_FUNCTION_CODES";
-
     /**组件列表*/
     public final static String VS_COMPONENTS = "VS_COMPONENTS";
-
-    /**组件编号列表*/
-    public final static String VS_COMPONENT_CODES = "VS_COMPONENT_CODES";
 
     /**页面JS的全局信息*/
     public final static String VS_JS_GLOBALINFO = "VS_JS_GLOBALINFO";
@@ -135,6 +122,12 @@ public class Constant {
 
     /**错误信息*/
     public final static String VM_ERROR = "VM_ERROR";
+
+    /**角色管理员代码*/
+    public final static String ROLE_MANAGER_CODE = "2";
+
+    /**组织序号层次长度*/
+    public final static int ORG_ORDER_TIER_LENGTH = 2;
 
 
 }

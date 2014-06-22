@@ -1,17 +1,16 @@
 package com.baihui.hxtd.soa.system.service;
 
+import com.baihui.hxtd.soa.base.Constant;
 import com.baihui.hxtd.soa.base.ServiceException;
 import com.baihui.hxtd.soa.base.orm.hibernate.HibernatePage;
 import com.baihui.hxtd.soa.base.utils.MD5;
 import com.baihui.hxtd.soa.base.utils.Search;
 import com.baihui.hxtd.soa.base.utils.serial.TierSerial;
 import com.baihui.hxtd.soa.base.utils.serial.TierSerials;
+import com.baihui.hxtd.soa.system.dao.DictionaryDao;
 import com.baihui.hxtd.soa.system.dao.OrganizationDao;
 import com.baihui.hxtd.soa.system.dao.UserDao;
-import com.baihui.hxtd.soa.system.entity.Component;
-import com.baihui.hxtd.soa.system.entity.Function;
-import com.baihui.hxtd.soa.system.entity.Role;
-import com.baihui.hxtd.soa.system.entity.User;
+import com.baihui.hxtd.soa.system.entity.*;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import org.apache.commons.lang3.Range;
 import org.hibernate.FetchMode;
@@ -53,10 +52,15 @@ public class UserService {
 
     @Resource
     private UserDao userDao;
+
     @Resource
     private OrganizationDao organizationDao;
+
     @Resource
     private MD5 md5;
+
+    @Resource
+    private DictionaryDao dictionaryDao;
 
     /**
      * 验证用户
@@ -133,7 +137,7 @@ public class UserService {
      * 分页查找
      */
     @Transactional(readOnly = true)
-    public HibernatePage<User> findPage(Map<String, Object> searchParams, HibernatePage<User> page, Long organizationId) throws NoSuchFieldException {
+    public HibernatePage<User> findPage(Map<String, Object> searchParams, HibernatePage<User> page, User user, Long organizationId) throws NoSuchFieldException {
         logger.info("分页查找用户");
         DetachedCriteria detachedCriteria = DetachedCriteria.forClass(User.class);
         detachedCriteria.setFetchMode("sex", FetchMode.JOIN);
@@ -142,10 +146,8 @@ public class UserService {
         detachedCriteria.setFetchMode("organization", FetchMode.JOIN);
 
         detachedCriteria.createAlias("organization", "org");
-        Long organizationOrder = organizationDao.getOrderById(organizationId);
-        Range<Long> orgRange = TierSerials.getYoungerRange(organizationOrder, orgTierLength);
-        detachedCriteria.add(Restrictions.between("org.order", orgRange.getMaximum(), orgRange.getMaximum()));
-        detachedCriteria.add(Restrictions.eq("isDeleted", false));
+        Long order = organizationDao.getOrderById(organizationId);
+        detachedCriteria.add(organizationDao.selfAndYounger("org", organizationId, TierSerials.getYoungerRange(order, Constant.ORG_ORDER_TIER_LENGTH)));
 
         Map<String, SearchFilter> filters = Search.parse(searchParams);
         Search.buildCriteria(filters, detachedCriteria, User.class);
@@ -212,14 +214,10 @@ public class UserService {
         user.setOrder(1l);
         user.setIsDeleted(false);
         user.setCreateTime(new Date());
-        logger.debug("创建时间为当前时间“{}”", user.getCreateTime());
         user.setModifiedTime(user.getCreateTime());
-        logger.debug("修改时间为当前时间“{}”", user.getModifiedTime());
         user.setPassword(md5.getMD5ofStr(user.getPassword()));
+        user.setStoreStatus(new Dictionary(01040402l));
         logger.debug("md5加密密码“{}”", user.getPassword());
-        user.setIsDeleted(false);
-        logger.debug("是否删除的为“{}”", user.getIsDeleted());
-
 
         userDao.save(user);
     }
@@ -244,7 +242,7 @@ public class UserService {
         DetachedCriteria criteria = DetachedCriteria.forClass(User.class);
         criteria.setFetchMode("type", FetchMode.JOIN);
         criteria.setFetchMode("sex", FetchMode.JOIN);
-        criteria.setFetchMode("storeStatus", FetchMode.JOIN);
+        criteria.setFetchMode("storeStatus", FetchMode.SELECT);
         criteria.setFetchMode("jobSituation", FetchMode.JOIN);
         criteria.setFetchMode("organization", FetchMode.JOIN);
         criteria.setFetchMode("creator", FetchMode.JOIN);

@@ -11,7 +11,7 @@
 <meta http-equiv="description" content="This is my page">
 </head>
 <body>
-	<div style="margin-left: auto;margin-right: auto;margin-top: 50px;" align="center">
+	<div style="margin-left: auto;margin-right: auto;margin-top: 50px;min-height: 500px;" align="center">
 		<img alt="" src="${ctx }${url }"/>
 	</div>
 </body>

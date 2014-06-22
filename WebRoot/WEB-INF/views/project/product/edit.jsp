@@ -7,35 +7,11 @@
 <title>产品</title>
 <link rel="stylesheet" href="${ctx}/static/css/recommend/detail.css" type="text/css"></link>
 <script type="text/javascript" src="${ctx}/static/js/jquery.validate.js"></script>
+<script type="text/javascript" src="${ctx}/static/js/jquery.metadata.js"></script>
+<script type="text/javascript" src="${ctx}/static/js/validator.js"></script>
 <script type="text/javascript" src="${ctx}/static/js/ui/jquery.ui.datepicker.js"></script>
-<style type="text/css">
-	input.error { border: 1px solid red }
-	label.error { padding-left: 18px; color: red; }
-	input.right { text-align: right; }
-</style>
 <script type="text/javascript">
 $(function(){
-	jQuery.validator.addMethod("amount", function(val, element){
-		var reg = /^\d+(\.\d+)?$/;
-		return this.optional(element)||(reg.test(val));
-	}, "*只能输入整数或小数");
-	$("#form").validate({
-		rules: {
-			name: { required: true },
-			projectname: { required: true },
-			saleBeginTime: { required: true },
-			saleEndTime: { required: true },
-			sellMoney: { required: true, amount: true },
-		},
-		messages: {
-			name: { required: "(*必填)"},
-			projectname: { required: "(*必填)"},
-			saleBeginTime: { required: "(*必填)"},
-			saleEndTime: { required: "(*必填)"},
-			sellMoney: { required: "*请输入整数或小数", amount: "*只能输入整数或小数"}
-		}
-	});
-	
 	$(".add").click(function(){
 		if($("#form").valid()){
 			form.action = form.action + "?redirectUri=" + encodeURI($(this).attr("redirecturi"));
@@ -103,7 +79,7 @@ function clearInputVal(obj){//清除
 	<table class="cb id_table3 w95b bg_c_white margin0 mt10">
 		<tr>
 			<td width="15%" align="right"><span class="w_red">*&nbsp;</span>产品名称：</td>
-			<td align="left"><input name="name" type="text" value="${product.name}" class="text_input3"/></td>
+			<td align="left"><input name="name" type="text" value="${product.name}" class="text_input3 required"/></td>
 			<td width="15%" align="right"><span class="w_red">*&nbsp;</span>产品编号：</td>
 			<td align="left"><input name="code" type="text" value="${product.code}" class="text_input3" readonly/></td>
 		</tr>
@@ -123,15 +99,15 @@ function clearInputVal(obj){//清除
 			</td>
 			<td align="right"><span class="w_red">*&nbsp;</span>所属项目：</td>
 			<td align="left">
-				<input type="text" id="txt_project" name="projectname" value="${product.project.name}" readonly class="text_input3"/>
+				<input type="text" id="txt_project" name="projectname" value="${product.project.name}" readonly class="text_input3 required"/>
 				<input type="hidden"id="hide_project_id" name="project.id" value="${product.project.id}"/>
 				<i class="s_inquiry globle_img block_inline ml5 vm cp" title="搜索项目" onclick="searchData('project');"></i>
 				<i class="dump_btn globle_img block_inline ml5 vm cp" title="清除" onclick="clearInputVal(this);"></i>
 			</td>
 		</tr>
 		<tr>
-			<td align="right">出售金额：</td>
-			<td align="left"><input name="sellMoney" type="text" value="${product.sellMoney}" class="text_input3 right"/></td>
+			<td align="right"><span class="w_red">*&nbsp;</span>出售金额：</td>
+			<td align="left"><input name="sellMoney" type="text" value="${product.sellMoney}" class="text_input3 right required amount"/></td>
 			<td align="right">收益率%：</td>
 			<td align="left">
 				<input name="minRate" type="text" value="${product.minRate}" class="text_input4 right"/>
@@ -156,19 +132,19 @@ function clearInputVal(obj){//清除
 			</td>
 		</tr>
 		<tr>
-			<td align="right">销售开始日期：</td>
+			<td align="right"><span class="w_red">*&nbsp;</span>销售开始日期：</td>
 			<td align="left">
 				<a href="javascript:;" class="pa time_closenone1"></a>
-				<input id="start" name=saleBeginTime type="text" value="${activity.saleBeginTime}" class="text_input3 input_close1" readonly/>
+				<input id="start" name=saleBeginTime type="text" value="${activity.saleBeginTime}" class="text_input3 input_close1 required" readonly/>
 			</td>
 			<td align="right">赎回赔率%：</td>
-			<td align="left"><input name="redeemRate" type="text" value="${product.redeemRate}" class="right text_input3"/></td>
+			<td align="left"><input name="redeemRate" type="text" value="${product.redeemRate}" class="right text_input3 amount"/></td>
 		</tr>
 		<tr>
-			<td align="right">销售结束日期：</td>
+			<td align="right"><span class="w_red">*&nbsp;</span>销售结束日期：</td>
 			<td align="left">
 				<a href="javascript:;" class="pa time_closenone1"></a>
-				<input id="end" name="saleEndTime" type="text" value="${product.saleEndTime}" readonly class="text_input3 input_close1"/>
+				<input id="end" name="saleEndTime" type="text" value="${product.saleEndTime}" readonly class="text_input3 input_close1 required"/>
 			</td>
 			<td align="right">赎回公式：</td>
 			<td align="left"><input name="redeemFormula" type="text" value="${product.redeemFormula}" class="text_input3"/></td>

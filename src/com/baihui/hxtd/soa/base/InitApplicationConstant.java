@@ -1,17 +1,25 @@
 package com.baihui.hxtd.soa.base;
 
+import java.io.IOException;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.Properties;
+
+import javax.annotation.Resource;
+import javax.servlet.ServletContext;
+import javax.servlet.ServletContextEvent;
+
 import org.apache.commons.collections.BidiMap;
 import org.apache.commons.collections.bidimap.DualHashBidiMap;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Component;
 
-import javax.servlet.ServletContext;
-import javax.servlet.ServletContextEvent;
-import java.io.IOException;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Properties;
+import com.baihui.hxtd.soa.common.controller.model.ListModel;
+import com.baihui.hxtd.soa.common.entity.PCAS;
+import com.baihui.hxtd.soa.common.service.PCASService;
+import com.baihui.hxtd.soa.util.JsonDto;
 
 /**
  * 初始化Application中常量
@@ -25,6 +33,9 @@ public class InitApplicationConstant implements StartupListener {
 
     private Logger logger = LoggerFactory.getLogger(this.getClass());
 
+    @Resource
+	private PCASService pcasService;
+    
     @Override
     public void onStartup(ServletContextEvent event) {
         logger.info("应用启动完成后，初始化Application中常量");
@@ -33,6 +44,7 @@ public class InitApplicationConstant implements StartupListener {
         loadComponentCode(servletContext);
         loadNameDesc(servletContext);
         loadImportExport(servletContext);
+        loadPCAS(servletContext);
     }
 
     /**
@@ -115,6 +127,13 @@ public class InitApplicationConstant implements StartupListener {
         logger.debug("导入导出数目“{}”", properties.entrySet().size());
         servletContext.setAttribute(Constant.VC_IMPORTEXPORTS, properties);
     }
-
-
+    
+    /**加载省份信息*/
+    @SuppressWarnings("unchecked")
+	private void loadPCAS(ServletContext servletContext){
+    	List<PCAS> pcas = pcasService.getRoot();
+    	JsonDto json = new JsonDto();
+    	json.setResult(new ListModel(pcas));
+    	servletContext.setAttribute(Constant.VC_PCAS, "var pcasJson="+json.toString());
+    }
 }

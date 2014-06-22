@@ -414,7 +414,7 @@ public class OrganizationService {
      */
     @Transactional
     public List<Organization> getOrgAndUsers() {
-        String hql = "select org from Organization org ";
+        String hql = "select org from Organization org left join fetch org.owners";
         return organizationDao.find(hql);
     }
 

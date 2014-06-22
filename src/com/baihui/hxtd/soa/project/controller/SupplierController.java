@@ -234,24 +234,12 @@ public class SupplierController {
      * todo: lihua 2014-05-22
      */
     @RequestMapping(value = "/toQueryPage.comp")
-    public String toSupplierLstPage(
-            @RequestParam(value = "pageNo", defaultValue = "1") int pageNumber,
-            @RequestParam(value = "pageSize", defaultValue = "10") int pageSize,
-            @RequestParam(value = "pageOrderBy", defaultValue = "createdTime") String orderBy,
-            @RequestParam(value = "order", defaultValue = "asc") String order,
-            HttpServletRequest request, Model model) throws NoSuchFieldException {
-        Map<String, Object> searchParams = Servlets.getParametersStartingWith(
-                request, "search_");
-        Search.clearBlankValue(searchParams);
-        
-        HibernatePage<Supplier> page=new HibernatePage<Supplier>(pageNumber, pageSize);
-        page.setHibernateOrderBy(orderBy);
-        page.setHibernateOrder(order);
-        supplierService.findPage(searchParams, page);
-        
-        JsonDto jsonDto = new JsonDto();
-        jsonDto.setResult(page);
-        model.addAttribute("jsondata", jsonDto.toString());
+    public String toSupplierLstPage(HttpServletRequest request,
+    		HibernatePage<Supplier> page,
+    		Model model) throws NoSuchFieldException {
+        model.addAttribute("page", page);
+        //page.setHibernateOrderBy(orderBy);
+        //page.setHibernateOrder(order);
         
         return "/project/supplier/listcomp";
     }

@@ -18,6 +18,7 @@
 <script type="text/javascript" src="${ctx}/static/js/js-util.common.js"></script>
 <script type="text/javascript" src="${ctx}/static/js/scrollTitle.js?v=1"></script>
 <script type="text/javascript" src="${ctx}/static/js/pacs.js"></script>
+<script type="text/javascript">${applicationScope.VC_PCAS}</script>
 <script type="text/javascript">
 $(function() {
 	jsUtil.datepicker(".time");//加载时间控件
@@ -134,12 +135,12 @@ function reset() {
 						</td>
 						<td class="f14" align="left" width="18%">
 							<div class="pr vm">
-								<a href="javascript:;" class="pa time_closenone1"
-									onclick="javascript:$(this).nextAll().eq(1).val('');"></a>
-								<a href="javascript:;" class="pa time_closenone2"
-									onclick="javascript:$(this).nextAll().eq(1).val('');"></a>
+								<a href="javascript:;" class="pa time_closenone1"></a>
+								<a href="javascript:;" class="pa time_closenone2"></a>
 								<input class="text_input2 input_close globle_img time"
-									name="search_GTE_modifiedTime" type="text" readonly />-<input class="text_input2 input_close globle_img time"
+									name="search_GTE_modifiedTime" type="text" 
+									readonly />-<input 
+									class="text_input2 input_close globle_img time"
 									name="search_LTE_modifiedTime" type="text" readonly />
 							</div>
 						</td>
@@ -195,12 +196,12 @@ function reset() {
 						</td>
 						<td class="f14" align="left" width="18%">
 							<div class="pr vm">
-								<a href="javascript:;" class="pa time_closenone1"
-									onclick="javascript:$(this).nextAll().eq(1).val('');"></a>
-								<a href="javascript:;" class="pa time_closenone2"
-									onclick="javascript:$(this).nextAll().eq(1).val('');"></a>
+								<a href="javascript:;" class="pa time_closenone1"></a>
+								<a href="javascript:;" class="pa time_closenone2"></a>
 								<input class="text_input2 input_close globle_img time"
-									name="search_GTE_createdTime" type="text" readonly />-<input class="text_input2 input_close globle_img time"
+									name="search_GTE_createdTime" type="text" 
+									readonly />-<input 
+									class="text_input2 input_close globle_img time"
 									name="search_LTE_createdTime" type="text" readonly />
 							</div>
 						</td>

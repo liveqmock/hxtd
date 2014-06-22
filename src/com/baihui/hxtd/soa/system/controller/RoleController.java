@@ -39,8 +39,8 @@ import java.util.Map;
 @Controller
 @RequestMapping(value = "/system/role")
 @SessionAttributes(value = {Constant.VS_USER_ID, Constant.VS_USER_NAME, Constant.VS_USER,
-        Constant.VS_ORG_ID, Constant.VS_ORG_ORDER_MIN, Constant.VS_ORG_ORDER_MAX, Constant.VS_ORG,
-        Constant.VS_MENUS,Constant.VS_FUNCTIONS, Constant.VS_COMPONENTS})
+        Constant.VS_ORG_ID, Constant.VS_DATASHIFT, Constant.VS_ORG,
+        Constant.VS_MENUS, Constant.VS_FUNCTIONS, Constant.VS_COMPONENTS})
 @SuppressWarnings("unchecked")
 public class RoleController {
 
@@ -93,14 +93,8 @@ public class RoleController {
         Search.clearBlankValue(searchParams);
         logger.debug("查询条件数目“{}”", searchParams.size());
 
-        logger.info("添加默认的查询条件");
-        Long orderMin = (Long) model.get(Constant.VS_ORG_ORDER_MIN);
-        Long orderMax = (Long) model.get(Constant.VS_ORG_ORDER_MAX);
-        Search.addRange(searchParams, "creator.organization.order", orderMin, orderMax);
-        logger.debug("组织序号区间值“[{},{}]”", orderMin, orderMax);
-
         logger.info("获取分页数据");
-        page = roleService.findPage(searchParams, page);
+        page = roleService.findPage(searchParams, page, (DataShift) model.get(Constant.VS_DATASHIFT));
 
         logger.info("以DTO格式返回");
         JsonDto jsonDto = new JsonDto();

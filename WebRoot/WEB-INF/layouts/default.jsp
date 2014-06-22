@@ -17,7 +17,6 @@
 <link rel="stylesheet" href="${ctx}/static/css/public/reset.css?v=${now}" type="text/css"/>
 <script type="text/javascript" src="${ctx}/static/js/api/api.string.js?v=${now}"></script>
 <script type="text/javascript" src="${ctx}/static/js/jquery.min.js?v=${now}"></script>
-<script type="text/javascript" src="${ctx}/static/js/jquery.custom.js?v=${now}"></script>
 <script type="text/javascript" src="${ctx}/static/js/jquery.form.js?v=${now}"></script>
 <link rel="stylesheet" href="${ctx}/static/css/themes/base/jquery.ui.all.css?v=${now}"/>
 <script type="text/javascript" src="${ctx}/static/js/ui/jquery.ui.core.js?v=${now}"></script>

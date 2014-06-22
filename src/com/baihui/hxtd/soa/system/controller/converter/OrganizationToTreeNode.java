@@ -20,8 +20,12 @@ public class OrganizationToTreeNode implements Converter<Organization, TreeNode>
         organization.setChildren(null);
         TreeNode treeNode = mapper.map(organization, TreeNode.class);
         treeNode.setIsParent(!organization.getIsLeaf());
-        Organization parent = organization.getParent();
-        treeNode.setpId(parent == null ? 0l : parent.getId());
+        try {
+            Organization parent = organization.getParent();
+            treeNode.setpId(parent == null ? 0l : parent.getId());
+        } catch (Exception e) {
+            treeNode.setpId(0l);
+        }
         treeNode.setOpen(true);
         return treeNode;
     }

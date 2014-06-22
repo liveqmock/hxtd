@@ -175,13 +175,13 @@ function convOwner(){
 	<tr>
 	<td class="f14" align="right" width="6%">省：</td>
 	<td class="f14" align="left" width="16%">
-	<select id="province" name="province.id" class="select2"></select></td>
+	<select id="province" name="search_EQ_province.id" class="select2"></select></td>
 	<td class="f14" align="right" width="6%">市：</td>
 	<td class="f14" align="left" width="16%">
-	<select id="city" name="city.id" class="select2"></select></td>
+	<select id="city" name="search_EQ_city.id" class="select2"></select></td>
 	<td class="f14" align="right" width="6%">县：</td>
 	<td class="f14" align="left" width="16%">
-	<select id="county" name="county.id" class="select2"></select></td>
+	<select id="county" name="search_EQ_county.id" class="select2"></select></td>
 	</tr>
     </table>
      <tags:paginationparams page="${page}"></tags:paginationparams>

@@ -41,6 +41,9 @@ public class Constant {
     /**组织*/
     public final static String VS_ORG = "VS_ORG";
 
+    /**组织序号区间*/
+    public final static String VS_ORG_ORDER_RANGE = "VS_ORG_ORDER_RANGE";
+
     /**组织最小序号*/
     public final static String VS_ORG_ORDER_MIN = "VS_ORG_ORDER_MIN";
 

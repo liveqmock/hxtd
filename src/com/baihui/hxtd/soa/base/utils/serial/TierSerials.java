@@ -1,5 +1,6 @@
 package com.baihui.hxtd.soa.base.utils.serial;
 
+import org.apache.commons.lang3.Range;
 import org.apache.commons.lang3.StringUtils;
 
 import java.util.ArrayList;
@@ -159,7 +160,17 @@ public class TierSerials {
      */
     public static Long getMaxChild(long serial, int length) {
         int tierIncrease = getTierIncrease(length);
-        return serial + getIncrease(serial, length) / tierIncrease * (tierIncrease - 1);
+        long increase = getIncrease(serial, length);
+        return serial + increase - increase / tierIncrease;
+    }
+
+    /**
+     * 获取下级序号区间
+     */
+    public static Range<Long> getYoungerRange(long serial, int length) {
+        int tierIncrease = getTierIncrease(length);
+        long increase = getIncrease(serial, length);
+        return Range.between(serial + increase / tierIncrease, serial + increase - 1);
     }
 
 

@@ -2,9 +2,12 @@ package com.baihui.hxtd.soa.system.dao;
 
 
 import com.baihui.hxtd.soa.base.orm.hibernate.HibernateDAOImpl;
+import com.baihui.hxtd.soa.base.utils.serial.TierSerials;
 import com.baihui.hxtd.soa.system.entity.User;
+import org.apache.commons.lang3.Range;
 import org.apache.commons.lang3.StringUtils;
 import org.hibernate.Criteria;
+import org.hibernate.criterion.Criterion;
 import org.hibernate.criterion.DetachedCriteria;
 import org.hibernate.criterion.Projections;
 import org.hibernate.criterion.Restrictions;
@@ -20,6 +23,39 @@ import java.util.List;
  */
 @Repository
 public class UserDao extends HibernateDAOImpl<User, Long> {
+
+    /**
+     * 可访问的数据
+     * 1.当前用户
+     * 2.下级组织
+     */
+    public static Criterion visibleData(String userAlias, String orgAlias, User user) {
+        Criterion id = Restrictions.eq(userAlias + ".id", user.getId());
+        Range<Long> range = TierSerials.getYoungerRange(user.getOrganization().getOrder(), 2);
+        Criterion order = Restrictions.between(orgAlias + ".order", range.getMinimum(), range.getMaximum());
+        return Restrictions.or(id, order);
+    }
+
+    /**
+     * 可访问的数据
+     * 1.当前用户
+     * 2.下级组织
+     */
+    public static Criterion visibleData(User user) {
+        return visibleData("creator", "organization", user);
+    }
+
+    /**
+     * 可访问的数据
+     * 1.当前用户
+     * 2.下级组织
+     */
+    public static DetachedCriteria visibleData(DetachedCriteria criteria, User user) {
+        criteria.createAlias("creator", "creator");
+        criteria.createAlias("creator.organization", "organization");
+        criteria.add(visibleData(user));
+        return criteria;
+    }
 
     /**
      * 查找用户集合通过离线查询条件

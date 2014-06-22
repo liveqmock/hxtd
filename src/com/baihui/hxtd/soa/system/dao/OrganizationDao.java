@@ -2,10 +2,14 @@ package com.baihui.hxtd.soa.system.dao;
 
 
 import com.baihui.hxtd.soa.base.orm.hibernate.HibernateDAOImpl;
+import com.baihui.hxtd.soa.base.utils.serial.TierSerials;
 import com.baihui.hxtd.soa.system.entity.Organization;
+import org.apache.commons.lang3.Range;
 import org.hibernate.Criteria;
+import org.hibernate.criterion.Criterion;
 import org.hibernate.criterion.Projections;
 import org.hibernate.criterion.Restrictions;
+import org.hibernate.criterion.SimpleExpression;
 import org.springframework.stereotype.Repository;
 
 /**
@@ -16,6 +20,15 @@ import org.springframework.stereotype.Repository;
  */
 @Repository
 public class OrganizationDao extends HibernateDAOImpl<Organization, Long> {
+
+    /**
+     * 可访问的数据
+     * 1.下级组织
+     */
+    public static Criterion visibleData(String alias, Long order) {
+        Range<Long> range = TierSerials.getYoungerRange(order, 2);
+        return Restrictions.between(alias + ".order", range.getMinimum(), range.getMaximum());
+    }
 
     /**
      * 获取序号通过主键编号

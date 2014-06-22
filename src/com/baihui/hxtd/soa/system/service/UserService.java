@@ -13,6 +13,7 @@ import com.baihui.hxtd.soa.system.entity.Function;
 import com.baihui.hxtd.soa.system.entity.Role;
 import com.baihui.hxtd.soa.system.entity.User;
 import com.fasterxml.jackson.core.JsonProcessingException;
+import org.apache.commons.lang3.Range;
 import org.hibernate.FetchMode;
 import org.hibernate.criterion.DetachedCriteria;
 import org.hibernate.criterion.Order;
@@ -142,8 +143,8 @@ public class UserService {
 
         detachedCriteria.createAlias("organization", "org");
         Long organizationOrder = organizationDao.getOrderById(organizationId);
-        TierSerial tierSerial = TierSerials.parse(organizationOrder, orgTierLength);
-        detachedCriteria.add(Restrictions.between("org.order", organizationOrder, organizationOrder + tierSerial.getIncrease() - 1));
+        Range<Long> orgRange = TierSerials.getYoungerRange(organizationOrder, orgTierLength);
+        detachedCriteria.add(Restrictions.between("org.order", orgRange.getMaximum(), orgRange.getMaximum()));
         detachedCriteria.add(Restrictions.eq("isDeleted", false));
 
         Map<String, SearchFilter> filters = Search.parse(searchParams);

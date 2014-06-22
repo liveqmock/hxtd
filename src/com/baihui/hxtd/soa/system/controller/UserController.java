@@ -13,6 +13,7 @@ import com.baihui.hxtd.soa.system.entity.Organization;
 import com.baihui.hxtd.soa.system.entity.User;
 import com.baihui.hxtd.soa.system.service.*;
 import com.baihui.hxtd.soa.util.JsonDto;
+import com.fasterxml.jackson.core.JsonProcessingException;
 import org.apache.commons.io.FilenameUtils;
 import org.apache.commons.lang3.ArrayUtils;
 import org.apache.poi.openxml4j.exceptions.InvalidFormatException;
@@ -103,8 +104,9 @@ public class UserController {
         return "/system/user/list";
     }
 
+    @ResponseBody
     @RequestMapping(value = "/query.do")
-    public void query(HttpServletRequest request, Long organizationId, HibernatePage<User> page, PrintWriter out) throws NoSuchFieldException, IOException {
+    public String query(HttpServletRequest request, Long organizationId, HibernatePage<User> page) throws NoSuchFieldException, JsonProcessingException {
         logger.info("查询用户信息");
 
         logger.info("解析页面查询条件");
@@ -125,7 +127,7 @@ public class UserController {
         jsonDto.setMessage("请求数据成功！");
         jsonDto.setResult(page);
 
-        HibernateAwareObjectMapper.DEFAULT.writeValue(out, jsonDto);
+        return HibernateAwareObjectMapper.DEFAULT.writeValueAsString(jsonDto);
     }
 
     /**

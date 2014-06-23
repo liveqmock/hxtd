@@ -1,6 +1,7 @@
 
 package com.baihui.hxtd.soa.project.dao;
 
+import org.hibernate.Query;
 import org.springframework.stereotype.Repository;
 
 import com.baihui.hxtd.soa.base.orm.hibernate.HibernateDAOImpl;
@@ -20,4 +21,18 @@ import com.baihui.hxtd.soa.project.entity.Product;
 @Repository
 public class ProductDao extends HibernateDAOImpl<Product, Long> {
 	
+	
+	
+	/**
+	  * getCount(产品是否关联项目)
+	  * @param id 供应商Id
+	  * @return 条数 
+	 */
+	public long getCount(Long[] id){
+		String hql = "select count(pro.id) from Product pro where pro.project.id in (:id)";
+		Query query = getSession().createQuery(hql);
+		query.setParameterList("id", id);
+		long count=(Long)query.uniqueResult();
+		return count;
+	}
 }

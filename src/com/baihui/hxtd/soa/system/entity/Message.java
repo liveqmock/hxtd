@@ -70,7 +70,7 @@ public class Message implements Serializable{
 	 */
 	@JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss", timezone = "GMT+08:00")
 	@Column(name="MODIFIED_TIME",updatable=false)
-	private Date modifieTime;
+	private Date modifiedTime;
     
 	@Column(name = "IS_DELETED", nullable = false)
 	private Boolean isDeleted;
@@ -130,12 +130,13 @@ public class Message implements Serializable{
 		this.modifier = modifier;
 	}
 
-	public Date getModifieTime() {
-		return modifieTime;
+
+	public Date getModifiedTime() {
+		return modifiedTime;
 	}
 
-	public void setModifieTime(Date modifieTime) {
-		this.modifieTime = modifieTime;
+	public void setModifiedTime(Date modifiedTime) {
+		this.modifiedTime = modifiedTime;
 	}
 
 	public Boolean getIsDeleted() {

@@ -82,7 +82,7 @@ function formReset() {
 </script>
 </head>
  <body>
-<div class=" listcontainer"><!--请在此处使用iframe--->
+<div class=" listcontainer">
 <!--查询条件开始-->
    <form id="form" action="${ctx}/customer/customer/query.do" onsubmit="return false;">
    <table class="fl mt5 w">
@@ -92,7 +92,7 @@ function formReset() {
 	<td class="f14" align="right" width="6%">客户类型：</td>
 	<td class="f14" align="left" width="16%">
 	<select name="search_EQ_type.id" class="select2">
-     	<option value="">--全部--</option>
+     	<option value="">全部</option>
      	<c:forEach items="${cType}" var="t">
      		<option value="${t.id}">${t.key}</option>
      	</c:forEach>
@@ -101,20 +101,15 @@ function formReset() {
 	<td class="f14" align="right" width="6%">客户来源：</td>
 	<td class="f14" align="left" width="16%">
 	<select name="search_EQ_source.id" class="select2">
-     	<option value="">--全部--</option>
+     	<option value="">全部</option>
      	<c:forEach items="${source}" var="s">
      		<option value="${s.id}">${s.key}</option>
      	</c:forEach>
     </select>
 	</td>
-    <td class="f14" align="right" width="6%">创建时间：</td>
+	<td class="f14" align="right" width="6%">手机：</td>
     <td class="f14" align="left" width="16%">
-    <div class="pr vm"><a href="javascript:;" class="pa time_closenone1" ></a>
-    <a href="javascript:;" class="pa time_closenone2" ></a>
-     <input class="text_input2 input_close globle_img time" name="search_GTE_createdTime" type="text" />-<input 
-     class="text_input2 input_close globle_img time" name="search_LTE_createdTime" type="text" />
-    </div>
-    </td>
+    <input class="text_input1"type="text" id="cmobile"  name="search_LIKE_mobile" value="${mobile }" /></td>
 	<td width="8%">
     			<a href="javascript:;" class="block c_white lh25 fl ml10">
     				<b class="allbtn_l block fl"></b>
@@ -127,18 +122,23 @@ function formReset() {
 	<td class="f14" align="right" width="6%">邮箱：</td>
     <td class="f14" align="left" width="16%">
     <input type="text" class="text_input1"id="cemail"  name="search_LIKE_email" value="${email }" /></td>
-	<td class="f14" align="right" width="6%">手机：</td>
-    <td class="f14" align="left" width="16%">
-    <input class="text_input1"type="text" id="cmobile"  name="search_LIKE_mobile" value="${mobile }" /></td>
 	<td class="f14" align="right" width="6%">行业：</td>
 	<td class="f14" align="left" width="16%">
 	<select name="search_EQ_industry.id" class="select2">
-     	<option value="">--全部--</option>
+     	<option value="">全部</option>
      	<c:forEach items="${industry}" var="industry">
      		<option value="${industry.id}">${industry.key}</option>
      	</c:forEach>
     </select>
 	</td>
+	<td class="f14" align="right" width="6%">创建时间：</td>
+    <td class="f14" align="left" width="16%">
+    <div class="pr vm"><a href="javascript:;" class="pa time_closenone1" ></a>
+    <a href="javascript:;" class="pa time_closenone2" ></a>
+     <input class="text_input2 input_close globle_img time" name="search_GTE_createdTime" type="text" />-<input 
+     class="text_input2 input_close globle_img time" name="search_LTE_createdTime" type="text" />
+    </div>
+    </td>
 	<td class="f14" align="right" width="6%">修改时间：</td>
     <td class="f14" align="left" width="16%">
     <div class="pr vm"><a href="javascript:;" class="pa time_closenone1"></a>

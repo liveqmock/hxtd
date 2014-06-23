@@ -7,6 +7,7 @@ import com.baihui.hxtd.soa.base.utils.Search;
 import com.baihui.hxtd.soa.base.utils.mapper.HibernateAwareObjectMapper;
 import com.baihui.hxtd.soa.base.utils.mapper.JsonMapper;
 import com.baihui.hxtd.soa.base.utils.ztree.TreeNodeConverter;
+import com.baihui.hxtd.soa.system.DictionaryConstant;
 import com.baihui.hxtd.soa.system.entity.Dictionary;
 import com.baihui.hxtd.soa.system.entity.Function;
 import com.baihui.hxtd.soa.system.entity.Organization;
@@ -145,7 +146,9 @@ public class UserController {
         model.addAttribute("jobsituations", jobsituation);
         logger.debug("工作状态数目“{}”", jobsituation.size());
 
-        List<Organization> organizations = organizationService.findSector((Long) model.get(Constant.VS_ORG_ID), organizationOrder);
+        Organization organization = (Organization) model.get(Constant.VS_ORG);
+        List<Organization> organizations = organizationService.findChildrenById(organization.getId());
+        organizations.add(0, organization);
         model.addAttribute("organizationTree", JsonMapper.nonEmptyMapper().toJson(TreeNodeConverter.convert(organizations)));
     }
 
@@ -160,6 +163,7 @@ public class UserController {
 
         logger.info("存储表单默认值");
         User defaultUser = new User();
+        defaultUser.setSex(dictionaryService.getByValue(DictionaryConstant.PUBLIC_SEX_MAN));
         defaultUser.setIsManager(false);
         defaultUser.setIsActive(true);
         defaultUser.setOrganization(organizationService.getByOrder(organizationOrder));

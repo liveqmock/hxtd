@@ -36,17 +36,19 @@
     <div class="cb"></div>
     <div class="ml35 mr35">
         <div class="fl" style="width:20%">
-            <div class="mt20 block cb cb">
-                <b class="table_blueheadl globle_img block fl"></b>
+            <div class="mt20 block cb cb mr20">
+                <b class="ba"></b>
+                <b class="bb"></b>
+                <b class="bc"></b>
+                <b class="bd"></b>
 
-                <div class="fl table_blueheadc fl w90b">
+                <div class="fl table_blueheadc fl w">
                     <h1 class="f14 c_white lh40 ml10 fl">组织结构</h1>
-                    <img width="104" height="40" class="fl" src="${ctx}/static/images/snowflake.png">
-                    <a class="c_white f14 fr mt10 fb" href="javascript:;">&lt;&lt;</a>
+                    <img width="108" height="50" class="fl" src="${ctx}/static/images/snowflake.png">
+                    <a class="c_white f14 fr mt10 fb mr10" href="javascript:;">&lt;&lt;</a>
                 </div>
-                <b class="table_blueheadr globle_img block fl"></b>
             </div>
-            <div class="cb mb20" style="width:92%; height:560px; border:1px solid #636363;">
+            <div class="cb mb20 mr20 bor_636363" style=" height:495px;">
                 <ul id="organizationTree" class="ztree"></ul>
             </div>
         </div>
@@ -87,7 +89,7 @@
                     <tr>
                         <td align="right" width="15%">管理员：</td>
                         <td align="left">${user.isManager?"是":"否"}</td>
-                        <td align="right" width="15%">激活：</td>
+                        <td align="right" width="15%">启用：</td>
                         <td align="left">${user.isActive?"是":"否"}</td>
                     </tr>
                     <tr>

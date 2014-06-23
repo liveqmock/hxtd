@@ -31,7 +31,7 @@ RcmsAjax.bgImage = {
 
 RcmsAjax.msgDiv = {
 	begin : '<div class="zzc"><img width="50" height="51" class="fl mt20 ml10" src="'+jsUtil.getRootPath()+'/static/images/',
-	middle : '" /><p class="fr mr35 mt40">',
+	middle : '" /><p class="fr mr20 mt35 w100">',
 	end : '</p></div>'
 }
 

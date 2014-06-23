@@ -159,7 +159,7 @@
                             <td align="left"><input type="text" name="url" class="{required:true,ruleUrl:true,unique:['Menu','${menu.url}']} text_input3" value="${menu.url}"/></td>
                         </tr>
                         <tr>
-                            <td align="right" width="15%" class="required">激活：</td>
+                            <td align="right" width="15%" class="required">启用：</td>
                             <td align="left">
                                 <label><input type="radio" name="isActive" value="1" ${menu.isActive==true?"checked":""}>是</label>
                                 <label><input type="radio" name="isActive" value="0" ${menu.isActive==false?"checked":""}>否</label>

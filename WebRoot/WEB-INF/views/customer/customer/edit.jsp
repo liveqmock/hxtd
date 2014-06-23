@@ -6,7 +6,6 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <c:set var="ctx" value="${pageContext.request.contextPath}"/>
-<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
 <html>
 <head>
 <title>客户编辑页</title>
@@ -64,7 +63,7 @@ function searchData(action){//搜索弹出框
 function clearInputVal(obj){//清除
 	$(obj).prevAll("input").val('');
 }
-        </script> 
+</script> 
 
 </head>
 <body>
@@ -102,14 +101,13 @@ function clearInputVal(obj){//清除
 						>${type.key }</option>
 					</c:forEach>
 				</select>
-				<!--<input name="" type="text" value="${customer.type.key }"/>
-				<input name="type.id" type="text" value="${customer.type.id }" style="display:none;"/>-->
+				<input name="type.id" type="text" value="${customer.type.id }" style="display:none;"/>
 			</td>
 		</tr>
 		<tr>
-			<td  align="right" width="15%"><span class="w_red">*&nbsp;</span>客户名称：</td>
+			<td align="right" width="15%"><span class="w_red">*&nbsp;</span>客户名称：</td>
 			<td align="left"><input class="text_input3 required" name="name" type="text" value="${customer.name }"/></td>
-			<td  align="right" width="15%"><span class="w_red">*&nbsp;</span>客户来源：</td>
+			<td align="right" width="15%"><span class="w_red">*&nbsp;</span>客户来源：</td>
 			<td align="left">
 				<select name="source.id" class="select1 pr requiredSelect">
 				<option value="-1">--无--</option>
@@ -122,8 +120,6 @@ function clearInputVal(obj){//清除
 				</c:forEach>
 					
 				</select>
-				<!--<input name="" type="text" value="${customer.source.key }"/>
-				<input name="source.id" type="text" value="${customer.source.id }" style="display:none;"/> -->
 			</td>
 		</tr>
 		<tr>
@@ -141,10 +137,8 @@ function clearInputVal(obj){//清除
 					
 				</select>
 			</td>
-			<td  align="right" width="15%">风险等级：</td>
+			<td align="right" width="15%">风险等级：</td>
 			<td align="left">
-				<!--<input name="" type="text" value="${customer.riskGrade.key }"/>
-				<input name="riskGrade.id" type="text" value="${customer.riskGrade.id }" style="display:none;"/>-->
 				<select name="riskGrade.id" class="select1 pr">
 				<option value="040304">--无--</option>
 					<c:forEach items="${riskGrade}" var="riskGrade">
@@ -189,9 +183,6 @@ function clearInputVal(obj){//清除
 				</c:forEach>
 				</select>
 			</td>
-			<!-- <td class="bghb pl10 fwb"><input name="" type="text" value="${customer.openBank.key }"/>
-				<input name="openBank.id" type="text" value="${customer.openBank.id }" style="display:none;"/>
-			</td> -->
 			<td  align="right" width="15%">银行户名：</td>
 			<td align="left"><input class="text_input3" name="bankName" type="text" value="${customer.bankName }"/></td>
 		</tr>
@@ -215,8 +206,6 @@ function clearInputVal(obj){//清除
 		<tr>
 			<td  align="right" width="15%"><span class="w_red">*&nbsp;</span>行业：</td>
 			<td align="left">
-				<!--<input name="" type="text" value="${customer.industry.key }"/>
-				<input name="industry.id" type="text" value="${customer.industry.id }" style="display:none;"/>-->
 				<select name="industry.id" class="select1 pr requiredSelect ">
 				<option value="-1">--无--</option>
 					<c:forEach items="${industry}" var="industry">
@@ -232,7 +221,8 @@ function clearInputVal(obj){//清除
 			<td align="left">
 			<input name="email" type="text" value="${customer.email}" class="text_input3 required"/>
 			</td>
-		</tr></table>
+		</tr>
+		</table>
 		<h1 class="f14 fbnone ml40 pt10">地址信息</h1>
 		<table class="cb id_table3 w95b bg_c_white margin0 mt10">
 			<tr>
@@ -270,5 +260,5 @@ function clearInputVal(obj){//清除
 	</ul>
 	</div>
 </form>
-  </body>
+</body>
 </html>

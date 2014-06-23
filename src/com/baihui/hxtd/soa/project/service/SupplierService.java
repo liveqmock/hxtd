@@ -16,6 +16,7 @@ import org.springside.modules.persistence.SearchFilter;
 
 import com.baihui.hxtd.soa.base.orm.hibernate.HibernatePage;
 import com.baihui.hxtd.soa.base.utils.Search;
+import com.baihui.hxtd.soa.project.dao.ProjectDao;
 import com.baihui.hxtd.soa.project.dao.SupplierDao;
 import com.baihui.hxtd.soa.project.entity.Supplier;
 import com.baihui.hxtd.soa.system.dao.UserDao;
@@ -43,6 +44,8 @@ public class SupplierService {
 	@Resource
 	private SupplierDao supplierDao;
 	
+	@Resource
+	private ProjectDao projectDao;
 
 	@Resource
 	private UserDao userDao;
@@ -111,8 +114,12 @@ public class SupplierService {
      * @throws
      * @Title: delete
      */
-    public void delete(Long[] id) {
-        supplierDao.delete(id);
+    public boolean delete(Long[] id) {
+    	if(projectDao.getCount(id)==0){
+    		supplierDao.delete(id);
+    		return true;
+    	}
+    	return false;
     }
 
     public List<Supplier> export(Map<String, Object> searchParams,DataShift dataShift) throws NoSuchFieldException {

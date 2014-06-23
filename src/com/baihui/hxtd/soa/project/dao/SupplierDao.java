@@ -1,6 +1,10 @@
 
 package com.baihui.hxtd.soa.project.dao;
 
+
+import java.util.List;
+
+import org.hibernate.Query;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Repository;
@@ -21,51 +25,6 @@ import com.baihui.hxtd.soa.project.entity.Supplier;
 @Repository
 public class SupplierDao extends HibernateDAOImpl<Supplier, Long> {
 	
-	private Logger logger = LoggerFactory.getLogger(this.getClass());
-	
-	
-	
-	/**
-	 * 
-	  * getl(根据ID查询组件信息)
-	  * @param @param 
-	  * @param @return    参数类型
-	  * @return HibernatePage<Component>    返回类型
-	  * @throws
-	 */
-	@Override
-	public Supplier get(Long id) {
-		logger.info("根据ID查询组件信息");
-		return super.get(id);
-	}
 
-
-
-	/**
-	 * 
-	  * save(保存：修改/新建)
-	  * @Title: save
-	  * @param @param entity    参数类型
-	  * @return void    返回类型
-	  * @throws
-	 */
-	@Override
-	public Supplier save(Supplier entity) {
-		return super.save(entity);
-	}
-
-	/**
-	  * delete(删除组件信息)
-	  * @Title: delete
-	  * @param @param id    参数类型
-	  * @return void    返回类型
-	  * @throws
-	 */
-	public void delete(long... id) {
-		for(int i=0;i<id.length;i++){
-			super.delete(id[i]);
-		}
-	}
-	
 	
 }

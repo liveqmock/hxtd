@@ -7,7 +7,6 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@taglib prefix="tag" tagdir="/WEB-INF/tags" %>
 <c:set var="ctx" value="${pageContext.request.contextPath}"/>
-<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
 <html>
 <head>
 <title>客户详情</title>
@@ -85,28 +84,30 @@
 		<tr>
 			<td align="right" width="15%">行业：</td>
 			<td align="left">${customer.industry.key}</td>
-			<td align="right" width="15%">省:</td>
-			<td align="left">${customer.province.name }</td>
+			<td  align="right" width="15%">邮箱：</td>
+			<td align="left">${customer.email}</td>
 		</tr>
 		<tr>
+		    <td align="right" width="15%">省:</td>
+			<td align="left">${customer.province.name }</td>
 			<td align="right" width="15%">市：</td>
 			<td align="left">${customer.city.name }</td>
-			<td align="right" width="15%">县:</td>
-			<td align="left">${customer.county.name}</td>
 		</tr>
 		<tr>
+		    <td align="right" width="15%">县:</td>
+			<td align="left">${customer.county.name}</td>
 			<td align="right" width="15%">详细地址：</td>
 			<td align="left">${customer.address}</td>
-			
-			<td align="right" width="15%">创建时间：</td>
-			<td align="left">${customer.createdTime }</td>
 		</tr>
 		<tr>
+		    <td align="right" width="15%">创建时间：</td>
+			<td align="left">${customer.createdTime }</td>
 			<td align="right" width="15%">创建者:</td>
 			<td align="left">${customer.creator.name }</td>
+		</tr>
+		<tr>
 			<td align="right" width="15%">修改时间：</td>
 			<td align="left">${customer.modifiedTime}</td>
-		</tr><tr>
 			<td align="right" width="15%">修改者:</td>
 			<td align="left">${customer.modifier.name }</td>
 		</tr>
@@ -116,8 +117,8 @@
 		<tr>
 			<td align="right" width="15%" valign="top">备注：</td>
 			<td align="left" width="85%" valign="top" class="remarks_input1">
-			<div class="w85b">
-			${customer.remark }</div></td>
+			<div class="w85b">${customer.remark }</div>
+			</td>
 		</tr>
 	</table>
 	<tag:attachment view="true" upload="true" module="customer" query="true" down="true" id="${costomer.id}"></tag:attachment>
@@ -125,8 +126,7 @@
 	<div class=" h40"></div>
     </div>
     <div class="cb block h40 margin0 mt10" style="width:350px;">
-        <ul class="id_table1 cb">
-        </ul>
+        <ul class="id_table1 cb"></ul>
     </div>
 </body>
 </html>

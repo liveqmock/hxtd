@@ -42,7 +42,7 @@ $(function(){
 	       dates.not(this).datepicker("option", option, selectedDate);
 	    }
 	});
-	$(".clear").click(function(){// 清除
+	$(".empty").click(function(){// 清除
 		$(this).prevAll("input").val('');
 	});
 });
@@ -137,7 +137,7 @@ function searchData(action){//搜索弹出框
 					 class="text_input3 required"/>
 				<input type="hidden"id="hide_boss_id" name="bossHead.id" value="${activity.bossHead.id }"/>
 				<i class="s_inquiry globle_img block_inline ml5 vm cp" title="搜索责任人" onclick="searchData('boss');"></i>
-				<i class="dump_btn globle_img block_inline ml5 vm cp clear" title="清除"></i>
+				<i class="dump_btn globle_img block_inline ml5 vm cp empty" title="清除"></i>
 			</td>
 		</tr>
 		</table>

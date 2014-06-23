@@ -63,7 +63,7 @@ $(function(){
            <td width="25%">真实姓名</td>
            <td width="25%">用户名</td>
            <td width="20%">性别</td>
-           <td width="20%">激活</td>
+           <td width="20%">启用</td>
        </tr>
    </table>
    <div style="height: 270px; overflow: hidden; overflow-y:auto; background: #fff">

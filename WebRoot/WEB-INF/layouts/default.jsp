@@ -51,7 +51,7 @@ $(function(){//table tr 双击查看
 </head>
 	<body style="min-width: 1100px;">
 	<%@include file="/WEB-INF/layouts/header.jsp" %>
-	<div style="min-height: 750px;">
+	<div style="min-height: 700px;">
 	<sitemesh:body/>
 	</div>
 	<%@include file="/WEB-INF/layouts/footer.jsp" %>

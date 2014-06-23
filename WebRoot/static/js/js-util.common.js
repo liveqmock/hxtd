@@ -13,6 +13,8 @@ Grid.defaults = {
     resultSelector: ".list",
     resultTemplateId: "template-tbody",
 
+    opebarSelector: ".ie_head",
+
     paginationActive: true,//是否启用分页
     paginationCountLimit: 1,//分页的最低限制条数
     paginationContainerSelector: ".pagination",
@@ -67,17 +69,23 @@ Grid.prototype = {
     /**设置公用元素*/
     setElements: function () {
         this.container = $(this.options.containerSelector);
-        this.form = $(this.options.formSelector, this.container);
-        this.formAction = this.form.attr("action");
+
+        var formSelector = this.container.attr("forform");
+        this.form = formSelector ? $(formSelector) : $(this.options.formSelector, this.container);
+        this.formAction = this.container.attr("formaction") || this.form.attr("action");
         this.form.attr("uri", this.formAction);
-        this.formPageOrderBy = $(this.options.formPageOrderBySelector, this.container);
-        this.formPageOrder = $(this.options.formPageOrderSelector, this.container);
+        this.formPageOrderBy = $(this.options.formPageOrderBySelector, this.form);
+        this.formPageOrder = $(this.options.formPageOrderSelector, this.form);
+
+        var opebarSelector = this.container.attr("foropebar");
+        this.opebar = opebarSelector ? $(opebarSelector) : $(this.options.opebarSelector, this.container);
 
         this.list = this.container.find(this.options.resultSelector);
         this.table = this.list.parents("table");
         this.header = this.table.find("tr:first");
 
         this.paginationContainer = $(this.options.paginationContainerSelector, this.container);
+
         return this;
     },
     /**初始化界面*/
@@ -223,7 +231,7 @@ Grid.prototype = {
                 }, null, $.param({id: values }, true));
             });
         };
-        $(this.options.deleteSomeSelector, container).click(click).data("click", click);
+        $(this.options.deleteSomeSelector, this.opebar).click(click).data("click", click);
         return this;
     },
     /**绑定删除一个事件*/
@@ -247,9 +255,10 @@ Grid.prototype = {
     },
     /**绑定授权事件*/
     bindAuthorization: function () {
+        var _this = this;
         var checkItemSelector = this.options.checkItemSelector;
-        $(this.options.authorizationSelector, this.container).click(function () {
-            var ids = $(checkItemSelector + ":checked", this.container);
+        $(this.options.authorizationSelector, this.opebar).click(function () {
+            var ids = $(checkItemSelector + ":checked", _this.container);
             if (ids.length != 1) {
                 jsUtil.alert("请选择一条且仅限一条数据！");
                 return this;
@@ -263,8 +272,7 @@ Grid.prototype = {
     bindResetPassword: function () {
         var checkItemSelector = this.options.checkItemSelector;
         var container = this.container;
-        var _this = this;
-        $(this.options.resetPasswordSelector, container).click(function () {
+        $(this.options.resetPasswordSelector, this.opebar).click(function () {
             var ids = $(checkItemSelector + ":checked", container);
             if (ids.length == 0) {
                 jsUtil.alert("请选择一条或多条数据！");
@@ -282,10 +290,10 @@ Grid.prototype = {
     },
     /**绑定启用事件*/
     bindEnable: function () {
+        var _this = this;
         var checkItemSelector = this.options.checkItemSelector;
         var container = this.container;
-        var _this = this;
-        $(this.options.enableSelector, container).click(function () {
+        $(this.options.enableSelector, this.opebar).click(function () {
             var ids = $(checkItemSelector + ":checked", container);
             if (ids.length == 0) {
                 jsUtil.alert("请选择一条或多条数据！");
@@ -304,10 +312,10 @@ Grid.prototype = {
     },
     /**绑定禁用事件*/
     bindDisable: function () {
+        var _this = this;
         var checkItemSelector = this.options.checkItemSelector;
         var container = this.container;
-        var _this = this;
-        $(this.options.disableSelector, container).click(function () {
+        $(this.options.disableSelector, this.opebar).click(function () {
             var ids = $(checkItemSelector + ":checked", container);
             if (ids.length == 0) {
                 jsUtil.alert("请选择一条或多条数据！");
@@ -354,7 +362,7 @@ Grid.prototype = {
     /**绑定导出*/
     bindExport: function () {
         var _this = this;
-        $(this.options.exportSelector, this.container).click(function () {
+        $(this.options.exportSelector, this.opebar).click(function () {
             var exportButton = $(this);
             jsUtil.confirm("最多导出符合条件的前3000条数据", function () {
                 var params = {};
@@ -370,8 +378,7 @@ Grid.prototype = {
     /**设置分页元素*/
     setPaginationElements: function () {
         var options = this.options;
-
-        this.pagination = $(options.paginationSelector, this.container);
+        this.pagination = $(this.options.paginationSelector, this.container);
         this.pageNo = parseInt($(options.noSelector, this.pagination).attr("pageno"));
         this.totalPages = parseInt($(options.totalPagesSelector).text());
 
@@ -409,7 +416,7 @@ Grid.prototype = {
 
         var pagination = this.pagination;
 
-        var form = $(options.formSelector, this.container);
+        var form = this.form;
         var formPageSize = $(options.formPageSizeSelector, form);
         var formPageNo = $(options.formPageNoSelector, form);
 
@@ -514,7 +521,7 @@ Grid.prototype = {
     bindQuery: function () {
         var _this = this;
         var click = function () {_this.loadGridWithDisable({button: $(this)});};
-        $(this.options.submitSelector, this.container).click(click).data("click", click);
+        $(this.options.submitSelector, this.form).click(click).data("click", click);
         return this;
     },
     /**绑定重置事件*/
@@ -538,7 +545,7 @@ Grid.deleteSynTree = function (ztree, jqele) {
             ztree.removeNode(node);
         }
 
-        if (node.pId) {
+        if (node && node.pId) {
             node = ztree.getNodeByParam("id", node.pId);
         } else {
             node = ztree.getNodes()[0];

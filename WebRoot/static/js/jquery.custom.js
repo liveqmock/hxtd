@@ -1,4 +1,94 @@
 (function ($) {
+
+    /**jQuery的自定义扩展*/
+    $.Custom = function () {}
+    $.extend($.Custom, {
+        /**选中通过样式*/
+        selectByClass: function (jqele, selected, unselected) {
+            jqele.addClass(selected).removeClass(unselected);
+            return this;
+        },
+        /**不选中通过样式*/
+        unselectByClass: function (jqele, selected, unselected) {
+            jqele.addClass(unselected).removeClass(selected);
+            return this;
+        },
+        /**取消选中通过样式*/
+        cancleSelectByClass: function (containerSelector, selected, unselected) {
+            this.unselectByClass($("." + selected, containerSelector), selected, unselected);
+            return this;
+        },
+        /**触发切换“选中|未选中”样式*/
+        toggleClass: function (jqele, selected, unselected) {
+            var _this = this;
+            _this.selectByClass(jqele, unselected, selected);
+            jqele.toggle(function () {_this.selectByClass($(this), selected, unselected);}, function () {_this.selectByClass($(this), unselected, selected);});
+            return this;
+        },
+        /**选项卡*/
+        tab: function (options) {
+            var _this = this;
+
+            options = $.extend({
+                tabContainerSelector: ".tab",
+                tabTitlesSelector: ".tab-titles",
+                tabTitleSelector: ".tab-title",
+                titleSelectedClass: "id_table3li",
+                titleUnselectedClass: "id_table3li2",
+                tabPanelsSelector: ".tab-panels",
+                tabPanelSelector: ".tab-panel",
+                panelSelectedClass: "selected",
+                panelUnselectedClass: "unselected"
+            }, options);
+
+            var titles = $(options.tabTitlesSelector);
+            var panels = $(options.tabPanelsSelector);
+            options = $.extend(options, {
+                titleSelectedClass: titles.attr("selectedclass"),
+                titleUnselectedClass: titles.attr("unselectedclass"),
+                panelSelectedClass: panels.attr("selectedclass"),
+                panelUnselectedClass: panels.attr("unselectedclass")
+            });
+
+            titles.find(options.tabTitleSelector).click(function () {
+                var $this = $(this);
+                _this.cancleSelectByClass(options.tabTitlesSelector, options.titleSelectedClass, options.titleUnselectedClass);
+                _this.selectByClass($this, options.titleSelectedClass, options.titleUnselectedClass);
+                _this.cancleSelectByClass(options.tabPanelsSelector, options.panelSelectedClass, options.panelUnselectedClass);
+                _this.selectByClass($($this.attr("fortab")), options.panelSelectedClass, options.panelUnselectedClass);
+            });
+
+            return this;
+        },
+        /**触发设置Boolean属性的值*/
+        toggleBoolean: function (jqele, name) {
+            jqele.attr(name, false);
+            jqele.toggle(function () {$(this).attr(name, true);}, function () {$(this).attr(name, false);});
+            return this;
+        },
+        /**
+         * 设置全选
+         * 1.点击全选，复选框项选中
+         * 2.点击全选，触发子项中未选中项全选
+         */
+        bindCheckAll: function (jqele, containerSelector, checkItemSelector, eventType) {
+            checkItemSelector = checkItemSelector || ":checkbox";
+            jqele.click(function () {
+                var $this = $(this);
+                var checkItem = $this.parents(containerSelector).find(checkItemSelector);
+                if (eventType) {
+                    checkItem.filter(Boolean($this.attr("checked")) ? ":not([checked])" : "[checked]").trigger(eventType);
+                } else {
+                    checkItem.attr("checked", Boolean($this.attr("checked")));
+                }
+            });
+            return this;
+        }
+    });
+
+    //缩写
+    window.$C = $.Custom;
+
     $.objectClear = function (object) {
         var clears = [];
         for (var attr in object) {

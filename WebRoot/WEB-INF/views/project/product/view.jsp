@@ -61,7 +61,7 @@
 		</tr>
 		<tr>
 			<td align="right">销售开始日期：</td>
-			<td align="left">${activity.saleBeginTime}</td>
+			<td align="left">${product.saleBeginTime}</td>
 			<td align="right">销售结束日期：</td>
 			<td align="left">${product.saleEndTime}</td>
 		</tr>

@@ -107,7 +107,7 @@ public class MessageService {
 	public Message save(Message message) {
 		logger.info("保存系统消息信息{}", message);
 		message.setCreatedTime(new Date());
-		message.setModifieTime(new Date());
+		message.setModifiedTime(new Date());
 		message.setIsDeleted(false);
 		return messageDao.save(message);
 

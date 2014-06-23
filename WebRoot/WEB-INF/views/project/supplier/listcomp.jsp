@@ -36,7 +36,7 @@ $(function(){
 </head>
 <body>
 <div class="listcontainer">
-	<form name="user" action="${ctx}/system/user/query.do" onsubmit="return false;">
+	<form name="user" action="${ctx}/project/supplier/query.do" onsubmit="return false;">
 	<table class="fl mt5 w">
     	<tr>
     		<td class="f14" align="right" width="12%">供应商名称：</td>

@@ -27,21 +27,21 @@
 
                     <c:set var="secoundMenus" value="${VS_MENUBAR_SECOUND_MENUS[menu.id]}"/>
                     <c:if test="${secoundMenus!=null}">
-                        <span class="pa none z1">
-                              <b class="h_navlist_growt block c_orange f14 tc lh50">${menu.name}</b>
-                              <ul class="block c_orange id_grow block">
-                                  <c:forEach items="${secoundMenus}" var="secoundMenu">
-                                      <c:set var="selectedSecoundMenuCss" value="${secoundMenu==VR_LAST_MENU?'select':''}"/>
-                                      <li class="cb block tc">
-                                          <c:choose>
-                                              <c:when test="${secoundMenu.trigger==null}"><a href="javascript:void(0)" class="${selectedSecoundMenuCss}">${secoundMenu.name}</a></c:when>
-                                              <c:otherwise><a href="${ctx}${secoundMenu.trigger.url}" class="${selectedSecoundMenuCss}">${secoundMenu.name}</a></c:otherwise>
-                                          </c:choose>
-                                      </li>
-                                  </c:forEach>
-                                  <b class="h_navlist_growb1 block cb"></b>
-                              </ul>
-                         </span>
+                        <div class="pa none z1">
+                            <b class="h_navlist_growt block c_orange f14 tc lh50">${menu.name}</b>
+                            <ul class="block c_orange id_grow block">
+                                <c:forEach items="${secoundMenus}" var="secoundMenu">
+                                    <c:set var="selectedSecoundMenuCss" value="${secoundMenu==VR_LAST_MENU?'select':''}"/>
+                                    <li class="cb block tc">
+                                        <c:choose>
+                                            <c:when test="${secoundMenu.trigger==null}"><a href="javascript:void(0)" class="${selectedSecoundMenuCss}">${secoundMenu.name}</a></c:when>
+                                            <c:otherwise><a href="${ctx}${secoundMenu.trigger.url}" class="${selectedSecoundMenuCss}">${secoundMenu.name}</a></c:otherwise>
+                                        </c:choose>
+                                    </li>
+                                </c:forEach>
+                                <b class="h_navlist_growb1 block cb"></b>
+                            </ul>
+                        </div>
                     </c:if>
                 </b>
             </li>

@@ -196,10 +196,12 @@ public class ProjectController {
 	@RequestMapping(value = "/delete.do",produces = "text/text;charset=UTF-8")
 	public String delete(Long[] id){
 		logger.info("projectController.delete删除组件");
-		projectService.delete(id);
-		JsonDto json = new JsonDto();
-		json.setMessage("删除成功");
-		return json.toString();
+		boolean flag = projectService.delete(id);
+		if(flag){
+			return new JsonDto().toString();
+		}else{
+			return new JsonDto("数据存在关联,删除失败!").toString(); 
+		}
 	}
 	
 	/**

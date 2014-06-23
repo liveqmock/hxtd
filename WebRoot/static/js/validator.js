@@ -74,9 +74,10 @@ jQuery.validator.addMethod("requiredSelect", function (value, element) {
 jQuery.validator.addMethod("ruleUrl", function (value, element) {
     return this.optional(element) || /^(\/[a-zA-Z]+)+\.(do|doself|docomp)$/.test(value);
 }, "请输入规则的调用入口，如：/system/user/add.do");
-jQuery.validator.addMethod("amount", function(val, element){
-	var reg = /^\d+(\.\d+)?$/;
-	return this.optional(element)||(reg.test(val));
+
+jQuery.validator.addMethod("amount", function (val, element) {
+    var reg = /^\d+(\.\d+)?$/;
+    return this.optional(element) || (reg.test(val));
 }, "*只能输入整数或小数");
 
 /**
@@ -85,7 +86,7 @@ jQuery.validator.addMethod("amount", function(val, element){
  * 修改时，传入原始值，当前值不进行验证
  */
 jQuery.validator.addMethod("unique", function (value, element, param) {
-    !param instanceof Array && (param = [param]);
+    !param instanceof Array && (param = [param, '']);
 
     if (param[1] == value.trim()) {
         return true;
@@ -146,7 +147,7 @@ jQuery.validator.addMethod("unique", function (value, element, param) {
         }
     }, param));
     return "pending";
-}, "该字段值已存在");
+}, "该字段值不允许重复");
 
 function _previousValue(element) {
     return $.data(element, "previousValue") || $.data(element, "previousValue", {
@@ -155,3 +156,9 @@ function _previousValue(element) {
         message: this.defaultMessage(element, "unique")
     });
 }
+
+/**qq号验证*/
+jQuery.validator.addMethod("qq", function (value, element) {
+    return this.optional(element) || value.search(/^[1-9]\d{4,8}$/) != -1;
+}, "QQ号格式错误");
+

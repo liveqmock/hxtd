@@ -107,9 +107,7 @@ function formReset() {
 				</td>
 				<td class="f14" align="left" width="16%">
 					<input class="text_input2" name="search_GTE_financeLimit"
-						type="text" />
-					-
-					<input class="text_input2" name="search_LTE_financeLimit"
+						type="text" />-<input class="text_input2" name="search_LTE_financeLimit"
 						type="text" />
 				</td>
 				<td class="f14" align="right" width="6%">
@@ -117,26 +115,22 @@ function formReset() {
 				</td>
 				<td class="f14" align="left" width="16%">
 					<input class="text_input2" name="search_GTE_financeCycle"
-						type="text" />
-					-
-					<input class="text_input2" name="search_LTE_financeCycle"
+						type="text" />-<input class="text_input2" name="search_LTE_financeCycle"
 						type="text" />
 				</td>
 				<td class="f14" align="right" width="6%">
 					收益率%：
 				</td>
 				<td class="f14" align="left" width="16%">
-					<input class="text_input2" name="search_GTE_er" type="text" />
-					-
-					<input class="text_input2" name="search_LTE_er" type="text" />
+					<input class="text_input2" name="search_GTE_er" type="text" 
+					/>-<input class="text_input2" name="search_LTE_er" type="text" />
 				</td>
 				<td class="f14" align="right" width="6%">
 					赎回率%：
 				</td>
 				<td class="f14" align="left" width="16%">
-					<input class="text_input2" name="search_GTE_aer" type="text" />
-					-
-					<input class="text_input2" name="search_LTE_aer" type="text" />
+					<input class="text_input2" name="search_GTE_aer" type="text" />-<input 
+					class="text_input2" name="search_LTE_aer" type="text" />
 				</td>
 			</tr>
 			<tr>
@@ -145,9 +139,8 @@ function formReset() {
 				</td>
 				<td class="f14" align="left" width="16%">
 					<input class="text_input2 input_close globle_img time"
-						name="search_GTE_beginTime" type="text" />
-					-
-					<input class="text_input2 input_close globle_img time"
+						name="search_GTE_beginTime" type="text"
+						 />-<input class="text_input2 input_close globle_img time"
 						name="search_LTE_beginTime" type="text" />
 				</td>
 				<td class="f14" align="right" width="6%">
@@ -155,9 +148,8 @@ function formReset() {
 				</td>
 				<td class="f14" align="left" width="16%">
 					<input class="text_input2 input_close globle_img time"
-						name="search_GTE_createdTime" type="text" />
-					-
-					<input class="text_input2 input_close globle_img time"
+						name="search_GTE_createdTime" type="text" 
+						/>-<input class="text_input2 input_close globle_img time"
 						name="search_LTE_createdTime" type="text" />
 				</td>
 				<td class="f14" align="right" width="6%">
@@ -165,9 +157,8 @@ function formReset() {
 				</td>
 				<td class="f14" align="left" width="16%">
 					<input class="text_input2 input_close globle_img time"
-						name="search_GTE_modifiedTime" type="text" />
-					-
-					<input class="text_input2 input_close globle_img time"
+						name="search_GTE_modifiedTime" type="text" 
+						/>-<input class="text_input2 input_close globle_img time"
 						name="search_LTE_modifiedTime" type="text" />
 				</td>
 			</tr>

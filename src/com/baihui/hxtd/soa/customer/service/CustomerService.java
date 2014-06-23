@@ -143,15 +143,14 @@ public class CustomerService {
 	public List<Customer>  find(Map<String, Object> searchParams) throws NoSuchFieldException {
 		logger.info("分页查找用户");
         DetachedCriteria detachedCriteria = DetachedCriteria.forClass(Customer.class);
+        detachedCriteria.setFetchMode("owner", FetchMode.JOIN);
         detachedCriteria.setFetchMode("creator", FetchMode.JOIN);
-        detachedCriteria.setFetchMode("modifier", FetchMode.JOIN);
         detachedCriteria.setFetchMode("type", FetchMode.JOIN);
+        detachedCriteria.setFetchMode("modifier", FetchMode.JOIN);
         detachedCriteria.add(Restrictions.eq("isDeleted", false));
-
         Map<String, SearchFilter> filters = Search.parse(searchParams);
+        
         Search.buildCriteria(filters, detachedCriteria, Customer.class);
-
-        detachedCriteria.addOrder(Order.asc("name"));
         return customerDao.find(detachedCriteria, exportCounts);
 
 	}

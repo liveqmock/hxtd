@@ -10,7 +10,7 @@
 
 <html>
 <head>
-    <title>角色详细信息</title>
+    <title>角色详情</title>
     <link rel="stylesheet" href="${ctx}/static/css/application.css" type="text/css"/>
     <link href="${ctx}/static/css/recommend/detail.css" rel="stylesheet" type="text/css"/>
     <script type="text/javascript" src="${ctx}/static/js/js-util.common.js"></script>
@@ -18,7 +18,7 @@
     <script type="text/javascript" src="${ctx}/static/js/jquery.metadata.js"></script>
     <script type="text/javascript" src="${ctx}/static/js/validator.js"></script>
 
-    <script>$(function () {jsUtil.bindSave();});</script>
+    <script>$(function () {jsUtil.bindSave().renderRequired();});</script>
 </head>
 
 <body>
@@ -51,7 +51,7 @@
                 </tr>
                 <tr>
                     <td align="right" width="15%">角色名：</td>
-                    <td align="left"><input type="text" class="{required:true} text_input3" name="name" value="${role.name}"/></td>
+                    <td align="left"><input type="text" class="{required:true,maxlength:16,unique:['Role','${role.name}']} text_input3" name="name" value="${role.name}"/></td>
                     <td align="right" width="15%">类型：</td>
                     <td align="left">
                         <div class="pr">
@@ -70,7 +70,7 @@
                 <tr>
                     <td align="right" width="15%" valign="top">备注：</td>
                     <td align="left" width="85%">
-                        <textarea name="remark" class="remarks_input1">${role.remark }</textarea>
+                        <textarea name="remark" class="{maxlength:255} remarks_input1">${role.remark }</textarea>
                     </td>
                 </tr>
                 <tr style="display: none">

@@ -28,7 +28,7 @@
             var grid = new Grid().init().bindAuthorization().bindResetPassword().bindEnable().bindDisable().bindExport();
             jsUtil.organizationTree({
                 data:${organizationTree==null?"":organizationTree},
-                selectedId:"${organizationId}",
+                selectedId: "${organizationId}",
                 click: function (event, treeId, treeNode) {
                     $("[name=organizationId]").val(treeNode.id);
                     var $add = $(".add");
@@ -39,7 +39,7 @@
     </script>
 </head>
 <body>
-<div class="listcontainer">
+<div>
     <div class="margin0 ml35 mr35">
 
         <div class="fl" style="width:20%">
@@ -69,7 +69,7 @@
                         <td class="f14" align="left" width="16%"><input type="text" name="search_LIKE_name" value="${name}" class="text_input1"/></td>
                         <td class="f14" align="right" width="6%">真实姓名：</td>
                         <td class="f14" align="left" width="16%"><input type="text" name="search_LIKE_realName" value="${realName}" class="text_input1"/></td>
-                        <td class="f14" align="right" width="6%">激活：</td>
+                        <td class="f14" align="right" width="6%">启用：</td>
                         <td class="f14" align="left" width="16%">
                             <div class="pr">
                                 <select name="search_EQ_isActive" class="select2 pr">
@@ -109,10 +109,13 @@
                             <li><a href="javascript:void(0)" uri="${ctx}/system/user/resetPassword.do" class="block c_white lh25 mr10 resetpassword"><b class="allbtn_l block fl"></b><b class="allbtn_r pr13 block fl w_auto f14">重置密码</b></a></li>
                         </c:if>
                         <c:if test="${VS_HAS_FUNCTIONS.userEnable}">
-                            <li><a href="javascript:void(0)" uri="${ctx}/system/user/enable.do" class="block c_white lh25 mr10 enable"><b class="allbtn_l block fl"></b><b class="allbtn_r pr13 block fl w_auto f14">启&nbsp;用</b></a></li>
+                            <%--<li><a href="javascript:void(0)" uri="${ctx}/system/user/enable.do" class="block c_white lh25 mr10 enable"><b class="allbtn_l block fl"></b><b class="allbtn_r pr13 block fl w_auto f14">启&nbsp;用</b></a></li>--%>
+                            <li><a href="javascript:void(0)" uri="${ctx}/system/user/enable.do" class="globle_img h_on block enable"></a></li>
                         </c:if>
                         <c:if test="${VS_HAS_FUNCTIONS.userDisable}">
-                            <li><a href="javascript:void(0)" uri="${ctx}/system/user/disable.do" class="block c_white lh25 mr10 disable"><b class="allbtn_l block fl"></b><b class="allbtn_r pr13 block fl w_auto f14">禁&nbsp;用</b></a></li>
+                            <%--<li><a href="javascript:void(0)" uri="${ctx}/system/user/disable.do" class="block c_white lh25 mr10 disable"><b class="allbtn_l block fl"></b><b class="allbtn_r pr13 block fl w_auto f14">禁&nbsp;用</b></a></li>--%>
+                            <li><a href="javascript:void(0)" uri="${ctx}/system/user/disable.do" class="globle_img h_off block disable"></a></li>
+
                         </c:if>
                     </ul>
 
@@ -127,13 +130,13 @@
                 </div>
             </div>
 
-            <div>
+            <div class="listcontainer" forform="form" foropebar=".ie_head">
                 <table class="cb id_table2 w pr35">
                     <tr>
                         <th style="width:2%"><input type="checkbox" class="checkall"/></th>
                         <th style="width:10%" class="sortable orderby" orderby="name">用户名</th>
                         <th style="width:5%">管理员</th>
-                        <th style="width:10%" class="sortable orderby" orderby="isActive">激活</th>
+                        <th style="width:10%" class="sortable orderby" orderby="isActive">启用</th>
                         <th style="width:10%">组织</th>
                         <th style="width:10%">真实姓名</th>
                         <th style="width:5%">性别</th>
@@ -175,9 +178,9 @@
                         {#/for}
                     </textarea>
                 </table>
+                <div class="cb ml35 mt20 h40 pagination"></div>
+                <%@include file="/WEB-INF/template/pagination.jsp" %>
             </div>
-            <div class="cb ml35 mt20 h40 pagination"></div>
-            <%@include file="/WEB-INF/template/pagination.jsp" %>
         </div>
     </div>
     <div class="cb"></div>

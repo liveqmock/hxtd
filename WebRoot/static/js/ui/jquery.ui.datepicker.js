@@ -1665,7 +1665,7 @@ $.extend(Datepicker.prototype, {
 			this._get(inst, "closeText") + "</button>" : "");
 
 		buttonPanel = (showButtonPanel) ? "<div class='ui-datepicker-buttonpane ui-widget-content'>" + (isRTL ? controls : "") +
-			(this._isInRange(inst, gotoDate) ? "<button type='button' class='ui-datepicker-current ui-state-default ui-priority-secondary ui-corner-all' data-handler='today' data-event='click'" +
+			(this._isInRange(inst, gotoDate) ? "<button type='button' class='ui-datepicker-current ui-state-default ui-priority-primary ui-corner-all' data-handler='today' data-event='click'" +
 			">" + currentText + "</button>" : "") + (isRTL ? "" : controls) + "</div>" : "";
 
 		firstDay = parseInt(this._get(inst, "firstDay"),10);

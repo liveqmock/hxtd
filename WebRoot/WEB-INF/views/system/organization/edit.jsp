@@ -10,7 +10,7 @@
 
 <html>
 <head>
-    <title>组织详细信息</title>
+    <title>组织详情</title>
     <link rel="stylesheet" href="${ctx}/static/css/application.css" type="text/css"/>
     <link href="${ctx}/static/css/recommend/detail.css" rel="stylesheet" type="text/css"/>
     <script type="text/javascript" src="${ctx}/static/js/js-util.common.js"></script>
@@ -21,7 +21,12 @@
     <script type="text/javascript" src="${ctx}/static/js/jquery.validate.js"></script>
     <script type="text/javascript" src="${ctx}/static/js/validator.js"></script>
 
-    <script type="text/javascript">$(function () {jsUtil.organizationTreeDialog().bindSave();});</script>
+    <script type="text/javascript">
+        $(function () {
+            jsUtil.organizationTreeDialog().bindSave();
+            jsUtil.renderRequired();
+        });
+    </script>
 
 </head>
 <body>
@@ -45,7 +50,7 @@
 
             <h1 class="f14 fbnone ml40 pt10">基本信息</h1>
             <table class="cb id_table3 w95b bg_c_white margin0 mt10">
-                <tr style="display: none">
+                <tr class="none">
                     <td align="right" width="15%">编号：</td>
                     <td align="left"><input type="text" name="code" value="${organization.code}" class="text_input3"/></td>
                     <td align="right" width="15%">序号：</td>
@@ -53,9 +58,9 @@
                 </tr>
                 <tr>
                     <td align="right" width="15%">名称：</td>
-                    <td align="left"><input type="text" name="name" class="{required:true,maxlength:64} text_input3" value="${organization.name}"/></td>
+                    <td align="left"><input type="text" name="name" class="{required:true,maxlength:64,unique:['Organization','${organization.name}']} text_input3" value="${organization.name}"/></td>
                     <td align="right" width="15%">全名：</td>
-                    <td align="left"><input type="text" name="fullName" class="{required:true,maxlength:128} text_input3" value="${organization.fullName}"/></td>
+                    <td align="left"><input type="text" name="fullName" class="{required:true,maxlength:128,unique:['Organization','${organization.fullName}']} text_input3" value="${organization.fullName}"/></td>
                 </tr>
                 <tr>
                     <td align="right" width="15%">类型：</td>
@@ -85,7 +90,7 @@
                     <td align="right" width="15%">电话：</td>
                     <td align="left"><input type="text" name="phone" value="${organization.phone}" class="{isMobile:true} text_input3"/></td>
                     <td align="right" width="15%">邮箱：</td>
-                    <td align="left"><input type="text" name="email" class="{email:true} text_input3" value="${organization.email}"/></td>
+                    <td align="left"><input type="text" name="email" class="{email:true,maxlength:32} text_input3" value="${organization.email}"/></td>
                 </tr>
                 <tr>
                     <td align="right" width="15%">地址：</td>

@@ -133,7 +133,7 @@ $(function(){
                   	class="block_inline s_dump_btn globle_img ml10" title="详情"></a>
               </c:if>
               <c:if test="${VS_HAS_FUNCTIONS.productModify}">
-                  <a href="${ctx}/project/supplier/toModifyPage.do?id={$T.row.id}" 
+                  <a href="${ctx}/project/product/toModifyPage.do?id={$T.row.id}" 
                   	class="block_inline s_edit_btn globle_img ml10" title="编辑"></a>
               </c:if>
               <c:if test="${VS_HAS_FUNCTIONS.productDelete}">

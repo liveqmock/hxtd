@@ -1,5 +1,5 @@
 <%--
-  系统消息明细页
+    系统消息增加页面
   Role: huizijing
   Date:2014/6/4
 --%>
@@ -9,6 +9,7 @@
 <c:set var="ctx" value="${pageContext.request.contextPath}"/>
 <html>
 <head>
+<title>系统消息增加</title>
 <link href="${ctx}/static/css/stressing/detail.css" rel="stylesheet" type="text/css" />
 <script type="text/javascript" src="${ctx}/static/js/jquery.metadata.js"></script>
 <script type="text/javascript" src="${ctx}/static/js/jquery.validate.js"></script>
@@ -51,7 +52,6 @@ function clearInputVal(obj){//清除
 </head>
 <body>
 <form id="form" action="${ctx }${funcUrl}" method="POST">
-<div >
         <div class="ml35 mr35 mt20 block cb cb">
         <b class="table_headl globle_img block fl"></b>
         <div class="fl table_headc fl w99b">
@@ -73,9 +73,7 @@ function clearInputVal(obj){//清除
             <tr>
             <td align="right" width="15%" ><span class="w_red">*&nbsp;</span>系统消息内容：</td>
                 <td align="left">
-                    
                     <textarea name="content" class="required" style="width:90%;height:300px;border:1px solid #e0e0e0; margin:5px 0px">${userMessage.message.content}</textarea>
-                   
                </td>
            </tr>
            <tr>
@@ -89,7 +87,7 @@ function clearInputVal(obj){//清除
            </tr>
         </table>
 		<div class=" h40"></div>
-       </div>
+        </div>
         <div class="cb block h40 margin0 mt10" style="width:350px;">
 		<ul class="id_table1 cb">
 		<li><a id="save" href="javascript:;" class="block c_white lh25 mr10"><b class="allbtn_l block fl"></b><b class="allbtn_r pr13 block fl w_auto f14 ">发&nbsp;&nbsp;送</b></a></li>
@@ -98,8 +96,6 @@ function clearInputVal(obj){//清除
 		</ul>
 		<div class="clear"></div>
 	    </div>
-   
-  </div>
 </form>
 </body>
 </html>

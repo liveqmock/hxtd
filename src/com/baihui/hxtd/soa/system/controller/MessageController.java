@@ -92,17 +92,13 @@ public class MessageController {
         Search.clearBlankValue(searchParams);
         Search.toRangeDate(searchParams, "createdTime");
         logger.debug("查询条件数目“{}”", searchParams.size());
-
         logger.info("添加默认的查询条件");
-
         logger.info("获取分页数据");
-        if("recived".equals(type)){
+        if("recived".contains(type)){
             page = messageService.findRecivePage(searchParams, page,user);
         }else{
-        	
         	page = messageService.findSendPage(searchParams, page,user);
         }
-       
         logger.info("以DTO格式返回");
         JsonDto jsonDto = new JsonDto();
         jsonDto.setSuccessFlag(true);
@@ -130,12 +126,7 @@ public class MessageController {
         page.setHibernateOrder(order);
         model.addAttribute("page", page);
         model.addAttribute("type", type);
-        if("recived".equals(type)){
-        	
-        	return "/system/message/list";
-        }else{
-            return "/system/message/sendlist";
-        }
+       	return "/system/message/list";
 	}
 	
 	
@@ -183,7 +174,7 @@ public class MessageController {
 		logger.info("获得当前操作用户{}", u.getName());
 		message.setCreatedTime(new Date());
 		message.setModifier(u);
-		message.setModifieTime(new Date());
+		message.setModifiedTime(new Date());
 		message.setCreater(u);
 		messageService.save(message);
 		User user=userService.getById(userId);

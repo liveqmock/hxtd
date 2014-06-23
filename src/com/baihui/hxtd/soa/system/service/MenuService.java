@@ -4,11 +4,12 @@ import com.baihui.hxtd.soa.base.orm.hibernate.HibernatePage;
 import com.baihui.hxtd.soa.base.utils.UrlUtil;
 import com.baihui.hxtd.soa.base.utils.serial.TierSerial;
 import com.baihui.hxtd.soa.base.utils.serial.TierSerials;
-import com.baihui.hxtd.soa.common.dao.CommonDao;
+import com.baihui.hxtd.soa.system.DictionaryConstant;
 import com.baihui.hxtd.soa.system.dao.DictionaryDao;
 import com.baihui.hxtd.soa.system.dao.FunctionDao;
 import com.baihui.hxtd.soa.system.dao.MenuDao;
 import com.baihui.hxtd.soa.system.dao.UserDao;
+import com.baihui.hxtd.soa.system.entity.Dictionary;
 import com.baihui.hxtd.soa.system.entity.Function;
 import com.baihui.hxtd.soa.system.entity.Menu;
 import com.baihui.hxtd.soa.system.entity.User;
@@ -102,6 +103,11 @@ public class MenuService {
             orgCriteria.createAlias("menu", "menu");
             orgCriteria.add(Restrictions.eqProperty("menu.id", "rootMenu.id"));
             criterion = Restrictions.or(criterion, Subqueries.exists(orgCriteria));
+
+            //公共级别的菜单，不需要权限验证
+            criteria.createAlias("trigger", "trigger");
+            Dictionary privilegeLevel = dictionaryDao.getByValue(DictionaryConstant.FUNCTION_PRIVILEGELEVEL_PUBLIC);
+            criterion = Restrictions.or(criterion, Restrictions.eq("trigger.privilegeLevel", privilegeLevel));
 
             criteria.add(criterion);
         } else {
@@ -212,27 +218,6 @@ public class MenuService {
         logger.debug("数目“{}”", showMenus.size());
 
         return showMenus;
-    }
-
-    /**
-     * 查找首页url
-     */
-    public String findIndexUrl(Collection<Menu> menus) {
-        logger.info("查找首页url");
-
-        String url = null;
-        for (Menu menu : menus) {
-            if (menu.getIsLeaf()) {
-                url = menu.getUrl();
-                break;
-            }
-        }
-
-        if (url == null) {
-            throw new RuntimeException("未找到首页url");
-        }
-
-        return url;
     }
 
     /**
@@ -363,21 +348,6 @@ public class MenuService {
     }
 
     /**
-     * getMenuId(自动生成编号)
-     *
-     * @param @return 参数类型
-     * @return String    返回类型
-     * @throws
-     * @Title: getMenuId
-     * @Description: TODO
-     */
-    @Transactional(readOnly = true)
-    public String getMenuId(Long pId) {
-        return menuDao.createMenuId(pId);
-    }
-
-
-    /**
      * 新增
      * 编号规则：依次增长。
      * 在A节点下新增AB节点，AB节点的编号为A节点下最大子节点AA的下一位，
@@ -430,6 +400,9 @@ public class MenuService {
         menu.setIsDeleted(false);
         logger.debug("是否删除的为“{}”", menu.getIsDeleted());
 
+        if (menu.getDefaultShow()) {
+            menuDao.updateToNotDefaultShow();
+        }
         menuDao.save(menu);
 
         //级联新增功能
@@ -503,6 +476,11 @@ public class MenuService {
         menu.setModifiedTime(new Date());
         logger.debug("修改时间为当前时间“{}”", menu.getModifiedTime());
 
+        //修改当前菜单为默认显示时，更新其他默认显示的菜单为不默认显示
+        Boolean defaultShow = menuDao.getDefaultShow(menu.getId());
+        if (defaultShow == false && menu.getDefaultShow() == true) {
+            menuDao.updateToNotDefaultShow();
+        }
         menuDao.update(menu);
 
         userDao.updateAllStoreStatus();

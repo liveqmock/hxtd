@@ -24,10 +24,11 @@
 
     <script type="text/javascript">
         $(function () {
+            jsUtil.renderRequired();
             jsUtil.bindSave();
             jsUtil.organizationTree({
-                data:${organizationTree},
-                selectedId: ${user.organization.id},
+                data:${organizationTree==null?"":organizationTree},
+                selectedId: "${user.organization.id}",
                 click: function (event, treeId, treeNode) {
                     $(".organization").val(treeNode.name);
                     $("[name=organization\\.id]").val(treeNode.id);
@@ -88,26 +89,26 @@
                         </tr>
                         <tr>
                             <td align="right" width="15%">用户名：</td>
-                            <td align="left"><input type="text" class="{required:true} text_input3" name="name" value="${user.name}"/></td>
+                            <td align="left"><input type="text" class="{required:true,maxlength:32} text_input3" name="name" value="${user.name}"/></td>
                             <td align="right" width="15%">密码：</td>
-                            <td align="left"><input type="password" class="{required:true} text_input3" name="password" value="${user.password}"/></td>
+                            <td align="left"><input type="password" class="{required:true,maxlength:64} text_input3" name="password" value="${user.password}"/></td>
                         </tr>
                         <tr>
-                            <td align="right" width="15%">管理员：</td>
+                            <td align="right" width="15%" class="required">管理员：</td>
                             <td align="left">
-                                <label><input type="radio" name="isManager" value="1" ${user.isManager?"checked":""} ${VS_USER.isManager?"":"disabled"}>是</label>
-                                <label><input type="radio" name="isManager" value="0" ${!user.isManager?"checked":""} >否</label>
+                                <label><input type="radio" name="isManager" value="1" ${user.isManager==true?"checked":""} ${VS_USER.isManager?"":"disabled"}>是</label>
+                                <label><input type="radio" name="isManager" value="0" ${user.isManager==false?"checked":""} >否</label>
                             </td>
-                            <td align="right" width="15%">激活：</td>
+                            <td align="right" width="15%" class="required">启用：</td>
                             <td align="left">
-                                <label><input type="radio" name="isActive" value="1" ${user.isActive?"checked":""}>是</label>
-                                <label><input type="radio" name="isActive" value="0" ${!user.isActive?"checked":""}>否</label>
+                                <label><input type="radio" name="isActive" value="1" ${user.isActive==true?"checked":""}>是</label>
+                                <label><input type="radio" name="isActive" value="0" ${user.isActive==false?"checked":""}>否</label>
                             </td>
                         </tr>
                         <tr>
                             <td align="right" width="15%">真实姓名：</td>
-                            <td align="left"><input type="text" name="realName" value="${user.realName}" class="text_input3"/></td>
-                            <td align="right" width="15%">性别：</td>
+                            <td align="left"><input type="text" name="realName" value="${user.realName}" class="{required:true,maxlength:32} text_input3"/></td>
+                            <td align="right" width="15%" class="required">性别：</td>
                             <td align="left">
                                 <c:forEach items="${sexs}" var="item">
                                     <label><input type="radio" name="sex.id" value="${item.id}" ${item.id==user.sex.id?"checked":""}>${item.key}</label>
@@ -116,19 +117,29 @@
                         </tr>
                         <tr>
                             <td align="right" width="15%">手机：</td>
-                            <td align="left"><input type="text" name="phone" value="${user.phone}" class="text_input3"/></td>
+                            <td align="left"><input type="text" name="phone" value="${user.phone}" class="{isMobile:true} text_input3"/></td>
                             <td align="right" width="15%">电话：</td>
-                            <td align="left"><input type="text" name="mobile" value="${user.mobile}" class="text_input3"/></td>
+                            <td align="left"><input type="text" name="mobile" value="${user.mobile}" class="{isMobile:true} text_input3"/></td>
                         </tr>
                         <tr>
                             <td align="right" width="15%">邮箱：</td>
-                            <td align="left"><input type="text" name="email" value="${user.email}" class="text_input3"/></td>
+                            <td align="left"><input type="text" name="email" value="${user.email}" class="{email:true,maxlength:32} text_input3"/></td>
                             <td align="right" width="15%">QQ号：</td>
-                            <td align="left"><input type="text" name="qq" value="${user.qq}" class="text_input3"/></td>
+                            <td align="left"><input type="text" name="qq" value="${user.qq}" class="{qq:true,maxlength:16} text_input3"/></td>
+                        </tr>
+                        <tr>
+                            <td align="right" width="15%">组织：</td>
+                            <td align="left">
+                                <input type="text" class="organization {required:true} text_input3" value="${user.organization.name}" forselector="[name=organization\.id]" readonly>
+                                <input type="hidden" name="organization.id" value="${user.organization.id}">
+                            </td>
+                            <%--//TODO 序号暂不处理--%>
+                            <td align="right" width="15%"><%--序号：--%></td>
+                            <td align="left"><input type="hidden" name="order" value="${user.order}"/></td>
                         </tr>
                         <tr>
                             <td align="right" width="15%">职位：</td>
-                            <td align="left"><input type="text" name="jobName" value="${user.jobName}" class="text_input3"/></td>
+                            <td align="left"><input type="text" name="jobName" value="${user.jobName}" class="{maxlength:64} text_input3"/></td>
                             <td align="right" width="15%">在岗情况：</td>
                             <td align="left">
                                 <div class="pr">
@@ -141,22 +152,12 @@
                                 </div>
                             </td>
                         </tr>
-                        <tr>
-                            <td align="right" width="15%">组织：</td>
-                            <td align="left">
-                                <input type="text" class="organization {required:true,messages:{required:'（*必填）'}} text_input3" value="${user.organization.name}" forselector="[name=organization\.id]" readonly>
-                                <input type="hidden" name="organization.id" value="${user.organization.id}">
-                            </td>
-                            <%--//TODO 序号暂不处理--%>
-                            <td align="right" width="15%"><%--序号：--%></td>
-                            <td align="left"><input type="hidden" name="order" value="${user.order}"/></td>
-                        </tr>
                     </table>
                     <h1 class="f14 fbnone ml40 pt10">描述信息</h1>
                     <table class="cb id_table4 w95b bg_c_white margin0 mt10">
                         <tr>
                             <td align="right" width="15%" valign="top">备注：</td>
-                            <td align="left" width="85%"><textarea class="remarks_input1" name="remark">${user.remark}</textarea></td>
+                            <td align="left" width="85%"><textarea class="{maxlength:512} remarks_input1" name="remark">${user.remark}</textarea></td>
                         </tr>
                         <tr style="display: none">
                             <td class="tar bghui pr10">创建人：</td>

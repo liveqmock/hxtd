@@ -16,7 +16,7 @@ div.remark {
     font-size: 15px;
 }
 
-span.remark{
+span.remark {
 
 }
 
@@ -36,4 +36,24 @@ label.error {
 td.sortable {
     position: relative;
     min-width: 50px;
+}
+
+.selected {
+    display: block;
+}
+
+.unselected {
+    display: none;
+}
+
+.inherit-role {
+    color: green;
+}
+
+.inherit-function {
+    color: green;
+}
+
+.inherit-component {
+    color: green;
 }

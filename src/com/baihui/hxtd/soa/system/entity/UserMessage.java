@@ -33,6 +33,12 @@ public class UserMessage {
 	private User user;
 
 	/**
+	 * 最终修改时间
+	 */
+	@JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss", timezone = "GMT+08:00")
+	@Column(name="MODIFIED_TIME",updatable=false)
+	private Date modifiedTime;
+	/**
 	 * 消息读取状态
 	 */
 	@Column(name="STATUS")
@@ -107,6 +113,14 @@ public class UserMessage {
 
 	public void setCreatedTime(Date createdTime) {
 		this.createdTime = createdTime;
+	}
+
+	public Date getModifiedTime() {
+		return modifiedTime;
+	}
+
+	public void setModifiedTime(Date modifiedTime) {
+		this.modifiedTime = modifiedTime;
 	}
 	
 }

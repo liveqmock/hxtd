@@ -42,7 +42,7 @@ $(function(){
 	       $dates.not(this).datepicker("option", option, selectedDate);
 	    }
 	});
-	$(".clear").click(function(){// 清除
+	$(".empty").click(function(){// 清除
 		$(this).prevAll("input").val('');
 	});
 });
@@ -97,7 +97,7 @@ function searchData(action){// 搜索弹出框
 				<input type="text" id="txt_project" name="projectname" value="${product.project.name}" readonly class="text_input3 required"/>
 				<input type="hidden"id="hide_project_id" name="project.id" value="${product.project.id}"/>
 				<i class="s_inquiry globle_img block_inline ml5 vm cp" title="搜索项目" onclick="searchData('project');"></i>
-				<i class="dump_btn globle_img block_inline ml5 vm cp clear" title="清除"></i>
+				<i class="dump_btn globle_img block_inline ml5 vm cp empty" title="清除"></i>
 			</td>
 		</tr>
 		<tr>
@@ -130,7 +130,7 @@ function searchData(action){// 搜索弹出框
 			<td align="right"><span class="w_red">*&nbsp;</span>销售开始日期：</td>
 			<td align="left">
 				<a href="javascript:;" class="pa time_closenone1"></a>
-				<input id="start" name=saleBeginTime type="text" value="${activity.saleBeginTime}" 
+				<input id="start" name="saleBeginTime" type="text" value="${product.saleBeginTime}" 
 					class="text_input3 input_close1 required" readonly/>
 			</td>
 			<td align="right">赎回赔率%：</td>

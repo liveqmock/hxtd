@@ -16,6 +16,7 @@ import org.springside.modules.persistence.SearchFilter;
 
 import com.baihui.hxtd.soa.base.orm.hibernate.HibernatePage;
 import com.baihui.hxtd.soa.base.utils.Search;
+import com.baihui.hxtd.soa.project.dao.ProductDao;
 import com.baihui.hxtd.soa.project.dao.ProjectDao;
 import com.baihui.hxtd.soa.project.entity.Project;
 /**
@@ -38,6 +39,9 @@ public class ProjectService {
 	 */
 	@Resource
 	private ProjectDao projectDao;
+	
+	@Resource
+	private ProductDao productDao;
 	/**
 	 * 
 	  * findPage(分页查询)
@@ -96,8 +100,12 @@ public class ProjectService {
 	  * @return void    返回类型
 	  * @throws
 	 */
-	public void delete(Long[] id){
-		projectDao.delete(id);
+	public boolean delete(Long[] id){
+		if(productDao.getCount(id)==0){
+			projectDao.delete(id);
+			return true;
+		}else{
+			return false;
+		}
 	}
-	
 }

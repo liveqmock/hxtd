@@ -49,16 +49,16 @@
         </c:if>
     </div>
 
-    <ul class="fl id_table3 w block cb mt10 tab-titles" style="border-bottom:5px solid #626262; height:32px;">
-        <li class="tab-title id_table3li" fortab="#tabs-role">
+    <ul class="fl id_table3 w block cb mt10 tab-titles" style="border-bottom:5px solid #626262; height:32px;" fortabpanels>
+        <li class="tab-title" fortabpanel="#tabs-role">
             <b class="h_tabbtn_l w25 block fl"></b>
             <b class="h_tabbtn_r pr25 w_auto f14 block fr lh32 cp id_nav pr">角色</b>
         </li>
-        <li class="tab-title id_table3li2" fortab="#tabs-function">
+        <li class="tab-title" fortabpanel="#tabs-function">
             <b class="h_tabbtn_l w25 block fl"></b>
             <b class="h_tabbtn_r  pr25 w_auto f14 block fr lh32 cp id_nav pr">功能</b>
         </li>
-        <li class="tab-title id_table3li2" fortab="#tabs-component">
+        <li class="tab-title" fortabpanel="#tabs-component">
             <b class="h_tabbtn_l w25 block fl"></b>
             <b class="h_tabbtn_r pr25 w_auto f14 block fr lh32 cp id_nav pr">组件</b>
         </li>
@@ -72,7 +72,7 @@
     <div class="margin0 ml35 mr35">
         <div class="w cb tab-panels">
 
-            <div id="tabs-role" class="role selected w">
+            <div id="tabs-role" class="tab-panel">
                 <ul class="w">
                     <c:forEach items="${allRoles}" var="item" varStatus="status">
                         <li class="fl" style="width:16%;">
@@ -84,7 +84,7 @@
                 </ul>
             </div>
 
-            <div id="tabs-function" class="function unselected">
+            <div id="tabs-function" class="tab-panel">
                 <c:forEach items="${allMenus}" var="item" varStatus="status">
                 <c:choose>
                 <c:when test="${item.level==1}">
@@ -125,7 +125,7 @@
             </c:forEach>
         </div>
 
-        <div id="tabs-component" class="component unselected">
+        <div id="tabs-component" class="tab-panel">
             <c:forEach items="${allComponents}" var="item" varStatus="status">
                 <li style="width:16%" class="fl">
                     <label class="box size81 ${fn:contains(allAuthorizationComponents,item)?" inherit-component":""}">

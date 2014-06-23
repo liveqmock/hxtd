@@ -21,43 +21,98 @@
         /**触发切换“选中|未选中”样式*/
         toggleClass: function (jqele, selected, unselected) {
             var _this = this;
-            _this.selectByClass(jqele, unselected, selected);
+            _this.unselectByClass(jqele, unselected, selected);
             jqele.toggle(function () {_this.selectByClass($(this), selected, unselected);}, function () {_this.selectByClass($(this), unselected, selected);});
             return this;
         },
-        /**选项卡*/
+        /**
+         * 选项卡
+         * 1.html结构
+         * <div> 选项卡容器
+         *     <ul fortabpanels> 选项卡标题容器
+         *        <li fortabpanel></li> 选项卡标题
+         *        <li fortabpanel></li> 选项卡标题
+         *     </ul>
+         *     <div> 选项卡内容面板容器
+         *        <div></div> 选项卡内容面板
+         *        <div></div> 选项卡内容面板
+         *     </div>
+         * </div>
+         * 结构中标记仅供参考，实际上通过选择器获取对应元素，可以替换
+         * 2.支持多个选项卡
+         * 3.初始化默认选中
+         * 4.选中事件
+         * @param options
+         * @returns {$.Custom}
+         */
         tab: function (options) {
             var _this = this;
 
             options = $.extend({
-                tabContainerSelector: ".tab",
-                tabTitlesSelector: ".tab-titles",
-                tabTitleSelector: ".tab-title",
-                titleSelectedClass: "id_table3li",
-                titleUnselectedClass: "id_table3li2",
-                tabPanelsSelector: ".tab-panels",
-                tabPanelSelector: ".tab-panel",
-                panelSelectedClass: "selected",
-                panelUnselectedClass: "unselected"
+                tabContainerSelector: ".tab", //选项卡容器选择器
+                tabTitlesSelector: ".tab-titles",//选项卡标题容器选择器
+                tabTitleSelector: ".tab-title",//选项卡标题选择器
+                titleSelectedClass: "id_table3li",//选项卡标题选中样式
+                titleUnselectedClass: "id_table3li2",//选项卡标题未选中样式
+                tabPanelsSelector: ".tab-panels",//选项卡内容面板容器选择器
+                tabPanelSelector: ".tab-panel",//选项卡内容面板选择器
+                panelSelectedClass: "selected",//内容面板选中样式
+                panelUnselectedClass: "unselected", //内容面板选中未选中样式
+                extfortabpanels: "fortabpanels",//指定标题容器对应的内容面板容器选择器
+                extfortabpanel: "fortabpanel",//指定标题对应的内容面板选择器
+                onSelected: function (event, title, panel) {},//选中触发事件
+                defaultSelected: 0,//默认选中的标题。指定标题的索引|选择器，false不默认选中
+                "": ""//无效参数，便于增加属性
             }, options);
 
-            var titles = $(options.tabTitlesSelector);
-            var panels = $(options.tabPanelsSelector);
-            options = $.extend(options, {
-                titleSelectedClass: titles.attr("selectedclass"),
-                titleUnselectedClass: titles.attr("unselectedclass"),
-                panelSelectedClass: panels.attr("selectedclass"),
-                panelUnselectedClass: panels.attr("unselectedclass")
-            });
-
-            titles.find(options.tabTitleSelector).click(function () {
+            //使用each，支持多个选项卡，支持拆分的标题和内容面板（不在同一个容器内）
+            var tabContainer = $(options.tabContainerSelector);
+            tabContainer.length == 0 && (tabContainer = $(options.tabTitlesSelector));
+            tabContainer.each(function () {
                 var $this = $(this);
-                _this.cancleSelectByClass(options.tabTitlesSelector, options.titleSelectedClass, options.titleUnselectedClass);
-                _this.selectByClass($this, options.titleSelectedClass, options.titleUnselectedClass);
-                _this.cancleSelectByClass(options.tabPanelsSelector, options.panelSelectedClass, options.panelUnselectedClass);
-                _this.selectByClass($($this.attr("fortab")), options.panelSelectedClass, options.panelUnselectedClass);
-            });
+                //初始化元素
+                var titleContainer = $(options.tabTitlesSelector, $this);
+                titleContainer.length == 0 && (titleContainer = $this);
+                var panelContainerSelector = titleContainer.attr(options.extfortabpanels);
+                panelContainerSelector == "" && (panelContainerSelector = options.tabPanelsSelector);
+                var panelContainer = $(panelContainerSelector);
+                panelContainer.length == 0 && (panelContainer = $(options.tabPanelsSelector, $this));
+                var titles = titleContainer.find(options.tabTitleSelector);
+                var panels = panelContainer.find(options.tabPanelSelector);
 
+                //使用扩展属性
+                var eachOptions = $.extend({}, options, {
+                    titleSelectedClass: titleContainer.attr("selectedclass"),
+                    titleUnselectedClass: titleContainer.attr("unselectedclass"),
+                    panelSelectedClass: panelContainer.attr("selectedclass"),
+                    panelUnselectedClass: panelContainer.attr("unselectedclass")
+                });
+
+                //绑定扩展事件
+                titles.bind("selected", eachOptions.onSelected);
+
+                //绑定默认事件
+                titles.click(function () {
+                    var title = $(this);
+                    var panel = $(title.attr(eachOptions.extfortabpanel), eachOptions.tabPanelsSelector);
+                    _this.cancleSelectByClass(eachOptions.tabTitlesSelector, eachOptions.titleSelectedClass, eachOptions.titleUnselectedClass);
+                    _this.selectByClass(title, eachOptions.titleSelectedClass, eachOptions.titleUnselectedClass);
+                    _this.cancleSelectByClass(eachOptions.tabPanelsSelector, eachOptions.panelSelectedClass, eachOptions.panelUnselectedClass);
+                    _this.selectByClass(panel, eachOptions.panelSelectedClass, eachOptions.panelUnselectedClass);
+                    title.trigger("selected", [title, panel]);
+                });
+
+                //初始化样式
+                _this.unselectByClass(titles, eachOptions.titleSelectedClass, eachOptions.titleUnselectedClass);
+                _this.unselectByClass(panels, eachOptions.panelSelectedClass, eachOptions.panelUnselectedClass);
+
+                //默认选中
+                if ($.isNumeric(eachOptions.defaultSelected)) {
+                    titles.eq(eachOptions.defaultSelected).trigger("click");
+                } else if (eachOptions.defaultSelected instanceof String) {
+                    titles.filter(eachOptions.defaultSelected).trigger("click");
+                }
+            });
             return this;
         },
         /**触发设置Boolean属性的值*/

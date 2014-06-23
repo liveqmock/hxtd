@@ -25,7 +25,7 @@
     <script type="text/javascript">
         $(function () {
             var ztree = jsUtil.organizationTree({
-                data:${organizationTree==null?"":organizationTree},
+                data:${organizationTree==null?"[]":organizationTree},
                 selectedId:"${organizationId}",
                 click: function (event, treeId, treeNode) {
                     $("[name=id]").val(treeNode.id);

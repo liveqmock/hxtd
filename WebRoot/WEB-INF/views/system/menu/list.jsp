@@ -31,7 +31,7 @@
             var grid = new Grid().init({paginationActive: false, deleteCallback: Grid.deleteSynTree(window.ztree, $("[name=id]"))});
 
             window.ztree = jsUtil.menuTree({
-                data:${menuTree==null?"":menuTree},
+                data:${menuTree==null?"[]":menuTree},
                 selectedId: "${parentId}",
                 ztreeOptions: {
                     edit: {

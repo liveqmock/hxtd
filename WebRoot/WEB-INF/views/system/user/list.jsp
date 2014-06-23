@@ -27,7 +27,7 @@
         $(function () {
             var grid = new Grid().init().bindAuthorization().bindResetPassword().bindEnable().bindDisable().bindExport();
             jsUtil.organizationTree({
-                data:${organizationTree==null?"":organizationTree},
+                data:${organizationTree==null?"[]":organizationTree},
                 selectedId: "${organizationId}",
                 click: function (event, treeId, treeNode) {
                     $("[name=organizationId]").val(treeNode.id);

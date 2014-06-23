@@ -22,9 +22,9 @@
         $(function () {
             jsUtil.bindSave();
             jsUtil.bindCheckAll(".functioncheckall", ".functioncheckitem");
-            jsUtil.renderRequiredFromInput();
+            jsUtil.renderRequired();
             jsUtil.menuTree({
-                data:${menuTree==null?"":menuTree},
+                data:${menuTree==null?"[]":menuTree},
                 selectedId: "${menu.id}",
                 ztreeOptions: {
                     callback: {

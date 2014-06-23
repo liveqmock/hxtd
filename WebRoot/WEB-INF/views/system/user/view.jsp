@@ -9,7 +9,7 @@
 <c:set var="ctx" value="${pageContext.request.contextPath}"/>
 <html>
 <head>
-    <title>用户详细信息</title>
+    <title>用户详情</title>
     <link rel="stylesheet" href="${ctx}/static/css/application.css" type="text/css"/>
     <link href="${ctx}/static/css/recommend/detail.css" rel="stylesheet" type="text/css"/>
     <link rel="stylesheet" href="${ctx}/static/component/zTree_v3/css/zTreeStyle.css" type="text/css"/>

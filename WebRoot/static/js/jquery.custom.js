@@ -72,7 +72,6 @@
          * 2.点击全选，触发子项中未选中项全选
          */
         bindCheckAll: function (jqele, containerSelector, checkItemSelector, eventType) {
-            checkItemSelector = checkItemSelector || ":checkbox";
             jqele.click(function () {
                 var $this = $(this);
                 var checkItem = $this.parents(containerSelector).find(checkItemSelector);

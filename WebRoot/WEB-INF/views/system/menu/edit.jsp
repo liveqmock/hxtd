@@ -29,12 +29,12 @@
             jsUtil.renderRequired();
 
             var ztree = jsUtil.menuTree({
-                data:${menuTree},
+                data:${menuTree==null?"[]":menuTree},
                 selectedId: "${menuAdd?menu.parent.id:menu.id}",
                 ztreeOptions: {
                     callback: {
                         beforeClick: function (treeId, treeNode) {
-                            var isClickSelf = $.Ztree.isClickSelf($.fn.zTree.getZTreeObj(treeId), treeNode);
+                            var isClickSelf = $.Ztree.isClickSelf(ztree, treeNode);
                             treeNode.isClickSelf = isClickSelf;
 
                             if (Boolean("${menuModify}")) {
@@ -164,7 +164,7 @@
                                 <label><input type="radio" name="isActive" value="1" ${menu.isActive==true?"checked":""}>是</label>
                                 <label><input type="radio" name="isActive" value="0" ${menu.isActive==false?"checked":""}>否</label>
                             </td>
-                            <td align="right" width="15%" >默认显示：</td>
+                            <td align="right" width="15%">默认显示：</td>
                             <td align="left">
                                 <label><input type="radio" name="defaultShow" value="1" ${menu.defaultShow==true?"checked":""}>是</label>
                                 <label><input type="radio" name="defaultShow" value="0" ${menu.defaultShow==false?"checked":""}>否</label>

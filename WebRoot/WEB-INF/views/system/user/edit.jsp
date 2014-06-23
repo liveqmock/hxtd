@@ -27,7 +27,7 @@
             jsUtil.renderRequired();
             jsUtil.bindSave();
             jsUtil.organizationTree({
-                data:${organizationTree==null?"":organizationTree},
+                data:${organizationTree==null?"[]":organizationTree},
                 selectedId: "${user.organization.id}",
                 click: function (event, treeId, treeNode) {
                     $(".organization").val(treeNode.name);

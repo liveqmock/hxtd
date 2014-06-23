@@ -10,7 +10,7 @@
 
 <html>
 <head>
-    <title>角色详细信息</title>
+    <title>角色详情</title>
     <link href="${ctx}/static/css/recommend/detail.css" rel="stylesheet" type="text/css"/>
 </head>
 <body>

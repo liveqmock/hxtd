@@ -10,12 +10,12 @@
 
 <html>
 <head>
-    <title>菜单详情页</title>
+    <title>菜单详情</title>
     <link rel="stylesheet" href="${ctx}/static/css/application.css" type="text/css"/>
     <link href="${ctx}/static/css/recommend/detail.css" rel="stylesheet" type="text/css"/>
     <link rel="stylesheet" href="${ctx}/static/component/zTree_v3/css/zTreeStyle.css" type="text/css"/>
     <script type="text/javascript" src="${ctx}/static/component/zTree_v3/js/jquery.ztree.core-3.5.js"></script>
-    <script type="text/javascript" src="${ctx}/static/component/zTree_v3/js/jquery.ztree.excheck-3.5.js"></script>
+    <script type="text/javascript" src="${ctx}/static/js/jquery-json.2.4.js"></script>
     <script type="text/javascript" src="${ctx}/static/js/js-util.common.js"></script>
 
     <script>
@@ -24,12 +24,12 @@
             jsUtil.bindCheckAll(".functioncheckall", ".functioncheckitem");
             jsUtil.renderRequiredFromInput();
             jsUtil.menuTree({
-                data:${menuTree},
-                selectedId: "${menu.parent.id}",
+                data:${menuTree==null?"":menuTree},
+                selectedId: "${menu.id}",
                 ztreeOptions: {
                     callback: {
-                        beforeClick: function (treeId, treeNode) {
-                            return false;
+                        onClick: function (event, treeId, treeNode) {
+                            window.open("${ctx}/system/menu/toViewPage.do?id=" + treeNode.id, "_self");
                         }
                     }
                 }
@@ -49,7 +49,7 @@
                 <b class="bd"></b>
 
                 <div class="fl table_blueheadc fl w">
-                    <h1 class="f14 c_white lh40 ml10 fl">上级菜单</h1>
+                    <h1 class="f14 c_white lh40 ml10 fl">${menuAdd?"上级菜单":"菜单结构"}</h1>
                     <img width="108" height="50" class="fl" src="${ctx}/static/images/snowflake.png">
                     <a class="c_white f14 fr mt10 fb mr10" href="javascript:;">&lt;&lt;</a>
                 </div>
@@ -91,34 +91,32 @@
                         <td align="left"><input type="text" name="order" value="${menu.order}" class="text_input3"/></td>
                     </tr>
                     <tr>
-                        <td align="right" width="15%">名称：</td>
+                        <td align="right" width="15%">菜单名称：</td>
                         <td align="left">${menu.name}</td>
                         <td align="right" width="15%">调用入口：</td>
                         <td align="left">${menu.url}</td>
                     </tr>
                     <tr>
+                        <td align="right" width="15%">启用：</td>
+                        <td align="left">${menu.isActive?"是":"否"}</td>
+                        <td align="right" width="15%">默认显示：</td>
+                        <td align="left">${menu.defaultShow?"是":"否"}</td>
+                    </tr>
+                    <tr>
                         <td align="right" width="15%">显示位置：</td>
                         <td align="left">${menu.showLocation.key}</td>
-                        <td align="right" width="15%">打开方式：</td>
-                        <td align="left">${menu.openType.key}</td>
                     </tr>
                     <tr>
                         <td align="right" width="15%">包含功能：</td>
-                        <td align="left">
+                        <td align="left" colspan="3">
                             <c:forEach items="${menu.functions}" var="item" varStatus="status">${item.name}&nbsp;&nbsp;</c:forEach>
                         </td>
                     </tr>
                     <tr>
-                        <td align="right" width="15%">触发功能：</td>
+                        <td align="right" width="15%">执行功能：</td>
                         <td align="left">${menu.trigger.name}</td>
-                        <td align="right" width="15%">激活：</td>
-                        <td align="left">${menu.isActive?"是":"否"}</td>
-                    </tr>
-                    <tr>
                         <td align="right" width="15%">上级菜单：</td>
                         <td align="left">${menu.parent.name}</td>
-                        <td align="right" width="15%"></td>
-                        <td align="left"></td>
                     </tr>
                 </table>
                 <h1 class="f14 fbnone ml40 pt10">描述信息</h1>

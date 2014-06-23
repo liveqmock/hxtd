@@ -1,0 +1,1 @@
+ALTER TABLE hxtd.sm_menu DROP OPEN_TYPE;

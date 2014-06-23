@@ -12,7 +12,7 @@
 
 <html>
 <head>
-    <title>组织列表页</title>
+    <title>${VR_LAST_MENU.name}</title>
     <link rel="stylesheet" href="${ctx}/static/css/application.css" type="text/css"/>
     <link rel="stylesheet" href="${ctx}/static/css/recommend/empower.css" type="text/css"/>
     <link rel="stylesheet" href="${ctx}/static/component/zTree_v3/css/zTreeStyle.css" type="text/css"/>
@@ -25,7 +25,8 @@
     <script type="text/javascript">
         $(function () {
             var ztree = jsUtil.organizationTree({
-                data:${organizationTree},
+                data:${organizationTree==null?"":organizationTree},
+                selectedId:"${organizationId}",
                 click: function (event, treeId, treeNode) {
                     $("[name=id]").val(treeNode.id);
                     grid.loadGrid();

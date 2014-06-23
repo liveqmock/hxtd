@@ -10,10 +10,14 @@
     padding-top: .5em;
 }
 
-.remark {
+div.remark {
     text-align: left;
     font-weight: bold;
     font-size: 15px;
+}
+
+span.remark{
+
 }
 
 .toviewpage {

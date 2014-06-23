@@ -189,8 +189,7 @@ public class IdentityAuthenticationController {
         userService.resetDataStoreStatus(persistUser.getId());
 
         logger.info("初始化系统首页");
-        String url = menuService.findIndexUrl(activeMenus);
-
+        String url = menuService.findDefaultShow(activeMenus).getUrl();
         long timeDiffer = System.currentTimeMillis() - startTime;
         logger.info("登录耗时“{}.{}”", timeDiffer / 1000, timeDiffer % 1000);
         return "redirect:" + url;

@@ -11,7 +11,7 @@
 
 <html>
 <head>
-    <title>角色列表页</title>
+    <title>${VR_LAST_MENU.name}</title>
 
     <link rel="stylesheet" href="${ctx}/static/css/application.css" type="text/css"/>
     <link rel="stylesheet" href="${ctx}/static/css/recommend/detail.css" type="text/css"/>

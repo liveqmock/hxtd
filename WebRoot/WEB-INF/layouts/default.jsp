@@ -12,7 +12,7 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
-<title>华兴控股</title>
+<title>华兴控股-<sitemesh:title/></title>
 <link rel="stylesheet" href="${ctx}/static/css/public/common.css?v=${now}" type="text/css"/>
 <link rel="stylesheet" href="${ctx}/static/css/public/reset.css?v=${now}" type="text/css"/>
 <script type="text/javascript" src="${ctx}/static/js/api/api.string.js?v=${now}"></script>

@@ -7,7 +7,7 @@
 <meta http-equiv="Content-Type" content="text/html; charset=gb2312"/>
 <meta name="keywords" content=""/>
 <meta name="description" content=""/>
-<title></title>
+<title>华兴控股-登录</title>
 <link href="${ctx}/static/css/stressing/login.css" rel="stylesheet" type="text/css" />
 <script type="text/javascript" src="${ctx}/static/js/jquery.min.js"></script>
 <script type="text/javascript">

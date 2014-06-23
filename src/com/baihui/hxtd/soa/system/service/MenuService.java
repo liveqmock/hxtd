@@ -163,6 +163,21 @@ public class MenuService {
     }
 
     /**
+     * 查找默认选中的菜单
+     */
+    public Menu findDefaultShow(List<Menu> menus) {
+        logger.info("查找默认选中的菜单");
+
+        for (Menu menu : menus) {
+            if (menu.getDefaultShow()) {
+                return menu;
+            }
+        }
+
+        throw new RuntimeException("菜单默认选中数据值状态异常，没有默认选中的菜单（有且仅有一项处于默认选中状态）");
+    }
+
+    /**
      * 查找菜单根据级别
      */
     public List<Menu> findByLevel(List<Menu> menus, int level) {
@@ -340,7 +355,6 @@ public class MenuService {
         String hql = "select menu" +
                 " from Menu menu" +
                 " inner join fetch menu.showLocation" +
-                " left join fetch menu.openType" +
                 " left join fetch menu.parent" +
                 " left join fetch menu.functions" +
                 " left join fetch menu.trigger" +

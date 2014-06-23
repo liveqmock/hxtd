@@ -72,7 +72,7 @@ Grid.prototype = {
         this.form.attr("uri", this.formAction);
         this.formPageOrderBy = $(this.options.formPageOrderBySelector, this.container);
         this.formPageOrder = $(this.options.formPageOrderSelector, this.container);
-		
+
         this.list = this.container.find(this.options.resultSelector);
         this.table = this.list.parents("table");
         this.header = this.table.find("tr:first");
@@ -1049,6 +1049,13 @@ jsUtil.requiredDefaults = {
 
 /**渲染必填样式*/
 jsUtil.renderRequired = function (options) {
+    this.renderRequiredFormTd(options);
+    this.renderRequiredFromInput(options);
+    return this;
+}
+
+/**渲染必填样式*/
+jsUtil.renderRequiredFormTd = function (options) {
     options = $.extend({}, jsUtil.requiredDefaults, options);
     $(options.elementSelector).each(function () {
         var $td = $(this);

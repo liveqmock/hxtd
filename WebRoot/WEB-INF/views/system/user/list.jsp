@@ -10,7 +10,7 @@
 <c:set var="ctx" value="${pageContext.request.contextPath}"/>
 <html>
 <head>
-    <title>用户列表页</title>
+    <title>${VR_LAST_MENU.name}</title>
 
     <link rel="stylesheet" href="${ctx}/static/css/application.css" type="text/css"/>
     <link rel="stylesheet" href="${ctx}/static/css/recommend/empower.css" type="text/css"/>
@@ -27,7 +27,8 @@
         $(function () {
             var grid = new Grid().init().bindAuthorization().bindResetPassword().bindEnable().bindDisable().bindExport();
             jsUtil.organizationTree({
-                data:${organizationTree},
+                data:${organizationTree==null?"":organizationTree},
+                selectedId:"${organizationId}",
                 click: function (event, treeId, treeNode) {
                     $("[name=organizationId]").val(treeNode.id);
                     var $add = $(".add");

@@ -48,16 +48,14 @@ public class Menu implements Serializable, Cloneable, TreeNode<Menu> {
     @JoinColumn(name = "SHOW_LOCATION_ID")
     private Dictionary showLocation;
 
-    @JsonIgnore
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "OPEN_TYPE")
-    private Dictionary openType;
-
     @Column(name = "REMARK", length = 512, nullable = false)
     private String remark;
 
     @Column(name = "`ORDER`", nullable = false, unique = true)
     private Long order;
+
+    @Column(name = "DEFAULT_SHOW", nullable = false)
+    private Boolean defaultShow;
 
     @Column(name = "IS_ACTIVE", nullable = false)
     private Boolean isActive;
@@ -173,20 +171,20 @@ public class Menu implements Serializable, Cloneable, TreeNode<Menu> {
         this.isLeaf = isLeaf;
     }
 
+    public Boolean getDefaultShow() {
+        return defaultShow;
+    }
+
+    public void setDefaultShow(Boolean defaultShow) {
+        this.defaultShow = defaultShow;
+    }
+
     public Dictionary getShowLocation() {
         return showLocation;
     }
 
     public void setShowLocation(Dictionary showLocation) {
         this.showLocation = showLocation;
-    }
-
-    public Dictionary getOpenType() {
-        return openType;
-    }
-
-    public void setOpenType(Dictionary openType) {
-        this.openType = openType;
     }
 
     public String getRemark() {

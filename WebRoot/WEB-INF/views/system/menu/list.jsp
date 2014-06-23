@@ -11,7 +11,7 @@
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
 <html>
 <head>
-    <title>菜单管理</title>
+    <title>${VR_LAST_MENU.name}</title>
 
     <link rel="stylesheet" href="${ctx}/static/css/application.css" type="text/css"/>
     <link rel="stylesheet" href="${ctx}/static/css/recommend/empower.css" type="text/css"/>
@@ -68,8 +68,7 @@
                     }
                 }
             });
-        })
-        ;
+        });
     </script>
 </head>
 <body>
@@ -126,8 +125,9 @@
                         <th style="width: 20%">调用入口</th>
                         <th style="width: 10%">上级菜单</th>
                         <th style="width: 5%">级别</th>
-                        <th style="width: 10%">包含下级菜单</th>
+                        <th style="width: 10%">包含下级</th>
                         <th style="width: 5%">启用</th>
+                        <th style="width: 10%">默认显示</th>
                         <th style="width: 10%">显示位置</th>
                         <th style="width: 10%">序号</th>
                         <th style="width: 15%">操作</th>
@@ -151,6 +151,7 @@
                             <td style="text-align: right">{$T.row.level}</td>
                             <td>{$T.row.isLeaf?"否":"是"}</td>
                             <td>{$T.row.isActive?"是":"否"}</td>
+                            <td>{$T.row.defaultShow?"是":"否"}</td>
                             <td>{$T.row.showLocation.key}</td>
                             <td style="text-align: right">{$T.row.order}</td>
                             <td>

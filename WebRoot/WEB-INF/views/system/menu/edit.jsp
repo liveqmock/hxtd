@@ -11,12 +11,11 @@
 
 <html>
 <head>
-    <title>菜单详情信息</title>
+    <title>菜单详情</title>
     <link rel="stylesheet" href="${ctx}/static/css/application.css" type="text/css"/>
     <link href="${ctx}/static/css/recommend/detail.css" rel="stylesheet" type="text/css"/>
     <link rel="stylesheet" href="${ctx}/static/component/zTree_v3/css/zTreeStyle.css" type="text/css"/>
     <script type="text/javascript" src="${ctx}/static/component/zTree_v3/js/jquery.ztree.core-3.5.js"></script>
-    <script type="text/javascript" src="${ctx}/static/component/zTree_v3/js/jquery.ztree.excheck-3.5.js"></script>
     <script type="text/javascript" src="${ctx}/static/js/jquery.metadata.js"></script>
     <script type="text/javascript" src="${ctx}/static/js/jquery.validate.js"></script>
     <script type="text/javascript" src="${ctx}/static/js/validator.js"></script>
@@ -27,26 +26,32 @@
         $(function () {
             jsUtil.bindSave();
             jsUtil.bindCheckAll(".functioncheckall", ".functioncheckitem");
-            jsUtil.renderRequiredFromInput();
+            jsUtil.renderRequired();
 
             var ztree = jsUtil.menuTree({
                 data:${menuTree},
-                selectedId: "${menu.parent.id}",
+                selectedId: "${menuAdd?menu.parent.id:menu.id}",
                 ztreeOptions: {
                     callback: {
                         beforeClick: function (treeId, treeNode) {
-                            if (Boolean("${menuModify}")) {
-                                return false;
-                            }
-                            if (treeNode.level != 0) {
-                                jsUtil.alert("请选择一级菜单！仅限新增一级菜单和二级菜单，不允许在二级菜单下新增子菜单");
-                                return false;
-                            }
-                            var selectedNodes = ztree.getSelectedNodes();
-                            var isClickSelf = $.inArray(treeNode, selectedNodes) > -1;
+                            var isClickSelf = $.Ztree.isClickSelf($.fn.zTree.getZTreeObj(treeId), treeNode);
                             treeNode.isClickSelf = isClickSelf;
+
+                            if (Boolean("${menuModify}")) {
+                                return !isClickSelf;
+                            } else {
+                                if (treeNode.level != 0) {
+                                    jsUtil.alert("请选择一级菜单！仅限新增一级菜单和二级菜单，不允许在二级菜单下新增子菜单");
+                                    return false;
+                                }
+                            }
                         },
                         onClick: function (event, treeId, treeNode) {
+                            if (Boolean("${menuModify}")) {
+                                window.open("${ctx}/system/menu/toModifyPage.do?id=" + treeNode.id, "_self");
+                                return this;
+                            }
+
                             var id = "", name = "";
                             if (!treeNode.isClickSelf) {
                                 id = treeNode.id;
@@ -110,7 +115,7 @@
                 <b class="bd"></b>
 
                 <div class="fl table_blueheadc fl w">
-                    <h1 class="f14 c_white lh40 ml10 fl">上级菜单</h1>
+                    <h1 class="f14 c_white lh40 ml10 fl">${menuAdd?"上级菜单":"菜单结构"}</h1>
                     <img width="108" height="50" class="fl" src="${ctx}/static/images/snowflake.png">
                     <a class="c_white f14 fr mt10 fb mr10" href="javascript:;">&lt;&lt;</a>
                 </div>
@@ -148,10 +153,22 @@
                             <td align="left"><input type="text" name="order" value="${menu.order}" class="text_input3"/></td>
                         </tr>
                         <tr>
-                            <td align="right" width="15%">名称：</td>
+                            <td align="right" width="15%">菜单名称：</td>
                             <td align="left"><input type="text" name="name" class="{required:true,unique:['Menu','${menu.name}']} text_input3" value="${menu.name}"/></td>
                             <td align="right" width="15%" class="required">调用入口：</td>
                             <td align="left"><input type="text" name="url" class="{required:true,ruleUrl:true,unique:['Menu','${menu.url}']} text_input3" value="${menu.url}"/></td>
+                        </tr>
+                        <tr>
+                            <td align="right" width="15%" class="required">激活：</td>
+                            <td align="left">
+                                <label><input type="radio" name="isActive" value="1" ${menu.isActive==true?"checked":""}>是</label>
+                                <label><input type="radio" name="isActive" value="0" ${menu.isActive==false?"checked":""}>否</label>
+                            </td>
+                            <td align="right" width="15%" >默认显示：</td>
+                            <td align="left">
+                                <label><input type="radio" name="defaultShow" value="1" ${menu.defaultShow==true?"checked":""}>是</label>
+                                <label><input type="radio" name="defaultShow" value="0" ${menu.defaultShow==false?"checked":""}>否</label>
+                            </td>
                         </tr>
                         <tr>
                             <td align="right" width="15%">显示位置：</td>
@@ -165,24 +182,13 @@
                                     </select>
                                 </div>
                             </td>
-                            <td align="right" width="15%">打开方式：</td>
-                            <td align="left">
-                                <div class="pr">
-                                    <select name="openType.id" class="{required:true} select1 pr">
-                                        <option value="">--无--</option>
-                                        <c:forEach items="${openTypes}" var="item">
-                                            <option value="${item.id}" ${item.id==menu.openType.id?"selected":""}>${item.key}</option>
-                                        </c:forEach>
-                                    </select>
-                                </div>
-                            </td>
                         </tr>
                         <%--//TODO 关于复选框的必填验证--%>
                         <tr>
-                            <td align="right" width="15%">包含功能：</td>
-                            <td align="left">
+                            <td align="right" width="15%" class="required">包含功能：</td>
+                            <td align="left" colspan="3">
                                 <c:if test="${menuAdd}">
-                                    <div class="{required:true}">
+                                    <div>
                                         <c:forEach items="${functions}" var="item" varStatus="status">
                                             <label class="functioncheck">
                                                 <c:set var="checked" value="${fn:contains(menu.functions,item)?'checked':''}"/>
@@ -197,7 +203,7 @@
                             </td>
                         </tr>
                         <tr>
-                            <td align="right" width="15%">触发功能：</td>
+                            <td align="right" width="15%">执行功能：</td>
                             <td align="left">
                                 <div class="pr">
                                     <select name="trigger.id" class="{required:true} select1 pr">
@@ -208,13 +214,6 @@
                                     </select>
                                 </div>
                             </td>
-                            <td align="right" width="15%">激活：</td>
-                            <td align="left">
-                                <label><input type="radio" name="isActive" value="1" ${menu.isActive?"checked":""}>是</label>
-                                <label><input type="radio" name="isActive" value="0" ${!menu.isActive?"checked":""}>否</label>
-                            </td>
-                        </tr>
-                        <tr>
                             <td align="right" width="15%">上级菜单：</td>
                             <td align="left">
                                 <c:if test="${menuAdd||(menuModify&&menu.parent.id!=null)}">
@@ -224,8 +223,6 @@
                                 <input type="hidden" name="level" value="${menu.level}"/>
                                 <input type="hidden" name="isLeaf" value="${menu.isLeaf}"/>
                             </td>
-                            <td align="right" width="15%"></td>
-                            <td align="left"></td>
                         </tr>
                     </table>
                     <h1 class="f14 fbnone ml40 pt10">描述信息</h1>

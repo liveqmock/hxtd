@@ -95,8 +95,8 @@ public class UserController {
         model.addAttribute("organizationOrder", organization.getOrder());
         logger.debug("组织主键编号“{}”", organization.getId());
 
-        page.setHibernateOrderBy("modifiedTime");
-        page.setHibernateOrder("desc");
+        page.setHibernateOrderBy("order");
+        page.setHibernateOrder("asc");
         model.addAttribute("page", page);
 
         return "/system/user/list";
@@ -295,7 +295,8 @@ public class UserController {
         logger.info("转至授权页面");
 
         logger.info("存储表单初始化数据");
-        model.addAttribute("allRoles", model.get(Constant.VS_ROLES));
+        User user = (User) model.get(Constant.VS_USER);
+        model.addAttribute("allRoles", roleService.findValid(user));
         model.addAttribute("allMenus", model.get(Constant.VS_MENUS));
         List<Function> functions = (List<Function>) model.get(Constant.VS_FUNCTIONS);
         model.addAttribute("allFunctions", functionService.groupByMenuId(functions));

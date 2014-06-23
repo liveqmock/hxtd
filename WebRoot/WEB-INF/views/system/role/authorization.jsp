@@ -11,7 +11,7 @@
 
 <html>
 <head>
-    <title>角色授权信息</title>
+    <title>角色授权</title>
     <link rel="stylesheet" href="${ctx}/static/css/application.css" type="text/css"/>
     <link href="${ctx}/static/css/recommend/detail.css" rel="stylesheet" type="text/css"/>
     <style>
@@ -46,7 +46,7 @@
         <b class="b4"></b>
 
         <div class="ie_head">
-            <h1 class="f14 fbnone mt10 ml10 fl">角色授权信息</h1>
+            <h1 class="f14 fbnone mt10 ml10 fl">角色授权</h1>
             <c:if test="${VM_BUSINESS!=null}">
                 <div class="message">${VM_BUSINESS}</div>
             </c:if>

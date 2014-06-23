@@ -132,6 +132,7 @@ public class MenuController {
         logger.info("存储表单默认值");
         Menu menu = new Menu();
         menu.setIsActive(true);
+        menu.setDefaultShow(false);
         menu.setIsLeaf(true);
         if (parentId != null) {
             menu.setParent(menuService.get(parentId));

@@ -7,7 +7,7 @@
 <!--菜单开始-->
 <div class="h_head_bg pr">
     <p class="tr mr15 pt20">
-        今天是<fmt:formatDate value="${VR_DATE}" pattern="MM月dd日"/>，欢迎您${VS_USER.realName}
+        今天是<fmt:formatDate value="${VR_DATE}" pattern="MM月dd日"/>，欢迎您 ${VS_USER.realName}
         <c:forEach items="${VS_TITLEBAR_FIRST_MENUS}" var="item">
             <a href="${ctx}${item.trigger.url}" class="ml10 w_blue">${item.name}</a>
         </c:forEach>

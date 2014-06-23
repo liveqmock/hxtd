@@ -11,7 +11,7 @@
 
 <html>
 <head>
-    <title>用户授权信息</title>
+    <title>用户授权</title>
     <link rel="stylesheet" href="${ctx}/static/css/application.css" type="text/css"/>
     <link href="${ctx}/static/css/recommend/detail.css" rel="stylesheet" type="text/css"/>
     <style>
@@ -61,7 +61,7 @@
         <b class="b4"></b>
 
         <div class="ie_head">
-            <h1 class="f14 fbnone mt10 ml10 fl">用户授权信息</h1>
+            <h1 class="f14 fbnone mt10 ml10 fl">用户授权</h1>
             <c:if test="${VM_BUSINESS!=null}">
                 <div class="message">${VM_BUSINESS}</div>
             </c:if>
@@ -86,7 +86,7 @@
                         </label>
                     </c:forEach>
                 </div>
-              <%--  <div id="tabs-function" class="function">
+                <div id="tabs-function" class="function">
                     <c:forEach items="${allMenus}" var="item" varStatus="status">
                         <div class="line line${item.level}">
                             <label><input type="checkbox" class="checkall"/>${item.name}</label>
@@ -97,7 +97,8 @@
                             </c:forEach>
                         </div>
                     </c:forEach>
-                </div>--%>
+                </div>
+                <%--
                 <div id="tabs-function" class="function">
                       <c:forEach items="${allMenus}" var="item" varStatus="status">
                           <c:if test="${item.level==1}">
@@ -120,6 +121,7 @@
                           </c:if>
                       </c:forEach>
                   </div>
+                  --%>
                 <div id="tabs-component" class="component">
                     <c:forEach items="${allComponents}" var="item" varStatus="status">
                         <label class="box size81 ${fn:contains(allAuthorizationComponents,item)?" inherit-component":""}">

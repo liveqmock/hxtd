@@ -112,14 +112,14 @@ function clearInputVal(obj){//清除
 		</h1>
 		<table class="cb id_table3 w95b bg_c_white margin0 mt10">
 			<tr>
-				<td align="right" width="14%">
+				<td align="right" width="15%">
 					<span class="w_red">*&nbsp;</span>线索名：
 				</td>
 				<td align="left">
 					<input type="text" name="name" value="${lead.name }"
 						class="text_input3 required" />
 				</td>
-				<td align="right" width="14%">
+				<td align="right" width="15%">
 					<span class="w_red">*&nbsp;</span>所有者：
 				</td>
 				<td align="left">

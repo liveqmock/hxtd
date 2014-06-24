@@ -362,6 +362,7 @@ $.widget( "ui.dialog", {
 		uiDialogTitle = $("<span>")
 			.uniqueId()
 			.addClass("ui-dialog-title")
+			.addClass("c_white")
 			.prependTo( this.uiDialogTitlebar );
 		this._title( uiDialogTitle );
 

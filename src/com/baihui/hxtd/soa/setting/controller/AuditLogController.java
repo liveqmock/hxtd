@@ -7,12 +7,14 @@ import java.util.Map;
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
 
+import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
 import org.springside.modules.web.Servlets;
 
 import com.baihui.hxtd.soa.base.orm.hibernate.HibernatePage;
@@ -33,7 +35,7 @@ import com.baihui.hxtd.soa.util.JsonDto;
  * @since (该版本支持的 JDK 版本) ： 1.5 
  * @ClassName: com.baihui.hxtd.soa.setting.controller.AuditLogController.java
  * @version (版本) 1
- * @date 2014-5-26 上午11:17:53
+ * @date 2014-6-20 上午11:17:53
  */
 @Controller
 @RequestMapping(value = "/setting/auditlog")
@@ -73,17 +75,33 @@ public class AuditLogController {
            PrintWriter out) throws NoSuchFieldException, IOException {
 		logger.info("获取查询条件");
 		Map<String, Object> searchParams = Servlets.getParametersStartingWith(request, "search_");
-       Search.clearBlankValue(searchParams);
-       logger.debug("查询条件数目“{}”", searchParams.size());
-       logger.info("添加默认的查询条件");
-       logger.info("获取分页数据");
-       page = auditLogService.findPage(searchParams, page);
-       logger.info("以DTO格式返回");
-       JsonDto json = new JsonDto();
-       json.setSuccessFlag(true);
-       json.setMessage("请求数据成功！");
-       json.setResult(page);
+		Search.clearBlankValue(searchParams);
+		logger.debug("查询条件数目“{}”", searchParams.size());
+		logger.info("添加默认的查询条件");
+		logger.info("获取分页数据");
+		page = auditLogService.findPage(searchParams, page);
+		logger.info("以DTO格式返回");
+		JsonDto json = new JsonDto();
+		json.setSuccessFlag(true);
+		json.setMessage("请求数据成功！");
+		json.setResult(page);
        
 		HibernateAwareObjectMapper.DEFAULT.writeValue(out, json);
 	}
+	
+	/**
+	 *  delete(删除审计日志)
+	 * @param id
+	 * @return
+	 */
+	@ResponseBody
+	@RequestMapping(value = "/delete.do",produces = "text/text;charset=UTF-8")
+	public String delete(Long... id){
+		logger.info("AuditLogController.delete删除审计日志id={}",StringUtils.join(id,","));
+		auditLogService.delete(id);
+		JsonDto jsonDto = new JsonDto();
+		jsonDto.setMessage("删除成功");
+		return jsonDto.toString();
+	}
+	
 }

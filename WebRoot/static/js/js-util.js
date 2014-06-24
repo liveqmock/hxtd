@@ -142,8 +142,12 @@ var jsUtil = {
 	},
 	datepickerNotNow:function(rep){
 		$.getScript(jsUtil.getRootPath()+ "/static/js/ui/jquery.ui.datepicker.js",function(){
+			var txtObj;
+			
 			$.datepicker.regional['zh-CN'] = {
-				closeText : '关闭',
+				showButtonPanel: true,
+				closeText : '清空',
+				currentText: '今天',
 				prevText : '&#x3c;上月',
 				nextText : '下月&#x3e;',
 				currentText : '今天',
@@ -159,7 +163,8 @@ var jsUtil = {
 				firstDay : 1,
 				isRTL : false,
 				showMonthAfterYear : true,
-				yearSuffix : '年'
+				yearSuffix : '年',
+				
 			};  
         $.datepicker.setDefaults($.datepicker.regional['zh-CN']);
         var time = $(rep);
@@ -173,6 +178,7 @@ var jsUtil = {
 						if (end) {
 							$(beginTime).datepicker("option", "maxDate", end);
 						}
+						txtObj = input;
 					}
 				};
 		var setting_end = {
@@ -183,6 +189,7 @@ var jsUtil = {
 						if(min){
 							$(endTime).datepicker("option", "minDate", min);
 						}
+						txtObj = input;
 					}
 				};
 		$(beginTime).datepicker(setting_begin);
@@ -190,8 +197,14 @@ var jsUtil = {
 		
 		for(var i=2;i<time.length;i++){
 			$(time[i]).datepicker();
-		}
+		};
+		
+		$(".ui-datepicker-close").live("click", function(){
+				txtObj.value = '';//清空
+			});
 		});
+		
+		
 	},
 	easyTree : {
 		init:function(data,chileNodeFun){

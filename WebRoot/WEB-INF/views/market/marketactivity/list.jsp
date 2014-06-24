@@ -15,7 +15,7 @@ $(function(){
 	jsUtil.datepicker(".time");// 绑定日历
 	new Grid().init().bindExport(); // 生成Gird
 	$(".more").click(function(){
-		$(this).toggleClass("h_shangla").parents("tr").nextAll().toggle();
+		$(this).find("i").toggleClass("develop").parents("tr").nextAll().toggle();
 	});
 });
 </script>
@@ -55,10 +55,12 @@ $(function(){
 	    				type="text" readonly/>
     			</div>
     		</td>
-    		<td width="10%">
-    			<a class="h_xiala globle_img block fr more" href="javascript:;" title="更多搜索条件"></a>
-    			<a href="javascript:;" class="reset block dump_btn globle_img fr ml10"></a>
-    			<a href="javascript:;" class="block c_white lh25 fr ml10 submit">
+    		<td width="11%">
+    			<a href="javascript:;" class="c_222 fr block ml10 mr10 mt5 cp more">
+    				展开<i class="packup globle_img block_inline"></i>
+    			</a>
+    			<a href="javascript:;" class="a_underline fr w_blue mt5">清除</a>
+    			<a href="javascript:;" class="block c_white lh25 fr mr10 submit">
     				<b class="allbtn_l block fl"></b>
     				<b class="allbtn_r pr13 block fl w_auto f14">查&nbsp;&nbsp;询</b>
     			</a>

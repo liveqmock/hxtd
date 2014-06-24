@@ -73,26 +73,28 @@
 <!--列表开始-->
 <div class="ml35 mr35 mt20 block cb cb">
 <b class="table_headl globle_img block fl"></b>
-     <div class="fl table_headc fl w99b">
-           <ul class="fl id_table1 mt10 ml10">
+	<div class="fl table_headc fl w99b">
+	<div class="ie_head">
+		<ul class="fl id_table1 mt10 ml10">
               <c:if test="${VS_HAS_FUNCTIONS.noticeDelete}">
               <li>
-              <a href="javascript:void(0)" uri="${ctx}/system/notice/delete.do" class="block c_white lh25 fr mr10  deletesome">
-                 <b class="allbtn_l block fl"></b>
-                 <b class="allbtn_r pr13 block fl w_auto f14">删&nbsp;&nbsp;除</b></a></li>
+                <a href="javascript:;" uri="${ctx}/system/notice/delete.do" class="block c_white lh25 mr10 deletesome">
+                <b class="allbtn_l block fl"></b>
+                <b class="allbtn_r pr13 block fl w_auto f14">删&nbsp;&nbsp;除</b></a></li>
                </c:if>
                <c:if test="${VS_HAS_FUNCTIONS.noticeAdd}">
-               <li><a href="${ctx}/system/notice/toAddPage.do?parentId=${parentId}" class="block c_white lh25 add mr10"><b class="allbtn_l block fl"></b><b class="allbtn_r pr13 block fl w_auto f14">新&nbsp;&nbsp;增</b></a></li>
+               <li>
+                <a href="${ctx}/system/notice/toAddPage.do?parentId=${parentId}" class="block c_white lh25 add mr10"><b class="allbtn_l block fl"></b><b class="allbtn_r pr13 block fl w_auto f14">新&nbsp;&nbsp;增</b></a></li>
                </c:if>
                <li>
-               <a href="javascript:void(0)" class="submit block c_white lh25 mr10">
+                <a href="${ctx}/system/notice/toQueryPage.do" class="block c_white lh25 mr10 submit">
                 <b class="allbtn_l block fl"></b>
                 <b class="allbtn_r pr13 block fl w_auto f14">刷&nbsp;&nbsp;新</b>
-               </a> 
+                </a> 
                </li>
-            </ul>
-             
-     </div>
+		</ul>
+	</div>
+	</div>
               <b class="table_headr globle_img block fl"></b>
 </div>
 <!-- 浮动表头开始 -->
@@ -124,9 +126,9 @@
             <tbody id="tbody" class="list"></tbody>
        </table>
          <div class="cb ml35 mt20 h40 pagination"></div>
-        <textarea  id="template-tbody" class="template template-tbody">
+        <textarea id="template-tbody" class="template template-tbody">
             {#foreach $T.result as row}
-            <tr  class="{$T.row$index%2==1?'':'bg_c_blue w'}">
+            <tr class="{$T.row$index%2==1?'':'bg_c_blue w'}">
                 <td align="center"><input type="checkbox" name="id" class="checkitem" value="{$T.row.id}"/></td>
                 <td >
                 <c:choose>

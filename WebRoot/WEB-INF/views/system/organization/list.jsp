@@ -33,7 +33,7 @@
                 }
             });
 
-            window.grid = new Grid().init({deleteCallback: Grid.deleteSynTree(ztree, $("[name=id]"))}).bindAuthorization();
+            window.grid = new Grid().init({onDelete: Grid.deleteSynTree(ztree, $("[name=id]"))}).bindAuthorization();
         })
     </script>
 </head>

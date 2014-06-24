@@ -13,6 +13,7 @@
     <title>系统消息列表页</title>
     <link href="${ctx}/static/css/stressing/empower.css" rel="stylesheet" type="text/css" />
     <link href="${ctx}/static/css/application.css" rel="stylesheet" type="text/css"/>
+    <script type="text/javascript" src="${ctx}/static/js/jquery-json.2.4.js"></script>
     <script type="text/javascript" src="${ctx}/static/js/jquery-jtemplates.js"></script>
     <script type="text/javascript" src="${ctx}/static/js/js-util.common.js"></script>
     <script type="text/javascript" src="${ctx}/static/js/scrollTitle.js?v=1"></script>
@@ -26,9 +27,8 @@
      jsUtil.datepicker(".time");
 	
       $(function(){
-            //var grid = new Grid().init().bindExport();
-			new Grid().init({containerSelector: ".accept"});
-            new Grid().init({containerSelector: ".send"});
+			new Grid().init({gridSelector: ".accept"});
+            new Grid().init({gridSelector: ".send"});
 			$C.tab();
        });
         
@@ -64,9 +64,9 @@
       </table>
     </form>
 <div class="cb"></div>
-
     <div class="ml35 mr35 mt20 block cb cb"></div>
     <div class="ml35 mr35">
+        <div class="ie_head">
       <ul class="fl id_table3 w block cb mt10 tab-titles" style="border-bottom:5px solid #626262; height:32px;" fortabpanels>
         <li class="tab-title" fortabpanel="#tabs-recived">
             <b class="h_tabbtn_l w25 block fl"></b>
@@ -92,11 +92,12 @@
              <b class="allbtn_r pr13 block fl w_auto f14">刷&nbsp;&nbsp;新</b>
              </a> 
              </li>
-        </ul>	
+        </ul>
       </ul>
+        </div>	
    <div class="w cb tab-panels">
 <!--接收消息-->
-<div id="tabs-recived" class="tab-panel accept" forform="form" formaction="${ctx}/system/message/query.do?type=recived">
+<div id="tabs-recived" class="tab-panel accept" forform="form" formaction="${ctx}/system/message/query.do?type=recived" forpagination=".accept .pagination">
      <div id="title" style="display: none;background-color: #f5f5f6;" class=" ml35 mr35">
 	 　　<table  class="cb id_table2 w">
 		　　<tr>
@@ -198,7 +199,7 @@
         <%@include file="/WEB-INF/template/pagination.jsp" %>
 		</div>
 		<!--已发消息-->
-		<div id="tabs-send" class="tab-panel send" forform="form" formaction="${ctx}/system/message/query.do?type=send">
+		<div id="tabs-send" class="tab-panel send" forform="form" formaction="${ctx}/system/message/query.do?type=send" forpagination=".send .pagination">
 		
 				<div id="title" style="display: none; background-color: #f5f5f6;"
 					class=" ml35 mr35">

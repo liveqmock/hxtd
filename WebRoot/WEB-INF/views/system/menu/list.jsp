@@ -28,7 +28,7 @@
     <script type="text/javascript">
         $(function () {
 
-            var grid = new Grid().init({paginationActive: false, deleteCallback: Grid.deleteSynTree(window.ztree, $("[name=id]"))});
+            var grid = new Grid().init({paginationActive: false, onDelete: Grid.deleteSynTree(window.ztree, $("[name=id]"))});
 
             window.ztree = jsUtil.menuTree({
                 data:${menuTree==null?"[]":menuTree},

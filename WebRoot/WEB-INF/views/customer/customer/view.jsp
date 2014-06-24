@@ -122,7 +122,7 @@
 		</tr>
 	</table>
 	<tag:attachment view="true" upload="true" module="customer" query="true" down="true" id="${costomer.id}"></tag:attachment>
-	<tag:memoir view="true" edit="true" query="true" delete="true" moduleType="11010102" moduleId="${customer.id}"></tag:memoir>
+	<tag:memoir view="true" edit="true" query="true" delete="true" moduleType="customer" moduleId="${customer.id}"></tag:memoir>
 	<div class=" h40"></div>
     </div>
     <div class="cb block h40 margin0 mt10" style="width:350px;">

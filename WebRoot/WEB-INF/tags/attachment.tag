@@ -19,16 +19,14 @@
 <c:if test="${query}">
 <h1 class="f14 fbnone ml40 mt10">附件列表</h1>
 <div class="w95b  bg_c_white margin0">
-	<div class="w70b margin0 mt10 pt10 mb10">
-		<c:if test="${upload}">
-		<a href="javascript:attachment.upload();" class="block c_white lh25 fl ml10"> <b
-			class="allbtn_l block fl"></b><b
-			class="allbtn_r pr13 block fl w_auto f14">上传附件</b></a>
-		</c:if>
-	</div>
 	<br />
 	<h1 class="w70b margin0 fbnone f12 mt10 block">
 		已上传：
+		<c:if test="${upload}">
+		<a href="javascript:attachment.upload();" class="block c_white lh25 fr mt-15 mr60 "> <b
+			class="allbtn_l block fl"></b><b
+			class="allbtn_r pr13 block fl w_auto f14">上传附件</b></a>
+		</c:if>
 	</h1>
 	<b class="w70b f_line2 block margin0"></b>
 

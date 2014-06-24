@@ -24,7 +24,7 @@ import com.baihui.hxtd.soa.setting.entity.AuditLog;
  * @since (该版本支持的 JDK 版本) ： 1.6
  * @ClassName: com.baihui.hxtd.soa.setting.service.AuditLogService.java
  * @version (版本)1
- * @date 2014-5-16 下午04:48:19
+ * @date 2014-6-20 上午10:48:19
  */
 @Service
 @Transactional
@@ -71,4 +71,13 @@ public class AuditLogService {
     	
         return auditLogDao.findUnique(hql, id);
     }
+
+    /**
+     * 根据属性isDeleted删除
+     * @param id
+     */
+	public void delete(Long... id) {
+		auditLogDao.delete(id);
+		
+	}
 }

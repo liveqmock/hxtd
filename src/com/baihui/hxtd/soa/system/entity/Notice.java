@@ -56,7 +56,7 @@ public class Notice implements Serializable{
 	
 	@JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss", timezone = "GMT+08:00")
 	@Column(name = "MODIFIED_TIME")
-	private Date modifieTime;
+	private Date modifiedTime;
    
 	/**
 	 * 过期时间
@@ -129,11 +129,11 @@ public class Notice implements Serializable{
 	}
 
 	public Date getModifieTime() {
-		return modifieTime;
+		return modifiedTime;
 	}
 
 	public void setModifieTime(Date modifieTime) {
-		this.modifieTime = modifieTime;
+		this.modifiedTime = modifieTime;
 	}
 
 	public Date getDeadTime() {

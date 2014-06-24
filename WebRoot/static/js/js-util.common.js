@@ -1,23 +1,76 @@
 window.jsUtil = window.jsUtil || {};
 
+/**
+ * 表格对象
+ * -html结构
+ * <div> 表格容器
+ *  <form> 查询条件
+ *      <div>查询</div> 查询按钮
+ *      <div>重置</div> 重置按钮
+ *      <div>高级搜索</div> 高级搜索
+ *  </form>
+ *  <div> 操作栏
+ *      <div>删除</div>
+ *  </div>
+ *  <div></div> 浮动表头
+ *  <div> 数据列表
+ *      <div></div> 表头
+ *      <div></div> 排序模板
+ *      <div></div> 内容
+ *      <div></div> 内容模板
+ *  </div>
+ *  <div></div> 分页栏
+ *  <div></div> 分页栏模板
+ * </div>
+ * -支持多个表格
+ *
+ * @constructor
+ */
 function Grid() {}
 
 Grid.defaults = {
     containerSelector: ".listcontainer",
-
+    //表单
     formSelector: "form",
     formPageNoSelector: "[name=hibernatePageNo]",
     formPageSizeSelector: "[name=hibernatePageSize]",
     formPageOrderBySelector: "[name=hibernateOrderBy]",
     formPageOrderSelector: "[name=hibernateOrder]",
+    submitSelector: ".submit",
+    resetSelector: ".reset",
+    //操作栏
+    operatebarSelector: ".operatebar",
+    deleteSomeSelector: ".deletesome",
+    authorizationSelector: ".authorization",
+    resetPasswordSelector: ".resetpassword",
+    enableSelector: ".enable",
+    disableSelector: ".disable",
+    exportSelector: ".export",
+    exportFiledSelector: "[name^=search]",
+    //内容列表
+    gridSelector: ".grid",
+    headerSelector: ".header",
+    checkAllSelector: ".checkall",
     resultSelector: ".list",
     resultTemplateId: "template-tbody",
-
-    opebarSelector: ".ie_head",
-
+    checkItemSelector: ".checkitem",
+    onDelete: function (ids) {},
+    deleteOneSelector: ".delete",
+    disableButtonClass: ["allbtnno_l", "allbtnno_r"],
+    enableButtonClass: ["allbtn_l", "allbtn_r"],
+    //排序
+    sortableSelector: ".sortable",
+    orderBySelector: ".orderby",
+    orderSelector: ".order",
+    sortAscUnselectedClass: "sort_btm",
+    sortAscSelectedClass: "sort_btm_orange",
+    sortDescUnselectedClass: "sort_top",
+    sortDescSelectedClass: "sort_top_orange",
+    sortableTemplateId: "template-sort",
+    //分页
     paginationActive: true,//是否启用分页
     paginationCountLimit: 1,//分页的最低限制条数
-    paginationContainerSelector: ".pagination",
+    paginationbarSelector: ".pagination",
     paginationTemplateId: "template-pagination",
     paginationSelector: ".paginationbar",
     sizeSelector: ".page-size",
@@ -29,32 +82,7 @@ Grid.defaults = {
     nextSelector: ".page-next",
     lastSelector: ".page-last",
     refreshSelector: ".page-rel",
-    totalPagesSelector: ".page-totalpages",
-
-    sortableSelector: ".sortable",
-    orderBySelector: ".orderby",
-    orderSelector: ".order",
-    sortAscUnselectedClass: "sort_btm",
-    sortAscSelectedClass: "sort_btm_orange",
-    sortDescUnselectedClass: "sort_top",
-    sortDescSelectedClass: "sort_top_orange",
-    sortableTemplateId: "template-sort",
-
-    enableButtonClass: ["allbtn_l", "allbtn_r"],
-    disableButtonClass: ["allbtnno_l", "allbtnno_r"],
-    submitSelector: ".submit",
-    resetSelector: ".reset",
-    checkAllSelector: ".checkall",
-    checkItemSelector: ".checkitem",
-    deleteSomeSelector: ".deletesome",
-    deleteCallback: null,
-    deleteOneSelector: ".delete",
-    authorizationSelector: ".authorization",
-    resetPasswordSelector: ".resetpassword",
-    enableSelector: ".enable",
-    disableSelector: ".disable",
-    exportSelector: ".export",
-    exportFiledSelector: "[name^=search]"
+    totalPagesSelector: ".page-totalpages"
 }
 
 Grid.prototype = {
@@ -68,149 +96,78 @@ Grid.prototype = {
     },
     /**设置公用元素*/
     setElements: function () {
-        this.container = $(this.options.containerSelector);
+        var options = this.options;
+        this.container = $(options.containerSelector);
+        this.container.length == 0 && (this.container = $("body"));
 
-        var formSelector = this.container.attr("forform");
-        this.form = formSelector ? $(formSelector) : $(this.options.formSelector, this.container);
-        this.formAction = this.container.attr("formaction") || this.form.attr("action");
-        this.form.attr("uri", this.formAction);
-        this.formPageOrderBy = $(this.options.formPageOrderBySelector, this.form);
-        this.formPageOrder = $(this.options.formPageOrderSelector, this.form);
+        this.form = this.container.find(options.formSelector);
+        this.form.length == 0 && (this.form = $(options.formSelector));
+        this.action = this.form.attr("action");
 
-        var opebarSelector = this.container.attr("foropebar");
-        this.opebar = opebarSelector ? $(opebarSelector) : $(this.options.opebarSelector, this.container);
+        this.btnQuery = this.form.find(options.submitSelector);
+        this.btnReset = this.form.find(options.resetSelector);
+        this.formPageOrderBy = $(options.formPageOrderBySelector, this.form);
+        this.formPageOrder = $(options.formPageOrderSelector, this.form);
 
-        this.list = this.container.find(this.options.resultSelector);
-        this.table = this.list.parents("table");
-        this.header = this.table.find("tr:first");
+        this.operatebar = this.container.find(options.operatebarSelector);
+        this.operatebar.length == 0 && (this.operatebar = this.container);
 
-        this.paginationContainer = $(this.options.paginationContainerSelector, this.container);
+        this.btnDeleteSome = this.operatebar.find(options.deleteSomeSelector);
+        this.btnEnable = this.operatebar.find(options.enableSelector);
+        this.btnDisable = this.operatebar.find(options.disableSelector);
+        this.btnResetPassword = this.operatebar.find(options.resetPasswordSelector);
+        this.btnExport = this.operatebar.find(options.exportSelector);
+
+        this.grid = this.container.find(options.gridSelector);
+        this.grid.length == 0 && (this.grid = this.container.find("table"));
+        var forform = this.grid.attr("forform");
+        forform && (this.form = this.container.find(forform));
+        var formaction = this.grid.attr("formaction");
+        formaction && (this.action = formaction);
+
+        this.header = this.grid.find(options.headerSelector);
+        this.header.length == 0 && (this.header = this.grid.find("tr:first"));
+        this.sorts = this.header.find(options.sortableSelector);
+        this.result = this.grid.find(options.resultSelector);
+        this.deleteOne = this.grid.find(options.deleteOneSelector);
+
+        this.paginationbar = this.container.find(options.paginationbarSelector);
+        var forpagination = this.grid.attr("forpagination");
+        forpagination && (this.paginationbar = this.container.find(forpagination));
 
         return this;
     },
     /**初始化界面*/
     initUi: function () {
-        this.bindCheckAll();
-        this.bindDeleteSome();
-        this.bindDeleteOne();
         this.bindQuery();
         this.bindReset();
+        this.bindDeleteSome();
+        this.bindCheckAll();
         this.floatHeader();
         this.renderSort();
         this.bindSort();
+        this.bindDeleteOne();
         this.setPagination();
         return this;
     },
-    /**浮动表头*/
-    floatHeader: function () {
-        if (window.RcmsFloatTitle && $("#title").length == 0) {
-            var floatHeader = $('<div id="title" style="display: none;background-color: #f5f5f6;" class="mr35"></div>');
-            this.table.before(floatHeader);
-            var emptyTable = this.table.clone().empty();
-            floatHeader.append(emptyTable);
-            emptyTable.append(this.header.clone());
-            this.header.attr("id", "recordDiv");
-            RcmsFloatTitle.init();
-        }
-        return this;
-    },
-    /**加载表格*/
-    loadGrid: function (options) {
+    /**绑定查询事件*/
+    bindQuery: function () {
         var _this = this;
-        this.clearGrid().clearPagination();
-
-        options = $.extend(true, {
-            ajaxArgs: [this.formAction, function (result) {
-                var page = result.result;
-                _this.resetCheckAll();
-                _this.renderList(page);
-                $(_this.container).trigger("pagination", [page]);
-            }, null, this.form.formSerialize()]
-        }, options);
-        RcmsAjax.ajax.apply(RcmsAjax, options.ajaxArgs);
+        var click = function () {_this.loadGridWithDisable({button: $(this)});};
+        this.btnQuery.click(click).data("click", click);
         return this;
     },
-    /**加载表格附带禁用按钮功能*/
-    loadGridWithDisable: function (options) {
+    /**绑定重置事件*/
+    bindReset: function () {
         var _this = this;
-        options = $.extend(true, {button: null, ajaxArgs: []}, options);
-
-        this.disableButton(options.button);
-        var _completeCallback = options.ajaxArgs[2];
-        var completeCallback = function () {
-            _this.enableButton(options.button);
-            _completeCallback && _completeCallback.apply(this, arguments);
-        };
-        options.ajaxArgs[2] = completeCallback;
-        return this.loadGrid(options);
-    },
-    /**禁用按钮*/
-    disableButton: function (button) {
-        var disableButtonClass = this.options.disableButtonClass;
-        var enableButtonClass = this.options.enableButtonClass;
-        for (var i = 0; i < disableButtonClass.length; i++) {
-            button.children().eq(i).removeClass(enableButtonClass[i]).addClass(disableButtonClass[i]);
-        }
-        button.unbind("click", button.data("click"));
-        return this;
-    },
-    /**启用按钮*/
-    enableButton: function (button) {
-        var disableButtonClass = this.options.disableButtonClass;
-        var enableButtonClass = this.options.enableButtonClass;
-        for (var i = 0; i < disableButtonClass.length; i++) {
-            button.children().eq(i).removeClass(disableButtonClass[i]).addClass(enableButtonClass[i]);
-        }
-        button.bind("click", button.data("click"));
-        return this;
-    },
-    /**清除表格内容*/
-    clearGrid: function () {
-        this.list.empty();
-        return this;
-    },
-    /**含有数据*/
-    hasData: function (data) {
-        var result = data.result || data.list;
-        return result && result.length > 0;
-    },
-    /**渲染列表*/
-    renderList: function (data) {
-        var options = this.options;
-        if (!this.hasData(data)) {
-            var resultTemplate = "<tr><td colspan='{$T.colspan}' align='center'><b>没有符合条件的数据</b></td></tr>";
-            var data = {colspan: this.header.children().length};
-            $(options.resultSelector, this.container).setTemplate(resultTemplate).processTemplate(data);
-        } else {
-            $(options.resultSelector, this.container).setTemplateElement(options.resultTemplateId).processTemplate(data);
-        }
-        return this;
-    },
-    /**绑定选择所有事件*/
-    bindCheckAll: function () {
-        var checkItemSelector = this.options.checkItemSelector;
-        var checkAllSelector = this.options.checkAllSelector;
-        var container = this.container;
-        $(checkAllSelector, container).click(function () {$(checkItemSelector, container).attr("checked", this.checked);});
-        $(checkItemSelector).live("click", function (e) {
-            $(checkAllSelector, container).attr("checked", $(checkItemSelector + ":not(:checked)", container).length == 0);
-            e.stopPropagation();//jquery 阻止冒泡事件
-        });
-        return this;
-    },
-    /**重置选择所有*/
-    resetCheckAll: function () {
-        $(this.options.checkAllSelector, this.container).attr("checked", false);
-        $(this.options.checkItemSelector, this.container).attr("checked", false);
+        this.btnReset.click(function () {_this.form[0].reset();});
         return this;
     },
     /**绑定删除一些事件*/
     bindDeleteSome: function () {
-        var checkItemSelector = this.options.checkItemSelector;
-        var container = this.container;
         var _this = this;
         var click = function () {
-            var ids = $(checkItemSelector + ":checked", container);
+            var ids = $(_this.options.checkItemSelector + ":checked", _this.result);
             if (ids.length == 0) {
                 jsUtil.alert("请选择一条或多条数据！");
                 return this;
@@ -222,35 +179,13 @@ Grid.prototype = {
                 ids.each(function () {values.push(this.value);});
                 _this.disableButton($this);
                 RcmsAjax.ajax($this.attr("uri"), function () {
-                    if (_this.options.deleteCallback) {
-                        var isContinue = _this.options.deleteCallback(values);
-                        isContinue != false && _this.loadGridWithDisable({button: $this});
-                    } else {
-                        _this.loadGridWithDisable({button: $this});
-                    }
+                    _this.options.onDelete.call(_this, (values));
+                    _this.loadGridWithDisable({button: $this});
                 }, null, $.param({id: values }, true));
             });
         };
-        $(this.options.deleteSomeSelector, this.opebar).click(click).data("click", click);
-        return this;
-    },
-    /**绑定删除一个事件*/
-    bindDeleteOne: function () {
-        var _this = this;
-        $(this.options.deleteOneSelector, this.container).live("click", function () {
-            var $this = $(this);
-            jsUtil.confirm("确定要删除吗？", function () {
-                var url = $this.attr("uri");
-                RcmsAjax.ajax(url, function () {
-                    if (_this.options.deleteCallback) {
-                        var isContinue = _this.options.deleteCallback([$.URL.jsonParamsByUrl(url).id]);
-                        isContinue != false && _this.loadGrid();
-                    } else {
-                        _this.loadGrid();
-                    }
-                });
-            });
-        });
+
+        this.btnDeleteSome.click(click).data("click", click);
         return this;
     },
     /**绑定授权事件*/
@@ -272,7 +207,7 @@ Grid.prototype = {
     bindResetPassword: function () {
         var checkItemSelector = this.options.checkItemSelector;
         var container = this.container;
-        $(this.options.resetPasswordSelector, this.opebar).click(function () {
+        this.btnResetPassword.click(function () {
             var ids = $(checkItemSelector + ":checked", container);
             if (ids.length == 0) {
                 jsUtil.alert("请选择一条或多条数据！");
@@ -293,7 +228,7 @@ Grid.prototype = {
         var _this = this;
         var checkItemSelector = this.options.checkItemSelector;
         var container = this.container;
-        $(this.options.enableSelector, this.opebar).click(function () {
+        this.btnEnable.click(function () {
             var ids = $(checkItemSelector + ":checked", container);
             if (ids.length == 0) {
                 jsUtil.alert("请选择一条或多条数据！");
@@ -315,7 +250,7 @@ Grid.prototype = {
         var _this = this;
         var checkItemSelector = this.options.checkItemSelector;
         var container = this.container;
-        $(this.options.disableSelector, this.opebar).click(function () {
+        this.btnDisable.click(function () {
             var ids = $(checkItemSelector + ":checked", container);
             if (ids.length == 0) {
                 jsUtil.alert("请选择一条或多条数据！");
@@ -332,37 +267,10 @@ Grid.prototype = {
         });
         return this;
     },
-    /**绑定提交
-     * 1.uri 提交到服务端的uri
-     * 2.redirecturi 转发|重定向的uri
-     * 2.1.不指定redirecturi，以open方式在本页面打开，提供给导出、下载等使用
-     * 2.2.指定redirecuri，以表单提交方式发生请求，进行页面跳转
-     * @returns {Grid}
-     */
-    bindSubmit: function () {
-        var _this = this;
-        $(this.options.submitSelector).each(function () {
-            $(this).click(function () {
-                var $this = $(this);
-                var submitAction = $this.attr("uri");
-                var redirectUri = $this.attr("redirecturi");
-
-                if (redirectUri) {
-                    _this.form.attr("action", $.URL.appendParams(submitAction, "redirectUri=" + encodeURI(redirectUri)));
-                    if (!_this.form.valid || _this.form.valid()) {
-                        _this.form.submit();
-                    }
-                } else {
-                    window.open($.URL.appendParams(submitAction, _this.form.formSerialize()), "_self");
-                }
-            });
-        });
-        return this;
-    },
     /**绑定导出*/
     bindExport: function () {
         var _this = this;
-        $(this.options.exportSelector, this.opebar).click(function () {
+        this.btnExport.click(function () {
             var exportButton = $(this);
             jsUtil.confirm("最多导出符合条件的前3000条数据", function () {
                 var params = {};
@@ -375,13 +283,102 @@ Grid.prototype = {
         });
         return this;
     },
-    /**设置分页元素*/
-    setPaginationElements: function () {
-        var options = this.options;
-        this.pagination = $(this.options.paginationSelector, this.container);
-        this.pageNo = parseInt($(options.noSelector, this.pagination).attr("pageno"));
-        this.totalPages = parseInt($(options.totalPagesSelector).text());
-
+    /**浮动表头*/
+    floatHeader: function () {
+        if (window.RcmsFloatTitle && $("#title").length == 0) {
+            var floatHeader = $('<div id="title" style="display: none;background-color: #f5f5f6;" class="mr35"></div>');
+            this.grid.before(floatHeader);
+            var emptyTable = this.grid.clone().empty();
+            floatHeader.append(emptyTable);
+            emptyTable.append(this.header.clone());
+            this.header.attr("id", "recordDiv");
+            RcmsFloatTitle.init();
+        }
+        return this;
+    },
+    /**绑定选择所有事件*/
+    bindCheckAll: function () {
+        var checkItemSelector = this.options.checkItemSelector;
+        var checkAllSelector = this.options.checkAllSelector;
+        var container = this.container;
+        $(checkAllSelector, container).click(function () {$(checkItemSelector, container).attr("checked", this.checked);});
+        $(checkItemSelector).live("click", function (e) {
+            $(checkAllSelector, container).attr("checked", $(checkItemSelector + ":not(:checked)", container).length == 0);
+            e.stopPropagation();//jquery 阻止冒泡事件
+        });
+        return this;
+    },
+    /**重置选择所有*/
+    resetCheckAll: function () {
+        $(this.options.checkAllSelector, this.container).attr("checked", false);
+        $(this.options.checkItemSelector, this.container).attr("checked", false);
+        return this;
+    },
+    /**渲染排序*/
+    renderSort: function () {
+        var _this = this;
+        this.sorts.each(function () {
+            var $this = $(this);
+            var orderBy = $this.attr("orderby");
+            var orderByValue = _this.formPageOrderBy.val();
+            var orderValue = _this.formPageOrder.val();
+            var data = {
+                name: $this.text(),
+                ascClass: (orderByValue == orderBy && orderValue == "asc") ? _this.options.sortAscSelectedClass : _this.options.sortAscUnselectedClass,
+                descClass: (orderByValue == orderBy && orderValue == "desc") ? _this.options.sortDescSelectedClass : _this.options.sortDescUnselectedClass
+            };
+            $this.setTemplateElement(_this.options.sortableTemplateId).processTemplate(data);
+        });
+        return this;
+    },
+    /**绑定排序事件*/
+    bindSort: function () {
+        var _this = this;
+        this.sorts.find(this.options.orderSelector).click(function () {
+            var $this = $(this);
+            _this.selectedSort($this);
+            _this.formPageOrderBy.val($this.parents(_this.options.orderBySelector).attr("orderby"));
+            _this.formPageOrder.val($this.attr("order"));
+            _this.loadGrid();
+        });
+        return this;
+    },
+    /**排序不选中*/
+    unselectedSort: function (jqele) {
+        var order = jqele.attr("order");
+        if (order == "asc") {
+            jqele.removeClass(this.options.sortAscSelectedClass).addClass(this.options.sortAscUnselectedClass);
+        } else if (order == "desc") {
+            jqele.removeClass(this.options.sortDescSelectedClass).addClass(this.options.sortDescUnselectedClass);
+        }
+        return this;
+    },
+    /**排序选中*/
+    selectedSort: function (jqele) {
+        var order = jqele.attr("order");
+        this.unselectedSort($("." + this.options.sortAscSelectedClass + ",." + this.options.sortDescSelectedClass, this.container));
+        if (order == "asc") {
+            jqele.removeClass(this.options.sortAscUnselectedClass);
+            jqele.addClass(this.options.sortAscSelectedClass);
+        } else if (order == "desc") {
+            jqele.removeClass(this.options.sortDescUnselectedClass);
+            jqele.addClass(this.options.sortDescSelectedClass);
+        }
+        return this;
+    },
+    /**绑定删除一个事件*/
+    bindDeleteOne: function () {
+        var _this = this;
+        this.deleteOne.live("click", function () {
+            var $this = $(this);
+            jsUtil.confirm("确定要删除吗？", function () {
+                var url = $this.attr("uri");
+                RcmsAjax.ajax(url, function () {
+                    _this.options.onDelete.call(this, [$.URL.jsonParamsByUrl(url).id]);
+                    _this.loadGrid();
+                });
+            });
+        });
         return this;
     },
     /**设置分页*/
@@ -400,21 +397,22 @@ Grid.prototype = {
     },
     /**清除表格内容*/
     clearPagination: function () {
-        this.paginationContainer.empty();
+        this.paginationbar.empty();
         return this;
     },
     /**渲染分页*/
     renderPagination: function (data) {
         var options = this.options;
-        this.paginationContainer.setTemplateElement(options.paginationTemplateId).processTemplate(data);
-        this.setPaginationElements();
+        this.paginationbar.setTemplateElement(options.paginationTemplateId).processTemplate(data);
+        this.totalPages = parseInt($(options.totalPagesSelector, this.paginationbar).text());
+        this.pageNo = parseInt($(options.noSelector, this.paginationbar).attr("pageno"));
         return this;
     },
     /**绑定分页事件*/
     bindPagination: function () {
         var options = this.options;
 
-        var pagination = this.pagination;
+        var pagination = this.paginationbar;
 
         var form = this.form;
         var formPageSize = $(options.formPageSizeSelector, form);
@@ -465,69 +463,103 @@ Grid.prototype = {
 
         return this;
     },
-    /**渲染排序*/
-    renderSort: function () {
+    /**加载表格*/
+    loadGrid: function (options) {
         var _this = this;
-        $(this.options.sortableSelector, this.container).each(function () {
-            var $this = $(this);
-            var orderBy = $this.attr("orderby");
-            var orderByValue = _this.formPageOrderBy.val();
-            var orderValue = _this.formPageOrder.val();
-            var data = {
-                name: $this.text(),
-                ascClass: (orderByValue == orderBy && orderValue == "asc") ? _this.options.sortAscSelectedClass : _this.options.sortAscUnselectedClass,
-                descClass: (orderByValue == orderBy && orderValue == "desc") ? _this.options.sortDescSelectedClass : _this.options.sortDescUnselectedClass
-            };
-            $this.setTemplateElement(_this.options.sortableTemplateId).processTemplate(data);
-        });
+        this.clearGrid().clearPagination();
+        options = $.extend(true, {
+            ajaxArgs: [this.action, function (result) {
+                var page = result.result;
+                _this.resetCheckAll();
+                _this.renderList(page);
+                $(_this.container).trigger("pagination", [page]);
+            }, null, this.form.formSerialize()]
+        }, options);
+        RcmsAjax.ajax.apply(RcmsAjax, options.ajaxArgs);
         return this;
     },
-    /**绑定排序事件*/
-    bindSort: function () {
+    /**加载表格附带禁用按钮功能*/
+    loadGridWithDisable: function (options) {
         var _this = this;
-        $(this.options.orderSelector, this.container).click(function () {
-            var $this = $(this);
-            _this.selectedSort($this);
-            _this.formPageOrderBy.val($this.parents(_this.options.orderBySelector).attr("orderby"));
-            _this.formPageOrder.val($this.attr("order"));
-            _this.loadGrid();
-        });
+        options = $.extend(true, {button: null, ajaxArgs: []}, options);
+
+        this.disableButton(options.button);
+        var _completeCallback = options.ajaxArgs[2];
+        var completeCallback = function () {
+            _this.enableButton(options.button);
+            _completeCallback && _completeCallback.apply(this, arguments);
+        };
+        options.ajaxArgs[2] = completeCallback;
+        return this.loadGrid(options);
+    },
+    /**禁用按钮*/
+    disableButton: function (button) {
+        var disableButtonClass = this.options.disableButtonClass;
+        var enableButtonClass = this.options.enableButtonClass;
+        for (var i = 0; i < disableButtonClass.length; i++) {
+            button.children().eq(i).removeClass(enableButtonClass[i]).addClass(disableButtonClass[i]);
+        }
+        button.unbind("click", button.data("click"));
         return this;
     },
-    /**排序不选中*/
-    unselectedSort: function (jqele) {
-        var order = jqele.attr("order");
-        if (order == "asc") {
-            jqele.removeClass(this.options.sortAscSelectedClass).addClass(this.options.sortAscUnselectedClass);
-        } else if (order == "desc") {
-            jqele.removeClass(this.options.sortDescSelectedClass).addClass(this.options.sortDescUnselectedClass);
+    /**启用按钮*/
+    enableButton: function (button) {
+        var disableButtonClass = this.options.disableButtonClass;
+        var enableButtonClass = this.options.enableButtonClass;
+        for (var i = 0; i < disableButtonClass.length; i++) {
+            button.children().eq(i).removeClass(disableButtonClass[i]).addClass(enableButtonClass[i]);
+        }
+        button.bind("click", button.data("click"));
+        return this;
+    },
+    /**清除表格内容*/
+    clearGrid: function () {
+        this.result.empty();
+        return this;
+    },
+    /**含有数据*/
+    hasData: function (data) {
+        var result = data.result || data.list;
+        return result && result.length > 0;
+    },
+    /**渲染列表*/
+    renderList: function (data) {
+        var options = this.options;
+        if (!this.hasData(data)) {
+            var resultTemplate = "<tr><td colspan='{$T.colspan}' align='center'><b>没有符合条件的数据</b></td></tr>";
+            var data = {colspan: this.header.children().length};
+            this.result.setTemplate(resultTemplate).processTemplate(data);
+        } else {
+            this.result.setTemplateElement(options.resultTemplateId).processTemplate(data);
         }
         return this;
     },
-    /**排序选中*/
-    selectedSort: function (jqele) {
-        var order = jqele.attr("order");
-        this.unselectedSort($("." + this.options.sortAscSelectedClass + ",." + this.options.sortDescSelectedClass, this.container));
-        if (order == "asc") {
-            jqele.removeClass(this.options.sortAscUnselectedClass);
-            jqele.addClass(this.options.sortAscSelectedClass);
-        } else if (order == "desc") {
-            jqele.removeClass(this.options.sortDescUnselectedClass);
-            jqele.addClass(this.options.sortDescSelectedClass);
-        }
-        return this;
-    },
-    /**绑定查询事件*/
-    bindQuery: function () {
+
+    /**绑定提交
+     * 1.uri 提交到服务端的uri
+     * 2.redirecturi 转发|重定向的uri
+     * 2.1.不指定redirecturi，以open方式在本页面打开，提供给导出、下载等使用
+     * 2.2.指定redirecuri，以表单提交方式发生请求，进行页面跳转
+     * @returns {Grid}
+     */
+    bindSubmit: function () {
         var _this = this;
-        var click = function () {_this.loadGridWithDisable({button: $(this)});};
-        $(this.options.submitSelector, this.form).click(click).data("click", click);
-        return this;
-    },
-    /**绑定重置事件*/
-    bindReset: function () {
-        var _this = this;
-        $(this.options.resetSelector, this.container).click(function () {_this.form[0].reset();});
+        $(this.options.submitSelector).each(function () {
+            $(this).click(function () {
+                var $this = $(this);
+                var submitAction = $this.attr("uri");
+                var redirectUri = $this.attr("redirecturi");
+
+                if (redirectUri) {
+                    _this.form.attr("action", $.URL.appendParams(submitAction, "redirectUri=" + encodeURI(redirectUri)));
+                    if (!_this.form.valid || _this.form.valid()) {
+                        _this.form.submit();
+                    }
+                } else {
+                    window.open($.URL.appendParams(submitAction, _this.form.formSerialize()), "_self");
+                }
+            });
+        });
         return this;
     }
 }
@@ -687,168 +719,6 @@ jsUtil.bindQuery = function (options) {
 
     return this;
 }
-
-/**加载表格*/
-/*
- jsUtil.loadGrid = function (options) {
- var defaults = {
- formSelector: "form",
- formPageNoSelector: "[name=pageNo]",
- formPageSizeSelector: "[name=pageSize]",
- formPageOrderBySelector: "[name=pageOrderBy]",
- formPageOrderSelector: "[name=pageOrder]",
- resultSelector: ".list",
- resultTemplateId: "template-tbody",
- paginationSelector: ".pagination",
- paginationTemplateId: "template-pagination"
- };
- options = $.extend({}, defaults, options);
-
-
- jsUtil.sendRequest(options.formSelector, function (result) {
- var page = result.result;
- jsUtil.renderList(options.resultSelector, options.resultTemplateId, page);
-
- page.formSelector = options.formSelector;
- page.pageNoSelector = options.formPageNoSelector;
- page.pageSizeSelector = options.formPageSizeSelector;
-
- jsUtil.renderPagination(options.paginationContainerSelector, options.paginationTemplateId, page);
- jsUtil.bindPagination(options);
- });
- return this;
- }
- */
-
-/**查询数据*/
-jsUtil.sendRequest = function (formselector, callback) {
-    formselector = formselector || "form";
-    var $form = $(formselector);
-    RcmsAjax.ajax($form.attr("action"), callback, null, $form.formSerialize());
-    return this;
-}
-
-/**渲染列表*/
-jsUtil.renderList = function (resultselector, templateid, data) {
-    resultselector = resultselector || ".list";
-    templateid = templateid || "template-tbody"
-    $(resultselector).setTemplateElement(templateid).processTemplate(data);
-    return this;
-}
-
-/**渲染分页*/
-jsUtil.renderPagination = function (paginationselector, templateid, data) {
-    paginationselector = paginationselector || ".pagination";
-    templateid = templateid || "template-pagination";
-    data = data || {};
-    data.formSelector = data.formSelector || "form";
-    data.pageSizeSelector = data.pageSizeSelector || "[name=pageSize]";
-    data.pageNoSelector = data.pageNoSelector || "[name=pageNo]";
-    $(paginationselector).setTemplateElement(templateid).processTemplate(data);
-    return this;
-}
-
-
-//TODO 关于分页使用上一次的查询条件
-jsUtil.bindPagination = function (options) {
-    var defaults = {
-        paginationbar: ".paginationbar",
-        pagenobar: ".pagenobar",
-        size: ".page-size",
-        first: ".page-first",
-        pre: ".page-pre",
-        no: ".page-no",
-        anyone: ".page-anyone",
-        next: ".page-next",
-        last: ".page-last",
-        rel: ".page-rel",
-        totalpages: ".page-totalpages"
-    };
-    options = $.extend({}, defaults, options);
-
-
-    $(options.paginationbar).each(function () {
-        var $pagination = $(this);
-        var $pagesize = $(options.size, $pagination);
-        var $pagenobar = $(options.pagenobar, $pagination);
-
-        var $form = $($pagination.attr("forform"));
-        var $formpagesize = $($pagesize.attr("forformfield"), $form);
-        var $formpageno = $($pagenobar.attr("forformfield"), $form);
-
-        var pageNo = parseInt($(options.no, $pagination).attr("pageno"));
-
-        $pagesize.live("change", function () {
-            $formpagesize.val(this.value);
-            jsUtil.loadGrid(options);
-        });
-
-        $(options.first, $pagination).live("click", function () {
-            if (pageNo > 1) {
-                $formpageno.val(1);
-                jsUtil.loadGrid(options);
-            }
-        });
-        $(options.pre, $pagination).live("click", function () {
-            if (pageNo > 1) {
-                $formpageno.val(pageNo - 1);
-                jsUtil.loadGrid(options);
-            }
-        });
-        $(options.anyone, $pagination).live("click", function () {
-            var totalpages = parseInt($(options.totalpages).text());
-            if (pageNo > 0 && pageNo <= totalpages) {
-                $formpageno.val(pageNo);
-                jsUtil.loadGrid(options);
-            }
-        });
-        $(options.next, $pagination).live("click", function () {
-            var totalpages = parseInt($(options.totalpages).text());
-            if (pageNo < totalpages) {
-                $formpageno.val(pageNo + 1);
-                jsUtil.loadGrid(options);
-            }
-        });
-        $(options.last, $pagination).live("click", function () {
-            var totalpages = parseInt($(options.totalpages).text());
-            if (pageNo < totalpages) {
-                $formpageno.val(totalpages);
-                jsUtil.loadGrid(options);
-            }
-        });
-
-        $(options.rel, $pagination).live("click", function () {jsUtil.loadGrid(options)});
-    });
-
-    return this;
-}
-
-
-/**渲染排序*/
-jsUtil.renderSort = function (sortableselector, templateid) {
-    sortableselector = sortableselector || ".sortable";
-    templateid = templateid || "template-sort";
-    $(sortableselector).append($("#" + templateid).html());
-    return this;
-}
-
-/**绑定排序事件*/
-jsUtil.bindSort = function (sortableselector, orderbyselector, orderselector) {
-    sortableselector = sortableselector || ".sortable";
-    orderbyselector = orderbyselector || ".orderby";
-    orderselector = orderselector || ".order";
-    var $pageOrderBy = $("[name=pageOrderBy]");
-    var $pageOrder = $("[name=pageOrder]");
-
-    $(orderselector).click(function () {
-        var $this = $(this);
-        $pageOrder.val($this.attr("order"));
-        $pageOrderBy.val($this.parents(orderbyselector).attr("orderby"));
-        jsUtil.loadGrid();
-    });
-    return this;
-}
-
 
 jsUtil.bindSave = function (submitselector, formselector) {
     submitselector = submitselector || ".submit";

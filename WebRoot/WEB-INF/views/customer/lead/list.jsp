@@ -260,11 +260,14 @@ function reset() {
 								class="allbtn_l block fl"></b><b
 								class="allbtn_r pr13 block fl w_auto f14">刷&nbsp;&nbsp;新</b> </a>
 						</li>
+						<c:if test="${VS_HAS_FUNCTIONS.leadModifyOwner}">
 						<li>
 							<a href="javascript:void(0)" id="modifyOwner"
 								class="block c_white lh25 ml10"><b class="allbtn_l block fl"></b><b
 								class="allbtn_r pr13 block fl w_auto f14">更改所有者</b> </a>
 						</li>
+						</c:if>
+						<c:if test="${VS_HAS_FUNCTIONS.leadExport}">
 						<li>
 							<a href="javascript:void(0)"
 								uri="${ctx}/customer/lead/export.do?TYPE=pagination"
@@ -272,6 +275,7 @@ function reset() {
 								class="allbtn_l block fl"></b> <b
 								class="allbtn_r pr13 block fl w_auto f14">导&nbsp;出</b> </a>
 						</li>
+						</c:if>
 						<!--<a href="javascript:void(0)" id="transfer" class="blue_btn">转换</a>
 		<a href="javascript:void(0)" id="import" class="blue_btn">导入</a>
 		<a href="javascript:void(0)" id="export" class="blue_btn">导出</a>

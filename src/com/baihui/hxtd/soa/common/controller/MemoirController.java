@@ -83,7 +83,7 @@ public class MemoirController {
 	public void query(HttpServletRequest request,
 			HibernatePage<Memoir> page,
 			@RequestParam(value = "moduleId") Long moduleId,
-			@RequestParam(value = "moduleType") Long moduleType,
+			@RequestParam(value = "moduleType") String moduleType,
 			PrintWriter out) throws IOException {
         /************分页查询*****************/
 		Dictionary dic = dictionaryService.getByValue(moduleMap.get(moduleType));
@@ -102,7 +102,7 @@ public class MemoirController {
 	  * @param model ModelMap
 	  * @return String 新增联系纪要地址页
 	 */
-	@RequestMapping(value = "/toAddPage.docomp")
+	@RequestMapping(value = "/toAddPage.doself")
 	public String toAddPage(ModelMap model){
 		model.addAttribute("memoir", new Memoir());
 		
@@ -122,7 +122,7 @@ public class MemoirController {
 	@RequestMapping(value = "/add.do", method = RequestMethod.POST)
 	public String add(Memoir memoir,
 			@RequestParam(value = "moduleId") Long moduleId,
-			@RequestParam(value = "moduleType") Long moduleType,
+			@RequestParam(value = "moduleType") String moduleType,
 			@ModelAttribute(Constant.VS_USER_ID) Long userId) {
 		Dictionary dic = dictionaryService.getByValue(moduleMap.get(moduleType));
 		memoir.setType(dic);//模块类型
@@ -149,7 +149,7 @@ public class MemoirController {
 	  * @param model Model
 	  * @return String 编辑页地址信息
 	 */
-	@RequestMapping(value = "/toModifyPage.docomp")
+	@RequestMapping(value = "/toModifyPage.doself")
 	public String toModifyPage(Long id, ModelMap model) {
 		model.addAttribute("memoir", memoirService.get(id));
 		
@@ -170,7 +170,7 @@ public class MemoirController {
 	@RequestMapping(value = "/modify.do")
 	public String modify(Memoir memoir,
 			@RequestParam(value = "moduleId") Long moduleId,
-			@RequestParam(value = "moduleType") Long moduleType,
+			@RequestParam(value = "moduleType") String moduleType,
 			@ModelAttribute(Constant.VS_USER_ID) Long userId,
 			HttpServletRequest request) {
 		Dictionary dic = dictionaryService.getByValue(moduleMap.get(moduleType));
@@ -193,7 +193,7 @@ public class MemoirController {
 	  * @param model Model
 	  * @return String 查看页地址
 	 */
-	@RequestMapping(value = "/toViewPage.docomp")
+	@RequestMapping(value = "/toViewPage.doself")
 	public String toViewPage(Long id, Model model) {
 		model.addAttribute("memoir", memoirService.get(id));
 		

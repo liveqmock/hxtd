@@ -14,7 +14,7 @@
 <script type="text/javascript" src="${ctx}/static/js/js-util.common.js"></script>
 <script type="text/javascript">
 $(function(){
-	new Grid().init({containerSelector: '.memoircontainer', paginationCountLimit: 11});
+	grid = new Grid().init({containerSelector: '.memoircontainer', paginationCountLimit: 11});
 	$(".contactrecords").click(function(){
 		iframeRemoir('add', '');
 	});
@@ -22,13 +22,13 @@ $(function(){
 function iframeRemoir(act, id){
 	var url, title;
 	if(act == "add"){
-		url = '${ctx}/common/memoir/toAddPage.docomp';
+		url = '${ctx}/common/memoir/toAddPage.doself';
 		title = '新增联系纪要';
 	} else if(act == "edit"){
-		url = '${ctx}/common/memoir/toModifyPage.docomp?id=' + id;
+		url = '${ctx}/common/memoir/toModifyPage.doself?id=' + id;
 		title = '编辑联系纪要';
 	} else {
-		url = '${ctx}/common/memoir/toViewPage.docomp?id=' + id;
+		url = '${ctx}/common/memoir/toViewPage.doself?id=' + id;
 		title = '查看联系纪要';
 	}
 	jsUtil.dialogIframe(url, title, 800, 515);
@@ -38,7 +38,7 @@ function iframeRemoir(act, id){
 				DIALOG.dialog("close");
 			} else {
 				if($("#dialogIframe")[0].contentWindow.submitRemoir()){
-					$(".page-rel").click();//刷新列表
+					grid.loadGrid(); //刷新列表
 					DIALOG.dialog("close");
 				}
 			}
@@ -52,8 +52,8 @@ function iframeRemoir(act, id){
 <h1 class="f14 fbnone ml40">联系纪要</h1>
 <div class="memoircontainer w95b bg_c_white margin0 mt10">
 	<form action="${ctx}/common/memoir/query.do" onsubmit="return false;">
-		<input type="hidden" name="moduleId" value="${moduleId}"/>
-		<input type="hidden" name="moduleType" value="${moduleType}"/>
+		<input type="hidden" id="moduleId" name="moduleId" value="${moduleId}"/>
+		<input type="hidden" id="moduleType" name="moduleType" value="${moduleType}"/>
 		<c:choose>
 			<c:when test="${page}">
 				<tags:paginationparams page="${page}"></tags:paginationparams>
@@ -87,7 +87,7 @@ function iframeRemoir(act, id){
 	<div class="cb ml35 mt20 h40 pagination"></div>
 	<textarea id="template-tbody" class="template template-tbody">
 	    {#foreach $T.result as row}
-	    <tr class="{$T.row$index%2==1?'':'bg_c_blue'} w">
+	    <tr class="w">
            <td>{$T.row.summary}</td>
            <td>{$T.row.nextContactTime}</td>
            <td>{$T.row.nextContactPoints}</td>

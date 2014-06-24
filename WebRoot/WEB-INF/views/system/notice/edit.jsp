@@ -16,11 +16,10 @@
 <script type="text/javascript" src="${ctx}/static/js/validator.js"></script>
 <script type="text/javascript" src="${ctx}/static/js/jquery.metadata.js"></script>
 <script type="text/javascript" src="${ctx}/static/js/ui/jquery.ui.datepicker.js"></script>
-<script type="text/javascript" src="${ctx}/static/js/pacs.js"></script>
 <script type="text/javascript"> 
 	$(function(){//初始化 
     	//加载时间控件
-    	 jsUtil.datepickerNotNow(".time");
+    	jsUtil.datepickerNotNow(".time");
     	 //验证
     	 $(function(){
 		    $("#save").click(function(){
@@ -56,6 +55,7 @@
       <h1 class="f14 fbnone ml40 pt10">基本信息</h1>
         <table class="cb id_table3 w95b bg_c_white margin0 mt10">
             <tr>
+                <input type="hidden" name="id" value="${notice.id}"/>
                 <td align="right" width="15%"><span class="w_red">*&nbsp;</span>公告标题：</td>
                 <td align="left"><input type="text" class="text_input3 required" name="title" value="${notice.title}"/></td>
             </tr>
@@ -67,20 +67,30 @@
            </tr>
            <tr>
                 <td align="right" width="15%"><span class="w_red">*&nbsp;</span>发布时间：</td>
-                <td align="left"><input readonly type="text" class="time required" name="sentTime" value="${sendTime}"/></td>
+                <td align="left">
+                <div class="pr vm"><a href="javascript:;" class="pa time_closenone1" ></a>
+                <a href="javascript:;" class="pa time_closenone2 "></a>
+                <input type="text" class="text_input3 input_close1 globle_img time " name="sentTime" value="${sendTime}"/>
+                </div>
+                </td>
             </tr>
              <tr>
                 <td align="right" width="15%"><span class="w_red">*&nbsp;</span>过期时间：</td>
-                <td align="left"><input readonly type="text" class="time required" name="deadTime" value="${deadTime}"/></td>
+                <td align="left">
+                <div class="pr vm"><a href="javascript:;" class="pa time_closenone1" ></a>
+                <a href="javascript:;" class="pa time_closenone2 "></a>
+                <input type="text" class="text_input3 input_close1 globle_img time " name="deadTime" value="${deadTime}"/>
+                </div>
+                </td>
             </tr>
         </table>
         <div class=" h40"></div>
      </div>
      <div class="cb block h40 margin0 mt10" style="width:350px;">
         <ul class="id_table1 cb">
-		<li><a id="save"href="javascript:;"class="block c_white lh25 mr10"><b class="allbtn_l block fl"></b><b class="allbtn_r pr13 block fl w_auto f14 ">发&nbsp;&nbsp;布</b></a></li>
-		<li><a id="saveAndAdd"href="javascript:;"class="block c_white lh25 mr10"><b class="allbtn_l block fl"></b><b class="allbtn_r pr13 block fl w_auto f14 deletesome">发布并新建</b></a></li>
-		<li><a href="${ctx}/system/notice/toQueryPage.do" class="block c_white lh25 mr10"><b class="allbtn_l block fl"></b><b class="allbtn_r pr13 block fl w_auto f14 deletesome">取&nbsp;&nbsp;消</b></a></li>
+		<li><a id="save"href="javascript:;" class="block c_white lh25 mr10"><b class="allbtn_l block fl"></b><b class="allbtn_r pr13 block fl w_auto f14 ">发&nbsp;&nbsp;布</b></a></li>
+		<li><a id="saveAndAdd"href="javascript:;" class="block c_white lh25 mr10"><b class="allbtn_l block fl"></b><b class="allbtn_r pr13 block fl w_auto f14 ">发布并新建</b></a></li>
+		<li><a href="${ctx}/system/notice/toQueryPage.do" class="block c_white lh25 mr10"><b class="allbtn_l block fl"></b><b class="allbtn_r pr13 block fl w_auto f14 ">取&nbsp;&nbsp;消</b></a></li>
 	    </ul>
 	 </div>
 </form>

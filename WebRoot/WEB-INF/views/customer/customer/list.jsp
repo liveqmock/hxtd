@@ -170,6 +170,7 @@ function formReset() {
 <b class="table_headl globle_img block fl"></b>
 
         <div class="fl table_headc fl w99b">
+        <div class="ie_head">
         <ul class="fl id_table1 mt10 ml10">
          <li>
          <a href="javascript:void(0)" uri="${ctx}/customer/customer/delete.do" class="block c_white lh25 fr mr10  deletesome">
@@ -180,8 +181,11 @@ function formReset() {
          <li><a href="${ctx}/customer/customer/toAddPage.do" class="block c_white lh25 mr10"><b class="allbtn_l block fl"></b><b class="allbtn_r pr13 block fl w_auto f14">新&nbsp;&nbsp;增</b></a></li>
          <li><a href="javascript:void(0)" id="modifyOwner" class="block c_white lh25 mr10"><b class="allbtn_l block fl"></b><b class="allbtn_r pr13 block fl w_auto f14">更改所有者</b></a></li>
          <li><a href="javascript:void(0)" id="reload" class="block c_white lh25 mr10"><b class="allbtn_l block fl"></b><b class="allbtn_r pr13 block fl w_auto f14">刷&nbsp;&nbsp;新</b></a> </li>
-         <li><a href="javascript:void(0)" uri="${ctx}/customer/customer/export.do?TYPE=pagination" class="block c_white lh25 mr10 export"><b class="allbtn_l block fl"></b><b class="allbtn_r pr13 block fl w_auto f14">导&nbsp;&nbsp;出</b></a></li>
 		</ul>
+		 <ul class="fr id_table1 mt10 ml10">
+              <li><a href="javascript:void(0)" uri="${ctx}/customer/customer/export.do?TYPE=pagination" class="leading_out globle_img block_inline mr10 export" title="导出"></a></li>
+          </ul>
+         </div>
 		</div>
 		<b class="table_headr globle_img block fl"></b>
 </div>

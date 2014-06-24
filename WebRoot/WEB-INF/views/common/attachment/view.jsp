@@ -12,7 +12,7 @@
 </head>
 <body>
 	<div style="margin-left: auto;margin-right: auto;margin-top: 50px;min-height: 500px;" align="center">
-		<img alt="" src="${ctx }${url }"/>
+		<img alt="" src="${ctx }${url }" width="70%" height="70%"/>
 	</div>
 </body>
 </html>

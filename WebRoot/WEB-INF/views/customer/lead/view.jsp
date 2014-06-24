@@ -5,6 +5,7 @@
 --%>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<%@taglib prefix="tag" tagdir="/WEB-INF/tags" %>
 <c:set var="ctx" value="${pageContext.request.contextPath}"/>
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
 <html>
@@ -40,7 +41,7 @@
 					</a>
 				</li>
 				<li>
-					<a class=" pl35 c_white f14 lh25 cp block fr"
+					<a class=" pl10 c_white f14 lh25 cp block fr mr10"
 						href="javascript:history.go(-1)"><b
 						class="allbtn_l block fl"></b><b
 						class="allbtn_r pr13 block fl w_auto f14">返&nbsp;&nbsp;回</b>
@@ -191,6 +192,18 @@
 			</tr>
 
 		</table>
+		
+		<tag:attachment 
+		view="${VS_HAS_FUNCTIONS.leadAttView}" 
+		upload="${VS_HAS_FUNCTIONS.leadUpload}" 
+		query="${VS_HAS_FUNCTIONS.leadAttQuery}" 
+		down="${VS_HAS_FUNCTIONS.leadDown}" 
+		module="lead"
+		id="${lead.id}">
+		</tag:attachment>
+		
+		<tag:memoir view="true" edit="true" query="true" delete="true" 
+		moduleType="lead" moduleId="${lead.id}"></tag:memoir>
 		<div class=" h40"></div>
 	</div>
 </div>

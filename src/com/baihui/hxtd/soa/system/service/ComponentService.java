@@ -49,8 +49,8 @@ public class ComponentService {
         String hql = "select component" +
                 " from Component component" +
                 " inner join fetch component.privilegeLevel" +
-                " where component.url=?";
-        return componentDao.findUnique(hql, url);
+                " where component.url like ?";
+        return componentDao.findUnique(hql, url + "%");
     }
 
     /**

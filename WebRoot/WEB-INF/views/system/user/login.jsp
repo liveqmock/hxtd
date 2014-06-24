@@ -82,18 +82,18 @@ function checkLoginForm(){
 <form action="" method="post" id="loginForm">
 <table class="id_table1 margin0 mt60">
 <tr>
-<td>账号：</td>
-<td><div class="user_bg globle_img"><input type="text" id="loginId" name="name" class="bdnone ml35 mt10"  value="${user.name==null?'请输入用户名':user.name}"/></div></td>
+<td>用户名：</td>
+<td><div class="user_bg globle_img"><input type="text" id="loginId" name="name" class="bdnone ml40 mt10 w215 bgnone"  value="${user.name==null?'请输入用户名':user.name}"/></div></td>
 </tr>
 <tr>
 <td>密码：</td>
-<td><div class="password_bg globle_img"><input type="password" id="password" name="password" class="bdnone ml35 mt10" value="${user.password==null?'请输入密码':user.password}"/></div></td>
+<td><div class="password_bg globle_img"><input type="password" id="password" name="password" class="bdnone ml40 mt10 w215 bgnone" value="${user.password==null?'请输入密码':user.password}"/></div></td>
 </tr>
 </table>
 </form>
 <a href="javascript:void(0);" id="loginBtn" class="block c_white lh25 mr10 fr mr80 " ><b class="allbtn_l block fl"></b><b class="allbtn_r pr13 block fl w_auto f14">登&nbsp;&nbsp;录</b></a>
 
 </div>
-<div class="margin0 w500 h80"><p class="foot_login tc pt20 lh32">版权所有：华兴泰达           地址：中国北京市朝阳区建国外大街永安里8号华彬中心（CBD商圈）<br />联系电话：010-12345678</p></div>
+<div class="margin0 w500 h80"><p class="foot_login tc pt20 lh32 margin0">版权所有：华兴泰达           地址：中国北京市朝阳区建国外大街永安里8号华彬中心（CBD商圈）<br />联系电话：010-12345678</p></div>
 </body>
 </html>

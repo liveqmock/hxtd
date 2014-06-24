@@ -9,7 +9,8 @@
 <script type="text/javascript" src="${ctx}/static/js/js-util.common.js"></script>
 <script type="text/javascript">
 $(function(){
-	$("#moduleId").val($("#hide_id").val());
+	//$("#moduleId").val($("#hide_id").val());
+	alert("XX");
 	new Grid().init();
 	$(".contactrecords").click(function(){
 		iframeRemoir('add', '');
@@ -18,13 +19,13 @@ $(function(){
 function iframeRemoir(act, id){
 	var url, title;
 	if(act == "add"){
-		url = '${ctx}/common/memoir/toAddPage.docomp';
+		url = '${ctx}/common/memoir/toAddPage.doself';
 		title = '新增联系纪要';
 	} else if(act == "edit"){
-		url = '${ctx}/common/memoir/toModifyPage.docomp?id=' + id;
+		url = '${ctx}/common/memoir/toModifyPage.doself?id=' + id;
 		title = '编辑联系纪要';
 	} else {
-		url = '${ctx}/common/memoir/toViewPage.docomp?id=' + id;
+		url = '${ctx}/common/memoir/toViewPage.doself?id=' + id;
 		title = '查看联系纪要';
 	}
 	jsUtil.dialogIframe(url, title, 800, 515);

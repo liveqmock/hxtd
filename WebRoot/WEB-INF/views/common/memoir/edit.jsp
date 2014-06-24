@@ -3,8 +3,8 @@
 <c:set var="ctx" value="${pageContext.request.contextPath}"/>
 <html>
 <head>
-<title></title>
-<link rel="stylesheet" href="${ctx}/static/css/css.css" type="text/css"></link>
+<title>联系纪要</title>
+<link href="${ctx}/static/css/recommend/detail.css?v=1" rel="stylesheet" type="text/css"/>
 <link rel="stylesheet" href="${ctx}/static/css/themes/base/jquery.ui.all.css"/>
 <script type="text/javascript" src="${ctx}/static/js/jquery.min.js"></script>
 <script type="text/javascript" src="${ctx}/static/js/ui/jquery.ui.core.js"></script>
@@ -82,6 +82,7 @@ function submitRemoir(){//提交表单
 		<tr>
 			<td class="tar bghui pr10">下次联系时间：</td>
 			<td class="bghb pl10 color1 fwb">
+				<a href="javascript:;" class="pa time_closenone1"></a>
 				<input id="time" name="nextContactTime" type="text" value="${memoir.nextContactTime}" readonly="readonly"/>
 			</td>
 		</tr>
@@ -94,7 +95,7 @@ function submitRemoir(){//提交表单
 		<tr>
 			<td class="tar bghui pr10">备注：</td>
 			<td class="bghb pl10">
-				<textarea name="remark" >${contact.remark}</textarea>
+				<textarea name="remark" class="remarks_input1" style="resize: none;">${contact.remark}</textarea>
 			</td>
 		</tr>
 	</table>

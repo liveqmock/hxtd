@@ -46,6 +46,7 @@ public class ValidUrlInterceptor extends HandlerInterceptorAdapter {
         String uri = request.getRequestURI().replaceFirst(request.getContextPath(), "");
         uri = UrlUtil.filterJsessionid(uri);
         uri = UrlUtil.exec(uri);
+        uri = uri.substring(0, uri.lastIndexOf("."));
         logger.debug("执行URI“{}”", uri);
         Function function = functionService.getRequest(uri);
         if (function == null) {

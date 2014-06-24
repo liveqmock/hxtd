@@ -97,8 +97,8 @@
 			<td align="left" valign="top"><div class="w85b">${contact.remark}</div></td>
 		</tr>
 	</table>
-	<tag:attachment view="true" upload="true" module="contact" query="true" 
-		down="true" id="${contact.id}"></tag:attachment>
+	<tag:attachment view="${VS_HAS_FUNCTIONS.leadAttView}" upload="${VS_HAS_FUNCTIONS.leadUpload}" module="lead"
+			query="${VS_HAS_FUNCTIONS.leadAttQuery}" down="${VS_HAS_FUNCTIONS.leadDown}" id="${lead.id}"></tag:attachment>
 	<tag:memoir view="true" edit="true" query="true" delete="true" 
 		moduleType="contact" moduleId="${contact.id}"></tag:memoir>
 	<div class="h40"></div>

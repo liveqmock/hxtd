@@ -175,7 +175,8 @@ public class SupplierController {
 	  * @return String    返回类型
 	  * @throws
 	 */
-	@RequestMapping(value = "/modify.do")
+	@ResponseBody
+	@RequestMapping(value = "/modify.do", produces = "text/text;charset=UTF-8")
 	public String modify(Supplier supplier,String type,HttpServletRequest request){
 		logger.info("SupplierController.modify修改组件信息");
 		supplier.setCreatedTime(new java.util.Date());
@@ -184,10 +185,8 @@ public class SupplierController {
 		logger.info("获得当前操作用户{}",u.getName());
 		supplier.setModifier(u);
 		supplierService.save(supplier);
-		if("add".equals(type)){
-			return "redirect:/project/supplier/toAddPage.do";
-		}
-		return "redirect:/project/supplier/toViewPage.do?id="+supplier.getId();
+		JsonDto json = new JsonDto(supplier.getId(),"保存成功!");
+		return json.toString();
 	}
 	/**
 	 * 
@@ -198,7 +197,8 @@ public class SupplierController {
 	  * @return String    返回类型
 	  * @throws
 	 */
-	@RequestMapping(value = "/add.do")
+	@ResponseBody
+	@RequestMapping(value = "/add.do", produces = "text/text;charset=UTF-8")
 	public String add(Supplier supplier,String type,HttpServletRequest request){
 		logger.info("SupplierController.query查询组件列表");
 		//临时代码，时间类型应从数据库中取
@@ -209,10 +209,8 @@ public class SupplierController {
 		supplier.setCreator(u);
 		supplier.setModifier(u);
 		supplierService.save(supplier);
-		if("add".equals(type)){
-			return "redirect:/project/supplier/toAddPage.do";
-		}
-		return "redirect:/project/supplier/toViewPage.do?id="+supplier.getId();
+		JsonDto json = new JsonDto(supplier.getId(),"保存成功!");
+		return json.toString();
 	}
 	/**
 	 * 

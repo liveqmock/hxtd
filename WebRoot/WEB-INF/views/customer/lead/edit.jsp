@@ -28,16 +28,28 @@
 <script type="text/javascript">
 $(function(){
 	$("#saveAndAdd").click(function(){
-		if($("#form").valid()){
-			form.action = form.action + "?type=add";
-			form.submit();
+		var $form = $("#form");
+		if($form.valid()){
+			RcmsAjax.ajax($form.attr("action"),function(result){
+				setTimeout(function(){
+					window.location.replace("${ctx}/customer/lead/toAddPage.do")
+				},500);
+			},null,$form.formSerialize());
 		}
 		return false;
 	});
 	$("#save").click(function(){
-		if($("#form").valid()){
-			$("#form").submit();
+		var $form = $("#form");
+		if($form.valid()){
+			RcmsAjax.ajax($form.attr("action"),function(result){
+				//redirect
+				var id = result.result.result;
+				setTimeout(function(){
+					window.location.replace("${ctx}/customer/lead/toViewPage.do?id="+id)
+				},500);
+			},null,$form.formSerialize());
 		}
+		return false;
 	});
 	//获得省市县代码，加载三级联动
 	var province = '${lead.province.id}';

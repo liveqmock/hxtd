@@ -17,6 +17,14 @@ import java.util.List;
 public class DictionaryDao extends HibernateDAOImpl<Dictionary, Long> {
 
     /**
+     * 获取主键编号通过代码值
+     */
+    public Long getIdByValue(String value) {
+        String hql = "select dic.id from Dictionary dic where dic.value=?";
+        return findUnique(hql, value);
+    }
+
+    /**
      * 获取字典通过字典值
      */
     public Dictionary getByValue(String value) {

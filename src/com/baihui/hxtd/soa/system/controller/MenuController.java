@@ -19,7 +19,6 @@ import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import javax.annotation.Resource;
 import java.io.IOException;
@@ -149,11 +148,9 @@ public class MenuController {
      * 2.仅限下级菜单
      * 3.下级菜单溢出处理
      */
+    @ResponseBody
     @RequestMapping(value = "/add.do", method = RequestMethod.POST)
-    public String add(Menu menu,
-                      @RequestParam(defaultValue = "/system/menu/toModifyPage.do?id=%s") String redirectUri,
-                      @ModelAttribute(Constant.VS_USER_ID) Long userId,
-                      RedirectAttributes model) {
+    public String add(Menu menu, @ModelAttribute(Constant.VS_USER_ID) Long userId) {
         logger.info("新增");
         logger.debug("名称“{}”", menu.getName());
 
@@ -165,12 +162,7 @@ public class MenuController {
 
         menuService.add(menu);
 
-        logger.info("添加操作提示");
-        model.addFlashAttribute(Constant.VM_BUSINESS, "新增成功");
-
-        redirectUri = String.format(redirectUri, menu.getId());
-        logger.info("重定向至“{}”", redirectUri);
-        return "redirect:" + redirectUri;
+        return new JsonDto(menu.getId()).toString();
     }
 
     /**
@@ -216,26 +208,19 @@ public class MenuController {
      * 1.当前菜单信息
      * 2.父节点
      */
+    @ResponseBody
     @RequestMapping(value = "/modify.do")
-    public String modify(Menu menu,
-                         @RequestParam(defaultValue = "/system/menu/toModifyPage.do?id=%s") String redirectUri,
-                         @ModelAttribute(Constant.VS_USER_ID) Long userId,
-                         @ModelAttribute(Constant.VS_USER_NAME) String userName,
-                         RedirectAttributes model) {
+    public String modify(Menu menu, ModelMap modelMap) {
         logger.info("修改");
 
         logger.info("添加服务端属性值");
-        menu.setModifier(new User(userId));
-        logger.debug("修改用户为当前用户“{}”", userName);
+        User user = (User) modelMap.get(Constant.VS_USER);
+        menu.setModifier(new User(user.getId()));
+        logger.debug("修改用户为当前用户“{}”", user.getName());
 
         menuService.modify(menu);
 
-        logger.info("添加操作提示");
-        model.addFlashAttribute(Constant.VM_BUSINESS, "修改成功");
-
-        redirectUri = String.format(redirectUri, menu.getId());
-        logger.info("重定向至“{}”", redirectUri);
-        return "redirect:" + redirectUri;
+        return new JsonDto(menu.getId()).toString();
     }
 
     /**

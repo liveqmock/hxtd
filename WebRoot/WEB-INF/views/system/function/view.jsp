@@ -51,6 +51,10 @@
                 <td align="left">${func.url }</td>
                 <td align="right">归属菜单：</td>
                 <td align="left">${func.menu.name }</td>
+            </tr> 
+            <tr>
+                <td align="right">权限级别：</td>
+                <td align="left">${func.privilegeLevel.key }</td>
             </tr>
         </table>
         <h1 class="f14 fbnone ml40 pt10">描述信息</h1>

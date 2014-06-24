@@ -29,16 +29,29 @@
 $(function(){
 	jsUtil.datepickerNotNow(".time");
 	//jsUtil.datepicker("#openTime");
-	$("#save").click(function(){
-		if($("#form").valid()){
-			$("#form").submit();
-		}
-	});
 	$("#saveAndAdd").click(function(){
-		$("#form").attr("action",$("#form").attr("action")+"?type=add");
-		if($("#form").valid()){
-			$("#form").submit();
+		var $form = $("#form");
+		if($form.valid()){
+			RcmsAjax.ajax($form.attr("action"),function(result){
+				setTimeout(function(){
+					window.location.replace("${ctx}/project/project/toAddPage.do")
+				},500);
+			},null,$form.formSerialize());
 		}
+		return false;
+	});
+	$("#save").click(function(){
+		var $form = $("#form");
+		if($form.valid()){
+			RcmsAjax.ajax($form.attr("action"),function(result){
+				//redirect
+				var id = result.result.result;
+				setTimeout(function(){
+					window.location.replace("${ctx}/project/project/toViewPage.do?id="+id)
+				},500);
+			},null,$form.formSerialize());
+		}
+		return false;
 	});
 	jsUtil.renderRequiredFromInput();
 });

@@ -27,7 +27,7 @@
         },
         /**
          * 选项卡
-         * 1.html结构
+         * -.html结构
          * <div> 选项卡容器
          *     <ul fortabpanels> 选项卡标题容器
          *        <li fortabpanel></li> 选项卡标题
@@ -39,9 +39,10 @@
          *     </div>
          * </div>
          * 结构中标记仅供参考，实际上通过选择器获取对应元素，可以替换
-         * 2.支持多个选项卡
-         * 3.初始化默认选中
-         * 4.选中事件
+         * -.支持多个选项卡
+         * -.支持拆分的标题和内容面板（不在同一个容器内），通过fortabpanels指定
+         * -.初始化默认选中
+         * -.选中事件
          * @param options
          * @returns {$.Custom}
          */
@@ -212,9 +213,24 @@
             return function (ztreeId, treeNode) {
                 var ztree = $.fn.zTree.getZTreeObj(ztreeId);
                 var isClickSelf = _this.isClickSelf(ztree, treeNode);
-                isClickSelf && (ztree.cancelSelectedNode() || callback.apply(this, [ztree, treeNode]));
+                isClickSelf && (ztree.cancelSelectedNode() || (callback && callback.apply(this, [ztree, treeNode])));
                 return !isClickSelf;
             };
+        },
+        /**设置值*/
+        setValue: function (ztree, treeNode, nameSelector, idSelector) {
+            nameSelector = nameSelector || "[name$=name]";
+            var id = "", name = "";
+            if (!treeNode.isClickSelf) {
+                id = treeNode.id;
+                name = treeNode.name;
+            } else {
+                ztree.cancelSelectedNode(treeNode);
+            }
+
+            var jqName = $(nameSelector).val(id);
+            idSelector = idSelector || jqName.attr("forid");
+            $(idSelector).val(name);
         }
     });
 

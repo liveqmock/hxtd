@@ -124,6 +124,14 @@ public class DictionaryService {
     }
 
     /**
+     * 获取默认的字典通过字典值
+     * 1.仅查出id用于进行判断
+     */
+    public Long getIdByValue(String value) {
+        return dictionaryDao.getIdByValue(value);
+    }
+
+    /**
      * 获取字典通过字典值
      */
     @Transactional(readOnly = true)

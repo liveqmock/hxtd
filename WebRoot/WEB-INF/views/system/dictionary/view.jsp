@@ -4,7 +4,7 @@
 <c:set var="ctx" value="${pageContext.request.contextPath}"/>
 <html>
 <head>
-<title></title>
+<title>字典管理</title>
 <link rel="stylesheet" href="${ctx}/static/css/recommend/detail.css" type="text/css"></link>
 </head>
 <body>
@@ -58,8 +58,8 @@
 	<h1 class="f14 fbnone ml40 pt10">描述信息</h1>
 	<table class="cb id_table4 w95b bg_c_white margin0 mt10">
 		<tr>
-			<td align="right" width="15%">备注：</td>
-			<td align="left"><div class="w85b">${dictionary.remark}</div></td>
+			<td align="right" width="15%" valign="top">备注：</td>
+			<td align="left" valign="top"><div class="w85b">${dictionary.remark}</div></td>
 		</tr>
 	</table>
 	<div class="h40"></div>

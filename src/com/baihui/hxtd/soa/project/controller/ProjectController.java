@@ -125,7 +125,8 @@ public class ProjectController {
 	  * @return String    返回类型
 	  * @throws
 	 */
-	@RequestMapping(value="/modify.do")
+	@ResponseBody
+	@RequestMapping(value="/modify.do", produces = "text/text;charset=UTF-8")
 	public String modify(Project project,String type,HttpServletRequest request){
 		logger.info("SupplierController.modify修改组件信息");
 		project.setCreatedTime(new Date());
@@ -134,10 +135,8 @@ public class ProjectController {
 		logger.info("获得当前操作用户{}",u.getName());
 		project.setModifier(u);
 		projectService.save(project);
-		if("add".equals(type)){
-			return "redirect:/project/project/toAddPage.do";
-		}
-		return "redirect:/project/project/toViewPage.do?id="+project.getId();
+		JsonDto json = new JsonDto(project.getId(),"保存成功!");
+		return json.toString();
 	}
 	
 	/**
@@ -167,7 +166,8 @@ public class ProjectController {
 	  * @return String    返回类型
 	  * @throws
 	 */
-	@RequestMapping(value="/add.do")
+	@ResponseBody
+	@RequestMapping(value="/add.do", produces = "text/text;charset=UTF-8")
 	public String add(Project project,String type,HttpServletRequest request){
 		logger.info("projectController.modify修改组件信息");
 		project.setCreatedTime(new Date());
@@ -177,10 +177,8 @@ public class ProjectController {
 		project.setModifier(u);
 		project.setCreator(u);
 		projectService.save(project);
-		if("add".equals(type)){
-			return "redirect:/project/project/toAddPage.do";
-		}
-		return "redirect:/project/project/toViewPage.do?id="+project.getId();
+		JsonDto json = new JsonDto(project.getId(),"保存成功!");
+		return json.toString();
 	}
 
 	/**

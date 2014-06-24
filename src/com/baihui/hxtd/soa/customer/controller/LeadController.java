@@ -112,10 +112,10 @@ public class LeadController {
 
 	
 	
-	
-	@RequestMapping(value = "/modify.do")
+	@ResponseBody
+	@RequestMapping(value = "/modify.do", produces = "text/text;charset=UTF-8")
 	public String modify(Lead lead, 
-						HttpServletRequest request,String type) {
+						HttpServletRequest request) {
 		logger.info("LeadController.modify修改线索信息");
 		User u = (User) request.getSession().getAttribute(Constant.VS_USER);
 		logger.info("获得当前操作用户{}", u.getName());
@@ -124,11 +124,8 @@ public class LeadController {
 		lead.setModifier(u);
 		lead.setCreator(u);
 		leadService.save(lead);
-		String redStr = "/customer/lead/toViewPage.do?id="+lead.getId();
-		if("add".equals(type)){
-			redStr = "/customer/lead/toAddPage.do";
-		}
-		return "redirect:"+redStr;
+		JsonDto json = new JsonDto(lead.getId(),"保存成功!");
+		return json.toString();
 	}
 	
 	@ResponseBody
@@ -198,8 +195,9 @@ public class LeadController {
 	 * @param type
 	 * @return
 	 */
-	@RequestMapping(value = "/add.do")
-	public String add(Lead lead,HttpServletRequest request,String type){
+	@ResponseBody
+	@RequestMapping(value = "/add.do", produces = "text/text;charset=UTF-8")
+	public String add(Lead lead,HttpServletRequest request){
 		logger.info("ComponentController.query查询组件列表");
 		//临时代码，时间类型应从数据库中取
 		User u = (User) request.getSession().getAttribute(Constant.VS_USER);
@@ -209,11 +207,8 @@ public class LeadController {
 		lead.setCreatedTime(new Date(new java.util.Date().getTime()));
 		lead.setModifiedTime(new Date(new java.util.Date().getTime()));
 		leadService.save(lead);
-		String redStr = "/customer/lead/toViewPage.do?id="+lead.getId();
-		if("add".equals(type)){
-			redStr = "/customer/lead/toAddPage.do";
-		}
-		return "redirect:"+redStr;
+		JsonDto json = new JsonDto(lead.getId(),"保存成功!");
+		return json.toString();
 	}
 	
 	

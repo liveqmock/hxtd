@@ -5,7 +5,7 @@
 <c:set var="ctx" value="${pageContext.request.contextPath}"/>
 <html>
 <head>
-<title>数据字典列表页</title>
+<title>字典管理</title>
 <link rel="stylesheet" href="${ctx}/static/css/recommend/detail.css" type="text/css"/>
 <link href="${ctx}/static/css/application.css" rel="stylesheet" type="text/css"/>
 <script type="text/javascript" src="${ctx}/static/js/jquery-jtemplates.js"></script>
@@ -13,7 +13,7 @@
 <script type="text/javascript" src="${ctx}/static/js/scrollTitle.js?v=1"></script>
 <script type="text/javascript">
 $(function () {
-    new Grid().init().bindAuthorization();
+    new Grid().init();
 });
 </script>
 </head>
@@ -22,8 +22,8 @@ $(function () {
     <form id="form" action="${ctx}/system/dictionary/query.do" onsubmit="return false;">
     <table class="fl mt5 w">
     	<tr>
-    		<td class="f14" align="right" width="7%">字典类型：</td>
-    		<td class="f14" align="left"  width="13%">
+    		<td class="f14" align="right" width="6%">字典类型：</td>
+    		<td class="f14" align="left"  width="16%">
 	    		<select name="search_EQ_type" class="select2">
 					<option value="">全部</option>
 					<c:forEach var="item" items="${types}">
@@ -31,19 +31,19 @@ $(function () {
 		   			</c:forEach>
 				</select>
     		</td>
-    		<td width="15%">
+    		<td class="f14" align="right" width="6%">字典名称：</td>
+    		<td class="f14" align="right" width="16%"><input type="text" class="text_input1" name="search_LIKE_key"/></td>
+    		<td width="8%">
     			<a href="javascript:;" class="reset block dump_btn globle_img fr ml10"></a>
     			<a href="javascript:;" class="block c_white lh25 fr ml10">
     				<b class="allbtn_l block fl"></b>
     				<b class="allbtn_r pr13 block fl w_auto f14 submit">查&nbsp;&nbsp;询</b>
     			</a>
     		</td>
-    		<td class="f14" align="right" width="7%"></td>
-    		<td class="f14" align="right" width="18%"></td>
-    		<td class="f14" align="right" width="7%"></td>
-    		<td class="f14" align="right" width="13%"></td>
-    		<td class="f14" align="right" width="7%"></td>
-    		<td class="f14" align="right" width="13%"></td>
+    		<td class="f14" align="right" width="6%"></td>
+    		<td class="f14" align="right" width="16%"></td>
+    		<td class="f14" align="right" width="6%"></td>
+    		<td class="f14" align="right" width="16%"></td>
     	</tr>
     </table>
     <div class="cb"></div>

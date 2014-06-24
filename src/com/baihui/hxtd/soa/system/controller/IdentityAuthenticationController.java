@@ -1,10 +1,10 @@
 package com.baihui.hxtd.soa.system.controller;
 
 import com.baihui.hxtd.soa.base.Constant;
+import com.baihui.hxtd.soa.base.InitApplicationConstant;
 import com.baihui.hxtd.soa.base.ServiceException;
 import com.baihui.hxtd.soa.base.utils.ReflectionUtils;
 import com.baihui.hxtd.soa.base.utils.mapper.HibernateAwareObjectMapper;
-import com.baihui.hxtd.soa.base.utils.serial.TierSerial;
 import com.baihui.hxtd.soa.base.utils.serial.TierSerials;
 import com.baihui.hxtd.soa.system.entity.Component;
 import com.baihui.hxtd.soa.system.entity.Function;
@@ -133,12 +133,12 @@ public class IdentityAuthenticationController {
         DataShift dataShift = new DataShift(roleService.isDataManager(persistUser), persistUser.getId(), TierSerials.getYoungerRange(order, orgTierLength));
         session.setAttribute(Constant.VS_DATASHIFT, dataShift);
 
-        List<Menu> menus = menuService.findValid(persistUser);
+        List<Menu> menus = menuService.findById(InitApplicationConstant.MENUS, menuService.findValidId(persistUser));
         menus = menuService.fullParent(menus);
         session.setAttribute(Constant.VS_MENUS, menus);
-        List<Function> functions = functionService.findValid(persistUser);
+        List<Function> functions = functionService.findById(InitApplicationConstant.FUNCTIONS, functionService.findValidId(persistUser));
         session.setAttribute(Constant.VS_FUNCTIONS, functions);
-        List<Component> components = componentService.findValid(persistUser);
+        List<Component> components = componentService.findById(InitApplicationConstant.COMPONENTS, componentService.findValidId(persistUser));
         session.setAttribute(Constant.VS_COMPONENTS, components);
 
         BidiMap functionNameCodes = (BidiMap) session.getServletContext().getAttribute(Constant.VC_FUNCTION_CODES);
@@ -159,7 +159,6 @@ public class IdentityAuthenticationController {
         }
         session.setAttribute(Constant.VS_HAS_COMPONENTS, hasFunctions);
 
-        menuService.toTriggerUrl(menus);
         List<Menu> activeMenus = menuService.findActive(menus);
         List<Menu> titlebarMenus = menuService.findByShowlocation(activeMenus, showlocationTitlebarValue);
         List<Menu> titlebarFirstMenus = menuService.findByLevel(titlebarMenus, 1);
@@ -175,14 +174,7 @@ public class IdentityAuthenticationController {
         logger.info("session中存储脚本信息");
         Map<String, Object> jsInfo = new HashMap<String, Object>();
         jsInfo.put("ctx", request.getContextPath());
-        Map<String, Object> jsSession = new HashMap<String, Object>();
-        jsSession.put("userId", persistUser.getId());
-        jsSession.put("userName", persistUser.getName());
-        jsSession.put("orgId", persistUser.getOrganization().getId());
-        jsSession.put("ctx", request.getContextPath());
-        jsInfo.put("session", jsSession);
-
-        String jsInfoStr = "window.baseInfo=" + HibernateAwareObjectMapper.DEFAULT.writeValueAsString(jsInfo);
+        String jsInfoStr = String.format("$.extend(window,%s)", HibernateAwareObjectMapper.DEFAULT.writeValueAsString(jsInfo));
         session.setAttribute(Constant.VS_JS_GLOBALINFO, jsInfoStr);
         logger.debug("基本脚本信息“{}”->“{}”", Constant.VS_JS_GLOBALINFO, jsInfoStr);
 

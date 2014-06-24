@@ -144,9 +144,13 @@ i{font-style:normal}
 .zzc{  background:url(../../images/zzc.png) no-repeat; width:200px; height:90px;}
 
 
-.id_table3li .h_tabbtn_l{background:url(../../images/tab_bg.png) no-repeat; background-position:left bottom; height:32px;}
-.id_table3li .h_tabbtn_r{ background:url(../../images/tab_bg.png) no-repeat; background-position: right bottom; color:#fff;}
-.id_table3li2 .h_tabbtn_l{ background:url(../../images/tab_pitchbg.png) no-repeat; background-position:left bottom; height:32px;}
-.id_table3li2 .h_tabbtn_r{ background:url(../../images/tab_pitchbg.png) no-repeat; background-position: right bottom; color:#222;}
+.id_table3li .h_tabbtn_l{background:url(../../images/tab_bg.png) no-repeat; background-position:left bottom; height:32px; cursor:pointer;}
+.id_table3li .h_tabbtn_r{ background:url(../../images/tab_bg.png) no-repeat; background-position: right bottom; color:#fff; cursor:pointer;}
+.id_table3li2 .h_tabbtn_l{ background:url(../../images/tab_pitchbg.png) no-repeat; background-position:left bottom; height:32px; cursor:pointer;}
+.id_table3li2 .h_tabbtn_r{ background:url(../../images/tab_pitchbg.png) no-repeat; background-position: right bottom; color:#222; cursor:pointer;}
+
+
+/*没有数据的样式*/
+.allnone{ background:url(../../images/allno.png) no-repeat; width:550px; height:138px; margin:0px auto;}
 
 

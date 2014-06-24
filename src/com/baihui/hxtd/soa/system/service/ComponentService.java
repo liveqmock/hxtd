@@ -1,32 +1,21 @@
 package com.baihui.hxtd.soa.system.service;
 
-import java.util.List;
-import java.util.Map;
-
-import javax.annotation.Resource;
-
+import com.baihui.hxtd.soa.base.orm.hibernate.HibernatePage;
+import com.baihui.hxtd.soa.base.utils.Search;
+import com.baihui.hxtd.soa.system.dao.ComponentDao;
+import com.baihui.hxtd.soa.system.entity.*;
 import org.hibernate.FetchMode;
-import org.hibernate.criterion.CriteriaSpecification;
-import org.hibernate.criterion.Criterion;
-import org.hibernate.criterion.DetachedCriteria;
-import org.hibernate.criterion.Order;
-import org.hibernate.criterion.Projections;
-import org.hibernate.criterion.Restrictions;
-import org.hibernate.criterion.Subqueries;
+import org.hibernate.criterion.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springside.modules.persistence.SearchFilter;
 
-import com.baihui.hxtd.soa.base.orm.hibernate.HibernatePage;
-import com.baihui.hxtd.soa.base.utils.Search;
-import com.baihui.hxtd.soa.system.dao.ComponentDao;
-import com.baihui.hxtd.soa.system.entity.Component;
-import com.baihui.hxtd.soa.system.entity.Function;
-import com.baihui.hxtd.soa.system.entity.Organization;
-import com.baihui.hxtd.soa.system.entity.Role;
-import com.baihui.hxtd.soa.system.entity.User;
+import javax.annotation.Resource;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
 
 /**
  * 组件描述：组件表service层实现
@@ -43,14 +32,11 @@ import com.baihui.hxtd.soa.system.entity.User;
 public class ComponentService {
     private Logger logger = LoggerFactory.getLogger(ComponentService.class);
 
-    //    @Value(value = "${system.user.type.manager}")
-    @SuppressWarnings("unused")
-	private String typeManagerValue = "01040101";
-
-    //    @Value(value = "${system.user.type.normal}")
-    @SuppressWarnings("unused")
-	private String typeNormalValue = "01040102";
-
+    /**
+     * 注入DAO
+     */
+    @Resource
+    private ComponentDao componentDao;
 
     /**
      * 获得请求组件
@@ -65,6 +51,74 @@ public class ComponentService {
                 " inner join fetch component.privilegeLevel" +
                 " where component.url=?";
         return componentDao.findUnique(hql, url);
+    }
+
+    /**
+     * 查找系统初始化时的组件
+     * 1.排除已删除的
+     */
+    @Transactional(readOnly = true)
+    public List<Component> findInit() {
+        logger.info("查找系统初始化时的菜单");
+        String hql = "select component from Component component" +
+                " where component.isDeleted=false";
+        return componentDao.find(hql);
+    }
+
+    /**
+     * 查找有效组件主键编号
+     */
+    @Transactional(readOnly = true)
+    public List<Long> findValidId(User user) {
+        logger.info("查找有效组件主键编号");
+        logger.debug("用户主键编号“{}”", user.getId());
+
+        DetachedCriteria criteria = DetachedCriteria.forClass(Component.class, "rootComponent");
+        criteria.setResultTransformer(CriteriaSpecification.DISTINCT_ROOT_ENTITY);
+        criteria.setProjection(Projections.id());
+
+        logger.info("根据用户类型查找组件");
+        if (!user.getIsManager()) {
+            logger.debug("用户类型为“常规人员”，查找权限内组件");
+
+            logger.debug("用户关联");
+            DetachedCriteria userCriteria = DetachedCriteria.forClass(User.class, "user");
+            userCriteria.setProjection(Projections.property("id"));
+            userCriteria.add(Restrictions.eq("id", user.getId()));
+            userCriteria.createAlias("components", "component");
+            userCriteria.add(Restrictions.eqProperty("component.id", "rootComponent.id"));
+            Criterion criterion = Subqueries.exists(userCriteria);
+
+            logger.debug("用户角色关联");
+            DetachedCriteria roleCriteria = DetachedCriteria.forClass(Role.class, "role");
+            roleCriteria.setProjection(Projections.property("id"));
+            roleCriteria.createAlias("owners", "owner");
+            roleCriteria.add(Restrictions.eq("owner.id", user.getId()));
+            roleCriteria.createAlias("components", "component");
+            roleCriteria.add(Restrictions.eqProperty("component.id", "rootComponent.id"));
+            criterion = Restrictions.or(criterion, Subqueries.exists(roleCriteria));
+
+            logger.debug("用户组织角色关联");
+            DetachedCriteria orgCriteria = DetachedCriteria.forClass(Organization.class, "org");
+            orgCriteria.setProjection(Projections.property("id"));
+            orgCriteria.createAlias("owners", "owner");
+            orgCriteria.add(Restrictions.eq("owner.id", user.getId()));
+            orgCriteria.createAlias("roles", "role");
+            orgCriteria.createAlias("role.components", "component");
+            orgCriteria.add(Restrictions.eqProperty("component.id", "rootComponent.id"));
+            criterion = Restrictions.or(criterion, Subqueries.exists(orgCriteria));
+
+            criteria.add(criterion);
+        } else {
+            logger.debug("用户类型为“管理员”，查找所有组件");
+        }
+
+        criteria.addOrder(Order.asc("id"));
+
+        List<Long> components = componentDao.find(criteria);
+        logger.info("数目“{}”", components.size());
+
+        return components;
     }
 
     /**
@@ -121,12 +175,6 @@ public class ComponentService {
 
         return components;
     }
-
-    /**
-     * 注入DAO
-     */
-    @Resource
-    private ComponentDao componentDao;
 
     /**
      * 查找用户授权组件
@@ -192,6 +240,19 @@ public class ComponentService {
         return componentDao.find(hql, organizationId);
     }
 
+    /**
+     * 查找组件通过主键编号集合
+     */
+    public List<Component> findById(List<Component> components, List<Long> ids) {
+        List<Component> findComponents = new ArrayList<Component>();
+        for (Component component : components) {
+            if (ids.contains(component.getId())) {
+                findComponents.add(component);
+            }
+        }
+        return findComponents;
+    }
+
 
     /**
      * findPage(分页查询组件列表)
@@ -199,7 +260,7 @@ public class ComponentService {
      * @param @param  findPage
      * @param @return 参数类型
      * @return HibernatePage<Component>    返回类型
-     * @throws NoSuchFieldException 
+     * @throws NoSuchFieldException
      * @throws
      * @Title: getAll
      */

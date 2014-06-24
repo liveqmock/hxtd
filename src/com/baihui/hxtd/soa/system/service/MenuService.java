@@ -35,15 +35,6 @@ public class MenuService {
 
     private Logger logger = LoggerFactory.getLogger(this.getClass());
 
-    //    @Value(value = "${system.menu.type.manager}")
-    private String typeManagerValue = "01040101";
-
-    private String typeNormalValue = "01040102";
-
-    //    @Value(value = "${system.function.privilegelevel.authority}")
-    private String privilegelevelAuthorityValue = "01060103";
-
-
     @Resource
     private MenuDao menuDao;
 
@@ -55,6 +46,93 @@ public class MenuService {
 
     @Resource
     private DictionaryDao dictionaryDao;
+
+    /**
+     * 查找系统初始化时的菜单
+     * 1.排除已删除的
+     * 2.必须带有触发功能的
+     */
+    @Transactional(readOnly = true)
+    public List<Menu> findInit() {
+        logger.info("查找系统初始化时的菜单");
+        String hql = "select menu from Menu menu" +
+                " inner join fetch menu.trigger" +
+                " inner join fetch menu.showLocation" +
+                " left join fetch menu.parent" +
+                " where menu.isDeleted=false" +
+                " order by menu.order";
+        return menuDao.find(hql);
+    }
+
+    /**
+     * 查找有效的菜单
+     */
+    @Transactional(readOnly = true)
+    public List<Long> findValidId(User user) {
+        logger.info("查找有效菜单");
+        logger.debug("主键编号“{}”", user.getId());
+
+        DetachedCriteria criteria = DetachedCriteria.forClass(Menu.class, "rootMenu");
+        criteria.setResultTransformer(CriteriaSpecification.DISTINCT_ROOT_ENTITY);
+        criteria.setProjection(Projections.id());
+//        criteria.setFetchMode("parent", FetchMode.JOIN);
+//        criteria.setFetchMode("trigger", FetchMode.JOIN);
+//        criteria.setFetchMode("showLocation", FetchMode.JOIN);
+
+        logger.info("根据类型查找菜单");
+        if (!user.getIsManager()) {
+            logger.debug("类型为“常规人员”，查找权限内菜单");
+
+            logger.debug("关联");
+            DetachedCriteria functionCriteria = DetachedCriteria.forClass(Function.class, "function");
+            functionCriteria.setProjection(Projections.property("id"));
+            functionCriteria.createAlias("owners", "owner");
+            functionCriteria.add(Restrictions.eq("owner.id", user.getId()));
+            functionCriteria.createAlias("menu", "menu");
+            functionCriteria.add(Restrictions.eqProperty("menu.id", "rootMenu.id"));
+            Criterion criterion = Subqueries.exists(functionCriteria);
+
+            logger.debug("角色关联");
+            DetachedCriteria roleCriteria = DetachedCriteria.forClass(Function.class, "function");
+            roleCriteria.setProjection(Projections.property("id"));
+            roleCriteria.createAlias("roles", "role");
+            roleCriteria.createAlias("role.owners", "owner");
+            roleCriteria.add(Restrictions.eq("owner.id", user.getId()));
+            roleCriteria.createAlias("menu", "menu");
+            roleCriteria.add(Restrictions.eqProperty("menu.id", "rootMenu.id"));
+            criterion = Restrictions.or(criterion, Subqueries.exists(roleCriteria));
+
+            logger.debug("组织角色关联");
+            DetachedCriteria orgCriteria = DetachedCriteria.forClass(Function.class, "function");
+            orgCriteria.setProjection(Projections.property("id"));
+            orgCriteria.createAlias("roles", "role");
+            orgCriteria.createAlias("role.organizations", "organization");
+            orgCriteria.createAlias("organization.owners", "orgOwner");
+            orgCriteria.add(Restrictions.eq("orgOwner.id", user.getId()));
+            orgCriteria.createAlias("menu", "menu");
+            orgCriteria.add(Restrictions.eqProperty("menu.id", "rootMenu.id"));
+            criterion = Restrictions.or(criterion, Subqueries.exists(orgCriteria));
+
+            //公共级别的菜单，不需要权限验证
+            criteria.createAlias("trigger", "trigger");
+            Dictionary privilegeLevel = dictionaryDao.getByValue(DictionaryConstant.FUNCTION_PRIVILEGELEVEL_PUBLIC);
+            criterion = Restrictions.or(criterion, Restrictions.eq("trigger.privilegeLevel", privilegeLevel));
+
+            criteria.add(criterion);
+        } else {
+            logger.debug("类型为“管理员”，查找所有菜单");
+            //TODO 筛选有功能的菜单
+            criteria.createAlias("functions", "function", JoinType.INNER_JOIN);
+        }
+
+        criteria.add(Restrictions.eq("isDeleted", false));
+
+        criteria.addOrder(Order.asc("order"));
+
+        List<Long> ids = menuDao.find(criteria);
+        logger.info("菜单主键编号数目“{}”", ids.size());
+        return ids;
+    }
 
     /**
      * 查找有效的菜单
@@ -181,6 +259,19 @@ public class MenuService {
         }
 
         throw new RuntimeException("菜单默认选中数据值状态异常，没有默认选中的菜单（有且仅有一项处于默认选中状态）");
+    }
+
+    /**
+     * 查找菜单通过主键编号集合
+     */
+    public List<Menu> findById(List<Menu> menus, List<Long> ids) {
+        List<Menu> findMenus = new ArrayList<Menu>();
+        for (Menu menu : menus) {
+            if (ids.contains(menu.getId())) {
+                findMenus.add(menu);
+            }
+        }
+        return findMenus;
     }
 
     /**
@@ -425,7 +516,7 @@ public class MenuService {
             function.setId(null);
             function.setName(persistFunction.getName());
             function.setUrl(url + persistFunction.getUrl());
-            function.setPrivilegeLevel(dictionaryDao.getByValue(privilegelevelAuthorityValue));
+            function.setPrivilegeLevel(dictionaryDao.getByValue(DictionaryConstant.FUNCTION_PRIVILEGELEVEL_AUTHORITY));
             function.setMenu(menu);
             function.setCreator(menu.getCreator());
             function.setModifier(menu.getModifier());

@@ -89,8 +89,7 @@ public class DataStoreInterceptor extends HandlerInterceptorAdapter {
 
         Map<String, Object> jsRequest = new HashMap<String, Object>();
         jsRequest.put("time", date);
-        jsRequest.put("function", function);
-        String jsRequestJson = "window.baseInfo=window.baseInfo||{};window.baseInfo.request=" + HibernateAwareObjectMapper.DEFAULT.writeValueAsString(jsRequest);
+        String jsRequestJson = String.format("$.extend(window,%s)", HibernateAwareObjectMapper.DEFAULT.writeValueAsString(jsRequest));
         request.setAttribute(Constant.VR_JS_GLOBALINFO, jsRequestJson);
         logger.debug("脚本信息“{}”", jsRequestJson);
 

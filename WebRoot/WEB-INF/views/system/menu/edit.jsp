@@ -24,9 +24,10 @@
 
     <script type="text/javascript">
         $(function () {
-            jsUtil.bindSave();
+
             jsUtil.bindCheckAll(".functioncheckall", ".functioncheckitem");
             jsUtil.renderRequired();
+            jsUtil.bindSave();
 
             var ztree = jsUtil.menuTree({
                 data:${menuTree==null?"[]":menuTree},
@@ -52,15 +53,7 @@
                                 return this;
                             }
 
-                            var id = "", name = "";
-                            if (!treeNode.isClickSelf) {
-                                id = treeNode.id;
-                                name = treeNode.name;
-                            } else {
-                                ztree.cancelSelectedNode(treeNode);
-                            }
-                            $("[name=parent\\.id]").val(id);
-                            $("[name=parent\\.name]").val(name);
+                            $.Ztree.setValue(ztree, treeNode, "[name=parent\\.id]", "[name=parent\\.name]");
                         }
                     }
                 }

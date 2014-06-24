@@ -1,5 +1,6 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
 <c:set var="ctx" value="${pageContext.request.contextPath}"/>
 <html>
 <head>
@@ -61,13 +62,13 @@
 		</tr>
 		<tr>
 			<td align="right">销售开始日期：</td>
-			<td align="left">${product.saleBeginTime}</td>
-			<td align="right">销售结束日期：</td>
-			<td align="left">${product.saleEndTime}</td>
-		</tr>
-		<tr>
+			<td align="left"><fmt:formatDate value="${product.saleBeginTime}" pattern="yyyy-MM-dd" var="saleBeginTime"/>${saleBeginTime}</td>
 			<td align="right">赎回赔率%：</td>
 			<td align="left">${product.redeemRate}</td>
+		</tr>
+		<tr>
+			<td align="right">销售结束日期：</td>
+			<td align="left"><fmt:formatDate value="${product.saleEndTime}" pattern="yyyy-MM-dd" var="saleEndTime"/>${saleEndTime}</td>
 			<td align="right">赎回公式：</td>
 			<td align="left">${product.redeemFormula}</td>
 		</tr>

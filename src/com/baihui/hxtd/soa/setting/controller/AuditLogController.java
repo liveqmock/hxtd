@@ -20,6 +20,7 @@ import com.baihui.hxtd.soa.base.utils.Search;
 import com.baihui.hxtd.soa.base.utils.mapper.HibernateAwareObjectMapper;
 import com.baihui.hxtd.soa.setting.entity.AuditLog;
 import com.baihui.hxtd.soa.setting.service.AuditLogService;
+import com.baihui.hxtd.soa.system.service.DictionaryService;
 import com.baihui.hxtd.soa.util.JsonDto;
 
 /**
@@ -42,20 +43,18 @@ public class AuditLogController {
 	@Resource
 	private AuditLogService auditLogService;
 	
+	@Resource
+	private DictionaryService dictionaryService;
 	
-	/*@RequestMapping(value = "/toQueryPage.do")
-	public String toQueryPage(HibernatePage<T> page, Model model) {
-		model.addAttribute("page", page);
-		
-		return "/setting/auditlog/list";
-	}*/
 	@RequestMapping(value = "/toQueryPage.do")
     public String toQueryPage(@RequestParam(value = "pageNo", defaultValue = "1") int pageNumber,
             @RequestParam(value = "pageSize", defaultValue = "10") int pageSize,
+            @RequestParam(value = "pageOrderBy", defaultValue = "operateTime") String orderBy,
             Model model) {
         logger.info("FunctionController.query跳转列表页");
+        model.addAttribute("types", dictionaryService.findChildren("100401"));//字典类型
         HibernatePage<AuditLog> page = new HibernatePage<AuditLog>(pageNumber, pageSize);
-        //page.setHibernateOrderBy(orderBy);
+        page.setHibernateOrderBy(orderBy);
         //page.setHibernateOrder(order);
         model.addAttribute("page", page);
         return "/setting/auditlog/list";

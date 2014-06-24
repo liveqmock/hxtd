@@ -251,6 +251,19 @@ var jsUtil = {
 				jsUtil.easyTree.hide();
 			}
 		}
+	},
+	f : {
+		stopPropagation : function(event){
+			if(event){
+				if(event.stopPropagation){
+					event.stopPropagation();
+				}else{
+					event.cancelBubble = true;
+				}
+			}else{
+				return false;	
+			}
+		}
 	}
 };
 $(function(){

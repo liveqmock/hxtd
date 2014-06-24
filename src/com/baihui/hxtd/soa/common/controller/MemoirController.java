@@ -4,6 +4,8 @@ import java.io.IOException;
 import java.io.PrintWriter;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.HashMap;
+import java.util.Map;
 
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
@@ -28,6 +30,7 @@ import com.baihui.hxtd.soa.common.entity.Memoir;
 import com.baihui.hxtd.soa.common.service.MemoirService;
 import com.baihui.hxtd.soa.system.entity.Dictionary;
 import com.baihui.hxtd.soa.system.entity.User;
+import com.baihui.hxtd.soa.system.service.DictionaryService;
 import com.baihui.hxtd.soa.util.JsonDto;
 /**
  * 
@@ -42,15 +45,24 @@ import com.baihui.hxtd.soa.util.JsonDto;
  * @date 2014-5-26 上午11:17:53
  */
 @Controller
-@SessionAttributes(value = {Constant.VS_USER_ID})
 @RequestMapping(value = "/common/memoir")
+@SessionAttributes(value = {Constant.VS_USER_ID})
 public class MemoirController {
 
 	@Resource
-	private MemoirService memoirService; 
-	//@Resource
-	//private DictionaryService dictionaryService;
-
+	private MemoirService memoirService;
+	@Resource
+	private DictionaryService dictionaryService;
+	//模块字典类型
+	private static Map<String,String> moduleMap;
+	static{
+		moduleMap = new HashMap<String,String>();
+		moduleMap.put("supplier", "11010101");
+		moduleMap.put("lead", "11010103");
+		moduleMap.put("contact", "11010104");
+		moduleMap.put("customer", "11010102");
+	}
+	
     @InitBinder
     public void initBinder(WebDataBinder binder) {
         SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
@@ -74,7 +86,8 @@ public class MemoirController {
 			@RequestParam(value = "moduleType") Long moduleType,
 			PrintWriter out) throws IOException {
         /************分页查询*****************/
-		memoirService.findPage(moduleId, moduleType, page);
+		Dictionary dic = dictionaryService.getByValue(moduleMap.get(moduleType));
+		memoirService.findPage(moduleId, dic.getId(), page);
 		
 		/************json转换****************/
 		JsonDto json = new JsonDto();
@@ -107,15 +120,12 @@ public class MemoirController {
 	 */
 	@ResponseBody
 	@RequestMapping(value = "/add.do", method = RequestMethod.POST)
-	public String add(Memoir memoir, 
-			//@RequestParam(value = "userIds") String userIds,
+	public String add(Memoir memoir,
 			@RequestParam(value = "moduleId") Long moduleId,
 			@RequestParam(value = "moduleType") Long moduleType,
 			@ModelAttribute(Constant.VS_USER_ID) Long userId) {
-		Dictionary dic = new Dictionary();
-		dic.setId(moduleType);
+		Dictionary dic = dictionaryService.getByValue(moduleMap.get(moduleType));
 		memoir.setType(dic);//模块类型
-		
 		memoir.setModuleId(moduleId);//模块主键ID
 		
 		User user = new User(userId);
@@ -163,8 +173,7 @@ public class MemoirController {
 			@RequestParam(value = "moduleType") Long moduleType,
 			@ModelAttribute(Constant.VS_USER_ID) Long userId,
 			HttpServletRequest request) {
-		Dictionary dic = new Dictionary();
-		dic.setId(moduleType);
+		Dictionary dic = dictionaryService.getByValue(moduleMap.get(moduleType));
 		memoir.setType(dic);//模块类型
 		memoir.setModuleId(moduleId);//模块主键ID
 		memoir.setModifier(new User(userId));

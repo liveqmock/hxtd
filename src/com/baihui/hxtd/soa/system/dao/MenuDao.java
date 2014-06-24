@@ -44,7 +44,7 @@ public class MenuDao extends HibernateDAOImpl<Menu, Long> {
      * 更新默认显示的菜单为不默认显示
      */
     public int updateToNotDefaultShow() {
-        String hql = "update menu.defaultShow=false where menu.defaultShow=true";
+        String hql = "update Menu menu set menu.defaultShow=false where menu.defaultShow=true";
         return batchExecute(hql);
     }
 

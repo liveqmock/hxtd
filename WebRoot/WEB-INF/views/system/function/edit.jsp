@@ -26,16 +26,29 @@
 <script type="text/javascript">
 $(function(){
 	//$("#form").valid();
-	$("#save").click(function(){
-		if($("#form").valid()){
-			$("#form").submit();
-		}
-	});
 	$("#saveAndAdd").click(function(){
-		$("#form").attr("action",$("#form").attr("action")+"?type=add");
-		if($("#form").valid()){
-			$("#form").submit();
+		var $form = $("#form");
+		if($form.valid()){
+			RcmsAjax.ajax($form.attr("action"),function(result){
+				setTimeout(function(){
+					window.location.replace("${ctx}/system/function/toAddPage.do")
+				},500);
+			},null,$form.formSerialize());
 		}
+		return false;
+	});
+	$("#save").click(function(){
+		var $form = $("#form");
+		if($form.valid()){
+			RcmsAjax.ajax($form.attr("action"),function(result){
+				//redirect
+				var id = result.result.result;
+				setTimeout(function(){
+					window.location.replace("${ctx}/system/function/toViewPage.do?id="+id)
+				},500);
+			},null,$form.formSerialize());
+		}
+		return false;
 	});
 	
 	jsUtil.renderRequiredFromInput();
@@ -104,6 +117,23 @@ function childFun(treeNode){
                 <input type="text" id="menuText"  value="${func.menu.name }" class="text_input3" readonly/>
                 <input name="menu.id" id="menuId" value="${func.menu.id }" type="hidden"/>
                 </td>
+            </tr>
+            <tr>
+                <td align="right">权限级别：</td>
+                <td align="left">
+					<select name="privilegeLevel.id" class="select1 pr required">
+						<option value="">
+							--请选择--
+						</option>
+						<c:forEach items="${level}" var="d">
+							<option value="${d.id}"
+								<c:if test="${d.id==func.privilegeLevel.id}">
+             						selected
+             				</c:if>
+             				>${d.key}</option>
+						</c:forEach>
+					</select>
+				</td>
             </tr>
         </table>
         <h1 class="f14 fbnone ml40 pt10">描述信息</h1>

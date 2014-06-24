@@ -14,7 +14,7 @@
 <script type="text/javascript" src="${ctx}/static/js/js-util.common.js"></script>
 <script type="text/javascript">
 $(function(){
-	new Grid().init({ containerSelector: '.memoircontainer' });
+	new Grid().init({containerSelector: '.memoircontainer', paginationCountLimit: 11});
 	$(".contactrecords").click(function(){
 		iframeRemoir('add', '');
 	});
@@ -66,6 +66,14 @@ function iframeRemoir(act, id){
 			</c:otherwise>
 		</c:choose>
 	</form>
+	<c:if test="${edit}">
+	<div class="pt10">
+		<a href="javascript:;" class="block c_white lh25 fl ml10 contactrecords">
+			<b class="allbtn_l block fl"></b>
+			<b class="allbtn_r pr13 block fl w_auto f14">新&nbsp;&nbsp;增</b>
+		</a>
+	</div>
+	</c:if>
 	<table class="cb id_table2 w pr35">
 		<tr>
 		    <th>联系纪要</th>
@@ -86,10 +94,10 @@ function iframeRemoir(act, id){
            <td>{$T.row.employee.name}</td>
            <td align="center">
              <c:if test="${query}">
-                 <a class="block_inline s_detail_btn globle_img ml10" onclick="iframeRemoir('view',{$T.row.id});" title="详情"></a>
+                 <a href="javascript:;" class="block_inline s_detail_btn globle_img ml10" onclick="iframeRemoir('view',{$T.row.id});" title="详情"></a>
              </c:if>
              <c:if test="${edit}">
-                 <a class="block_inline s_edit_btn globle_img ml10" onclick="iframeRemoir('edit',{$T.row.id});" title="编辑"></a>
+                 <a href="javascript:;" class="block_inline s_edit_btn globle_img ml10" onclick="iframeRemoir('edit',{$T.row.id});" title="编辑"></a>
              </c:if>
              <c:if test="${delete}">
                  <a href="javascript:;" class="block_inline s_dump_btn globle_img ml10 delete" uri="${ctx}/common/memoir/delete.do?id={$T.row.id}" title="删除"></a>

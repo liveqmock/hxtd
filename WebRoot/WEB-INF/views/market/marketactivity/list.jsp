@@ -4,7 +4,7 @@
 <c:set var="ctx" value="${pageContext.request.contextPath}"/>
 <html>
 <head>
-<title>市场活动列表</title>
+<title>市场活动</title>
 <link href="${ctx}/static/css/recommend/detail.css?v=1" rel="stylesheet" type="text/css"/>
 <link href="${ctx}/static/css/application.css?v=1" rel="stylesheet" type="text/css"/>
 <script type="text/javascript" src="${ctx}/static/js/jquery-jtemplates.js?v=1"></script>
@@ -14,6 +14,9 @@
 $(function(){
 	jsUtil.datepicker(".time");// 绑定日历
 	new Grid().init().bindExport(); // 生成Gird
+	$(".more").click(function(){
+		$(this).toggleClass("h_shangla").parents("tr").nextAll().toggle();
+	});
 });
 </script>
 </head>
@@ -52,7 +55,8 @@ $(function(){
 	    				type="text" readonly/>
     			</div>
     		</td>
-    		<td width="8%">
+    		<td width="10%">
+    			<a class="h_xiala globle_img block fr more" href="javascript:;" title="更多搜索条件"></a>
     			<a href="javascript:;" class="reset block dump_btn globle_img fr ml10"></a>
     			<a href="javascript:;" class="block c_white lh25 fr ml10 submit">
     				<b class="allbtn_l block fl"></b>
@@ -60,7 +64,7 @@ $(function(){
     			</a>
     		</td>
     	</tr>
-    	<tr>
+    	<tr style="display:none;">
     		<td class="f14" align="right">创建时间：</td>
     		<td class="f14" align="left">
     			<div class="pr vm">

@@ -96,6 +96,7 @@ public class MessageController {
         logger.info("获取分页数据");
         if("recived".contains(type)){
             page = messageService.findRecivePage(searchParams, page,user);
+            
         }else{
         	page = messageService.findSendPage(searchParams, page,user);
         }
@@ -118,14 +119,12 @@ public class MessageController {
             @RequestParam(value = "pageSize", defaultValue = "10") int pageSize,
             @RequestParam(value = "pageOrderBy", defaultValue = "status") String orderBy,
             @RequestParam(value = "pageOrder", defaultValue = "asc") String order,
-            @RequestParam(value = "type", defaultValue = "recived") String type,
             Model model) {
 		logger.info("MessageController.toQueryPage跳转系统消息列表页");
 		HibernatePage<UserMessage> page = new HibernatePage<UserMessage>(pageNumber, pageSize);
         page.setHibernateOrderBy(orderBy);
         page.setHibernateOrder(order);
         model.addAttribute("page", page);
-        model.addAttribute("type", type);
        	return "/system/message/list";
 	}
 	

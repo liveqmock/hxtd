@@ -31,20 +31,11 @@ public class FunctionService {
 
     private Logger logger = LoggerFactory.getLogger(this.getClass());
 
-    //    @Value(value = "${system.user.type.manager}")
-    @SuppressWarnings("unused")
-    private String typeManagerValue = "01040101";
-
-    //    @Value(value = "${system.user.type.normal}")
-    @SuppressWarnings("unused")
-    private String typeNormalValue = "01040102";
-
-
     @Resource
     private FunctionDao functionDao;
+
     @Resource
     private UserDao userDao;
-
 
     /**
      * 获得请求功能
@@ -66,14 +57,90 @@ public class FunctionService {
         return functionDao.findUnique(criteria);
     }
 
+
+    /**
+     * 查找系统初始化时的功能
+     * 1.排除已删除的
+     * 2.排除未关联到菜单的（基础模板的）
+     */
+    @Transactional(readOnly = true)
+    public List<Function> findInit() {
+        logger.info("查找系统初始化时的菜单");
+        String hql = "select function from Function function" +
+                " inner join fetch function.menu" +
+                " inner join fetch function.privilegeLevel" +
+                " left join fetch function.parent" +
+                " where function.isDeleted=false";
+        return functionDao.find(hql);
+    }
+
     /**
      * 查找基本功能
      */
     @Transactional(readOnly = true)
     public List<Function> findBase() {
         logger.info("查找基本功能");
-        String hql = "select function from Function function where function.menu=null";
+        String hql = "select function from Function function" +
+                " where function.menu=null";
         return functionDao.find(hql);
+    }
+
+    /**
+     * 查找有效的功能主键编号
+     */
+    @Transactional(readOnly = true)
+    public List<Long> findValidId(User user) {
+        logger.info("查找有效的功能主键编号");
+        logger.debug("用户主键编号“{}”", user.getId());
+
+        DetachedCriteria criteria = DetachedCriteria.forClass(Function.class, "rootFunction");
+        criteria.setResultTransformer(CriteriaSpecification.DISTINCT_ROOT_ENTITY);
+        criteria.setProjection(Projections.id());
+//        criteria.setFetchMode("menu", FetchMode.JOIN);
+//        criteria.setFetchMode("parent", FetchMode.JOIN);
+
+        logger.info("根据用户类型查找功能");
+        if (!user.getIsManager()) {
+            logger.debug("用户类型为“常规人员”，查找权限内功能");
+
+            logger.debug("用户关联");
+            DetachedCriteria userCriteria = DetachedCriteria.forClass(User.class, "user");
+            userCriteria.setProjection(Projections.property("id"));
+            userCriteria.add(Restrictions.eq("id", user.getId()));
+            userCriteria.createAlias("functions", "function");
+            userCriteria.add(Restrictions.eqProperty("function.id", "rootFunction.id"));
+            Criterion criterion = Subqueries.exists(userCriteria);
+
+            logger.debug("用户角色关联");
+            DetachedCriteria roleCriteria = DetachedCriteria.forClass(Role.class, "role");
+            roleCriteria.setProjection(Projections.property("id"));
+            roleCriteria.createAlias("owners", "owner");
+            roleCriteria.add(Restrictions.eq("owner.id", user.getId()));
+            roleCriteria.createAlias("functions", "function");
+            roleCriteria.add(Restrictions.eqProperty("function.id", "rootFunction.id"));
+            criterion = Restrictions.or(criterion, Subqueries.exists(roleCriteria));
+
+            logger.debug("用户组织角色关联");
+            DetachedCriteria orgCriteria = DetachedCriteria.forClass(Organization.class, "org");
+            orgCriteria.setProjection(Projections.property("id"));
+            orgCriteria.createAlias("owners", "owner");
+            orgCriteria.add(Restrictions.eq("owner.id", user.getId()));
+            orgCriteria.createAlias("roles", "role");
+            orgCriteria.createAlias("role.functions", "function");
+            orgCriteria.add(Restrictions.eqProperty("function.id", "rootFunction.id"));
+            criterion = Restrictions.or(criterion, Subqueries.exists(orgCriteria));
+
+            criteria.add(criterion);
+        } else {
+            logger.debug("用户类型为“管理员”，查找所有功能");
+        }
+
+        criteria.addOrder(Order.asc("id"));
+
+        List<Long> functions = functionDao.find(criteria);
+        logger.info("功能主键编号数目“{}”", functions.size());
+
+        return functions;
     }
 
     /**
@@ -220,6 +287,19 @@ public class FunctionService {
     }
 
     /**
+     * 查找组件通过主键编号集合
+     */
+    public List<Function> findById(List<Function> functions, List<Long> ids) {
+        List<Function> findFunctions = new ArrayList<Function>();
+        for (Function function : functions) {
+            if (ids.contains(function.getId())) {
+                findFunctions.add(function);
+            }
+        }
+        return findFunctions;
+    }
+
+    /**
      * 查找功能根据菜单编号
      */
     public List<Function> findByMenuId(List<Function> functions, Long menuId) {
@@ -301,7 +381,9 @@ public class FunctionService {
     public Function get(Long id) {
         logger.info("查询单个功能信息{}", id);
         String hql = "select function from Function function  " +
-                "left join fetch function.menu where function.id = ?";
+                "left join fetch function.menu " +
+                " left join fetch function.privilegeLevel " +
+                "where function.id = ?";
         return functionDao.findUnique(hql, id);
     }
 

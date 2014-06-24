@@ -13,6 +13,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
+import org.apache.commons.collections.BidiMap;
 import org.apache.commons.io.FilenameUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.poi.openxml4j.exceptions.InvalidFormatException;
@@ -267,7 +268,7 @@ public class NoticeController {
 
         logger.info("根据excel文件解析出对象集合");
         ServletContext servletContext = session.getServletContext();
-        Map<String, Map<String, String>> descNames = (Map<String, Map<String, String>>) servletContext.getAttribute(Constant.VC_DESCNAMES);
+        Map<String, BidiMap> descNames = (Map<String, BidiMap>) servletContext.getAttribute(Constant.VC_DESCNAMES);
 
         Workbook workbook = ImportExport.create(file.getInputStream());
         List<Notice> notices = ImportExport.imports(workbook, descNames.get("notice"), Notice.class);

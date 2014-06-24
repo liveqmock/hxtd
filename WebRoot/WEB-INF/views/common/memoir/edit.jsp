@@ -31,33 +31,35 @@ $(function(){//初始化
 });
 function submitRemoir(){//提交表单
 	if($("#form").valid()){
-		RcmsAjax.ajax(form.action, null, null, $("form").serialize() + "&moduleType=" + $("#moduleType", parent.document).val() + "&moduleId=" + $("#moduleId", parent.document).val());
+		var moduleType =$("#moduleType", parent.document).val();
+		var moduleId = $("#moduleId", parent.document).val();
+		RcmsAjax.ajax(form.action, null, null, $("form").serialize() + "&moduleType=" + moduleType + "&moduleId=" + moduleId);
 		return true;
 	}else{
 		return false;
 	}
 }
-function searchData(action){//搜索弹出框
-	var url, title;
-	if(action == "users"){
-		url = "${ctx}/system/user/toQueryPage.comp";
-		title = "参与者";
-	}
-	jsUtil.dialogIframe(url, title, 800, 465, function(){//确定回调
-		var ckObj = $(":checked", window.frames["dialogIframe"].document);
-		if(ckObj.length > 0){
-			$("#txt_" + action).val(ckObj.parent().next().text());
-			$("#hide_" + action +"_id").val(ckObj.val());
-		}
-	});
-}
-function clearInputVal(obj){//清除
-	$(obj).prevAll("input").val('');
-}
+//function searchData(action){//搜索弹出框
+//	var url, title;
+//	if(action == "users"){
+//		url = "${ctx}/system/user/toQueryPage.comp";
+//		title = "参与者";
+//	}
+//	jsUtil.dialogIframe(url, title, 800, 465, function(){//确定回调
+//		var ckObj = $(":checked", window.frames["dialogIframe"].document);
+//		if(ckObj.length > 0){
+//			$("#txt_" + action).val(ckObj.parent().next().text());
+//			$("#hide_" + action +"_id").val(ckObj.val());
+//		}
+//	});
+//}
+//function clearInputVal(obj){//清除
+//	$(obj).prevAll("input").val('');
+//}
 </script>
 </head>
 <body>
-<form id="form" action="${ctx}/common/memoir/add.do" method="post">
+<form id="form" action="${ctx}${VR_FUNCTION.url}" method="post">
 <div class="">
 	<input type="hidden" name="id" value="${memoir.id}"/>
 	<table style="width:100%;" class="table140421">

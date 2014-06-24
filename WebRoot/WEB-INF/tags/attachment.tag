@@ -17,7 +17,7 @@
 </script>
 <input id="id" type="hidden" value="${id}">
 <c:if test="${query}">
-<h1 class="f14 fbnone ml40">附件列表</h1>
+<h1 class="f14 fbnone ml40 mt10">附件列表</h1>
 <div class="w95b  bg_c_white margin0">
 	<div class="w70b margin0 mt10 pt10 mb10">
 		<c:if test="${upload}">

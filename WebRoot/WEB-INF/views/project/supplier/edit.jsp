@@ -28,16 +28,29 @@
 <script type="text/javascript">${applicationScope.VC_PCAS}</script>
 <script type="text/javascript">
 $(function(){
-	$("#save").click(function(){
-		if($("#form").valid()){
-			$("#form").submit();
-		}
-	});
 	$("#saveAndAdd").click(function(){
-		$("#form").attr("action",$("#form").attr("action")+"?type=add");
-		if($("#form").valid()){
-			$("#form").submit();
+		var $form = $("#form");
+		if($form.valid()){
+			RcmsAjax.ajax($form.attr("action"),function(result){
+				setTimeout(function(){
+					window.location.replace("${ctx}/project/supplier/toAddPage.do")
+				},500);
+			},null,$form.formSerialize());
 		}
+		return false;
+	});
+	$("#save").click(function(){
+		var $form = $("#form");
+		if($form.valid()){
+			RcmsAjax.ajax($form.attr("action"),function(result){
+				//redirect
+				var id = result.result.result;
+				setTimeout(function(){
+					window.location.replace("${ctx}/project/supplier/toViewPage.do?id="+id)
+				},500);
+			},null,$form.formSerialize());
+		}
+		return false;
 	});
 	
 	//jsUtil.renderRequiredFromInput();

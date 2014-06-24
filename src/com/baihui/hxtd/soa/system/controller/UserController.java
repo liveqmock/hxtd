@@ -15,6 +15,7 @@ import com.baihui.hxtd.soa.system.entity.User;
 import com.baihui.hxtd.soa.system.service.*;
 import com.baihui.hxtd.soa.util.JsonDto;
 import com.fasterxml.jackson.core.JsonProcessingException;
+import org.apache.commons.collections.BidiMap;
 import org.apache.commons.io.FilenameUtils;
 import org.apache.commons.lang3.ArrayUtils;
 import org.apache.poi.openxml4j.exceptions.InvalidFormatException;
@@ -131,7 +132,7 @@ public class UserController {
     /**
      * 存储表单初始化数据
      */
-    public void detail(ModelMap model, Long organizationOrder) {
+    public void detail(ModelMap model) {
         logger.info("存储表单初始化数据");
 
         List<Dictionary> sexs = dictionaryService.findChildren("0001");
@@ -150,23 +151,24 @@ public class UserController {
         List<Organization> organizations = organizationService.findChildrenById(organization.getId());
         organizations.add(0, organization);
         model.addAttribute("organizationTree", JsonMapper.nonEmptyMapper().toJson(TreeNodeConverter.convert(organizations)));
+        logger.debug("组织数目“{}”", organizations.size());
     }
 
     /**
      * 转至新增用户页面
      */
     @RequestMapping(value = "/toAddPage.do", method = RequestMethod.GET)
-    public String toAddPage(Long organizationOrder, ModelMap model) {
+    public String toAddPage(Long organizationId, ModelMap model) {
         logger.info("转至新增用户页面");
 
-        detail(model, organizationOrder);
+        detail(model);
 
         logger.info("存储表单默认值");
         User defaultUser = new User();
-        defaultUser.setSex(dictionaryService.getByValue(DictionaryConstant.PUBLIC_SEX_MAN));
+        defaultUser.setSex(new Dictionary(dictionaryService.getIdByValue(DictionaryConstant.PUBLIC_SEX_MAN)));
         defaultUser.setIsManager(false);
         defaultUser.setIsActive(true);
-        defaultUser.setOrganization(organizationService.getByOrder(organizationOrder));
+        defaultUser.setOrganization(organizationService.getByOrder(organizationId));
         model.addAttribute("user", defaultUser);
         logger.debug("用户“{}”", defaultUser);
 
@@ -176,28 +178,22 @@ public class UserController {
     /**
      * 新增用户
      */
+    @ResponseBody
     @RequestMapping(value = "/add.do", method = RequestMethod.POST)
-    public String add(User user,
-                      @RequestParam(defaultValue = "/system/user/toModifyPage.do?id=%s") String redirectUri,
-                      @ModelAttribute(Constant.VS_USER_ID) Long userId,
-                      RedirectAttributes model) {
+    public String add(User user, ModelMap modelMap) {
         logger.info("新增用户");
         logger.debug("用户名“{}”", user.getName());
 
         logger.info("添加服务端属性值");
-        user.setCreator(new User(userId));
-        logger.debug("创建用户为当前用户“{}”", userId);
+        User sessionUser = (User) modelMap.get(Constant.VS_USER);
+        user.setCreator(sessionUser);
+        logger.debug("创建用户为当前用户“{}”", sessionUser.getName());
         user.setModifier(user.getCreator());
-        logger.debug("修改用户为当前用户“{}”", userId);
+        logger.debug("修改用户为当前用户“{}”", sessionUser.getName());
 
         userService.add(user);
 
-        logger.info("添加操作提示");
-        model.addFlashAttribute(Constant.VM_BUSINESS, "新增成功");
-
-        redirectUri = String.format(redirectUri, user.getId());
-        logger.info("重定向至“{}”", redirectUri);
-        return "redirect:" + redirectUri;
+        return new JsonDto(user.getId()).toString();
     }
 
     /**
@@ -226,7 +222,7 @@ public class UserController {
         logger.debug("用户主键编号“{}”", id);
         User user = userService.getById(id);
 
-        detail(model, user.getOrganization().getOrder());
+        detail(model);
 
         logger.info("存储表单默认值");
         model.addAttribute("user", user);
@@ -238,25 +234,19 @@ public class UserController {
     /**
      * 修改用户
      */
+    @ResponseBody
     @RequestMapping(value = "/modify.do", method = RequestMethod.POST)
-    public String modify(User user,
-                         @RequestParam(defaultValue = "/system/user/toModifyPage.do?id=%s") String redirectUri,
-                         @ModelAttribute(Constant.VS_USER_ID) Long userId,
-                         RedirectAttributes model) {
+    public String modify(User user, ModelMap modelMap) {
         logger.info("修改用户");
 
         logger.info("添加服务端属性值");
-        user.setModifier(new User(userId));
-        logger.debug("修改用户为当前用户“{}”", userId);
+        User sessionUser = (User) modelMap.get(Constant.VS_USER);
+        user.setModifier(sessionUser);
+        logger.debug("修改用户为当前用户“{}”", sessionUser.getName());
 
         userService.modify(user);
 
-        logger.info("添加操作提示");
-        model.addFlashAttribute(Constant.VM_BUSINESS, "修改成功");
-
-        redirectUri = String.format(redirectUri, user.getId());
-        logger.info("重定向至“{}”", redirectUri);
-        return "redirect:" + redirectUri;
+        return new JsonDto(user.getId()).toString();
     }
 
     /**
@@ -324,21 +314,15 @@ public class UserController {
      * 2.功能
      * 3.组件
      */
+    @ResponseBody
     @RequestMapping(value = "/authorization.do")
     public String authorization(Long id,
                                 @RequestParam(value = "roleId", required = false) Long[] roleIds,
                                 @RequestParam(value = "functionId", required = false) Long[] functionIds,
-                                @RequestParam(value = "componentId", required = false) Long[] componentIds,
-                                @RequestParam(defaultValue = "/system/user/toAuthorizationPage.do?id=%s") String redirectUri,
-                                RedirectAttributes model) {
+                                @RequestParam(value = "componentId", required = false) Long[] componentIds) {
         logger.info("授权");
         userService.authorization(id, roleIds, functionIds, componentIds);
-
-        logger.info("添加操作提示");
-        model.addFlashAttribute(Constant.VM_BUSINESS, "授权成功");
-
-        redirectUri = String.format(redirectUri, id);
-        return "redirect:" + redirectUri;
+        return new JsonDto(id).toString();
     }
 
     /**
@@ -418,7 +402,7 @@ public class UserController {
 
         logger.info("根据excel文件解析出对象集合");
         ServletContext servletContext = session.getServletContext();
-        Map<String, Map<String, String>> descNames = (Map<String, Map<String, String>>) servletContext.getAttribute(Constant.VC_DESCNAMES);
+        Map<String, BidiMap> descNames = (Map<String, BidiMap>) servletContext.getAttribute(Constant.VC_DESCNAMES);
 
         Workbook workbook = ImportExport.create(file.getInputStream());
         List<User> users = ImportExport.imports(workbook, descNames.get("user"), User.class);

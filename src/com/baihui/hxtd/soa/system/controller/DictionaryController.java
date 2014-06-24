@@ -94,7 +94,9 @@ public class DictionaryController {
 	 */
 	@RequestMapping(value = "/toAddPage.do")
 	public String toAddPage(Model model) {
-		model.addAttribute("dictionary", new Dictionary());// 初始化字典
+		Dictionary dic = new Dictionary();
+		dic.setOrder(Long.parseLong("1"));
+		model.addAttribute("dictionary", dic);// 初始化字典
 		model.addAttribute("types", dicService.getDicTypes());//字典类型
 		model.addAttribute("dict", dicService.getDictJsonData());//字典层级树形(不包含字典类型)
 		

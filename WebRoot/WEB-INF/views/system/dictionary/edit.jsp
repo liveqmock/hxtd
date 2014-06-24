@@ -4,42 +4,30 @@
 <c:set var="ctx" value="${pageContext.request.contextPath}"/>
 <html>
 <head>
-<title>字典信息</title>
+<title>字典管理</title>
 <link rel="stylesheet" href="${ctx}/static/css/recommend/detail.css" type="text/css"></link>
 <script type="text/javascript" src="${ctx}/static/js/jquery.validate.js"></script>
-<style type="text/css">
-	input.error { border: 1px solid red }
-	label.error { padding-left: 18px; color: red; }
-</style>
+<script type="text/javascript" src="${ctx}/static/js/jquery.metadata.js?v=1"></script>
+<script type="text/javascript" src="${ctx}/static/js/validator.js?v=1"></script>
 <script type="text/javascript">
 $(function(){
-	$("#form").validate({
-		rules: {
-			key: { required: true },
-			value: { required: true },
-		},
-		messages: {
-			key: { required: "*请输入字典名称"},
-			value: { required: "*请输入字典值"},
-		}
-	});
-	$(".add").click(function(){
+	$(".add").click(function(){// 表单验证
 		if($("#form").valid()){
 			form.action = form.action + "?redirectUri=" + encodeURI($(this).attr("redirecturi"));
 			form.submit();
 		}
 		return false;
 	});
-	$("#pName").focus(function(){//tree
+	$("#pName").focus(function(){// 所属字典名称
 		jsUtil.easyTree.show('#pName');
 	});;
-	jsUtil.easyTree.init(${dict}, function(node){
+	jsUtil.easyTree.init(${dict}, function(node){// 字典树形下拉
 		$("#pName").val(node.name);
 		$("#pId").val(node.id);
 		$("#dicType").val(node.typename);
 		jsUtil.easyTree.hide();
 	});
-	$("#dicType").change(function(){
+	$("#dicType").change(function(){// 改变字典类型
 		if(this.value == '0'){
 			$("#pName").val('');
 			$("#pId").val('');
@@ -67,10 +55,10 @@ $(function(){
 	<h1 class="f14 fbnone ml40 pt10">基本信息</h1>
 	<table class="cb id_table3 w95b bg_c_white margin0 mt10">
 		<tr>
-			<td width="15%" align="right">字典名称：</td>
-			<td align="left"><input type="text" name="key" value="${dictionary.key}" class="text_input3"/></td>
-			<td width="15%" align="right">字典值：</td>
-			<td align="left"><input type="text" name="value" value="${dictionary.value}" class="text_input3" readonly/></td>
+			<td width="15%" align="right"><span class="w_red">*&nbsp;</span>字典名称：</td>
+			<td align="left"><input type="text" name="key" value="${dictionary.key}" class="text_input3 required"/></td>
+			<td width="15%" align="right"><span class="w_red">*&nbsp;</span>字典值：</td>
+			<td align="left"><input type="text" name="value" value="${dictionary.value}" class="text_input3 required"/></td>
 		</tr>
 		<tr>
 			<td align="right">所属字典：</td>
@@ -98,14 +86,14 @@ $(function(){
                	</select>
 			</td>
 			<td align="right">排序：</td>
-			<td align="left"><input type="text" name="order" value="${dictionary.order}" class="text_input3"/></td>
+			<td align="left"><input type="text" name="order" value="${dictionary.order}" class="text_input3 digits"/></td>
 		</tr>
 	</table>
 	<h1 class="f14 fbnone ml40 pt10">描述信息</h1>
 	<table class="cb id_table4 w95b bg_c_white margin0 mt10">
 		<tr>
-			<td align="right" width="15%">备注：</td>
-			<td align="left" width="85%"><textarea name="remark" class="remarks_input1" style="resize: none;">${dictionary.remark}</textarea></td>
+			<td align="right" width="15%" valign="top">备注：</td>
+			<td align="left" width="85%" valign="top"><textarea name="remark" class="remarks_input1" style="resize: none;">${dictionary.remark}</textarea></td>
 		</tr>
 	</table>
 	<div class="h40"></div>

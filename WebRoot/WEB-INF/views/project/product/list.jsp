@@ -130,7 +130,7 @@ $(function(){
 	        <td>
               <c:if test="${VS_HAS_FUNCTIONS.productView}">
                   <a href="${ctx}/project/product/toViewPage.do?id={$T.row.id}" 
-                  	class="block_inline s_dump_btn globle_img ml10" title="详情"></a>
+                  	class="block_inline s_detail_btn globle_img ml10" title="详情"></a>
               </c:if>
               <c:if test="${VS_HAS_FUNCTIONS.productModify}">
                   <a href="${ctx}/project/product/toModifyPage.do?id={$T.row.id}" 
@@ -138,7 +138,7 @@ $(function(){
               </c:if>
               <c:if test="${VS_HAS_FUNCTIONS.productDelete}">
                   <a href="javascript:;" uri="${ctx}/project/product/delete.do?id={$T.row.id}" 
-                  	class="block_inline s_detail_btn globle_img ml10 delete" title="删除"></a>
+                  	class="block_inline s_dump_btn globle_img ml10 delete" title="删除"></a>
               </c:if>
 	        </td>
 	    </tr>

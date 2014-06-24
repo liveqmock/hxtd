@@ -31,9 +31,10 @@
 <script type="text/javascript" src="${ctx}/static/js/ui/jquery.ui.effect-blind.js?v=${now}"></script>
 <script type="text/javascript" src="${ctx}/static/js/ui/jquery.ui.tabs.js?v=${now}"></script>
 <script type="text/javascript" src="${ctx}/static/js/jquery.custom.js?v=${now}"></script>
+<script type="text/javascript">${VS_JS_GLOBALINFO};${VR_JS_GLOBALINFO};</script>
+
 <script type="text/javascript" src="${ctx}/static/js/js-util.js?v=${now}"></script>
 <script type="text/javascript" src="${ctx}/static/js/commonAjax.js?v=${now}"></script>
-<script type="text/javascript">${VS_JS_GLOBALINFO}</script>
 <script>
 $(function(){//table tr 双击查看
 	$(".list tr").live({

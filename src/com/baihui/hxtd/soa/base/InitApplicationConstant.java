@@ -1,25 +1,25 @@
 package com.baihui.hxtd.soa.base;
 
-import java.io.IOException;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Properties;
-
-import javax.annotation.Resource;
-import javax.servlet.ServletContext;
-import javax.servlet.ServletContextEvent;
-
+import com.baihui.hxtd.soa.common.controller.model.ListModel;
+import com.baihui.hxtd.soa.common.entity.PCAS;
+import com.baihui.hxtd.soa.common.service.PCASService;
+import com.baihui.hxtd.soa.system.entity.Component;
+import com.baihui.hxtd.soa.system.entity.Function;
+import com.baihui.hxtd.soa.system.entity.Menu;
+import com.baihui.hxtd.soa.system.service.ComponentService;
+import com.baihui.hxtd.soa.system.service.FunctionService;
+import com.baihui.hxtd.soa.system.service.MenuService;
+import com.baihui.hxtd.soa.util.JsonDto;
 import org.apache.commons.collections.BidiMap;
 import org.apache.commons.collections.bidimap.DualHashBidiMap;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.stereotype.Component;
 
-import com.baihui.hxtd.soa.common.controller.model.ListModel;
-import com.baihui.hxtd.soa.common.entity.PCAS;
-import com.baihui.hxtd.soa.common.service.PCASService;
-import com.baihui.hxtd.soa.util.JsonDto;
+import javax.annotation.Resource;
+import javax.servlet.ServletContext;
+import javax.servlet.ServletContextEvent;
+import java.io.IOException;
+import java.util.*;
 
 /**
  * 初始化Application中常量
@@ -28,14 +28,37 @@ import com.baihui.hxtd.soa.util.JsonDto;
  * @author xiayouxue
  * @date 2014/5/30
  */
-@Component
+@org.springframework.stereotype.Component
 public class InitApplicationConstant implements StartupListener {
 
     private Logger logger = LoggerFactory.getLogger(this.getClass());
 
+    /**
+     * 系统菜单
+     */
+    public final static List<Menu> MENUS = new ArrayList<Menu>();
+    /**
+     * 系统功能
+     */
+    public final static List<Function> FUNCTIONS = new ArrayList<Function>();
+    /**
+     * 系统组件
+     */
+    public final static List<Component> COMPONENTS = new ArrayList<Component>();
+
     @Resource
-	private PCASService pcasService;
-    
+    private PCASService pcasService;
+
+    @Resource
+    private MenuService menuService;
+
+    @Resource
+    private FunctionService functionService;
+
+    @Resource
+    private ComponentService componentService;
+
+
     @Override
     public void onStartup(ServletContextEvent event) {
         logger.info("应用启动完成后，初始化Application中常量");
@@ -44,6 +67,7 @@ public class InitApplicationConstant implements StartupListener {
         loadComponentCode(servletContext);
         loadNameDesc(servletContext);
         loadImportExport(servletContext);
+        loadSystemPrivi();
         loadPCAS(servletContext);
     }
 
@@ -87,8 +111,7 @@ public class InitApplicationConstant implements StartupListener {
         Properties properties = new Properties();
         try {
             properties.load(getClass().getResourceAsStream("/application.namedesc.properties"));
-            Map<String, Map<String, String>> nameDescs = new HashMap<String, Map<String, String>>();
-            Map<String, Map<String, String>> descNames = new HashMap<String, Map<String, String>>();
+            Map<String, BidiMap> nameDescs = new HashMap<String, BidiMap>();
             for (String key : properties.stringPropertyNames()) {
                 int index = key.indexOf(".");
                 String entityName = key.substring(0, index);
@@ -96,18 +119,13 @@ public class InitApplicationConstant implements StartupListener {
                 String value = properties.getProperty(key);
                 value = new String(value.getBytes("ISO-8859-1"), "UTF-8");
                 if (!nameDescs.containsKey(entityName)) {
-                    nameDescs.put(entityName, new HashMap<String, String>());
+                    nameDescs.put(entityName, new DualHashBidiMap());
                 }
                 nameDescs.get(entityName).put(filedName, value);
 
-                if (!descNames.containsKey(entityName)) {
-                    descNames.put(entityName, new HashMap<String, String>());
-                }
-                descNames.get(entityName).put(value, filedName);
             }
             logger.debug("名称描述数目“{}”", properties.entrySet().size());
             servletContext.setAttribute(Constant.VC_NAMEDESCS, nameDescs);
-            servletContext.setAttribute(Constant.VC_DESCNAMES, descNames);
         } catch (IOException e) {
             throw new RuntimeException("加载名称描述配置文件异常", e);
         }
@@ -127,13 +145,29 @@ public class InitApplicationConstant implements StartupListener {
         logger.debug("导入导出数目“{}”", properties.entrySet().size());
         servletContext.setAttribute(Constant.VC_IMPORTEXPORTS, properties);
     }
-    
-    /**加载省份信息*/
+
+    /**
+     * 加载系统管理权限数据
+     */
+    private void loadSystemPrivi() {
+        logger.info("加载系统管理权限数据");
+        MENUS.addAll(menuService.findInit());
+        menuService.toTriggerUrl(MENUS);
+        logger.debug("菜单数目“{}”", MENUS.size());
+        FUNCTIONS.addAll(functionService.findInit());
+        logger.debug("功能数目“{}”", FUNCTIONS.size());
+        COMPONENTS.addAll(componentService.findInit());
+        logger.debug("组件数目“{}”", COMPONENTS.size());
+    }
+
+    /**
+     * 加载省份信息
+     */
     @SuppressWarnings("unchecked")
-	private void loadPCAS(ServletContext servletContext){
-    	List<PCAS> pcas = pcasService.getRoot();
-    	JsonDto json = new JsonDto();
-    	json.setResult(new ListModel(pcas));
-    	servletContext.setAttribute(Constant.VC_PCAS, "var pcasJson="+json.toString());
+    private void loadPCAS(ServletContext servletContext) {
+        List<PCAS> pcas = pcasService.getRoot();
+        JsonDto json = new JsonDto();
+        json.setResult(new ListModel(pcas));
+        servletContext.setAttribute(Constant.VC_PCAS, "var pcasJson=" + json.toString());
     }
 }

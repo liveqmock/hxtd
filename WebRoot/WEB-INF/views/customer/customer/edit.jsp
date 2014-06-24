@@ -101,7 +101,7 @@ function clearInputVal(obj){//清除
 						>${type.key }</option>
 					</c:forEach>
 				</select>
-				<input name="type.id" type="text" value="${customer.type.id }" style="display:none;"/>
+				
 			</td>
 		</tr>
 		<tr>

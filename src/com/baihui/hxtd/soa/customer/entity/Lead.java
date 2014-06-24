@@ -123,19 +123,19 @@ public class Lead {
 	 * 省
 	 */
 	@ManyToOne(fetch = FetchType.LAZY)
-	@JoinColumn(name = "PROVINCE")
+	@JoinColumn(name = "PROVINCE",nullable = true)
 	private PCAS province;
 	/**
 	 * 市
 	 */
 	@ManyToOne(fetch = FetchType.LAZY)
-	@JoinColumn(name = "CITY")
+	@JoinColumn(name = "CITY",nullable = true)
 	private PCAS city;
 	/**
 	 * 区/县
 	 */
 	@ManyToOne(fetch = FetchType.LAZY)
-	@JoinColumn(name = "COUNTY")
+	@JoinColumn(name = "COUNTY",nullable = true)
 	private PCAS county;
 	/** 详细地址 */
 	@Column(name = "ADDRESS", length = 256)

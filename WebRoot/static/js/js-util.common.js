@@ -859,12 +859,18 @@ jsUtil.bindSave = function (submitselector, formselector) {
         var submitAction = action;
         var redirectUri = $(this).attr("redirecturi");
 
-        if (redirectUri) {
-            submitAction += "?redirectUri=" + encodeURI(redirectUri);
-        }
-        $form.attr("action", submitAction);
+//        if (redirectUri) {
+//            submitAction += "?redirectUri=" + encodeURI(redirectUri);
+//        }
+//        $form.attr("action", submitAction);
+
         if ($form.valid()) {
-            $form.submit();
+            RcmsAjax.ajax(submitAction, function (result) {
+                if (redirectUri) {
+                    redirectUri = redirectUri.replace("%s", "{}");
+                    setTimeout(function () {window.open(window.ctx + redirectUri.format(result.result.result), "_self");}, 500);
+                }
+            }, null, $form.formSerialize());
         } else {
             return false;
         }
@@ -965,7 +971,7 @@ jsUtil.organizationTreeDialog = function (targetselector, dialogselector, treese
     var ztree = $.fn.zTree.init(tree, {
         async: {
             enable: true,
-            url: baseInfo.session.ctx + "/system/organization/query.do?TYPE=children",
+            url: window.ctx + "/system/organization/query.do?TYPE=children",
             autoParam: ["id"]
         },
         check: {
@@ -1002,7 +1008,7 @@ jsUtil.organizationTree = function (options) {
         },
         async: {
             enable: true,
-            url: baseInfo.session.ctx + "/system/organization/query.do?TYPE=children",
+            url: window.ctx + "/system/organization/query.do?TYPE=children",
             autoParam: ["id"]
         },
         callback: {

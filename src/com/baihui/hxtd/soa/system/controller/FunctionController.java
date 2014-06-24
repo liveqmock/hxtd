@@ -20,6 +20,7 @@ import com.baihui.hxtd.soa.base.orm.hibernate.HibernatePage;
 import com.baihui.hxtd.soa.base.utils.Search;
 import com.baihui.hxtd.soa.system.entity.Function;
 import com.baihui.hxtd.soa.system.entity.User;
+import com.baihui.hxtd.soa.system.service.DictionaryService;
 import com.baihui.hxtd.soa.system.service.FunctionService;
 import com.baihui.hxtd.soa.system.service.MenuService;
 import com.baihui.hxtd.soa.util.JsonDto;
@@ -39,6 +40,9 @@ public class FunctionController {
      */
     @Resource
     private MenuService menuService;
+    
+    @Resource
+    private DictionaryService dictionaryService;
 
     /**
      * view(查询单个菜单信息)
@@ -80,6 +84,7 @@ public class FunctionController {
         model.addAttribute("zNode", menuService.getMenuJsonData());
         model.addAttribute("func",func);
         model.addAttribute("funcUrl", "/system/function/modify.do");
+        model.addAttribute("level",dictionaryService.findChildren("010601"));
         return "/system/function/edit";
     }
 
@@ -100,6 +105,7 @@ public class FunctionController {
         String funcUrl = "/system/function/add.do";
         model.addAttribute("zNode", menuService.getMenuJsonData());
         model.addAttribute("funcUrl", funcUrl);
+        model.addAttribute("level",dictionaryService.findChildren("010601"));
         return "/system/function/edit";
     }
 
@@ -155,6 +161,7 @@ public class FunctionController {
      * @throws
      * @Title: modify
      */
+    @ResponseBody
     @RequestMapping(value = "/modify.do")
     public String modify(Function function, String type, HttpServletRequest request) {
         logger.info("FunctionController.modify修改组件信息");
@@ -164,10 +171,8 @@ public class FunctionController {
         logger.info("获得当前操作用户{}", u.getName());
         function.setModifier(u);
         functionService.save(function);
-        if ("add".equals(type)) {
-            return "redirect:/system/function/toAddPage.do";
-        }
-        return "redirect:/system/function/toViewPage.do?id="+function.getId();
+        JsonDto json = new JsonDto(function.getId(),"保存成功!");
+		return json.toString();
     }
 
     /**
@@ -178,6 +183,7 @@ public class FunctionController {
      * @throws
      * @Title: add
      */
+    @ResponseBody
     @RequestMapping(value = "/add.do")
     public String add(Function function,
                       String type,
@@ -191,10 +197,8 @@ public class FunctionController {
         function.setCreator(u);
         function.setModifier(u);
         functionService.save(function);
-        if ("add".equals(type)) {
-            return "redirect:/system/function/toAddPage.do";
-        }
-        return "redirect:/system/function/toQueryPage.do";
+        JsonDto json = new JsonDto(function.getId(),"保存成功!");
+		return json.toString();
     }
 
     /**

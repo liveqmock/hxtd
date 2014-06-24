@@ -13,8 +13,8 @@
 <head>
     <title>公告列表页</title>
     <link href="${ctx}/static/css/stressing/detail.css" rel="stylesheet" type="text/css" />
+    <link href="${ctx}/static/css/stressing/empower.css" rel="stylesheet" type="text/css"/>
     <link href="${ctx}/static/css/application.css" rel="stylesheet" type="text/css"/>
-    <script type="text/javascript">${VS_JS_GLOBALINFO}${VR_JS_GLOBALINFO}</script>
     <script type="text/javascript" src="${ctx}/static/js/jquery-jtemplates.js"></script>
     <script type="text/javascript" src="${ctx}/static/js/js-util.common.js"></script>
     <script type="text/javascript" src="${ctx}/static/js/scrollTitle.js?v=1"></script>
@@ -37,21 +37,21 @@
     <form id="form" action="${ctx}/system/notice/query.do" onsubmit="return false;">
        <table class="fl mt5 w">
        <tr>   
-        <td class="f14" align="right" width="7%">公告名称：</td>
-        <td class="f14" align="left" width="13%"><input type="text" id="typeId" name="search_LIKE_title" value="${title}"/></td>
-        <td class="f14" align="right" width="7%">有效期：</td>
-        <td class="f14" align="left"width="13%">
+        <td class="f14" align="right" width="6%">公告名称：</td>
+        <td class="f14" align="left" width="16%"><input type="text" id="typeId" name="search_LIKE_title" value="${title}"/></td>
+        <td class="f14" align="right" width="6%">有效期：</td>
+        <td class="f14" align="left"width="16%">
                         <select name="type" class="select2 pr">
-                        <option value="all">--全部--</option>
+                        <option value="all">全部</option>
                         <option value="dead">过期公告</option>
                         <option >未过期公告</option>
                         <option value="unsend">未发送公告</option>
                         </select>
        </td>
-       <td class="f14" align="right" width="7%">发送时间：</td>
-       <td class="f14" align="left" width="18%">
-    <div class="pr vm"><a href="javascript:;" class="pa time_closenone1" title="清空" onclick="javascript:$(this).nextAll().eq(1).val('');"></a>
-    <a href="javascript:;" class="pa time_closenone2 " title="清空" onclick="javascript:$(this).nextAll().eq(1).val('');"></a>
+       <td class="f14" align="right" width="6%">发送时间：</td>
+       <td class="f14" align="left" width="16%">
+    <div class="pr vm"><a href="javascript:;" class="pa time_closenone1" ></a>
+    <a href="javascript:;" class="pa time_closenone2 "></a>
     <input class="text_input2 input_close globle_img time" name="search_GTE_sentTime" type="text" />-<input class="text_input2 input_close globle_img time" name="search_LTE_sentTime" type="text" />
     </div>
     </td>
@@ -62,8 +62,8 @@
 	 <b class="allbtn_r pr13 block fl w_auto f14">查&nbsp;&nbsp;询</b>
 	 </a>
 	</td>
-    <td class="f14" align="right" width="7%"></td>
-    <td class="f14" align="left" width="18%"></td>
+    <td class="f14" align="right" width="6%"></td>
+    <td class="f14" align="left" width="16%"></td>
         <tags:paginationparams page="${page}"/>
     </tr>  
     </table>
@@ -79,10 +79,10 @@
               <li>
               <a href="javascript:void(0)" uri="${ctx}/system/notice/delete.do" class="block c_white lh25 fr mr10  deletesome">
                  <b class="allbtn_l block fl"></b>
-                 <b class="allbtn_r pr13 block fl w_auto f14">删&nbsp;除</b></a></li>
+                 <b class="allbtn_r pr13 block fl w_auto f14">删&nbsp;&nbsp;除</b></a></li>
                </c:if>
                <c:if test="${VS_HAS_FUNCTIONS.noticeAdd}">
-               <li><a href="${ctx}/system/notice/toAddPage.do?parentId=${parentId}" class="block c_white lh25 add mr10"><b class="allbtn_l block fl"></b><b class="allbtn_r pr13 block fl w_auto f14">新&nbsp;增</b></a></li>
+               <li><a href="${ctx}/system/notice/toAddPage.do?parentId=${parentId}" class="block c_white lh25 add mr10"><b class="allbtn_l block fl"></b><b class="allbtn_r pr13 block fl w_auto f14">新&nbsp;&nbsp;增</b></a></li>
                </c:if>
                <li>
                <a href="javascript:void(0)" class="submit block c_white lh25 mr10">
@@ -90,11 +90,10 @@
                 <b class="allbtn_r pr13 block fl w_auto f14">刷&nbsp;&nbsp;新</b>
                </a> 
                </li>
-               <li>
-               <a href="javascript:void(0)" uri="${ctx}/system/notice/export.do?TYPE=pagination" class="block c_white lh25 mr10 export"><b class="allbtn_l block fl"></b><b class="allbtn_r pr13 block fl w_auto f14">导&nbsp;&nbsp;出</b></a></li>
             </ul>
+             
      </div>
-  <b class="table_headr globle_img block fl"></b>
+              <b class="table_headr globle_img block fl"></b>
 </div>
 <!-- 浮动表头开始 -->
 <div id="title" style="display: none;background-color: #f5f5f6;" class=" ml35 mr35">
@@ -111,7 +110,7 @@
 		    </table>
 </div>
 <!-- 浮动表头结束 -->
-    <div class="ml35 mr35" >
+    <div class="ml35 mr35" > 
         <table  id="table" class="cb id_table2 w pr35">
             <tr id="recordDiv">
                 <th  align="center" width="5%" ><input type="checkbox" class="checkall"/></th>
@@ -131,7 +130,41 @@
                 <td align="center"><input type="checkbox" name="id" class="checkitem" value="{$T.row.id}"/></td>
                 <td >
                 <c:choose>
-                        <c:when test="${VS_HAS_FUNCTIONS.noticeView}"><a href="${ctx}/system/notice/toViewPage.do?id={$T.row.id}" class="toviewpage">{$T.row.title}</a></c:when>
+                        <c:when test="${VS_HAS_FUNCTIONS.noticeView}">
+                        <a href="${ctx}/system/notice/toViewPage.do?id={$T.row.id}" class="toviewpage">{$T.row.title}
+                        <div class="none w240">
+                                        <div class="w240 pr">
+                                            <i class="block globle_img pa tan_leftjian"></i>
+                                            <b class="bb1"></b>
+                                            <b class="bb2"></b>
+                                            <b class="bb3"></b>
+                                            <b class="bb4"></b>
+                                            <b class="bb5"></b>
+                                            <b class="bb5"></b>
+                                            <b class="bb5"></b>
+                                            <b class="bb5"></b>
+        									<span class="block" style="background-color:#f5f5f6; 
+       												 width:238px; height:100%; border-left:1px solid #666666; border-right:1px solid #666666;">
+        									<span class=" block ml10 mr10">
+       										 <h1>名称：</h1>
+       										<p class="fbnone">{$T.row.title}</p>
+        									<h1>内容：</h1>
+        									<p class="fbnone">{$T.row.content}</p>
+        									<h1>发送时间：</h1>
+       										<p class="fbnone"> {$T.row.sentTime}</p>
+        									<p></p>
+        									</span>
+        									</span>
+                                            <b class="bb6"></b>
+                                            <b class="bb6"></b>
+                                            <b class="bb6"></b>
+                                            <b class="bb6"></b>
+                                            <b class="bb7"></b>
+                                            <b class="bb8"></b>
+                                            <b class="bb9"></b>
+                                            <b class="bb0"></b></div>
+                                    </div>
+                        </a></c:when>
                         <c:otherwise>{$T.row.title}</c:otherwise>
                     </c:choose>
                 </td>

@@ -4,7 +4,7 @@
 <c:set var="ctx" value="${pageContext.request.contextPath}"/>
 <html>
 <head>
-<title>联系人信息</title>
+<title>联系人</title>
 <link href="${ctx}/static/css/recommend/detail.css?v=1" type="text/css" rel="stylesheet"></link>
 </head>
 <body>
@@ -100,7 +100,7 @@
 	<tag:attachment view="true" upload="true" module="contact" query="true" 
 		down="true" id="${contact.id}"></tag:attachment>
 	<tag:memoir view="true" edit="true" query="true" delete="true" 
-		moduleType="11010104" moduleId="${contact.id}"></tag:memoir>
+		moduleType="contact" moduleId="${contact.id}"></tag:memoir>
 	<div class="h40"></div>
 </div>
 </body>

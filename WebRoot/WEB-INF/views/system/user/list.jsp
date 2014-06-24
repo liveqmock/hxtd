@@ -32,7 +32,7 @@
                 click: function (event, treeId, treeNode) {
                     $("[name=organizationId]").val(treeNode.id);
                     var $add = $(".add");
-                    $add.attr("href", $add.attr("href").split("=").shift() + "=" + treeNode.order);
+                    $add.attr("href", $add.attr("href").split("=").shift() + "=" + treeNode.id);
                     grid.loadGrid();
                 }});
         });
@@ -100,7 +100,7 @@
                             <li><a href="javascript:void(0)" uri="${ctx}/system/user/delete.do" class="block c_white lh25 deletesome mr10"><b class="allbtn_l block fl"></b><b class="allbtn_r pr13 block fl w_auto f14">删&nbsp;除</b></a></li>
                         </c:if>
                         <c:if test="${VS_HAS_FUNCTIONS.userAdd}">
-                            <li><a href="${ctx}/system/user/toAddPage.do?organizationOrder=${organizationOrder}" class="block c_white lh25 add mr10"><b class="allbtn_l block fl"></b><b class="allbtn_r pr13 block fl w_auto f14">新&nbsp;增</b></a></li>
+                            <li><a href="${ctx}/system/user/toAddPage.do?organizationId=${organizationId}" class="block c_white lh25 add mr10"><b class="allbtn_l block fl"></b><b class="allbtn_r pr13 block fl w_auto f14">新&nbsp;增</b></a></li>
                         </c:if>
                         <c:if test="${VS_HAS_FUNCTIONS.userAuthorization}">
                             <li><a href="javascript:void(0)" uri="${ctx}/system/user/toAuthorizationPage.do" class="block c_white lh25 mr10 authorization"><b class="allbtn_l block fl"></b><b class="allbtn_r pr13 block fl w_auto f14">授&nbsp;权</b></a></li>
@@ -124,7 +124,7 @@
                             <li><a href="${ctx}/system/user/toImportPage.do" class="leading_in globle_img block_inline mr10" title="导入"></a></li>
                         </c:if>
                         <c:if test="${VS_HAS_FUNCTIONS.userExport}">
-                            <li><a href="javascript:void(0)" uri="${ctx}/system/user/export.do?TYPE=pagination" class="leading_out globle_img block_inline mr10" title="导出"></a></li>
+                            <li><a href="javascript:void(0)" uri="${ctx}/system/user/export.do?TYPE=pagination" class="leading_out globle_img block_inline mr10 export" title="导出"></a></li>
                         </c:if>
                     </ul>
                 </div>
@@ -141,7 +141,7 @@
                         <th style="width:10%">真实姓名</th>
                         <th style="width:5%">性别</th>
                         <th style="width:10%">联系电话</th>
-                        <th style="width:10%">工作</th>
+                        <th style="width:10%">职位</th>
                         <th style="width:15%">操作</th>
                     </tr>
                     <%@include file="/WEB-INF/template/sort.jsp" %>

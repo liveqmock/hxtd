@@ -1,6 +1,7 @@
 package com.baihui.hxtd.soa.base.utils;
 
 import com.baihui.hxtd.soa.base.Constant;
+import org.apache.commons.collections.BidiMap;
 import org.apache.poi.POIXMLDocument;
 import org.apache.poi.hssf.usermodel.HSSFWorkbook;
 import org.apache.poi.openxml4j.exceptions.InvalidFormatException;
@@ -174,8 +175,8 @@ public class ImportExport {
         logger.info("导出excel");
         response.setContentType("application/octet-stream; charset=utf-8");
         response.setHeader("Content-Disposition", "attachment; filename=" + objectName + ".xls");
-        Map<String, Map<String, String>> nameDescs = (Map<String, Map<String, String>>) servletContext.getAttribute(Constant.VC_NAMEDESCS);
-        Map<String, String> userNameDescs = nameDescs.get(objectName);
+        Map<String, BidiMap> nameDescs = (Map<String, BidiMap>) servletContext.getAttribute(Constant.VC_NAMEDESCS);
+        BidiMap userNameDescs = nameDescs.get(objectName);
         Map<String, String> export = (Map<String, String>) servletContext.getAttribute(Constant.VC_IMPORTEXPORTS);
         String exportFieldName = export.get(objectName + ".export");
         logger.debug("导出字段名称“{}”", exportFieldName);

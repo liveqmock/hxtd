@@ -182,28 +182,22 @@ public class OrganizationController {
      * 2.仅限下级组织 //TODO 服务端检查
      * 3.下级组织溢出处理
      */
+    @ResponseBody
     @RequestMapping(value = "/add.do", method = RequestMethod.POST)
-    public String add(Organization organization,
-                      @RequestParam(defaultValue = "/system/organization/toModifyPage.do?id=%s") String redirectUri,
-                      @ModelAttribute(Constant.VS_USER_ID) Long userId,
-                      RedirectAttributes model) {
+    public String add(Organization organization, ModelMap modelMap) {
         logger.info("新增");
         logger.debug("名称“{}”", organization.getName());
 
         logger.info("添加服务端属性值");
-        organization.setCreator(new User(userId));
-        logger.debug("创建用户为当前用户“{}”", userId);
+        User user = (User) modelMap.get(Constant.VS_USER);
+        organization.setCreator(user);
+        logger.debug("创建用户为当前用户“{}”", user.getName());
         organization.setModifier(organization.getCreator());
-        logger.debug("修改用户为当前用户“{}”", userId);
+        logger.debug("修改用户为当前用户“{}”", user.getName());
 
         organizationService.add(organization);
 
-        logger.info("添加操作提示");
-        model.addFlashAttribute(Constant.VM_BUSINESS, "新增成功");
-
-        redirectUri = String.format(redirectUri, organization.getId());
-        logger.info("重定向至“{}”", redirectUri);
-        return "redirect:" + redirectUri;
+        return new JsonDto(organization.getId()).toString();
     }
 
     /**
@@ -244,28 +238,21 @@ public class OrganizationController {
      * 1.当前组织信息
      * 2.父节点
      */
+    @ResponseBody
     @RequestMapping(value = "/modify.do")
-    public String modify(Organization organization,
-                         @RequestParam(defaultValue = "/system/organization/toModifyPage.do?id=%s") String redirectUri,
-                         @ModelAttribute(Constant.VS_USER_ID) Long userId,
-                         @ModelAttribute(Constant.VS_USER_NAME) String userName,
-                         RedirectAttributes model) {
+    public String modify(Organization organization, ModelMap modelMap) {
         logger.info("修改");
 
         logger.info("添加服务端属性值");
+        User user = (User) modelMap.get(Constant.VS_USER);
         organization.setModifiedTime(new Date());
         logger.debug("修改时间为当前时间“{}”", organization.getModifiedTime());
-        organization.setModifier(new User(userId));
-        logger.debug("修改用户为当前用户“{}”", userName);
+        organization.setModifier(user);
+        logger.debug("修改用户为当前用户“{}”", user.getName());
 
         organizationService.modify(organization);
 
-        logger.info("添加操作提示");
-        model.addFlashAttribute(Constant.VM_BUSINESS, "修改成功");
-
-        redirectUri = String.format(redirectUri, organization.getId());
-        logger.info("重定向至“{}”", redirectUri);
-        return "redirect:" + redirectUri;
+        return new JsonDto(organization.getId(), "修改组织成功").toString();
     }
 
     /**

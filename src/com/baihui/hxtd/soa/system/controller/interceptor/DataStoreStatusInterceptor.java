@@ -2,6 +2,7 @@ package com.baihui.hxtd.soa.system.controller.interceptor;
 
 import com.baihui.hxtd.soa.base.Constant;
 import com.baihui.hxtd.soa.base.utils.RequestUtil;
+import com.baihui.hxtd.soa.system.DictionaryConstant;
 import com.baihui.hxtd.soa.system.service.UserService;
 import com.baihui.hxtd.soa.util.JsonDto;
 import org.slf4j.Logger;
@@ -26,8 +27,6 @@ public class DataStoreStatusInterceptor extends HandlerInterceptorAdapter {
 
     //    @Value(value = "${application.logout_url}")
     private String logoutUrl = "/logout.doself";
-    //    @Value(value = "${system.user.storestatus.delayed}")
-    private String storestatusDelayedValue = "01040402";
 
     @Resource
     private UserService userService;
@@ -38,7 +37,7 @@ public class DataStoreStatusInterceptor extends HandlerInterceptorAdapter {
 
         Long userId = (Long) request.getSession().getAttribute(Constant.VS_USER_ID);
         String storeStatusValue = userService.getStoreStatusById(userId);
-        if (storestatusDelayedValue.equals(storeStatusValue)) {
+        if (DictionaryConstant.USER_STORESTATUS_DELAYED.equals(storeStatusValue)) {
             String logoutUrl = request.getContextPath() + this.logoutUrl;
             logger.debug("延迟状态，检查未通过。重定向至退出请求“{}”", logoutUrl);
             //TODO 无法给出错误提示，退出时会清除session，重新设计接口，通过参数传参

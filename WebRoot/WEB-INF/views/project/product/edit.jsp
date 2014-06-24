@@ -1,7 +1,7 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
 <c:set var="ctx" value="${pageContext.request.contextPath}"/>
-<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
 <html>
 <head>
 <title>产品</title>
@@ -130,6 +130,7 @@ function searchData(action){// 搜索弹出框
 			<td align="right"><span class="w_red">*&nbsp;</span>销售开始日期：</td>
 			<td align="left">
 				<a href="javascript:;" class="pa time_closenone1"></a>
+				<fmt:formatDate value="${product.saleBeginTime}" pattern="yyyy-MM-dd" var="saleBeginTime"/>
 				<input id="start" name="saleBeginTime" type="text" value="${product.saleBeginTime}" 
 					class="text_input3 input_close1 required" readonly/>
 			</td>
@@ -140,6 +141,7 @@ function searchData(action){// 搜索弹出框
 			<td align="right"><span class="w_red">*&nbsp;</span>销售结束日期：</td>
 			<td align="left">
 				<a href="javascript:;" class="pa time_closenone1"></a>
+				<fmt:formatDate value="${product.saleEndTime}" pattern="yyyy-MM-dd" var="saleEndTime"/>
 				<input id="end" name="saleEndTime" type="text" value="${product.saleEndTime}" readonly 
 					class="text_input3 input_close1 required"/>
 			</td>

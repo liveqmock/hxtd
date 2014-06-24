@@ -4,7 +4,7 @@
 <c:set var="ctx" value="${pageContext.request.contextPath}"/>
 <html>
 <head>
-<title>联系人列表</title>
+<title>联系人</title>
 <link href="${ctx}/static/css/recommend/detail.css?v=1" rel="stylesheet" type="text/css"/>
 <link href="${ctx}/static/css/application.css?v=1" rel="stylesheet" type="text/css"/>
 <script type="text/javascript" src="${ctx}/static/js/jquery-jtemplates.js?v=1"></script>
@@ -17,6 +17,9 @@ $(function(){
 	jsUtil.datepicker(".time");// 加载日历 
 	new PCAS("province","city","county");// 加载省市县 
 	new Grid().init().bindExport();// 生成Grid
+	$(".more").click(function(){
+		$(this).toggleClass("h_shangla").parents("tr").nextAll().toggle();
+	});
 });
 </script>
 </head>
@@ -33,7 +36,8 @@ $(function(){
     		<td class="f14" align="left" width="16%"><input type="text" class="text_input1" name="search_LIKE_phone"/></td>
     		<td class="f14" align="right" width="6%">邮箱：</td>
     		<td class="f14" align="left" width="16%"><input type="text" class="text_input1" name="search_LIKE_email"/></td>
-    		<td width="8%">
+    		<td width="10%">
+    			<a class="h_xiala globle_img block fr more" href="javascript:;" title="更多搜索条件"></a>
     			<a href="javascript:;" class="reset block dump_btn globle_img fr ml10"></a>
     			<a href="javascript:;" class="block c_white lh25 fr ml10">
     				<b class="allbtn_l block fl"></b>
@@ -41,7 +45,7 @@ $(function(){
     			</a>
     		</td>
     	</tr>
-    	<tr>
+    	<tr style="display:none;">
     		<td class="f14" align="right" width="6%">省份：</td>
     		<td class="f14" align="left"  width="16%"><select id="province" name="search_EQ_province.id" class="select2"></select></td>
     		<td class="f14" align="right" width="6%">城市：</td>
@@ -58,9 +62,9 @@ $(function(){
 	    				type="text" readonly/>
     			</div>
     		</td>
-    		<td width="8%"></td>
+    		<td width="10%"></td>
     	</tr>
-    	<tr>
+    	<tr style="display:none;">
     		<td class="f14" align="right" width="6%">修改时间：</td>
     		<td class="f14" align="left" width="16%">
     			<div class="pr vm">
@@ -77,7 +81,7 @@ $(function(){
     		<td class="f14" align="left" width="16%"></td>
     		<td class="f14" align="right" width="6%"></td>
     		<td class="f14" align="left" width="16%"></td>
-    		<td width="8%"></td>
+    		<td width="10%"></td>
     	</tr>
     </table>
     <div class="cb"></div>

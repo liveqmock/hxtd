@@ -162,6 +162,7 @@ public class ComponentController {
      * @throws
      * @Title: modify
      */
+    @ResponseBody
     @RequestMapping(value = "/modify.do")
     public String modify(Component component,
                          HttpServletRequest request,
@@ -173,11 +174,8 @@ public class ComponentController {
         logger.info("获得当前操作用户{}", u.getName());
         component.setModifier(u);
         componentService.save(component);
-        String redStr = "/system/component/toViewPage.do?id="+component.getId();
-        if ("add".equals(type)) {
-            redStr = "/system/component/toAddPage.do";
-        }
-        return "redirect:" + redStr;
+        JsonDto json = new JsonDto(component.getId(),"保存成功!");
+		return json.toString();
     }
 
     /**
@@ -188,6 +186,7 @@ public class ComponentController {
      * @throws
      * @Title: add
      */
+    @ResponseBody
     @RequestMapping(value = "/add.do")
     public String add(Component component, HttpServletRequest request, String type) {
         logger.info("ComponentController.query查询组件列表");
@@ -199,11 +198,8 @@ public class ComponentController {
         component.setCreator(u);
         component.setModifier(u);
         componentService.save(component);
-        String redStr = "/system/component/toViewPage.do?id="+component.getId();
-        if ("add".equals(type)) {
-            redStr = "/system/component/toAddPage.do";
-        }
-        return "redirect:" + redStr;
+        JsonDto json = new JsonDto(component.getId(),"保存成功!");
+		return json.toString();
     }
 
     /**

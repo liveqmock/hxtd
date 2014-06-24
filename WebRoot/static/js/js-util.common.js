@@ -385,7 +385,7 @@ Grid.prototype = {
     setPagination: function () {
         if (this.options.paginationActive) {
             var _this = this;
-            $(this.container).bind("pagination", function (event, page) {
+            $(this.grid).bind("pagination", function (event, page) {
                 var result = page.result || page.list;
                 if (result.length >= _this.options.paginationCountLimit) {
                     _this.renderPagination(page);
@@ -472,7 +472,7 @@ Grid.prototype = {
                 var page = result.result;
                 _this.resetCheckAll();
                 _this.renderList(page);
-                $(_this.container).trigger("pagination", [page]);
+                $(_this.grid).trigger("pagination", [page]);
             }, null, this.form.formSerialize()]
         }, options);
         RcmsAjax.ajax.apply(RcmsAjax, options.ajaxArgs);

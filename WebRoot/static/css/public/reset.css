@@ -1,5 +1,6 @@
 @charset "utf-8";
 /* CSS Document */
+.footposition{ position:fixed; bottom:0;}
 .block{ display:block;}
 .block_inline{ display:inline-block;}
 .none{ display:none;}
@@ -26,6 +27,10 @@
 .lh32{ line-height:32px;}
 .lh40{ line-height:40px;}
 .lh50{ line-height:50px;}
+.namewidth1{ width:9%}
+.namewidth2{ width:19%}
+.namewidth3{ width:12%}
+.zfjq{width:95px; overflow:hidden; text-overflow:ellipsis; white-space:nowrap;}
 
 .z-1{ z-index:-1;}
 .z1{ z-index:1;}
@@ -103,6 +108,7 @@
 .mt-5{ margin-top:-5px;}
 .mt3{ margin-top:3px;}
 .mt5{ margin-top:5px;}
+.mt8{ margin-top:8px;}
 .mt10{ margin-top:10px;}
 .mt15{ margin-top:15px;}
 .mt20{ margin-top:20px;}
@@ -127,6 +133,7 @@
 .pr13{ padding-right:13px;}
 .pr25{ padding-right:25px;}
 .pr35{ padding-right:35px;}
+.pl5{ padding-left:5px;}
 .pl10{ padding-left:10px;}
 .pl35{ padding-left:35px;}
 

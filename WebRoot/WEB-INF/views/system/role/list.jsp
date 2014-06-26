@@ -26,17 +26,23 @@
     </script>
 </head>
 <body>
-<div style="min-height:750px;" class="listcontainer">
+<div class="listcontainer">
 
     <form action="${ctx}/system/role/query.do" onsubmit="return false;">
         <table class="fl mt5 w">
             <tr>
-                <td class="f14" align="right" width="7%">角色名称：</td>
-                <td class="f14" align="left" width="13%"><input type="text" name="search_LIKE_name" value="${name}" class="text_input1"/></td>
-                <td width="15%">
-                    <a href="javascript:void(0)" class="reset block dump_btn globle_img fr mr35"></a>
-                    <a href="javascript:void(0)" class="block c_white lh25 fr mr10 submit"><b class="allbtn_l block fl"></b><b class="allbtn_r pr13 block fl w_auto f14">查&nbsp;&nbsp;询</b></a>
+                <td class="f14" align="right" width="6%"></td>
+                <td class="f14" align="left" width="16%"></td>
+                <td class="f14" align="right" width="6%">角色名称：</td>
+                <td class="f14" align="left" width="16%"><input type="text" name="search_LIKE_name" value="${name}" class="text_input1"/></td>
+                <td width="12%">
+                    <a href="javascript:void(0)" class="a_underline block_inline fr w_blue mt5 reset">清除</a>
+                    <a href="javascript:void(0)" class="block_inline c_white lh25 fr mr10 submit"><b class="allbtn_l block fl"></b><b class="allbtn_r pr13 block fl w_auto f14">查&nbsp;&nbsp;询</b></a>
                 </td>
+                <td class="f14" align="right" width="6%"></td>
+                <td class="f14" align="left" width="16%"></td>
+                <td class="f14" align="right" width="6%"></td>
+                <td class="f14" align="left" width="16%"></td>
             </tr>
         </table>
         <tags:paginationparams page="${page}"/>
@@ -57,8 +63,8 @@
                 <c:if test="${VS_HAS_FUNCTIONS.roleAdd}">
                     <li><a href="${ctx}/system/role/toAddPage.do" class="block c_white lh25 add mr10"><b class="allbtn_l block fl"></b><b class="allbtn_r pr13 block fl w_auto f14">新&nbsp;增</b></a></li>
                 </c:if>
-                <c:if test="${VS_HAS_FUNCTIONS.roleAuthorization}">
-                    <li><a href="javascript:void(0)" uri="${ctx}/system/role/toAuthorizationPage.do" class="block c_white lh25 mr10 authorization"><b class="allbtn_l block fl"></b><b class="allbtn_r pr13 block fl w_auto f14">授&nbsp;权</b></a></li>
+                <c:if test="${VS_HAS_FUNCTIONS.roleQuery}">
+                    <li><a href="javascript:void(0)" class="block c_white lh25 mr10 refresh"><b class="allbtn_l block fl"></b><b class="allbtn_r pr13 block fl w_auto f14">刷&nbsp;&nbsp;新</b> </a></li>
                 </c:if>
             </ul>
         </div>
@@ -77,7 +83,7 @@
             <tbody class="list"></tbody>
             <textarea id="template-tbody" class="template template-tbody">
                 {#foreach $T.result as row}
-                <tr class="row {#cycle values=['','bg_c_blue']}">
+                <tr class="row {#cycle values=['bg_c_blue','']}">
                     <td><input type="checkbox" class="checkitem" value="{$T.row.id}"/></td>
                     <td>
                         <c:choose>
@@ -97,6 +103,9 @@
                         <c:if test="${VS_HAS_FUNCTIONS.roleDelete}">
                             <a href="javascript:void(0)" uri="${ctx}/system/role/delete.do?id={$T.row.id}" class=" block_inline s_dump_btn globle_img ml10 delete" title="删除"></a>
                         </c:if>
+                        <c:if test="${VS_HAS_FUNCTIONS.roleAuthorization}">
+                            <a href="${ctx}/system/role/toAuthorizationPage.do?id={$T.row.id}" class=" block_inline h_shouquan globle_img ml10 authorization" title="授权"></a>
+                        </c:if>
                     </td>
                     {#/for}
             </textarea>
@@ -105,5 +114,6 @@
     <div class="cb ml35 mt20 h40 pagination"></div>
     <%@include file="/WEB-INF/template/pagination.jsp" %>
 </div>
+
 </body>
 </html>

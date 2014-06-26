@@ -55,9 +55,9 @@ function clearInputVal(obj){//清除
                 <input type="text" class="required" name="title" value=""/></td>
             </tr>
             <tr>
-            <td align="right" width="15%"><span class="w_red">*&nbsp;</span>回复内容：</td>
-                <td align="left">
-                    <textarea name="content" class="required"style="width:90%;height:300px;border:1px solid #e0e0e0; margin:5px 0px"></textarea>
+            <td align="right" width="15%" valign="top"><span class="w_red">*&nbsp;</span>回复内容：</td>
+                <td align="left" width="85%" valign="top">
+                    <textarea name="content" class="remarks_input1 required"style="resize: none;"></textarea>
                </td>
            </tr>
            <tr>
@@ -70,8 +70,7 @@ function clearInputVal(obj){//清除
         </div>
         <div class="cb block h40 margin0 mt10" style="width:350px;">
 		<ul class="id_table1 cb">
-        <li><a id="save" href="javascript:;"class="block c_white lh25 mr10"><b class="allbtn_l block fl"></b><b class="allbtn_r pr13 block fl w_auto f14 deletesome">发&nbsp;&nbsp;布</b></a></li>
-		<li><a id="saveAndAdd" href="javascript:;"class="block c_white lh25 mr10"><b class="allbtn_l block fl"></b><b class="allbtn_r pr13 block fl w_auto f14 ">发布并新建</b></a></li>
+        <li><a id="save" href="javascript:;"class="block c_white lh25 mr10"><b class="allbtn_l block fl"></b><b class="allbtn_r pr13 block fl w_auto f14 deletesome">回&nbsp;&nbsp;复</b></a></li>
 		<li><a href="${ctx }/system/message/toQueryPage.do" class="block c_white lh25 mr10"><b class="allbtn_l block fl"></b><b class="allbtn_r pr13 block fl w_auto f14 deletesome">取&nbsp;&nbsp;消</b></a></li>
 		</ul>
 	    </div>

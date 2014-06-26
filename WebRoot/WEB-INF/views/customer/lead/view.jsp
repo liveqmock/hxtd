@@ -198,10 +198,10 @@
 		upload="${VS_HAS_FUNCTIONS.leadUpload}" 
 		query="${VS_HAS_FUNCTIONS.leadAttQuery}" 
 		down="${VS_HAS_FUNCTIONS.leadDown}" 
+		deleteFlag="${VS_HAS_FUNCTIONS.leadAttDelete}"
 		module="lead"
 		id="${lead.id}">
 		</tag:attachment>
-		
 		<tag:memoir view="true" edit="true" query="true" delete="true" 
 		moduleType="lead" moduleId="${lead.id}"></tag:memoir>
 		<div class=" h40"></div>

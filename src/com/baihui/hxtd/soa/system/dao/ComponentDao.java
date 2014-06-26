@@ -78,7 +78,7 @@ public class ComponentDao extends HibernateDAOImpl<Component, Long>{
 	 */
 	public void delete(long... id) {
 		for(int i=0;i<id.length;i++){
-			super.delete(id[i]);
+			super.logicalDelete(id[i]);
 		}
 	}
 	

@@ -1,5 +1,6 @@
 package com.baihui.hxtd.soa.base.utils;
 
+import com.baihui.hxtd.soa.base.propertyeditors.MultiPatternDateEditor;
 import com.baihui.hxtd.soa.base.utils.serial.TierSerial;
 import com.baihui.hxtd.soa.base.utils.serial.TierSerials;
 import com.google.common.collect.Maps;
@@ -25,7 +26,6 @@ import java.net.URI;
 import java.net.URL;
 import java.net.URLDecoder;
 import java.nio.charset.Charset;
-import java.text.SimpleDateFormat;
 import java.util.*;
 import java.util.regex.Pattern;
 
@@ -329,7 +329,7 @@ public class Search {
         defaultEditors.put(BigDecimal.class, new CustomNumberEditor(BigDecimal.class, true));
         defaultEditors.put(BigInteger.class, new CustomNumberEditor(BigInteger.class, true));
 
-        defaultEditors.put(Date.class, new CustomDateEditor(new SimpleDateFormat("yyyy-MM-dd HH:mm:ss"), true));
+        defaultEditors.put(Date.class, new MultiPatternDateEditor("yyyy-MM-dd HH:mm:ss", "yyyy-MM-dd"));
     }
 
 
@@ -410,29 +410,4 @@ public class Search {
         return fieldBelongClass.getDeclaredField(fieldName);
     }
 
-//    @Value(value = "${system.organization.tier.count}")
-//    private Integer orgTierCount;
-//
-//    @Value(value = "${system.organization.tier.length}")
-//    private Integer orgTierLength;
-
-
-    /**
-     * 当前组织及其所有下级组织
-     */
-    public static Criterion selfAndYoungerOrg(String name, Long value, Integer orgTierLength) {
-        TierSerial tierSerial = TierSerials.parse(value, orgTierLength);
-        if (tierSerial.isLeaf()) {
-            return Restrictions.eq(name, value);
-        }
-        return Restrictions.between(name, value, value + tierSerial.getIncrease() - 1);
-    }
-
-    /**
-     * 所有下级组织
-     */
-    public static Criterion youngerOrg(String name, Long value, Integer orgTierLength) {
-        TierSerial tierSerial = TierSerials.parse(value, orgTierLength);
-        return Restrictions.between(name, value + 1, value + tierSerial.getIncrease() - 1);
-    }
 }

@@ -41,8 +41,9 @@
             <td align="left">${userMessage.message.title}</td>
         </tr>
         <tr>
-            <td align="right" width="15%">系统消息内容：</td>
-            <td align="left">
+            <td align="right" width="15%" valign="top">系统消息内容：</td>
+            <td align="left" width="85%" valign="top">
+            <div class="w85b">
             ${userMessage.message.content }
             </td>
         </tr>

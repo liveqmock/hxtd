@@ -50,16 +50,14 @@
 <form name="authorization" action="${ctx}${VR_FUNCTION.url}" method="get">
     <input type="hidden" name="id" value="${param.id}">
 
-    <input type="hidden" name="id" value="${param.id}">
-
     <div class="margin0 ml35 mr35">
         <div class="w cb tab-panels">
 
-            <div id="tabs-role" class="role selected w">
+            <div id="tabs-role" class="role w">
                 <ul class="w">
                     <c:forEach items="${allRoles}" var="item" varStatus="status">
                         <li class="fl" style="width:16%;">
-                            <label class="box size81 ${fn:contains(organizationInheritRoles,item)?" inherit-role":""}">
+                            <label class="box size81">
                                 <input type="checkbox" name="roleId" value="${item.id}" ${fn:contains(authorizationRoles,item)?"checked":""}>${item.name}
                             </label>
                         </li>

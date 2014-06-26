@@ -19,12 +19,9 @@ import org.springside.modules.persistence.SearchFilter;
 
 import com.baihui.hxtd.soa.base.orm.hibernate.HibernatePage;
 import com.baihui.hxtd.soa.base.utils.Search;
-import com.baihui.hxtd.soa.base.utils.serial.TierSerial;
-import com.baihui.hxtd.soa.base.utils.serial.TierSerials;
-import com.baihui.hxtd.soa.customer.entity.Customer;
 import com.baihui.hxtd.soa.system.dao.NoticeDao;
 import com.baihui.hxtd.soa.system.entity.Notice;
-import com.baihui.hxtd.soa.system.entity.User;
+
 /**
  * 公告服务类
  *
@@ -104,7 +101,7 @@ public class NoticeService {
 	 * @param id
 	 */
 	public void delete(Long[] id) {
-		noticeDao.delete(id);
+		noticeDao.logicalDelete(id);
 		
 	}
 

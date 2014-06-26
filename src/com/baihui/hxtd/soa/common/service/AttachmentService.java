@@ -1,6 +1,7 @@
 
 package com.baihui.hxtd.soa.common.service;
 
+import java.io.File;
 import java.util.List;
 import java.util.Map;
 
@@ -19,7 +20,6 @@ import com.baihui.hxtd.soa.base.orm.hibernate.HibernatePage;
 import com.baihui.hxtd.soa.base.utils.Search;
 import com.baihui.hxtd.soa.common.dao.AttachmentDao;
 import com.baihui.hxtd.soa.common.entity.Attachment;
-import com.baihui.hxtd.soa.system.entity.Notice;
 /**
  * 
  * 功能描述：附件表service层
@@ -52,6 +52,7 @@ public class AttachmentService {
 		DetachedCriteria criteria = DetachedCriteria.forClass(Attachment.class);
 		criteria.add(Restrictions.eq("moduleId", moduleId));
 		criteria.add(Restrictions.eq("type.id", type));
+		criteria.add(Restrictions.eq("isDeleted", false));
         criteria.setFetchMode("creator", FetchMode.JOIN);
         criteria.setFetchMode("modifier", FetchMode.JOIN);
         criteria.setFetchMode("dict", FetchMode.JOIN);
@@ -112,5 +113,25 @@ public class AttachmentService {
 		logger.info("getById得到公告信息{}", id);
 		return attachementDao.getById(id);
 	}
+	
+	/**
+	 * 
+	  * delete(删除的方法)
+	  * @Title: delete
+	  * @param @param id    参数类型
+	  * @return void    返回类型
+	  * @throws
+	 */
+	public void delete(Long[] id){
+		for(int i=0;i<id.length;i++){
+			Attachment att = this.getById(id[i]);
+			File f = new File(att.getAddress());
+			if(f.delete()){
+				attachementDao.logicalDelete(id[i]);
+			}
+		}
+		
+	}
+	
 	
 }

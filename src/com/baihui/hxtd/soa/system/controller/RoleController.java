@@ -18,13 +18,11 @@ import org.springframework.ui.Model;
 import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.WebDataBinder;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import org.springside.modules.web.Servlets;
 
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
 import java.io.IOException;
-import java.io.PrintWriter;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
@@ -53,14 +51,13 @@ public class RoleController {
 
     @Resource
     private RoleService roleService;
+
     @Resource
     private DictionaryService dictionaryService;
-    @Resource
-    private UserService userService;
-    @Resource
-    private MenuService menuService;
+
     @Resource
     private FunctionService functionService;
+
     @Resource
     private ComponentService componentService;
 
@@ -84,8 +81,9 @@ public class RoleController {
         return "/system/role/list";
     }
 
+    @ResponseBody
     @RequestMapping(value = "/query.do")
-    public void query(HttpServletRequest request, HibernatePage<Role> page, ModelMap model, PrintWriter out) throws NoSuchFieldException, IOException {
+    public String query(HttpServletRequest request, HibernatePage<Role> page, ModelMap model) throws NoSuchFieldException, IOException {
         logger.info("查询信息");
 
         logger.info("解析页面查询条件");
@@ -99,10 +97,9 @@ public class RoleController {
         logger.info("以DTO格式返回");
         JsonDto jsonDto = new JsonDto();
         jsonDto.setSuccessFlag(true);
-        jsonDto.setMessage("请求数据成功！");
         jsonDto.setResult(page);
 
-        HibernateAwareObjectMapper.DEFAULT.writeValue(out, jsonDto);
+        return HibernateAwareObjectMapper.DEFAULT.writeValueAsString(jsonDto);
     }
 
     /**
@@ -137,29 +134,21 @@ public class RoleController {
      * 新增
      */
     @RequestMapping(value = "/add.do", method = RequestMethod.POST)
-    public String add(Role role,
-                      @RequestParam(defaultValue = "/system/role/toModifyPage.do?id=%s") String redirectUri,
-                      @ModelAttribute(Constant.VS_USER_ID) Long userId,
-                      @ModelAttribute(Constant.VS_USER_NAME) String userName,
-                      RedirectAttributes model) {
+    public String add(Role role, ModelMap modelMap) {
         logger.info("新增");
         logger.debug("名称“{}”", role.getName());
         role.setId(null);
 
         logger.info("添加服务端属性值");
-        role.setCreator(new User(userId));
-        logger.debug("创建用户为当前用户“{}”", userId);
+        User user = (User) modelMap.get(Constant.VS_USER);
+        role.setCreator(user);
+        logger.debug("创建用户为当前用户“{}”", user.getName());
         role.setModifier(role.getCreator());
-        logger.debug("修改用户为当前用户“{}”", userId);
+        logger.debug("修改用户为当前用户“{}”", user.getName());
 
         roleService.add(role);
 
-        logger.info("添加操作提示");
-        model.addFlashAttribute(Constant.VM_BUSINESS, "新增成功");
-
-        redirectUri = String.format(redirectUri, role.getId());
-        logger.info("重定向至“{}”", redirectUri);
-        return "redirect:" + redirectUri;
+        return JsonDto.add(role.getId()).toString();
     }
 
     /**
@@ -199,27 +188,19 @@ public class RoleController {
      * 修改
      */
     @RequestMapping(value = "/modify.do")
-    public String modify(Role role,
-                         @RequestParam(defaultValue = "/system/role/toModifyPage.do?id=%s") String redirectUri,
-                         @ModelAttribute(Constant.VS_USER_ID) Long userId,
-                         @ModelAttribute(Constant.VS_USER_NAME) String userName,
-                         RedirectAttributes model) {
+    public String modify(Role role, ModelMap modelMap) {
         logger.info("修改");
 
         logger.info("添加服务端属性值");
+        User user = (User) modelMap.get(Constant.VS_USER);
         role.setModifiedTime(new Date());
         logger.debug("修改时间为当前时间“{}”", role.getModifiedTime());
-        role.setModifier(new User(userId));
-        logger.debug("修改用户为当前用户“{}”", userName);
+        role.setModifier(user);
+        logger.debug("修改用户为当前用户“{}”", user.getName());
 
         roleService.modify(role);
 
-        logger.info("添加操作提示");
-        model.addFlashAttribute(Constant.VM_BUSINESS, "修改成功");
-
-        redirectUri = String.format(redirectUri, role.getId());
-        logger.info("重定向至“{}”", redirectUri);
-        return "redirect:" + redirectUri;
+        return JsonDto.modify(role.getId()).toString();
     }
 
     /**
@@ -232,9 +213,7 @@ public class RoleController {
     public String delete(Long[] id) {
         logger.info("删除");
         roleService.delete(id);
-        JsonDto jsonDto = new JsonDto("删除成功");
-        jsonDto.setSuccessFlag(true);
-        return jsonDto.toString();
+        return JsonDto.delete(id).toString();
     }
 
     /**
@@ -253,7 +232,8 @@ public class RoleController {
 
         logger.info("存储表单初始化数据");
         model.addAttribute("allMenus", model.get(Constant.VS_MENUS));
-        model.addAttribute("allFunctions", functionService.groupByMenuId((List<Function>) model.get(Constant.VS_FUNCTIONS)));
+        List<Function> functions = (List<Function>) model.get(Constant.VS_FUNCTIONS);
+        model.addAttribute("allFunctions", functionService.groupByMenuId(functions));
         model.addAttribute("allComponents", model.get(Constant.VS_COMPONENTS));
 
         logger.info("存储表单默认值");
@@ -269,20 +249,14 @@ public class RoleController {
      * 2.功能
      * 3.组件
      */
+    @ResponseBody
     @RequestMapping(value = "/authorization.do")
     public String authorization(Long id,
                                 @RequestParam(value = "functionId", required = false) Long[] functionIds,
-                                @RequestParam(value = "componentId", required = false) Long[] componentIds,
-                                @RequestParam(defaultValue = "/system/role/toAuthorizationPage.do?id=%s") String redirectUri,
-                                RedirectAttributes model) {
+                                @RequestParam(value = "componentId", required = false) Long[] componentIds) {
         logger.info("授权");
         roleService.authorization(id, functionIds, componentIds);
-
-        logger.info("添加操作提示");
-        model.addFlashAttribute(Constant.VM_BUSINESS, "授权成功");
-
-        redirectUri = String.format(redirectUri, id);
-        return "redirect:" + redirectUri;
+        return new JsonDto(id, "授权成功").toString();
     }
 
 

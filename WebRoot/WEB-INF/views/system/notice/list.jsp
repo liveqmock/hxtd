@@ -43,24 +43,23 @@
         <td class="f14" align="left"width="16%">
                         <select name="type" class="select2 pr">
                         <option value="all">全部</option>
-                        <option value="dead">过期公告</option>
-                        <option >未过期公告</option>
-                        <option value="unsend">未发送公告</option>
+                      <!--  <option value="dead">过期公告</option> --> 
+                        <option >已发公告</option>
+                        <option value="unsend">未发公告</option>
                         </select>
        </td>
        <td class="f14" align="right" width="6%">发送时间：</td>
        <td class="f14" align="left" width="16%">
-    <div class="pr vm"><a href="javascript:;" class="pa time_closenone1" ></a>
-    <a href="javascript:;" class="pa time_closenone2 "></a>
+    <div class="vm">
     <input class="text_input2 input_close globle_img time" name="search_GTE_sentTime" type="text" />-<input class="text_input2 input_close globle_img time" name="search_LTE_sentTime" type="text" />
     </div>
     </td>
-    <td width="15%">
-	 <a class="reset block dump_btn globle_img fr mr35" href="javascript:formReset()"></a>
-	 <a href="javascript:void(0)" class="block c_white lh25 fr mr10 submit">
-	 <b class="allbtn_l block fl"></b>
-	 <b class="allbtn_r pr13 block fl w_auto f14">查&nbsp;&nbsp;询</b>
-	 </a>
+    <td width="11%">
+    			<a href="javascript:;" class="reset a_underline fr w_blue mt5">清除</a>
+    			<a href="javascript:;" class="block c_white lh25 fr ml10">
+    				<b class="allbtn_l block fl"></b>
+    				<b class="allbtn_r pr13 block fl w_auto f14 submit">查&nbsp;&nbsp;询</b>
+    			</a>
 	</td>
     <td class="f14" align="right" width="6%"></td>
     <td class="f14" align="left" width="16%"></td>
@@ -84,13 +83,13 @@
                </c:if>
                <c:if test="${VS_HAS_FUNCTIONS.noticeAdd}">
                <li>
-                <a href="${ctx}/system/notice/toAddPage.do?parentId=${parentId}" class="block c_white lh25 add mr10"><b class="allbtn_l block fl"></b><b class="allbtn_r pr13 block fl w_auto f14">新&nbsp;&nbsp;增</b></a></li>
+                <a href="${ctx}/system/notice/toAddPage.do" class="block c_white lh25 add mr10"><b class="allbtn_l block fl"></b><b class="allbtn_r pr13 block fl w_auto f14">新&nbsp;&nbsp;增</b></a></li>
                </c:if>
                <li>
-                <a href="${ctx}/system/notice/toQueryPage.do" class="block c_white lh25 mr10 submit">
-                <b class="allbtn_l block fl"></b>
+                <a href="javascript:;" class="refresh block c_white lh25 fr mr10">
+	            <b class="allbtn_l block fl"></b>
                 <b class="allbtn_r pr13 block fl w_auto f14">刷&nbsp;&nbsp;新</b>
-                </a> 
+                </a>
                </li>
 		</ul>
 	</div>

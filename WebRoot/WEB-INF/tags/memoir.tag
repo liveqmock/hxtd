@@ -31,16 +31,13 @@ function iframeRemoir(act, id){
 		url = '${ctx}/common/memoir/toViewPage.doself?id=' + id;
 		title = '查看联系纪要';
 	}
-	jsUtil.dialogIframe(url, title, 800, 515);
+	jsUtil.dialogIframe(url, title, 600, 350);
 	DIALOG.dialog('option','buttons',{
 		"确定" : function() {
 			if(act == "view") {
 				DIALOG.dialog("close");
 			} else {
-				if($("#dialogIframe")[0].contentWindow.submitRemoir()){
-					grid.loadGrid(); //刷新列表
-					DIALOG.dialog("close");
-				}
+				$("#dialogIframe")[0].contentWindow.submitForm();
 			}
 		},
 		"关闭" : function() {
@@ -49,7 +46,7 @@ function iframeRemoir(act, id){
 	});
 }
 </script>
-<h1 class="f14 fbnone ml40">联系纪要</h1>
+<h1 class="f14 fbnone ml40 mt10">联系纪要</h1>
 <div class="memoircontainer w95b bg_c_white margin0 mt10">
 	<form action="${ctx}/common/memoir/query.do" onsubmit="return false;">
 		<input type="hidden" id="moduleId" name="moduleId" value="${moduleId}"/>

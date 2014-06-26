@@ -1,7 +1,7 @@
 @charset "utf-8";
 /* CSS Document */
 
-.big_bg{background: url(../../images/big_bg.jpg) fixed center center no-repeat;   background-size: cover;  width: 100%;}
+.big_bg{ background:url(../../images/big_gb.jpg) fixed center center; background-size: cover; width: 100%; height:100%;}
 .slogin_white{ background:url(../../images/login_leftbg.png) repeat-x; width:342px; height:164px;}
 .big_whtie{ background:url(../../images/login_white.png) no-repeat; width:454px; height:511px;}
 
@@ -9,4 +9,4 @@
 .password_bg{ background-position:-1px -262px; width:267px; height:40px;}
 .id_table1 tr{ line-height:75px;}
 .foot_login{position:fixed; bottom:0}
-.big_img{left:0; top:0; width:100%; height:100%;z-index:-10}
+.big_img{left:0; top:0; width:100%; height:100%;z-index:-10; background:url(../../images/big_gb.jpg) repeat-y; background-size:100% 100%;}

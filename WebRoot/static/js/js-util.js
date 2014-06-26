@@ -93,27 +93,8 @@ var jsUtil = {
 		DIALOG.dialog("open");
 	},
 	datepicker:function(rep){
-		var path = jsUtil.getRootPath();
-		$.getScript(path+ "/static/js/ui/jquery.ui.datepicker.js", function(){
 			var txtObj;
 			$(rep).datepicker({//datepicker本地化
-				showButtonPanel: true,
-				closeText : '清空',
-				currentText: '今天',
-				prevText : '&#x3c;上月',
-				nextText : '下月&#x3e;',
-				currentText : '今天',
-				monthNames : [ '一月', '二月', '三月', '四月', '五月', '六月', '七月', '八月', '九月', '十月', '十一月', '十二月' ],
-				monthNamesShort : [ '一', '二', '三', '四', '五', '六', '七', '八', '九', '十', '十一', '十二' ],
-				dayNames : [ '星期日', '星期一', '星期二', '星期三', '星期四', '星期五', '星期六' ],
-				dayNamesShort : [ '周日', '周一', '周二', '周三', '周四', '周五', '周六' ],
-				dayNamesMin : [ '日', '一', '二', '三', '四', '五', '六' ],
-				weekHeader : '周',
-				dateFormat : 'yy-mm-dd',
-				firstDay : 1,
-				isRTL : false,
-				showMonthAfterYear : true,
-				yearSuffix : '年',
 				maxDate: 0, //设置最大时间界限
 				onSelect: function(selectedDate){
 					var sltObj = this, index = 0, option = "minDate";
@@ -136,75 +117,111 @@ var jsUtil = {
 			    }
 			});
 			$(".ui-datepicker-close").live("click", function(){
-				txtObj.value = '';//清空
+				if(txtObj.value == '') return false;
+				txtObj.value = ''; // 清空
+				
+				var $dateTxtObj = $(txtObj), 
+					$prevDate = $dateTxtObj.prev(), 
+					$nextDate = $dateTxtObj.next();
+				if($prevDate.length > 0 ){
+					$prevDate.datepicker("option", "maxDate", 0);
+				}
+				if($nextDate.length > 0){
+					$nextDate.datepicker("option", "minDate", null);
+				}
 			});
-		});
 	},
 	datepickerNotNow:function(rep){
-		$.getScript(jsUtil.getRootPath()+ "/static/js/ui/jquery.ui.datepicker.js",function(){
 			var txtObj;
-			
-			$.datepicker.regional['zh-CN'] = {
-				showButtonPanel: true,
-				closeText : '清空',
-				currentText: '今天',
-				prevText : '&#x3c;上月',
-				nextText : '下月&#x3e;',
-				currentText : '今天',
-				monthNames : [ '一月', '二月', '三月', '四月', '五月', '六月', '七月', '八月',
-						'九月', '十月', '十一月', '十二月' ],
-				monthNamesShort : [ '一', '二', '三', '四', '五', '六', '七', '八',
-						'九', '十', '十一', '十二' ],
-				dayNames : [ '星期日', '星期一', '星期二', '星期三', '星期四', '星期五', '星期六' ],
-				dayNamesShort : [ '周日', '周一', '周二', '周三', '周四', '周五', '周六' ],
-				dayNamesMin : [ '日', '一', '二', '三', '四', '五', '六' ],
-				weekHeader : '周',
-				dateFormat : 'yy-mm-dd',
-				firstDay : 1,
-				isRTL : false,
-				showMonthAfterYear : true,
-				yearSuffix : '年',
-				
-			};  
-        $.datepicker.setDefaults($.datepicker.regional['zh-CN']);
-        var time = $(rep);
-        var beginTime = time[0];
-		var endTime = time[1];
-		var setting_begin = {
-					showAnim : '',
-					numberOfMonths : 1,
-					beforeShow : function(input, inst) {
-						var end = $(endTime).val();
-						if (end) {
-							$(beginTime).datepicker("option", "maxDate", end);
+			$(rep).datepicker({//datepicker本地化
+				onSelect: function(selectedDate){
+					var sltObj = this, index = 0, option = "minDate";
+					$(rep).each(function(i, obj){
+						if(sltObj == obj){
+							if(i % 2 == 1){
+								option = "maxDate";
+								index = i - 1;
+							}else{
+								option = "minDate";
+								index = i + 1;
+							}
+							return false;
 						}
-						txtObj = input;
-					}
-				};
-		var setting_end = {
-					showAnim : '',
-					numberOfMonths : 1,
-					beforeShow : function(input, inst) {
-						var min = $(beginTime).val();
-						if(min){
-							$(endTime).datepicker("option", "minDate", min);
-						}
-						txtObj = input;
-					}
-				};
-		$(beginTime).datepicker(setting_begin);
-		$(endTime).datepicker(setting_end);
-		
-		for(var i=2;i<time.length;i++){
-			$(time[i]).datepicker();
-		};
-		
-		$(".ui-datepicker-close").live("click", function(){
-				txtObj.value = '';//清空
+					});
+					$(rep).eq(index).datepicker("option", option, selectedDate);
+			    },
+			    beforeShow: function(input, inst){
+			    	txtObj = input;
+			    }
 			});
-		});
-		
-		
+			$(".ui-datepicker-close").live("click", function(){
+				if(txtObj.value == '') return false;
+				txtObj.value = ''; // 清空
+				
+				var $dateTxtObj = $(txtObj), 
+					$prevDate = $dateTxtObj.prev(), 
+					$nextDate = $dateTxtObj.next();
+				if($prevDate.length > 0 ){
+					$prevDate.datepicker("option", "maxDate", 0);
+				}
+				if($nextDate.length > 0){
+					$nextDate.datepicker("option", "minDate", null);
+				}
+			});
+	},
+	datepickerAll:function(rep){
+			var txtObj;
+			$(rep).datetimepicker({//datepicker本地化
+				timeFormat: "HH:mm:ss",
+                dateFormat: "yy-mm-dd",
+				timeOnlyTitle: '选择时间',
+				timeText: '时间',
+				hourText: '小时',
+				minuteText: '分钟',
+				secondText: '秒钟',
+				millisecText: '毫秒',
+				microsecText: '微秒',
+				timezoneText: '时区',
+				currentText: '现在时间',
+				closeText: '清空',
+				timeFormat: 'HH:mm',
+				amNames: ['AM', 'A'],
+				pmNames: ['PM', 'P'],
+				isRTL: false,
+				onSelect: function(selectedDate){
+					var sltObj = this, index = 0, option = "minDate";
+					$(rep).each(function(i, obj){
+						if(sltObj == obj){
+							if(i % 2 == 1){
+								option = "maxDate";
+								index = i - 1;
+							}else{
+								option = "minDate";
+								index = i + 1;
+							}
+							return false;
+						}
+					});
+					$(rep).eq(index).datepicker("option", option, selectedDate);
+			    },
+			    beforeShow: function(input, inst){
+			    	txtObj = input;
+			    }
+			});
+			$(".ui-datepicker-close").live("click", function(){
+				if(txtObj.value == '') return false;
+				txtObj.value = ''; // 清空
+				
+				var $dateTxtObj = $(txtObj), 
+					$prevDate = $dateTxtObj.prev(), 
+					$nextDate = $dateTxtObj.next();
+				if($prevDate.length > 0 ){
+					$prevDate.datepicker("option", "maxDate", 0);
+				}
+				if($nextDate.length > 0){
+					$nextDate.datepicker("option", "minDate", null);
+				}
+			});
 	},
 	easyTree : {
 		init:function(data,chileNodeFun){

@@ -146,7 +146,6 @@ public class Contact implements Serializable {
 	private Date createdTime;
 	
 	/** 最后修改者 */
-	@JsonIgnore
 	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "MODIFIER_ID")
 	private User modifier;

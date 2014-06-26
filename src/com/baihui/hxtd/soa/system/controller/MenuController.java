@@ -90,7 +90,6 @@ public class MenuController {
         logger.info("以DTO格式返回");
         JsonDto jsonDto = new JsonDto();
         jsonDto.setSuccessFlag(true);
-        jsonDto.setMessage("请求数据成功！");
         ListModel<Menu> result = new ListModel<Menu>();
         result.setList(menus);
         jsonDto.setResult(result);
@@ -162,7 +161,7 @@ public class MenuController {
 
         menuService.add(menu);
 
-        return new JsonDto(menu.getId()).toString();
+        return JsonDto.add(menu.getId()).toString();
     }
 
     /**
@@ -220,7 +219,7 @@ public class MenuController {
 
         menuService.modify(menu);
 
-        return new JsonDto(menu.getId()).toString();
+        return JsonDto.modify(menu.getId()).toString();
     }
 
     /**
@@ -233,9 +232,7 @@ public class MenuController {
 
         menuService.delete(id);
 
-        JsonDto jsonDto = new JsonDto("删除成功");
-        jsonDto.setSuccessFlag(true);
-        return jsonDto.toString();
+        return JsonDto.delete(id).toString();
     }
 
     /**

@@ -45,7 +45,7 @@ $(function() {
 	//给刷新按钮绑定重新加载的事件
 	$("#reload").click(load);
 	//首次加载数据
-	grid = new Grid().init();
+	grid = new Grid().init().bindExport();
 });
 //树菜单子节点点击时事件
 //加载数据的方法
@@ -90,15 +90,23 @@ function formReset() {
 					支付方式：
 				</td>
 				<td class="f14" align="left" width="16%">
-					<input type="text" name="search_LIKE_payType" id="name"
-						class="text_input1" value="" />
+					<select name="search_EQ_payType" class="select2">
+						<option value="">全部</option>
+						<c:forEach items="${payType}" var="p">
+							<option value="${p.id}">${p.key}</option>
+						</c:forEach>
+					</select>
 				</td>
-				<td width="8%">
-					<a href="javascript:void(0)" class="block c_white lh25 submit"><b
+				<td width="12%">
+					<a class="c_222 block cp fr ml10 globle_img mt8 mr20 more"
+						title="展开"></a>
+					<a href="javascript:void(0)"
+						class="a_underline block_inline fr w_blue mt5 reset">清除</a>
+					<a href="javascript:void(0)"
+						class="block_inline c_white lh25 fr mr10 submit"><b
 						class="allbtn_l block fl"></b><b
-						class="allbtn_r pr13 block fl w_auto f14">查&nbsp&nbsp询</b> </a>
-					<a href="javascript:formReset()"
-						class="reset block dump_btn globle_img fl ml10"></a>
+						class="allbtn_r pr13 block fl w_auto f14">查&nbsp;&nbsp;询</b>
+					</a>
 				</td>
 			</tr>
 			<tr>
@@ -198,9 +206,19 @@ function formReset() {
 						class="allbtn_r pr13 block fl w_auto f14">刷&nbsp;&nbsp;新</b> </a>
 				</li>
 			</ul>
+			<ul class="fr id_table1 mt10 ml10">
+						<c:if test="${VS_HAS_FUNCTIONS.projectExport}">
+							<li>
+									<a href="javascript:void(0)"
+										uri="${ctx}/project/project/export.do?TYPE=pagination"
+										class="leading_out globle_img block_inline mr10 export"
+										title="导出"></a>
+							</li>
+						</c:if>
+			</ul>
 		</div>
 	</div>
-	<div id="title" style="display: none; background-color: #f5f5f6;"
+	<div id="title" style="display: none;z-index: 1; background-color: #f5f5f6;"
 		class=" ml35 mr35">
 		<table class="cb id_table2 w">
 			<tr>
@@ -239,7 +257,7 @@ function formReset() {
 	</div>
 
 	<div class="ml35 mr35">
-		<table class="cb id_table2 w pr35" cellspacing="1"
+		<table class="cb id_table2 w pr35 " cellspacing="1"
 			class="tablesorter" id="table">
 			<tr id="recordDiv">
 				<td width="2%">

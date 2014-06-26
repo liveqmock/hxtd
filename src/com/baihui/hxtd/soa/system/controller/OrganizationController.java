@@ -10,7 +10,6 @@ import com.baihui.hxtd.soa.base.utils.serial.TierSerials;
 import com.baihui.hxtd.soa.base.utils.ztree.TreeNodeConverter;
 import com.baihui.hxtd.soa.system.entity.Dictionary;
 import com.baihui.hxtd.soa.system.entity.Organization;
-import com.baihui.hxtd.soa.system.entity.Role;
 import com.baihui.hxtd.soa.system.entity.User;
 import com.baihui.hxtd.soa.system.service.DictionaryService;
 import com.baihui.hxtd.soa.system.service.OrganizationService;
@@ -22,13 +21,11 @@ import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import org.springside.modules.web.Servlets;
 
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
 import java.io.IOException;
-import java.io.PrintWriter;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -92,8 +89,9 @@ public class OrganizationController {
     /**
      * 查询分页数据
      */
+    @ResponseBody
     @RequestMapping(value = "/query.do")
-    public void query(HttpServletRequest request, Long id, HibernatePage<Organization> page, PrintWriter out) throws NoSuchFieldException, IOException {
+    public String query(HttpServletRequest request, Long id, HibernatePage<Organization> page) throws NoSuchFieldException, IOException {
         logger.info("查询信息");
 
         logger.info("解析页面查询条件");
@@ -116,11 +114,9 @@ public class OrganizationController {
         logger.info("以DTO格式返回");
         JsonDto jsonDto = new JsonDto();
         jsonDto.setSuccessFlag(true);
-        jsonDto.setMessage("请求数据成功！");
         jsonDto.setResult(page);
 
-        HibernateAwareObjectMapper.DEFAULT.writeValue(out, jsonDto);
-
+        return HibernateAwareObjectMapper.DEFAULT.writeValueAsString(jsonDto);
     }
 
     /**
@@ -197,7 +193,7 @@ public class OrganizationController {
 
         organizationService.add(organization);
 
-        return new JsonDto(organization.getId()).toString();
+        return JsonDto.add(organization.getId()).toString();
     }
 
     /**
@@ -252,22 +248,18 @@ public class OrganizationController {
 
         organizationService.modify(organization);
 
-        return new JsonDto(organization.getId(), "修改组织成功").toString();
+        return JsonDto.modify(organization.getId()).toString();
     }
 
     /**
      * 删除
-     * //TODO 关于删除后，跳转回列表页面，保留原查询条件和分页数据
-     * //TODO 关于删除的批量操作
      */
     @ResponseBody
     @RequestMapping(value = "/delete.do")
     public String delete(Long[] id) {
         logger.info("删除");
         organizationService.delete(id);
-        JsonDto jsonDto = new JsonDto("删除成功");
-        jsonDto.setSuccessFlag(true);
-        return jsonDto.toString();
+        return JsonDto.delete(id).toString();
     }
 
     /**
@@ -296,15 +288,15 @@ public class OrganizationController {
      * 1.2.未授权
      */
     @RequestMapping(value = "/toAuthorizationPage.do", method = RequestMethod.GET)
-    public String toAuthorizationPage(Long id, ModelMap model) throws CloneNotSupportedException {
+    public String toAuthorizationPage(Long id, ModelMap model) {
         logger.info("转至授权页面");
 
         logger.info("存储表单初始化数据");
-        model.addAttribute("allRoles", roleService.findValid((User) model.get(Constant.VS_USER)));
+        User user = (User) model.get(Constant.VS_USER);
+        model.addAttribute("allRoles", roleService.findValid(user));
 
         logger.info("存储表单默认值");
-        List<Role> authorizationRoles = organizationService.findAuthorization(id);
-        model.addAttribute("authorizationRoles", authorizationRoles);
+        model.addAttribute("authorizationRoles", roleService.findOrganization(id));
 
         return "/system/organization/authorization";
     }
@@ -313,19 +305,12 @@ public class OrganizationController {
      * 授权
      * 1.角色
      */
+    @ResponseBody
     @RequestMapping(value = "/authorization.do")
-    public String authorization(Long id,
-                                @RequestParam(value = "roleId", required = true, defaultValue = "") Long[] roleIds,
-                                @RequestParam(defaultValue = "/system/organization/toAuthorizationPage.do?id=%s") String redirectUri,
-                                RedirectAttributes model) {
+    public String authorization(Long id, @RequestParam(value = "roleId", required = false) Long[] roleIds) {
         logger.info("授权");
         organizationService.authorization(id, roleIds);
-
-        logger.info("添加操作提示");
-        model.addFlashAttribute(Constant.VM_BUSINESS, "授权成功");
-
-        redirectUri = String.format(redirectUri, id);
-        return "redirect:" + redirectUri;
+        return new JsonDto(id, "授权成功").toString();
     }
 
 

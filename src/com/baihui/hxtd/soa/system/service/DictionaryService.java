@@ -108,7 +108,7 @@ public class DictionaryService {
      * @Description: 根据字典主键ID删除，支持批量删除
      */
     public void delete(Long... id) {
-        dictionaryDao.delete(id);
+        dictionaryDao.logicalDelete(id);
     }
 
     /**

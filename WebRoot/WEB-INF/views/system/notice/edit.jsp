@@ -1,5 +1,5 @@
 <%--
-     公告明编辑、增加
+     系统公告编辑
   Role: huizijing
   Date:2014/6/4
 --%>
@@ -10,16 +10,15 @@
 
 <html>
 <head>
-<title>公告编辑</title>
+<title>系统公告编辑</title>
 <link href="${ctx}/static/css/stressing/detail.css" rel="stylesheet" type="text/css" />
 <script type="text/javascript" src="${ctx}/static/js/jquery.validate.js"></script>
 <script type="text/javascript" src="${ctx}/static/js/validator.js"></script>
 <script type="text/javascript" src="${ctx}/static/js/jquery.metadata.js"></script>
-<script type="text/javascript" src="${ctx}/static/js/ui/jquery.ui.datepicker.js"></script>
 <script type="text/javascript"> 
 	$(function(){//初始化 
     	//加载时间控件
-    	jsUtil.datepickerNotNow(".time");
+    	jsUtil.datepickerAll(".time");
     	 //验证
     	 $(function(){
 		    $("#save").click(function(){
@@ -55,22 +54,22 @@
       <h1 class="f14 fbnone ml40 pt10">基本信息</h1>
         <table class="cb id_table3 w95b bg_c_white margin0 mt10">
             <tr>
-                <input type="hidden" name="id" value="${notice.id}"/>
+                <input type="hidden" name="id" value="${notice.id}" />
                 <td align="right" width="15%"><span class="w_red">*&nbsp;</span>公告标题：</td>
                 <td align="left"><input type="text" class="text_input3 required" name="title" value="${notice.title}"/></td>
             </tr>
             <tr>
-            <td align="right" width="15%"><span class="w_red">*&nbsp;</span>公告内容：</td>
-            <td align="left">
-                 <textarea name="content" class="required" style="width:90%;height:300px;border:1px solid #e0e0e0; margin:5px 0px">${notice.content }</textarea>
-            </td>
+                <td align="right" width="15%" valign="top"><span class="w_red">*&nbsp;</span>公告内容：</td>
+                <td align="left" width="85%" valign="top">
+                 <textarea name="content" class="remarks_input1 required" style="resize: none;">${notice.content}</textarea>
+                </td>
            </tr>
            <tr>
                 <td align="right" width="15%"><span class="w_red">*&nbsp;</span>发布时间：</td>
                 <td align="left">
                 <div class="pr vm"><a href="javascript:;" class="pa time_closenone1" ></a>
                 <a href="javascript:;" class="pa time_closenone2 "></a>
-                <input type="text" class="text_input3 input_close1 globle_img time " name="sentTime" value="${sendTime}"/>
+                <input readyonly type="text" class="text_input3 input_close1 globle_img time required" name="sentTime" value="${sendTime}"/>
                 </div>
                 </td>
             </tr>
@@ -79,7 +78,7 @@
                 <td align="left">
                 <div class="pr vm"><a href="javascript:;" class="pa time_closenone1" ></a>
                 <a href="javascript:;" class="pa time_closenone2 "></a>
-                <input type="text" class="text_input3 input_close1 globle_img time " name="deadTime" value="${deadTime}"/>
+                <input readyonly type="text" class="text_input3 input_close1 globle_img time required" name="deadTime" value="${deadTime}"/>
                 </div>
                 </td>
             </tr>

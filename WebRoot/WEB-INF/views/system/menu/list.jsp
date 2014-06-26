@@ -74,7 +74,7 @@
 <body>
 <div class="listcontainer">
     <div class="margin0 ml35 mr35">
-        <div class="fl" style="width:20%">
+        <div class="fl treepanel" style="width:20%">
             <div class="mt20 block cb cb mr20">
                 <b class="ba"></b>
                 <b class="bb"></b>
@@ -84,7 +84,7 @@
                 <div class="fl table_blueheadc fl w">
                     <h1 class="f14 c_white lh40 ml10 fl">菜单结构</h1>
                     <img width="108" height="50" class="fl" src="${ctx}/static/images/snowflake.png">
-                    <a class="c_white f14 fr mt10 fb mr10" href="javascript:;">&lt;&lt;</a>
+                    <%--<a class="c_white f14 fr mt10 fb mr10" href="javascript:;">&lt;&lt;</a>--%>
                 </div>
             </div>
             <div class="cb mb20 mr20 bor_636363" style=" height:495px;">
@@ -107,10 +107,13 @@
                 <div class="ie_head">
                     <ul class="fl id_table1 mt10 ml10">
                         <c:if test="${VS_HAS_FUNCTIONS.menuDelete}">
-                            <li><a href="javascript:void(0)" uri="${ctx}/system/menu/delete.do" class="block c_white lh25 deletesome mr10"><b class="allbtn_l block fl"></b><b class="allbtn_r pr13 block fl w_auto f14">删&nbsp;除</b></a></li>
+                            <li><a href="javascript:void(0)" uri="${ctx}/system/menu/delete.do" class="block c_white lh25 deletesome mr10"><b class="allbtn_l block fl"></b><b class="allbtn_r pr13 block fl w_auto f14">删&nbsp;&nbsp;除</b></a></li>
                         </c:if>
                         <c:if test="${VS_HAS_FUNCTIONS.menuAdd}">
-                            <li><a href="${ctx}/system/menu/toAddPage.do?parentId=${parentId}" class="block c_white lh25 add mr10"><b class="allbtn_l block fl"></b><b class="allbtn_r pr13 block fl w_auto f14">新&nbsp;增</b></a></li>
+                            <li><a href="${ctx}/system/menu/toAddPage.do?parentId=${parentId}" class="block c_white lh25 add mr10"><b class="allbtn_l block fl"></b><b class="allbtn_r pr13 block fl w_auto f14">新&nbsp;&nbsp;增</b></a></li>
+                        </c:if>
+                        <c:if test="${VS_HAS_FUNCTIONS.menuQuery}">
+                            <li><a href="javascript:void(0)" class="block c_white lh25 mr10 refresh"><b class="allbtn_l block fl"></b><b class="allbtn_r pr13 block fl w_auto f14">刷&nbsp;&nbsp;新</b> </a></li>
                         </c:if>
                     </ul>
                 </div>
@@ -138,7 +141,7 @@
                     <textarea id="template-tbody" class="template template-tbody">
                         {#if $T.list.length>0}
                         {#foreach $T.list as row}
-                        <tr class="row {#cycle values=['','bg_c_blue']}">
+                        <tr class="row {#cycle values=['bg_c_blue','']}">
                             <td><input type="checkbox" class="checkitem" value="{$T.row.id}"/></td>
                             <td>
                                 <c:choose>

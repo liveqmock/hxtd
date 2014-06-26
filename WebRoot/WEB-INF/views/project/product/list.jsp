@@ -12,7 +12,15 @@
 <script type="text/javascript" src="${ctx}/static/js/scrollTitle.js?v=1"></script>
 <script type="text/javascript">
 $(function(){
+	jsUtil.datepicker(".time");// 绑定日历
 	new Grid().init().bindExport();// 生成Grid
+	$(".more").toggle(function(){
+		$(this).find("i:eq(0)").text("收起").parents("tr").nextAll().show();
+		$(this).find("i:eq(1)").addClass("develop");
+	}, function(){
+		$(this).find("i:eq(0)").text("展开").parents("tr").nextAll().hide();
+		$(this).find("i:eq(1)").removeClass("develop");
+	});
 });
 </script>
 </head>
@@ -21,21 +29,58 @@ $(function(){
     <form id="form" action="${ctx}/project/product/query.do" onsubmit="return false;">
     <table class="fl mt5 w">
     	<tr>
-    		<td class="f14" align="right" width="7%">产品名称：</td>
-    		<td class="f14" align="left"  width="13%"><input type="text" class="text_input1" name="search_LIKE_name" id="name"/></td>
-    		<td width="15%">
-    			<a href="javascript:;" class="reset block dump_btn globle_img fr ml10"></a>
+    		<td class="f14" align="right" width="6%">产品名称：</td>
+    		<td class="f14" align="left"  width="16%"><input type="text" class="text_input1" name="search_LIKE_name"/></td>
+    		<td class="f14" align="right" width="6%">产品编号：</td>
+    		<td class="f14" align="left" width="16%"><input type="text" class="text_input1" name="search_LIKE_code"/></td>
+    		<td class="f14" align="right" width="6%">出售金额：</td>
+    		<td class="f14" align="left" width="16%">
+    			<div class="pr vm">
+	    			<input class="text_input2" name="search_GTE_sellMoney" type="text"/>-<input class="text_input2" 
+	    				name="search_LTE_sellMoney" type="text"/>
+    			</div>
+    		</td>
+    		<td class="f14" align="right" width="6%">销售日期：</td>
+    		<td class="f14" align="left" width="16%">
+    			<div class="vm">
+	    			<input class="text_input2 input_close globle_img time" name="search_GTE_saleBeginTime" 
+	    				type="text" readonly/>-<input class="text_input2 input_close globle_img time" name="search_LTE_saleEndTime" 
+	    				type="text" readonly/>
+    			</div>
+    		</td>
+    		<td width="11%">
+    			<a href="javascript:;" class="c_222 fr block ml10 mr10 mt5 cp more">
+    				<i>展开</i><i class="packup globle_img block_inline"></i>
+    			</a>
+    			<a href="javascript:;" class="reset a_underline fr w_blue mt5">清除</a>
     			<a href="javascript:;" class="block c_white lh25 fr ml10 submit">
     				<b class="allbtn_l block fl"></b>
     				<b class="allbtn_r pr13 block fl w_auto f14">查&nbsp;&nbsp;询</b>
     			</a>
     		</td>
-    		<td class="f14" align="right" width="7%"></td>
-    		<td class="f14" align="right" width="18%"></td>
-    		<td class="f14" align="right" width="7%"></td>
-    		<td class="f14" align="right" width="13%"></td>
-    		<td class="f14" align="right" width="7%"></td>
-    		<td class="f14" align="right" width="13%"></td>
+    	</tr>
+    	<tr style="display:none;">
+    		<td class="f14" align="right" width="6%">创建时间：</td>
+    		<td class="f14" align="left"  width="16%">
+    			<div class="vm">
+	    			<input class="text_input2 input_close globle_img time" name="search_GTE_createdTime" 
+	    				type="text" readonly/>-<input class="text_input2 input_close globle_img time" name="search_LTE_createdTime" 
+	    				type="text" readonly/>
+    			</div>
+    		</td>
+    		<td class="f14" align="right" width="6%">修改时间：</td>
+    		<td class="f14" align="left" width="16%">
+    			<div class="vm">
+	    			<input class="text_input2 input_close globle_img time" name="search_GTE_modifiedTime" 
+	    				type="text" readonly/>-<input class="text_input2 input_close globle_img time" name="search_LTE_modifiedTime" 
+	    				type="text" readonly/>
+    			</div>
+    		</td>
+    		<td class="f14" align="right" width="6%"></td>
+    		<td class="f14" align="left" width="16%"></td>
+    		<td class="f14" align="right" width="6%"></td>
+    		<td class="f14" align="left" width="16%"></td>
+    		<td width="11%"></td>
     	</tr>
     </table>
     <div class="cb"></div>
@@ -64,11 +109,11 @@ $(function(){
 						</a>
 					</li>
 				</c:if>
+			</ul>
+			<ul class="fr id_table1 mt10 mr10">
 				<li>
-					<a href="javascript:;" uri="${ctx}/project/product/export.do?TYPE=pagination" class="block c_white ml10 lh25 mr10 export">
-						<b class="allbtn_l block fl"></b>
-						<b class="allbtn_r pr13 block fl w_auto f14">导&nbsp;出</b>
-					</a>
+					<a href="javascript:;" uri="${ctx}/project/product/export.do?TYPE=pagination" 
+						class="leading_out block_inline mr10 export" title="导出"></a>
 				</li>
 			</ul>
 		</div>

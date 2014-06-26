@@ -11,7 +11,6 @@ import java.util.Map;
  * @param <T>  实体类
  * @param <PK> 该实体类的主键
  * @modify by xiayouxue 14-5-8 新增"集合删除"
-
  */
 public interface BasicDAO<T, PK extends Serializable> {
 
@@ -47,7 +46,23 @@ public interface BasicDAO<T, PK extends Serializable> {
     public void delete(final T entity);
 
     /**
-     * 根据实体ID从删除该实体对应的记录
+     * 逻辑删除
+     * 1.更新isDelete字段为true
+     *
+     * @param id
+     */
+    public void logicalDelete(final PK id);
+
+    /**
+     * 集合逻辑删除
+     * 1.更新isDelete字段为true
+     *
+     * @param ids
+     */
+    public void logicalDelete(final PK... ids);
+
+    /**
+     * 删除
      *
      * @param id
      */

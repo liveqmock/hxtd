@@ -5,12 +5,13 @@
 <%@ attribute name="upload" type="java.lang.Boolean" required="true"%>
 <%@ attribute name="view" type="java.lang.Boolean" required="true"%>
 <%@ attribute name="down" type="java.lang.Boolean" required="true"%>
+<%@ attribute name="deleteFlag" type="java.lang.Boolean" required="true"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <c:set var="ctx" value="${pageContext.request.contextPath}"/>
 <script type="text/javascript" src="${ctx}/static/js/attachment.js">
 </script>
 <script type="text/javascript">
-	attachment.init({id:${id},view:${view},down:${down},module:"${module}"});
+	attachment.init({id:${id},view:${view},down:${down},deleteF:${deleteFlag},module:"${module}"});
 	$(function(){
 		attachment.query();
 	})
@@ -18,7 +19,7 @@
 <input id="id" type="hidden" value="${id}">
 <c:if test="${query}">
 <h1 class="f14 fbnone ml40 mt10">附件列表</h1>
-<div class="w95b  bg_c_white margin0">
+<div class="w95b  bg_c_white margin0 mt10">
 	<br />
 	<h1 class="w70b margin0 fbnone f12 mt10 block">
 		已上传：
@@ -30,7 +31,7 @@
 	</h1>
 	<b class="w70b f_line2 block margin0"></b>
 
-	<table class="cb id_table3 w70b margin0 mt10 mb10">
+	<table class="cb id_table2 w70b margin0 mt10 mb10">
 		<tr>
 			<th width="25%">
 				附件名称
@@ -45,8 +46,8 @@
 				操作
 			</th>
 		</tr>
-		<tbody id="attBody"></tbody>
-
+		<tbody id="attBody" class="list"></tbody>
 	</table>
+	<div class=" h40"></div>
 </div>
 </c:if>

@@ -116,14 +116,14 @@
 		<table class="cb id_table4 w95b bg_c_white margin0 mt10">
 		<tr>
 			<td align="right" width="15%" valign="top">备注：</td>
-			<td align="left" width="85%" valign="top" class="remarks_input1">
+			<td align="left" width="85%" valign="top">
 			<div class="w85b">${customer.remark }</div>
 			</td>
 		</tr>
 	</table>
-	<tag:attachment view="true" upload="true" module="customer" query="true" down="true" id="${costomer.id}"></tag:attachment>
+	<tag:attachment view="${VS_HAS_FUNCTIONS.customerAttView}" upload="${VS_HAS_FUNCTIONS.customerUpload}" module="customer" query="${VS_HAS_FUNCTIONS.customerAttQuery}" down="${VS_HAS_FUNCTIONS.customerDown}" id="${costomer.id}"></tag:attachment>
 	<tag:memoir view="true" edit="true" query="true" delete="true" moduleType="customer" moduleId="${customer.id}"></tag:memoir>
-	<div class=" h40"></div>
+	<div class="h40"></div>
     </div>
     <div class="cb block h40 margin0 mt10" style="width:350px;">
         <ul class="id_table1 cb"></ul>

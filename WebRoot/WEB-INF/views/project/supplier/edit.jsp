@@ -78,7 +78,7 @@ function searchData(action){//搜索弹出框
 		var ckObj = $(":checked", window.frames["dialogIframe"].document);
 		if(ckObj.length > 0){
 			$("#txt_" + action).val(ckObj.parent().next().text());
-			$("#hide_" + action +"_id").val(ckObj.val());
+			$("#hide_" + action ).val(ckObj.val());
 		}
 	});
 }
@@ -119,9 +119,9 @@ function searchData(action){//搜索弹出框
 					<span class="w_red">*&nbsp;</span>所有者：
 				</td>
 				<td align="left">
-					<input type="text" id="text_owner" value="${com.owner.realName}"
+					<input type="text" id="txt_owner" value="${com.owner.realName}"
 						class="text_input3 required" onclick="searchData('owner')" readonly>
-					<input type="hidden" id="hide_owner" value="${com.owner.id}"/>
+					<input type="hidden" id="hide_owner" name="owner.id" value="${com.owner.id}"/>
 				</td>
 			</tr>
 

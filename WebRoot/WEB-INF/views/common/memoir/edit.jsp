@@ -4,102 +4,68 @@
 <html>
 <head>
 <title>联系纪要</title>
-<link href="${ctx}/static/css/recommend/detail.css?v=1" rel="stylesheet" type="text/css"/>
-<link rel="stylesheet" href="${ctx}/static/css/themes/base/jquery.ui.all.css"/>
-<script type="text/javascript" src="${ctx}/static/js/jquery.min.js"></script>
-<script type="text/javascript" src="${ctx}/static/js/ui/jquery.ui.core.js"></script>
-<script type="text/javascript" src="${ctx}/static/js/js-util.js"></script>
-<script type="text/javascript" src="${ctx}/static/js/jquery.validate.js"></script>
-<script type="text/javascript" src="${ctx}/static/js/commonAjax.js"></script>
-<style type="text/css">
-	input.error { border: 1px solid red }
-	label.error { padding-left: 18px; color: red; }
-	img { cursor:pointer; }
-	textarea{ resize:none; width:90%; height:100px; border:1px solid #e0e0e0; margin:5px 0px }
-</style>
+<link rel="stylesheet" href="${ctx}/static/css/public/common.css?v=1" type="text/css"/>
+<link rel="stylesheet" href="${ctx}/static/css/public/reset.css?v=1" type="text/css"/>
+<link rel="stylesheet" href="${ctx}/static/css/recommend/detail.css?v=1" type="text/css"/>
+<link rel="stylesheet" href="${ctx}/static/css/themes/base/jquery.ui.all.css?v=1" type="text/css"/>
+<script type="text/javascript" src="${ctx}/static/js/jquery.min.js?v=1"></script>
+<script type="text/javascript" src="${ctx}/static/js/ui/jquery.ui.core.js?v=1"></script>
+<script type="text/javascript" src="${ctx}/static/js/js-util.js?v=1"></script>
+<script type="text/javascript" src="${ctx}/static/js/jquery.validate.js?v=1"></script>
+<script type="text/javascript" src="${ctx}/static/js/jquery.metadata.js?v=1"></script>
+<script type="text/javascript" src="${ctx}/static/js/validator.js?v=1"></script>
+<script type="text/javascript" src="${ctx}/static/js/commonAjax.js?v=1"></script>
+<script type="text/javascript" src="${ctx}/static/js/ui/jquery.ui.datepicker.js?v=1"></script>
 <script type="text/javascript">
-$(function(){//初始化 
-	$("#form").validate({
-		rules: {
-			summary: { required: true }
-		},
-		messages: {
-			summary: { required: "*必填"}
-		}
-	});
-	jsUtil.datepicker("#time");//日历
+$(function(){
+	jsUtil.datepickerNotNow("#time");
 });
-function submitRemoir(){//提交表单
+function submitForm(){
 	if($("#form").valid()){
 		var moduleType =$("#moduleType", parent.document).val();
 		var moduleId = $("#moduleId", parent.document).val();
-		RcmsAjax.ajax(form.action, null, null, $("form").serialize() + "&moduleType=" + moduleType + "&moduleId=" + moduleId);
-		return true;
-	}else{
-		return false;
+		RcmsAjax.ajaxNoMsg(form.action, callback, null, 
+			$("form").serialize() + "&moduleType=" + moduleType + "&moduleId=" + moduleId);
 	}
 }
-//function searchData(action){//搜索弹出框
-//	var url, title;
-//	if(action == "users"){
-//		url = "${ctx}/system/user/toQueryPage.comp";
-//		title = "参与者";
-//	}
-//	jsUtil.dialogIframe(url, title, 800, 465, function(){//确定回调
-//		var ckObj = $(":checked", window.frames["dialogIframe"].document);
-//		if(ckObj.length > 0){
-//			$("#txt_" + action).val(ckObj.parent().next().text());
-//			$("#hide_" + action +"_id").val(ckObj.val());
-//		}
-//	});
-//}
-//function clearInputVal(obj){//清除
-//	$(obj).prevAll("input").val('');
-//}
+function callback(obj){
+	if(obj.successFlag){
+		parent.DIALOG.dialog("close");
+		parent.grid.loadGrid();
+	}
+}
 </script>
 </head>
 <body>
 <form id="form" action="${ctx}${VR_FUNCTION.url}" method="post">
-<div class="">
-	<input type="hidden" name="id" value="${memoir.id}"/>
-	<table style="width:100%;" class="table140421">
-		<!--<tr>
-			<td class="tar bghui pr10">参与沟通人员：</td>
-			<td class="bghb pl10">
-				<input name="txt_users" type="text" value=""/>
-				<img src="${ctx}/static/images/search.png" alt="" title="搜索人员" onclick="searchData('users');"/>
-				<img src="${ctx}/static/images/clear.png" alt="" title="清除" onclick="clearInputVal(this);"/>
-				<input type="hidden" name="" id="hide_users_id"/>
-			</td>
-		</tr>
-		 -->
-		<tr>
-			<td width="20%" class="tar bghui pr10">联系纪要：</td>
-			<td width="80%" class="bghb pl10 fwb color0">
-				<textarea name="summary" >${memoir.summary}</textarea>
-			</td>
-		</tr>
-		<tr>
-			<td class="tar bghui pr10">下次联系时间：</td>
-			<td class="bghb pl10 color1 fwb">
-				<a href="javascript:;" class="pa time_closenone1"></a>
-				<input id="time" name="nextContactTime" type="text" value="${memoir.nextContactTime}" readonly="readonly"/>
-			</td>
-		</tr>
-		<tr>
-			<td class="tar bghui pr10">下次联系要点：</td>
-			<td class="bghb pl10">
-				<textarea name="nextContactPoints" >${memoir.nextContactPoints}</textarea>
-			</td>
-		</tr>
-		<tr>
-			<td class="tar bghui pr10">备注：</td>
-			<td class="bghb pl10">
-				<textarea name="remark" class="remarks_input1" style="resize: none;">${contact.remark}</textarea>
-			</td>
-		</tr>
-	</table>
-</div>
+  <input type="hidden" name="id" value="${memoir.id}"/>
+  <div class="margin0">
+    <div>
+      <table class="id_tantable1 w pr10 pl10">
+        <tr class="h50">
+          <td align="right" valign="top" width="20%"><i class="mt3 block">联系纪要：</i></td>
+          <td><textarea name="summary" class="remarks_input3">${memoir.summary}</textarea></td>
+        </tr>
+        <tr class="h50">
+          <td align="right"><i class="mt3 block">下次联系时间：</i></td>
+          <td>
+          	<div class="vm">
+              <input id="time" name="nextContactTime" class="text_input2 input_close2 globle_img" 
+              	type="text" value="${memoir.nextContactTime}" readonly/>
+            </div>
+          </td>
+        </tr>
+        <tr class="h50">
+          <td align="right" valign="top"><i class="mt3 block">下次联系要点：</i></td>
+          <td><textarea name="nextContactPoints" class="remarks_input3">${memoir.nextContactPoints}</textarea></td>
+        </tr>
+        <tr class="h50">
+          <td align="right" valign="top"><i class="mt3 block">备注：</i></td>
+          <td><textarea name="remark" class="remarks_input3">${contact.remark}</textarea></td>
+        </tr>
+      </table>
+    </div>
+  </div>
 </form>
 </body>
 </html>

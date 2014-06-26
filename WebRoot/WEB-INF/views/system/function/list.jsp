@@ -97,9 +97,7 @@ function formReset(){
 							菜单信息
 						</h1>
 						<img width="108" height="50" class="fl" src="${ctx }/static/images/snowflake.png">
-						<a class="c_white f14 fr mt10 fb mr10" href="javascript:;">&lt;&lt;</a>
 					</div>
-
 				</div>
 				<div class="cb mb20 mr20 bor_636363" style=" height:495px;">
 					<ul id="tree" class="ztree"></ul>
@@ -154,7 +152,6 @@ function formReset(){
 					<b class="b2"></b>
 					<b class="b3"></b>
 					<b class="b4"></b>
-
 					<div class="ie_head">
 						<ul class="fl id_table1 mt10 ml10">
 							<c:if test="${VS_HAS_FUNCTIONS.functionDelete}">
@@ -184,7 +181,7 @@ function formReset(){
 					</div>
 				</div>
 				<!-- 浮动表头html开始 -->
-				<div id="title" style="display: none; background-color: #f5f5f6;"
+				<div id="title" style="display: none;z-index: 1; background-color: #f5f5f6;"
 					class="mr35">
 					<table class="cb id_table2 w">
 						<tr>

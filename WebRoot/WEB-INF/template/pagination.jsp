@@ -8,6 +8,7 @@
 <c:set var="ctx" value="${pageContext.request.contextPath}"/>
 <textarea id="template-pagination" class="template template-pagination">
     <ul class="id_ul1 block  fl cb paginationbar" forform="{$T.formSelector}">
+        {#if $T.paginationSizeShow}
         <li class="mt3">每页条数</li>
         <li>
             <select class="page-size" forformfield="{$T.pageSizeSelector}">
@@ -17,6 +18,7 @@
                 {#/for}
             </select>
         </li>
+        {#/if}
         <li class="mt3 cp"><a class="page-first">首页</a></li>
         <li><a href="javascript:void(0)" class="block prev globle_img page-pre" title="上一页"></a></li>
         <li class="pr">

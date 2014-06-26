@@ -10,76 +10,82 @@
 <c:set var="ctx" value="${pageContext.request.contextPath}"/>
 <html>
 <head>
-<title>客户列表</title>
-<link href="${ctx}/static/css/stressing/detail.css" rel="stylesheet" type="text/css" />
-<link href="${ctx}/static/css/application.css" rel="stylesheet" type="text/css"/>
-<script type="text/javascript" src="${ctx}/static/js/api/api.date.js"></script>
-<script type="text/javascript" src="${ctx}/static/js/jquery-json.2.4.js"></script>
-<script type="text/javascript" src="${ctx}/static/js/jquery-jtemplates.js"></script>
-<script type="text/javascript" src="${ctx}/static/js/js-util.common.js"></script>
-<script type="text/javascript" src="${ctx}/static/js/scrollTitle.js?v=1"></script>
-<script type="text/javascript" src="${ctx}/static/js/pacs.js"></script>
-<script type="text/javascript">${applicationScope.VC_PCAS}</script>
-<script type="text/javascript">
-$(function () {
-	
-	//加载省市县
-	new PCAS("province","city","county");
-     
-	//单击更改所有者按钮时执行
-	$("#modifyOwner").click(function(){
-		var box = $("input(name=id):checked");
-		if(box.length==0){
-			jsUtil.alert("请选择数据");
-			return false;
-		}
-		var url, title;
-		url = "${ctx}/system/user/toQueryPage.comp";
-		title = "所有者";
-		jsUtil.dialogIframe(url, title, 800, 465, convOwner);
-	});
-    function convOwner(){
-		var ckObj = $(":checked", window.frames["dialogIframe"].document);
-		if(ckObj.length > 0){
-			var boxs = $("input(name=id):checked");
-			var param = $.param(boxs)+"&ownerId="+ckObj.val();
-			RcmsAjax.ajax(jsUtil.getRootPath()+'/customer/customer/modify.do?type=modifyOwner',function(){load();},null,param);
-		              }
-           }
-    
-    //加载时间控件
-    jsUtil.datepicker(".time");
-    
-    //给刷新按钮绑定重新加载的事件
-    $("#reload").click(load);
-    
-    //首次加载数据
-    grid = new Grid().init().bindExport();
-    
-     //给删除按钮绑定时间
-     $("#delete").click(function () {
-                var boxs = $("input(name=id):checked");
-				var param = $.param(boxs);
-                if (boxs.length == 0) {
-                    jsUtil.alert("请选择数据");
-                    return false;
-                }
-                jsUtil.confirm('危险操作，确定要批量删除？', function () {
-                    RcmsAjax.ajax("${ctx}/customer/customer/delete.do",load,null,param);
-                }, '警告');
-            });
-});
+	<title>客户列表</title>
+	<link href="${ctx}/static/css/stressing/detail.css" rel="stylesheet" type="text/css" />
+	<link href="${ctx}/static/css/application.css" rel="stylesheet" type="text/css"/>
+	<script type="text/javascript" src="${ctx}/static/js/api/api.date.js"></script>
+	<script type="text/javascript" src="${ctx}/static/js/jquery-json.2.4.js"></script>
+	<script type="text/javascript" src="${ctx}/static/js/jquery-jtemplates.js"></script>
+	<script type="text/javascript" src="${ctx}/static/js/js-util.common.js"></script>
+	<script type="text/javascript" src="${ctx}/static/js/scrollTitle.js?v=1"></script>
+	<script type="text/javascript" src="${ctx}/static/js/pacs.js"></script>
+	<script type="text/javascript">${applicationScope.VC_PCAS}</script>
+	<script type="text/javascript">
+			$(function () {
+		
+			//加载省市县
+			new PCAS("province","city","county");
+		 
+		//单击更改所有者按钮时执行
+		$("#modifyOwner").click(function(){
+			var box = $("input(name=id):checked");
+			if(box.length==0){
+				jsUtil.alert("请选择数据");
+				return false;
+			}
+			var url, title;
+			url = "${ctx}/system/user/toQueryPage.comp";
+			title = "所有者";
+			jsUtil.dialogIframe(url, title, 800, 465, convOwner);
+		});
+		function convOwner(){
+			var ckObj = $(":checked", window.frames["dialogIframe"].document);
+			if(ckObj.length > 0){
+				var boxs = $("input(name=id):checked");
+				var param = $.param(boxs)+"&ownerId="+ckObj.val();
+				RcmsAjax.ajax(jsUtil.getRootPath()+'/customer/customer/modify.do?type=modifyOwner',function(){load();},null,param);
+						  }
+			   }
+		
+		//加载时间控件
+		jsUtil.datepicker(".time");
+		
+		//首次加载数据
+		grid = new Grid().init().bindExport();
+		
+		//展开
+		$(".more").toggle(function(){
+		$(this).find("i:eq(0)").text("收起").parents("tr").nextAll().show();
+		$(this).find("i:eq(1)").addClass("develop");
+	    }, function(){
+		$(this).find("i:eq(0)").text("展开").parents("tr").nextAll().hide();
+		$(this).find("i:eq(1)").removeClass("develop");
+	    });
+		
+		 //给删除按钮绑定时间
+		 $("#delete").click(function () {
+					var boxs = $("input(name=id):checked");
+					var param = $.param(boxs);
+					if (boxs.length == 0) {
+						jsUtil.alert("请选择数据");
+						return false;
+					}
+					jsUtil.confirm('危险操作，确定要批量删除？', function () {
+						RcmsAjax.ajax("${ctx}/customer/customer/delete.do",load,null,param);
+					}, '警告');
+				});
+		});
 
-//加载数据的方法
-function load() {
-     grid.loadGrid();
-}
-       
-function formReset() {
-      $("#form")[0].reset();
-      $("#cname").removeAttr("value");
-}
-</script>
+		//加载数据的方法
+		function load() {
+			 grid.loadGrid();
+			}
+		   
+		function formReset() {
+		  $("#form")[0].reset();
+		  $("#cname").removeAttr("value");
+		}
+	</script>
 </head>
  <body>
 <div class=" listcontainer">
@@ -110,20 +116,23 @@ function formReset() {
 	<td class="f14" align="right" width="6%">手机：</td>
     <td class="f14" align="left" width="16%">
     <input class="text_input1"type="text" id="cmobile"  name="search_LIKE_mobile" value="${mobile }" /></td>
-	<td width="8%">
-    			<a href="javascript:;" class="block c_white lh25 fl ml10">
+	<td width="10%">
+    			<a href="javascript:;" class="c_222 fr block ml10 mr10 mt5 cp more">
+    				<i>展开</i><i class="packup globle_img block_inline"></i>
+    			</a>
+    			<a href="javascript:;" class="reset a_underline fr w_blue mt5">清除</a>
+    			<a href="javascript:;" class="block c_white lh25 fr ml10">
     				<b class="allbtn_l block fl"></b>
     				<b class="allbtn_r pr13 block fl w_auto f14 submit">查&nbsp;&nbsp;询</b>
     			</a>
-    			<a href="javascript:;" class="reset block dump_btn globle_img fl ml10"></a>
     		</td>
 	</tr>
-	<tr>
-	<td class="f14" align="right" width="6%">邮箱：</td>
-    <td class="f14" align="left" width="16%">
+	<tr class="h40">
+	<td class="f14" align="right">邮箱：</td>
+    <td class="f14" align="left">
     <input type="text" class="text_input1"id="cemail"  name="search_LIKE_email" value="${email }" /></td>
-	<td class="f14" align="right" width="6%">行业：</td>
-	<td class="f14" align="left" width="16%">
+	<td class="f14" align="right">行业：</td>
+	<td class="f14" align="left">
 	<select name="search_EQ_industry.id" class="select2">
      	<option value="">全部</option>
      	<c:forEach items="${industry}" var="industry">
@@ -131,31 +140,29 @@ function formReset() {
      	</c:forEach>
     </select>
 	</td>
-	<td class="f14" align="right" width="6%">创建时间：</td>
-    <td class="f14" align="left" width="16%">
-    <div class="pr vm"><a href="javascript:;" class="pa time_closenone1" ></a>
-    <a href="javascript:;" class="pa time_closenone2" ></a>
+	<td class="f14" align="right">创建时间：</td>
+    <td class="f14" align="left">
+    <div class="vm">
      <input class="text_input2 input_close globle_img time" name="search_GTE_createdTime" type="text" />-<input 
      class="text_input2 input_close globle_img time" name="search_LTE_createdTime" type="text" />
     </div>
     </td>
-	<td class="f14" align="right" width="6%">修改时间：</td>
-    <td class="f14" align="left" width="16%">
-    <div class="pr vm"><a href="javascript:;" class="pa time_closenone1"></a>
-    <a href="javascript:;" class="pa time_closenone2"></a>
+	<td class="f14" align="right">修改时间：</td>
+    <td class="f14" align="left">
+    <div class="vm">
      <input class="text_input2 input_close globle_img time" name="search_GTE_modifiedTime" type="text" />-<input class="text_input2 input_close globle_img time" name="search_LTE_modifiedTime" type="text" />
     </div>
     </td>
 	</tr>
-	<tr>
-	<td class="f14" align="right" width="6%">省：</td>
-	<td class="f14" align="left" width="16%">
+	<tr class="h40">
+	<td class="f14" align="right">省：</td>
+	<td class="f14" align="left" >
 	<select id="province" name="search_EQ_province.id" class="select2"></select></td>
-	<td class="f14" align="right" width="6%">市：</td>
-	<td class="f14" align="left" width="16%">
+	<td class="f14" align="right">市：</td>
+	<td class="f14" align="left" >
 	<select id="city" name="search_EQ_city.id" class="select2"></select></td>
-	<td class="f14" align="right" width="6%">县：</td>
-	<td class="f14" align="left" width="16%">
+	<td class="f14" align="right">县：</td>
+	<td class="f14" align="left">
 	<select id="county" name="search_EQ_county.id" class="select2"></select></td>
 	</tr>
     </table>
@@ -173,14 +180,28 @@ function formReset() {
         <div class="ie_head">
         <ul class="fl id_table1 mt10 ml10">
          <li>
-         <a href="javascript:void(0)" uri="${ctx}/customer/customer/delete.do" class="block c_white lh25 fr mr10  deletesome">
+         <c:if test="${VS_HAS_FUNCTIONS.customerDelete}">
+         <a href="javascript:void(0);" uri="${ctx}/customer/customer/delete.do" class="block c_white lh25 deletesome mr10">
          <b class="allbtn_l block fl"></b>
          <b class="allbtn_r pr13 block fl w_auto f14 ">删&nbsp;&nbsp;除</b>
          </a>
+         </c:if>
          </li>
-         <li><a href="${ctx}/customer/customer/toAddPage.do" class="block c_white lh25 mr10"><b class="allbtn_l block fl"></b><b class="allbtn_r pr13 block fl w_auto f14">新&nbsp;&nbsp;增</b></a></li>
+         <li>
+         <c:if test="${VS_HAS_FUNCTIONS.customerAdd}">
+         <a href="${ctx}/customer/customer/toAddPage.do" class="block c_white lh25 mr10">
+         <b class="allbtn_l block fl"></b>
+         <b class="allbtn_r pr13 block fl w_auto f14">新&nbsp;&nbsp;增</b>
+         </a>
+         </c:if>
+         </li>
          <li><a href="javascript:void(0)" id="modifyOwner" class="block c_white lh25 mr10"><b class="allbtn_l block fl"></b><b class="allbtn_r pr13 block fl w_auto f14">更改所有者</b></a></li>
-         <li><a href="javascript:void(0)" id="reload" class="block c_white lh25 mr10"><b class="allbtn_l block fl"></b><b class="allbtn_r pr13 block fl w_auto f14">刷&nbsp;&nbsp;新</b></a> </li>
+         <li>
+        	<a href="javascript:;" class="refresh block c_white lh25 fr mr10">
+	        <b class="allbtn_l block fl"></b>
+            <b class="allbtn_r pr13 block fl w_auto f14">刷&nbsp;&nbsp;新</b>
+            </a> 
+         </li>
 		</ul>
 		 <ul class="fr id_table1 mt10 ml10">
               <li><a href="javascript:void(0)" uri="${ctx}/customer/customer/export.do?TYPE=pagination" class="leading_out globle_img block_inline mr10 export" title="导出"></a></li>
@@ -230,7 +251,8 @@ function formReset() {
                 <td><input type="checkbox" name="id" class="checkitem" value="{$T.row.id}"/></td>
                 <td>
                     <c:choose>
-                        <c:when test="${VS_HAS_FUNCTIONS.customerView}"><a href="${ctx}/customer/customer/toViewPage.do?id={$T.row.id}" class="toviewpage">{$T.row.name}</a></c:when>
+                        <c:when test="${VS_HAS_FUNCTIONS.customerView}">
+                        <a href="${ctx}/customer/customer/toViewPage.do?id={$T.row.id}" class="toviewpage">{$T.row.name}</a></c:when>
                         <c:otherwise>{$T.row.name}</c:otherwise>
                     </c:choose>
                 </td>
@@ -243,9 +265,15 @@ function formReset() {
                 <td>{$T.row.createdTime}</td>
                 <td>{$T.row.modifiedTime}</td>
                 <td align="center">
+                <c:if test="${VS_HAS_FUNCTIONS.customerView}">
                 <a href="${ctx}/customer/customer/toViewPage.do?id={$T.row.id}" title="详情" class=" block_inline s_detail_btn globle_img ml10"></a>
+                </c:if>
+                <c:if test="${VS_HAS_FUNCTIONS.customerModify}">
                 <a href="${ctx}/customer/customer/toViewPage.do?id={$T.row.id}&type=edit" title="编辑" class=" block_inline s_edit_btn globle_img ml10"></a>
+                </c:if>
+                <c:if test="${VS_HAS_FUNCTIONS.customerDelete}">
                 <a href="javascript:void(0)" uri="${ctx}/customer/customer/delete.do?id={$T.row.id}" title="删除" class=" block_inline s_dump_btn globle_img ml10 delete"></a>
+                </c:if>
                 </td>
             </tr>
             {#/for}

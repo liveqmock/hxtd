@@ -364,7 +364,7 @@ public class OrganizationService {
     @Transactional
     public void delete(Long... ids) {
         logger.info("删除");
-        organizationDao.delete(ids);
+        organizationDao.logicalDelete(ids);
     }
 
 
@@ -398,8 +398,10 @@ public class OrganizationService {
         organization.setRoles(new HashSet<Role>());
 
         logger.info("重新分配角色");
-        for (Long roleId : roleIds) {
-            organization.getRoles().add(new Role(roleId));
+        if (roleIds != null) {
+            for (Long roleId : roleIds) {
+                organization.getRoles().add(new Role(roleId));
+            }
         }
         logger.debug("数目“{}”", organization.getRoles().size());
 

@@ -127,7 +127,7 @@ function formReset() {
 	</div>
 
 	<!-- 浮动表头html开始 -->
-	<div id="title" style="display: none; background-color: #f5f5f6;"
+	<div id="title" style="display: none;z-index: 1; background-color: #f5f5f6;"
 		class="mr35">
 		<table class="cb id_table2 w">
 			<tr>

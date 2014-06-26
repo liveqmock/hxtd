@@ -38,7 +38,7 @@
 	<table class="cb id_table3 w95b bg_c_white margin0 mt10">
 		<tr>
 			<td width="15%" align="right">活动所有者：</td>
-			<td align="left">${activity.sponsor.name}</td>
+			<td align="left">${activity.sponsor.realName}</td>
 			<td width="15%" align="right">类型：</td>
 			<td align="left">${activity.dic.key}</td>
 		</tr>
@@ -74,7 +74,7 @@
 			<td align="right">期望成功率%：</td>
 			<td align="left">${activity.expectSuccessRate}</td>
 			<td align="right">负责人：</td>
-			<td align="left">${activity.bossHead.name}</td>
+			<td align="left">${activity.bossHead.realName}</td>
 		</tr>
 		</table>
 		<h1 class="f14 fbnone ml40 pt10">描述信息</h1>

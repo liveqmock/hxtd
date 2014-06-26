@@ -124,7 +124,7 @@ public class LeadController {
 		lead.setModifier(u);
 		lead.setCreator(u);
 		leadService.save(lead);
-		JsonDto json = new JsonDto(lead.getId(),"保存成功!");
+		JsonDto json = JsonDto.modify(lead.getId());
 		return json.toString();
 	}
 	
@@ -133,8 +133,8 @@ public class LeadController {
 					produces = "text/text;charset=UTF-8")
 	public String modifyOwner(Long[] id, Long ownerId) {
 		leadService.modifyOwner(ownerId, id);
-		JsonDto json = new JsonDto();
-		json.setMessage("转换成功");
+		JsonDto json = new JsonDto("转换成功");
+		json.setSuccessFlag(true);
 		return json.toString();
 	}
 	
@@ -160,8 +160,7 @@ public class LeadController {
 	public String delete(Long[] id){
 		//logger.info("LeadController.delete删除线索id={}",id);
 		leadService.delete(id);
-		JsonDto json = new JsonDto();
-		json.setMessage("删除成功");
+		JsonDto json = JsonDto.delete(id);
 		return json.toString();
 	}
 	
@@ -183,7 +182,7 @@ public class LeadController {
 		model.addAttribute("source",dictionaryService.findChildren("040101"));
 		model.addAttribute("status",dictionaryService.findChildren("040102"));
 		model.addAttribute("cardType",dictionaryService.findChildren("040103"));
-		model.addAttribute("industry",dictionaryService.findChildren("040104"));
+		model.addAttribute("industry",dictionaryService.findChildren("040305"));
 	}
 	
 
@@ -207,7 +206,7 @@ public class LeadController {
 		lead.setCreatedTime(new Date(new java.util.Date().getTime()));
 		lead.setModifiedTime(new Date(new java.util.Date().getTime()));
 		leadService.save(lead);
-		JsonDto json = new JsonDto(lead.getId(),"保存成功!");
+		JsonDto json = JsonDto.add(lead.getId());
 		return json.toString();
 	}
 	
@@ -235,7 +234,19 @@ public class LeadController {
         ImportExport.exportExcel(response, servletContext, "lead", leads).write(response.getOutputStream());
     }
 	
-	
+    /**
+     * 导出分页数据
+     * 1.在分页列表上根据当前条件进行导出
+     */
+    @ResponseBody
+    @RequestMapping(value = "/leadConverter.do", produces = "text/text;charset=UTF-8")
+    public String convCustomerAndContact(Long id) {
+        logger.info("线索转换");
+        leadService.leadConverter(id);
+        JsonDto json = new JsonDto("转换成功");
+        json.setSuccessFlag(true);
+        return json.toString();
+    }
 	
 	/**
 	 * @param args

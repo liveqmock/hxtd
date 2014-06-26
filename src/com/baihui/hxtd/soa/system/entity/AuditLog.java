@@ -1,4 +1,4 @@
-package com.baihui.hxtd.soa.setting.entity;
+package com.baihui.hxtd.soa.system.entity;
 
 import java.util.Date;
 /**
@@ -27,7 +27,6 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
-import com.baihui.hxtd.soa.system.entity.Dictionary;
 import com.fasterxml.jackson.annotation.JsonFormat;
 
 @Entity
@@ -51,8 +50,9 @@ public class AuditLog {
 	private Dictionary type;
 	
 	/**操作者*/
-	@Column(name = "OPERATOR")
-	private String operator;
+	@ManyToOne(fetch = FetchType.LAZY)
+	@JoinColumn(name = "OPERATOR")
+	private User operator;
 	
 	/**操作模块的名称*/
 	@Column(name = "MODULE_NAME")
@@ -85,12 +85,6 @@ public class AuditLog {
 	public void setOperateTime(Date operateTime) {
 		this.operateTime = operateTime;
 	}
-	public String getOperator() {
-		return operator;
-	}
-	public void setOperator(String operator) {
-		this.operator = operator;
-	}
 	public String getRecordId() {
 		return recordId;
 	}
@@ -108,6 +102,12 @@ public class AuditLog {
 	}
 	public void setType(Dictionary type) {
 		this.type = type;
+	}
+	public User getOperator() {
+		return operator;
+	}
+	public void setOperator(User operator) {
+		this.operator = operator;
 	}
 	
 }

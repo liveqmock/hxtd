@@ -1,10 +1,13 @@
 
 package com.baihui.hxtd.soa.common.dao;
 
+import org.hibernate.Query;
 import org.springframework.stereotype.Repository;
 
 import com.baihui.hxtd.soa.base.orm.hibernate.HibernateDAOImpl;
 import com.baihui.hxtd.soa.common.entity.Attachment;
+import com.baihui.hxtd.soa.customer.entity.Contact;
+import com.baihui.hxtd.soa.customer.entity.Lead;
 /**
  * 
  * 功能描述：附件持久化层
@@ -33,4 +36,13 @@ public class AttachmentDao extends HibernateDAOImpl<Attachment, Long> {
 		return findUnique(hql.toString(), id);
 	}
 
+	
+	public void leadConverter(Lead l,Contact c){
+		String hql = "update Attachment att set att.moduleId=? , att.type = 11010104 " +
+				"where att.type=11010103 and att.moduleId=?";
+		Query query = createQuery(hql);
+		query.setParameter(0, c.getId());
+		query.setParameter(1, l.getId());
+		query.executeUpdate();
+	}
 }

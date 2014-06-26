@@ -3,6 +3,40 @@
     /**jQuery的自定义扩展*/
     $.Custom = function () {}
     $.extend($.Custom, {
+        /**
+         * 克隆json对象
+         * @param json json对象
+         * @param filterAttrs 可选的过滤属性
+         * @returns {{}}
+         */
+        clone: function (json, filterAttrs) {
+            var clone = {};
+            if (filterAttrs) {
+                for (var i = 0; i < filterAttrs.length; i++) {
+                    var attr = filterAttrs[i];
+                    clone[ attr] = json[attr];
+                }
+            } else {
+                for (var attr in json) {
+                    clone[attr] = json[attr];
+                }
+            }
+            return clone;
+        },
+        /**
+         * 过滤json对象
+         * 1.清除值为0、-0、null、""、false、undefined 或 NaN的属性
+         * @param json
+         * @returns {*}
+         */
+        filter: function (json) {
+            for (var attr in json) {
+                if (!json[attr]) {
+                    delete json[attr];
+                }
+            }
+            return json;
+        },
         /**选中通过样式*/
         selectByClass: function (jqele, selected, unselected) {
             jqele.addClass(selected).removeClass(unselected);
@@ -21,7 +55,7 @@
         /**触发切换“选中|未选中”样式*/
         toggleClass: function (jqele, selected, unselected) {
             var _this = this;
-            _this.unselectByClass(jqele, unselected, selected);
+            _this.unselectByClass(jqele, selected, unselected);
             jqele.toggle(function () {_this.selectByClass($(this), selected, unselected);}, function () {_this.selectByClass($(this), unselected, selected);});
             return this;
         },
@@ -104,8 +138,8 @@
                 });
 
                 //初始化样式
-                _this.unselectByClass(titles, eachOptions.titleSelectedClass, eachOptions.titleUnselectedClass);
-                _this.unselectByClass(panels, eachOptions.panelSelectedClass, eachOptions.panelUnselectedClass);
+                _this.unselectByClass(titles.filter(":not(.{})".format(eachOptions.titleSelectedClass)), eachOptions.titleSelectedClass, eachOptions.titleUnselectedClass);
+                _this.unselectByClass(panels.filter(":not(.{})".format(eachOptions.panelSelectedClass)), eachOptions.panelSelectedClass, eachOptions.panelUnselectedClass);
 
                 //默认选中
                 if ($.isNumeric(eachOptions.defaultSelected)) {

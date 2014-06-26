@@ -1,8 +1,20 @@
 package com.baihui.hxtd.soa.common.dao;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.List;
+import java.util.Map;
+
 import com.baihui.hxtd.soa.base.orm.hibernate.HibernateDAOImpl;
+import com.baihui.hxtd.soa.base.orm.hibernate.HibernatePage;
 import com.baihui.hxtd.soa.common.entity.Common;
+
+import org.apache.poi.ss.formula.functions.T;
+import org.hibernate.Query;
 import org.springframework.stereotype.Repository;
+import org.springside.modules.persistence.SearchFilter;
 
 
 @Repository
@@ -64,6 +76,40 @@ public class CommonDao extends HibernateDAOImpl<Common, Long> {
     public int updateIsLeafById(String entityName, Long id, boolean isLeaf) {
         String hql = String.format("update %s entity set entity.isLeaf=? where entity.id=?", entityName);
         return createQuery(hql, isLeaf, id).executeUpdate();
+    }
+    
+    /**
+     * 查询已删除的数据
+     */
+    public  HibernatePage<T> getDeletedDate(HibernatePage<T> page, String entityName, String recordName,Long deletorId, Date gteModifiedTime, Date lteModifiedTime) {
+    	SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm");
+    	
+    	String hql = String.format("select entity from %s entity inner join fetch entity.modifier where entity.isDeleted=true ", entityName);
+    	List<Object> listParams = new ArrayList<Object>();
+        //删除者
+        if(null != deletorId){
+        	hql += " and entity.modifier.id = ?";
+        	listParams.add(Long.valueOf(deletorId));
+        }
+      //记录名称
+        if(null != recordName && !recordName.isEmpty()){
+        	hql += " and entity.name = ?";
+        	listParams.add(recordName);
+        }
+      //大于删除时间
+        if(null != gteModifiedTime){
+			hql += " and entity.modifiedTime>?";
+			listParams.add(gteModifiedTime);
+			
+        }
+      //小于删除时间
+        if(null != gteModifiedTime){
+			hql += " and entity.modifiedTime<?";
+			listParams.add(gteModifiedTime);
+        }
+        Object[] o = listParams.toArray();
+        page.setResult(createQuery(hql, o).list());
+        return page;
     }
 
 }

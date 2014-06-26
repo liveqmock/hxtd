@@ -34,7 +34,7 @@ $(function () {
     		<td class="f14" align="right" width="6%">字典名称：</td>
     		<td class="f14" align="right" width="16%"><input type="text" class="text_input1" name="search_LIKE_key"/></td>
     		<td width="8%">
-    			<a href="javascript:;" class="reset block dump_btn globle_img fr ml10"></a>
+    			<a href="javascript:;" class="reset a_underline fr w_blue mt5">清除</a>
     			<a href="javascript:;" class="block c_white lh25 fr ml10">
     				<b class="allbtn_l block fl"></b>
     				<b class="allbtn_r pr13 block fl w_auto f14 submit">查&nbsp;&nbsp;询</b>

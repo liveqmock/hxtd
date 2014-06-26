@@ -72,9 +72,9 @@ function checkLoginForm(){
 </script>
 </head>
 
-<body>
-<img src="${ctx}/static/images/big_gb.jpg" class="pa big_img">
-<div class="slogin_white fl mt22b">
+<body class="big_bg" style="min-width: 1100px;">
+<%--<img src="${ctx}/static/images/big_gb.jpg" class="pa big_img" />
+--%><div class="slogin_white fl mt22b">
 <img src="${ctx}/static/images/big_logo.png" width="162" height="50" class=" mt60 ml80"/>
 </div>
 <div class="big_whtie fr mt8b mr80">
@@ -94,6 +94,6 @@ function checkLoginForm(){
 <a href="javascript:void(0);" id="loginBtn" class="block c_white lh25 mr10 fr mr80 " ><b class="allbtn_l block fl"></b><b class="allbtn_r pr13 block fl w_auto f14">登&nbsp;&nbsp;录</b></a>
 
 </div>
-<div class="margin0 w500 h80"><p class="foot_login tc pt20 lh32 margin0">版权所有：华兴泰达           地址：中国北京市朝阳区建国外大街永安里8号华彬中心（CBD商圈）<br />联系电话：010-12345678</p></div>
+<div class="margin0 w500 h80"><p class="foot_login tc pt20 lh32 margin0">版权所有©华兴控股集团 地址：北京市朝阳区建国门外大街永安东里8号华彬中心7层<br />联系电话：010-85288488</p></div>
 </body>
 </html>

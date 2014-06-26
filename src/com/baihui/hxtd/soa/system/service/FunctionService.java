@@ -53,7 +53,7 @@ public class FunctionService {
         criteria.setFetchMode("menu.trigger", FetchMode.JOIN);
         criteria.setFetchMode("parentMenu", FetchMode.JOIN);
         criteria.setFetchMode("parentMenu.trigger", FetchMode.JOIN);
-        criteria.add(Restrictions.like("url", url, MatchMode.START));
+        criteria.add(Restrictions.like("url", url + ".", MatchMode.START));
         return functionDao.findUnique(criteria);
     }
 

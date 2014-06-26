@@ -109,7 +109,7 @@ public class HibernateDAOImpl<T, PK extends Serializable> implements
     /**
      * 按id删除对象.
      */
-    public void delete(final PK id) {
+    public void logicalDelete(final PK id) {
         Assert.notNull(id, "id不能为空");
         String hql = String.format("update %s entity set entity.isDeleted=true, entity.modifiedTime=? where entity.id =?", entityClass.getSimpleName());
         batchExecute(hql, new Date(), id);
@@ -119,27 +119,33 @@ public class HibernateDAOImpl<T, PK extends Serializable> implements
     /**
      * 按id删除对象.
      */
-    public void delete(final PK... ids) {
+    public void logicalDelete(final PK... ids) {
         Assert.notNull(ids, "id不能为空");
         String hql = String.format("update %s entity set entity.isDeleted=true, entity.modifiedTime=:modifyTime where entity.id in (:id)", entityClass.getSimpleName());
         getSession().createQuery(hql).setParameter("modifyTime", new Date()).setParameterList("id", ids).executeUpdate();
         logger.debug("delete entity {},id is {}", entityClass.getSimpleName(), ids);
     }
 
-
-   /* *//**
+    /**
      * 按id删除对象.
-     *//*
+     */
+    public void delete(final PK id) {
+        Assert.notNull(id, "id不能为空");
+        delete(get(id));
+        logger.debug("delete entity {" + entityClass.getSimpleName() + "},id is {" + id + "}");
+    }
+
+    /**
+     * 按id删除对象.
+     */
     public void delete(final PK... ids) {
         Assert.notNull(ids, "id不能为空");
         for (int i = 0; i < ids.length; i++) {
             delete(ids[i]);
         }
-        logger.debug("delete entity {" + entityClass.getSimpleName()
-                + "},id is {" + ids + "}");
+        logger.debug("delete entity {" + entityClass.getSimpleName() + "},id is {" + ids + "}");
     }
 
-*/
 
     /**
      * 按id获取对象.

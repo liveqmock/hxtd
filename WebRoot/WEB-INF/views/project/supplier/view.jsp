@@ -134,8 +134,14 @@
 
 		</table>
 		<!-- 附件组件调用开始  -->
-		<tag:attachment view="${VS_HAS_FUNCTIONS.supplierAttView}" upload="${VS_HAS_FUNCTIONS.supplierUpload}" module="supplier"
-			query="${VS_HAS_FUNCTIONS.supplierAttQuery}" down="${VS_HAS_FUNCTIONS.supplierDown}" id="${com.id}"></tag:attachment>
+		<tag:attachment 
+		view="${VS_HAS_FUNCTIONS.supplierAttView}" 
+		upload="${VS_HAS_FUNCTIONS.supplierUpload}" 
+		query="${VS_HAS_FUNCTIONS.supplierAttQuery}" 
+		down="${VS_HAS_FUNCTIONS.supplierDown}"
+		deleteFlag="${VS_HAS_FUNCTIONS.supplierAttDelete}" 
+		module="supplier"
+		id="${com.id}"></tag:attachment>
 		<!-- 附件组件调用结束  -->
 		<div class=" h40"></div>
 	</div>

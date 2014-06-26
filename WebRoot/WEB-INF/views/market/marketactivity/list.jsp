@@ -14,9 +14,7 @@
 $(function(){
 	jsUtil.datepicker(".time");// 绑定日历
 	new Grid().init().bindExport(); // 生成Gird
-	$(".more").click(function(){
-		$(this).find("i").toggleClass("develop").parents("tr").nextAll().toggle();
-	});
+
 });
 </script>
 </head>
@@ -25,10 +23,10 @@ $(function(){
     <form id="form" action="${ctx}/market/marketactivity/query.do" onsubmit="return false;">
     <table class="fl mt5 w">
     	<tr>
-    		<td class="f14" align="right" width="6%">活动名称：</td>
-    		<td class="f14" align="left"  width="16%"><input type="text" class="text_input1" name="search_LIKE_name"/></td>
-    		<td class="f14" align="right" width="6%">活动类型：</td>
-    		<td class="f14" align="left" width="16%">
+    		<td class="f14 namewidth1" align="right">活动名称：</td>
+    		<td class="f14 namewidth2" align="left"><input type="text" class="text_input1" name="search_LIKE_name"/></td>
+    		<td class="f14 namewidth1 " align="right">活动类型：</td>
+    		<td class="f14 namewidth2" align="left" width="16%">
     			<select name="search_EQ_dic.id" class="select2">
 					<option value="">全部</option>
 					<c:forEach items="${dicType}" var="dic">
@@ -36,8 +34,8 @@ $(function(){
 					</c:forEach>
 				</select>
     		</td>
-    		<td class="f14" align="right" width="6%">活动状态：</td>
-    		<td class="f14" align="left" width="16%">
+    		<td class="f14 namewidth1" align="right">活动状态：</td>
+    		<td class="namewidth2" align="left" width="16%">
     			<select name="search_EQ_status.id" class="select2">
 					<option value="">全部</option>
 					<c:forEach items="${dicStatus}" var="dic">
@@ -45,52 +43,37 @@ $(function(){
 					</c:forEach>
 				</select>
     		</td>
-    		<td class="f14" align="right" width="6%">举办时间：</td>
-    		<td class="f14" align="left" width="16%">
-    			<div class="pr vm">
-	    			<a href="javascript:;" class="pa time_closenone1"></a>
-	    			<a href="javascript:;" class="pa time_closenone2"></a>
-	    			<input class="text_input2 input_close globle_img time" name="search_GTE_beginDate" 
-	    				type="text" readonly/>-<input class="text_input2 input_close globle_img time" name="search_LTE_endDate" 
-	    				type="text" readonly/>
-    			</div>
-    		</td>
-    		<td width="11%">
-    			<a href="javascript:;" class="c_222 fr block ml10 mr10 mt5 cp more">
-    				展开<i class="packup globle_img block_inline"></i>
-    			</a>
-    			<a href="javascript:;" class="a_underline fr w_blue mt5">清除</a>
-    			<a href="javascript:;" class="block c_white lh25 fr mr10 submit">
-    				<b class="allbtn_l block fl"></b>
-    				<b class="allbtn_r pr13 block fl w_auto f14">查&nbsp;&nbsp;询</b>
-    			</a>
+    		<td width="namewidth3">
+    			<a href="javascript:void(0);" class="c_222 block cp fr ml10 packup globle_img mt8 mr20 more" title="展开"></a>
+                <a href="javascript:void(0);" class="a_underline block_inline fr w_blue mt5 reset" >清除</a>
+                <a href="javascript:void(0);" class="block_inline c_white lh25 fr mr10 submit"><b class="allbtn_l block fl"></b><b class="allbtn_r pr13 block fl w_auto f14">查&nbsp;&nbsp;询</b></a>
     		</td>
     	</tr>
-    	<tr style="display:none;">
-    		<td class="f14" align="right">创建时间：</td>
-    		<td class="f14" align="left">
-    			<div class="pr vm">
-	    			<a href="javascript:;" class="pa time_closenone1"></a>
-	    			<a href="javascript:;" class="pa time_closenone2"></a>
-	    			<input class="text_input2 input_close globle_img time" name="search_GTE_createdTime" 
-	    				type="text" readonly/>-<input class="text_input2 input_close globle_img time" name="search_LTE_createdTime" 
+    	<tr class="more-content">
+    		<td class="f14 namewidth1" align="right">举办时间：</td>
+    		<td class="f14 namewidth2" align="left" width="16%">
+    			<div class="vm">
+	    			<input class="text_input2 input_close globle_img time" name="search_GTE_beginDate"
+	    				type="text" readonly/>-<input class="text_input2 input_close globle_img time" name="search_LTE_endDate"
 	    				type="text" readonly/>
     			</div>
     		</td>
-    		<td class="f14" align="right">修改时间：</td>
-    		<td class="f14" align="left">
-    			<div class="pr vm">
-	    			<a href="javascript:;" class="pa time_closenone1"></a>
-	    			<a href="javascript:;" class="pa time_closenone2"></a>
-	    			<input class="text_input2 input_close globle_img time" name="search_GTE_modifiedTime" 
-	    				type="text" readonly/>-<input class="text_input2 input_close globle_img time" name="search_LTE_modifiedTime" 
+    		<td class="f14 namewidth1" align="right">创建时间：</td>
+    		<td class="f14 namewidth2" align="left">
+    			<div class="vm">
+	    			<input class="text_input2 input_close globle_img time" name="search_GTE_createdTime"
+	    				type="text" readonly/>-<input class="text_input2 input_close globle_img time" name="search_LTE_createdTime"
 	    				type="text" readonly/>
     			</div>
     		</td>
-    		<td class="f14" align="right"></td>
-    		<td class="f14" align="left"></td>
-    		<td class="f14" align="right"></td>
-    		<td class="f14" align="left"></td>
+    		<td class="f14 namewidth1" align="right">修改时间：</td>
+    		<td class="namewidth2" align="left">
+    			<div class="vm">
+	    			<input class="text_input2 input_close globle_img time" name="search_GTE_modifiedTime"
+	    				type="text" readonly/>-<input class="text_input2 input_close globle_img time" name="search_LTE_modifiedTime"
+	    				type="text" readonly/>
+    			</div>
+    		</td>
     		<td></td>
     	</tr>
     </table>
@@ -120,12 +103,11 @@ $(function(){
 						</a>
 					</li>
 				</c:if>
+			</ul>
+			<ul class="fr id_table1 mt10 mr10" style="display:none;">
 				<li>
-					<a href="javascript:;" uri="${ctx}/market/marketactivity/export.do?TYPE=pagination" 
-						class="block c_white ml10 lh25 mr10 export">
-						<b class="allbtn_l block fl"></b>
-						<b class="allbtn_r pr13 block fl w_auto f14">导&nbsp;出</b>
-					</a>
+					<a href="javascript:;" uri="${ctx}/market/marketactivity/export.do?TYPE=pagination"
+						class="leading_out block_inline mr10 export" title="导出"></a>
 				</li>
 			</ul>
 		</div>
@@ -184,11 +166,11 @@ $(function(){
            <td>{$T.row.createdTime}</td>
            <td align="center">
              <c:if test="${VS_HAS_FUNCTIONS.marketactivityView}">
-                 <a href="${ctx}/market/marketactivity/toViewPage.do?id={$T.row.id}" 
+                 <a href="${ctx}/market/marketactivity/toViewPage.do?id={$T.row.id}"
                  	class="block_inline s_detail_btn globle_img ml10" title="详情"></a>
              </c:if>
              <c:if test="${VS_HAS_FUNCTIONS.marketactivityModify}">
-                 <a href="${ctx}/market/marketactivity/toModifyPage.do?id={$T.row.id}" 
+                 <a href="${ctx}/market/marketactivity/toModifyPage.do?id={$T.row.id}"
                  	class="block_inline s_edit_btn globle_img ml10" title="编辑"></a>
              </c:if>
              <c:if test="${VS_HAS_FUNCTIONS.marketactivityDelete}">
@@ -197,7 +179,7 @@ $(function(){
              </c:if>
            </td>
 	    </tr>
-	    {#/for} 
+	    {#/for}
 	</textarea>
 	<%@include file="/WEB-INF/template/sort.jsp" %>
 	<%@include file="/WEB-INF/template/pagination.jsp" %>

@@ -7,18 +7,25 @@ import javax.annotation.Resource;
 
 import org.hibernate.FetchMode;
 import org.hibernate.criterion.DetachedCriteria;
-import org.hibernate.criterion.Restrictions;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.BeanUtils;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springside.modules.persistence.SearchFilter;
 
 import com.baihui.hxtd.soa.base.orm.hibernate.HibernatePage;
 import com.baihui.hxtd.soa.base.utils.Search;
+import com.baihui.hxtd.soa.common.dao.AttachmentDao;
+import com.baihui.hxtd.soa.common.dao.MemoirDao;
+import com.baihui.hxtd.soa.customer.dao.ContactDao;
+import com.baihui.hxtd.soa.customer.dao.CustomerDao;
 import com.baihui.hxtd.soa.customer.dao.LeadDao;
+import com.baihui.hxtd.soa.customer.entity.Contact;
+import com.baihui.hxtd.soa.customer.entity.Customer;
 import com.baihui.hxtd.soa.customer.entity.Lead;
 import com.baihui.hxtd.soa.system.dao.UserDao;
+import com.baihui.hxtd.soa.system.entity.Dictionary;
 import com.baihui.hxtd.soa.system.service.DataShift;
 
 /**
@@ -43,7 +50,18 @@ public class LeadService {
 	
 	@Resource
 	private UserDao userDao;
+	
+	@Resource
+	private CustomerDao customerDao;
+	
+	@Resource
+	private ContactDao contactDao;
 
+	@Resource
+	private AttachmentDao attachementDao;
+
+	@Resource
+	private MemoirDao memoirDao;
 	/**
 	 * 根据id查询Lead对象
 	 */
@@ -79,8 +97,16 @@ public class LeadService {
 
 	public void save(Lead lead) {
 		logger.info("保存线索信息{}", lead);
+		if(lead.getProvince().getId()==null){
+			lead.setProvince(null);
+		}
+		if(lead.getCity().getId()==null){
+			lead.setCity(null);
+		}
+		if(lead.getCounty().getId()==null){
+			lead.setCounty(null);
+		}
 		leadDao.save(lead);
-
 	}
 
 	/**
@@ -122,9 +148,44 @@ public class LeadService {
 	 * @param id
 	 */
 	public void delete(Long... id) {
-		leadDao.delete(id);
+		leadDao.logicalDelete(id);
 	}
 
+	/**
+	 * 
+	  * leadConverter(线索转换为客户和联系人)
+	  * @Title: leadConverter
+	  * @param @param id    参数类型
+	  * @return void    返回类型
+	  * @throws
+	 */
+	public void leadConverter(Long id){
+		logger.info("线索转换开始，ID={}",id);
+		Lead lead = this.get(id);
+		
+		logger.debug("转换客户信息");
+		Customer cus = new Customer();
+		BeanUtils.copyProperties(lead, cus);
+		logger.debug("客户来源指定为线索转换");
+		cus.setSource(new Dictionary(4030206L));
+		cus.setId(null);
+		customerDao.save(cus);
+		
+		logger.debug("转换联系人信息");
+		Contact con = new Contact();
+		BeanUtils.copyProperties(lead, con);
+		con.setSource(null);
+		con.setId(null);
+		con.setCustomer(cus);
+		contactDao.save(con);
+		
+		logger.debug("修改线索的附件以及联系纪要给联系人");
+		attachementDao.leadConverter(lead, con);
+		memoirDao.leadConverter(lead, con);
+		
+		logger.info("删除线索信息 ID={}",id);
+		this.delete(id);
+	}
 	public int modifyOwner(Long ownerId, Long... ids) {
 		return leadDao.modifyOwner(ownerId, ids);
 

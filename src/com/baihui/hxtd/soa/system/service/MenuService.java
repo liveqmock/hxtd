@@ -583,7 +583,7 @@ public class MenuService {
     @Transactional
     public void delete(Long... ids) {
         logger.info("删除");
-        menuDao.delete(ids);
+        menuDao.logicalDelete(ids);
 
         userDao.updateAllStoreStatus();
     }

@@ -1,4 +1,4 @@
-package com.baihui.hxtd.soa.setting.controller;
+package com.baihui.hxtd.soa.system.controller;
 
 import java.io.IOException;
 import java.io.PrintWriter;
@@ -20,8 +20,8 @@ import org.springside.modules.web.Servlets;
 import com.baihui.hxtd.soa.base.orm.hibernate.HibernatePage;
 import com.baihui.hxtd.soa.base.utils.Search;
 import com.baihui.hxtd.soa.base.utils.mapper.HibernateAwareObjectMapper;
-import com.baihui.hxtd.soa.setting.entity.AuditLog;
-import com.baihui.hxtd.soa.setting.service.AuditLogService;
+import com.baihui.hxtd.soa.system.entity.AuditLog;
+import com.baihui.hxtd.soa.system.service.AuditLogService;
 import com.baihui.hxtd.soa.system.service.DictionaryService;
 import com.baihui.hxtd.soa.util.JsonDto;
 
@@ -38,7 +38,7 @@ import com.baihui.hxtd.soa.util.JsonDto;
  * @date 2014-6-20 上午11:17:53
  */
 @Controller
-@RequestMapping(value = "/setting/auditlog")
+@RequestMapping(value = "/system/auditlog")
 public class AuditLogController {
 	private Logger logger = LoggerFactory.getLogger(this.getClass());
 	
@@ -59,7 +59,7 @@ public class AuditLogController {
         page.setHibernateOrderBy(orderBy);
         //page.setHibernateOrder(order);
         model.addAttribute("page", page);
-        return "/setting/auditlog/list";
+        return "/system/auditlog/list";
     }
 	
 	/**
@@ -74,8 +74,10 @@ public class AuditLogController {
 			HibernatePage<AuditLog> page,
            PrintWriter out) throws NoSuchFieldException, IOException {
 		logger.info("获取查询条件");
+
 		Map<String, Object> searchParams = Servlets.getParametersStartingWith(request, "search_");
 		Search.clearBlankValue(searchParams);
+		Search.toRangeDate(searchParams, "operateTime");
 		logger.debug("查询条件数目“{}”", searchParams.size());
 		logger.info("添加默认的查询条件");
 		logger.info("获取分页数据");
@@ -89,19 +91,5 @@ public class AuditLogController {
 		HibernateAwareObjectMapper.DEFAULT.writeValue(out, json);
 	}
 	
-	/**
-	 *  delete(删除审计日志)
-	 * @param id
-	 * @return
-	 */
-	@ResponseBody
-	@RequestMapping(value = "/delete.do",produces = "text/text;charset=UTF-8")
-	public String delete(Long... id){
-		logger.info("AuditLogController.delete删除审计日志id={}",StringUtils.join(id,","));
-		auditLogService.delete(id);
-		JsonDto jsonDto = new JsonDto();
-		jsonDto.setMessage("删除成功");
-		return jsonDto.toString();
-	}
 	
 }

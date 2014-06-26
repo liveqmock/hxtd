@@ -1,11 +1,11 @@
-package com.baihui.hxtd.soa.setting.dao;
+package com.baihui.hxtd.soa.system.dao;
 
 import org.hibernate.Query;
 import org.hibernate.SQLQuery;
 import org.springframework.stereotype.Repository;
 
 import com.baihui.hxtd.soa.base.orm.hibernate.HibernateDAOImpl;
-import com.baihui.hxtd.soa.setting.entity.AuditLog;
+import com.baihui.hxtd.soa.system.entity.AuditLog;
 
 /**
  * 
@@ -20,8 +20,8 @@ import com.baihui.hxtd.soa.setting.entity.AuditLog;
  * @date 2014-5-16 下午04:07:53
  */
 @Repository
-public class AuditLogDao extends HibernateDAOImpl<AuditLog, Long>  {
-	public void delete(Long... ids) {
+public class RecycleBinDao extends HibernateDAOImpl<AuditLog, Long>  {
+	public void logicalDelete(Long... ids) {
 		Query sqlQuery = getSession().createQuery("delete from AuditLog where id in (:ids)");
 		//batchExecute(hql, values)
 		sqlQuery.setParameterList("ids", ids);

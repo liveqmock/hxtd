@@ -116,7 +116,7 @@ public class SupplierService {
      */
     public boolean delete(Long[] id) {
     	if(projectDao.getCount(id)==0){
-    		supplierDao.delete(id);
+    		supplierDao.logicalDelete(id);
     		return true;
     	}
     	return false;

@@ -130,6 +130,6 @@ public class ProductService {
      * @param id 产品主键IDS
     */
    public void delete(Long... ids) {
-	   productDao.delete(ids);
+	   productDao.logicalDelete(ids);
    }
 }

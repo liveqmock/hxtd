@@ -54,7 +54,7 @@ public class AttachmentController {
 	
 	private static Map<String,String> moduleMap;
 	
-	private static final String FOLDER = "/res/";
+	private static final String FOLDER = "res";
 	
 	static{
 		moduleMap = new HashMap<String,String>();
@@ -83,8 +83,9 @@ public class AttachmentController {
 	@RequestMapping(value="/{module}/attachment/view.comp")
 	public String view(Model model,Long id){
 		Attachment att = attachmentService.view(id);
-		String[] urls =att.getAddress().split("/");
-		String url = FOLDER+urls[urls.length-1];
+		String separator = File.separator;
+		String[] urls =att.getAddress().split("\\"+separator);
+		String url = separator+FOLDER+separator+urls[urls.length-1];
 		model.addAttribute("url",url);
 		return "/common/attachment/view";
 	}
@@ -108,7 +109,8 @@ public class AttachmentController {
 			dict.setId(Long.valueOf(datas[1]));
 		}
 		List<MultipartFile> files=request.getFiles("file");//取得from里面的参数
-        String uploadpath=request.getSession().getServletContext().getRealPath("/")+FOLDER;
+		String separator = File.separator;
+        String uploadpath=request.getSession().getServletContext().getRealPath("/")+FOLDER+separator;
         String[] names = null;
         String fName = null;
         FileOutputStream fileOS = null;
@@ -138,6 +140,15 @@ public class AttachmentController {
         json.setMessage("上传成功");
         json.setSuccessFlag(true);
         return json.toString();
+	}
+	
+	
+	@ResponseBody
+	@RequestMapping(value="/{module}/attachment/delete.do",produces = "text/text;charset=UTF-8")
+	public String query(Long[] id){
+		attachmentService.delete(id);
+		JsonDto json = JsonDto.delete(id);
+		return json.toString();
 	}
 	
 	private static String randomFilename(){  

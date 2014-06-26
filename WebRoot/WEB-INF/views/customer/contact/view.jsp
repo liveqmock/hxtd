@@ -4,7 +4,7 @@
 <c:set var="ctx" value="${pageContext.request.contextPath}"/>
 <html>
 <head>
-<title>联系人</title>
+<title>联系人详情</title>
 <link href="${ctx}/static/css/recommend/detail.css?v=1" type="text/css" rel="stylesheet"></link>
 </head>
 <body>
@@ -97,8 +97,8 @@
 			<td align="left" valign="top"><div class="w85b">${contact.remark}</div></td>
 		</tr>
 	</table>
-	<tag:attachment view="${VS_HAS_FUNCTIONS.leadAttView}" upload="${VS_HAS_FUNCTIONS.leadUpload}" module="lead"
-			query="${VS_HAS_FUNCTIONS.leadAttQuery}" down="${VS_HAS_FUNCTIONS.leadDown}" id="${lead.id}"></tag:attachment>
+	<tag:attachment view="${VS_HAS_FUNCTIONS.leadAttView}" upload="${VS_HAS_FUNCTIONS.leadUpload}" module="contact"
+			query="${VS_HAS_FUNCTIONS.leadAttQuery}" down="${VS_HAS_FUNCTIONS.leadDown}" id="${contact.id}"></tag:attachment>
 	<tag:memoir view="true" edit="true" query="true" delete="true" 
 		moduleType="contact" moduleId="${contact.id}"></tag:memoir>
 	<div class="h40"></div>

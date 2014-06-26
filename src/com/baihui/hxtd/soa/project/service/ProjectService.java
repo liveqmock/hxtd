@@ -1,6 +1,7 @@
 
 package com.baihui.hxtd.soa.project.service;
 
+import java.util.List;
 import java.util.Map;
 
 import javax.annotation.Resource;
@@ -19,6 +20,7 @@ import com.baihui.hxtd.soa.base.utils.Search;
 import com.baihui.hxtd.soa.project.dao.ProductDao;
 import com.baihui.hxtd.soa.project.dao.ProjectDao;
 import com.baihui.hxtd.soa.project.entity.Project;
+import com.baihui.hxtd.soa.system.service.DataShift;
 /**
  * 
  * 功能描述：项目模块业务层
@@ -75,9 +77,10 @@ public class ProjectService {
      */
     public Project get(Long id) {
         logger.info("查询单个信息{}", id);
-        String hql = "select project from Project project  " +
-        				" left join fetch project.supplier " +
-        				" where project.id = ?";
+        String hql = " select project from Project project  " +
+        				" left join fetch project.supplier  " +
+        				" left join fetch project.payType  " +
+        				" where  project.id = ? ";
         return projectDao.findUnique(hql,id);
     }
     
@@ -102,10 +105,24 @@ public class ProjectService {
 	 */
 	public boolean delete(Long[] id){
 		if(productDao.getCount(id)==0){
-			projectDao.delete(id);
+			projectDao.logicalDelete(id);
 			return true;
 		}else{
 			return false;
 		}
 	}
+	
+	
+	public List<Project> export(Map<String, Object> searchParams,DataShift dataShift) throws NoSuchFieldException{
+		DetachedCriteria criteria = DetachedCriteria.forClass(Project.class);
+        criteria.add(Restrictions.eq("isDeleted", false));
+        criteria.setFetchMode("creator", FetchMode.JOIN);
+        criteria.setFetchMode("modifier", FetchMode.JOIN);
+        criteria.setFetchMode("supplier", FetchMode.JOIN);
+        Map<String, SearchFilter> filters = Search.parse(searchParams);
+        Search.buildCriteria(filters, criteria, Project.class);
+        return projectDao.find(criteria,3000);
+	}
+	
+	
 }

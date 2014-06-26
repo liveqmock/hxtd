@@ -124,9 +124,11 @@ function clearInputVal(obj){//清除
 				</td>
 				<td align="left">
 					<input type="text" id="txt_owner" value="${lead.owner.name }"
-						onclick="searchData('owner')" class="text_input3" readonly />
+						 class="text_input3 required" readonly />
 					<input type="hidden" id="hide_owner_id" name="owner.id"
 						value="${lead.owner.id }" />
+					<i class="s_inquiry globle_img block_inline ml5 vm cp" title="搜索所有者" onclick="searchData('owner');"></i>
+				<i class="dump_btn globle_img block_inline ml5 vm cp empty" title="清除"></i>
 				</td>
 			</tr>
 			<tr>

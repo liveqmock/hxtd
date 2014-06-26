@@ -10,7 +10,7 @@
 
 <html>
 <head>
-    <title>组织详情</title>
+    <title>组织编辑</title>
     <link rel="stylesheet" href="${ctx}/static/css/application.css" type="text/css"/>
     <link href="${ctx}/static/css/recommend/detail.css" rel="stylesheet" type="text/css"/>
     <script type="text/javascript" src="${ctx}/static/js/js-util.common.js"></script>
@@ -119,12 +119,12 @@
         <div class="cb block h40 margin0 mt10" style="width:350px;">
             <ul class="id_table1 cb">
                 <c:if test="${VS_HAS_FUNCTIONS.organizationModify}">
-                    <li><a href="javascript:void(0)" redirecturi="/system/organization/toViewPage.do?id=%s" class="block c_white lh25 submit mr10"><b class="allbtn_l block fl"></b><b class="allbtn_r pr13 block fl w_auto f14">保&nbsp;存</b></a></li>
+                    <li><a href="javascript:void(0)" redirecturi="/system/organization/toViewPage.do?id=%s" class="block c_white lh25 submit mr10"><b class="allbtn_l block fl"></b><b class="allbtn_r pr13 block fl w_auto f14">保&nbsp;&nbsp;存</b></a></li>
                     <c:if test="${VS_HAS_FUNCTIONS.organizationAdd}">
                         <li><a href="javascript:void(0)" redirecturi="/system/organization/toAddPage.do" class="block c_white lh25 submit mr10"><b class="allbtn_l block fl"></b><b class="allbtn_r pr13 block fl w_auto f14">保存并新增</b></a></li>
                     </c:if>
                 </c:if>
-                <li><a href="${ctx}/system/organization/toQueryPage.do" class="block c_white lh25 mr10"><b class="allbtn_l block fl"></b><b class="allbtn_r pr13 block fl w_auto f14">取消</b></a></li>
+                <li><a href="${ctx}/system/organization/toQueryPage.do" class="block c_white lh25 mr10"><b class="allbtn_l block fl"></b><b class="allbtn_r pr13 block fl w_auto f14">取&nbsp;&nbsp;消</b></a></li>
             </ul>
         </div>
     </form>

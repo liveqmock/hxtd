@@ -174,8 +174,14 @@ function clearInputVal(obj){//清除
 					支付方式：
 				</td>
 				<td align="left">
-					<input type="text" name="payType" value="${project.payType }"
-						class="text_input3">
+					<select name="payType.id" class="select1">
+						<option value="">--请选择--</option>
+						<c:forEach items="${payType}" var="p">
+							<option value="${p.id}"
+							<c:if test="${p.id==project.payType.id}">selected</c:if>
+							>${p.key}</option>
+						</c:forEach>
+					</select>
 				</td>
 				<td align="right">
 					提前赎回率：

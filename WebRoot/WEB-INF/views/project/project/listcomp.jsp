@@ -10,10 +10,13 @@
 <link rel="stylesheet" href="${ctx}/static/css/recommend/detail.css" type="text/css"/>
 <link href="${ctx}/static/css/application.css" rel="stylesheet" type="text/css"/>
 <script type="text/javascript" src="${ctx}/static/js/jquery.min.js"></script>
+<script type="text/javascript" src="${ctx}/static/js/jquery.custom.js"></script>
+<script type="text/javascript" src="${ctx}/static/js/ui/jquery.ui.datepicker.js"></script>
 <script type="text/javascript" src="${ctx}/static/js/jquery.form.js"></script>
-<script type="text/javascript" src="${ctx}/static/js/jquery-jtemplates.js"></script>
+<script type="text/javascript" src="${ctx}/static/js/api/api.string.js"></script>
 <script type="text/javascript" src="${ctx}/static/js/js-util.js"></script>
 <script type="text/javascript" src="${ctx}/static/js/commonAjax.js"></script>
+<script type="text/javascript" src="${ctx}/static/js/jquery-jtemplates.js"></script>
 <script type="text/javascript" src="${ctx}/static/js/js-util.common.js"></script>
 <script type="text/javascript">
 $(function(){

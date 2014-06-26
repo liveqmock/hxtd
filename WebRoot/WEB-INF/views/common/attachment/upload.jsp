@@ -11,10 +11,12 @@
 <meta http-equiv="keywords" content="keyword1,keyword2,keyword3">
 <link rel="stylesheet" href="${ctx}/static/css/public/common.css"/>
 <link rel="stylesheet" href="${ctx}/static/css/public/reset.css"/>
-<script type="text/javascript" src="${ctx}/static/js/jquery.min.js"></script>
-<script type="text/javascript" src="${ctx}/static/js/js-util.js"></script>
-<script type="text/javascript" src="${ctx}/static/js/jquery.uploadify.min.js"></script>
 <link rel="stylesheet" href="${ctx}/static/css/uploadify.css" type="text/css"></link>
+<script type="text/javascript" src="${ctx}/static/js/jquery.min.js"></script>
+<script type="text/javascript" src="${ctx}/static/js/js-util.js?v=1"></script>
+<script type="text/javascript" src="${ctx}/static/js/jquery.uploadify.min.js"></script>
+<script type="text/javascript" src="${ctx}/static/js/commonAjax.js"></script>
+
 <style type="text/css">
 .uploadify-button {background-color:transparent;border:none;padding: 0;}
 .uploadify:hover .uploadify-button {background-color:transparent;}
@@ -23,6 +25,7 @@
 var moduleId;
 buttonAdd="${ctx}/static/images/tan_btn1.png";
 buttonNoneAdd="${ctx}/static/images/tan_btn1none.png";
+
 $(function(){
 	var url = parent.uploadURL;
 	moduleId = $("#id",parent.document).val();
@@ -50,8 +53,8 @@ $(function(){
              'onQueueComplete':function(){
             	 $('#att-button').css({"background-image":"url("+buttonAdd+")"});
             	 $('#att').uploadify('disable', false);
+            	
              }
-             
 	});
 });
 function upload(){

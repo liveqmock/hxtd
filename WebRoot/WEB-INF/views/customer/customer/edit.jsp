@@ -89,10 +89,10 @@ function clearInputVal(obj){//清除
 				<i class="s_inquiry globle_img block_inline ml5 vm cp" title="搜索所有者" onclick="searchData('owner');"></i>
 				<i class="dump_btn globle_img block_inline ml5 vm cp" title="清除" onclick="clearInputVal(this);"></i>
 			</td>
-			<td  align="right" width="15%"><span class="w_red">*&nbsp;</span>客户类型：</td>
+			<td  align="right" width="15%">客户类型：</td>
 			<td align="left">
-				<select name="type.id" class="select1 pr requiredSelect">
-				<option value="-1">--无--</option>
+				<select name="type.id" class="select1 pr ">
+				<option value="040301">--无--</option>
 					<c:forEach items="${cType}" var="type">
 						<option value="${type.id }"
 						<c:if test="${customer.type.id==type.id }">
@@ -242,10 +242,9 @@ function clearInputVal(obj){//清除
 		<h1   class="f14 fbnone ml40 pt10">描述信息</h1>
 		<table  class="cb id_table4 w95b bg_c_white margin0 mt10">
 		<tr>
-			<td  align="right" width="15%" valign="top">备注：</td>
-			<td  align="left" width="85%" valign="top">
-				<input  name="remark" class="remarks_input1" >${customer.remark }</textarea>
-			</td>
+			<td align="right" width="15%" valign="top">备注：</td>
+			<td align="left" width="85%" valign="top"><textarea name="remark" class="remarks_input1" style="resize: none;">${customer.remark}</textarea></td>
+		</tr>
 		</tr>
 	</table>
 	<div class=" h40"></div>

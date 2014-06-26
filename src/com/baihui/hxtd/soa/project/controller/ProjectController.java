@@ -1,12 +1,16 @@
 
 package com.baihui.hxtd.soa.project.controller;
 
+import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.List;
 import java.util.Map;
 
 import javax.annotation.Resource;
+import javax.servlet.ServletContext;
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -22,10 +26,14 @@ import org.springside.modules.web.Servlets;
 
 import com.baihui.hxtd.soa.base.Constant;
 import com.baihui.hxtd.soa.base.orm.hibernate.HibernatePage;
+import com.baihui.hxtd.soa.base.utils.ImportExport;
 import com.baihui.hxtd.soa.base.utils.Search;
 import com.baihui.hxtd.soa.project.entity.Project;
+import com.baihui.hxtd.soa.project.entity.Supplier;
 import com.baihui.hxtd.soa.project.service.ProjectService;
 import com.baihui.hxtd.soa.system.entity.User;
+import com.baihui.hxtd.soa.system.service.DataShift;
+import com.baihui.hxtd.soa.system.service.DictionaryService;
 import com.baihui.hxtd.soa.util.JsonDto;
 /**
  * 
@@ -54,12 +62,16 @@ public class ProjectController {
 	@Resource
 	private ProjectService projectService;
 	
+	@Resource
+	private DictionaryService dictionaryService;
+	
 	@RequestMapping(value="/toQueryPage.do")
 	public String toQueryPage(ModelMap model){
         logger.info("转至查询页面");
         logger.info("存储表单默认值");
         HibernatePage<Project> page = new HibernatePage<Project>();
         model.addAttribute("page", page);
+        model.addAttribute("payType", dictionaryService.findChildren("040201"));
 		return "/project/project/list";
 	}
 	
@@ -111,6 +123,7 @@ public class ProjectController {
 	public String toModifyPage(Long id,Model model){
 		Project project = projectService.get(id);
 		model.addAttribute("project",project);
+		model.addAttribute("payType", dictionaryService.findChildren("040201"));
 		model.addAttribute("funcUrl","/project/project/modify.do");
 		return "/project/project/edit";
 	}
@@ -152,6 +165,7 @@ public class ProjectController {
 	@RequestMapping(value="/toAddPage.do")
 	public String toAddPage(Long id,Model model){
 		model.addAttribute("funcUrl","/project/project/add.do");
+		model.addAttribute("payType", dictionaryService.findChildren("040201"));
 		return "/project/project/edit";
 	}
 
@@ -217,4 +231,28 @@ public class ProjectController {
 		return "/project/project/listcomp";
 	}
 
+	
+	/**
+     * 导出分页数据
+     * 1.在分页列表上根据当前条件进行导出
+     */
+    @RequestMapping(value = "/export.do", params = "TYPE=pagination")
+    public void exportPagination(HttpServletRequest request,  ModelMap model, HttpServletResponse response) throws NoSuchFieldException, IOException {
+        logger.info("导出excel文件");
+
+        logger.info("解析页面查询条件");
+        Map<String, Object> searchParams = Servlets.getParametersStartingWith(request, "search_");
+        Search.clearBlankValue(searchParams);
+        Search.decodeValue(searchParams);
+        Search.toRangeDate(searchParams, "createdTime");
+        Search.toRangeDate(searchParams, "modifiedTime");
+        logger.debug("查询条件数目“{}”", searchParams.size());
+        DataShift dataShift = (DataShift) model.get(Constant.VS_DATASHIFT);		
+        List<Project> project = projectService.export(searchParams,dataShift);
+        logger.debug("列表信息数目“{}”", project.size());
+
+        logger.info("转换成excel文件并输出");
+        ServletContext servletContext = request.getSession().getServletContext();
+        ImportExport.exportExcel(response, servletContext, "project", project).write(response.getOutputStream());
+    }
 }

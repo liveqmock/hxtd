@@ -1,5 +1,5 @@
 <%--
-    系统消息增加页面
+    系统消息编辑
   Role: huizijing
   Date:2014/6/4
 --%>
@@ -9,7 +9,7 @@
 <c:set var="ctx" value="${pageContext.request.contextPath}"/>
 <html>
 <head>
-<title>系统消息增加</title>
+<title>系统消息编辑</title>
 <link href="${ctx}/static/css/stressing/detail.css" rel="stylesheet" type="text/css" />
 <script type="text/javascript" src="${ctx}/static/js/jquery.metadata.js"></script>
 <script type="text/javascript" src="${ctx}/static/js/jquery.validate.js"></script>
@@ -72,14 +72,14 @@ function clearInputVal(obj){//清除
             </tr>
             <tr>
             <td align="right" width="15%" ><span class="w_red">*&nbsp;</span>系统消息内容：</td>
-                <td align="left">
-                    <textarea name="content" class="required" style="width:90%;height:300px;border:1px solid #e0e0e0; margin:5px 0px">${userMessage.message.content}</textarea>
+                <td align="left" valign="top" width="85%">
+                    <textarea name="content" class="remarks_input1 required" style="resize: none;">${userMessage.message.content}</textarea>
                </td>
            </tr>
            <tr>
             <td align="right" width="15%"><span class="w_red">*&nbsp;</span>消息发至用户：</td>
                 <td align="left">
-				<input id="txt_owner" class="text_input3 required"type="text" "/>
+				<input readonly  id="txt_owner" class="text_input3 required"type="text" "/>
 				<input id="hide_owner_id" name="userId" type="hidden" />
 				<i class="s_inquiry globle_img block_inline ml5 vm cp" title="搜索所有者" onclick="searchData('org');"></i>
 				<i class="dump_btn globle_img block_inline ml5 vm cp" title="清除" onclick="clearInputVal(this);"></i>

@@ -35,7 +35,6 @@ public class JsonDto {
     public static final JsonDto NO_RESULT = new JsonDto("没有符合当前检索条件的结果.");
 
     public JsonDto() {
-
     }
 
     /**
@@ -62,6 +61,33 @@ public class JsonDto {
     public JsonDto(String message) {
         this.successFlag = false;
         this.message = message;
+    }
+
+    /**
+     * 新增成功提示
+     */
+    public static JsonDto add(Long id) {
+        return new JsonDto(id, "新增成功！");
+    }
+
+    /**
+     * 编辑成功提示
+     */
+    public static JsonDto modify(Long id) {
+        return new JsonDto(id, "编辑成功！");
+    }
+
+    /**
+     * 删除成功提示
+     */
+    public static JsonDto delete(Long... id) {
+        JsonDto jsonDto = new JsonDto();
+        jsonDto.setSuccessFlag(true);
+        jsonDto.setMessage("删除成功！");
+        BusinessResult<Long[]> result = new BusinessResult<Long[]>();
+        result.setResult(id);
+        jsonDto.setResult(result);
+        return jsonDto;
     }
 
     /**

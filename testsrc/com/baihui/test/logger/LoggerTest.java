@@ -6,8 +6,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.AbstractJUnit4SpringContextTests;
 
-@ContextConfiguration(value = "classpath*:ApplicationContext.xml")
-public class LoggerTest extends AbstractJUnit4SpringContextTests {
+public class LoggerTest  {
     @Test
     public void testLoginForm() throws Exception {
         Logger logger = LoggerFactory.getLogger(this.getClass());

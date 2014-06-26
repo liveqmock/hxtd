@@ -8,7 +8,6 @@ import javax.annotation.Resource;
 import org.hibernate.Criteria;
 import org.hibernate.FetchMode;
 import org.hibernate.criterion.DetachedCriteria;
-import org.hibernate.criterion.Order;
 import org.hibernate.criterion.Restrictions;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -18,15 +17,11 @@ import org.springside.modules.persistence.SearchFilter;
 
 import com.baihui.hxtd.soa.base.orm.hibernate.HibernatePage;
 import com.baihui.hxtd.soa.base.utils.Search;
-import com.baihui.hxtd.soa.base.utils.serial.TierSerial;
-import com.baihui.hxtd.soa.base.utils.serial.TierSerials;
 import com.baihui.hxtd.soa.customer.dao.CustomerDao;
 import com.baihui.hxtd.soa.customer.entity.Customer;
 import com.baihui.hxtd.soa.system.dao.UserDao;
 import com.baihui.hxtd.soa.system.entity.Notice;
-import com.baihui.hxtd.soa.system.entity.User;
 import com.baihui.hxtd.soa.system.service.DataShift;
-import com.baihui.hxtd.soa.util.JsonDto;
 
 /**
  * 功能描述：客户模块service层
@@ -99,7 +94,7 @@ public class CustomerService {
      * @param id
      */
     public void delete(Long... id) {
-    	customerDao.delete(id);
+    	customerDao.logicalDelete(id);
     }
     
     /**

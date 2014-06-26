@@ -73,8 +73,8 @@ jsUtil.page.page2TableFoot=function(page,query,successFun){
 		foot.push('<li><a href="javascript:void(0)" id="pre"><img src="',path,'/static/images/lbtn.png"');
 	}
 	foot.push(' alt="" /></a></li><li>|</li>');		
-	foot.push('<li>第<input type="text" id="pageNo" value="',page.hibernatePageNo ,'"/>页 <a href="javascript:;" style="color:blue;">go</a>，共<label id="totalPages">',page.totalPages,'</label>页</li><li>|</li>');		
-	if(page.hibernatePageNo==page.totalPages){
+	foot.push('<li>第<input type="text" id="pageNo" value="',page.hibernatePageNo ,'"/>页 <a href="javascript:;" style="color:blue;">go</a>，共<label id="totalPages">',page.totalPageValue,'</label>页</li><li>|</li>');
+	if(page.hibernatePageNo==page.totalPageValue){
 		foot.push('<li><a><img src="',path,'/static/images/rbtn_h.png" alt="" /></a></li>');
 		foot.push('<li><a><img src="',path,'/static/images/rrbtn_h.png" alt="" /></a></li>');
 	}else{
@@ -94,7 +94,7 @@ jsUtil.page.addFunction=function(page,query,successFun){
 	$("#pageNo").blur(function(){
 		var no = $("#pageNo").val();
 		var rep = /^\d*$/;
-		if(!rep.test(no)||parseInt(no)>page.totalPages||parseInt(no)==0){
+		if(!rep.test(no)||parseInt(no)>page.totalPageValue||parseInt(no)==0){
 			jsUtil.alert("请输入正确的页码");
 			return false;
 		}

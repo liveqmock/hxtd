@@ -123,7 +123,6 @@ public class UserController {
         logger.info("转换为TDO格式");
         JsonDto jsonDto = new JsonDto();
         jsonDto.setSuccessFlag(true);
-        jsonDto.setMessage("请求数据成功！");
         jsonDto.setResult(page);
 
         return HibernateAwareObjectMapper.DEFAULT.writeValueAsString(jsonDto);
@@ -193,7 +192,7 @@ public class UserController {
 
         userService.add(user);
 
-        return new JsonDto(user.getId()).toString();
+        return JsonDto.add(user.getId()).toString();
     }
 
     /**
@@ -246,7 +245,7 @@ public class UserController {
 
         userService.modify(user);
 
-        return new JsonDto(user.getId()).toString();
+        return JsonDto.modify(user.getId()).toString();
     }
 
     /**
@@ -266,9 +265,7 @@ public class UserController {
 
         userService.delete(id);
 
-        JsonDto jsonDto = new JsonDto("删除成功");
-        jsonDto.setSuccessFlag(true);
-        return jsonDto.toString();
+        return JsonDto.delete(id).toString();
     }
 
     /**
@@ -322,7 +319,7 @@ public class UserController {
                                 @RequestParam(value = "componentId", required = false) Long[] componentIds) {
         logger.info("授权");
         userService.authorization(id, roleIds, functionIds, componentIds);
-        return new JsonDto(id).toString();
+        return new JsonDto(id, "授权成功").toString();
     }
 
     /**
@@ -488,8 +485,9 @@ public class UserController {
      * toOwnerLst(跳转至所有者组件列表界面)
      */
     @RequestMapping(value = "/toQueryUser.comp")
-    public String toOwnerLst(ModelMap model) throws NoSuchFieldException {
-        List<Organization> orgList = organizationService.getOrgAndUsers();
+    public String toOwnerLst(ModelMap model,HttpServletRequest request) throws NoSuchFieldException {
+    	User u = (User) request.getSession().getAttribute(Constant.VS_USER);
+    	List<Organization> orgList = organizationService.getOrgAndUsers();
         StringBuffer sb = new StringBuffer("[");
         Long oldOrgId = 0l;
         for (int i = 0; i < orgList.size(); i++) {
@@ -507,9 +505,9 @@ public class UserController {
             for (User user : org.getOwners()) {//用户
                 sb.append(String.format("{id:%s, name:\"%s\", pId:-%s, type:\"%s\"},", new Object[]{
                         user.getId(),
-                        user.getName(),
+                        user.getRealName(),
                         org.getId(),
-                        "user"
+                        u.getId()==user.getId()? "org":"user"
                 }));
             }
             oldOrgId = org.getId();

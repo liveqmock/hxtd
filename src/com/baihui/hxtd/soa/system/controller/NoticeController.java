@@ -69,7 +69,12 @@ public class NoticeController {
 	private NoticeService noticeService;
 	
 	
-	
+
+	@InitBinder
+    public void initBinder(WebDataBinder binder) {
+        SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd HH:mm");
+        binder.registerCustomEditor(Date.class, new CustomDateEditor(format, true));
+    }
 	/**
 	 * 查询公告列表(从功能按钮跳转)
 	 * @param page
@@ -97,7 +102,6 @@ public class NoticeController {
         jsonDto.setSuccessFlag(true);
         jsonDto.setMessage("请求数据成功！");
         jsonDto.setResult(page);
-
         HibernateAwareObjectMapper.DEFAULT.writeValue(out, jsonDto);
 	}
 
@@ -135,21 +139,19 @@ public class NoticeController {
 		String funcUrl="";
 		String returnStr="/system/notice/view";
 		Notice notice = null;
+		notice = noticeService.getById(id);
 		if("edit".equals(type)){
 			funcUrl="/system/notice/modify.do";
 			returnStr= "/system/notice/edit";
-		}else 
-		if("send".equals(type)){
-		    funcUrl="/system/notice/toSend.do?id=id";
-		    returnStr= "/system/notice/send";
-			}
-		notice = noticeService.getById(id);
-		//SimpleDateFormat   sdformat   =   new SimpleDateFormat("yyyy-MM-dd");   
-		//String sendTime=notice.getSentTime();
-		//String deadTime=notice.getDeadTime();
-		model.addAttribute("sendTime", notice.getSentTime());
-		model.addAttribute("deadTime", notice.getDeadTime());
+		}else{
+			notice.setContent(notice.getContent().replaceAll("\r", "<br>"));
+		}
+		SimpleDateFormat   sdformat   =   new SimpleDateFormat("yyyy-MM-dd HH:mm");   
+		String sendTime=sdformat.format(notice.getSentTime());
+		String deadTime=sdformat.format(notice.getDeadTime());
 		model.addAttribute("notice",notice);
+		model.addAttribute("sendTime", sendTime);
+		model.addAttribute("deadTime", deadTime);
 		model.addAttribute("funcUrl", funcUrl);
 		return returnStr;
 	}

@@ -34,12 +34,6 @@ public class RoleService {
 
     private Logger logger = LoggerFactory.getLogger(RoleService.class);
 
-    //    @Value(value = "${system.user.type.manager}")
-    private String typeManagerValue = "01040101";
-
-    //    @Value(value = "${system.user.type.normal}")
-    private String typeNormalValue = "01040102";
-
     @Resource
     private RoleDao roleDao;
 
@@ -115,7 +109,7 @@ public class RoleService {
     @Transactional
     public void delete(Long... ids) {
         logger.info("删除");
-        roleDao.delete(ids);
+        roleDao.logicalDelete(ids);
     }
 
 
@@ -189,6 +183,17 @@ public class RoleService {
         logger.debug("用户主键编号“{}”", userId);
         String hql = "select role from Role role inner join role.owners owner where owner.id=?";
         return roleDao.find(hql, userId);
+    }
+
+    /**
+     * 查找组织关联角色
+     */
+    @Transactional(readOnly = true)
+    public List<Role> findOrganization(Long organizationId) {
+        logger.info("查找组织关联角色");
+        logger.debug("组织主键编号“{}”", organizationId);
+        String hql = "select role from Role role inner join role.organizations orgs where orgs.id=?";
+        return roleDao.find(hql, organizationId);
     }
 
     /**

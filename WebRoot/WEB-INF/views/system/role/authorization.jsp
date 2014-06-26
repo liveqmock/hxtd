@@ -50,12 +50,12 @@
         </c:if>
     </div>
 
-    <ul class="fl id_table3 w block cb mt10 tab-titles" style="border-bottom:5px solid #626262; height:32px;">
-        <li class="tab-title id_table3li" fortab="#tabs-function">
+    <ul class="fl id_table3 w block cb mt10 tab-titles" style="border-bottom:5px solid #626262; height:32px;" fortabpanels>
+        <li class="tab-title" fortabpanel="#tabs-function">
             <b class="h_tabbtn_l w25 block fl"></b>
             <b class="h_tabbtn_r  pr25 w_auto f14 block fr lh32 cp id_nav pr">功能</b>
         </li>
-        <li class="tab-title id_table3li2" fortab="#tabs-component">
+        <li class="tab-title" fortabpanel="#tabs-component">
             <b class="h_tabbtn_l w25 block fl"></b>
             <b class="h_tabbtn_r pr25 w_auto f14 block fr lh32 cp id_nav pr">组件</b>
         </li>
@@ -63,13 +63,13 @@
 </div>
 
 
-<form name="user" action="${ctx}${VR_FUNCTION.url}" method="post">
+<form action="${ctx}${VR_FUNCTION.url}" method="post">
     <input type="hidden" name="id" value="${param.id}">
 
     <div class="margin0 ml35 mr35">
         <div class="w cb tab-panels">
 
-            <div id="tabs-function" class="function selected">
+            <div id="tabs-function" class="tab-panel">
                 <c:forEach items="${allMenus}" var="item" varStatus="status">
                 <c:choose>
                 <c:when test="${item.level==1}">
@@ -80,7 +80,7 @@
                         <ul class="id_ul4 fr mt10 ">
                             <c:forEach items="${allFunctions[item.id]}" var="item">
                                 <li>
-                                    <label class="box size51 ${fn:contains(allAuthorizationFunctions,item)?" inherit-function":""}">
+                                    <label>
                                         <input type="checkbox" name="functionId" value="${item.id}" class="function" ${fn:contains(authorizationFunctions,item)?"checked":""}>${item.name}
                                     </label>
                                 </li>
@@ -96,7 +96,7 @@
                     <ul class="id_ul4 fr">
                         <c:forEach items="${allFunctions[item.id]}" var="item">
                             <li>
-                                <label class="box size51 ${fn:contains(allAuthorizationFunctions,item)?" inherit-function":""}">
+                                <label>
                                     <input type="checkbox" name="functionId" value="${item.id}" class="function" ${fn:contains(authorizationFunctions,item)?"checked":""}>${item.name}
                                 </label>
                             </li>
@@ -110,10 +110,10 @@
             </c:forEach>
         </div>
 
-        <div id="tabs-component" class="component unselected">
+        <div id="tabs-component" class="tab-panel">
             <c:forEach items="${allComponents}" var="item" varStatus="status">
                 <li style="width:16%" class="fl">
-                    <label class="box size81 ${fn:contains(allAuthorizationComponents,item)?" inherit-component":""}">
+                    <label class="box size81">
                         <input type="checkbox" name="componentId" value="${item.id}" ${fn:contains(authorizationComponents,item)?"checked":""}>${item.name}
                     </label>
                 </li>
@@ -123,10 +123,10 @@
         <div class="h40"></div>
         <div class="cb block h40 margin0 mt10" style="width:350px;">
             <ul class="id_table1 cb">
-                <c:if test="${VS_HAS_FUNCTIONS.userAuthorization}">
-                    <li><a href="javascript:void(0)" class="block c_white lh25 submit mr10"><b class="allbtn_l block fl"></b><b class="allbtn_r pr13 block fl w_auto f14">保&nbsp;存</b></a></li>
+                <c:if test="${VS_HAS_FUNCTIONS.roleAuthorization}">
+                    <li><a href="javascript:void(0)" class="block c_white lh25 submit mr10"><b class="allbtn_l block fl"></b><b class="allbtn_r pr13 block fl w_auto f14">保&nbsp;&nbsp;存</b></a></li>
                 </c:if>
-                <li><a href="${ctx}/system/user/toQueryPage.do" class="block c_white lh25 mr10"><b class="allbtn_l block fl"></b><b class="allbtn_r pr13 block fl w_auto f14">取消</b></a></li>
+                <li><a href="${ctx}/system/role/toQueryPage.do" class="block c_white lh25 mr10"><b class="allbtn_l block fl"></b><b class="allbtn_r pr13 block fl w_auto f14">取消</b></a></li>
             </ul>
         </div>
     </div>
@@ -135,4 +135,5 @@
 <div class="cb"></div>
 
 </body>
+
 </html>

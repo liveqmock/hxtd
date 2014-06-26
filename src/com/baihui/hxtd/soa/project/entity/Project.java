@@ -13,6 +13,7 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
+import com.baihui.hxtd.soa.system.entity.Dictionary;
 import com.baihui.hxtd.soa.system.entity.User;
 import com.fasterxml.jackson.annotation.JsonFormat;
 /**
@@ -67,7 +68,7 @@ public class Project {
 	 * 融资前周期（天）
 	 */
 	@Column(name="BEFORE_FINANCE_CYCLE")
-	private Integer BeforeFinanceCycle;
+	private Integer beforeFinanceCycle;
 	/**
 	 * 融资周期
 	 */
@@ -97,10 +98,9 @@ public class Project {
 	/**
 	 * 支付方式
 	 */
-//	@ManyToOne(fetch=FetchType.LAZY)
-//	@JoinColumn(name="PAY_TYPE")
-	@Column(name="PAY_TYPE")
-	private Integer payType;
+	@ManyToOne(fetch=FetchType.LAZY)
+	@JoinColumn(name="PAY_TYPE")
+	private Dictionary payType;
 	/**
 	 * 备注
 	 */
@@ -134,126 +134,196 @@ public class Project {
 	
 	@Column(name = "IS_DELETED", nullable = false, updatable = false)
     private Boolean isDeleted = false;
-	
+
+
 	public Long getId() {
 		return id;
 	}
+
+
 	public void setId(Long id) {
 		this.id = id;
 	}
+
+
 	public Supplier getSupplier() {
 		return supplier;
 	}
+
+
 	public void setSupplier(Supplier supplier) {
 		this.supplier = supplier;
 	}
+
+
 	public String getCode() {
 		return code;
 	}
+
+
 	public void setCode(String code) {
 		this.code = code;
 	}
+
+
 	public String getName() {
 		return name;
 	}
+
+
 	public void setName(String name) {
 		this.name = name;
 	}
+
+
 	public Float getFinanceLimit() {
 		return financeLimit;
 	}
+
+
 	public void setFinanceLimit(Float financeLimit) {
 		this.financeLimit = financeLimit;
 	}
+
+
 	public Date getBeginTime() {
 		return beginTime;
 	}
+
+
 	public void setBeginTime(Date beginTime) {
 		this.beginTime = beginTime;
 	}
+
+
 	public Integer getBeforeFinanceCycle() {
-		return BeforeFinanceCycle;
+		return beforeFinanceCycle;
 	}
+
+
 	public void setBeforeFinanceCycle(Integer beforeFinanceCycle) {
-		BeforeFinanceCycle = beforeFinanceCycle;
+		this.beforeFinanceCycle = beforeFinanceCycle;
 	}
+
+
 	public Integer getFinanceCycle() {
 		return financeCycle;
 	}
+
+
 	public void setFinanceCycle(Integer financeCycle) {
 		this.financeCycle = financeCycle;
 	}
+
+
 	public Date getOpenTime() {
 		return openTime;
 	}
+
+
 	public void setOpenTime(Date openTime) {
 		this.openTime = openTime;
 	}
+
+
 	public Date getDendlineTime() {
 		return dendlineTime;
 	}
+
+
 	public void setDendlineTime(Date dendlineTime) {
 		this.dendlineTime = dendlineTime;
 	}
+
+
 	public Float getEr() {
 		return er;
 	}
+
+
 	public void setEr(Float er) {
 		this.er = er;
 	}
+
+
 	public Float getAer() {
 		return aer;
 	}
+
+
 	public void setAer(Float aer) {
 		this.aer = aer;
 	}
-	public int getPayType() {
+
+
+	public Dictionary getPayType() {
 		return payType;
 	}
-	public void setPayType(int payType) {
+
+
+	public void setPayType(Dictionary payType) {
 		this.payType = payType;
 	}
+
+
 	public String getRemark() {
 		return remark;
 	}
+
+
 	public void setRemark(String remark) {
 		this.remark = remark;
 	}
+
+
 	public User getCreator() {
 		return creator;
 	}
+
+
 	public void setCreator(User creator) {
 		this.creator = creator;
 	}
+
+
 	public Date getCreatedTime() {
 		return createdTime;
 	}
+
+
 	public void setCreatedTime(Date createdTime) {
 		this.createdTime = createdTime;
 	}
+
+
 	public User getModifier() {
 		return modifier;
 	}
+
+
 	public void setModifier(User modifier) {
 		this.modifier = modifier;
 	}
+
+
 	public Date getModifiedTime() {
 		return modifiedTime;
 	}
+
+
 	public void setModifiedTime(Date modifiedTime) {
 		this.modifiedTime = modifiedTime;
 	}
+
+
 	public Boolean getIsDeleted() {
 		return isDeleted;
 	}
+
+
 	public void setIsDeleted(Boolean isDeleted) {
 		this.isDeleted = isDeleted;
 	}
-	public void setPayType(Integer payType) {
-		this.payType = payType;
-	}
-	
-	
 	
 	
 }

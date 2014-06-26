@@ -26,7 +26,7 @@
         $(function () {
             var ztree = jsUtil.organizationTree({
                 data:${organizationTree==null?"[]":organizationTree},
-                selectedId:"${organizationId}",
+                selectedId: "${organizationId}",
                 click: function (event, treeId, treeNode) {
                     $("[name=id]").val(treeNode.id);
                     grid.loadGrid();
@@ -50,7 +50,7 @@
                 <div class="fl table_blueheadc fl w">
                     <h1 class="f14 c_white lh40 ml10 fl">组织机构</h1>
                     <img width="108" height="50" class="fl" src="${ctx}/static/images/snowflake.png">
-                    <a class="c_white f14 fr mt10 fb mr10" href="javascript:;">&lt;&lt;</a>
+                    <%--<a class="c_white f14 fr mt10 fb mr10" href="javascript:;">&lt;&lt;</a>--%>
                 </div>
             </div>
             <div class="cb mb20 mr20 bor_636363" style=" height:495px;">
@@ -74,13 +74,13 @@
                 <div class="ie_head">
                     <ul class="fl id_table1 mt10 ml10">
                         <c:if test="${VS_HAS_FUNCTIONS.organizationDelete}">
-                            <li><a href="javascript:void(0)" uri="${ctx}/system/organization/delete.do" class="block c_white lh25 deletesome mr10"><b class="allbtn_l block fl"></b><b class="allbtn_r pr13 block fl w_auto f14">删&nbsp;除</b></a></li>
+                            <li><a href="javascript:void(0)" uri="${ctx}/system/organization/delete.do" class="block c_white lh25 deletesome mr10"><b class="allbtn_l block fl"></b><b class="allbtn_r pr13 block fl w_auto f14">删&nbsp;&nbsp;除</b></a></li>
                         </c:if>
                         <c:if test="${VS_HAS_FUNCTIONS.organizationAdd}">
-                            <li><a href="${ctx}/system/organization/toAddPage.do" class="block c_white lh25 add mr10"><b class="allbtn_l block fl"></b><b class="allbtn_r pr13 block fl w_auto f14">新&nbsp;增</b></a></li>
+                            <li><a href="${ctx}/system/organization/toAddPage.do" class="block c_white lh25 add mr10"><b class="allbtn_l block fl"></b><b class="allbtn_r pr13 block fl w_auto f14">新&nbsp;&nbsp;增</b></a></li>
                         </c:if>
-                        <c:if test="${VS_HAS_FUNCTIONS.organizationAuthorization}">
-                            <li><a href="javascript:void(0)" uri="${ctx}/system/organization/toAuthorizationPage.do" class="block c_white lh25 authorization mr10"><b class="allbtn_l block fl"></b><b class="allbtn_r pr13 block fl w_auto f14">授&nbsp;权</b></a></li>
+                        <c:if test="${VS_HAS_FUNCTIONS.organizationQuery}">
+                            <li><a href="javascript:void(0)" class="block c_white lh25 mr10 refresh"><b class="allbtn_l block fl"></b><b class="allbtn_r pr13 block fl w_auto f14">刷&nbsp;&nbsp;新</b> </a></li>
                         </c:if>
                     </ul>
                 </div>
@@ -104,7 +104,7 @@
                     <tbody class="list"></tbody>
                     <textarea id="template-tbody" class="template template-tbody">
                         {#foreach $T.result as row}
-                        <tr class="row {#cycle values=['','bg_c_blue']}">
+                        <tr class="row {#cycle values=['bg_c_blue','']}">
                             <td><input type="checkbox" class="checkitem" value="{$T.row.id}"/></td>
                             <td>
                                 <c:choose>
@@ -128,6 +128,9 @@
                                 </c:if>
                                 <c:if test="${VS_HAS_FUNCTIONS.organizationDelete}">
                                     <a href="javascript:void(0)" uri="${ctx}/system/organization/delete.do?id={$T.row.id}" class="block_inline s_dump_btn globle_img ml10 delete" title="删除"></a>
+                                </c:if>
+                                <c:if test="${VS_HAS_FUNCTIONS.organizationAuthorization}">
+                                    <a href="${ctx}/system/organization/toAuthorizationPage.do?id={$T.row.id}" class=" block_inline h_shouquan globle_img ml10 authorization" title="授权"></a>
                                 </c:if>
                             </td>
                         </tr>

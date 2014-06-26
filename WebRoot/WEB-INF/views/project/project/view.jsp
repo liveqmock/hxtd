@@ -120,7 +120,7 @@
 					支付方式：
 				</td>
 				<td align="left">
-					${project.payType }
+					${project.payType.key }
 				</td>
 				<td align="right">
 					提前赎回率：

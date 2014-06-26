@@ -1,10 +1,13 @@
 
 package com.baihui.hxtd.soa.common.dao;
 
+import org.hibernate.Query;
 import org.springframework.stereotype.Repository;
 
 import com.baihui.hxtd.soa.base.orm.hibernate.HibernateDAOImpl;
 import com.baihui.hxtd.soa.common.entity.Memoir;
+import com.baihui.hxtd.soa.customer.entity.Contact;
+import com.baihui.hxtd.soa.customer.entity.Lead;
 /**
  * 
  * 功能描述：联系纪要持久化层
@@ -27,7 +30,18 @@ public class MemoirDao extends HibernateDAOImpl<Memoir, Long> {
 	 */
 	public void delete(long... id) {
 		for (int i = 0; i < id.length; i++) {
-			super.delete(id[i]);
+			super.logicalDelete(id[i]);
 		}
 	}
+	
+	public void leadConverter(Lead l,Contact c){
+		String hql = "update Memoir m set m.moduleId=? , m.type = 11010104 " +
+				"where m.type=11010103 and m.moduleId=?";
+		Query query = createQuery(hql);
+		query.setParameter(0, c.getId());
+		query.setParameter(1, l.getId());
+		query.executeUpdate();
+	}
+	
+	
 }

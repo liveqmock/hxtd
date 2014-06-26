@@ -25,7 +25,7 @@
 
     <script type="text/javascript">
         $(function () {
-            var grid = new Grid().init().bindAuthorization().bindResetPassword().bindEnable().bindDisable().bindExport();
+            var grid = new Grid().init({paginationSizeShow: false}).bindAuthorization().bindResetPassword().bindEnable().bindDisable().bindExport();
             jsUtil.organizationTree({
                 data:${organizationTree==null?"[]":organizationTree},
                 selectedId: "${organizationId}",
@@ -52,7 +52,7 @@
                 <div class="fl table_blueheadc fl w">
                     <h1 class="f14 c_white lh40 ml10 fl">组织结构</h1>
                     <img width="108" height="50" class="fl" src="${ctx}/static/images/snowflake.png">
-                    <a class="c_white f14 fr mt10 fb mr10" href="javascript:;">&lt;&lt;</a>
+                    <%--<a class="c_white f14 fr mt10 fb mr10" href="javascript:;">&lt;&lt;</a>--%>
                 </div>
             </div>
             <div class="cb mb20 mr20 bor_636363" style=" height:495px;">
@@ -80,7 +80,7 @@
                             </div>
                         </td>
                         <td width="8%">
-                            <a href="javascript:void(0)" class="reset block dump_btn globle_img fr "></a>
+                            <a href="javascript:void(0)" class="reset block dump_btn globle_img fr"></a>
                             <a href="javascript:void(0)" class="block c_white lh25 fr mr10 submit"><b class="allbtn_l block fl"></b><b class="allbtn_r pr13 block fl w_auto f14">查&nbsp;&nbsp;询</b></a>
                         </td>
                     </tr>
@@ -97,25 +97,13 @@
                 <div class="ie_head">
                     <ul class="fl id_table1 mt10 ml10">
                         <c:if test="${VS_HAS_FUNCTIONS.userDelete}">
-                            <li><a href="javascript:void(0)" uri="${ctx}/system/user/delete.do" class="block c_white lh25 deletesome mr10"><b class="allbtn_l block fl"></b><b class="allbtn_r pr13 block fl w_auto f14">删&nbsp;除</b></a></li>
+                            <li><a href="javascript:void(0)" uri="${ctx}/system/user/delete.do" class="block c_white lh25 deletesome mr10"><b class="allbtn_l block fl"></b><b class="allbtn_r pr13 block fl w_auto f14">删&nbsp;&nbsp;除</b></a></li>
                         </c:if>
                         <c:if test="${VS_HAS_FUNCTIONS.userAdd}">
-                            <li><a href="${ctx}/system/user/toAddPage.do?organizationId=${organizationId}" class="block c_white lh25 add mr10"><b class="allbtn_l block fl"></b><b class="allbtn_r pr13 block fl w_auto f14">新&nbsp;增</b></a></li>
+                            <li><a href="${ctx}/system/user/toAddPage.do?organizationId=${organizationId}" class="block c_white lh25 add mr10"><b class="allbtn_l block fl"></b><b class="allbtn_r pr13 block fl w_auto f14">新&nbsp;&nbsp;增</b></a></li>
                         </c:if>
-                        <c:if test="${VS_HAS_FUNCTIONS.userAuthorization}">
-                            <li><a href="javascript:void(0)" uri="${ctx}/system/user/toAuthorizationPage.do" class="block c_white lh25 mr10 authorization"><b class="allbtn_l block fl"></b><b class="allbtn_r pr13 block fl w_auto f14">授&nbsp;权</b></a></li>
-                        </c:if>
-                        <c:if test="${VS_HAS_FUNCTIONS.userResetPassword}">
-                            <li><a href="javascript:void(0)" uri="${ctx}/system/user/resetPassword.do" class="block c_white lh25 mr10 resetpassword"><b class="allbtn_l block fl"></b><b class="allbtn_r pr13 block fl w_auto f14">重置密码</b></a></li>
-                        </c:if>
-                        <c:if test="${VS_HAS_FUNCTIONS.userEnable}">
-                            <%--<li><a href="javascript:void(0)" uri="${ctx}/system/user/enable.do" class="block c_white lh25 mr10 enable"><b class="allbtn_l block fl"></b><b class="allbtn_r pr13 block fl w_auto f14">启&nbsp;用</b></a></li>--%>
-                            <li><a href="javascript:void(0)" uri="${ctx}/system/user/enable.do" class="globle_img h_on block enable"></a></li>
-                        </c:if>
-                        <c:if test="${VS_HAS_FUNCTIONS.userDisable}">
-                            <%--<li><a href="javascript:void(0)" uri="${ctx}/system/user/disable.do" class="block c_white lh25 mr10 disable"><b class="allbtn_l block fl"></b><b class="allbtn_r pr13 block fl w_auto f14">禁&nbsp;用</b></a></li>--%>
-                            <li><a href="javascript:void(0)" uri="${ctx}/system/user/disable.do" class="globle_img h_off block disable"></a></li>
-
+                        <c:if test="${VS_HAS_FUNCTIONS.userQuery}">
+                            <li><a href="javascript:void(0)" class="block c_white lh25 mr10 refresh"><b class="allbtn_l block fl"></b><b class="allbtn_r pr13 block fl w_auto f14">刷&nbsp;&nbsp;新</b> </a></li>
                         </c:if>
                     </ul>
 
@@ -130,7 +118,7 @@
                 </div>
             </div>
 
-            <div class="listcontainer" forform="form" foropebar=".ie_head">
+            <div>
                 <table class="cb id_table2 w pr35">
                     <tr>
                         <th style="width:2%"><input type="checkbox" class="checkall"/></th>
@@ -142,13 +130,13 @@
                         <th style="width:5%">性别</th>
                         <th style="width:10%">联系电话</th>
                         <th style="width:10%">职位</th>
-                        <th style="width:15%">操作</th>
+                        <th style="width:25%">操作</th>
                     </tr>
                     <%@include file="/WEB-INF/template/sort.jsp" %>
                     <tbody class="list"></tbody>
                     <textarea id="template-tbody" class="template template-tbody">
                         {#foreach $T.result as row}
-                        <tr class="row {#cycle values=['','bg_c_blue']}">
+                        <tr class="row {#cycle values=['bg_c_blue','']}">
                             <td><input type="checkbox" class="checkitem" value="{$T.row.id}"/></td>
                             <td>
                                 <c:choose>
@@ -172,6 +160,22 @@
                                 </c:if>
                                 <c:if test="${VS_HAS_FUNCTIONS.userDelete}">
                                     <a href="javascript:void(0)" uri="${ctx}/system/user/delete.do?id={$T.row.id}" class=" block_inline s_dump_btn  globle_img ml10 delete" title="删除"></a>
+                                </c:if>
+                                <c:if test="${VS_HAS_FUNCTIONS.userEnable}">
+                                    {#if !$T.row.isActive}
+                                    <a href="javascript:void(0)" uri="${ctx}/system/user/enable.do?id={$T.row.id}" class="globle_img h_on block_inline enable" title="启用"></a>
+                                    {#/if}
+                                </c:if>
+                                <c:if test="${VS_HAS_FUNCTIONS.userDisable}">
+                                    {#if $T.row.isActive}
+                                    <a href="javascript:void(0)" uri="${ctx}/system/user/disable.do?id={$T.row.id}" class="globle_img h_off block_inline disable" title="禁用"></a>
+                                    {#/if}
+                                </c:if>
+                                <c:if test="${VS_HAS_FUNCTIONS.userAuthorization}">
+                                    <a href="${ctx}/system/user/toAuthorizationPage.do?id={$T.row.id}" class=" block_inline h_shouquan globle_img ml10 authorization" title="授权"></a>
+                                </c:if>
+                                <c:if test="${VS_HAS_FUNCTIONS.userResetPassword}">
+                                    <a href="javascript:void(0)" uri="${ctx}/system/user/resetPassword.do?id={$T.row.id}" class=" block_inline h_xiupass globle_img ml10 resetpassword" title="重置密码"></a>
                                 </c:if>
                             </td>
                         </tr>

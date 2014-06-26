@@ -94,9 +94,9 @@ public class MessageController {
         logger.debug("查询条件数目“{}”", searchParams.size());
         logger.info("添加默认的查询条件");
         logger.info("获取分页数据");
-        if("recived".contains(type)){
+        
+         if("recived".contains(type)){
             page = messageService.findRecivePage(searchParams, page,user);
-            
         }else{
         	page = messageService.findSendPage(searchParams, page,user);
         }
@@ -144,16 +144,19 @@ public class MessageController {
 		String funcUrl="";
 		String returnStr="/system/message/view";
 		UserMessage userMessage = null;
+		userMessage = messageService.getById(id);
 		if("edit".equals(type)){
 			funcUrl="/system/message/modify.do";
 			returnStr= "/system/message/reply";
 		}
-		
 		if("add".equals(type)){
 			funcUrl="/system/message/add.do";
 			returnStr= "/system/message/edit";
+		}else{
+			Message message=userMessage.getMessage();
+			message.setContent(message.getContent().replaceAll("\r", "<br>"));
+			userMessage.setMessage(message);
 		}
-		userMessage = messageService.getById(id);
 		model.addAttribute("userMessage",userMessage);
 		model.addAttribute("funcUrl", funcUrl);
 		return returnStr;
@@ -220,7 +223,6 @@ public class MessageController {
 		String[] userstr=userId.split(",");
 		for(int i=0;i<userstr.length;i++){
 			User user=userService.getById(Long.parseLong(userstr[i]));
-			
 			messageService.saveShip(message,user);
 		}
 		String redStr = "/system/message/toQueryPage.do";

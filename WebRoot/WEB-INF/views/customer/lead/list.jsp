@@ -52,8 +52,15 @@ $(function() {
 	new PCAS("province","city","county");
 	//首次加载数据
 	grid = new Grid().init().bindExport();
-	
 });
+
+function converter(id){
+	jsUtil.confirm("是否转换为客户",function(){
+		RcmsAjax.ajax(jsUtil.getRootPath() + '/customer/lead/leadConverter.do',
+				load, null, 'id='+id);
+	},"线索转换")
+}
+
 function convOwner() {
 	var ckObj = $(":checked", window.frames["dialogIframe"].document);
 	if (ckObj.length > 0) {
@@ -101,24 +108,24 @@ function reset() {
 				onsubmit="return false;">
 				<table class="fl mt5 w">
 					<tr>
-						<td class="f14" align="right" width="7%">
+						<td class="f14" align="right" width="6%">
 							线索名称：
 						</td>
-						<td class="f14" align="left" width="13%">
+						<td class="f14" align="left" width="16%">
 							<input type="text" class="text_input1" name="search_LIKE_name"
 								id="name" value="" />
 						</td>
-						<td class="f14" align="right" width="7%">
+						<td class="f14" align="right" width="6%">
 							邮箱：
 						</td>
-						<td class="f14" align="left" width="13%">
+						<td class="f14" align="left" width="16%">
 							<input type="text" class="text_input1" name="search_LIKE_email"
 								id="name" value="" />
 						</td>
-						<td class="f14" align="right" width="7%">
+						<td class="f14" align="right" width="6%">
 							线索来源：
 						</td>
-						<td class="f14" align="left" width="13%">
+						<td class="f14" align="left" width="16%">
 							<select name="search_EQ_source.id" class="select2">
 								<option value="">
 									--全部--
@@ -130,10 +137,10 @@ function reset() {
 								</c:forEach>
 							</select>
 						</td>
-						<td class="f14" align="right" width="7%">
+						<td class="f14" align="right" width="6%">
 							修改时间：
 						</td>
-						<td class="f14" align="left" width="18%">
+						<td class="f14" align="left" width="16%">
 							<div class="pr vm">
 								<a href="javascript:;" class="pa time_closenone1"></a>
 								<a href="javascript:;" class="pa time_closenone2"></a>
@@ -144,27 +151,29 @@ function reset() {
 									name="search_LTE_modifiedTime" type="text" readonly />
 							</div>
 						</td>
-						<td width="8%">
+						<td width="12%">
+							<a class="c_222 block cp fr ml10 globle_img mt8 mr20 more"
+								title="展开"></a>
 							<a href="javascript:void(0)"
-								class=" block c_white lh25 submit"><b
+								class="a_underline block_inline fr w_blue mt5 reset">清除</a>
+							<a href="javascript:void(0)"
+								class="block_inline c_white lh25 fr mr10 submit"><b
 								class="allbtn_l block fl"></b><b
-								class="allbtn_r pr13 block fl w_auto f14">查&nbsp&nbsp询</b> </a>
-							<a href="javascript:formReset()"
-								class="reset block dump_btn globle_img fl ml10"></a>
+								class="allbtn_r pr13 block fl w_auto f14">查&nbsp;&nbsp;询</b> </a>
 						</td>
 					</tr>
 					<tr>
-						<td class="f14" align="right" width="7%">
+						<td class="f14" align="right" width="6%">
 							手机：
 						</td>
-						<td class="f14" align="left" width="13%">
+						<td class="f14" align="left" width="16%">
 							<input type="text" class="text_input1" name="search_LIKE_mobile"
 								id="name" value="" />
 						</td>
-						<td class="f14" align="right" width="7%">
+						<td class="f14" align="right" width="6%">
 							线索状态：
 						</td>
-						<td class="f14" align="left" width="13%">
+						<td class="f14" align="left" width="16%">
 							<select name="search_EQ_status.id" class="select2">
 								<option value="">
 									--全部--
@@ -176,10 +185,10 @@ function reset() {
 								</c:forEach>
 							</select>
 						</td>
-						<td class="f14" align="right" width="7%">
+						<td class="f14" align="right" width="6%">
 							行业：
 						</td>
-						<td class="f14" align="left" width="13%">
+						<td class="f14" align="left" width="16%">
 							<select name="search_EQ_industry.id" class="select2">
 								<option value="">
 									--全部--
@@ -191,10 +200,10 @@ function reset() {
 								</c:forEach>
 							</select>
 						</td>
-						<td class="f14" align="right" width="7%">
+						<td class="f14" align="right" width="6%">
 							创建时间：
 						</td>
-						<td class="f14" align="left" width="18%">
+						<td class="f14" align="left" width="16%">
 							<div class="pr vm">
 								<a href="javascript:;" class="pa time_closenone1"></a>
 								<a href="javascript:;" class="pa time_closenone2"></a>
@@ -207,22 +216,22 @@ function reset() {
 						</td>
 					</tr>
 					<tr>
-						<td class="f14" align="right" width="7%">
+						<td class="f14" align="right" width="6%">
 							省：
 						</td>
-						<td class="f14" align="left" width="13%">
+						<td class="f14" align="left" width="16%">
 							<select id="province" name="search_EQ_province.id" class="select2"></select>
 						</td>
-						<td class="f14" align="right" width="7%">
+						<td class="f14" align="right" width="6%">
 							市：
 						</td>
-						<td class="f14" align="left" width="13%">
+						<td class="f14" align="left" width="16%">
 							<select id="city" name="search_EQ_city.id" class="select2"></select>
 						</td>
-						<td class="f14" align="right" width="7%">
+						<td class="f14" align="right" width="6%">
 							区/县：
 						</td>
-						<td class="f14" align="left" width="13%">
+						<td class="f14" align="left" width="16%">
 							<select id="county" name="search_EQ_county.id" class="select2"></select>
 						</td>
 					</tr>
@@ -267,26 +276,22 @@ function reset() {
 								class="allbtn_r pr13 block fl w_auto f14">更改所有者</b> </a>
 						</li>
 						</c:if>
-						<c:if test="${VS_HAS_FUNCTIONS.leadExport}">
-						<li>
-							<a href="javascript:void(0)"
-								uri="${ctx}/customer/lead/export.do?TYPE=pagination"
-								class="block c_white ml10 lh25 mr10 export"> <b
-								class="allbtn_l block fl"></b> <b
-								class="allbtn_r pr13 block fl w_auto f14">导&nbsp;出</b> </a>
-						</li>
-						</c:if>
-						<!--<a href="javascript:void(0)" id="transfer" class="blue_btn">转换</a>
-		<a href="javascript:void(0)" id="import" class="blue_btn">导入</a>
-		<a href="javascript:void(0)" id="export" class="blue_btn">导出</a>
-		<a href="javascript:void(0)" id="print" class="blue_btn">打印</a>
-		 -->
+					</ul>
+					<ul class="fr id_table1 mt10 ml10">
+					<c:if test="${VS_HAS_FUNCTIONS.leadExport}">
+								<li>
+									<a href="javascript:void(0)"
+										uri="${ctx}/customer/lead/export.do?TYPE=pagination"
+										class="leading_out globle_img block_inline mr10 export"
+										title="导出"></a>
+								</li>
+					</c:if>
 					</ul>
 				</div>
 			</div>
-			<div id="title" style="display: none; background-color: #f5f5f6;"
+			<div id="title" style="display: none;z-index: 1; background-color: #f5f5f6;"
 				class=" ml35 mr35">
-				<table class="cb id_table2 w">
+				<table class="cb id_table2 w ">
 					<tr>
 						<th>
 							<input type="checkbox" name="" class="checkall" id="id" />
@@ -328,7 +333,7 @@ function reset() {
 				</table>
 			</div>
 			<div class="ml35 mr35 content">
-				<table class="cb id_table2 w  tablesorter" id="table">
+				<table class="cb id_table2 w   tablesorter" id="table">
 					<tr id="recordDiv">
 						<th>
 							<input type="checkbox" name="" class="checkall" id="id" />
@@ -411,6 +416,8 @@ function reset() {
 									uri="${ctx}/customer/lead/delete.do?id={$T.row.id}" title="删除"
 									class="delete  block_inline s_dump_btn globle_img ml10"></a>
                         </c:if>
+                         <a href="javascript:void(0)" title="转换所有者"
+							onclick="converter({$T.row.id});"	class=" block_inline s_change globle_img ml10"></a>
                 </td>
             </tr>
             {#/for}

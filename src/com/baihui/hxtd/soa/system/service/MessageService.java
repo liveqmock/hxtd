@@ -22,7 +22,6 @@ import com.baihui.hxtd.soa.base.utils.Search;
 import com.baihui.hxtd.soa.system.dao.MessageDao;
 import com.baihui.hxtd.soa.system.dao.UserMessageDao;
 import com.baihui.hxtd.soa.system.entity.Message;
-import com.baihui.hxtd.soa.system.entity.Notice;
 import com.baihui.hxtd.soa.system.entity.User;
 import com.baihui.hxtd.soa.system.entity.UserMessage;
 /**
@@ -119,7 +118,7 @@ public class MessageService {
 	 * @param id
 	 */
 	public void delete(Long[] id) {
-		userMessageDao.delete(id);
+		userMessageDao.logicalDelete(id);
 
 	}
 

@@ -77,8 +77,8 @@
                     <td class="tar bghui pr10">创建人：</td>
                     <td class="bghb pl10">${role.creator.realName}</td>
                     <td class="tar bghui pr10">创建时间：</td>
-                    <fmt:formatDate value="${role.createTime}" pattern="yyyy-MM-dd HH:mm:ss" var="createTime"/>
-                    <td class="bghb pl10">${createTime}</td>
+                    <fmt:formatDate value="${role.createdTime}" pattern="yyyy-MM-dd HH:mm:ss" var="createdTime"/>
+                    <td class="bghb pl10">${createdTime}</td>
                 </tr>
                 <tr style="display: none">
                     <td class="tar bghui pr10">修改人：</td>

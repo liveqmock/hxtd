@@ -98,7 +98,8 @@
 		</tr>
 	</table>
 	<tag:attachment view="${VS_HAS_FUNCTIONS.leadAttView}" upload="${VS_HAS_FUNCTIONS.leadUpload}" module="contact"
-			query="${VS_HAS_FUNCTIONS.leadAttQuery}" down="${VS_HAS_FUNCTIONS.leadDown}" id="${contact.id}"></tag:attachment>
+			query="${VS_HAS_FUNCTIONS.leadAttQuery}" down="${VS_HAS_FUNCTIONS.leadDown}" 
+			deleteFlag="${VS_HAS_FUNCTIONS.leadAttDelete}" id="${contact.id}"></tag:attachment>
 	<tag:memoir view="true" edit="true" query="true" delete="true" 
 		moduleType="contact" moduleId="${contact.id}"></tag:memoir>
 	<div class="h40"></div>

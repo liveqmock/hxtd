@@ -20,6 +20,7 @@ import com.fasterxml.jackson.annotation.JsonFormat;
  * @author huizijing
  * 2016/6/4
  */
+@SuppressWarnings("serial")
 @Entity
 @Table(name = "SYSMESSAGE")
 public class Message implements Serializable{

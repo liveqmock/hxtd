@@ -200,7 +200,7 @@ function formReset(){
 							<th width="15%">
 								功能调用入口
 							</th>
-							<th width="15%" class="sortable orderby" orderby="createTime">
+							<th width="15%" class="sortable orderby" orderby="createdTime">
 								创建时间
 							</th>
 							<th width="7%">
@@ -236,7 +236,7 @@ function formReset(){
 						<th width="15%">
 							功能调用入口
 						</th>
-						<th width="15%" class="sortable orderby" orderby="createTime">
+						<th width="15%" class="sortable orderby" orderby="createdTime">
 							创建时间
 						</th>
 						<th width="7%">
@@ -274,7 +274,7 @@ function formReset(){
                 <td>{$T.row.code}</td>
                 <td>{$T.row.menu.name}</td>
                 <td>{$T.row.url}</td>
-                <td>{$T.row.createTime}</td>
+                <td>{$T.row.createdTime}</td>
                 <td>{$T.row.creator.realName}</td>
                 <td>{$T.row.modifiedTime}</td>
                 <td>{$T.row.modifier.realName}</td>

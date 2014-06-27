@@ -16,6 +16,7 @@
 <script type="text/javascript" src="${ctx}/static/js/validator.js?v=1"></script>
 <script type="text/javascript" src="${ctx}/static/js/commonAjax.js?v=1"></script>
 <script type="text/javascript" src="${ctx}/static/js/ui/jquery.ui.datepicker.js?v=1"></script>
+<script type="text/javascript" src="${ctx}/static/js/ui/i18n/jquery.ui.datepicker-zh-CN.js"></script>
 <script type="text/javascript">
 $(function(){
 	jsUtil.datepickerNotNow("#time");

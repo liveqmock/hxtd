@@ -223,7 +223,7 @@ public class LeadController {
         Map<String, Object> searchParams = Servlets.getParametersStartingWith(request, "search_");
         Search.clearBlankValue(searchParams);
         Search.decodeValue(searchParams);
-        Search.toRangeDate(searchParams, "createTime");
+        Search.toRangeDate(searchParams, "createdTime");
         logger.debug("查询条件数目“{}”", searchParams.size());
         DataShift dataShift = (DataShift) model.get(Constant.VS_DATASHIFT);
         List<Lead> leads = leadService.export(searchParams,dataShift);

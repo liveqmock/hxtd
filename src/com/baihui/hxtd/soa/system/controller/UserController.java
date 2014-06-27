@@ -7,6 +7,7 @@ import com.baihui.hxtd.soa.base.utils.Search;
 import com.baihui.hxtd.soa.base.utils.mapper.HibernateAwareObjectMapper;
 import com.baihui.hxtd.soa.base.utils.mapper.JsonMapper;
 import com.baihui.hxtd.soa.base.utils.ztree.TreeNodeConverter;
+import com.baihui.hxtd.soa.common.service.CommonService;
 import com.baihui.hxtd.soa.system.DictionaryConstant;
 import com.baihui.hxtd.soa.system.entity.Dictionary;
 import com.baihui.hxtd.soa.system.entity.Function;
@@ -67,14 +68,22 @@ public class UserController {
 
     @Resource
     private UserService userService;
+
+    @Resource
+    private CommonService commonService;
+
     @Resource
     private DictionaryService dictionaryService;
+
     @Resource
     private RoleService roleService;
+
     @Resource
     private FunctionService functionService;
+
     @Resource
     private ComponentService componentService;
+
     @Resource
     private OrganizationService organizationService;
 
@@ -113,7 +122,7 @@ public class UserController {
         Map<String, Object> searchParams = Servlets.getParametersStartingWith(request, "search_");
         Search.clearBlankValue(searchParams);
         Search.trimValue(searchParams);
-        Search.toRangeDate(searchParams, "createTime");
+        Search.toRangeDate(searchParams, "createdTime");
         logger.debug("查询条件数目“{}”", searchParams.size());
 
         logger.info("查询分页列表信息");
@@ -238,6 +247,10 @@ public class UserController {
     public String modify(User user, ModelMap modelMap) {
         logger.info("修改用户");
 
+        if (commonService.isInitialized(User.class, user.getId())) {
+            return new JsonDto("系统初始化数据不允许修改！").toString();
+        }
+
         logger.info("添加服务端属性值");
         User sessionUser = (User) modelMap.get(Constant.VS_USER);
         user.setModifier(sessionUser);
@@ -256,12 +269,14 @@ public class UserController {
     public String delete(Long[] id, @ModelAttribute(Constant.VS_USER_ID) Long sessionId) {
         logger.info("删除用户");
 
+        if (commonService.isInitialized(User.class, id)) {
+            return new JsonDto("系统初始化数据不允许删除！").toString();
+        }
+
         logger.info("检查是否包含当前用户");
         if (ArrayUtils.contains(id, sessionId)) {
-            logger.debug("包含");
             return new JsonDto("不允许删除当前操作用户").toString();
         }
-        logger.debug("不包含");
 
         userService.delete(id);
 
@@ -485,9 +500,9 @@ public class UserController {
      * toOwnerLst(跳转至所有者组件列表界面)
      */
     @RequestMapping(value = "/toQueryUser.comp")
-    public String toOwnerLst(ModelMap model,HttpServletRequest request) throws NoSuchFieldException {
-    	User u = (User) request.getSession().getAttribute(Constant.VS_USER);
-    	List<Organization> orgList = organizationService.getOrgAndUsers();
+    public String toOwnerLst(ModelMap model, HttpServletRequest request) throws NoSuchFieldException {
+        User u = (User) request.getSession().getAttribute(Constant.VS_USER);
+        List<Organization> orgList = organizationService.getOrgAndUsers();
         StringBuffer sb = new StringBuffer("[");
         Long oldOrgId = 0l;
         for (int i = 0; i < orgList.size(); i++) {
@@ -507,7 +522,7 @@ public class UserController {
                         user.getId(),
                         user.getRealName(),
                         org.getId(),
-                        u.getId()==user.getId()? "org":"user"
+                        u.getId() == user.getId() ? "org" : "user"
                 }));
             }
             oldOrgId = org.getId();

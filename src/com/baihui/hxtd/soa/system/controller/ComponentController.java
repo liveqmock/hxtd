@@ -1,12 +1,16 @@
 package com.baihui.hxtd.soa.system.controller;
 
-import java.sql.Date;
-import java.util.List;
-import java.util.Map;
-
-import javax.annotation.Resource;
-import javax.servlet.http.HttpServletRequest;
-
+import com.baihui.hxtd.soa.base.Constant;
+import com.baihui.hxtd.soa.base.orm.hibernate.HibernatePage;
+import com.baihui.hxtd.soa.base.utils.Search;
+import com.baihui.hxtd.soa.common.service.CommonService;
+import com.baihui.hxtd.soa.system.entity.Component;
+import com.baihui.hxtd.soa.system.entity.Dictionary;
+import com.baihui.hxtd.soa.system.entity.User;
+import com.baihui.hxtd.soa.system.service.ComponentService;
+import com.baihui.hxtd.soa.system.service.DictionaryService;
+import com.baihui.hxtd.soa.util.JsonDto;
+import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Controller;
@@ -16,15 +20,11 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springside.modules.web.Servlets;
 
-import com.baihui.hxtd.soa.base.Constant;
-import com.baihui.hxtd.soa.base.orm.hibernate.HibernatePage;
-import com.baihui.hxtd.soa.base.utils.Search;
-import com.baihui.hxtd.soa.system.entity.Component;
-import com.baihui.hxtd.soa.system.entity.Dictionary;
-import com.baihui.hxtd.soa.system.entity.User;
-import com.baihui.hxtd.soa.system.service.ComponentService;
-import com.baihui.hxtd.soa.system.service.DictionaryService;
-import com.baihui.hxtd.soa.util.JsonDto;
+import javax.annotation.Resource;
+import javax.servlet.http.HttpServletRequest;
+import java.sql.Date;
+import java.util.List;
+import java.util.Map;
 
 /**
  * 功能描述： 组件管理控制器
@@ -47,6 +47,10 @@ public class ComponentController {
      */
     @Resource
     private ComponentService componentService;
+
+    @Resource
+    private CommonService commonService;
+
     @Resource
     private DictionaryService dictionaryService;
 
@@ -56,7 +60,7 @@ public class ComponentController {
      * @param @param  page
      * @param @return 参数类型
      * @return ModelAndView    返回类型
-     * @throws NoSuchFieldException 
+     * @throws NoSuchFieldException
      * @throws
      * @Title: query
      */
@@ -66,13 +70,13 @@ public class ComponentController {
                         HttpServletRequest request) throws NoSuchFieldException {
         logger.info("ComponentController.query查询组件列表");
         Map<String, Object> searchParams = Servlets.getParametersStartingWith(
-				request, "search_");
-		Search.clearBlankValue(searchParams);
-		Search.toRangeDate(searchParams, "modifiedTime");
-		Search.toRangeDate(searchParams, "createdTime");
-		page = componentService.findPage(searchParams, page);
-		JsonDto json = new JsonDto();
-		json.setResult(page);
+                request, "search_");
+        Search.clearBlankValue(searchParams);
+        Search.toRangeDate(searchParams, "modifiedTime");
+        Search.toRangeDate(searchParams, "createdTime");
+        page = componentService.findPage(searchParams, page);
+        JsonDto json = new JsonDto();
+        json.setResult(page);
         return json.toString();
     }
 
@@ -88,7 +92,7 @@ public class ComponentController {
     @RequestMapping(value = "/toQueryPage.do")
     public String toQueryPage(Model model) {
         logger.info("ComponentController.toQueryPage跳转列表页");
-        model.addAttribute("page",new HibernatePage<Component>().order("desc").orderBy("modifiedTime"));
+        model.addAttribute("page", new HibernatePage<Component>().order("desc").orderBy("modifiedTime"));
         return "/system/component/list";
     }
 
@@ -108,13 +112,14 @@ public class ComponentController {
                        @RequestParam(required = false) Long id,
                        Model model) {
         logger.info("ComponentController.view查询组件");
-        Component com  = componentService.get(id);
+        Component com = componentService.get(id);
         model.addAttribute("com", com);
         return "/system/component/view";
     }
 
     /**
      * toModifyPage
+     *
      * @param @param  type
      * @param @param  id
      * @param @param  model
@@ -125,17 +130,19 @@ public class ComponentController {
      */
     @RequestMapping(value = "/toModifyPage.do")
     public String toModifyPage(Long id,
-                       Model model) {
+                               Model model) {
         logger.info("ComponentController.view查询组件");
-        Component com  = componentService.get(id);
+        Component com = componentService.get(id);
         model.addAttribute("com", com);
         List<Dictionary> dict = dictionaryService.findChildren("010601");
         model.addAttribute("dict", dict);
         model.addAttribute("funcUrl", "/system/component/modify.do");
         return "/system/component/edit";
     }
+
     /**
      * toAddPage
+     *
      * @param @param  type
      * @param @param  id
      * @param @param  model
@@ -168,14 +175,19 @@ public class ComponentController {
                          HttpServletRequest request,
                          String type) {
         logger.info("ComponentController.modify修改组件信息");
+
+        if (commonService.isInitialized(Component.class, component.getId())) {
+            return new JsonDto("系统初始化数据不允许修改！").toString();
+        }
+
         component.setCreatedTime(new Date(new java.util.Date().getTime()));
         component.setModifiedTime(new Date(new java.util.Date().getTime()));
         User u = (User) request.getSession().getAttribute(Constant.VS_USER);
         logger.info("获得当前操作用户{}", u.getName());
         component.setModifier(u);
         componentService.save(component);
-        JsonDto json = new JsonDto(component.getId(),"保存成功!");
-		return json.toString();
+        JsonDto json = new JsonDto(component.getId(), "保存成功!");
+        return json.toString();
     }
 
     /**
@@ -190,6 +202,7 @@ public class ComponentController {
     @RequestMapping(value = "/add.do")
     public String add(Component component, HttpServletRequest request, String type) {
         logger.info("ComponentController.query查询组件列表");
+
         //临时代码，时间类型应从数据库中取
         component.setCreatedTime(new Date(new java.util.Date().getTime()));
         component.setModifiedTime(new Date(new java.util.Date().getTime()));
@@ -198,8 +211,8 @@ public class ComponentController {
         component.setCreator(u);
         component.setModifier(u);
         componentService.save(component);
-        JsonDto json = new JsonDto(component.getId(),"保存成功!");
-		return json.toString();
+        JsonDto json = new JsonDto(component.getId(), "保存成功!");
+        return json.toString();
     }
 
     /**
@@ -212,8 +225,13 @@ public class ComponentController {
      */
     @ResponseBody
     @RequestMapping(value = "/delete.do", produces = "text/text;charset=UTF-8")
-    public String delete(long[] id) {
-        logger.info("ComponentController.delete删除组件id={}", id);
+    public String delete(Long[] id) {
+        logger.info("ComponentController.delete删除组件id={}", StringUtils.join(id, ","));
+
+        if (commonService.isInitialized(Component.class, id)) {
+            return new JsonDto("系统初始化数据不允许删除！").toString();
+        }
+
         componentService.delete(id);
         JsonDto json = new JsonDto();
         json.setMessage("删除成功");

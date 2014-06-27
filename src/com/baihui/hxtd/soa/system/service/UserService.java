@@ -213,8 +213,9 @@ public class UserService {
         user.setCode("");
         user.setOrder(1l);
         user.setIsDeleted(false);
-        user.setCreateTime(new Date());
-        user.setModifiedTime(user.getCreateTime());
+        user.setIsInitialized(false);
+        user.setCreatedTime(new Date());
+        user.setModifiedTime(user.getCreatedTime());
         user.setPassword(md5.getMD5ofStr(user.getPassword()));
         user.setStoreStatus(new Dictionary(01040402l));
         logger.debug("md5加密密码“{}”", user.getPassword());

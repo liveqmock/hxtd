@@ -50,7 +50,7 @@ public class Constant {
     public final static String VS_MENUS = "VS_MENUS";
 
     /**标题栏一级菜单列表*/
-    public final static String VS_TITLEBAR_FIRST_MENUS = "VS_TITLEBAR_FIRST_MENUS";
+    public final static String VS_SETPAGE_MENUS = "VS_SETPAGE_MENUS";
 
     /**菜单栏菜单列表*/
     public final static String VS_MENUBAR_MENUS = "VS_MENUBAR_MENUS";

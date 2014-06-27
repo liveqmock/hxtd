@@ -1,5 +1,6 @@
 package com.baihui.hxtd.soa.system.entity;
 
+import com.baihui.hxtd.soa.common.entity.Initialized;
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonFormat;
 
@@ -23,7 +24,7 @@ import java.util.Set;
 @Entity
 @Table(name = "SM_COMPONENT")
 @SuppressWarnings("serial")
-public class Component implements Serializable, Comparable<Component> {
+public class Component implements Serializable, Comparable<Component>, Initialized {
 
     /**
      * 主键ID
@@ -60,6 +61,9 @@ public class Component implements Serializable, Comparable<Component> {
      */
     @Column(name = "REMARK", length = 512)
     private String remark;
+
+    @Column(name = "IS_INITIALIZED", nullable = false, updatable = false)
+    private Boolean isInitialized;
 
     /**
      * 创建者
@@ -176,6 +180,14 @@ public class Component implements Serializable, Comparable<Component> {
 
     public void setRemark(String remark) {
         this.remark = remark;
+    }
+
+    public Boolean getIsInitialized() {
+        return isInitialized;
+    }
+
+    public void setIsInitialized(Boolean isInitialized) {
+        this.isInitialized = isInitialized;
     }
 
     public Set<Role> getRoles() {

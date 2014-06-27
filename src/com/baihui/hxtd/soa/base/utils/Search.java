@@ -227,7 +227,7 @@ public class Search {
 
     /**
      * 转换为区间的日期
-     * 1.使用单一时间，例如：EQ_createTime=2014-05-14转换为GTE_createTime=2014-05-14 00:00:00和LTE_createTime=2014-05-14 23:59:59
+     * 1.使用单一时间，例如：EQ_createdTime=2014-05-14转换为GTE_createdTime=2014-05-14 00:00:00和LTE_createdTime=2014-05-14 23:59:59
      */
     public static void dateEqToRange(Map<String, Object> params, String key) {
         if (params.containsKey(key)) {

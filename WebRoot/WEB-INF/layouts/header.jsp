@@ -3,61 +3,14 @@
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
 <%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions" %>
 <c:set var="ctx" value="${pageContext.request.contextPath}"/>
-<link href="${ctx}/static/css/stressing/detail.css" rel="stylesheet" type="text/css" />
-<script type="text/javascript">
-   $(function(){
-	   //每个5分钟执行一次定时任务
-	   refreshAjax();
-	   setInterval(refreshAjax, 10*60*1000);
-   });
-   
-   function refreshAjax(){
-	   requestMessageAjax();
-	   requestNoticeAjax();
-   }
-   
-   function requestMessageAjax(){
-	   RcmsAjax.ajaxNoMsg ("${ctx}/system/message/query.do?search_EQ_status=0&type=recived",function(data){
-		   var messageSize = data.result.result.length;
-		   if(messageSize>0){
-		   		$("#message").removeClass().addClass("head_news1 globle_img fl");
-	   		}else{
-	   			$("#message").removeClass().addClass("head_news globle_img fl");
-	   		}
-	   		var messages=eval(data.result.result);
-	   		var ss='<li>系统消息：</li>';
-	   		var len=messages.length>3?3:messages.length;
-	   		for(var i=0;i<len;i++){
-	           ss+='<li><a href=\"${ctx}/system/message/toViewPage.do?id='+messages[i].id+'\">'+messages[i].message.title+'</a></li>';
-	   		}
-	   		$("#messages").html(ss);
-	   });
- 	};
-    function requestNoticeAjax(){
-    	RcmsAjax.ajaxNoMsg ("${ctx}/system/notice/query.do",function(data){
-			var noticeSize = data.result.result.length;
-			if(noticeSize>0){
-				$("#notice").removeClass().addClass("head_system1 globle_img fl mr15");
-			}else{
-				$("#notice").removeClass().addClass("head_system globle_img fl mr15");
-			}
-			var notices=eval(data.result.result);
-			var ss='<ul class=\" block\">';
-			if(notices.length>0){
-			      ss+='<li><a href=\"${ctx}/system/notice/toViewPage.do?id='+notices[0].id+'\">'+notices[0].title+'</a></li>';
-			      ss+='</ul>';
-				$("#notices").html(ss);
-			}
-	   });
- 	};
-</script>
+<link href="${ctx}/static/css/stressing/detail.css" rel="stylesheet" type="text/css"/>
+<script type="text/javascript" src="${ctx}/static/js/message.js"></script>
+
 <!--菜单开始-->
 <div class="h_head_bg pr">
     <p class="tr mr15 pt20">
         今天是<fmt:formatDate value="${VR_DATE}" pattern="MM月dd日"/>，欢迎您 ${VS_USER.realName}
-        <c:forEach items="${VS_TITLEBAR_FIRST_MENUS}" var="item">
-            <a href="${ctx}${item.trigger.url}" class="ml10 w_blue">${item.name}</a>
-        </c:forEach>
+        <a href="${ctx}/system/toViewPage.do" class="ml10 w_blue">设置</a>
         <a href="${ctx}/logout.doself" class="ml10 mr35 w_blue">注销</a>
     </p>
     <img src="${ctx}/static/images/logo.png" width="162" height="50" class="fl ml35 mt45 pa at-20"/>
@@ -112,98 +65,97 @@
     </c:if>
     <ul class="fr mr35 mt3 common_id1">
         <li class="head_add globle_img fl mr15">
-        	<div class="none w100 div1 pr z1">
-        	    <b class="tan_leftjian2 globle_img block pa"></b>
-		        <b class="bb1"></b>
-		        <b class="bb2"></b>
-		        <b class="bb3"></b>
-		        <b class="bb4"></b>
-		        <b class="bb5"></b>
-		        <b class="bb5"></b>
-		        <b class="bb5"></b>
-		        <b class="bb5"></b>
+            <div class="none w100 div1 pr z1">
+                <b class="tan_leftjian2 globle_img block pa"></b>
+                <b class="bb1"></b>
+                <b class="bb2"></b>
+                <b class="bb3"></b>
+                <b class="bb4"></b>
+                <b class="bb5"></b>
+                <b class="bb5"></b>
+                <b class="bb5"></b>
+                <b class="bb5"></b>
 		        <span class="block">
 		        <ul class=" block">
-		        	<li><a href="${ctx}/market/marketactivity/toAddPage.do">新增市场活动</a></li>
-			        <li><a href="${ctx}/customer/lead/toAddPage.do">新增线索</a></li>
-			        <li><a href="${ctx}/customer/contact/toAddPage.do">新增联系人</a></li>
-			        <li><a href="${ctx}/customer/customer/toAddPage.do">新增客户</a></li>
-			        <li><a href="${ctx}/customer/supplier/toAddPage.do">新增供应商</a></li>
-			        <li><a href="${ctx}/customer/project/toAddPage.do">新增项目</a></li>
-			        <li><a href="${ctx}/customer/product/toAddPage.do">新增产品</a></li>
-			        <li><a href="javascript:;">新增订单</a></li>
-			        <li><a href="javascript:;">新增合同</a></li>
-		        </ul>
+                    <li><a href="${ctx}/market/marketactivity/toAddPage.do">新增市场活动</a></li>
+                    <li><a href="${ctx}/customer/lead/toAddPage.do">新增线索</a></li>
+                    <li><a href="${ctx}/customer/contact/toAddPage.do">新增联系人</a></li>
+                    <li><a href="${ctx}/customer/customer/toAddPage.do">新增客户</a></li>
+                    <li><a href="${ctx}/customer/supplier/toAddPage.do">新增供应商</a></li>
+                    <li><a href="${ctx}/customer/project/toAddPage.do">新增项目</a></li>
+                    <li><a href="${ctx}/customer/product/toAddPage.do">新增产品</a></li>
+                    <li><a href="javascript:;">新增订单</a></li>
+                    <li><a href="javascript:;">新增合同</a></li>
+                </ul>
 		        </span>
-		       <b class="bb6"></b>
-		       <b class="bb6"></b>
-		       <b class="bb6"></b>
-		       <b class="bb6"></b>
-		       <b class="bb7"></b>
-		       <b class="bb8"></b>
-		       <b class="bb9"></b>
-		       <b class="bb0"></b>
-		    </div>
+                <b class="bb6"></b>
+                <b class="bb6"></b>
+                <b class="bb6"></b>
+                <b class="bb6"></b>
+                <b class="bb7"></b>
+                <b class="bb8"></b>
+                <b class="bb9"></b>
+                <b class="bb0"></b>
+            </div>
         </li>
-        
-        
-        	<li class="head_system globle_img fl mr15" id="notice"><a href="${ctx}/system/notice/toQueryPage.do">&nbsp;</a>
-        	<div class="none w100 div2 pr">
-        	    <b class="tan_leftjian3 globle_img block pa"></b>
-		        <b class="bb1"></b>
-		        <b class="bb2"></b>
-		        <b class="bb3"></b>
-		        <b class="bb4"></b>
-		        <b class="bb5"></b>
-		        <b class="bb5"></b>
-		        <b class="bb5"></b>
-		        <b class="bb5"></b>
+
+        <li class="head_system globle_img fl mr15" id="notice">
+            <a href="${ctx}/system/notice/toQueryPage.do" title="系统公告">&nbsp;&nbsp;&nbsp;&nbsp;</a>
+
+            <div class="none w100 div2 pr">
+                <b class="tan_leftjian3 globle_img block pa"></b>
+                <b class="bb1"></b>
+                <b class="bb2"></b>
+                <b class="bb3"></b>
+                <b class="bb4"></b>
+                <b class="bb5"></b>
+                <b class="bb5"></b>
+                <b class="bb5"></b>
+                <b class="bb5"></b>
 		        <span class="block">
 		        <ul class=" block">
-		        	<li>公告：</li>
-        			<li id="notices"></li>
-		        </ul>
+                    <li id="notices"></li>
+                </ul>
 		        </span>
-		       <b class="bb6"></b>
-		       <b class="bb6"></b>
-		       <b class="bb6"></b>
-		       <b class="bb6"></b>
-		       <b class="bb7"></b>
-		       <b class="bb8"></b>
-		       <b class="bb9"></b>
-		       <b class="bb0"></b>
-		    </div>
-        	
-        	</li>
-        	<li class="head_news globle_img fl mr10" id="message"><a href="${ctx}/system/message/toQueryPage.do?type=reviced">&nbsp;</a>
-        	<div class="none w100 div3 pr">
-        	<b class="tan_leftjian4 globle_img block pa"></b>
-		        <b class="bb1"></b>
-		        <b class="bb2"></b>
-		        <b class="bb3"></b>
-		        <b class="bb4"></b>
-		        <b class="bb5"></b>
-		        <b class="bb5"></b>
-		        <b class="bb5"></b>
-		        <b class="bb5"></b>
+                <b class="bb6"></b>
+                <b class="bb6"></b>
+                <b class="bb6"></b>
+                <b class="bb6"></b>
+                <b class="bb7"></b>
+                <b class="bb8"></b>
+                <b class="bb9"></b>
+                <b class="bb0"></b>
+            </div>
+        </li>
+        <li class="head_news globle_img fl mr10" id="message">
+            <a href="${ctx}/system/message/toQueryPage.do?type=reviced" title="系统消息">&nbsp;&nbsp;&nbsp;&nbsp;</a>
+
+            <div class="none w100 div3 pr">
+                <b class="tan_leftjian4 globle_img block pa"></b>
+                <b class="bb1"></b>
+                <b class="bb2"></b>
+                <b class="bb3"></b>
+                <b class="bb4"></b>
+                <b class="bb5"></b>
+                <b class="bb5"></b>
+                <b class="bb5"></b>
+                <b class="bb5"></b>
 		        <span class="block">
 		         <ul id="messages" class=" block">
-		        	<li>系统消息：</li>
-        			<li>您有一条系统消息</li>
-        			<li>您有一条系统消息</li>
-        			<li>您有一条系统消息</li>
-		        </ul> 
+
+                 </ul>
 		        </span>
-		       <b class="bb6"></b>
-		       <b class="bb6"></b>
-		       <b class="bb6"></b>
-		       <b class="bb6"></b>
-		       <b class="bb7"></b>
-		       <b class="bb8"></b>
-		       <b class="bb9"></b>
-		       <b class="bb0"></b>
-		    </div>
-        	</li>
+                <b class="bb6"></b>
+                <b class="bb6"></b>
+                <b class="bb6"></b>
+                <b class="bb6"></b>
+                <b class="bb7"></b>
+                <b class="bb8"></b>
+                <b class="bb9"></b>
+                <b class="bb0"></b>
+            </div>
+        </li>
+
     </ul>
 </div>
 <!--当前页及功能条结束-->

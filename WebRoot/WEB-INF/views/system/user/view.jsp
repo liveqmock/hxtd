@@ -135,8 +135,8 @@
                         <td class="tar bghui pr10">创建人：</td>
                         <td align="left">${user.creator.realName}<input type="hidden" name="creator.id" value="${creator.id}"></td>
                         <td class="tar bghui pr10">创建时间：</td>
-                        <fmt:formatDate value="${user.createTime}" pattern="yyyy-MM-dd HH:mm:ss" var="createTime"/>
-                        <td align="left">${createTime}<input type="hidden" name="createTime" value="${createTime}"></td>
+                        <fmt:formatDate value="${user.createdTime}" pattern="yyyy-MM-dd HH:mm:ss" var="createdTime"/>
+                        <td align="left">${createdTime}<input type="hidden" name="createdTime" value="${createdTime}"></td>
                     </tr>
                     <tr style="display: none">
                         <td class="tar bghui pr10">修改人：</td>

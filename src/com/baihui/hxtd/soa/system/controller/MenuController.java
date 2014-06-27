@@ -212,6 +212,10 @@ public class MenuController {
     public String modify(Menu menu, ModelMap modelMap) {
         logger.info("修改");
 
+        if (commonService.isInitialized(Menu.class, menu.getId())) {
+            return new JsonDto("系统初始化数据不允许修改！").toString();
+        }
+
         logger.info("添加服务端属性值");
         User user = (User) modelMap.get(Constant.VS_USER);
         menu.setModifier(new User(user.getId()));
@@ -229,6 +233,10 @@ public class MenuController {
     @RequestMapping(value = "/delete.do")
     public String delete(Long[] id) {
         logger.info("删除菜单");
+
+        if (commonService.isInitialized(Menu.class, id)) {
+            return new JsonDto("系统初始化数据不允许删除！").toString();
+        }
 
         menuService.delete(id);
 

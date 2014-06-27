@@ -51,39 +51,35 @@ function formReset() {
 		onsubmit="return false;">
 		<table class="fl mt5 w">
 			<tr>
-				<td class="f14" align="right" width="6%">
+				<td class="f14 namewidth1" align="right" >
 					组件编号：
 				</td>
-				<td class="f14" align="left" width="16%">
+				<td class="f14 namewidth2" align="left" >
 					<input type="text" name="search_LIKE_code" id="code"
 						class="text_input1" value="" />
 				</td>
-				<td class="f14" align="right" width="6%">
+				<td class="f14 namewidth1" align="right" >
 					组件名：
 				</td>
-				<td class="f14" align="left" width="16%">
+				<td class="f14 namewidth2" align="left" >
 					<input type="text" name="search_LIKE_name" id="name"
 						class="text_input1" value="" />
 				</td>
-				<td class="f14" align="right" width="6%">
+				<td class="f14 namewidth1" align="right" >
 					调用入口：
 				</td>
-				<td class="f14" align="left" width="16%">
+				<td class="f14 namewidth2" align="left" >
 					<input type="text" name="search_LIKE_url" id="url"
 						class="text_input1" value="" />
 				</td>
-				<td width="8%">
-					<a href="javascript:void(0)"
-						class=" block c_white lh25 submit">
-						<b class="allbtn_l block fl"></b>
-						<b class="allbtn_r pr13 block fl w_auto f14">查&nbsp&nbsp询</b>
-					</a>
-					<a href="javascript:formReset()"
-						class="reset block dump_btn globle_img fl ml10"></a>
-				</td>
-				<td class="f14" align="right" width="6%">
-				</td>
-				<td class="f14" align="left" width="16%">
+				<td class="namewidth3">
+							<a class="c_222 block cp fr ml10  mt8 mr20 more"></a>
+							<a href="javascript:void(0)"
+								class="a_underline block_inline fr w_blue mt5 reset">清除</a>
+							<a href="javascript:void(0)"
+								class="block_inline c_white lh25 fr mr10 submit"><b
+								class="allbtn_l block fl"></b><b
+								class="allbtn_r pr13 block fl w_auto f14">查&nbsp;&nbsp;询</b> </a>
 				</td>
 			</tr>
 		</table>

@@ -14,19 +14,14 @@
     <link href="${ctx}/static/css/stressing/empower.css" rel="stylesheet" type="text/css"/>
     <link href="${ctx}/static/css/application.css" rel="stylesheet" type="text/css"/>
     <script type="text/javascript" src="${ctx}/static/js/jquery-json.2.4.js"></script>
-    <script type="text/javascript" src="${ctx}/static/js/jquery-jtemplates.js"></script>
-    <script type="text/javascript" src="${ctx}/static/js/js-util.common.js"></script>
+    <script type="text/javascript" src="${ctx}/static/js/jquery-jtemplates.js?v=1"></script>
+    <script type="text/javascript" src="${ctx}/static/js/js-util.common.js?v=1"></script>
     <script type="text/javascript" src="${ctx}/static/js/scrollTitle.js?v=1"></script>
     <script type="text/javascript">
-        function formReset() {
-            $("#form")[0].reset();
-            $("#typeId").removeAttr("value");
-        }
-
-        //加载时间控件
-        jsUtil.datepicker(".time");
-
         $(function () {
+	        //加载时间控件
+	        jsUtil.datepicker(".time");
+	        
             //var grid = new Grid().init().bindExport();
             new Grid().init({gridName: "accept", gridSelector: ".accept", resultTemplateId: "accept-template"});
             new Grid().init({gridName: "send", gridSelector: ".send", resultTemplateId: "send-template"});
@@ -34,7 +29,6 @@
                 $("[name=hibernatePageNo]").val(1);
             }})
         });
-
     </script>
 </head>
 <body>
@@ -42,34 +36,30 @@
 <form id="form" action="${ctx}/system/message/query.do" onsubmit="return false;">
     <table class="fl mt5 w">
         <tr>
-            <td class="f14" align="right" width="6%">消息名称：</td>
-            <td class="f14" align="left" width="16%">
-                <input type="text" id="typeId" name="search_LIKE_message.title" value="${userMessage.message.title}"/></td>
-            <td class="f14" align="right" width="6%">时间：</td>
-            <td class="f14" align="left" width="16%">
+            <td class="f14 namewidth1" align="right">消息名称：</td>
+            <td class="f14 namewidth2" align="left">
+                <input type="text" id="typeId" class="text_input1" name="search_LIKE_message.title" value="${userMessage.message.title}"/>
+            </td>
+            <td class="f14 namewidth1" align="right">时间：</td>
+            <td class="f14 namewidth2" align="left">
                 <div class="vm">
-                    <input class="text_input2 input_close globle_img time" name="search_GTE_createdTime" type="text"/>-<input class="text_input2 input_close globle_img time" name="search_LTE_createdTime" type="text"/>
+                    <input class="text_input2 input_close globle_img time" name="search_GTE_createdTime" type="text" readonly/>-<input 
+                           class="text_input2 input_close globle_img time" name="search_LTE_createdTime" type="text" readonly/>
                 </div>
             </td>
-            <td width="11%">
-                <a href="javascript:;" class="reset a_underline fr w_blue mt5">清除</a>
-                <a href="javascript:;" class="block c_white lh25 fr ml10">
-                    <b class="allbtn_l block fl"></b>
-                    <b class="allbtn_r pr13 block fl w_auto f14 submit">查&nbsp;&nbsp;询</b>
-                </a>
-            </td>
-            <td class="f14" align="right" width="6%"></td>
-            <td class="f14" align="left" width="16%"></td>
-            <td class="f14" align="right" width="6%"></td>
-            <td class="f14" align="left" width="16%"></td>
+            <td width="namewidth3">
+    			<a href="javascript:void(0);" class="c_222 block cp fr ml10 packup globle_img mt8 mr20 more" title="展开"></a>
+                <a href="javascript:void(0);" class="a_underline block_inline fr w_blue mt5 reset" >清除</a>
+                <a href="javascript:void(0);" class="block_inline c_white lh25 fr mr10 submit"><b class="allbtn_l block fl"></b><b class="allbtn_r pr13 block fl w_auto f14">查&nbsp;&nbsp;询</b></a>
+    		</td>
+            <td class="f14 namewidth1" align="right"></td>
+            <td class="f14 namewidth2" align="left"></td>
             <tags:paginationparams page="${page}"/>
         </tr>
     </table>
-
 </form>
 <div class="cb"></div>
 <div class="ml35 mr35">
-<div class="">
     <ul class="fl id_table3 w block cb mt10 tab-titles" style="border-bottom:5px solid #626262; height:32px;" fortabpanels>
         <li class="tab-title" fortabpanel="#tabs-recived">
             <b class="h_tabbtn_l w25 block fl"></b>
@@ -98,20 +88,19 @@
             </li>
         </ul>
     </ul>
-</div>
 <div class="w cb tab-panels">
     <!--接收消息-->
     <div id="tabs-recived" class="tab-panel ">
         <table class="cb id_table2 w pr35 accept" forform="form" formaction="${ctx}/system/message/query.do?type=recived" forpagination="#tabs-recived .pagination">
-            <tr class="header">
-                <th width="5%"><input type="checkbox" class="checkall"/>&nbsp;&nbsp;&nbsp;&nbsp;</th>
-                <th width="34%">系统消息名称</th>
-                <th width="19%">发送者</th>
-                <th width="19%" class="sortable orderby" orderby="createdTime">接收时间</th>
-                <th width="19%">接收者</th>
-                <th align="center" width="12%">操作</th>
-            </tr>
-            <tbody class="list"></tbody>
+           <tr class="header">
+              <th width="5%"><input type="checkbox" class="checkall"/>&nbsp;&nbsp;&nbsp;&nbsp;</th>
+              <th width="24%">系统消息名称</th>
+              <th width="19%">发送者</th>
+              <th width="19%" class="sortable orderby" orderby="createdTime">接收时间</th>
+              <th width="19%">接收者</th>
+              <th align="center" width="12%">操作</th>
+           </tr>
+           <tbody class="list"></tbody>
         </table>
         <div class="cb ml35 mt20 h40 pagination"></div>
         <textarea id="accept-template" class="template template-tbody">
@@ -127,35 +116,35 @@
                             <a href="${ctx}/system/message/toViewPage.do?id={$T.row.id}&userName={$T.row.message.creater.name}">{$T.row.message.title}
                                 <div class="none w240">
                                     <div class="w240 pr">
-                                        <i class="block globle_img pa tan_leftjian"></i>
-                                        <b class="bb1"></b>
-                                        <b class="bb2"></b>
-                                        <b class="bb3"></b>
-                                        <b class="bb4"></b>
-                                        <b class="bb5"></b>
-                                        <b class="bb5"></b>
-                                        <b class="bb5"></b>
-                                        <b class="bb5"></b>
-        									<span class="block" style="background-color:#f5f5f6; 
-       												 width:238px; height:100%; border-left:1px solid #666666; border-right:1px solid #666666;">
-        									<span class=" block ml10 mr10">
-       										 <h1>名称：</h1>
-       										<p class="fbnone">{$T.row.message.title}</p>
-        									<h1>内容：</h1>
-        									<p class="fbnone">{$T.row.message.content}</p>
-        									<h1>接收时间：</h1>
-       										<p class="fbnone"> {$T.row.createdTime}</p>
-        									<p></p>
-        									</span>
-        									</span>
-                                        <b class="bb6"></b>
-                                        <b class="bb6"></b>
-                                        <b class="bb6"></b>
-                                        <b class="bb6"></b>
-                                        <b class="bb7"></b>
-                                        <b class="bb8"></b>
-                                        <b class="bb9"></b>
-                                        <b class="bb0"></b>
+                                       <i class="block globle_img pa tan_leftjian"></i>
+                                       <b class="bb1"></b>
+                                       <b class="bb2"></b>
+                                       <b class="bb3"></b>
+                                       <b class="bb4"></b>
+                                       <b class="bb5"></b>
+                                       <b class="bb5"></b>
+                                       <b class="bb5"></b>
+                                       <b class="bb5"></b>
+      									<span class="block" style="background-color:#f5f5f6; 
+     												 width:238px; height:100%; border-left:1px solid #666666; border-right:1px solid #666666;">
+       									<span class=" block ml10 mr10">
+      										 <h1>名称：</h1>
+      										<p class="fbnone">{$T.row.message.title}</p>
+       									<h1>内容：</h1>
+       									<p class="fbnone">{$T.row.message.content}</p>
+       									<h1>接收时间：</h1>
+      										<p class="fbnone"> {$T.row.createdTime}</p>
+       									<p></p>
+       									</span>
+      									</span>
+                                       <b class="bb6"></b>
+                                       <b class="bb6"></b>
+                                       <b class="bb6"></b>
+                                       <b class="bb6"></b>
+                                       <b class="bb7"></b>
+                                       <b class="bb8"></b>
+                                       <b class="bb9"></b>
+                                       <b class="bb0"></b>
                                     </div>
                                 </div>
                             </a>
@@ -190,20 +179,20 @@
                 <th width="5%">
                     <input type="checkbox" class="checkall"/>
                 </th>
-                <th width="34%">
-                    系统消息名称
+                <th width="24%">
+                   	 系统消息名称
                 </th>
                 <th width="19%">
-                    发送者
+                  	  发送者
                 </th>
                 <th width="19%" class="sortable orderby" orderby="createdTime">
-                    发送时间
+                   	 发送时间
                 </th>
                 <th width="19%">
-                    接收者
+                   	 接收者
                 </th>
                 <th align="center" width="12%">
-                    操作
+                  	  操作
                 </th>
             </tr>
             <tbody class="list"></tbody>
@@ -214,9 +203,7 @@
             <tr class="{$T.row$index%2==1?'':'bg_c_blue'}">
                 <td align="center">
                     <input type="checkbox" name="id" class="checkitem" value="{$T.row.id}"/></td>
-                　
                 <td>
-                    　
                     <c:choose>
                     <c:when test="${VS_HAS_FUNCTIONS.messageView}">
                     <a class="toviewpage" href="${ctx}/system/message/toViewPage.do?id={$T.row.id}&userName={$T.row.message.creater.realName}">{$T.row.message.title}
@@ -231,18 +218,18 @@
                                 <b class="bb5"></b>
                                 <b class="bb5"></b>
                                 <b class="bb5"></b>
-        									<span class="block" style="background-color:#f5f5f6; 
-       												 width:238px; height:100%; border-left:1px solid #666666; border-right:1px solid #666666;">
-        									<span class=" block ml10 mr10">
-       										 <h1>名称：</h1>
-       										<p class="fbnone">{$T.row.message.title}</p>
-        									<h1>内容：</h1>
-        									<p class="fbnone">{$T.row.message.content}</p>
-        									<h1>发送时间：</h1>
-       										<p class="fbnone"> {$T.row.createdTime}</p>
-        									<p></p>
-        									</span>
-        									</span>
+								<span class="block" style="background-color:#f5f5f6; 
+										 width:238px; height:100%; border-left:1px solid #666666; border-right:1px solid #666666;">
+								<span class=" block ml10 mr10">
+								 <h1>名称：</h1>
+								<p class="fbnone">{$T.row.message.title}</p>
+								<h1>内容：</h1>
+								<p class="fbnone">{$T.row.message.content}</p>
+								<h1>发送时间：</h1>
+								<p class="fbnone"> {$T.row.createdTime}</p>
+								<p></p>
+								</span>
+								</span>
                                 <b class="bb6"></b>
                                 <b class="bb6"></b>
                                 <b class="bb6"></b>
@@ -256,12 +243,11 @@
                         </c:when>
                         <c:otherwise>{$T.row.message.title}</c:otherwise>
                         </c:choose>
-                        　</td>
+                        　              </td>
                 <td>{$T.row.message.creater.realName}</td>
                 <td>{$T.row.createdTime}</td>
                 <td>{$T.row.user.realName}</td>
                 <td align="center">
-
                     <c:if test="${VS_HAS_FUNCTIONS.messageView}">
                         <a href="${ctx}/system/message/toViewPage.do?id={$T.row.id}" title="详情" class=" block_inline s_detail_btn globle_img  ml10"></a>
                     </c:if>
@@ -272,7 +258,6 @@
                         <a href="javascript:void(0)" class=" block_inline s_dump_btn globle_img ml10 delete" title="删除" uri="${ctx}/system/message/delete.do?id={$T.row.id}"></a>
                     </c:if>
                 </td>
-                　　
             </tr>
             {#/for}
             　　</textarea>

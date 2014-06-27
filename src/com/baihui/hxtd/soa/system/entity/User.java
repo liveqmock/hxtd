@@ -1,5 +1,6 @@
 package com.baihui.hxtd.soa.system.entity;
 
+import com.baihui.hxtd.soa.common.entity.Initialized;
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 
@@ -18,7 +19,7 @@ import java.util.Set;
 @Entity
 @Table(name = "SM_USER")
 @SuppressWarnings("serial")
-public class User implements Serializable, Cloneable {
+public class User implements Serializable, Cloneable, Initialized {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -80,13 +81,16 @@ public class User implements Serializable, Cloneable {
     @Column(name = "IS_DELETED", nullable = false, updatable = false)
     private Boolean isDeleted;
 
+    @Column(name = "IS_INITIALIZED", nullable = false, updatable = false)
+    private Boolean isInitialized;
+
     @JsonBackReference
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "CREATOR_ID", updatable = false)
     private User creator;
 
     @Column(name = "CREATED_TIME", nullable = false, updatable = false)
-    private Date createTime;
+    private Date createdTime;
 
     @JsonBackReference
     @ManyToOne(fetch = FetchType.LAZY)
@@ -273,6 +277,14 @@ public class User implements Serializable, Cloneable {
         this.isDeleted = isDeleted;
     }
 
+    public Boolean getIsInitialized() {
+        return isInitialized;
+    }
+
+    public void setIsInitialized(Boolean isInitialized) {
+        this.isInitialized = isInitialized;
+    }
+
     public User getCreator() {
         return creator;
     }
@@ -281,12 +293,12 @@ public class User implements Serializable, Cloneable {
         this.creator = creator;
     }
 
-    public Date getCreateTime() {
-        return createTime;
+    public Date getCreatedTime() {
+        return createdTime;
     }
 
-    public void setCreateTime(Date createTime) {
-        this.createTime = createTime;
+    public void setCreatedTime(Date createdTime) {
+        this.createdTime = createdTime;
     }
 
     public User getModifier() {

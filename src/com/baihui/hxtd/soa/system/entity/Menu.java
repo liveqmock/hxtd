@@ -1,6 +1,7 @@
 package com.baihui.hxtd.soa.system.entity;
 
 
+import com.baihui.hxtd.soa.common.entity.Initialized;
 import com.baihui.hxtd.soa.common.entity.Orderable;
 import com.baihui.hxtd.soa.common.entity.TreeNode;
 import com.fasterxml.jackson.annotation.JsonBackReference;
@@ -22,7 +23,7 @@ import java.util.List;
 @Entity
 @Table(name = "SM_MENU")
 @SuppressWarnings("serial")
-public class Menu implements Serializable, Cloneable, TreeNode<Menu> {
+public class Menu implements Serializable, Cloneable, TreeNode<Menu>, Initialized {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -48,6 +49,9 @@ public class Menu implements Serializable, Cloneable, TreeNode<Menu> {
     @JoinColumn(name = "SHOW_LOCATION_ID")
     private Dictionary showLocation;
 
+    @Column(name = "IS_INITIALIZED", nullable = false, updatable = false)
+    private Boolean isInitialized;
+
     @Column(name = "REMARK", length = 512, nullable = false)
     private String remark;
 
@@ -68,7 +72,7 @@ public class Menu implements Serializable, Cloneable, TreeNode<Menu> {
     private User creator;
 
     @Column(name = "CREATED_TIME", nullable = false, updatable = false)
-    private Date createTime;
+    private Date createdTime;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "MODIFIER_ID")
@@ -187,6 +191,14 @@ public class Menu implements Serializable, Cloneable, TreeNode<Menu> {
         this.showLocation = showLocation;
     }
 
+    public Boolean getIsInitialized() {
+        return isInitialized;
+    }
+
+    public void setIsInitialized(Boolean isInitialized) {
+        this.isInitialized = isInitialized;
+    }
+
     public String getRemark() {
         return remark;
     }
@@ -219,12 +231,12 @@ public class Menu implements Serializable, Cloneable, TreeNode<Menu> {
         this.creator = creator;
     }
 
-    public Date getCreateTime() {
-        return createTime;
+    public Date getCreatedTime() {
+        return createdTime;
     }
 
-    public void setCreateTime(Date createTime) {
-        this.createTime = createTime;
+    public void setCreatedTime(Date createdTime) {
+        this.createdTime = createdTime;
     }
 
     public User getModifier() {

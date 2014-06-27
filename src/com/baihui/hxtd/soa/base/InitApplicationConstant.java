@@ -151,7 +151,9 @@ public class InitApplicationConstant implements StartupListener {
      */
     private void loadSystemPrivi() {
         logger.info("加载系统管理权限数据");
-        MENUS.addAll(menuService.findInit());
+        List<Menu> menus = menuService.findInit();
+        menuService.fullParent(menus);
+        MENUS.addAll(menus);
         menuService.toTriggerUrl(MENUS);
         logger.debug("菜单数目“{}”", MENUS.size());
         FUNCTIONS.addAll(functionService.findInit());

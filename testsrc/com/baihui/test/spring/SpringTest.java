@@ -2,8 +2,6 @@ package com.baihui.test.spring;
 
 import com.baihui.hxtd.soa.system.entity.User;
 import org.junit.Test;
-import org.springframework.beans.factory.BeanFactory;
-import org.springframework.context.support.ClassPathXmlApplicationContext;
 import org.springframework.test.context.ContextConfiguration;
 
 import javax.annotation.Resource;
@@ -24,6 +22,6 @@ public class SpringTest {
 //        BeanFactory factory = new ClassPathXmlApplicationContext("classpath*:ApplicationContext*.xml");
 //        Bean工厂通过Bean的id得到JavaBean
 //        user = factory.getBean(User.class);
-        System.out.println(user.getCreateTime());
+        System.out.println(user.getCreatedTime());
     }
 }

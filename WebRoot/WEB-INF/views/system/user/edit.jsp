@@ -89,7 +89,7 @@
                         </tr>
                         <tr>
                             <td align="right" width="15%">用户名：</td>
-                            <td align="left"><input type="text" class="{required:true,maxlength:32} text_input3" name="name" value="${user.name}"/></td>
+                            <td align="left"><input type="text" class="{required:true,maxlength:32,unique:['User','${user.id}']} text_input3" name="name" value="${user.name}"/></td>
                             <td align="right" width="15%">密码：</td>
                             <td align="left"><input type="password" class="{required:true,maxlength:64} text_input3" name="password" value="${user.password}"/></td>
                         </tr>
@@ -163,8 +163,8 @@
                             <td class="tar bghui pr10">创建人：</td>
                             <td align="left">${user.creator.realName}<input type="hidden" name="creator.id" value="${creator.id}"></td>
                             <td class="tar bghui pr10">创建时间：</td>
-                            <fmt:formatDate value="${user.createTime}" pattern="yyyy-MM-dd HH:mm:ss" var="createTime"/>
-                            <td align="left">${createTime}<input type="hidden" name="createTime" value="${createTime}"></td>
+                            <fmt:formatDate value="${user.createdTime}" pattern="yyyy-MM-dd HH:mm:ss" var="createdTime"/>
+                            <td align="left">${createdTime}<input type="hidden" name="createdTime" value="${createdTime}"></td>
                         </tr>
                         <tr style="display: none">
                             <td class="tar bghui pr10">修改人：</td>

@@ -25,7 +25,7 @@
 
     <script type="text/javascript">
         $(function () {
-            var grid = new Grid().init({paginationSizeShow: false}).bindAuthorization().bindResetPassword().bindEnable().bindDisable().bindExport();
+            var grid = new Grid().init().bindAuthorization().bindResetPassword().bindEnable().bindDisable().bindExport();
             jsUtil.organizationTree({
                 data:${organizationTree==null?"[]":organizationTree},
                 selectedId: "${organizationId}",

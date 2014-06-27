@@ -4,6 +4,7 @@ import com.baihui.hxtd.soa.base.Constant;
 import com.baihui.hxtd.soa.base.orm.hibernate.HibernatePage;
 import com.baihui.hxtd.soa.base.utils.Search;
 import com.baihui.hxtd.soa.base.utils.mapper.HibernateAwareObjectMapper;
+import com.baihui.hxtd.soa.common.service.CommonService;
 import com.baihui.hxtd.soa.system.entity.Dictionary;
 import com.baihui.hxtd.soa.system.entity.Function;
 import com.baihui.hxtd.soa.system.entity.Role;
@@ -51,6 +52,9 @@ public class RoleController {
 
     @Resource
     private RoleService roleService;
+
+    @Resource
+    private CommonService commonService;
 
     @Resource
     private DictionaryService dictionaryService;
@@ -133,6 +137,7 @@ public class RoleController {
     /**
      * 新增
      */
+    @ResponseBody
     @RequestMapping(value = "/add.do", method = RequestMethod.POST)
     public String add(Role role, ModelMap modelMap) {
         logger.info("新增");
@@ -187,16 +192,19 @@ public class RoleController {
     /**
      * 修改
      */
+    @ResponseBody
     @RequestMapping(value = "/modify.do")
     public String modify(Role role, ModelMap modelMap) {
         logger.info("修改");
 
+        if (commonService.isInitialized(User.class, role.getId())) {
+            return new JsonDto("系统初始化数据不允许修改！").toString();
+        }
+
         logger.info("添加服务端属性值");
         User user = (User) modelMap.get(Constant.VS_USER);
-        role.setModifiedTime(new Date());
-        logger.debug("修改时间为当前时间“{}”", role.getModifiedTime());
+        //修改用户为当前用户
         role.setModifier(user);
-        logger.debug("修改用户为当前用户“{}”", user.getName());
 
         roleService.modify(role);
 
@@ -212,6 +220,11 @@ public class RoleController {
     @RequestMapping(value = "/delete.do")
     public String delete(Long[] id) {
         logger.info("删除");
+
+        if (commonService.isInitialized(User.class, id)) {
+            return new JsonDto("系统初始化数据不允许删除！").toString();
+        }
+
         roleService.delete(id);
         return JsonDto.delete(id).toString();
     }

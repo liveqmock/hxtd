@@ -80,6 +80,7 @@ public class RecycleBinController {
 			HibernatePage page,
 			ModelMap model,
            PrintWriter out,
+           @RequestParam(required=true)String type,
            @RequestParam(required=false)String recordName,
            @RequestParam(required=false)Long deletorId,
            @RequestParam(required=false)Date gteModifiedTime,
@@ -87,7 +88,6 @@ public class RecycleBinController {
            ) throws NoSuchFieldException, IOException {
 		logger.info("获取查询条件");
 
-		String type = request.getParameter("type");
 		Map<String, Object> searchParams = Servlets.getParametersStartingWith(request, "search_");
 		Search.clearBlankValue(searchParams);
 		Search.toRangeDate(searchParams, "modifiedTime");
@@ -104,6 +104,34 @@ public class RecycleBinController {
        
 		HibernateAwareObjectMapper.DEFAULT.writeValue(out, json);
 	}
+	/**
+     * 物理删除回收站中的数据
+     */
+	@ResponseBody
+    @RequestMapping(value = "/delete.do", produces = "text/text;charset=UTF-8")
+    public String delete(@RequestParam(required=true)String entityName,
+    		HttpServletRequest request,
+    		Long... id) {
+        logger.info("ComponentController.delete删除回收站数据id={}", id);
+        commonService.delete(entityName, id);
+        JsonDto json = new JsonDto();
+        json.setMessage("删除成功");
+        return json.toString();
+    }
 	
+	/**
+     * 还原回收站中的数据
+     */
+	@ResponseBody
+    @RequestMapping(value = "/recovery.do", produces = "text/text;charset=UTF-8")
+    public String recovery(@RequestParam(required=true)String entityName,
+    		HttpServletRequest request,
+    		Long... id) {
+        logger.info("ComponentController.delete还原回收站数据id={}", id);
+        commonService.recovery(entityName, id);
+        JsonDto json = new JsonDto();
+        json.setMessage("恢复数据成功!");
+        return json.toString();
+    }
 	
 }

@@ -21,73 +21,69 @@
 <script type="text/javascript" src="${ctx}/static/js/js-util.common.js"></script>
 <script type="text/javascript">
 $(function(){
-	new Grid().init().bindAuthorization();
-	$(".list tr").live({
+	new Grid().init({ paginationSizeShow:false, paginationCountLimit:13 });
+	$(".list .module").live({
 		click: function(){
-			var $ck = $(this).find(":radio"), ck = $ck.get(0);
-			$ck.attr("checked", !ck.checked);
+			$(".module").removeAttr("style");
+			$(this).css({"border":"1px solid #e28d1f"});
+			$(".module").removeClass("bor_e28d1f");
+			$(this).addClass("bor_e28d1f");
 		},
 		dblclick: function(){
-			$(this).find(":radio").attr("checked", true);//防止click影响
+			$(this).addClass("bor_e28d1f");
 			$(".ui-button", parent.document).eq(1).trigger("click");
 		}
-	});
-	$(".list :radio").live("click", function(e){
-		e.stopPropagation();//jquery 阻止冒泡事件
 	});
 });
 </script>
 </head>
 <body>
 <div class="listcontainer">
-	<form action="${ctx}/system/user/query.do" onsubmit="return false;">
-    <input type="hidden" name="organizationId" value="${orgId}"/>
-    <table class="fl mt5 w">
-    	<tr>
-    		<td class="f14" align="right" width="10%">用户名称：</td>
-    		<td class="f14" align="left" width="16%"><input type="text" name="search_LIKE_name" value="${name}" class="text_input1"/></td>
-    		<td>
-    			<a href="javascript:;" class="reset block dump_btn globle_img fr ml10"></a>
-    			<a href="javascript:;" class="block c_white lh25 fr ml10 submit">
-    				<b class="allbtn_l block fl"></b>
-    				<b class="allbtn_r pr13 block fl w_auto f14">查&nbsp;&nbsp;询</b>
-    			</a>
-    		</td>
-    		<td class="f14" align="right"></td>
-    		<td class="f14" align="left"></td>
-    	</tr>
-    </table>
-    <div class="cb"></div>
-    <tags:paginationparams page="${page}"></tags:paginationparams>
-	</form>
-   <table class="cb id_table2 w pr35">
-       <tr>
-           <td width="10%"></td>
-           <td width="25%">真实姓名</td>
-           <td width="25%">用户名</td>
-           <td width="20%">性别</td>
-           <td width="20%">启用</td>
-       </tr>
-   </table>
-   <div style="height: 270px; overflow: hidden; overflow-y:auto; background: #fff">
-   <table class="cb id_table2 w pr35">
-        <tbody id="lst" class="list"></tbody>
-   </table>
-   <div class="cb ml35 mt20 h40 pagination"></div>
-   <textarea id="template-tbody" class="template template-tbody">
-	    {#foreach $T.result as row}
-	    <tr class="{$T.row$index%2==1?'':'bg_c_blue'} w">
-           <td><input type="radio" name="ck" value="{$T.row.id}"/></td>
-           <td>{$T.row.realName}</td>
-           <td>{$T.row.name}</td>
-           <td>{$T.row.sex.key}</td>
-           <td>{$T.row.isActive?"是":"否"}</td>
-	    </tr>
-	    {#/for} 
-	</textarea>
-	<%@include file="/WEB-INF/template/sort.jsp" %>
-	<%@include file="/WEB-INF/template/pagination.jsp" %>
-   </div>
+	<div class="margin0">
+		<form action="${ctx}/system/user/query.do" onsubmit="return false;">
+    	<input type="hidden" name="organizationId" value="${orgId}"/>
+		<div>
+			<table class="w pr10 pl10">
+				<tr>
+				  <td class="f14" align="right" width="10%">用户名称：</td>
+				  <td class="f14" align="left" width="55%"><input type="text" class="text_input1" name="search_LIKE_realName" /></td>
+				  <td width="30%">
+				  	<a href="javascript:;"class="a_underline fr w_blue mt5 reset">清除</a>
+				  	<a href="javascript:;" class="block c_white lh25 fr mr10 submit">
+				  		<b class="allbtn_l block fl"></b>
+				  		<b class="allbtn_r pr13 block fl w_auto f14">查&nbsp;&nbsp;询</b>
+				  	</a>
+				  </td>
+				</tr>
+			</table>
+		</div>
+    	<tags:paginationparams page="${page}"></tags:paginationparams>
+		</form>
+		<div style="height: 300px; overflow: hidden; overflow-y:auto;" class="grid">
+			<ul class="id_tantable1 w list"></ul>
+			<div class="cb ml35 pt20 h40 pagination"></div>
+			<textarea id="template-tbody" class="template template-tbody">
+			    {#foreach $T.result as row}
+				<li>
+					<div class="module" id="${$T.row.id}">
+						<table class="w">
+							<tr>
+								<td align="right">用户名：</td>
+								<td>{$T.row.realName}</td>
+							</tr>
+							<tr>
+								<td align="right">部门：</td>
+								<td>{$T.row.organization.name}</td>
+							</tr>
+						</table>
+					</div>
+				</li>
+			    {#/for} 
+			</textarea>
+			<%@include file="/WEB-INF/template/sort.jsp" %>
+			<%@include file="/WEB-INF/template/pagination.jsp" %>
+		</div>
+	</div>
 </div>
 </body>
 </html>

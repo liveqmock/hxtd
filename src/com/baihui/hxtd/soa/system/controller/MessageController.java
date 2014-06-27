@@ -33,7 +33,6 @@ import com.baihui.hxtd.soa.base.utils.ImportExport;
 import com.baihui.hxtd.soa.base.utils.Search;
 import com.baihui.hxtd.soa.base.utils.mapper.HibernateAwareObjectMapper;
 import com.baihui.hxtd.soa.system.entity.Message;
-import com.baihui.hxtd.soa.system.entity.Notice;
 import com.baihui.hxtd.soa.system.entity.User;
 import com.baihui.hxtd.soa.system.entity.UserMessage;
 import com.baihui.hxtd.soa.system.service.MessageService;
@@ -169,6 +168,7 @@ public class MessageController {
 	 * @param type
 	 * @return
 	 */
+	@ResponseBody
 	@RequestMapping(value = "/modify.do")
 	public String modify(Message message,long userId, HttpServletRequest request,String type) {
 		logger.info("MessageController.modify修改系统消息信息");
@@ -181,11 +181,8 @@ public class MessageController {
 		messageService.save(message);
 		User user=userService.getById(userId);
 		messageService.saveShip(message,user);
-		String redStr = "/system/message/toQueryPage.do";
-		if("add".equals(type)){
-			redStr = "/system/message/toAddPage.do";
-		}
-		return "redirect:"+redStr;
+		JsonDto json = JsonDto.modify(message.getId());
+		return json.toString();
 	}
 	
 	
@@ -210,6 +207,7 @@ public class MessageController {
 	 * @param type
 	 * @return
 	 */
+	@ResponseBody
 	@RequestMapping(value = "/add.do")
 	public String add(Message message,HttpServletRequest request,String type,String userId){
 		logger.info("ComponentController.query查询组件列表");
@@ -225,11 +223,8 @@ public class MessageController {
 			User user=userService.getById(Long.parseLong(userstr[i]));
 			messageService.saveShip(message,user);
 		}
-		String redStr = "/system/message/toQueryPage.do";
-		if("add".equals(type)){
-			redStr = "/system/message/toAddPage.do";
-		}
-		return "redirect:"+redStr;
+		JsonDto json = JsonDto.add(message.getId());
+		return json.toString();
 	}
 	
 	/**
@@ -242,8 +237,7 @@ public class MessageController {
 	public String delete(Long... id){
 		logger.info("MessageController.delete删除系统消息id={}",StringUtils.join(id,","));
 		messageService.delete(id);
-		JsonDto json = new JsonDto();
-		json.setMessage("删除成功");
+		JsonDto json = JsonDto.delete(id);
 		return json.toString();
 	}
 	

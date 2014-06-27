@@ -31,7 +31,7 @@
 	            $C.toggleClass($menu1, "allright", "allnoright");
 	            $C.toggleBoolean($menu1, "checked");
 	            $C.bindCheckAll($menu1, "div.menus1", "a.menu2", "click");
-	
+				var m;
 	           
 	            $C.tab({onSelected:function(event,title,panel){
 	            	//每次选中tab页,清空查询条件
@@ -39,14 +39,31 @@
 	            	//每次选中tab页,将分页条页面置为1
 	            	$("[name=hibernatePageNo]").val(1);
 	            	
-	            	var m = title.attr("name");
+	            	m = title.attr("name");
 	            	var id = title.attr("id");
 	            	//给隐藏的input复制
 	            	$("#moduleName").val(m);
 	            	//点击tab页,展示div
 	            	$("#tab-div div div").attr("name","tabs-"+id);
+	            	//点击tab页,重置删除按钮和重置按钮的uri
+	            	$("#deleteData").attr("uri","${ctx}/system/recyclebin/delete.do?entityName="+m);
+	            	$("#recoveryData").attr("uri","${ctx}/system/recyclebin/recovery.do?entityName="+m);
 	            	onLoad();
 	            }})
+	            
+	            $("#recoveryData").click(function(){
+					if($(":checkbox:checked").length == 0){
+						jsUtil.alert("请选择要恢复的数据");
+						return false;
+					}
+					jsUtil.confirm("确定要恢复数据吗?",function(){
+						var ckAry = [];
+						$("#tbody :checkbox:checked").each(function(){
+							ckAry.push(this.value);
+						});
+			            RcmsAjax.ajax("${ctx}/system/recyclebin/recovery.do?entityName="+m,onLoad, null, $.param({id: ckAry }, true));
+					});
+				});
 			});
 			function onLoad(){
 				grid.loadGrid();
@@ -63,6 +80,10 @@
 					}
 				});
 			}
+			
+			//function ckAll(obj){//全选
+				//$(":checkbox").attr("checked", obj.checked);
+			//}
 			
 		</script>
 	</head>
@@ -152,6 +173,20 @@
 							<b class="h_tabbtn_l w25 block fl"></b>
 							<b class="h_tabbtn_r pr25 w_auto f14 block fr lh32 cp id_nav pr">产品</b>
 						</li>
+						<div class="ie_head">
+						<li style="float:right;">
+							<a class="block c_white lh25 mr10" href="javascript:;" id="recoveryData" uri="${ctx}/system/recyclebin/recovery.do?entityName=MarketActivity">
+								<b class="allbtn_l block fl"></b>
+								<b class="allbtn_r pr13 block fl w_auto f14">还&nbsp;&nbsp;原</b>
+							</a>
+						</li>
+                		<li style="float:right;">
+                			<a class="block c_white lh25 mr10 deletesome" id="deleteData" href="javascript:;"  uri="${ctx}/system/recyclebin/delete.do?entityName=MarketActivity">
+                				<b class="allbtn_l block fl"></b>
+                				<b class="allbtn_r pr13 block fl w_auto f14">删&nbsp;&nbsp;除</b>
+                			</a>
+                		</li>
+						</div>
 					</ul>
 
 					<div class="cb"></div>

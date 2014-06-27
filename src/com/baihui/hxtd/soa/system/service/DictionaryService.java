@@ -68,6 +68,7 @@ public class DictionaryService {
      * @return void 返回类型
      */
     public void save(Dictionary entity) {
+        entity.setIsInitialized(false);
         dictionaryDao.save(entity);
     }
 

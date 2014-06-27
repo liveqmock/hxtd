@@ -62,31 +62,64 @@ function formReset() {
 				onsubmit="return false;">
 				<table class="fl mt5 w">
 					<tr>
-						<td class="f14" align="right" width="6%">
+						<td class="f14 namewidth1" align="right" >
 							供应商名：
 						</td>
-						<td class="f14" align="left" width="16%">
+						<td class="f14 namewidth2" align="left" >
 							<input type="text" class="text_input1" name="search_LIKE_name"
 								value="" />
 						</td>
-						<td class="f14" align="right" width="6%">
+						<td class="f14 namewidth1" align="right" >
 							电话：
 						</td>
-						<td class="f14" align="left" width="16%">
+						<td class="f14 namewidth2" align="left" >
 							<input type="text" class="text_input1" name="search_LIKE_phone"
 								value="" />
 						</td>
-						<td class="f14" align="right" width="6%">
+						<td class="f14 namewidth1" align="right" >
 							手机：
 						</td>
-						<td class="f14" align="left" width="16%">
+						<td class="f14 namewidth2" align="left" >
 							<input type="text" class="text_input1" name="search_LIKE_mobile"
 								value="" />
 						</td>
-						<td class="f14" align="right" width="6%">
+						<td class="namewidth3">
+							<a class="c_222 block cp fr ml10 globle_img mt8 mr20 more"
+								title="展开"></a>
+							<a href="javascript:void(0)"
+								class="a_underline block_inline fr w_blue mt5 reset">清除</a>
+							<a href="javascript:void(0)"
+								class="block_inline c_white lh25 fr mr10 submit"><b
+								class="allbtn_l block fl"></b><b
+								class="allbtn_r pr13 block fl w_auto f14">查&nbsp;&nbsp;询</b> </a>
+						</td>
+					</tr>
+					<tr class="more-content">
+						<td class="f14 namewidth1" align="right" width="7%">
+							省：
+						</td>
+						<td class="f14 namewidth2" align="left" width="13%">
+							<select id="province" name="search_EQ_province.id"
+								class="select2"></select>
+						</td>
+						<td class="f14 namewidth1" align="right" width="7%">
+							市：
+						</td>
+						<td class="f14 namewidth2" align="left" width="13%">
+							<select id="city" name="search_EQ_city.id" class="select2"></select>
+						</td>
+						<td class="f14 namewidth1" align="right" width="7%">
+							区/县：
+						</td>
+						<td class="f14 namewidth2" align="left" width="13%">
+							<select id="county" name="search_EQ_county.id" class="select2"></select>
+						</td>
+					</tr>
+					<tr class="more-content">
+						<td class="f14 namewidth1" align="right" >
 							类型：
 						</td>
-						<td class="f14" align="left" width="16%">
+						<td class="f14 namewidth2" align="left" >
 							<select name="search_EQ_type.id" class="select2">
 								<option value="">
 									--全部--
@@ -98,43 +131,10 @@ function formReset() {
 								</c:forEach>
 							</select>
 						</td>
-						<td width="12%">
-							<a class="c_222 block cp fr ml10 globle_img mt8 mr20 more"
-								title="展开"></a>
-							<a href="javascript:void(0)"
-								class="a_underline block_inline fr w_blue mt5 reset">清除</a>
-							<a href="javascript:void(0)"
-								class="block_inline c_white lh25 fr mr10 submit"><b
-								class="allbtn_l block fl"></b><b
-								class="allbtn_r pr13 block fl w_auto f14">查&nbsp;&nbsp;询</b> </a>
-						</td>
-					</tr>
-					<tr>
-						<td class="f14" align="right" width="7%">
-							省：
-						</td>
-						<td class="f14" align="left" width="13%">
-							<select id="province" name="search_EQ_province.id"
-								class="select2"></select>
-						</td>
-						<td class="f14" align="right" width="7%">
-							市：
-						</td>
-						<td class="f14" align="left" width="13%">
-							<select id="city" name="search_EQ_city.id" class="select2"></select>
-						</td>
-						<td class="f14" align="right" width="7%">
-							区/县：
-						</td>
-						<td class="f14" align="left" width="13%">
-							<select id="county" name="search_EQ_county.id" class="select2"></select>
-						</td>
-					</tr>
-					<tr>
-						<td class="f14" align="right" width="6%">
+						<td class="f14 namewidth1" align="right" >
 							创建时间：
 						</td>
-						<td class="f14" align="left" width="16%">
+						<td class="f14 namewidth2" align="left" >
 							<div class="pr vm">
 								<a href="javascript:;" class="pa time_closenone1"></a>
 								<a href="javascript:;" class="pa time_closenone2"></a>
@@ -145,10 +145,10 @@ function formReset() {
 									name="search_LTE_createdTime" type="text" readonly />
 							</div>
 						</td>
-						<td class="f14" align="right" width="6%">
+						<td class="f14 namewidth1" align="right" >
 							修改时间：
 						</td>
-						<td class="f14" align="left" width="16%">
+						<td class="f14 namewidth2" align="left" >
 							<div class="pr vm">
 								<a href="javascript:;" class="pa time_closenone1"></a>
 								<a href="javascript:;" class="pa time_closenone2"></a>

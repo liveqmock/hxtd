@@ -1,6 +1,7 @@
 package com.baihui.hxtd.soa.system.entity;
 
 
+import com.baihui.hxtd.soa.common.entity.Initialized;
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
@@ -18,7 +19,7 @@ import java.util.*;
 @Entity
 @Table(name = "SM_ORG")
 @SuppressWarnings("serial")
-public class Organization implements Serializable, Cloneable {
+public class Organization implements Serializable, Cloneable, Initialized {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -73,6 +74,9 @@ public class Organization implements Serializable, Cloneable {
     @Column(name = "IS_DELETED", nullable = false, updatable = false)
     private Boolean isDeleted;
 
+    @Column(name = "IS_INITIALIZED", nullable = false, updatable = false)
+    private Boolean isInitialized;
+
     @JsonBackReference
     @OneToMany(mappedBy = "organization", cascade = {CascadeType.REMOVE})
     private Set<User> owners = new HashSet<User>();
@@ -83,7 +87,7 @@ public class Organization implements Serializable, Cloneable {
     private User creator;
 
     @Column(name = "CREATED_TIME", nullable = false, updatable = false)
-    private Date createTime;
+    private Date createdTime;
 
     @JsonIgnore
     @ManyToOne(fetch = FetchType.LAZY)
@@ -247,6 +251,14 @@ public class Organization implements Serializable, Cloneable {
         this.isDeleted = isDeleted;
     }
 
+    public Boolean getIsInitialized() {
+        return isInitialized;
+    }
+
+    public void setIsInitialized(Boolean isInitialized) {
+        this.isInitialized = isInitialized;
+    }
+
     public Set<User> getOwners() {
         return owners;
     }
@@ -263,12 +275,12 @@ public class Organization implements Serializable, Cloneable {
         this.creator = creator;
     }
 
-    public Date getCreateTime() {
-        return createTime;
+    public Date getCreatedTime() {
+        return createdTime;
     }
 
-    public void setCreateTime(Date createTime) {
-        this.createTime = createTime;
+    public void setCreatedTime(Date createdTime) {
+        this.createdTime = createdTime;
     }
 
     public User getModifier() {

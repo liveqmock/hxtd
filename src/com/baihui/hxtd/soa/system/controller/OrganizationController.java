@@ -8,6 +8,7 @@ import com.baihui.hxtd.soa.base.utils.mapper.JsonMapper;
 import com.baihui.hxtd.soa.base.utils.serial.TierSerial;
 import com.baihui.hxtd.soa.base.utils.serial.TierSerials;
 import com.baihui.hxtd.soa.base.utils.ztree.TreeNodeConverter;
+import com.baihui.hxtd.soa.common.service.CommonService;
 import com.baihui.hxtd.soa.system.entity.Dictionary;
 import com.baihui.hxtd.soa.system.entity.Organization;
 import com.baihui.hxtd.soa.system.entity.User;
@@ -51,13 +52,17 @@ public class OrganizationController {
     private Integer orgTierLength = 2;
     //        @Value(value = "${system.organization.type}")
     private String typeValue = "010301";
-    //        @Value(value = "${system.organization.typeCompanyValue}")
-    private String typeCompanyValue = "01030101";
+
 
     @Resource
     private OrganizationService organizationService;
+
+    @Resource
+    private CommonService commonService;
+
     @Resource
     private DictionaryService dictionaryService;
+
     @Resource
     private RoleService roleService;
 
@@ -239,6 +244,10 @@ public class OrganizationController {
     public String modify(Organization organization, ModelMap modelMap) {
         logger.info("修改");
 
+        if (commonService.isInitialized(Organization.class, organization.getId())) {
+            return new JsonDto("系统初始化数据不允许修改！").toString();
+        }
+
         logger.info("添加服务端属性值");
         User user = (User) modelMap.get(Constant.VS_USER);
         organization.setModifiedTime(new Date());
@@ -258,6 +267,9 @@ public class OrganizationController {
     @RequestMapping(value = "/delete.do")
     public String delete(Long[] id) {
         logger.info("删除");
+        if (commonService.isInitialized(Organization.class, id)) {
+            return new JsonDto("系统初始化数据不允许修改！").toString();
+        }
         organizationService.delete(id);
         return JsonDto.delete(id).toString();
     }

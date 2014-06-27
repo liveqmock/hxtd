@@ -22,6 +22,7 @@ import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
  * @author huizijing
  * @date 2014/6/3
  */
+@SuppressWarnings("serial")
 @Entity
 @Table(name = "NOTICE")
 public class Notice implements Serializable{

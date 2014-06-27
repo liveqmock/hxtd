@@ -304,6 +304,7 @@ public class ComponentService {
     @Transactional
     public void save(Component entity) {
         logger.info("保存组件信息{}", entity);
+        entity.setIsInitialized(false);
         componentDao.save(entity);
     }
 
@@ -316,8 +317,8 @@ public class ComponentService {
      * @Title: delete
      */
     @Transactional
-    public void delete(long... id) {
-        componentDao.delete(id);
+    public void delete(Long... id) {
+        componentDao.logicalDelete(id);
     }
 
 

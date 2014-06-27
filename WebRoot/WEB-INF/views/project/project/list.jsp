@@ -65,39 +65,28 @@ function formReset() {
 <form id="form" action="${ctx}/project/project/query.do" onsubmit="return false;">
 		<table class="fl mt5 w">
 			<tr>
-				<td class="f14" align="right" width="6%">
+				<td class="f14 namewidth1" align="right" >
 					项目名：
 				</td>
-				<td class="f14" align="left" width="16%">
+				<td class="f14 namewidth2" align="left" >
 					<input type="text" name="search_LIKE_name" id="name"
 						class="text_input1" value="" />
 				</td>
-				<td class="f14" align="right" width="6%">
+				<td class="f14 namewidth1" align="right" >
 					项目编号：
 				</td>
-				<td class="f14" align="left" width="16%">
+				<td class="f14 namewidth2" align="left" >
 					<input type="text" name="search_LIKE_code" id="name"
 						class="text_input1" value="" />
 				</td>
-				<td class="f14" align="right" width="6%">
+				<td class="f14 namewidth1" align="right" >
 					供应商：
 				</td>
-				<td class="f14" align="left" width="16%">
+				<td class="f14 namewidth2" align="left" >
 					<input type="text" name="search_LIKE_supplier.name" id="name"
 						class="text_input1" value="" />
 				</td>
-				<td class="f14" align="right" width="6%">
-					支付方式：
-				</td>
-				<td class="f14" align="left" width="16%">
-					<select name="search_EQ_payType" class="select2">
-						<option value="">全部</option>
-						<c:forEach items="${payType}" var="p">
-							<option value="${p.id}">${p.key}</option>
-						</c:forEach>
-					</select>
-				</td>
-				<td width="12%">
+				<td class="namewidth3">
 					<a class="c_222 block cp fr ml10 globle_img mt8 mr20 more"
 						title="展开"></a>
 					<a href="javascript:void(0)"
@@ -109,61 +98,74 @@ function formReset() {
 					</a>
 				</td>
 			</tr>
-			<tr>
-				<td class="f14" align="right" width="6%">
+			<tr class="more-content">
+				<td class="f14 namewidth1" align="right" >
 					融资额度：
 				</td>
-				<td class="f14" align="left" width="16%">
+				<td class="f14 namewidth2" align="left" >
 					<input class="text_input2" name="search_GTE_financeLimit"
 						type="text" />-<input class="text_input2" name="search_LTE_financeLimit"
 						type="text" />
 				</td>
-				<td class="f14" align="right" width="6%">
+				<td class="f14 namewidth1" align="right" >
 					融资周期：
 				</td>
-				<td class="f14" align="left" width="16%">
+				<td class="f14 namewidth2" align="left" >
 					<input class="text_input2" name="search_GTE_financeCycle"
 						type="text" />-<input class="text_input2" name="search_LTE_financeCycle"
 						type="text" />
 				</td>
-				<td class="f14" align="right" width="6%">
+				<td class="f14 namewidth1" align="right" >
 					收益率%：
 				</td>
-				<td class="f14" align="left" width="16%">
+				<td class="f14 namewidth2" align="left" >
 					<input class="text_input2" name="search_GTE_er" type="text" 
 					/>-<input class="text_input2" name="search_LTE_er" type="text" />
 				</td>
-				<td class="f14" align="right" width="6%">
+			</tr>
+			<tr class="more-content">
+				<td class="f14 namewidth1" align="right" >
+					支付方式：
+				</td>
+				<td class="f14 namewidth2" align="left" >
+					<select name="search_EQ_payType" class="select2">
+						<option value="">全部</option>
+						<c:forEach items="${payType}" var="p">
+							<option value="${p.id}">${p.key}</option>
+						</c:forEach>
+					</select>
+				</td>
+				<td class="f14 namewidth1" align="right" >
 					赎回率%：
 				</td>
-				<td class="f14" align="left" width="16%">
+				<td class="f14 namewidth2" align="left" >
 					<input class="text_input2" name="search_GTE_aer" type="text" />-<input 
 					class="text_input2" name="search_LTE_aer" type="text" />
 				</td>
-			</tr>
-			<tr>
-				<td class="f14" align="right" width="6%">
+				<td class="f14 namewidth1" align="right" >
 					开放时间：
 				</td>
-				<td class="f14" align="left" width="16%">
+				<td class="f14 namewidth2" align="left" >
 					<input class="text_input2 input_close globle_img time"
 						name="search_GTE_beginTime" type="text"
 						 />-<input class="text_input2 input_close globle_img time"
 						name="search_LTE_beginTime" type="text" />
 				</td>
-				<td class="f14" align="right" width="6%">
+			</tr>
+			<tr class="more-content">
+				<td class="f14 namewidth1" align="right" >
 					创建时间：
 				</td>
-				<td class="f14" align="left" width="16%">
+				<td class="f14 namewidth2" align="left" >
 					<input class="text_input2 input_close globle_img time"
 						name="search_GTE_createdTime" type="text" 
 						/>-<input class="text_input2 input_close globle_img time"
 						name="search_LTE_createdTime" type="text" />
 				</td>
-				<td class="f14" align="right" width="6%">
+				<td class="f14 namewidth1" align="right" >
 					修改时间：
 				</td>
-				<td class="f14" align="left" width="16%">
+				<td class="f14" align="left" >
 					<input class="text_input2 input_close globle_img time"
 						name="search_GTE_modifiedTime" type="text" 
 						/>-<input class="text_input2 input_close globle_img time"

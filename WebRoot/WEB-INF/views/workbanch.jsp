@@ -9,7 +9,7 @@
 <c:set var="ctx" value="${pageContext.request.contextPath}"/>
 <html>
 <head>
-<title></title>
+<title>工作台</title>
 <style>
 .head{font-weight: bold;text-align: center;}
 tr{height: 35px;line-height: 35px;text-align: center;}

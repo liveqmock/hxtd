@@ -4,7 +4,7 @@
 <c:set var="ctx" value="${pageContext.request.contextPath}"/>
 <html>
 <head>
-<title>市场活动信息</title>
+<title>市场活动编辑</title>
 <link href="${ctx}/static/css/recommend/detail.css?v=1" type="text/css" rel="stylesheet"></link>
 <script type="text/javascript" src="${ctx}/static/js/jquery.validate.js?v=1"></script>
 <script type="text/javascript" src="${ctx}/static/js/jquery.metadata.js?v=1"></script>
@@ -47,11 +47,11 @@ $(function(){
 	});
 });
 function searchData(action){//搜索弹出框
-	jsUtil.dialogIframe("${ctx}/system/user/toQueryPage.comp", "发起者", 800, 465, function(){// 确定回调
-		var $ckObj = $(":checked", window.frames["dialogIframe"].document);
-		if($ckObj.length > 0){
-			$("#txt_" + action).val($ckObj.parent().next().text());
-			$("#hide_" + action +"_id").val($ckObj.val());
+	jsUtil.dialogIframe("${ctx}/system/user/toQueryPage.comp", "负责人", 800, 420, function(){// 确定回调
+		var $userObj = $(".bor_e28d1f", window.frames["dialogIframe"].document);
+		if($userObj.length > 0){
+			$("#txt_" + action).val($userObj.find("td:eq(1)").text());
+			$("#hide_" + action +"_id").val($userObj.attr("id"));
 		}
 	});
 }

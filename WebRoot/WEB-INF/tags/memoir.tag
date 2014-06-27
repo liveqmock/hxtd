@@ -8,9 +8,9 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ taglib prefix="tags" tagdir="/WEB-INF/tags" %>
 <c:set var="ctx" value="${pageContext.request.contextPath}"/>
-<link rel="stylesheet" href="${ctx}/static/css/recommend/detail.css" type="text/css"/>
 <link rel="stylesheet" href="${ctx}/static/css/application.css" type="text/css"/>
 <script type="text/javascript" src="${ctx}/static/js/jquery-jtemplates.js"></script>
+<script type="text/javascript" src="${ctx}/static/js/scrollTitle.js?v=1"></script>
 <script type="text/javascript" src="${ctx}/static/js/js-util.common.js"></script>
 <script type="text/javascript">
 $(function(){
@@ -56,10 +56,10 @@ function iframeRemoir(act, id){
 				<tags:paginationparams page="${page}"></tags:paginationparams>
 			</c:when>
 			<c:otherwise>
-				<input type="hidden" value="0" name="hibernatePageNo"/>
-				<input type="hidden" value="10" name="hibernatePageSize"/>
-				<input type="hidden" value="modifiedTime" name="hibernateOrderBy"/>
-				<input type="hidden" value="desc" name="hibernateOrder"/>
+				<input type="hidden" value="0" name="hibernatePageNo" class="pagination-param"/>
+				<input type="hidden" value="10" name="hibernatePageSize" class="pagination-param"/>
+				<input type="hidden" value="modifiedTime" name="hibernateOrderBy" class="pagination-param"/>
+				<input type="hidden" value="desc" name="hibernateOrder" class="pagination-param"/>
 			</c:otherwise>
 		</c:choose>
 	</form>

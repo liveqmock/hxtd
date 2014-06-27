@@ -62,14 +62,11 @@ function converter(id){
 }
 
 function convOwner() {
-	var ckObj = $(":checked", window.frames["dialogIframe"].document);
-	if (ckObj.length > 0) {
-		var boxs = $("input(name=id):checked");
-		var param = $.param(boxs) + "&ownerId=" + ckObj.val();
-		RcmsAjax.ajax(jsUtil.getRootPath() + '/customer/lead/modifyOwner.do',
-				function() {
-					load();
-				}, null, param);
+	var $userObj = $(".bor_e28d1f", window.frames["dialogIframe"].document);
+	if($userObj.length > 0){
+		var $boxs = $("input(name=id):checked");
+		var param = $.param($boxs) + "&ownerId=" + $userObj.attr("id");
+		RcmsAjax.ajax(jsUtil.getRootPath() + '/customer/lead/modifyOwner.do', function() { load(); }, null, param);
 	}
 }
 function load() {
@@ -108,24 +105,24 @@ function reset() {
 				onsubmit="return false;">
 				<table class="fl mt5 w">
 					<tr>
-						<td class="f14" align="right" width="6%">
+						<td class="f14 namewidth1" align="right" >
 							线索名称：
 						</td>
-						<td class="f14" align="left" width="16%">
+						<td class="f14 namewidth2" align="left" >
 							<input type="text" class="text_input1" name="search_LIKE_name"
 								id="name" value="" />
 						</td>
-						<td class="f14" align="right" width="6%">
+						<td class="f14 namewidth1" align="right" >
 							邮箱：
 						</td>
-						<td class="f14" align="left" width="16%">
+						<td class="f14 namewidth2" align="left" >
 							<input type="text" class="text_input1" name="search_LIKE_email"
 								id="name" value="" />
 						</td>
-						<td class="f14" align="right" width="6%">
+						<td class="f14 namewidth1" align="right" >
 							线索来源：
 						</td>
-						<td class="f14" align="left" width="16%">
+						<td class="f14 namewidth2" align="left" >
 							<select name="search_EQ_source.id" class="select2">
 								<option value="">
 									--全部--
@@ -137,21 +134,7 @@ function reset() {
 								</c:forEach>
 							</select>
 						</td>
-						<td class="f14" align="right" width="6%">
-							修改时间：
-						</td>
-						<td class="f14" align="left" width="16%">
-							<div class="pr vm">
-								<a href="javascript:;" class="pa time_closenone1"></a>
-								<a href="javascript:;" class="pa time_closenone2"></a>
-								<input class="text_input2 input_close globle_img time"
-									name="search_GTE_modifiedTime" type="text" 
-									readonly />-<input 
-									class="text_input2 input_close globle_img time"
-									name="search_LTE_modifiedTime" type="text" readonly />
-							</div>
-						</td>
-						<td width="12%">
+						<td class="namewidth3">
 							<a class="c_222 block cp fr ml10 globle_img mt8 mr20 more"
 								title="展开"></a>
 							<a href="javascript:void(0)"
@@ -162,18 +145,18 @@ function reset() {
 								class="allbtn_r pr13 block fl w_auto f14">查&nbsp;&nbsp;询</b> </a>
 						</td>
 					</tr>
-					<tr>
-						<td class="f14" align="right" width="6%">
+					<tr class="more-content">
+						<td class="f14 namewidth1" align="right" >
 							手机：
 						</td>
-						<td class="f14" align="left" width="16%">
+						<td class="f14 namewidth2" align="left" >
 							<input type="text" class="text_input1" name="search_LIKE_mobile"
 								id="name" value="" />
 						</td>
-						<td class="f14" align="right" width="6%">
+						<td class="f14 namewidth1" align="right" >
 							线索状态：
 						</td>
-						<td class="f14" align="left" width="16%">
+						<td class="f14 namewidth2" align="left" >
 							<select name="search_EQ_status.id" class="select2">
 								<option value="">
 									--全部--
@@ -185,10 +168,10 @@ function reset() {
 								</c:forEach>
 							</select>
 						</td>
-						<td class="f14" align="right" width="6%">
+						<td class="f14 namewidth1" align="right" >
 							行业：
 						</td>
-						<td class="f14" align="left" width="16%">
+						<td class="f14 namewidth2" align="left" >
 							<select name="search_EQ_industry.id" class="select2">
 								<option value="">
 									--全部--
@@ -200,10 +183,46 @@ function reset() {
 								</c:forEach>
 							</select>
 						</td>
-						<td class="f14" align="right" width="6%">
+					</tr>
+					<tr class="more-content">
+						<td class="f14 namewidth1" align="right" >
+							省：
+						</td>
+						<td class="f14 namewidth2" align="left" >
+							<select id="province" name="search_EQ_province.id" class="select2"></select>
+						</td>
+						<td class="f14 namewidth1" align="right" >
+							市：
+						</td>
+						<td class="f14 namewidth2" align="left" >
+							<select id="city" name="search_EQ_city.id" class="select2"></select>
+						</td>
+						<td class="f14 namewidth1" align="right" >
+							区/县：
+						</td>
+						<td class="f14 namewidth2" align="left" >
+							<select id="county" name="search_EQ_county.id" class="select2"></select>
+						</td>
+					</tr>
+					<tr class="more-content">
+						<td class="f14 namewidth1" align="right" >
+							修改时间：
+						</td>
+						<td class="f14 namewidth2" align="left" >
+							<div class="pr vm">
+								<a href="javascript:;" class="pa time_closenone1"></a>
+								<a href="javascript:;" class="pa time_closenone2"></a>
+								<input class="text_input2 input_close globle_img time"
+									name="search_GTE_modifiedTime" type="text" 
+									readonly />-<input 
+									class="text_input2 input_close globle_img time"
+									name="search_LTE_modifiedTime" type="text" readonly />
+							</div>
+						</td>
+						<td class="f14 namewidth1" align="right" >
 							创建时间：
 						</td>
-						<td class="f14" align="left" width="16%">
+						<td class="f14 namewidth2" align="left" >
 							<div class="pr vm">
 								<a href="javascript:;" class="pa time_closenone1"></a>
 								<a href="javascript:;" class="pa time_closenone2"></a>
@@ -213,26 +232,6 @@ function reset() {
 									class="text_input2 input_close globle_img time"
 									name="search_LTE_createdTime" type="text" readonly />
 							</div>
-						</td>
-					</tr>
-					<tr>
-						<td class="f14" align="right" width="6%">
-							省：
-						</td>
-						<td class="f14" align="left" width="16%">
-							<select id="province" name="search_EQ_province.id" class="select2"></select>
-						</td>
-						<td class="f14" align="right" width="6%">
-							市：
-						</td>
-						<td class="f14" align="left" width="16%">
-							<select id="city" name="search_EQ_city.id" class="select2"></select>
-						</td>
-						<td class="f14" align="right" width="6%">
-							区/县：
-						</td>
-						<td class="f14" align="left" width="16%">
-							<select id="county" name="search_EQ_county.id" class="select2"></select>
 						</td>
 					</tr>
 				</table>

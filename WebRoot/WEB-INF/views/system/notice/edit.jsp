@@ -16,33 +16,44 @@
 <script type="text/javascript" src="${ctx}/static/js/validator.js"></script>
 <script type="text/javascript" src="${ctx}/static/js/jquery.metadata.js"></script>
 <script type="text/javascript"> 
-	$(function(){//初始化 
+    $(function(){
     	//加载时间控件
     	jsUtil.datepickerAll(".time");
-    	 //验证
-    	 $(function(){
-		    $("#save").click(function(){
-			if($("#form").valid()){
-			$("#form").submit();
+    
+		$("#saveAndAdd").click(function(){
+			var $form = $("#form");
+			if($form.valid()){
+				RcmsAjax.ajax($form.attr("action"),function(result){
+					setTimeout(function(){
+						window.location.replace("${ctx}/system/notice/toAddPage.do")
+					},500);
+				},null,$form.formSerialize());
 			}
+			return false;
 		});
-	$("#saveAndAdd").click(function(){
-		$("#form").attr("action",$("#form").attr("action")+"?type=add");
-		if($("#form").valid()){
-			$("#form").submit();
-		}
-			});
+		$("#save").click(function(){
+			var $form = $("#form");
+			if($form.valid()){
+				RcmsAjax.ajax($form.attr("action"),function(result){
+					//redirect
+					var id = result.result.result;
+					setTimeout(function(){
+						window.location.replace("${ctx}/system/notice/toViewPage.do?id="+id)
+					},500);
+				},null,$form.formSerialize());
+			}
+			return false;
 		});
+	
+		function clearInputVal(obj){//清除
+			$(obj).prevAll("input").val('');
+		};
 	});
-
-	function clearInputVal(obj){//清除
-		$(obj).prevAll("input").val('');
-	}
 </script> 
 </head>
 <body>
 <div class="cb"></div>
-<form id="form" action="${ctx }${funcUrl}" method="POST">
+<form id="form" action="${ctx}${funcUrl}" method="POST">
    <div class="ml35 mr35 mt20 block cb cb">
         <b class="table_headl globle_img block fl"></b>
         <div class="fl table_headc fl w99b">
@@ -87,8 +98,8 @@
      </div>
      <div class="cb block h40 margin0 mt10" style="width:350px;">
         <ul class="id_table1 cb">
-		<li><a id="save"href="javascript:;" class="block c_white lh25 mr10"><b class="allbtn_l block fl"></b><b class="allbtn_r pr13 block fl w_auto f14 ">发&nbsp;&nbsp;布</b></a></li>
-		<li><a id="saveAndAdd"href="javascript:;" class="block c_white lh25 mr10"><b class="allbtn_l block fl"></b><b class="allbtn_r pr13 block fl w_auto f14 ">发布并新建</b></a></li>
+		<li><a id="save" href="javascript:;" class="block c_white lh25 mr10"><b class="allbtn_l block fl"></b><b class="allbtn_r pr13 block fl w_auto f14 ">发&nbsp;&nbsp;布</b></a></li>
+		<li><a id="saveAndAdd" href="javascript:;" class="block c_white lh25 mr10"><b class="allbtn_l block fl"></b><b class="allbtn_r pr13 block fl w_auto f14 ">发布并新建</b></a></li>
 		<li><a href="${ctx}/system/notice/toQueryPage.do" class="block c_white lh25 mr10"><b class="allbtn_l block fl"></b><b class="allbtn_r pr13 block fl w_auto f14 ">取&nbsp;&nbsp;消</b></a></li>
 	    </ul>
 	 </div>

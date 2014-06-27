@@ -1,6 +1,7 @@
 package com.baihui.hxtd.soa.system.entity;
 
 
+import com.baihui.hxtd.soa.common.entity.Initialized;
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
@@ -14,7 +15,7 @@ import java.util.Set;
 @Entity
 @Table(name = "SM_ROLE")
 @SuppressWarnings("serial")
-public class Role implements Serializable, Comparable<Role> {
+public class Role implements Serializable, Comparable<Role>, Initialized {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -37,13 +38,16 @@ public class Role implements Serializable, Comparable<Role> {
     @Column(name = "IS_DELETED", nullable = false, updatable = false)
     private Boolean isDeleted;
 
+    @Column(name = "IS_INITIALIZED", nullable = false, updatable = false)
+    private Boolean isInitialized;
+
     @JsonIgnore
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "CREATOR_ID", nullable = false, updatable = false)
     private User creator;
 
     @Column(name = "CREATED_TIME", nullable = false, updatable = false)
-    private Date createTime;
+    private Date createdTime;
 
     @JsonIgnore
     @ManyToOne(fetch = FetchType.LAZY)
@@ -150,6 +154,14 @@ public class Role implements Serializable, Comparable<Role> {
         this.isDeleted = isDeleted;
     }
 
+    public Boolean getIsInitialized() {
+        return isInitialized;
+    }
+
+    public void setIsInitialized(Boolean isInitialized) {
+        this.isInitialized = isInitialized;
+    }
+
     public User getCreator() {
         return creator;
     }
@@ -158,12 +170,12 @@ public class Role implements Serializable, Comparable<Role> {
         this.creator = creator;
     }
 
-    public Date getCreateTime() {
-        return createTime;
+    public Date getCreatedTime() {
+        return createdTime;
     }
 
-    public void setCreateTime(Date createTime) {
-        this.createTime = createTime;
+    public void setCreatedTime(Date createdTime) {
+        this.createdTime = createdTime;
     }
 
     public User getModifier() {

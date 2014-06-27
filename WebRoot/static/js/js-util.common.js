@@ -522,7 +522,7 @@ Grid.prototype = {
     /**渲染分页*/
     renderPagination: function (data) {
         var options = this.options;
-        data.paginationSizeShow = this.paginationSizeShow;
+        data.paginationSizeShow = this.options.paginationSizeShow;
         this.paginationData = data;
         this.paginationbar.setTemplateElement(options.paginationTemplateId).processTemplate(data);
         this.pageSize = $(options.sizeSelector, this.paginationbar);

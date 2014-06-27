@@ -398,6 +398,7 @@ public class FunctionService {
     @Transactional
     public void save(Function entity) {
         logger.info("保存功能信息{}", entity);
+        entity.setIsInitialized(false);
         functionDao.save(entity);
     }
 
@@ -410,8 +411,8 @@ public class FunctionService {
      * @Title: delete
      */
     @Transactional
-    public void delete(long... id) {
-        functionDao.delete(id);
+    public void delete(Long... id) {
+        functionDao.logicalDelete(id);
     }
 
 }

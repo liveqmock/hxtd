@@ -53,15 +53,6 @@
 		//首次加载数据
 		grid = new Grid().init().bindExport();
 		
-		//展开
-		$(".more").toggle(function(){
-		$(this).find("i:eq(0)").text("收起").parents("tr").nextAll().show();
-		$(this).find("i:eq(1)").addClass("develop");
-	    }, function(){
-		$(this).find("i:eq(0)").text("展开").parents("tr").nextAll().hide();
-		$(this).find("i:eq(1)").removeClass("develop");
-	    });
-		
 		 //给删除按钮绑定时间
 		 $("#delete").click(function () {
 					var boxs = $("input(name=id):checked");
@@ -93,10 +84,10 @@
    <form id="form" action="${ctx}/customer/customer/query.do" onsubmit="return false;">
    <table class="fl mt5 w">
 	<tr>
-	<td class="f14" align="right" width="6%">客户名称：</td>
-	<td class="f14" align="left" width="16%"><input type="text" id="cname" class="text_input1" name="search_LIKE_name" value="${name }" /></td>
-	<td class="f14" align="right" width="6%">客户类型：</td>
-	<td class="f14" align="left" width="16%">
+	<td class="f14 namewidth1" align="right">客户名称：</td>
+	<td class="f14 namewidth2" align="left"><input type="text" id="cname" class="text_input1" name="search_LIKE_name" value="${name }" /></td>
+	<td class="f14 namewidth1" align="right">客户类型：</td>
+	<td class="f14 namewidth2" align="left">
 	<select name="search_EQ_type.id" class="select2">
      	<option value="">全部</option>
      	<c:forEach items="${cType}" var="t">
@@ -104,8 +95,8 @@
      	</c:forEach>
     </select>
 	</td>
-	<td class="f14" align="right" width="6%">客户来源：</td>
-	<td class="f14" align="left" width="16%">
+	<td class="f14 namewidth1" align="right">客户来源：</td>
+	<td class="f14 namewidth2" align="left">
 	<select name="search_EQ_source.id" class="select2">
      	<option value="">全部</option>
      	<c:forEach items="${source}" var="s">
@@ -113,21 +104,16 @@
      	</c:forEach>
     </select>
 	</td>
-	<td class="f14" align="right" width="6%">手机：</td>
-    <td class="f14" align="left" width="16%">
-    <input class="text_input1"type="text" id="cmobile"  name="search_LIKE_mobile" value="${mobile }" /></td>
-	<td width="10%">
-    			<a href="javascript:;" class="c_222 fr block ml10 mr10 mt5 cp more">
-    				<i>展开</i><i class="packup globle_img block_inline"></i>
-    			</a>
-    			<a href="javascript:;" class="reset a_underline fr w_blue mt5">清除</a>
-    			<a href="javascript:;" class="block c_white lh25 fr ml10">
-    				<b class="allbtn_l block fl"></b>
-    				<b class="allbtn_r pr13 block fl w_auto f14 submit">查&nbsp;&nbsp;询</b>
-    			</a>
-    		</td>
+	<td width="namewidth3">
+	      <a href="javascript:void(0);" class="c_222 block cp fr ml10 packup globle_img mt8 mr20 more" title="展开"></a>
+          <a href="javascript:void(0);" class="a_underline block_inline fr w_blue mt5 reset" >清除</a>
+          <a href="javascript:void(0);" class="block_inline c_white lh25 fr mr10 submit"><b class="allbtn_l block fl"></b><b class="allbtn_r pr13 block fl w_auto f14">查&nbsp;&nbsp;询</b></a>
+    </td>
 	</tr>
-	<tr class="h40">
+	<tr class="more-content">
+	<td class="f14" align="right">手机：</td>
+    <td class="f14" align="left">
+    <input class="text_input1"type="text" id="cmobile"  name="search_LIKE_mobile" value="${mobile }" /></td>
 	<td class="f14" align="right">邮箱：</td>
     <td class="f14" align="left">
     <input type="text" class="text_input1"id="cemail"  name="search_LIKE_email" value="${email }" /></td>
@@ -140,21 +126,9 @@
      	</c:forEach>
     </select>
 	</td>
-	<td class="f14" align="right">创建时间：</td>
-    <td class="f14" align="left">
-    <div class="vm">
-     <input class="text_input2 input_close globle_img time" name="search_GTE_createdTime" type="text" />-<input 
-     class="text_input2 input_close globle_img time" name="search_LTE_createdTime" type="text" />
-    </div>
-    </td>
-	<td class="f14" align="right">修改时间：</td>
-    <td class="f14" align="left">
-    <div class="vm">
-     <input class="text_input2 input_close globle_img time" name="search_GTE_modifiedTime" type="text" />-<input class="text_input2 input_close globle_img time" name="search_LTE_modifiedTime" type="text" />
-    </div>
-    </td>
+	<td></td>
 	</tr>
-	<tr class="h40">
+	<tr class="more-content">
 	<td class="f14" align="right">省：</td>
 	<td class="f14" align="left" >
 	<select id="province" name="search_EQ_province.id" class="select2"></select></td>
@@ -164,6 +138,24 @@
 	<td class="f14" align="right">县：</td>
 	<td class="f14" align="left">
 	<select id="county" name="search_EQ_county.id" class="select2"></select></td>
+	<td></td>
+	</tr>
+	<tr class="more-content">
+	<td class="f14" align="right">创建时间：</td>
+    <td class="f14" align="left">
+    <div class="vm">
+     <input class="text_input2 input_close globle_img time" name="search_GTE_createdTime" type="text" readonly/>-<input 
+     class="text_input2 input_close globle_img time" name="search_LTE_createdTime" type="text" readonly/>
+    </div>
+    </td>
+	<td class="f14" align="right">修改时间：</td>
+    <td class="f14" align="left">
+    <div class="vm">
+     <input class="text_input2 input_close globle_img time" name="search_GTE_modifiedTime" type="text" />-<input class="text_input2 input_close globle_img time" name="search_LTE_modifiedTime" type="text" />
+    </div>
+    </td>
+    <td></td>
+    <td></td>
 	</tr>
     </table>
     <tags:paginationparams page="${page}"></tags:paginationparams>

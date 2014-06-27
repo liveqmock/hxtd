@@ -53,12 +53,14 @@
         <mvc:interceptor>
             <mvc:mapping path="/**/*.do*"/>
             <mvc:exclude-mapping path="/static/**"/>
+            <mvc:exclude-mapping path="/system/toViewPage.do" />
             <mvc:exclude-mapping path="/error/**.do*"/>
             <bean class="com.baihui.hxtd.soa.system.controller.interceptor.ValidUrlInterceptor"/>
         </mvc:interceptor>
         <mvc:interceptor>
             <mvc:mapping path="/**/*.do*"/>
             <mvc:exclude-mapping path="/login.doself"/>
+            <mvc:exclude-mapping path="/system/toViewPage.do" />
             <mvc:exclude-mapping path="/error/**.do*"/>
             <bean class="com.baihui.hxtd.soa.system.controller.interceptor.IdentityAuthenticationInterceptor"/>
         </mvc:interceptor>
@@ -66,6 +68,7 @@
             <mvc:mapping path="/**/*.do*"/>
             <mvc:exclude-mapping path="/login.doself"/>
             <mvc:exclude-mapping path="/logout.doself"/>
+            <mvc:exclude-mapping path="/system/toViewPage.do" />
             <mvc:exclude-mapping path="/toViewPage.do"/>
             <mvc:exclude-mapping path="/error/**.do*"/>
             <bean class="com.baihui.hxtd.soa.system.controller.interceptor.DataStoreStatusInterceptor"/>
@@ -75,6 +78,7 @@
             <mvc:mapping path="/**/*.doself"/>
             <mvc:exclude-mapping path="/login.doself"/>
             <mvc:exclude-mapping path="/logout.doself"/>
+            <mvc:exclude-mapping path="/system/toViewPage.do" />
             <mvc:exclude-mapping path="/toViewPage.do"/>
             <mvc:exclude-mapping path="/error/**.do*"/>
             <bean class="com.baihui.hxtd.soa.system.controller.interceptor.AuthorityFilterFunctionInterceptor"/>
@@ -82,6 +86,7 @@
         <mvc:interceptor>
             <mvc:mapping path="/**/to*Page.do"/>
             <mvc:mapping path="/**/query.do"/>
+            <mvc:exclude-mapping path="/system/toViewPage.do" />
             <mvc:exclude-mapping path="/toViewPage.do"/>
             <bean class="com.baihui.hxtd.soa.system.controller.interceptor.DataStoreInterceptor"/>
         </mvc:interceptor>

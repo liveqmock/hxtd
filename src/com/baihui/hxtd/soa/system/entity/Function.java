@@ -1,6 +1,7 @@
 package com.baihui.hxtd.soa.system.entity;
 
 
+import com.baihui.hxtd.soa.common.entity.Initialized;
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
@@ -14,7 +15,7 @@ import java.util.Set;
 @Entity
 @Table(name = "SM_FUNCTION")
 @SuppressWarnings("serial")
-public class Function implements Serializable, Cloneable, Comparable<Function> {
+public class Function implements Serializable, Cloneable, Comparable<Function>, Initialized {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -37,6 +38,9 @@ public class Function implements Serializable, Cloneable, Comparable<Function> {
     @Column(name = "REMARK", length = 512)
     private String remark;
 
+    @Column(name = "IS_INITIALIZED", nullable = false, updatable = false)
+    private Boolean isInitialized;
+
     //@JsonBackReference
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "MENU_ID")
@@ -56,7 +60,7 @@ public class Function implements Serializable, Cloneable, Comparable<Function> {
 
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss", timezone = "GMT+08:00")
     @Column(name = "CREATED_TIME", nullable = false, updatable = false)
-    private Date createTime;
+    private Date createdTime;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "MODIFIER_ID")
@@ -91,7 +95,7 @@ public class Function implements Serializable, Cloneable, Comparable<Function> {
 
     @Override
     public boolean equals(Object obj) {
-        return obj == null ? false : (getId().equals(((Function) obj).getId()));
+        return obj == null ? false : (((Function) obj).getId().equals(getId()));
     }
 
     @Override
@@ -177,6 +181,14 @@ public class Function implements Serializable, Cloneable, Comparable<Function> {
         this.remark = remark;
     }
 
+    public Boolean getIsInitialized() {
+        return isInitialized;
+    }
+
+    public void setIsInitialized(Boolean isInitialized) {
+        this.isInitialized = isInitialized;
+    }
+
     public User getCreator() {
         return creator;
     }
@@ -185,12 +197,12 @@ public class Function implements Serializable, Cloneable, Comparable<Function> {
         this.creator = creator;
     }
 
-    public Date getCreateTime() {
-        return createTime;
+    public Date getCreatedTime() {
+        return createdTime;
     }
 
-    public void setCreateTime(Date createTime) {
-        this.createTime = createTime;
+    public void setCreatedTime(Date createdTime) {
+        this.createdTime = createdTime;
     }
 
     public User getModifier() {

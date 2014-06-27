@@ -1,11 +1,16 @@
 package com.baihui.hxtd.soa.system.controller;
 
-import java.sql.Date;
-import java.util.Map;
-
-import javax.annotation.Resource;
-import javax.servlet.http.HttpServletRequest;
-
+import com.baihui.hxtd.soa.base.Constant;
+import com.baihui.hxtd.soa.base.orm.hibernate.HibernatePage;
+import com.baihui.hxtd.soa.base.utils.Search;
+import com.baihui.hxtd.soa.common.service.CommonService;
+import com.baihui.hxtd.soa.system.entity.Function;
+import com.baihui.hxtd.soa.system.entity.User;
+import com.baihui.hxtd.soa.system.service.DictionaryService;
+import com.baihui.hxtd.soa.system.service.FunctionService;
+import com.baihui.hxtd.soa.system.service.MenuService;
+import com.baihui.hxtd.soa.util.JsonDto;
+import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Controller;
@@ -15,15 +20,10 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springside.modules.web.Servlets;
 
-import com.baihui.hxtd.soa.base.Constant;
-import com.baihui.hxtd.soa.base.orm.hibernate.HibernatePage;
-import com.baihui.hxtd.soa.base.utils.Search;
-import com.baihui.hxtd.soa.system.entity.Function;
-import com.baihui.hxtd.soa.system.entity.User;
-import com.baihui.hxtd.soa.system.service.DictionaryService;
-import com.baihui.hxtd.soa.system.service.FunctionService;
-import com.baihui.hxtd.soa.system.service.MenuService;
-import com.baihui.hxtd.soa.util.JsonDto;
+import javax.annotation.Resource;
+import javax.servlet.http.HttpServletRequest;
+import java.sql.Date;
+import java.util.Map;
 
 @Controller
 @RequestMapping(value = "/system/function")
@@ -35,12 +35,16 @@ public class FunctionController {
      */
     @Resource
     private FunctionService functionService;
+
+    @Resource
+    private CommonService commonService;
+
     /**
      * 注入菜单表service
      */
     @Resource
     private MenuService menuService;
-    
+
     @Resource
     private DictionaryService dictionaryService;
 
@@ -66,9 +70,10 @@ public class FunctionController {
         model.addAttribute("func", func);
         return returnStr;
     }
-    
+
     /**
      * toModifyPage(查询单个菜单信息)
+     *
      * @param @param  id
      * @param @param  model
      * @param @return 参数类型
@@ -78,13 +83,13 @@ public class FunctionController {
      */
     @RequestMapping(value = "/toModifyPage.do")
     public String toModifyPage(@RequestParam(required = false) Long id,
-                       Model model) {
+                               Model model) {
         logger.info("functionController.view查询组件");
         Function func = functionService.get(id);
         model.addAttribute("zNode", menuService.getMenuJsonData());
-        model.addAttribute("func",func);
+        model.addAttribute("func", func);
         model.addAttribute("funcUrl", "/system/function/modify.do");
-        model.addAttribute("level",dictionaryService.findChildren("010601"));
+        model.addAttribute("level", dictionaryService.findChildren("010601"));
         return "/system/function/edit";
     }
 
@@ -105,7 +110,7 @@ public class FunctionController {
         String funcUrl = "/system/function/add.do";
         model.addAttribute("zNode", menuService.getMenuJsonData());
         model.addAttribute("funcUrl", funcUrl);
-        model.addAttribute("level",dictionaryService.findChildren("010601"));
+        model.addAttribute("level", dictionaryService.findChildren("010601"));
         return "/system/function/edit";
     }
 
@@ -121,8 +126,8 @@ public class FunctionController {
     @RequestMapping(value = "/toQueryPage.do")
     public String query(Model model) {
         logger.info("FunctionController.query跳转列表页");
-        model.addAttribute("tree",menuService.getMenuJsonData());
-        model.addAttribute("page",new HibernatePage<Function>().order("desc").orderBy("modifiedTime"));
+        model.addAttribute("tree", menuService.getMenuJsonData());
+        model.addAttribute("page", new HibernatePage<Function>().order("desc").orderBy("modifiedTime"));
         return "/system/function/list";
     }
 
@@ -132,23 +137,23 @@ public class FunctionController {
      * @param @param  page
      * @param @return 参数类型
      * @return ModelAndView    返回类型
-     * @throws NoSuchFieldException 
+     * @throws NoSuchFieldException
      * @throws
      * @Title: query
      */
     @RequestMapping(value = "/query.do", produces = "text/text;charset=UTF-8")
     @ResponseBody
     public String query(HibernatePage<Function> page,//
-    		HttpServletRequest request) throws NoSuchFieldException {
+                        HttpServletRequest request) throws NoSuchFieldException {
         logger.info("ComponentController.query查询组件列表");
         Map<String, Object> searchParams = Servlets.getParametersStartingWith(
-				request, "search_");
-		Search.clearBlankValue(searchParams);
-		Search.toRangeDate(searchParams, "modifiedTime");
-		Search.toRangeDate(searchParams, "createdTime");
-		page = functionService.findPage(searchParams, page);
-		JsonDto json = new JsonDto();
-		json.setResult(page);
+                request, "search_");
+        Search.clearBlankValue(searchParams);
+        Search.toRangeDate(searchParams, "modifiedTime");
+        Search.toRangeDate(searchParams, "createdTime");
+        page = functionService.findPage(searchParams, page);
+        JsonDto json = new JsonDto();
+        json.setResult(page);
         return json.toString();
     }
 
@@ -165,14 +170,18 @@ public class FunctionController {
     @RequestMapping(value = "/modify.do")
     public String modify(Function function, String type, HttpServletRequest request) {
         logger.info("FunctionController.modify修改组件信息");
-        function.setCreateTime(new Date(new java.util.Date().getTime()));
+        if (commonService.isInitialized(Function.class, function.getId())) {
+            return new JsonDto("系统初始化数据不允许修改！").toString();
+        }
+
+        function.setCreatedTime(new Date(new java.util.Date().getTime()));
         function.setModifiedTime(new Date(new java.util.Date().getTime()));
         User u = (User) request.getSession().getAttribute(Constant.VS_USER);
         logger.info("获得当前操作用户{}", u.getName());
         function.setModifier(u);
         functionService.save(function);
-        JsonDto json = new JsonDto(function.getId(),"保存成功!");
-		return json.toString();
+        JsonDto json = new JsonDto(function.getId(), "保存成功!");
+        return json.toString();
     }
 
     /**
@@ -190,15 +199,15 @@ public class FunctionController {
                       HttpServletRequest request) {
         logger.info("FunctionController.query查询组件列表");
         //临时代码，时间类型应从数据库中取
-        function.setCreateTime(new Date(new java.util.Date().getTime()));
+        function.setCreatedTime(new Date(new java.util.Date().getTime()));
         function.setModifiedTime(new Date(new java.util.Date().getTime()));
         User u = (User) request.getSession().getAttribute(Constant.VS_USER);
         logger.info("FunctionController.query 获得当前操作的用户{}", u.getName());
         function.setCreator(u);
         function.setModifier(u);
         functionService.save(function);
-        JsonDto json = new JsonDto(function.getId(),"保存成功!");
-		return json.toString();
+        JsonDto json = new JsonDto(function.getId(), "保存成功!");
+        return json.toString();
     }
 
     /**
@@ -211,8 +220,12 @@ public class FunctionController {
      */
     @ResponseBody
     @RequestMapping(value = "/delete.do")
-    public String delete(long[] id) {
-        logger.info("FunctionController.delete删除组件id={}", id);
+    public String delete(Long[] id) {
+        logger.info("FunctionController.delete删除组件id={}", StringUtils.join(id, ","));
+        if (commonService.isInitialized(Function.class, id)) {
+            return new JsonDto("系统初始化数据不允许修改！").toString();
+        }
+
         functionService.delete(id);
         JsonDto json = new JsonDto();
         json.setMessage("删除成功");

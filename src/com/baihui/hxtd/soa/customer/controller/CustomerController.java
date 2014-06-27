@@ -151,6 +151,7 @@ public class CustomerController {
 	 * @param type
 	 * @return
 	 */
+	@ResponseBody
 	@RequestMapping(value = "/modify.do")
 	public String modify(Customer customer, HttpServletRequest request,String type) {
 		logger.info("CustomerController.modify修改客户信息");
@@ -161,11 +162,8 @@ public class CustomerController {
 		customer.setIsDeleted(false);
 		customer.setCreator(u);
 		customerService.save(customer);
-		String redStr = "/customer/customer/toViewPage.do?id="+customer.getId();
-		if("add".equals(type)){
-			redStr = "/customer/customer/toAddPage.do";
-		}
-		return "redirect:"+redStr;
+		JsonDto json = JsonDto.modify(customer.getId());
+		return json.toString();
 	}
 	
 	@ResponseBody//表示该方法的返回结果直接写入HTTP response body中
@@ -204,10 +202,10 @@ public class CustomerController {
 	 * @param type
 	 * @return
 	 */
+	@ResponseBody
 	@RequestMapping(value = "/add.do")
 	public String add(Customer customer,HttpServletRequest request,String type){
 		logger.info("ComponentController.query查询组件列表");
-		//临时代码，时间类型应从数据库中取
 		User u = (User) request.getSession().getAttribute(Constant.VS_USER);
 		logger.info("ComponentController.query 获得当前操作的用户{}",u.getName());
 		customer.setCreator(u);
@@ -215,12 +213,15 @@ public class CustomerController {
 		customer.setModifier(u);
 		customer.setCreatedTime(new Date(new java.util.Date().getTime()));
 		customer.setModifiedTime(new Date(new java.util.Date().getTime()));
-		customerService.save(customer);
-		String redStr = "/customer/customer/toQueryPage.do";
-		if("add".equals(type)){
-			redStr = "/customer/customer/toAddPage.do";
+		if(customer.getProvince().getId()==null||customer.getCity()==null||
+				customer.getCounty()==null){
+			customer.setProvince(null);
+			customer.setCity(null);
+			customer.setCounty(null);
 		}
-		return "redirect:"+redStr;
+		customerService.save(customer);
+		JsonDto json = JsonDto.add(customer.getId());
+		return json.toString();
 	}
 	
 	/**
@@ -233,8 +234,7 @@ public class CustomerController {
 	public String delete(Long... id){
 		logger.info("CustomerController.delete删除客户id={}",StringUtils.join(id,","));
 		customerService.delete(id);
-		JsonDto json = new JsonDto();
-		json.setMessage("删除成功");
+		JsonDto json = JsonDto.delete(id);
 		return json.toString();
 	}
 	
@@ -294,7 +294,36 @@ public class CustomerController {
 		
 	}
 	
-	
+//	/**
+//	 * 如果数据字典类型的属性不是必填，就把其置为null
+//	 * @author huizijing
+//	 */
+//	private void setDictinaryNull(Customer customer){
+//		if(customer.getCardType().getId()==-1){
+//			customer.setCardType(null);
+//		}
+//		if(customer.getOpenBank().getId()==-1){
+//			customer.setOpenBank(null);
+//		}
+//		if(customer.getOwnerShip().getId()==-1){
+//			customer.setOwnerShip(null);
+//		}
+//		if(customer.getRiskGrade().getId()==-1){
+//			customer.setRiskGrade(null);
+//		}
+//		if(customer.getType().getId()==-1){
+//			customer.setType(null);
+//		}
+//		if(customer.getProvince().getId()==null){
+//			customer.setProvince(null);
+//		}
+//		if(customer.getCity().getId()==null){
+//			customer.setCity(null);
+//		}
+//		if(customer.getCounty().getId()==null){
+//			customer.setCounty(null);
+//		}
+//	}
 	  /**
      * 导出分页数据
      * 1.在分页列表上根据当前条件进行导出

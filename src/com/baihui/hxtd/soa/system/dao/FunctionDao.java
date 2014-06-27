@@ -70,8 +70,8 @@ public class FunctionDao extends HibernateDAOImpl<Function, Long> {
     /**新增*/
     public void add(Function function){
         function.setCode("");
-        function.setCreateTime(new Date());
-        function.setModifiedTime(function.getCreateTime());
+        function.setCreatedTime(new Date());
+        function.setModifiedTime(function.getCreatedTime());
         function.setIsDeleted(false);
         save(function);
     }
@@ -82,19 +82,5 @@ public class FunctionDao extends HibernateDAOImpl<Function, Long> {
             add(function);
         }
     }
-
-	/**
-	 *
-	  * delete(删除组件信息)
-	  * @Title: delete
-	  * @param @param id    参数类型
-	  * @return void    返回类型
-	  * @throws
-	 */
-	public void delete(long... id) {
-		for(int i=0;i<id.length;i++){
-			super.logicalDelete(id[i]);
-		}
-	}
 
 }

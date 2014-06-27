@@ -1,13 +1,9 @@
 package com.baihui.hxtd.soa.system.dao;
 
-import org.hibernate.criterion.DetachedCriteria;
 import org.springframework.stereotype.Repository;
 
 import com.baihui.hxtd.soa.base.orm.hibernate.HibernateDAOImpl;
-import com.baihui.hxtd.soa.base.orm.hibernate.HibernatePage;
-import com.baihui.hxtd.soa.customer.entity.Customer;
 import com.baihui.hxtd.soa.system.entity.Message;
-import com.baihui.hxtd.soa.system.entity.UserMessage;
 /**
  * 
  * 功能描述：系统消息表持久化层

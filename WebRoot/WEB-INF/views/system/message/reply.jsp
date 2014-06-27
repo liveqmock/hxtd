@@ -9,31 +9,31 @@
 <c:set var="ctx" value="${pageContext.request.contextPath}"/>
 <html>
 <head>
-<title>系统消息回复</title>
-<link href="${ctx}/static/css/stressing/detail.css" rel="stylesheet" type="text/css" />
-<link rel="stylesheet" href="${ctx}/static/css/application.css" type="text/css"/>
-<script type="text/javascript" src="${ctx}/static/js/jquery.validate.js"></script>
-<script type="text/javascript" src="${ctx}/static/js/jquery.metadata.js"></script>
-<script type="text/javascript" src="${ctx}/static/js/validator.js"></script>
-<script type="text/javascript"> 
-$(function(){//初始化 
-	$("#save").click(function(){
-		if($("#form").valid()){
-			$("#form").submit();
-		}
+	<title>系统消息回复</title>
+	<link href="${ctx}/static/css/stressing/detail.css" rel="stylesheet" type="text/css" />
+	<link rel="stylesheet" href="${ctx}/static/css/application.css" type="text/css"/>
+	<script type="text/javascript" src="${ctx}/static/js/jquery.validate.js"></script>
+	<script type="text/javascript" src="${ctx}/static/js/jquery.metadata.js"></script>
+	<script type="text/javascript" src="${ctx}/static/js/validator.js"></script>
+	<script type="text/javascript"> 
+	$(function(){//初始化 
+		$("#save").click(function(){
+			if($("#form").valid()){
+				$("#form").submit();
+			}
+		});
+		$("#saveAndAdd").click(function(){
+			$("#form").attr("action",$("#form").attr("action")+"?type=add");
+			if($("#form").valid()){
+				$("#form").submit();
+			}
+		});
 	});
-	$("#saveAndAdd").click(function(){
-		$("#form").attr("action",$("#form").attr("action")+"?type=add");
-		if($("#form").valid()){
-			$("#form").submit();
-		}
-	});
-});
-
-function clearInputVal(obj){//清除
-	$(obj).prevAll("input").val('');
-}
-</script> 
+	
+	function clearInputVal(obj){//清除
+		$(obj).prevAll("input").val('');
+	}
+	</script> 
 </head>
 <body>
 <div class="cb"></div>

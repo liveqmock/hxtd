@@ -6,6 +6,7 @@ import com.baihui.hxtd.soa.base.ServiceException;
 import com.baihui.hxtd.soa.base.utils.ReflectionUtils;
 import com.baihui.hxtd.soa.base.utils.mapper.HibernateAwareObjectMapper;
 import com.baihui.hxtd.soa.base.utils.serial.TierSerials;
+import com.baihui.hxtd.soa.system.DictionaryConstant;
 import com.baihui.hxtd.soa.system.entity.Component;
 import com.baihui.hxtd.soa.system.entity.Function;
 import com.baihui.hxtd.soa.system.entity.Menu;
@@ -27,6 +28,7 @@ import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 import java.io.IOException;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -48,12 +50,6 @@ public class IdentityAuthenticationController {
 
     //    @Value(value = "${application.login_url}")
     private String loginUrl = "/login.doself";
-
-    //    @Value(value = "${system.menu.showlocation.titlebar}")
-    private String showlocationTitlebarValue = "01020201";
-
-    //    @Value(value = "${system.menu.showlocation.menubar}")
-    private String showlocationMenubarValue = "01020202";
 
     //    @Value(value = "${system.organization.tier.length}")
     private Integer orgTierLength = 2;
@@ -123,16 +119,18 @@ public class IdentityAuthenticationController {
         logger.debug("已激活");
 
         logger.info("session中存储信息");
+        //用户、组织
         session.setAttribute(Constant.VS_USER_ID, persistUser.getId());
         session.setAttribute(Constant.VS_USER_NAME, persistUser.getName());
         session.setAttribute(Constant.VS_USER, persistUser);
         session.setAttribute(Constant.VS_ORG_ID, persistUser.getOrganization().getId());
         session.setAttribute(Constant.VS_ORG, persistUser.getOrganization());
-
+        //数据筛选
         Long order = persistUser.getOrganization().getOrder();
         DataShift dataShift = new DataShift(roleService.isDataManager(persistUser), persistUser.getId(), TierSerials.getYoungerRange(order, orgTierLength));
         session.setAttribute(Constant.VS_DATASHIFT, dataShift);
 
+        //菜单
         List<Menu> menus = menuService.findById(InitApplicationConstant.MENUS, menuService.findValidId(persistUser));
         menus = menuService.fullParent(menus);
         session.setAttribute(Constant.VS_MENUS, menus);
@@ -141,6 +139,7 @@ public class IdentityAuthenticationController {
         List<Component> components = componentService.findById(InitApplicationConstant.COMPONENTS, componentService.findValidId(persistUser));
         session.setAttribute(Constant.VS_COMPONENTS, components);
 
+        //功能判断
         BidiMap functionNameCodes = (BidiMap) session.getServletContext().getAttribute(Constant.VC_FUNCTION_CODES);
         List<String> functionCodes = ReflectionUtils.invokeGetterMethod(functions, "code");
         Map<String, Boolean> hasFunctions = new HashMap<String, Boolean>();
@@ -150,6 +149,7 @@ public class IdentityAuthenticationController {
         }
         session.setAttribute(Constant.VS_HAS_FUNCTIONS, hasFunctions);
 
+        //组件判断
         BidiMap componentNameCodes = (BidiMap) session.getServletContext().getAttribute(Constant.VC_COMPONENT_CODES);
         List<String> componentCodes = ReflectionUtils.invokeGetterMethod(components, "code");
         Map<String, Boolean> hasComponents = new HashMap<String, Boolean>();
@@ -159,17 +159,18 @@ public class IdentityAuthenticationController {
         }
         session.setAttribute(Constant.VS_HAS_COMPONENTS, hasFunctions);
 
+        //激活的菜单
         List<Menu> activeMenus = menuService.findActive(menus);
-        List<Menu> titlebarMenus = menuService.findByShowlocation(activeMenus, showlocationTitlebarValue);
-        List<Menu> titlebarFirstMenus = menuService.findByLevel(titlebarMenus, 1);
-        session.setAttribute(Constant.VS_TITLEBAR_FIRST_MENUS, titlebarFirstMenus);
-
-        List<Menu> menubarMenus = menuService.findByShowlocation(activeMenus, showlocationMenubarValue);
+        //菜单栏菜单
+        List<Menu> menubarMenus = menuService.findByShowlocation(activeMenus, DictionaryConstant.MENU_SHOWLOCATION_MENUBAR);
         session.setAttribute(Constant.VS_MENUBAR_MENUS, menubarMenus);
         List<Menu> menubarFirstMenus = menuService.findByLevel(menubarMenus, 1);
         session.setAttribute(Constant.VS_MENUBAR_FIRST_MENUS, menubarFirstMenus);
         List<Menu> menubarSecoundMenus = menuService.findByLevel(menubarMenus, 2);
         session.setAttribute(Constant.VS_MENUBAR_SECOUND_MENUS, menuService.groupByParentId(menubarSecoundMenus));
+        //设置页菜单
+        List<Menu> setPageMenus = menuService.findByShowlocation(activeMenus, DictionaryConstant.MENU_SHOWLOCATION_SETPAGE);
+        session.setAttribute(Constant.VS_SETPAGE_MENUS, setPageMenus);
 
         logger.info("session中存储脚本信息");
         Map<String, Object> jsInfo = new HashMap<String, Object>();

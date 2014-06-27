@@ -11,13 +11,8 @@ import javax.annotation.Resource;
 import javax.servlet.ServletContext;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import javax.servlet.http.HttpSession;
 
-import org.apache.commons.collections.BidiMap;
-import org.apache.commons.io.FilenameUtils;
 import org.apache.commons.lang3.StringUtils;
-import org.apache.poi.openxml4j.exceptions.InvalidFormatException;
-import org.apache.poi.ss.usermodel.Workbook;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.propertyeditors.CustomDateEditor;
@@ -26,13 +21,10 @@ import org.springframework.ui.Model;
 import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.WebDataBinder;
 import org.springframework.web.bind.annotation.InitBinder;
-import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.SessionAttributes;
-import org.springframework.web.multipart.MultipartFile;
-import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import org.springside.modules.web.Servlets;
 
 import com.baihui.hxtd.soa.base.Constant;
@@ -41,7 +33,6 @@ import com.baihui.hxtd.soa.base.utils.ImportExport;
 import com.baihui.hxtd.soa.base.utils.Search;
 import com.baihui.hxtd.soa.base.utils.mapper.HibernateAwareObjectMapper;
 import com.baihui.hxtd.soa.system.entity.Notice;
-import com.baihui.hxtd.soa.system.entity.Organization;
 import com.baihui.hxtd.soa.system.entity.User;
 import com.baihui.hxtd.soa.system.service.NoticeService;
 import com.baihui.hxtd.soa.util.JsonDto;
@@ -67,8 +58,6 @@ public class NoticeController {
 	/** 注入NoticeService */
 	@Resource
 	private NoticeService noticeService;
-	
-	
 
 	@InitBinder
     public void initBinder(WebDataBinder binder) {
@@ -163,6 +152,7 @@ public class NoticeController {
 	 * @param type
 	 * @return
 	 */
+	@ResponseBody
 	@RequestMapping(value = "/modify.do")
 	public String modify(Notice notice, HttpServletRequest request,String type) {
 		logger.info("NoticeController.modify修改公告信息");
@@ -171,14 +161,9 @@ public class NoticeController {
 		notice.setModifieTime(new Date());
 		notice.setModifier(u);
 		notice.setCreater(u);
-		//notice.setCreatedTime(new Date());
-		//notice.setSentTime(sentTime);
 		noticeService.save(notice);
-		String redStr = "/system/notice/toViewPage.do?id="+notice.getId();
-		if("add".equals(type)){
-			redStr = "/system/notice/toAddPage.do";
-		}
-		return "redirect:"+redStr;
+		JsonDto json = JsonDto.modify(notice.getId());
+		return json.toString();
 	}
 	
 	/**
@@ -202,6 +187,7 @@ public class NoticeController {
 	 * @param type
 	 * @return
 	 */
+	@ResponseBody
 	@RequestMapping(value = "/add.do")
 	public String add(Notice notice,HttpServletRequest request,String type){
 		logger.info("ComponentController.query查询组件列表");
@@ -214,11 +200,8 @@ public class NoticeController {
 		notice.setModifieTime(new Date());
 		notice.setIsDeleted(false);
 		noticeService.save(notice);
-		String redStr = "/system/notice/toQueryPage.do";
-		if("add".equals(type)){
-			redStr = "/system/notice/toAddPage.do";
-		}
-		return "redirect:"+redStr;
+		JsonDto json = JsonDto.add(notice.getId());
+		return json.toString();
 	}
 	
 	/**
@@ -231,66 +214,9 @@ public class NoticeController {
 	public String delete(Long... id){
 		logger.info("NoticeController.delete删除公告id={}",StringUtils.join(id,","));
 		noticeService.delete(id);
-		JsonDto json = new JsonDto();
-		json.setMessage("删除成功");
+		JsonDto json = JsonDto.delete(id);
 		return json.toString();
 	}
-	
-	@RequestMapping(value = "/toImportPage.do")
-    public String toImportPage(ModelMap model) throws NoSuchFieldException {
-        model.addAttribute("templateName", "notice.xls");
-        return "/system/notice/import";
-    }
-
-    @RequestMapping(value = "/import.do")
-    public String imports(MultipartFile file, HttpSession session,
-                          @RequestParam(defaultValue = "/system/notice/toQueryPage.do") String redirectUri,
-                          @ModelAttribute(Constant.VS_USER) User sessionUser,
-                          @ModelAttribute(Constant.VS_ORG) Organization organization,
-                          ModelMap modelMap,
-                          RedirectAttributes model) throws IOException, InvalidFormatException {
-
-        logger.info("导入excel文件");
-
-        logger.info("检查文件是否为空");
-        if (file.getSize() == 0) {
-            modelMap.addAttribute(Constant.VM_BUSINESS, "未选择导入文件");
-            return "forward:/system/notice/toImportPage.do";
-        }
-
-        logger.info("检查文件扩展名");
-        String extension = FilenameUtils.getExtension(file.getOriginalFilename());
-        if (!"xls,xlsx".contains(extension)) {
-            modelMap.addAttribute(Constant.VM_BUSINESS, "不支持的文件类型");
-            return "forward:/system/notice/toImportPage.do";
-        }
-
-        logger.info("根据excel文件解析出对象集合");
-        ServletContext servletContext = session.getServletContext();
-        Map<String, BidiMap> descNames = (Map<String, BidiMap>) servletContext.getAttribute(Constant.VC_DESCNAMES);
-
-        Workbook workbook = ImportExport.create(file.getInputStream());
-        List<Notice> notices = ImportExport.imports(workbook, descNames.get("notice"), Notice.class);
-
-        logger.info("设置默认的属性值");
-//        Dictionary jobsituation = dictionaryService.getByValue(jobsituationOnValue);
-//        for (User user : users) {
-//            user.setCreator(sessionUser);
-//            user.setModifier(sessionUser);
-//            user.setOrganization(organization);
-//            user.setJobSituation(jobsituation);
-//        }
-        logger.debug("导入信息“{}”", HibernateAwareObjectMapper.DEFAULT.writeValueAsString(notices));
-        logger.debug("对象集合数目“{}”", notices.size());
-
-        noticeService.add(notices);
-
-        logger.info("添加操作提示");
-        model.addFlashAttribute(Constant.VM_BUSINESS, "导入成功");
-
-        logger.info("重定向至“{}”", redirectUri);
-        return "redirect:" + redirectUri;
-    }
 
     /**
      * 导出分页数据
@@ -307,10 +233,8 @@ public class NoticeController {
         Search.toRangeDate(searchParams, "modifiedTime");
 		Search.toRangeDate(searchParams, "createdTime");
         logger.debug("查询条件数目“{}”", searchParams.size());
-
         List<Notice> notices=noticeService.find(searchParams);
         logger.debug("列表信息数目“{}”", notices.size());
-
         logger.info("转换成excel文件并输出");
         ServletContext servletContext = request.getSession().getServletContext();
         ImportExport.exportExcel(response, servletContext, "notice", notices).write(response.getOutputStream());
@@ -331,7 +255,5 @@ public class NoticeController {
         ServletContext servletContext = request.getSession().getServletContext();
         ImportExport.exportExcel(response, servletContext, "notice", notices).write(response.getOutputStream());
     }
-
-
 
 }

@@ -9,11 +9,11 @@
 <c:set var="ctx" value="${pageContext.request.contextPath}"/>
 <html>
 <head>
-<title>客户详情</title>
-<link href="${ctx}/static/css/stressing/detail.css" rel="stylesheet" type="text/css" />
+	<title>客户详情</title>
+	<link href="${ctx}/static/css/stressing/detail.css" rel="stylesheet" type="text/css" />
 </head>
 <body>
-<div class="cb"></div>
+	<div class="cb"></div>
 	<div class="ml35 mr35 mt20 block cb cb">
 	<b class="table_headl globle_img block fl"></b>
 	<div class="fl table_headc fl w99b">
@@ -22,11 +22,11 @@
 		<li><a href="${ctx }/customer/customer/toViewPage.do?type=edit&id=${customer.id}" class="block c_white lh25 mr10"><b class="allbtn_l block fl"></b><b class="allbtn_r pr13 block fl w_auto f14">编&nbsp;&nbsp;辑</b></a></li>
 		<li><a href="${ctx }/customer/customer/toQueryPage.do" class="block c_white lh25 mr10"><b class="allbtn_l block fl"></b><b class="allbtn_r pr13 block fl w_auto f14">返&nbsp;&nbsp;回</b></a></li>
 		</ul>
-	 </div>
-	 <b class="table_headr globle_img block fl"></b>
+	</div>
+	<b class="table_headr globle_img block fl"></b>
 	</div>
 	<div class="baocun">
-		<div class="clear"></div>
+	<div class="clear"></div>
 	</div>
 	<div class="ml35 mr35 bg_c_blue cb">
 	<h1 class="f14 fbnone ml40 pt10">基本信息</h1>
@@ -39,15 +39,35 @@
 		</tr>
 		<tr>
 			<td align="right" width="15%">客户类型：</td>
-			<td align="left">${customer.type.key }</td>
+			<td align="left">
+				<c:choose>
+				<c:when test="${customer.type.id=='040301'}"></c:when>
+				<c:otherwise>${customer.type.key }</c:otherwise>
+				</c:choose>
+			</td>
 			<td align="right" width="15%">客户来源：</td>
-			<td align="left">${customer.source.key }</td>
+			<td align="left">
+				<c:choose>
+					<c:when test="${customer.source.id=='040301'}"></c:when>
+					<c:otherwise>${customer.source.key }</c:otherwise>
+				</c:choose>
+			</td>
 		</tr>
 		<tr>
 			<td align="right" width="15%">风险等级：</td>
-			<td align="left">${customer.riskGrade.key }</td>
+			<td align="left">
+				<c:choose>
+					<c:when test="${customer.riskGrade.id=='040304'}"></c:when>
+					<c:otherwise>${customer.riskGrade.key }</c:otherwise>
+				</c:choose>
+			</td>
 			<td align="right" width="15%">证件类型：</td>
-			<td align="left">${customer.cardType.key }</td>
+			<td align="left">
+				<c:choose>
+					<c:when test="${customer.cardType.id=='040303'}"></c:when>
+					<c:otherwise>${customer.cardType.key }</c:otherwise>
+				</c:choose>
+			</td>
 		</tr>
 		<tr>
 			<td align="right" width="15%">证件号：</td>
@@ -69,7 +89,12 @@
 		</tr>
 		<tr>
 			<td align="right" width="15%">开户银行：</td>
-			<td align="left">${customer.openBank.key }</td>
+			<td align="left">
+				<c:choose>
+					<c:when test="${customer.openBank.id=='040307'}"></c:when>
+					<c:otherwise>${customer.openBank.key}</c:otherwise>
+				</c:choose>
+			</td>
 			<td align="right" width="15%">银行户名：</td>
 			<td align="left">${customer.bankName}</td>
 		</tr>
@@ -78,13 +103,16 @@
 			<td align="left">${customer.bankAccount }</td>
 			<td align="right" width="15%">所有权：</td>
 			<td align="left">
-			${customer.ownerShip.key}
+				<c:choose>
+					<c:when test="${customer.ownerShip.id=='040306'}"></c:when>
+					<c:otherwise>${customer.ownerShip.key}</c:otherwise>
+				</c:choose>
 			</td>
 		</tr>
 		<tr>
 			<td align="right" width="15%">行业：</td>
 			<td align="left">${customer.industry.key}</td>
-			<td  align="right" width="15%">邮箱：</td>
+			<td align="right" width="15%">邮箱：</td>
 			<td align="left">${customer.email}</td>
 		</tr>
 		<tr>
@@ -120,8 +148,8 @@
 			<div class="w85b">${customer.remark }</div>
 			</td>
 		</tr>
-	</table>
-	<tag:attachment view="${VS_HAS_FUNCTIONS.customerAttView}" upload="${VS_HAS_FUNCTIONS.customerUpload}" module="customer" query="${VS_HAS_FUNCTIONS.customerAttQuery}" down="${VS_HAS_FUNCTIONS.customerDown}" id="${costomer.id}"></tag:attachment>
+	</table> 
+	<tag:attachment view="${VS_HAS_FUNCTIONS.customerAttView}" upload="${VS_HAS_FUNCTIONS.customerUpload}" module="customer" query="${VS_HAS_FUNCTIONS.customerAttQuery}" down="${VS_HAS_FUNCTIONS.customerDown}" deleteFlag="true" id="${costomer.id}"></tag:attachment>
 	<tag:memoir view="true" edit="true" query="true" delete="true" moduleType="customer" moduleId="${customer.id}"></tag:memoir>
 	<div class="h40"></div>
     </div>

@@ -75,6 +75,8 @@ public class MenuService {
         DetachedCriteria criteria = DetachedCriteria.forClass(Menu.class, "rootMenu");
         criteria.setResultTransformer(CriteriaSpecification.DISTINCT_ROOT_ENTITY);
         criteria.setProjection(Projections.id());
+        criteria.createAlias("trigger", "trigger", JoinType.INNER_JOIN);
+
 //        criteria.setFetchMode("parent", FetchMode.JOIN);
 //        criteria.setFetchMode("trigger", FetchMode.JOIN);
 //        criteria.setFetchMode("showLocation", FetchMode.JOIN);
@@ -114,15 +116,13 @@ public class MenuService {
             criterion = Restrictions.or(criterion, Subqueries.exists(orgCriteria));
 
             //公共级别的菜单，不需要权限验证
-            criteria.createAlias("trigger", "trigger");
             Dictionary privilegeLevel = dictionaryDao.getByValue(DictionaryConstant.FUNCTION_PRIVILEGELEVEL_PUBLIC);
             criterion = Restrictions.or(criterion, Restrictions.eq("trigger.privilegeLevel", privilegeLevel));
 
             criteria.add(criterion);
         } else {
             logger.debug("类型为“管理员”，查找所有菜单");
-            //TODO 筛选有功能的菜单
-            criteria.createAlias("functions", "function", JoinType.INNER_JOIN);
+
         }
 
         criteria.add(Restrictions.eq("isDeleted", false));
@@ -484,12 +484,14 @@ public class MenuService {
         logger.debug("级别根据父节点设置为“{}”", menu.getLevel());
         logger.debug("序号根据父节点设置为“{}”", menu.getOrder());
 
-        menu.setCreateTime(new Date());
-        logger.debug("创建时间为当前时间“{}”", menu.getCreateTime());
-        menu.setModifiedTime(menu.getCreateTime());
-        logger.debug("修改时间为当前时间“{}”", menu.getModifiedTime());
+        //创建时间为当前时间
+        menu.setCreatedTime(new Date());
+        //修改时间为当前时间
+        menu.setModifiedTime(menu.getCreatedTime());
+        //是否删除的为false
         menu.setIsDeleted(false);
-        logger.debug("是否删除的为“{}”", menu.getIsDeleted());
+        //是否初始化数据为false
+        menu.setIsInitialized(false);
 
         if (menu.getDefaultShow()) {
             menuDao.updateToNotDefaultShow();

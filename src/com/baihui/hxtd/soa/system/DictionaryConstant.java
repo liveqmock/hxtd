@@ -66,6 +66,15 @@ public class DictionaryConstant {
     /**女性*/
     public final static String PUBLIC_SEX_WOMAN = "000102";
 
+    /*菜单*/
+    /**显示位置*/
+    public final static String MENU_SHOWLOCATION = "010404";
+    /**菜单栏*/
+    public final static String MENU_SHOWLOCATION_MENUBAR = "01020202";
+    /**设置页*/
+    public final static String MENU_SHOWLOCATION_SETPAGE = "01020201";
+
+
     /*用户*/
     /**数据存储状态*/
     public final static String USER_STORESTATUS = "010404";

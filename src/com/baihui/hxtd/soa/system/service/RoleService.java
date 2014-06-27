@@ -72,9 +72,11 @@ public class RoleService {
     public void add(Role role) {
         logger.info("新增");
 
-        role.setCreateTime(new Date());
-        role.setModifiedTime(role.getCreateTime());
+        role.setCreatedTime(new Date());
+        role.setModifiedTime(role.getCreatedTime());
         role.setIsDeleted(false);
+        role.setIsInitialized(false);
+
         roleDao.save(role);
 
         userDao.updateManagerStoreStatus();
@@ -100,6 +102,7 @@ public class RoleService {
     @Transactional
     public void modify(Role role) {
         logger.info("修改");
+        role.setModifiedTime(new Date());
         roleDao.update(role);
     }
 

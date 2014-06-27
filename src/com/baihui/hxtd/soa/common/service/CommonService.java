@@ -1,10 +1,10 @@
 package com.baihui.hxtd.soa.common.service;
 
 import com.baihui.hxtd.soa.base.orm.hibernate.HibernatePage;
-import com.baihui.hxtd.soa.base.utils.Search;
 import com.baihui.hxtd.soa.base.utils.serial.TierSerial;
 import com.baihui.hxtd.soa.base.utils.serial.TierSerials;
 import com.baihui.hxtd.soa.common.dao.CommonDao;
+import com.baihui.hxtd.soa.common.entity.Initialized;
 import com.baihui.hxtd.soa.common.entity.TreeNode;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.poi.ss.formula.functions.T;
@@ -12,15 +12,12 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import org.springside.modules.persistence.SearchFilter;
 
 import javax.annotation.Resource;
-
 import java.sql.Date;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
-import java.util.Map;
 
 /**
  * 基础公用的服务类
@@ -35,6 +32,25 @@ public class CommonService {
 
     @Resource
     private CommonDao commonDao;
+
+    /**
+     * 是否初始化数据
+     */
+    @Transactional(readOnly = true)
+    public boolean isInitialized(Class<? extends Initialized> clazz, long id) {
+        return commonDao.isInitialized(clazz, id);
+    }
+
+    /**
+     * 是否初始化数据
+     */
+    @Transactional(readOnly = true)
+    public boolean isInitialized(Class<? extends Initialized> clazz, Long[] ids) {
+        if (ids.length == 1) {
+            return commonDao.isInitialized(clazz, ids[0]);
+        }
+        return commonDao.isInitialized(clazz, ids);
+    }
 
     /**
      * 检查字段唯一性
@@ -229,8 +245,18 @@ public class CommonService {
     /**
      * 查询已删除的数据
      */
-    @Transactional(readOnly=true)
-    public HibernatePage<T> getDeletedDate(HibernatePage<T> page, String entityName,String recordName,Long deletorId,Date gteModifiedTime,Date lteModifiedTime){
-    	return commonDao.getDeletedDate(page, entityName, recordName, deletorId,gteModifiedTime,lteModifiedTime);
+    @Transactional(readOnly = true)
+    public HibernatePage<T> getDeletedDate(HibernatePage<T> page, String entityName, String recordName, Long deletorId, Date gteModifiedTime, Date lteModifiedTime) {
+        return commonDao.getDeletedDate(page, entityName, recordName, deletorId, gteModifiedTime, lteModifiedTime);
     }
+    
+    @Transactional
+	public void delete( String entityName, Long... ids) {
+		commonDao.delete(entityName, ids);
+		
+	}
+    @Transactional
+	public void recovery(String entityName, Long... id) {
+		commonDao.recovery(entityName, id);
+	}
 }

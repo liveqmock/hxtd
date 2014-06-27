@@ -41,9 +41,12 @@ public class CustomerService {
 
 	@Resource
 	private CustomerDao customerDao;
-	 @Resource
-	    private UserDao userDao;
+	
+	@Resource
+	private UserDao userDao;
+	
 	private Integer exportCounts = 5000;
+	
 	/**
      * 分页查找
      */
@@ -144,14 +147,11 @@ public class CustomerService {
         detachedCriteria.setFetchMode("modifier", FetchMode.JOIN);
         detachedCriteria.add(Restrictions.eq("isDeleted", false));
         Map<String, SearchFilter> filters = Search.parse(searchParams);
-        
         Search.buildCriteria(filters, detachedCriteria, Customer.class);
         return customerDao.find(detachedCriteria, exportCounts);
-
 	}
-
-
-	}
+	
+}
 
 
 

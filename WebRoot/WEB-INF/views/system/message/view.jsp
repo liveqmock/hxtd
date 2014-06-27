@@ -13,7 +13,7 @@
 <link href="${ctx}/static/css/stressing/detail.css" rel="stylesheet" type="text/css" />
 </head>
 <body>
-<div class="cb"></div>
+	<div class="cb"></div>
     <div class="ml35 mr35 mt20 block cb cb">
     <b class="table_headl globle_img block fl"></b>
     <div class="fl table_headc fl w99b">
@@ -34,7 +34,7 @@
 	<b class="table_headr globle_img block fl"></b>
  </div>
    <div class="ml35 mr35 bg_c_blue cb">
-   <h1 class="f14 fbnone ml40 pt10">基本信息</h1>
+   		<h1 class="f14 fbnone ml40 pt10">基本信息</h1>
         <table class="cb id_table3 w95b bg_c_white margin0 mt10">
         <tr>
             <td align="right" width="15%">系统消息名称：</td>
@@ -45,6 +45,7 @@
             <td align="left" width="85%" valign="top">
             <div class="w85b">
             ${userMessage.message.content }
+            </div>
             </td>
         </tr>
         <tr>
@@ -57,6 +58,6 @@
         </tr>
     </table>
 	<div class=" h40"></div>
-    </div>
+   </div>
 </body>
 </html>

@@ -148,11 +148,11 @@ i{font-style:normal}
 .f_line2{ background-color:#626262; height:2px; width:100%;}
 
 /*系统设置图标*/
-.Personal_settings{ background-position:-139px -107px; width:65px; height:70px;}
-.Personal_power{ background-position:-36px -36px; width:65px; height:70px;}
-.institution_settings{ background-position:-1px -110px; width:65px; height:70px;}
-.data_manage{ background-position:-68px -114px; width:65px; height:65px;}
-.develop_space{ background-position:-103px -37px; width:65px; height:65px;}
+.Personal_settings,.setting-icon10{ background-position:-139px -107px; width:65px; height:70px;}
+.Personal_power,.setting-icon11{ background-position:-36px -36px; width:65px; height:70px;}
+.institution_settings,.setting-icon12{ background-position:-1px -110px; width:65px; height:70px;}
+.data_manage,.setting-icon13{ background-position:-68px -114px; width:65px; height:65px;}
+.develop_space,.setting-icon14{ background-position:-103px -37px; width:65px; height:65px;}
 .templet{ background-position:-175px -35px; width:65px; height:70px;}
 
 

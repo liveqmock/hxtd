@@ -1,5 +1,6 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions" %>
 <c:set var="ctx" value="${pageContext.request.contextPath}"/>
 <html>
 <head>
@@ -42,7 +43,7 @@
                             <c:if test="${closeMenu}">
                         </dl>
                     </div>
-                    <div class="fr mr20 Personal_settings globle_img"></div>
+                    <div class="fr mr20  setting-icon${fn:substring(menu.code,0,2)} globle_img"></div>
                 </div>
             </td>
             <c:if test="${isNewline}">

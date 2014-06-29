@@ -53,7 +53,7 @@
                 <div class="fl table_blueheadc fl w">
                     <h1 class="f14 c_white lh40 ml10 fl">组织结构</h1>
                     <img width="108" height="50" class="fl" src="${ctx}/static/images/snowflake.png">
-                    <a class="c_white f14 fr mt10 fb mr10" href="javascript:;">&lt;&lt;</a>
+                    <%--<a class="c_white f14 fr mt10 fb mr10" href="javascript:;">&lt;&lt;</a>--%>
                 </div>
             </div>
             <div class="cb mb20 mr20 bor_636363" style=" height:495px;">

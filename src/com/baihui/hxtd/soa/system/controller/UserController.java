@@ -19,6 +19,8 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import org.apache.commons.collections.BidiMap;
 import org.apache.commons.io.FilenameUtils;
 import org.apache.commons.lang3.ArrayUtils;
+import org.apache.commons.lang3.StringUtils;
+import org.apache.commons.lang3.Validate;
 import org.apache.poi.openxml4j.exceptions.InvalidFormatException;
 import org.apache.poi.ss.usermodel.Workbook;
 import org.slf4j.Logger;
@@ -206,18 +208,27 @@ public class UserController {
 
     /**
      * 转至查看用户页面
+     * 1.从用户列表页点击详情
+     * 2.从个人设置->账号信息点击进入，此时id=session.user.id
      */
     @RequestMapping(value = "/toViewPage.do", method = RequestMethod.GET)
     public String toViewPage(Long id, ModelMap model) {
         logger.info("转至查看用户页面");
-        logger.info("存储表单默认值");
+
+        //默认为当前用户主键编号
+        if (id == null) {
+            id = ((User) model.get(Constant.VS_USER)).getId();
+        }
         User user = userService.getById(id);
 
+        logger.info("存储表单初始化值");
         Organization organization = (Organization) model.get(Constant.VS_ORG);
         List<Organization> organizations = organizationService.findSector(organization.getOrder(), user.getOrganization().getOrder());
         model.addAttribute("organizationTree", JsonMapper.nonEmptyMapper().toJson(TreeNodeConverter.convert(organizations)));
 
+        logger.info("存储表单初默认值");
         model.addAttribute("user", user);
+
         return "/system/user/view";
     }
 

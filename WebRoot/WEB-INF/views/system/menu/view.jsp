@@ -51,7 +51,7 @@
                 <div class="fl table_blueheadc fl w">
                     <h1 class="f14 c_white lh40 ml10 fl">${menuAdd?"上级菜单":"菜单结构"}</h1>
                     <img width="108" height="50" class="fl" src="${ctx}/static/images/snowflake.png">
-                    <a class="c_white f14 fr mt10 fb mr10" href="javascript:;">&lt;&lt;</a>
+                    <%--<a class="c_white f14 fr mt10 fb mr10" href="javascript:;">&lt;&lt;</a>--%>
                 </div>
             </div>
             <div class="cb mb20 mr20 bor_636363" style=" height:495px;">
@@ -70,7 +70,7 @@
                     <h1 class="f14 fbnone mt10 ml10 fl">菜单详情信息</h1>
                     <ul class="fr id_table1 mt10 ml10">
                         <c:if test="${VS_HAS_FUNCTIONS.menuModify}">
-                            <li><a href="${ctx }/system/menu/toModifyPage.do?id=${param.id}" class="block c_white lh25 mr10"><b class="allbtn_l block fl"></b><b class="allbtn_r pr13 block fl w_auto f14">编&nbsp;&nbsp;辑</b></a></li>
+                            <li><a href="${ctx }/system/menu/toModifyPage.do?id=${menu.id}" class="block c_white lh25 mr10"><b class="allbtn_l block fl"></b><b class="allbtn_r pr13 block fl w_auto f14">编&nbsp;&nbsp;辑</b></a></li>
                         </c:if>
                         <li><a href="${ctx}/system/menu/toQueryPage.do" class="block c_white lh25 mr10"><b class="allbtn_l block fl"></b><b class="allbtn_r pr13 block fl w_auto f14">返&nbsp;&nbsp;回</b></a></li>
                     </ul>

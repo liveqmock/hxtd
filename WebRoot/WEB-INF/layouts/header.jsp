@@ -4,7 +4,7 @@
 <%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions" %>
 <c:set var="ctx" value="${pageContext.request.contextPath}"/>
 <link href="${ctx}/static/css/stressing/detail.css" rel="stylesheet" type="text/css"/>
-<script type="text/javascript" src="${ctx}/static/js/message.js"></script>
+<%--<script type="text/javascript" src="${ctx}/static/js/message.js"></script>--%>
 
 <!--菜单开始-->
 <div class="h_head_bg pr">
@@ -49,20 +49,28 @@
 </div>
 <!--当前页及功能条开始-->
 <div class="facing mt-5">
-    <c:if test="${VR_TITLE_MENUS!=null}">
-        <p class="f12 pt5 ml35 fl">当前位置：
-            <c:forEach items="${VR_TITLE_MENUS}" var="item" varStatus="status">
-                <c:choose>
-                    <c:when test="${item.trigger==null}"><span>${item.name}</span></c:when>
-                    <c:otherwise><a href="${ctx}${item.trigger.url}">${item.name}</a> </c:otherwise>
-                </c:choose>
-                ${status.last?"":">"}
-            </c:forEach>
-            <c:if test="${VR_TITLE_LAST_MENU.trigger!=VR_TITLE_FUNCTION}">
-                > <a href="${ctx}${VR_TITLE_FUNCTION.url}?${VR_PARAMS}" class="c_orange">${VR_TITLE_FUNCTION.name}</a>
+    <c:choose>
+        <c:when test="${VR_LOCATION_TITLE!=null}">
+            <p class="f12 pt5 ml35 fl">当前位置：${VR_LOCATION_TITLE}</p>
+        </c:when>
+        <c:otherwise>
+            <c:if test="${VR_TITLE_MENUS!=null}">
+                <p class="f12 pt5 ml35 fl">当前位置：
+                    <c:forEach items="${VR_TITLE_MENUS}" var="item" varStatus="status">
+                        <c:choose>
+                            <c:when test="${item.trigger==null}"><span>${item.name}</span></c:when>
+                            <c:otherwise><a href="${ctx}${item.trigger.url}">${item.name}</a> </c:otherwise>
+                        </c:choose>
+                        ${status.last?"":">"}
+                    </c:forEach>
+                    <c:if test="${VR_TITLE_LAST_MENU.trigger!=VR_TITLE_FUNCTION}">
+                        > <a href="${ctx}${VR_TITLE_FUNCTION.url}?${VR_PARAMS}" class="c_orange">${VR_TITLE_FUNCTION.name}</a>
+                    </c:if>
+                </p>
             </c:if>
-        </p>
-    </c:if>
+        </c:otherwise>
+    </c:choose>
+
     <ul class="fr mr35 mt3 common_id1">
         <li class="head_add globle_img fl mr15">
             <div class="none w100 div1 pr z1">

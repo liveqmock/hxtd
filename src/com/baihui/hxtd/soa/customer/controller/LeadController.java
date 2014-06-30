@@ -203,8 +203,8 @@ public class LeadController {
 		logger.info("ComponentController.query 获得当前操作的用户{}",u.getName());
 		lead.setCreator(u);
 		lead.setModifier(u);
-		lead.setCreatedTime(new Date(new java.util.Date().getTime()));
-		lead.setModifiedTime(new Date(new java.util.Date().getTime()));
+		lead.setCreatedTime(new Date());
+		lead.setModifiedTime(new Date());
 		leadService.save(lead);
 		JsonDto json = JsonDto.add(lead.getId());
 		return json.toString();

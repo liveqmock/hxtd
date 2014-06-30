@@ -22,7 +22,6 @@ import org.springframework.web.bind.annotation.InitBinder;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.SessionAttributes;
 import org.springside.modules.web.Servlets;
@@ -142,13 +141,11 @@ public class MarketActivityController {
 	  * add(新增市场活动)
 	  * @Description: 新增一条市场活动记录
 	  * @param activity 市场活动实体
-	  * @param redirectUri url地址
 	  * @param userId 操作用户ID
-	  * @return String 修改页地址信息
 	 */
+	@ResponseBody
 	@RequestMapping(value = "/add.do", method = RequestMethod.POST)
 	public String add(MarketActivity activity, 
-			@RequestParam(defaultValue = "/market/marketactivity/toModifyPage.do?id=%s") String redirectUri,
 			@ModelAttribute(Constant.VS_USER_ID) Long userId) {
 		/************设置修改者、创建者****************/
 		User user = new User(userId);
@@ -167,7 +164,7 @@ public class MarketActivityController {
 		/************保存*****************************/
 		marketActivityService.save(activity);
 		
-		return "redirect:" + String.format(redirectUri, activity.getId());
+		return JsonDto.add(activity.getId()).toString();
 	}
 	
 	/**
@@ -191,20 +188,16 @@ public class MarketActivityController {
 	  * modify(修改活动)
 	  * @Description: 保存修改后的活动信息
 	  * @param activity 活动实体
-	  * @param redirectUri Url地址
 	  * @param userId 操作用户ID
-	  * @param request HttpServletRequest
-	  * @return String 编辑页地址信息
 	 */
+	@ResponseBody
 	@RequestMapping(value = "/modify.do")
 	public String modify(MarketActivity activity, 
-			@RequestParam(defaultValue = "/market/marketactivity/toModifyPage.do?id=%s") String redirectUri,
-			@ModelAttribute(Constant.VS_USER_ID) Long userId,
-			HttpServletRequest request) {
+			@ModelAttribute(Constant.VS_USER_ID) Long userId) {
 		activity.setModifier(new User(userId));
 		marketActivityService.save(activity);
 		
-		return String.format("redirect:" + redirectUri, activity.getId());
+		return JsonDto.modify(activity.getId()).toString();
 	}
 	
 	/**

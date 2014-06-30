@@ -87,6 +87,9 @@ public class Constant {
     /**当前日期*/
     public final static String VR_DATE = "VR_DATE";
 
+    /**当前位置菜单*/
+    public final static String VR_LOCATION_TITLE = "VR_LOCATION_TITLE";
+
     /**一级菜单，当前请求在菜单栏位置对应的一级菜单*/
     public final static String VR_FIRST_MENU = "VR_FIRST_MENU";
 

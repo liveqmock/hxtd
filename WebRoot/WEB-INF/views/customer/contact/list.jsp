@@ -17,13 +17,6 @@ $(function(){
 	jsUtil.datepicker(".time");// 加载日历 
 	new PCAS("province","city","county");// 加载省市县 
 	new Grid().init().bindExport();// 生成Grid
-	$(".more").toggle(function(){
-		$(this).find("i:eq(0)").text("收起").parents("tr").nextAll().show();
-		$(this).find("i:eq(1)").addClass("develop");
-	}, function(){
-		$(this).find("i:eq(0)").text("展开").parents("tr").nextAll().hide();
-		$(this).find("i:eq(1)").removeClass("develop");
-	});
 });
 </script>
 </head>
@@ -32,58 +25,50 @@ $(function(){
     <form id="form" action="${ctx}/customer/contact/query.do" onsubmit="return false;">
     <table class="fl mt5 w">
     	<tr>
-    		<td class="f14" align="right" width="6%">联系人：</td>
-    		<td class="f14" align="left" width="16%"><input type="text" class="text_input1" name="search_LIKE_name"/></td>
-    		<td class="f14" align="right" width="6%">手机：</td>
-    		<td class="f14" align="left" width="16%"><input type="text" class="text_input1" name="search_LIKE_mobile"/></td>
-    		<td class="f14" align="right" width="6%">电话：</td>
-    		<td class="f14" align="left" width="16%"><input type="text" class="text_input1" name="search_LIKE_phone"/></td>
-    		<td class="f14" align="right" width="6%">邮箱：</td>
-    		<td class="f14" align="left" width="16%"><input type="text" class="text_input1" name="search_LIKE_email"/></td>
-    		<td width="10%">
-    			<a href="javascript:;" class="c_222 fr block ml10 mr10 mt5 cp more">
-    				<i>展开</i><i class="packup globle_img block_inline"></i>
-    			</a>
+    		<td class="f14 namewidth1" align="right">联系人：</td>
+    		<td class="f14 namewidth2" align="left"><input type="text" class="text_input1" name="search_LIKE_name"/></td>
+    		<td class="f14 namewidth1" align="right">手机：</td>
+    		<td class="f14 namewidth2" align="left"><input type="text" class="text_input1" name="search_LIKE_mobile"/></td>
+    		<td class="f14 namewidth1" align="right">电话：</td>
+    		<td class="f14 namewidth2" align="left"><input type="text" class="text_input1" name="search_LIKE_phone"/></td>
+    		<td width="namewidth3">
+    			<a href="javascript:;" class="c_222 block cp fr ml10 packup globle_img mt8 mr20 more" title="展开"></a>
     			<a href="javascript:;" class="reset a_underline fr w_blue mt5">清除</a>
-    			<a href="javascript:;" class="block c_white lh25 fr ml10">
+    			<a href="javascript:;" class="block c_white lh25 fr mr10">
     				<b class="allbtn_l block fl"></b>
     				<b class="allbtn_r pr13 block fl w_auto f14 submit">查&nbsp;&nbsp;询</b>
     			</a>
     		</td>
     	</tr>
-    	<tr style="display:none;">
-    		<td class="f14" align="right" width="6%">省份：</td>
-    		<td class="f14" align="left"  width="16%"><select id="province" name="search_EQ_province.id" class="select2"></select></td>
-    		<td class="f14" align="right" width="6%">城市：</td>
-    		<td class="f14" align="left" width="16%"><select id="city" name="search_EQ_city.id" class="select2"></select></td>
-    		<td class="f14" align="right" width="6%">区县：</td>
-    		<td class="f14" align="left" width="16%"><select id="county" name="search_EQ_county.id" class="select2"></select></td>
-    		<td class="f14" align="right" width="6%">创建时间：</td>
-    		<td class="f14" align="left" width="16%">
+    	<tr class="more-content">
+    		<td class="f14 namewidth1" align="right">邮箱：</td>
+    		<td class="f14 namewidth2" align="left"><input type="text" class="text_input1" name="search_LIKE_email"/></td>
+    		<td class="f14 namewidth1" align="right">省份：</td>
+    		<td class="f14 namewidth2" align="left"><select id="province" name="search_EQ_province.id" class="select2"></select></td>
+    		<td class="f14 namewidth1" align="right">城市：</td>
+    		<td class="f14 namewidth2" align="left"><select id="city" name="search_EQ_city.id" class="select2"></select></td>
+    		<td></td>
+    	</tr>
+    	<tr class="more-content">
+    		<td class="f14 namewidth1" align="right">区县：</td>
+    		<td class="f14 namewidth2" align="left"><select id="county" name="search_EQ_county.id" class="select2"></select></td>
+    		<td class="f14 namewidth1" align="right">创建时间：</td>
+    		<td class="f14 namewidth2" align="left">
     			<div class="vm">
 	    			<input class="text_input2 input_close globle_img time" name="search_GTE_createdTime" 
 	    				type="text" readonly/>-<input class="text_input2 input_close globle_img time" name="search_LTE_createdTime" 
 	    				type="text" readonly/>
     			</div>
     		</td>
-    		<td width="10%"></td>
-    	</tr>
-    	<tr style="display:none;">
-    		<td class="f14" align="right" width="6%">修改时间：</td>
-    		<td class="f14" align="left" width="16%">
+    		<td class="f14 namewidth1" align="right">修改时间：</td>
+    		<td class="f14 namewidth2" align="left">
     			<div class="vm">
 	    			<input class="text_input2 input_close globle_img time" name="search_GTE_modifiedTime" 
 	    				type="text" readonly/>-<input class="text_input2 input_close globle_img time" name="search_LTE_modifiedTime" 
 	    				type="text" readonly/>
     			</div>
     		</td>
-    		<td class="f14" align="right" width="6%"></td>
-    		<td class="f14" align="left"  width="16%"></td>
-    		<td class="f14" align="right" width="6%"></td>
-    		<td class="f14" align="left" width="16%"></td>
-    		<td class="f14" align="right" width="6%"></td>
-    		<td class="f14" align="left" width="16%"></td>
-    		<td width="10%"></td>
+    		<td></td>
     	</tr>
     </table>
     <div class="cb"></div>

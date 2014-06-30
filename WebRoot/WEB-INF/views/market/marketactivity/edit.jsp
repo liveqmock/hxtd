@@ -10,15 +10,10 @@
 <script type="text/javascript" src="${ctx}/static/js/jquery.metadata.js?v=1"></script>
 <script type="text/javascript" src="${ctx}/static/js/validator.js?v=1"></script>
 <script type="text/javascript" src="${ctx}/static/js/ui/jquery.ui.datepicker.js?v=1"></script>
+<script type="text/javascript" src="${ctx}/static/js/js-util.common.js?v=1"></script>
 <script type="text/javascript">
 $(function(){
-	$(".add").click(function(){// 表单验证
-		if($("#form").valid()){
-			form.action = form.action + "?redirectUri=" + encodeURI($(this).attr("redirecturi"));
-			form.submit();
-		}
-		return false;
-	});
+	jsUtil.bindSave(".add", "form");// 提交表单
 	var dates=$("#start,#end");// 日历设置
 	dates.datepicker({
 		closeText : '关闭',
@@ -46,7 +41,7 @@ $(function(){
 		$(this).prevAll("input").val('');
 	});
 });
-function searchData(action){//搜索弹出框
+function searchData(action){// 搜索弹出框
 	jsUtil.dialogIframe("${ctx}/system/user/toQueryPage.comp", "负责人", 800, 420, function(){// 确定回调
 		var $userObj = $(".bor_e28d1f", window.frames["dialogIframe"].document);
 		if($userObj.length > 0){
@@ -109,7 +104,7 @@ function searchData(action){//搜索弹出框
 				<input type="text" id="start" name="beginDate" value="${beginDate}" readonly="readonly" class="text_input3 input_close1"/>
 			</td>
 			<td align="right">预计成本：</td>
-			<td align="left"><input name="predictCost" type="text" value="${activity.predictCost }" class="text_input3 amount"/></td>
+			<td align="left"><input name="predictCost" type="text" value="${activity.predictCost}" class="text_input3 amount"/></td>
 		</tr>
 		<tr>
 			<td align="right">结束日期：</td>
@@ -119,23 +114,23 @@ function searchData(action){//搜索弹出框
 				<input type="text" id="end" name="endDate" value="${endDate}" readonly="readonly" class="text_input3 input_close1"/>
 			</td>
 			<td align="right">实际成本：</td>
-			<td align="left"><input type="text" name="realityCost" value="${activity.realityCost }" class="text_input3 amount"/></td>
+			<td align="left"><input type="text" name="realityCost" value="${activity.realityCost}" class="text_input3 amount"/></td>
 		</tr>
 		<tr>
 			<td align="right">预期效果：</td>
-			<td align="left"><input name="expectEffect" type="text" value="${activity.expectEffect }" class="text_input3"/></td>
+			<td align="left"><input name="expectEffect" type="text" value="${activity.expectEffect}" class="text_input3"/></td>
 			<td align="right">活动次数：</td>
-			<td align="left"><input name="times" type="text" value="${activity.times }" class="text_input3 digits"/></td>
+			<td align="left"><input name="times" type="text" value="${activity.times}" class="text_input3 digits"/></td>
 		</tr>
 		<tr>
 			<td align="right">期望成功率%：</td>
-			<td align="left"><input type="text" name="expectSuccessRate" value="${activity.expectSuccessRate }" 
+			<td align="left"><input type="text" name="expectSuccessRate" value="${activity.expectSuccessRate}" 
 				class="text_input3 amount"/></td>
 			<td align="right"><span class="w_red">*&nbsp;</span>负责人：</td>
 			<td align="left">
-				<input type="text" id="txt_boss" name="bossname" value="${activity.bossHead.name }" readonly="readonly"
+				<input type="text" id="txt_boss" name="bossname" value="${activity.bossHead.realName}" readonly="readonly"
 					 class="text_input3 required"/>
-				<input type="hidden"id="hide_boss_id" name="bossHead.id" value="${activity.bossHead.id }"/>
+				<input type="hidden"id="hide_boss_id" name="bossHead.id" value="${activity.bossHead.id}"/>
 				<i class="s_inquiry globle_img block_inline ml5 vm cp" title="搜索责任人" onclick="searchData('boss');"></i>
 				<i class="dump_btn globle_img block_inline ml5 vm cp empty" title="清除"></i>
 			</td>
@@ -155,14 +150,14 @@ function searchData(action){//搜索弹出框
 <div class="cb block h40 margin0 mt10" style="width:350px;">
 	<ul class="id_table1 cb">
 		<li>
-			<a href="javascript;" class="block c_white lh25 ml10 add" redirecturi="/market/marketactivity/toViewPage.do?id=%s">
+			<a href="javascript:;" class="block c_white lh25 ml10 add" redirecturi="/market/marketactivity/toViewPage.do?id=%s">
 				<b class="allbtn_l block fl"></b>
 				<b class="allbtn_r pr13 block fl w_auto f14">保&nbsp;&nbsp;存</b>
 			</a>
 		</li>
 		<c:if test="${VS_HAS_FUNCTIONS.marketactivityAdd}">
 		<li>
-			<a href="javascript;" class="block c_white lh25 ml10 add" redirecturi="/market/marketactivity/toAddPage.do">
+			<a href="javascript:;" class="block c_white lh25 ml10 add" redirecturi="/market/marketactivity/toAddPage.do">
 				<b class="allbtn_l block fl"></b>
 				<b class="allbtn_r pr13 block fl w_auto f14">保存并新增</b>
 			</a>

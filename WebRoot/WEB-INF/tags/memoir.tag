@@ -31,7 +31,7 @@ function iframeRemoir(act, id){
 		url = '${ctx}/common/memoir/toViewPage.doself?id=' + id;
 		title = '查看联系纪要';
 	}
-	jsUtil.dialogIframe(url, title, 600, 350);
+	jsUtil.dialogIframe(url, title, 600, 400);
 	DIALOG.dialog('option','buttons',{
 		"确定" : function() {
 			if(act == "view") {

@@ -138,7 +138,7 @@ public class Customer implements Serializable {
 
 	/** 创建者 */
 	@ManyToOne(fetch = FetchType.LAZY)
-	@JoinColumn(name = "CREATOR_ID")
+	@JoinColumn(name = "CREATOR_ID",updatable=false)
 	private User creator;
 
 	/** 创建时间 */

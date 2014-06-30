@@ -93,7 +93,7 @@
 	    <b class="b2"></b>
 	    <b class="b3"></b>
 	    <b class="b4"></b>
-			<div class="margin0 ml35 mr35 listcontainer">
+			<div class="listcontainer">
 				<div class="w">
 					<!--查询条件开始-->
 					<form class="formclass" id="form" action="${ctx}/system/recyclebin/query.do" onsubmit="return false;">
@@ -101,24 +101,24 @@
 						<input type="hidden" name="type" id="moduleName" class="select2" value="MarketActivity"/>
 						<table class="fl mt5 w">
 							<tr>
-								<td class="f14" align="right" width="6%">记录名称：</td>
-								<td class="f14" align="left" width="16%">
+								<td class="f14 namewidth1" align="right">记录名称：</td>
+								<td class="f14 namewidth2" align="left">
 									<input type="text" name="recordName" class="text_input1"/>
 								</td>
-								<td class="f14" align="right" width="6%">删除者：</td>
+								<td class="f14 namewidth1" align="right">删除者：</td>
 								<%--<td class="f14" align="left" width="16%">
 									<input type="text" class="text_input1" id="operator" name="search_LIKE_operator.id" />
 								</td>
-								--%><td class="f14" align="left" width="16%">
+								--%><td class="f14 namewidth2" align="left">
 									<input type="text" id="txt_modifier" readonly="readonly" class="text_input1"/>
 									<input type="text" id="hide_modifier_id" name="deletorId" class="text_input1 none"/>
 									<i class="s_inquiry globle_img block_inline ml5 vm cp" title="搜索操作人" onclick="searchData('modifier');"></i>
 								</td>
 								
-								<td class="f14" align="right" width="7%">
+								<td class="f14 namewidth1" align="right">
 									删除时间：
 								</td>
-								<td class="f14" align="left" width="18%">
+								<td class="f14 namewidth2" align="left">
 									<div class="vm">
 										<input class="text_input2 input_close globle_img time"
 											name="GTE_modifiedTime" type="text" 
@@ -127,15 +127,14 @@
 											name="modifiedTime" type="text" readonly />
 									</div>
 								</td>
-								<td width="8%">
-									<a href="javascript:void(0)" class=" block c_white lh25 submit">
+								<td width="namewidth3">
+									<a href="javascript:void(0);" class="c_222 block cp fr ml10   mt8 mr20 "></a>
+									<a class="a_underline block_inline fr w_blue mt5 reset" href="javascript:formReset()">清除</a>
+									<a href="javascript:void(0)" class="block_inline c_white lh25 fr mr10 submit">
 										<b class="allbtn_l block fl"></b>
 										<b class="allbtn_r pr13 block fl w_auto f14">查&nbsp;&nbsp;询</b>
 									</a>
-									<a class="reset block a_underline fr w_blue mt5" href="javascript:formReset()">清除</a>
 								</td>
-								<td class="f14" align="right" width="6%"></td>
-								<td class="f14" align="left" width="4%"></td>
 								
 							</tr>
 						</table>

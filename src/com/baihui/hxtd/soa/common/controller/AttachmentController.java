@@ -7,7 +7,6 @@ import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.net.URLEncoder;
-import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
@@ -36,6 +35,7 @@ import com.baihui.hxtd.soa.system.entity.Dictionary;
 import com.baihui.hxtd.soa.system.entity.User;
 import com.baihui.hxtd.soa.system.service.DictionaryService;
 import com.baihui.hxtd.soa.util.JsonDto;
+import com.baihui.hxtd.soa.util.Tools;
 /**
  * 
  * 功能描述：附件控制器
@@ -155,8 +155,7 @@ public class AttachmentController {
         Random rand = new Random();//生成随机数  
         int random = rand.nextInt(1000);  
           
-        SimpleDateFormat dateformat1=new SimpleDateFormat("yyyyMMddHHmmss");
-        String fName=dateformat1.format(new Date())+random;
+        String fName=Tools.fomatDate("yyyyMMddHHmmss")+random;
           
         return fName;
     }  

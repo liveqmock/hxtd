@@ -80,4 +80,8 @@ public class AuditLogService {
 		auditLogDao.logicalDelete(id);
 		
 	}
+	
+	public void add(AuditLog auditLog){
+		auditLogDao.save(auditLog);
+	}
 }

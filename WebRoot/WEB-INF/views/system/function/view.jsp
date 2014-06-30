@@ -33,7 +33,7 @@
             <h1 class="f14 fbnone mt10 ml10 fl">功能详情信息</h1>
             <ul class="fr id_table1 mt10 ml10">
             <li><a class=" pl35 c_white f14 lh25 cp block fr" href="${ctx }/system/function/toModifyPage.do?id=${func.id}"><b class="allbtn_l block fl"></b><b class="allbtn_r pr13 block fl w_auto f14">编&nbsp;&nbsp;辑</b></a></li>
-            <li><a class=" pl10 c_white f14 lh25 cp block fr mr10" href="javascript:history.go(-1)"><b class="allbtn_l block fl"></b><b class="allbtn_r pr13 block fl w_auto f14">返&nbsp;&nbsp;回</b></a></li>
+            <li><a class=" pl10 c_white f14 lh25 cp block fr mr10" href="${ctx }/system/function/toQueryPage.do"><b class="allbtn_l block fl"></b><b class="allbtn_r pr13 block fl w_auto f14">返&nbsp;&nbsp;回</b></a></li>
            	</ul>
         </div>    
     </div> 

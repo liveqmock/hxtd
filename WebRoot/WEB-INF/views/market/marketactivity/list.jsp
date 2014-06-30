@@ -44,9 +44,9 @@ $(function(){
 				</select>
     		</td>
     		<td width="namewidth3">
-    			<a href="javascript:void(0);" class="c_222 block cp fr ml10 packup globle_img mt8 mr20 more" title="展开"></a>
-                <a href="javascript:void(0);" class="a_underline block_inline fr w_blue mt5 reset" >清除</a>
-                <a href="javascript:void(0);" class="block_inline c_white lh25 fr mr10 submit"><b class="allbtn_l block fl"></b><b class="allbtn_r pr13 block fl w_auto f14">查&nbsp;&nbsp;询</b></a>
+    			<a href="javascript:;" class="c_222 block cp fr ml10 packup globle_img mt8 mr20 more" title="展开"></a>
+                <a href="javascript:;" class="a_underline block_inline fr w_blue mt5 reset" >清除</a>
+                <a href="javascript:;" class="block_inline c_white lh25 fr mr10 submit"><b class="allbtn_l block fl"></b><b class="allbtn_r pr13 block fl w_auto f14">查&nbsp;&nbsp;询</b></a>
     		</td>
     	</tr>
     	<tr class="more-content">

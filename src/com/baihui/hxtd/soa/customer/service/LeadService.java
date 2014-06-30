@@ -43,7 +43,7 @@ import com.baihui.hxtd.soa.system.service.DataShift;
 @Service
 @Transactional
 public class LeadService {
-	private Logger logger = LoggerFactory.getLogger(LeadService.class);
+	private Logger logger = LoggerFactory.getLogger(this.getClass());
 
 	@Resource
 	private LeadDao leadDao;

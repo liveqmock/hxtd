@@ -22,7 +22,6 @@ import org.springframework.web.bind.annotation.InitBinder;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.SessionAttributes;
 import org.springside.modules.web.Servlets;
@@ -100,9 +99,9 @@ public class ProductController {
 		Map<String, Object> searchParams = Servlets.getParametersStartingWith(request, "search_");
         Search.clearBlankValue(searchParams);
         
-        DataShift dataShift = (DataShift) model.get(Constant.VS_DATASHIFT);
+        //DataShift dataShift = (DataShift) model.get(Constant.VS_DATASHIFT);
         /************分页查询*****************/
-        productService.findPage(searchParams, dataShift, page);
+        productService.findPage(searchParams, page);
         
         /************json转换****************/
         JsonDto json = new JsonDto();
@@ -135,13 +134,11 @@ public class ProductController {
 	  * add(新增产品)
 	  * @Description: 新增一条产品记录
 	  * @param product 产品实体
-	  * @param redirectUri url地址
 	  * @param userId 操作用户ID
-	  * @return String 修改页地址信息
 	 */
+	@ResponseBody
 	@RequestMapping(value = "/add.do", method = RequestMethod.POST)
 	public String add(Product product, 
-			@RequestParam(defaultValue = "/project/product/toModifyPage.do?id=%s") String redirectUri,
 			@ModelAttribute(Constant.VS_USER_ID) Long userId) {
 		/************设置修改者、创建者****************/
 		User user = new User(userId);
@@ -153,7 +150,7 @@ public class ProductController {
 		/************保存*****************************/
 		productService.save(product);
 		
-		return "redirect:" + String.format(redirectUri, product.getId());
+		return JsonDto.add(product.getId()).toString();
 	}
 	
 	/**
@@ -177,20 +174,16 @@ public class ProductController {
 	  * modify(修改产品)
 	  * @Description: 保存修改后的产品信息
 	  * @param activity 产品实体
-	  * @param redirectUri Url地址
 	  * @param userId 操作用户ID
-	  * @param request HttpServletRequest
-	  * @return String 编辑页地址信息
 	 */
+	@ResponseBody
 	@RequestMapping(value = "/modify.do")
 	public String modify(Product product, 
-			@RequestParam(defaultValue = "/project/product/toModifyPage.do?id=%s") String redirectUri,
-			@ModelAttribute(Constant.VS_USER_ID) Long userId,
-			HttpServletRequest request) {
+			@ModelAttribute(Constant.VS_USER_ID) Long userId) {
 		product.setModifier(new User(userId));
 		productService.save(product);
 		
-		return String.format("redirect:" + redirectUri, product.getId());
+		return JsonDto.modify(product.getId()).toString();
 	}
 	
 	/**

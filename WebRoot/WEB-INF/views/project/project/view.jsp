@@ -38,7 +38,7 @@
 				</li>
 				<li>
 					<a class=" pl10 c_white f14 lh25 cp block fr mr10"
-						href="javascript:history.go(-1)"><b
+						href="${ctx }/project/project/toQueryPage.do"><b
 						class="allbtn_l block fl"></b><b
 						class="allbtn_r pr13 block fl w_auto f14">返&nbsp;&nbsp;回</b>
 					</a>

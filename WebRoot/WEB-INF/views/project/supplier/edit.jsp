@@ -110,6 +110,7 @@ function searchData(action){//搜索弹出框
 			<tr>
 				<td align="right" width="15%">
 					<span class="w_red">*&nbsp;</span>供应商名：
+				<input type="hidden" value="${com.id}" name="id"/>
 				</td>
 				<td align="left">
 					<input type="text" name="name" value="${com.name}"

@@ -21,7 +21,7 @@ import java.util.List;
  */
 @Controller
 @RequestMapping(value = "")
-@SessionAttributes(value = {Constant.VS_USER_NAME,Constant.VS_MENUBAR_FIRST_MENUS})
+@SessionAttributes(value = {Constant.VS_USER_NAME, Constant.VS_MENUBAR_FIRST_MENUS})
 public class IndexController {
 
     private Logger logger = LoggerFactory.getLogger(this.getClass());
@@ -42,6 +42,7 @@ public class IndexController {
     @RequestMapping(value = "/system/toViewPage.do")
     public String systemIndex(Model model) {
 //        model.addAttribute("menus", menuService.findByShowlocation(user.getId()));
+        model.addAttribute(Constant.VR_LOCATION_TITLE, "设置");
         return "/system/index";
     }
 

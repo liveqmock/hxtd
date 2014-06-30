@@ -67,7 +67,7 @@
 	    <b class="b2"></b>
 	    <b class="b3"></b>
 	    <b class="b4"></b>
-			<div class="margin0 ml35 mr35 listcontainer">
+			<div class="listcontainer">
 				<div class="w">
 					<!--查询条件开始-->
 					<form id="form" action="${ctx}/system/auditlog/query.do" onsubmit="return false;">
@@ -75,17 +75,14 @@
 						<input type="hidden" name="search_EQ_moduleName" id="moduleName" class="select2" value="市场活动"/>
 						<table class="fl mt5 w">
 							<tr>
-								<td class="f14" align="right" width="6%">操作人：</td>
-								<%--<td class="f14" align="left" width="16%">
-									<input type="text" class="text_input1" id="operator" name="search_LIKE_operator.id" />
-								</td>
-								--%><td class="f14" align="left" width="16%">
+								<td class="f14 namewidth1" align="right">操作人：</td>
+								<td class="f14 namewidth2" align="left">
 									<input type="text" id="txt_operator" readonly="readonly" class="text_input1"/>
 									<input type="text" id="hide_operator_id" name="search_EQ_operator.id" class="text_input1 none"/>
 									<i class="s_inquiry globle_img block_inline ml5 vm cp" title="搜索操作人" onclick="searchData('operator');"></i>
 								</td>
-								<td class="f14" align="right" width="6%">操作类型：</td>
-								<td class="f14" align="left" width="16%">
+								<td class="f14 namewidth1" align="right">操作类型：</td>
+								<td class="f14 namewidth2" align="left">
 									<div class="pr">
 										<select name="search_EQ_type.id" class="select2">
 											<option value="">全部</option>
@@ -95,10 +92,10 @@
 										</select>
 									</div>
 								</td>
-								<td class="f14" align="right" width="7%">
+								<td class="f14 namewidth1" align="right">
 									操作时间：
 								</td>
-								<td class="f14" align="left" width="18%">
+								<td class="f14 namewidth2" align="left">
 									<div class="vm">
 										<input class="text_input2 input_close globle_img time"
 											name="search_GTE_operateTime" type="text" 
@@ -107,15 +104,16 @@
 											name="search_LTE_operateTime" type="text" readonly />
 									</div>
 								</td>
-								<td width="8%">
-									<a href="javascript:void(0)" class=" block c_white lh25 submit">
+								<td width="namewidth3">
+									<div class="c_222 block cp fr ml10  mt8 mr20" title=""></div>
+									<a class="a_underline block_inline fr w_blue mt5 reset" href="javascript:formReset()">清除</a>
+									<a href="javascript:void(0)" class="block_inline c_white lh25 fr mr10 submit">
 										<b class="allbtn_l block fl"></b>
 										<b class="allbtn_r pr13 block fl w_auto f14">查&nbsp;&nbsp;询</b>
 									</a>
-									<a class="reset block a_underline fr w_blue mt5" href="javascript:formReset()">清除</a>
+									
 								</td>
-								<td class="f14" align="right" width="6%"></td>
-								<td class="f14" align="left" width="4%"></td>
+								
 							</tr>
 						</table>
 						<tags:paginationparams page="${page}" />

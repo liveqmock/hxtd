@@ -10,15 +10,10 @@
 <script type="text/javascript" src="${ctx}/static/js/jquery.metadata.js?v=1"></script>
 <script type="text/javascript" src="${ctx}/static/js/validator.js?v=1"></script>
 <script type="text/javascript" src="${ctx}/static/js/ui/jquery.ui.datepicker.js?v=1"></script>
+<script type="text/javascript" src="${ctx}/static/js/js-util.common.js?v=1"></script>
 <script type="text/javascript">
 $(function(){
-	$(".add").click(function(){// 表单验证
-		if($("#form").valid()){
-			form.action = form.action + "?redirectUri=" + encodeURI($(this).attr("redirecturi"));
-			form.submit();
-		}
-		return false;
-	});
+	jsUtil.bindSave(".add", "form");// 提交表单
 	var $dates = $("#start,#end");// 日历设置
 	$dates.datepicker({
 		closeText : '关闭',
@@ -58,7 +53,7 @@ function searchData(action){// 搜索弹出框
 </script>
 </head>
 <body>
-<form id="form" action="${ctx}${VR_FUNCTION.url}" method="post">
+<form action="${ctx}${VR_FUNCTION.url}" method="post">
 <div class="ml35 mr35 mt20 block cb cb">
 	<b class="b1"></b>
 	<b class="b2"></b>

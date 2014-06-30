@@ -3,6 +3,7 @@ package com.baihui.hxtd.soa.system.controller;
 import com.baihui.hxtd.soa.base.Constant;
 import com.baihui.hxtd.soa.base.orm.hibernate.HibernatePage;
 import com.baihui.hxtd.soa.base.utils.ImportExport;
+import com.baihui.hxtd.soa.base.utils.MD5;
 import com.baihui.hxtd.soa.base.utils.Search;
 import com.baihui.hxtd.soa.base.utils.mapper.HibernateAwareObjectMapper;
 import com.baihui.hxtd.soa.base.utils.mapper.JsonMapper;
@@ -89,6 +90,8 @@ public class UserController {
     @Resource
     private OrganizationService organizationService;
 
+    @Resource
+    private MD5 md5;
     /**
      * 转至查询用户页面
      */
@@ -494,12 +497,16 @@ public class UserController {
 
 
     /**
-     * toOwnerLstPage(跳转至所有者组件列表界面)
+      * toOwnerLstPage(跳转至所有者组件列表界面)
+      * @param page 分页设置
+      * @param model ModelMap
+      * @return String 用户组件视图
      */
     @RequestMapping(value = "/toQueryPage.comp")
     public String toOwnerLstPage(
             HibernatePage<User> page,
             ModelMap model) {
+    	page.setHibernatePageSize(12);// 设置每页显示12个用户
         model.addAttribute("page", page);
         model.addAttribute("orgId", model.get(Constant.VS_ORG_ID));
 
@@ -543,4 +550,50 @@ public class UserController {
         model.addAttribute("json", sb.toString());
         return "/system/message/listcomp";
     }
+    
+    /**
+     * 修改密码跳转页
+     * @author huizijing
+     * @since 2014-6-30
+     */
+    @RequestMapping(value = "/toModifyPasswordPage.do")
+    public String toModifyPwd(User user, ModelMap model,HttpServletRequest request) {
+        logger.info("转至修改密码页面");
+        user = (User) request.getSession().getAttribute(Constant.VS_USER);
+        String funcUrl="/system/user/modifyPassword.do";
+        model.addAttribute("user", user);
+        model.addAttribute("funcUrl", funcUrl);
+        logger.debug("用户“{}”", user.getName());
+        return "/system/user/password";
+    }
+    
+    /**
+     * 修改密码
+     * @author huizijing
+     * @since 2014-6-30
+     */
+    @ResponseBody
+    @RequestMapping(value = "/modifyPassword.do")
+    public String modifyPwd(String password,Long id){
+    	userService.modifyPasswordById(id,password);
+        JsonDto jsonDto = new JsonDto("修改密码成功");
+        jsonDto.setSuccessFlag(true);
+        return jsonDto.toString();
+    }
+    
+    @ResponseBody
+    @RequestMapping(value = "/checkPwd")
+    public String checkPwd(String oldpwd,HttpServletRequest request){
+    	User user = (User) request.getSession().getAttribute(Constant.VS_USER);
+    	if(md5.getMD5ofStr(oldpwd).equals(user.getPassword())){
+    		JsonDto jsonDto = new JsonDto("原密码输入正确");
+            jsonDto.setSuccessFlag(true);
+            return jsonDto.toString();
+    	}else{
+    		JsonDto jsonDto = new JsonDto("原密码不正确");
+            jsonDto.setSuccessFlag(false);
+            return jsonDto.toString();
+    	}
+    }
+    
 }

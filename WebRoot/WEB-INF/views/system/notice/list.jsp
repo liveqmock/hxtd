@@ -39,8 +39,8 @@
 		<td class="f14 namewidth1" align="right">有效期：</td>
 		<td class="f14 namewidth2" align="left">
 		    <select name="type" class="select2">
-		    <option value="all">全部</option>
-		    <option >已发公告</option>
+		    <option>全部</option>
+		    <option>已发公告</option>
 		    <option value="unsend">未发公告</option>
 		    </select>
 		</td>
@@ -51,7 +51,6 @@
 		</div>
 		</td>
 		<td width="namewidth3">
-		      <a href="javascript:void(0);" class="c_222 block cp fr ml10 packup globle_img mt8 mr20 more" title="展开"></a>
 		      <a href="javascript:void(0);" class="a_underline block_inline fr w_blue mt5 reset" >清除</a>
 		      <a href="javascript:void(0);" class="block_inline c_white lh25 fr mr10 submit"><b class="allbtn_l block fl"></b><b class="allbtn_r pr13 block fl w_auto f14">查&nbsp;&nbsp;询</b></a>
 		</td>

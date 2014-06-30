@@ -16,7 +16,6 @@ import com.baihui.hxtd.soa.base.orm.hibernate.HibernatePage;
 import com.baihui.hxtd.soa.base.utils.Search;
 import com.baihui.hxtd.soa.project.dao.ProductDao;
 import com.baihui.hxtd.soa.project.entity.Product;
-import com.baihui.hxtd.soa.system.dao.UserDao;
 import com.baihui.hxtd.soa.system.service.DataShift;
 
 /**
@@ -39,20 +38,18 @@ public class ProductService {
 	 */
 	@Resource
 	private ProductDao productDao;
-	@Resource
-	private UserDao userDao;
+	//@Resource
+	//private UserDao userDao;
 
 	 /**
      * findPage(分页查询产品列表)
      * @param searchParams 过滤条件
      * @param page 分页
-     * @param dataShift 数据筛选
      * @return HibernatePage<Product> 列表结果集
 	 * @throws NoSuchFieldException 
      */
     @Transactional(readOnly = true)
     public HibernatePage<Product> findPage(Map<String, Object> searchParams, 
-    		DataShift dataShift,
     		HibernatePage<Product> page) throws NoSuchFieldException {
         DetachedCriteria criteria = DetachedCriteria.forClass(Product.class);
         criteria.setFetchMode("type", FetchMode.JOIN);//产品分类
@@ -61,7 +58,9 @@ public class ProductService {
         criteria.setFetchMode("creator", FetchMode.JOIN);//创建者
         criteria.add(Restrictions.eq("isDeleted", false));// 过滤已删除
         
-        DataAuthFliter(criteria, searchParams, dataShift);
+        //DataAuthFliter(criteria, searchParams, dataShift);
+        Map<String, SearchFilter> filters = Search.parse(searchParams);
+        Search.buildCriteria(filters, criteria, Product.class);
         
         return productDao.findPage(page, criteria);
     }
@@ -98,7 +97,7 @@ public class ProductService {
    		Map<String, Object> searchParams,
    		DataShift dataShift) throws NoSuchFieldException {
    	 	Map<String, SearchFilter> filters = Search.parse(searchParams);
-   	 	userDao.visibleData(criteria, dataShift);
+   	 	//userDao.visibleData(criteria, dataShift);
         Search.buildCriteria(filters, criteria, Product.class);
    }
     

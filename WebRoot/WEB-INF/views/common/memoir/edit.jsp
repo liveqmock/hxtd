@@ -43,12 +43,8 @@ function callback(obj){
   <div class="margin0">
     <div>
       <table class="id_tantable1 w pr10 pl10">
-        <tr class="h50">
-          <td align="right" valign="top" width="20%"><i class="mt3 block">联系纪要：</i></td>
-          <td><textarea name="summary" class="remarks_input3">${memoir.summary}</textarea></td>
-        </tr>
-        <tr class="h50">
-          <td align="right"><i class="mt3 block">下次联系时间：</i></td>
+      	<tr class="h50">
+          <td width="25%" align="right"><i class="mt3 block">下次联系时间：</i></td>
           <td>
           	<div class="vm">
               <input id="time" name="nextContactTime" class="text_input2 input_close2 globle_img" 
@@ -56,12 +52,16 @@ function callback(obj){
             </div>
           </td>
         </tr>
-        <tr class="h50">
-          <td align="right" valign="top"><i class="mt3 block">下次联系要点：</i></td>
+        <tr class="h80">
+          <td align="right"><i class="mt3 block">下次联系要点：</i></td>
           <td><textarea name="nextContactPoints" class="remarks_input3">${memoir.nextContactPoints}</textarea></td>
         </tr>
-        <tr class="h50">
-          <td align="right" valign="top"><i class="mt3 block">备注：</i></td>
+        <tr class="h80">
+          <td align="right"><i class="mt3 block">联系纪要：</i></td>
+          <td><textarea name="summary" class="remarks_input3 required">${memoir.summary}</textarea></td>
+        </tr>
+        <tr class="h80">
+          <td align="right"><i class="mt3 block">备注：</i></td>
           <td><textarea name="remark" class="remarks_input3">${contact.remark}</textarea></td>
         </tr>
       </table>

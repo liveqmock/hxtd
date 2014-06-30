@@ -3,23 +3,18 @@
 <c:set var="ctx" value="${pageContext.request.contextPath}"/>
 <html>
 <head>
-<title>联系人</title>
+<title>联系人编辑</title>
 <link href="${ctx}/static/css/recommend/detail.css?v=1" type="text/css" rel="stylesheet"></link>
 <script type="text/javascript" src="${ctx}/static/js/jquery.validate.js?v=1"></script>
 <script type="text/javascript" src="${ctx}/static/js/jquery.metadata.js?v=1"></script>
 <script type="text/javascript" src="${ctx}/static/js/validator.js?v=1"></script>
 <script type="text/javascript" src="${ctx}/static/js/pacs.js?v=1"></script>
+<script type="text/javascript" src="${ctx}/static/js/js-util.common.js?v=1"></script>
 <script type="text/javascript">${applicationScope.VC_PCAS}</script>
 <script type="text/javascript">
 $(function(){// 初始化 
+	jsUtil.bindSave(".add", "form");// 提交表单
 	new PCAS("province","city","county",'${contact.province.id}','${contact.city.id}','${contact.county.id}');
-	$(".add").click(function(){// 表单验证
-		if($("#form").valid()){
-			form.action = form.action + "?redirectUri=" + encodeURI($(this).attr("redirecturi"));
-			form.submit();
-		}
-		return false;
-	});
 	$(".empty").click(function(){// 清除
 		$(this).prevAll("input").val('');
 	});
@@ -37,10 +32,16 @@ function searchData(action){// 搜索弹出框
 		title = "供应商";
 	}
 	jsUtil.dialogIframe(url, title, 800, 465, function(){// 确定回调
-		var $ckObj = $(":checked", window.frames["dialogIframe"].document);
-		if($ckObj.length > 0){
-			$("#txt_" + action).val($ckObj.parent().next().text());
-			$("#hide_" + action +"_id").val($ckObj.val());
+		var selector;
+		if(action == "owner"){
+			selector = ".bor_e28d1f";
+		} else {
+			selector = ":checked";
+		}
+		var $userObj = $(selector, window.frames["dialogIframe"].document);
+		if($userObj.length > 0){
+			$("#txt_" + action).val($userObj.find("td:eq(1)").text());
+			$("#hide_" + action +"_id").val($userObj.attr("id"));
 		}
 	});
 }

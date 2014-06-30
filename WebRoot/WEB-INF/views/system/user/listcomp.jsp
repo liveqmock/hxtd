@@ -65,7 +65,7 @@ $(function(){
 			<textarea id="template-tbody" class="template template-tbody">
 			    {#foreach $T.result as row}
 				<li>
-					<div class="module" id="${$T.row.id}">
+					<div class="module" id="{$T.row.id}">
 						<table class="w">
 							<tr>
 								<td align="right">用户名：</td>

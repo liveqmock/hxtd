@@ -160,7 +160,13 @@ public class CustomerController {
 		customer.setModifiedTime(new Date(new java.util.Date().getTime()));
 		customer.setModifier(u);
 		customer.setIsDeleted(false);
-		customer.setCreator(u);
+		//customer.setCreator(u);
+		if(customer.getProvince().getId()==null||customer.getCity()==null||
+				customer.getCounty()==null){
+			customer.setProvince(null);
+			customer.setCity(null);
+			customer.setCounty(null);
+		}
 		customerService.save(customer);
 		JsonDto json = JsonDto.modify(customer.getId());
 		return json.toString();

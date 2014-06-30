@@ -18,7 +18,6 @@ import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.SessionAttributes;
 import org.springside.modules.web.Servlets;
@@ -124,13 +123,11 @@ public class ContactController {
 	  * add(新增联系人)
 	  * @Description: 新增一条联系人记录
 	  * @param contact 联系人实体
-	  * @param redirectUri url地址
 	  * @param userId 操作用户id
-	  * @return String 返回修改页视图地址
 	 */
+	@ResponseBody
 	@RequestMapping(value = "/add.do", method = RequestMethod.POST)
-	public String add(Contact contact, 
-			@RequestParam(defaultValue = "/customer/contact/toModifyPage.do?id=%s") String redirectUri,
+	public String add(Contact contact,
 			@ModelAttribute(Constant.VS_USER_ID) Long userId) {
 		User user = new User(userId);
 		contact.setCreator(user);
@@ -148,19 +145,19 @@ public class ContactController {
 		if(contact.getSource().getId() == null){
 			contact.setSource(null);
 		}
-		if(contact.getProvince().getId() == -1){
+		if(contact.getProvince().getId() == null){
 			contact.setProvince(null);
 		}
-		if(contact.getCity().getId() == -1){
+		if(contact.getCity().getId() == null){
 			contact.setCity(null);
 		}
-		if(contact.getCounty().getId() == -1){
+		if(contact.getCounty().getId() == null){
 			contact.setCounty(null);
 		}
 		
 		contactService.save(contact);
 		
-		return "redirect:" + String.format(redirectUri, contact.getId());
+		return JsonDto.add(contact.getId()).toString();
 	}
 
 	/**
@@ -183,15 +180,12 @@ public class ContactController {
 	  * modify(修改联系人)
 	  * @Description: 保存修改后的联系人信息
 	  * @param contact 联系人实体
-	  * @param redirectUri url地址
 	  * @param userId 操作用户ID
-	  * @param request HttpServletRequest
-	  * @return String 返回编辑视图地址
 	 */
+	@ResponseBody
 	@RequestMapping(value = "/modify.do")
-	public String modify(Contact contact, @RequestParam(defaultValue = "/customer/contact/toModifyPage.do?id=%s") String redirectUri,
-			@ModelAttribute(Constant.VS_USER_ID) Long userId,
-			HttpServletRequest request) {
+	public String modify(Contact contact, 
+			@ModelAttribute(Constant.VS_USER_ID) Long userId) {
 		contact.setModifier(new User(userId));
 		if(contact.getCustomer().getId() == null){
 			contact.setCustomer(null);
@@ -205,19 +199,19 @@ public class ContactController {
 		if(contact.getSource().getId() == null){
 			contact.setSource(null);
 		}
-		if(contact.getProvince().getId() == -1){
+		if(contact.getProvince().getId() == null){
 			contact.setProvince(null);
 		}
-		if(contact.getCity().getId() == -1){
+		if(contact.getCity().getId() == null){
 			contact.setCity(null);
 		}
-		if(contact.getCounty().getId() == -1){
+		if(contact.getCounty().getId() == null){
 			contact.setCounty(null);
 		}
 		
 		contactService.save(contact);
 		
-		return String.format("redirect:" + redirectUri, contact.getId());
+		return JsonDto.modify(contact.getId()).toString();
 	}
 
 	/**

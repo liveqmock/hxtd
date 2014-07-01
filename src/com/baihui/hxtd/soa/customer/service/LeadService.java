@@ -26,6 +26,7 @@ import com.baihui.hxtd.soa.customer.entity.Customer;
 import com.baihui.hxtd.soa.customer.entity.Lead;
 import com.baihui.hxtd.soa.system.dao.UserDao;
 import com.baihui.hxtd.soa.system.entity.Dictionary;
+import com.baihui.hxtd.soa.system.entity.User;
 import com.baihui.hxtd.soa.system.service.DataShift;
 
 /**
@@ -71,9 +72,9 @@ public class LeadService {
 				+ " left join fetch lead.status "
 				+ " left join fetch lead.cardType "
 				+ " left join fetch lead.industry "
-				+ "left join fetch lead.province "
-				+ "left join fetch lead.city " 
-				+ "left join fetch lead.county " 
+				+ " left join fetch lead.province "
+				+ " left join fetch lead.city " 
+				+ " left join fetch lead.county " 
 				+ " left join fetch lead.owner " + " where lead.id=?";
 		return leadDao.findUnique(hql, id);
 	}
@@ -95,7 +96,21 @@ public class LeadService {
 		leadDao.update(lead);
 	}
 
-	public void save(Lead lead) {
+	public void add(Lead lead,User u) {
+		logger.info("保存线索信息{}", lead);
+		if(lead.getProvince().getId()==null){
+			lead.setProvince(null);
+		}
+		if(lead.getCity().getId()==null){
+			lead.setCity(null);
+		}
+		if(lead.getCounty().getId()==null){
+			lead.setCounty(null);
+		}
+		leadDao.save(lead);
+	}
+	
+	public void modify(Lead lead, User u) {
 		logger.info("保存线索信息{}", lead);
 		if(lead.getProvince().getId()==null){
 			lead.setProvince(null);
@@ -147,7 +162,7 @@ public class LeadService {
 	 * 
 	 * @param id
 	 */
-	public void delete(Long... id) {
+	public void delete(User user, Long... id) {
 		leadDao.logicalDelete(id);
 	}
 
@@ -159,7 +174,7 @@ public class LeadService {
 	  * @return void    返回类型
 	  * @throws
 	 */
-	public void leadConverter(Long id){
+	public void leadConverter(User user, Long id){
 		logger.info("线索转换开始，ID={}",id);
 		Lead lead = this.get(id);
 		
@@ -184,7 +199,7 @@ public class LeadService {
 		memoirDao.leadConverter(lead, con);
 		
 		logger.info("删除线索信息 ID={}",id);
-		this.delete(id);
+		this.delete(user, id);
 	}
 	public int modifyOwner(Long ownerId, Long... ids) {
 		return leadDao.modifyOwner(ownerId, ids);

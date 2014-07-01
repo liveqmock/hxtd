@@ -1,69 +1,86 @@
-﻿//dialog全局对象
-var DIALOG;
+﻿var DIALOG; //dialog全局对象
 var jsUtil = {
-	getRootPath:function(){
-		//获取当前网址，如： http://localhost:8083/uimcardprj/share/meun.jsp
-		var curWwwPath = window.document.location.href;
-		//获取主机地址之后的目录，如： uimcardprj/share/meun.jsp
-		var pathName = window.document.location.pathname;
+	getRootPath: function(){
+		var curWwwPath = window.document.location.href; //获取当前网址，如： http://localhost:8083/uimcardprj/share/meun.jsp
+		var pathName = window.document.location.pathname; //获取主机地址之后的目录，如： uimcardprj/share/meun.jsp
 		var pos = curWwwPath.indexOf(pathName);
-		//获取主机地址，如： http://localhost:8083
-		var localhostPaht = curWwwPath.substring(0, pos);
-		//获取带"/"的项目名，如：/uimcardprj
-		var projectName = pathName.substring(0,
-				pathName.substr(1).indexOf('/') + 1);
-		if(projectName=="/hxtd"){
+		var localhostPaht = curWwwPath.substring(0, pos); //获取主机地址，如： http://localhost:8083
+		var projectName = pathName.substring(0, pathName.substr(1).indexOf('/') + 1); //获取带"/"的项目名，如：/uimcardprj
+		if(projectName == "/hxtd"){
 			return (localhostPaht + projectName);
 		}
 		return localhostPaht;
 	},
-	init:function(){ 
-		//动态加载有时会使页面上的js代码的效果失效，改用直接加载
+	init: function(){ //动态加载有时会使页面上的js代码的效果失效，改用直接加载
 		$('body').append("<div id='dialog' style='display:none; overflow:hidden;'></div>");
 		DIALOG = $( "#dialog" );
 	},
-	getDialogConfig:function(title,width,height){
+	getDialogConfig: function(title, width, height){
 		var config = {
-			resizable:false,
-			bgiframe: true,
+			resizable: false, //change the prompt box size
+			bgiframe: true, //mask layer
 			autoOpen: false,
 			modal: true,
-			closeOnEscape: true,
+			closeOnEscape: true, //escape to exit
 			title: '提示',
-			width:300,
-			height:160
+			width: 300,
+			height: 160
 		};
 		if(title){
-			config.title=title;
+			config.title = title;
 		}
 		if(width){
-			config.width=width;
+			config.width = width;
 		}
 		if(height){
-			config.height=height;
+			config.height = height;
 		}
 		return config;
 	},
-	dialogIframe:function(url,title,width,height,yesFun){
-		//this.height=this.contentWindow.document.documentElement.scrollHeight;
+	alert: function(msg, title, width, height){ //确定提示框
+		DIALOG.text(msg);
+		var config = jsUtil.getDialogConfig(title, width, height);
+		config.buttons = {
+			"确定": function(){
+			DIALOG.dialog("close");
+		}};
+		DIALOG.dialog(config);
+		DIALOG.dialog("open");
+	},
+	confirm: function(msg, yesFun, title, width, height){ //确认提示框
+		DIALOG.text(msg);
+		var config = jsUtil.getDialogConfig(title, width, height);
+		config.buttons = {
+			"确定": function(){
+				DIALOG.dialog("close");
+				yesFun();
+			},
+			"取消": function(){
+				DIALOG.dialog("close");
+			}
+		};
+		DIALOG.dialog(config);
+		DIALOG.dialog("open");
+	},
+	dialogIframe: function(url, title, width, height, yesFun){ //jquery-dialog提示框
 		DIALOG.html("<div style='padding:0px;'>" +
 		"<iframe onload='javascript:this.height=this.contentWindow.document.body.scrollHeight;'" +
 		" id='dialogIframe' name='dialogIframe' height='100%' width='100%' frameborder='no' border='0' " +
-		" scrolling='no' src='"+url+"'></iframe></div>");
-		var config = jsUtil.getDialogConfig(title,width,height);
+		" scrolling='no' src='" + url + "'></iframe></div>");
+		var config = jsUtil.getDialogConfig(title, width, height);
 		if(yesFun){
 			config.buttons = {
-				"确定" : function() {
+				"确定": function() {
 					yesFun();
 					DIALOG.dialog("close");
 				},
-				"关闭" : function() {
+				"关闭": function() {
 					DIALOG.dialog("close");
 				}
 			};
 		}else{
 			config.buttons = {
-				"关闭" : function() {
+				"关闭": function() {
 					DIALOG.dialog("close");
 				}
 			};
@@ -71,160 +88,125 @@ var jsUtil = {
 		DIALOG.dialog(config);
 		DIALOG.dialog("open");
 	},
-	alert:function(msg,title,width,height){
-		DIALOG.text(msg);
-		var config = jsUtil.getDialogConfig(title,width,height);
-		config.buttons={"确定":function(){
-				DIALOG.dialog( "close" );
-			}};
-		DIALOG.dialog(config);
-		DIALOG.dialog("open");
-	},
-	confirm:function(msg,yesFun,title,width,height){
-		DIALOG.text(msg);
-		var config = jsUtil.getDialogConfig(title,width,height);
-		config.buttons={"确定":function(){
-				DIALOG.dialog( "close" );
-				yesFun();
-			},"取消":function(){
-				DIALOG.dialog( "close" );
-			}};
-		DIALOG.dialog(config);
-		DIALOG.dialog("open");
-	},
-	datepicker:function(rep){
-			var txtObj;
-			$(rep).datepicker({//datepicker本地化
-				maxDate: 0, //设置最大时间界限
-				onSelect: function(selectedDate){
-					var sltObj = this, index = 0, option = "minDate";
-					$(rep).each(function(i, obj){
-						if(sltObj == obj){
-							if(i % 2 == 1){
-								option = "maxDate";
-								index = i - 1;
-							}else{
-								option = "minDate";
-								index = i + 1;
-							}
-							return false;
+	twoOrMoreRestrictDate: function(selector, limit, limitVal){ //两个互相制约的日历   比如：开始、结束时间
+		$(selector).datepicker({
+			maxDate: limit == "max" ? limitVal : null,
+			minDate: limit == "min" ? limitVal : null,
+			onSelect: function(selectedDate){
+				var sltObj = this, index = 0, option = "minDate";
+				$(selector).each(function(i, obj){
+					if(sltObj == obj){
+						if(i % 2 == 1){
+							option = "maxDate";
+							index = i - 1;
+						}else{
+							option = "minDate";
+							index = i + 1;
 						}
-					});
-					$(rep).eq(index).datepicker("option", option, selectedDate);
-			    },
-			    beforeShow: function(input, inst){
-			    	txtObj = input;
-			    }
-			});
-			$(".ui-datepicker-close").live("click", function(){
-				if(txtObj.value == '') return false;
-				txtObj.value = ''; // 清空
-				
-				var $dateTxtObj = $(txtObj), 
-					$prevDate = $dateTxtObj.prev(), 
-					$nextDate = $dateTxtObj.next();
-				if($prevDate.length > 0 ){
-					$prevDate.datepicker("option", "maxDate", 0);
-				}
-				if($nextDate.length > 0){
-					$nextDate.datepicker("option", "minDate", null);
-				}
-			});
+						return false;
+					}
+				});
+				$(selector).eq(index).datepicker("option", option, selectedDate);
+		    }
+		})
+		.focus(function(){
+			clearDate($(this), true);
+		});
 	},
-	datepickerNotNow:function(rep){
-			var txtObj;
-			$(rep).datepicker({//datepicker本地化
-				onSelect: function(selectedDate){
-					var sltObj = this, index = 0, option = "minDate";
-					$(rep).each(function(i, obj){
-						if(sltObj == obj){
-							if(i % 2 == 1){
-								option = "maxDate";
-								index = i - 1;
-							}else{
-								option = "minDate";
-								index = i + 1;
-							}
-							return false;
-						}
-					});
-					$(rep).eq(index).datepicker("option", option, selectedDate);
-			    },
-			    beforeShow: function(input, inst){
-			    	txtObj = input;
-			    }
-			});
-			$(".ui-datepicker-close").live("click", function(){
-				if(txtObj.value == '') return false;
-				txtObj.value = ''; // 清空
-				
-				var $dateTxtObj = $(txtObj), 
-					$prevDate = $dateTxtObj.prev(), 
-					$nextDate = $dateTxtObj.next();
-				if($prevDate.length > 0 ){
-					$prevDate.datepicker("option", "maxDate", 0);
-				}
-				if($nextDate.length > 0){
-					$nextDate.datepicker("option", "minDate", null);
-				}
-			});
+	SingleLimitDate: function(selector, limit, limitVal){ //单个带限制的日历
+		//typeof limitVal == Date;
+		$(selector).datepicker({
+			maxDate: limit == "max" ? limitVal : null,
+			minDate: limit == "min" ? limitVal : null
+		}).focus(function(){
+			clearDate($(this), false);
+		});
 	},
-	datepickerAll:function(rep){
-			var txtObj;
-			$(rep).datetimepicker({//datepicker本地化
-				timeFormat: "HH:mm:ss",
-                dateFormat: "yy-mm-dd",
-				timeOnlyTitle: '选择时间',
-				timeText: '时间',
-				hourText: '小时',
-				minuteText: '分钟',
-				secondText: '秒钟',
-				millisecText: '毫秒',
-				microsecText: '微秒',
-				timezoneText: '时区',
-				currentText: '现在时间',
-				closeText: '清空',
-				timeFormat: 'HH:mm',
-				amNames: ['AM', 'A'],
-				pmNames: ['PM', 'P'],
-				isRTL: false,
-				onSelect: function(selectedDate){
-					var sltObj = this, index = 0, option = "minDate";
-					$(rep).each(function(i, obj){
-						if(sltObj == obj){
-							if(i % 2 == 1){
-								option = "maxDate";
-								index = i - 1;
-							}else{
-								option = "minDate";
-								index = i + 1;
-							}
-							return false;
+	datepicker: function(rep){
+		$(rep).datepicker({
+			maxDate: 0, //设置最大时间界限
+			onSelect: function(selectedDate){
+				var sltObj = this, index = 0, option = "minDate";
+				$(rep).each(function(i, obj){
+					if(sltObj == obj){
+						if(i % 2 == 1){
+							option = "maxDate";
+							index = i - 1;
+						}else{
+							option = "minDate";
+							index = i + 1;
 						}
-					});
-					$(rep).eq(index).datepicker("option", option, selectedDate);
-			    },
-			    beforeShow: function(input, inst){
-			    	txtObj = input;
-			    }
-			});
-			$(".ui-datepicker-close").live("click", function(){
-				if(txtObj.value == '') return false;
-				txtObj.value = ''; // 清空
-				
-				var $dateTxtObj = $(txtObj), 
-					$prevDate = $dateTxtObj.prev(), 
-					$nextDate = $dateTxtObj.next();
-				if($prevDate.length > 0 ){
-					$prevDate.datepicker("option", "maxDate", 0);
-				}
-				if($nextDate.length > 0){
-					$nextDate.datepicker("option", "minDate", null);
-				}
-			});
+						return false;
+					}
+				});
+				$(rep).eq(index).datepicker("option", option, selectedDate);
+		    }
+		}).focus(function(){
+			clearDate($(this), true);
+		});
+	},
+	datepickerNotNow: function(rep){
+		$(rep).datepicker({
+			onSelect: function(selectedDate){
+				var sltObj = this, index = 0, option = "minDate";
+				$(rep).each(function(i, obj){
+					if(sltObj == obj){
+						if(i % 2 == 1){
+							option = "maxDate";
+							index = i - 1;
+						}else{
+							option = "minDate";
+							index = i + 1;
+						}
+						return false;
+					}
+				});
+				$(rep).eq(index).datepicker("option", option, selectedDate);
+		    }
+		}).focus(function(){
+			clearDate($(this), true);
+		});
+	},
+	datepickerAll: function(rep){
+		$(rep).datetimepicker({//datepicker本地化
+			timeFormat: "HH:mm:ss",
+            dateFormat: "yy-mm-dd",
+			timeOnlyTitle: '选择时间',
+			timeText: '时间',
+			hourText: '小时',
+			minuteText: '分钟',
+			secondText: '秒钟',
+			millisecText: '毫秒',
+			microsecText: '微秒',
+			timezoneText: '时区',
+			currentText: '现在时间',
+			closeText: '清空',
+			timeFormat: 'HH:mm',
+			amNames: ['AM', 'A'],
+			pmNames: ['PM', 'P'],
+			isRTL: false,
+			onSelect: function(selectedDate){
+				var sltObj = this, index = 0, option = "minDate";
+				$(rep).each(function(i, obj){
+					if(sltObj == obj){
+						if(i % 2 == 1){
+							option = "maxDate";
+							index = i - 1;
+						}else{
+							option = "minDate";
+							index = i + 1;
+						}
+						return false;
+					}
+				});
+				$(rep).eq(index).datepicker("option", option, selectedDate);
+		    }
+		}).focus(function(){
+			clearDate($(this), true);
+		});
 	},
 	easyTree : {
-		init:function(data,chileNodeFun){
+		init: function(data,chileNodeFun){
 			var path = jsUtil.getRootPath();
 			$('head').append('<link rel="stylesheet" href="'+path+'/static/css/zTreeStyle.css">');
 			$.getScript(path+"/static/js/jquery.ztree.core-3.5.js",function(){
@@ -264,7 +246,7 @@ var jsUtil = {
 				$.fn.zTree.init(t, setting, data);
 			});
 		},
-		show:function(rep){
+		show: function(rep){
 			var obj = $(rep);
 			var Offset = obj.offset();
 			$("#treeDiv").css({left:Offset.left + "px", top:Offset.top + obj.outerHeight() + "px"}).slideDown("fast");
@@ -272,17 +254,17 @@ var jsUtil = {
 		
 			$(document).bind("mousedown", jsUtil.easyTree.onBodyDown);
 		},
-		hide:function(){
+		hide: function(){
 			$("#treeDiv").fadeOut("fast");
 			$(document).unbind("mousedown", jsUtil.easyTree.onBodyDown);
 		},
-		onBodyDown:function(event){
+		onBodyDown: function(event){
 			if (!(event.target.id == "treeDiv" || $(event.target).parents("#treeDiv").length>0)) {
 				jsUtil.easyTree.hide();
 			}
 		}
 	},
-	f : {
+	f: {
 		stopPropagation : function(event){
 			if(event){
 				if(event.stopPropagation){
@@ -299,3 +281,23 @@ var jsUtil = {
 $(function(){
 	jsUtil.init();
 });
+
+function clearDate(inst, isRestrict){ //清空日历
+	$(".ui-datepicker-close").click(function(){
+		if(inst.val() == '') return false;
+		inst.val(''); // 清空
+
+		if(isRestrict){ //互相制约
+			var $prevDate = inst.prev(), 
+				$nextDate = inst.next();
+			if($prevDate.length > 0 ){
+				$prevDate.datepicker("option", "maxDate", 0);
+			}
+			if($nextDate.length > 0){
+				$nextDate.datepicker("option", "minDate", null);
+			}
+		}
+	});
+}
+
+

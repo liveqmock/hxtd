@@ -16,6 +16,7 @@ import com.baihui.hxtd.soa.base.utils.Search;
 import com.baihui.hxtd.soa.customer.dao.ContactDao;
 import com.baihui.hxtd.soa.customer.entity.Contact;
 import com.baihui.hxtd.soa.system.dao.UserDao;
+import com.baihui.hxtd.soa.system.entity.User;
 import com.baihui.hxtd.soa.system.service.DataShift;
 
 /**
@@ -100,7 +101,7 @@ public class ContactService {
      * @param @return 参数类型
      * @return HibernatePage<contact>返回类型
      */
-    public Contact get(Long id) {
+    public Contact get(long id) {
     	String hql = "select contact from Contact contact " +
     			"left join fetch contact.supplier " +
     			"left join fetch contact.customer " +
@@ -118,8 +119,17 @@ public class ContactService {
      * save(保存：修改/新建)
      * @param entity 参数类型
      * @return void 返回类型
+     * modifier:xiaoli.luo
      */
-    public void save(Contact entity) {
+    public void add(Contact entity, User user) {
+        contactDao.save(entity);
+    }
+    /**
+     *  modifier:xiaoli.luo
+     * @param entity
+     * @param userId
+     */
+    public void modify(Contact entity, User user) {
         contactDao.save(entity);
     }
 
@@ -128,7 +138,7 @@ public class ContactService {
      * @param id 参数类型
      * @return void 返回类型
      */
-    public void delete(long... id) {
+    public void delete(User user, Long... id) {
         contactDao.delete(id);
     }
 }

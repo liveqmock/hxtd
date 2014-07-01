@@ -117,12 +117,10 @@ public class InitApplicationConstant implements StartupListener {
                 String entityName = key.substring(0, index);
                 String filedName = key.substring(index + 1);
                 String value = properties.getProperty(key);
-                value = new String(value.getBytes("ISO-8859-1"), "UTF-8");
                 if (!nameDescs.containsKey(entityName)) {
                     nameDescs.put(entityName, new DualHashBidiMap());
                 }
                 nameDescs.get(entityName).put(filedName, value);
-
             }
             logger.debug("名称描述数目“{}”", properties.entrySet().size());
             servletContext.setAttribute(Constant.VC_NAMEDESCS, nameDescs);

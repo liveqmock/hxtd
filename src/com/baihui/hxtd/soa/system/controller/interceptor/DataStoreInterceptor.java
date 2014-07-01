@@ -4,6 +4,7 @@ import com.baihui.hxtd.soa.base.Constant;
 import com.baihui.hxtd.soa.base.utils.RequestUtil;
 import com.baihui.hxtd.soa.base.utils.UrlUtil;
 import com.baihui.hxtd.soa.base.utils.mapper.HibernateAwareObjectMapper;
+import com.baihui.hxtd.soa.system.DictionaryConstant;
 import com.baihui.hxtd.soa.system.entity.Function;
 import com.baihui.hxtd.soa.system.entity.Menu;
 import com.baihui.hxtd.soa.system.service.FunctionService;
@@ -63,6 +64,11 @@ public class DataStoreInterceptor extends HandlerInterceptorAdapter {
         }
         menus.add(lastMenu);
         menuService.toTriggerUrl(menus);
+        request.setAttribute("isMenuFunction", lastMenu.getTrigger().equals(function));
+
+        if (DictionaryConstant.MENU_SHOWLOCATION_SETPAGE.equals(lastMenu.getShowLocation().getValue())) {
+            menus.add(0, Menu.SETTING);
+        }
 
         request.setAttribute(Constant.VR_FIRST_MENU, firstMenu);
         logger.debug("菜单栏位置对应的一级菜单“{}”->“{}”", Constant.VR_FIRST_MENU, firstMenu.getName());

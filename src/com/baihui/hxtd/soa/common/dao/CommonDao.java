@@ -4,7 +4,9 @@ import com.baihui.hxtd.soa.base.orm.hibernate.HibernateDAOImpl;
 import com.baihui.hxtd.soa.base.orm.hibernate.HibernatePage;
 import com.baihui.hxtd.soa.common.entity.Common;
 import com.baihui.hxtd.soa.common.entity.Initialized;
+import com.baihui.hxtd.soa.system.service.DataShift;
 import org.apache.poi.ss.formula.functions.T;
+import org.hibernate.criterion.DetachedCriteria;
 import org.springframework.stereotype.Repository;
 
 import java.text.SimpleDateFormat;
@@ -56,6 +58,8 @@ public class CommonDao extends HibernateDAOImpl<Common, Long> {
         String hql = String.format("select entity.order from %s entity where entity.id=?", entityName);
         return findUnique(hql, id);
     }
+
+
 
     /**
      * 更新序号根据主键编号

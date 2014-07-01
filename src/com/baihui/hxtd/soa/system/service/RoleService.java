@@ -57,7 +57,9 @@ public class RoleService {
     public HibernatePage<Role> findPage(Map<String, Object> searchParams, HibernatePage<Role> page, DataShift dataShift) throws NoSuchFieldException {
         logger.info("分页查找");
         DetachedCriteria criteria = DetachedCriteria.forClass(Role.class);
-        criteria.setFetchMode("type", FetchMode.JOIN);
+//        criteria.setFetchMode("type", FetchMode.JOIN);
+        criteria.setFetchMode("creator",FetchMode.JOIN);
+        criteria.setFetchMode("modifier",FetchMode.JOIN);
         userDao.visibleData(criteria, dataShift);
         Map<String, SearchFilter> filters = Search.parse(searchParams);
         Search.buildCriteria(filters, criteria, Role.class);

@@ -25,6 +25,16 @@ import java.util.List;
 @SuppressWarnings("serial")
 public class Menu implements Serializable, Cloneable, TreeNode<Menu>, Initialized {
 
+    public final static Menu SETTING = new Menu();
+
+    static {
+        SETTING.setName("设置");
+        SETTING.setUrl("/system/toViewPage.do");
+        Function function = new Function();
+        function.setUrl("/system/toViewPage.do");
+        SETTING.setTrigger(function);
+    }
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "ID")

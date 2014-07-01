@@ -12,9 +12,9 @@
 <script type="text/javascript" src="${ctx}/static/js/scrollTitle.js?v=1"></script>
 <script type="text/javascript">
 $(function(){
-	jsUtil.datepicker(".time");// 绑定日历
+	jsUtil.twoOrMoreRestrictDate('.time', 'max', 0);// 绑定日历
+	jsUtil.twoOrMoreRestrictDate('.mintime', 'min', 0);
 	new Grid().init().bindExport(); // 生成Gird
-
 });
 </script>
 </head>
@@ -53,8 +53,8 @@ $(function(){
     		<td class="f14 namewidth1" align="right">举办时间：</td>
     		<td class="f14 namewidth2" align="left" width="16%">
     			<div class="vm">
-	    			<input class="text_input2 input_close globle_img time" name="search_GTE_beginDate"
-	    				type="text" readonly/>-<input class="text_input2 input_close globle_img time" name="search_LTE_endDate"
+	    			<input class="text_input2 input_close globle_img mintime" name="search_GTE_beginDate"
+	    				type="text" readonly/>-<input class="text_input2 input_close globle_img mintime" name="search_LTE_endDate"
 	    				type="text" readonly/>
     			</div>
     		</td>

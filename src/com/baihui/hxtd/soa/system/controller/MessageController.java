@@ -95,8 +95,12 @@ public class MessageController {
         logger.info("获取分页数据");
         
          if("recived".contains(type)){
+        	page.setHibernateOrderBy("status");
+         	page.setHibernateOrder("asc");
             page = messageService.findRecivePage(searchParams, page,user);
         }else{
+        	page.setHibernateOrderBy("createdTime");
+        	page.setHibernateOrder("desc");
         	page = messageService.findSendPage(searchParams, page,user);
         }
         logger.info("以DTO格式返回");
@@ -116,13 +120,11 @@ public class MessageController {
 	@RequestMapping("/toQueryPage.do")
 	public String toQueryPage(@RequestParam(value = "pageNo", defaultValue = "1") int pageNumber,
             @RequestParam(value = "pageSize", defaultValue = "10") int pageSize,
-            @RequestParam(value = "pageOrderBy", defaultValue = "status") String orderBy,
-            @RequestParam(value = "pageOrder", defaultValue = "asc") String order,
+            @RequestParam(value = "pageOrderBy", defaultValue = "createdTime") String orderBy,
+            @RequestParam(value = "pageOrder", defaultValue = "desc") String order,
             Model model) {
 		logger.info("MessageController.toQueryPage跳转系统消息列表页");
 		HibernatePage<UserMessage> page = new HibernatePage<UserMessage>(pageNumber, pageSize);
-        page.setHibernateOrderBy(orderBy);
-        page.setHibernateOrder(order);
         model.addAttribute("page", page);
        	return "/system/message/list";
 	}

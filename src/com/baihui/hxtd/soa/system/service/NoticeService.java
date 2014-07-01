@@ -52,18 +52,15 @@ public class NoticeService {
 	        DetachedCriteria criteria = DetachedCriteria.forClass(Notice.class);
 	        criteria.setFetchMode("creater", FetchMode.JOIN);
 	        criteria.setFetchMode("modifier", FetchMode.JOIN);
-	        if("dead".equals(type)){
-	        	//查过期的公告
-	            searchParams.put("LTE_deadTime", new Date());
-	        }else if("all".equals(type)){
+	        if("all".equals(type)){
 	        	//查看所有信息
+	        	searchParams.put("GTE_deadTime", new Date());
 	        }else if("unsend".equals(type)){
 	        	//未发送且未过期
 	        	searchParams.put("GTE_sentTime", new Date());
 	        	searchParams.put("GTE_deadTime", new Date());
 	        }
-	        else{
-	        	
+	        else if("sended".equals(type)){
 	        	//默认查未过期且已发送的公告
 	        	searchParams.put("GTE_deadTime", new Date());
 	        	searchParams.put("LTE_sentTime", new Date());

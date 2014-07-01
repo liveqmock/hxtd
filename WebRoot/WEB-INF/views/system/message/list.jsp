@@ -23,11 +23,14 @@
 	        jsUtil.datepicker(".time");
 	        
             //var grid = new Grid().init().bindExport();
-            new Grid().init({gridName: "accept", gridSelector: ".accept", resultTemplateId: "accept-template"});
             new Grid().init({gridName: "send", gridSelector: ".send", resultTemplateId: "send-template"});
+            new Grid().init({gridName: "accept", gridSelector: ".accept", resultTemplateId: "accept-template"});
             $C.tab({onSelected: function (event, title, panel) {
                 $("[name=hibernatePageNo]").val(1);
-            }})
+            }
+            }
+            );
+	        $C.tab({defaultSelected: window.location.href.indexOf("revice") > -1 ? 0 : 1})
         });
     </script>
 </head>
@@ -48,12 +51,13 @@
                 </div>
             </td>
             <td width="namewidth3">
-    			<a href="javascript:void(0);" class="c_222 block cp fr ml10 packup globle_img mt8 mr20 more" title="展开"></a>
+                <a href="javascript:;" class="c_222 block cp fr ml10 globle_img mt8 mr20 "></a>
                 <a href="javascript:void(0);" class="a_underline block_inline fr w_blue mt5 reset" >清除</a>
                 <a href="javascript:void(0);" class="block_inline c_white lh25 fr mr10 submit"><b class="allbtn_l block fl"></b><b class="allbtn_r pr13 block fl w_auto f14">查&nbsp;&nbsp;询</b></a>
     		</td>
             <td class="f14 namewidth1" align="right"></td>
             <td class="f14 namewidth2" align="left"></td>
+            <input type="hidden" name="hh" value=${hh}/>
             <tags:paginationparams page="${page}"/>
         </tr>
     </table>
@@ -61,11 +65,11 @@
 <div class="cb"></div>
 <div class="ml35 mr35">
     <ul class="fl id_table3 w block cb mt10 tab-titles" style="border-bottom:5px solid #626262; height:32px;" fortabpanels>
-        <li class="tab-title" fortabpanel="#tabs-recived">
+        <li class="tab-title" fortabpanel="#tabs-recived" id="recived">
             <b class="h_tabbtn_l w25 block fl"></b>
             <b class="h_tabbtn_r pr25 w_auto f14 block fr lh32 cp id_nav pr">接收消息</b>
         </li>
-        <li class="tab-title" fortabpanel="#tabs-send">
+        <li class="tab-title" fortabpanel="#tabs-send" id="send">
             <b class="h_tabbtn_l w25 block fl"></b>
             <b class="h_tabbtn_r  pr25 w_auto f14 block fr lh32 cp id_nav pr">已发消息</b>
         </li>
@@ -128,8 +132,8 @@
       									<span class="block" style="background-color:#f5f5f6; 
      												 width:238px; height:100%; border-left:1px solid #666666; border-right:1px solid #666666;">
        									<span class=" block ml10 mr10">
-      										 <h1>名称：</h1>
-      										<p class="fbnone">{$T.row.message.title}</p>
+    								    <h1>名称：</h1>
+    									<p class="fbnone">{$T.row.message.title}</p>
        									<h1>内容：</h1>
        									<p class="fbnone">{$T.row.message.content}</p>
        									<h1>接收时间：</h1>

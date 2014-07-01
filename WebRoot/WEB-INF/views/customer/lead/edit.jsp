@@ -58,7 +58,7 @@ $(function(){
 	//修改为根据ID选择组件，之前用name选择组件当name中出现“.”时有问题
 	new PCAS("province","city","county",province,city,county);
 });
-function searchData(action){//搜索弹出框
+function searchData(action){ //搜索弹出框
 	var url, title;
 	if(action == "owner"){
 		url = "${ctx}/system/user/toQueryPage.comp";
@@ -70,15 +70,16 @@ function searchData(action){//搜索弹出框
 		url = "${ctx}/project/supplier/toQueryPage.comp";
 		title = "供应商";
 	}
-	jsUtil.dialogIframe(url, title, 800, 465, function(){//确定回调
-		var ckObj = $(":checked", window.frames["dialogIframe"].document);
-		if(ckObj.length > 0){
-			$("#txt_" + action).val(ckObj.parent().next().text());
-			$("#hide_" + action +"_id").val(ckObj.val());
-		}
+	jsUtil.dialogIframe(url, title, 800, 465, 
+		function(){ // 确定回调
+			var $userObj = $('.bor_e28d1f', window.frames["dialogIframe"].document);
+			if($userObj.length > 0){
+				$("#txt_" + action).val($userObj.find("td:eq(0)").text());
+				$("#hide_" + action +"_id").val($userObj.attr("id"));
+			}
 	});
 }
-function clearInputVal(obj){//清除
+function clearInputVal(obj){ //清除
 	$(obj).prevAll("input").val('');
 }
 </script>
@@ -206,13 +207,6 @@ function clearInputVal(obj){//清除
 			</tr>
 			<tr>
 				<td align="right">
-					卡号码：
-				</td>
-				<td align="left">
-					<input type="text" name="cardNum" value="${lead.cardNum }"
-						class="text_input3" />
-				</td>
-				<td align="right">
 					<span class="w_red">*&nbsp;</span>卡类型：
 				</td>
 				<td align="left">
@@ -227,6 +221,13 @@ function clearInputVal(obj){//清除
 							</option>
 						</c:forEach>
 					</select>
+				</td>
+				<td align="right">
+					卡号码：
+				</td>
+				<td align="left">
+					<input type="text" name="cardNum" value="${lead.cardNum }"
+						class="text_input3 {maxlength:22}" />
 				</td>
 			</tr>
 			<tr>

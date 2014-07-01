@@ -8,63 +8,55 @@
 <c:set var="ctx" value="${pageContext.request.contextPath}"/>
 <html>
 <head>
-	<title>客户编辑页</title>
-	<link href="${ctx}/static/css/stressing/detail.css" rel="stylesheet" type="text/css" />
-	<script type="text/javascript" src="${ctx}/static/js/jquery.metadata.js"></script>
-	<script type="text/javascript" src="${ctx}/static/js/jquery.validate.js"></script>
-	<script type="text/javascript" src="${ctx}/static/js/validator.js"></script>
-	<script type="text/javascript" src="${ctx}/static/js/pacs.js"></script>
-	<script type="text/javascript">${applicationScope.VC_PCAS}</script>
-	<script type="text/javascript">
-		$(function(){
-			$("#save").click(function(){
-				var $form = $("#form");
-				if($("#form").valid()){
-					RcmsAjax.ajax($form.attr("action"),function(result){
-						//redirect
-						var id = result.result.result;
-						setTimeout(function(){
-							window.location.replace("${ctx}/customer/customer/toViewPage.do?id="+id)
-						},500);
-					},null,$form.formSerialize());
-				}
-				return false;
-			});
-			$("#saveAndAdd").click(function(){
-				var $form = $("#form");
-				if($form.valid()){
-					RcmsAjax.ajax($form.attr("action"),function(result){
-						setTimeout(function(){
-							window.location.replace("${ctx}/customer/customer/toAddPage.do")
-						},500);
-					},null,$form.formSerialize());
-				}
-				return false;
-			});
-			
-			//获得省市县代码，加载三级联动
-			var province = '${customer.province.id}';
-			var city = '${customer.city.id}';
-			var county = '${customer.county.id}';
-			//修改为根据ID选择组件，之前用name选择组件当name中出现“.”时有问题
-			new PCAS("province","city","county",province,city,county);
-		});
-	</script>
-	<script type="text/javascript"> 
-	function searchData(action){//搜索弹出框
-			jsUtil.dialogIframe("${ctx}/system/user/toQueryPage.comp", "负责人", 800, 420, function(){// 确定回调
+<title>客户编辑页</title>
+<link href="${ctx}/static/css/stressing/detail.css" rel="stylesheet" type="text/css" />
+<script type="text/javascript" src="${ctx}/static/js/jquery.metadata.js"></script>
+<script type="text/javascript" src="${ctx}/static/js/jquery.validate.js"></script>
+<script type="text/javascript" src="${ctx}/static/js/validator.js"></script>
+<script type="text/javascript" src="${ctx}/static/js/pacs.js"></script>
+<script type="text/javascript">${applicationScope.VC_PCAS}</script>
+<script type="text/javascript">
+$(function(){
+	new PCAS("province", "city", "county", '${customer.province.id}', 
+		'${customer.city.id}', '${customer.county.id}'); // 修改为根据ID选择组件，之前用name选择组件当name中出现“.”时有问题
+	$("#save").click(function(){
+		var $form = $("#form");
+		if($("#form").valid()){
+			RcmsAjax.ajax($form.attr("action"), function(result){
+				var id = result.result.result;
+				setTimeout(function(){
+					window.location.replace("${ctx}/customer/customer/toViewPage.do?id=" + id);
+				},500);
+			}, null, $form.formSerialize());
+		}
+		return false;
+	});
+	$("#saveAndAdd").click(function(){
+		var $form = $("#form");
+		if($form.valid()){
+			RcmsAjax.ajax($form.attr("action"), function(result){
+				setTimeout(function(){
+					window.location.replace("${ctx}/customer/customer/toAddPage.do");
+				},500);
+			}, null, $form.formSerialize());
+		}
+		return false;
+	});
+}); 
+function searchData(action){ // 搜索
+	jsUtil.dialogIframe("${ctx}/system/user/toQueryPage.comp", "负责人", 800, 420, 
+		function(){ // 确定回调
 			var $userObj = $(".bor_e28d1f", window.frames["dialogIframe"].document);
 			if($userObj.length > 0){
-				$("#txt_" + action).val($userObj.find("td:eq(1)").text());
+				$("#txt_" + action).val($userObj.find("td:eq(0)").text());
 				$("#hide_" + action +"_id").val($userObj.attr("id"));
 			}
-		});
-		}
-	</script> 
+	});
+}
+</script> 
 </head>
 <body>
-<div class="cb"></div>
-<form id="form" action="${ctx }${funcUrl}" method="post">
+<form id="form" action="${ctx}${funcUrl}" method="post">
 	<div class="ml35 mr35 mt20 block cb cb">
 		<b class="table_headl globle_img block fl"></b>
 		<div class="fl table_headc fl w99b">
@@ -89,8 +81,8 @@
 				<select name="type.id" class="select1 pr ">
 					<option value="040301">--无--</option>
 						<c:forEach items="${cType}" var="type">
-							<option value="${type.id }"
-							<c:if test="${customer.type.id==type.id }">
+							<option value="${type.id}"
+							<c:if test="${customer.type.id == type.id}">
 								selected
 							</c:if>
 							>${type.key }</option>
@@ -100,17 +92,17 @@
 		</tr>
 		<tr>
 			<td align="right" width="15%"><span class="w_red">*&nbsp;</span>客户名称：</td>
-			<td align="left"><input class="text_input3 required" name="name" type="text" value="${customer.name }"/></td>
+			<td align="left"><input class="text_input3 required" name="name" type="text" value="${customer.name}"/></td>
 			<td align="right" width="15%"><span class="w_red">*&nbsp;</span>客户来源：</td>
 			<td align="left">
 				<select name="source.id" class="select1 pr requiredSelect">
 					<option value="-1">--无--</option>
 					<c:forEach items="${source}" var="source">
-					<option value="${source.id }"
-							<c:if test="${customer.source.id==source.id }">
+					<option value="${source.id}"
+							<c:if test="${customer.source.id == source.id}">
 								selected
 							</c:if>
-							>${source.key }</option>
+							>${source.key}</option>
 					</c:forEach>
 				</select>
 			</td>
@@ -121,11 +113,11 @@
 				<select name="cardType.id" class="select1 pr">
 					<option value="040303">--无--</option>
 						<c:forEach items="${cardType}" var="cardType">
-					       <option value="${cardType.id }"
-							<c:if test="${customer.cardType.id==cardType.id }">
+					       <option value="${cardType.id}"
+							<c:if test="${customer.cardType.id == cardType.id}">
 								selected
 							</c:if>
-							>${cardType.key }</option>
+							>${cardType.key}</option>
 					   </c:forEach>
 				</select>
 			</td>
@@ -134,32 +126,32 @@
 				<select name="riskGrade.id" class="select1 pr">
 					<option value="040304">--无--</option>
 						<c:forEach items="${riskGrade}" var="riskGrade">
-					       <option value="${riskGrade.id }"
-							<c:if test="${customer.riskGrade.id==riskGrade.id }">
+					       <option value="${riskGrade.id}"
+							<c:if test="${customer.riskGrade.id == riskGrade.id}">
 								selected
 							</c:if>
-							>${riskGrade.key }</option>
+							>${riskGrade.key}</option>
 						</c:forEach>
 				</select>
 			</td>
 		</tr>
 		<tr>
 			<td align="right" width="15%">证件号：</td>
-			<td align="left"><input class="text_input3" name="cardNum" type="text" value="${customer.cardNum }"/></td>
+			<td align="left"><input class="text_input3" name="cardNum" type="text" value="${customer.cardNum}"/></td>
 			<td align="right" width="15%"><span class="w_red">*&nbsp;</span>电话：</td>
-			<td align="left"><input class="text_input3 required isPhone" name="phone" type="text" value="${customer.phone }"/></td>
+			<td align="left"><input class="text_input3 required isPhone" name="phone" type="text" value="${customer.phone}"/></td>
 		</tr>
 		<tr>
 			<td align="right" width="15%"><span class="w_red">*&nbsp;</span>手机：</td>
-			<td align="left"><input class="text_input3 required isMobile" name="mobile" type="text" value="${customer.mobile }"/></td>
+			<td align="left"><input class="text_input3 required isMobile" name="mobile" type="text" value="${customer.mobile}"/></td>
 			<td align="right" width="15%">邮编：</td>
-			<td align="left"><input class="text_input3" name="postCode" type="text" value="${customer.postCode }"/></td>
+			<td align="left"><input class="text_input3" name="postCode" type="text" value="${customer.postCode}"/></td>
 		</tr>
 		<tr>
 			<td align="right" width="15%"><span class="w_red">*&nbsp;</span>传真：</td>
-			<td align="left"><input class="text_input3 required isTel" name="fax" type="text" value="${customer.fax }"/></td>
+			<td align="left"><input class="text_input3 required isTel" name="fax" type="text" value="${customer.fax}"/></td>
 			<td align="right" width="15%"><span class="w_red">*&nbsp;</span>公司：</td>
-			<td align="left"><input class="text_input3 required" name="company" type="text" value="${customer.company }"/></td>
+			<td align="left"><input class="text_input3 required" name="company" type="text" value="${customer.company}"/></td>
 		</tr>
 		<tr>
 			<td  align="right" width="15%">开户银行：</td>
@@ -168,7 +160,7 @@
 					<option value="040307">--无--</option>
 						<c:forEach items="${openBank}" var="openBank">
 					       <option value="${openBank.id }"
-							<c:if test="${customer.openBank.id==openBank.id }">
+							<c:if test="${customer.openBank.id == openBank.id}">
 								selected
 							</c:if>
 							>${openBank.key }</option>
@@ -176,21 +168,21 @@
 				</select>
 			</td>
 			<td align="right" width="15%">银行户名：</td>
-			<td align="left"><input class="text_input3" name="bankName" type="text" value="${customer.bankName }"/></td>
+			<td align="left"><input class="text_input3" name="bankName" type="text" value="${customer.bankName}"/></td>
 		</tr>
 		<tr>
 			<td align="right" width="15%">账号：</td>
-			<td align="left"><input class="text_input3" name="bankAccount" type="text" value="${customer.bankAccount }"/></td>
+			<td align="left"><input class="text_input3" name="bankAccount" type="text" value="${customer.bankAccount}"/></td>
 			<td align="right" width="15%">所有权：</td>
 			<td align="left">
 			<select name="ownerShip.id" class="select1 pr ">
 				<option value="040306">--无--</option>
 					<c:forEach items="${ownerShip}" var="ownerShip">
-				       <option value="${ownerShip.id }"
-						<c:if test="${customer.ownerShip.id==ownerShip.id }">
+				       <option value="${ownerShip.id}"
+						<c:if test="${customer.ownerShip.id == ownerShip.id}">
 							selected
 						</c:if>
-						>${ownerShip.key }</option>
+						>${ownerShip.key}</option>
 					</c:forEach>
 				</select>
 			</td>
@@ -201,11 +193,11 @@
 				<select name="industry.id" class="select1 pr requiredSelect ">
 					<option value="-1">--无--</option>
 						<c:forEach items="${industry}" var="industry">
-					       <option value="${industry.id }"
-							<c:if test="${customer.industry.id==industry.id }">
+					       <option value="${industry.id}"
+							<c:if test="${customer.industry.id == industry.id}">
 								selected
 							</c:if>
-							>${industry.key }</option>
+							>${industry.key}</option>
 						</c:forEach>
 				</select>
 			</td>
@@ -236,7 +228,6 @@
 			<td align="right" width="15%" valign="top">备注：</td>
 			<td align="left" width="85%" valign="top"><textarea name="remark" class="remarks_input1" style="resize: none;">${customer.remark}</textarea></td>
 		</tr>
-		</tr>
 	</table>
 	<div class=" h40"></div>
 	</div>
@@ -245,7 +236,6 @@
 			<li><a id="save" class="block c_white lh25 mr10" href="javascript:;"><b class="allbtn_l block fl"></b><b class="allbtn_r pr13 block fl w_auto f14">保&nbsp;&nbsp;存</b></a></li>
 			<li><a id="saveAndAdd" class="block c_white lh25 mr10" href="javascript:;"><b class="allbtn_l block fl"></b><b class="allbtn_r pr13 block fl w_auto f14">保存并新建</b></a></li>
 			<li><a class="block c_white lh25 mr10"  href="${ctx}/customer/customer/toQueryPage.do"><b class="allbtn_l block fl"></b><b class="allbtn_r pr13 block fl w_auto f14">取&nbsp;&nbsp;消</b></a></li>
-			<div class="clear"></div>
 		</ul>
 	</div>
 </form>

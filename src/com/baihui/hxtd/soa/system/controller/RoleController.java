@@ -197,7 +197,7 @@ public class RoleController {
     public String modify(Role role, ModelMap modelMap) {
         logger.info("修改");
 
-        if (commonService.isInitialized(User.class, role.getId())) {
+        if (commonService.isInitialized(Role.class, role.getId())) {
             return new JsonDto("系统初始化数据不允许修改！").toString();
         }
 

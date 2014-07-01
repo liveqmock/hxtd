@@ -41,8 +41,7 @@ public class IndexController {
 
     @RequestMapping(value = "/system/toViewPage.do")
     public String systemIndex(Model model) {
-//        model.addAttribute("menus", menuService.findByShowlocation(user.getId()));
-        model.addAttribute(Constant.VR_LOCATION_TITLE, "设置");
+        model.addAttribute(Constant.VR_LOCATION_TITLE, Menu.SETTING);
         return "/system/index";
     }
 

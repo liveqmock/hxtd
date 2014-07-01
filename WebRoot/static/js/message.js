@@ -30,10 +30,10 @@ message._requestMessageAjax = function (data){
 	   		var ss='<li>系统消息：</li>';
 	   		var len=messages.length>3?3:messages.length;
 	   		if(len==0){
-	   			ss+='<li>无</li>';
+	   			ss+='<li>无新消息</li>';
 	   		}else{
 	   		for(var i=0;i<len;i++){
-	           ss+='<li><a href=\"'+message.setting.rootPath+'/system/message/toViewPage.do?id='+messages[i].id+'\">'+messages[i].message.title+'</a></li>';
+	           ss+='<li><c:if test=\"${VS_HAS_FUNCTIONS.messageView}\"><a href=\"'+message.setting.rootPath+'/system/message/toViewPage.do?id='+messages[i].id+'\">'+messages[i].message.title+'</a></c:if></li>';
 	   		}
 	   		}
 	   		$("#messages").html(ss);
@@ -54,11 +54,11 @@ message._requestNoticeAjax=function (data){
 			$("#notice").removeClass().addClass("head_system globle_img fl mr15");
 		}
 		var notices=eval(data.result.result);
-		var ss='<li>公告：</li>';
+		var ss='';
 		if(notices.length>0){
-		      ss+='<li><a href=\"'+message.setting.rootPath+'/system/notice/toViewPage.do?id='+notices[0].id+'\">'+notices[0].title+'</a></li>';
+		      ss+='<li><c:if test=\"${VS_HAS_FUNCTIONS.noticeView}\"><a href=\"'+message.setting.rootPath+'/system/notice/toViewPage.do?id='+notices[0].id+'\">'+notices[0].title+'</a></c:if></li>';
 		}else{
-			ss+='<li>无</li>';
+			ss+='<li>无公告</li>';
 		}
 		$("#notices").html(ss);
 };
@@ -68,7 +68,7 @@ message._requestNoticeAjax=function (data){
  */
 message._requestAjax=function (){
 	   RcmsAjax.ajaxNoMsg (message.setting.rootPath+"/system/message/query.do?search_EQ_status=0&type=recived",message._requestMessageAjax);
-	   RcmsAjax.ajaxNoMsg (message.setting.rootPath+"/system/notice/query.do",message._requestNoticeAjax);
+	   RcmsAjax.ajaxNoMsg (message.setting.rootPath+"/system/notice/query.do?type=sended&orderBy=sentTime&order=desc",message._requestNoticeAjax);
 };
 
 /*

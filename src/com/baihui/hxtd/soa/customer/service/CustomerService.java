@@ -21,6 +21,7 @@ import com.baihui.hxtd.soa.customer.dao.CustomerDao;
 import com.baihui.hxtd.soa.customer.entity.Customer;
 import com.baihui.hxtd.soa.system.dao.UserDao;
 import com.baihui.hxtd.soa.system.entity.Notice;
+import com.baihui.hxtd.soa.system.entity.User;
 import com.baihui.hxtd.soa.system.service.DataShift;
 
 /**
@@ -85,18 +86,29 @@ public class CustomerService {
      * 保存客户信息
      * @param lead
      */
-	public void save(Customer customer) {
+	public void add(Customer customer,User user) {
 		logger.info("保存客户信息{}", customer);
 		customer.setIsDeleted(false);
 		customerDao.save(customer);
-
 	}
+	
+	/**
+     * 保存客户信息
+     * @param lead
+     */
+	public void modify(Customer customer,User user) {
+		logger.info("保存客户信息{}", customer);
+		customer.setIsDeleted(false);
+		customerDao.save(customer);
+	}
+	
+	
 	
 	 /**
      * delete(删除客户信息)
      * @param id
      */
-    public void delete(Long... id) {
+    public void delete(User user, Long... id) {
     	customerDao.logicalDelete(id);
     }
     

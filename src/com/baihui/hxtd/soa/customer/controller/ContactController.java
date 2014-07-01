@@ -49,7 +49,7 @@ import com.baihui.hxtd.soa.util.JsonDto;
  */
 @Controller
 @RequestMapping(value = "/customer/contact")
-@SessionAttributes(value = { Constant.VS_USER_ID, Constant.VS_DATASHIFT })
+@SessionAttributes(value = { Constant.VS_USER, Constant.VS_USER_ID, Constant.VS_DATASHIFT })
 public class ContactController {
 
 	//private Logger logger = LoggerFactory.getLogger(this.getClass());
@@ -155,7 +155,7 @@ public class ContactController {
 			contact.setCounty(null);
 		}
 		
-		contactService.save(contact);
+		contactService.add(contact, user);
 		
 		return JsonDto.add(contact.getId()).toString();
 	}
@@ -186,7 +186,8 @@ public class ContactController {
 	@RequestMapping(value = "/modify.do")
 	public String modify(Contact contact, 
 			@ModelAttribute(Constant.VS_USER_ID) Long userId) {
-		contact.setModifier(new User(userId));
+		User user = new User(userId);
+		contact.setModifier(user);
 		if(contact.getCustomer().getId() == null){
 			contact.setCustomer(null);
 		}
@@ -209,7 +210,7 @@ public class ContactController {
 			contact.setCounty(null);
 		}
 		
-		contactService.save(contact);
+		contactService.modify(contact, user);
 		
 		return JsonDto.modify(contact.getId()).toString();
 	}
@@ -236,8 +237,9 @@ public class ContactController {
 	 */
 	@ResponseBody
 	@RequestMapping(value = "/delete.do")
-	public String delete(long[] id) {
-		contactService.delete(id);
+	public String delete(ModelMap modelMap, Long... id) {
+		User user = (User)modelMap.get(Constant.VS_USER);
+		contactService.delete(user, id);
 		
 		JsonDto json = new JsonDto("删除成功");
 		json.setSuccessFlag(true);

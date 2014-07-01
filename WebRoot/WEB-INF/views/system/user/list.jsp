@@ -96,8 +96,8 @@
 
                 <div class="ie_head">
                     <ul class="fl id_table1 mt10 ml10">
+                        <li><a href="javascript:void(0)" uri="${ctx}/system/user/delete.do" class="block c_white lh25 deletesome mr10"><b class="allbtn_l block fl"></b><b class="allbtn_r pr13 block fl w_auto f14">删&nbsp;&nbsp;除</b></a></li>
                         <c:if test="${VS_HAS_FUNCTIONS.userDelete}">
-                            <li><a href="javascript:void(0)" uri="${ctx}/system/user/delete.do" class="block c_white lh25 deletesome mr10"><b class="allbtn_l block fl"></b><b class="allbtn_r pr13 block fl w_auto f14">删&nbsp;&nbsp;除</b></a></li>
                         </c:if>
                         <c:if test="${VS_HAS_FUNCTIONS.userAdd}">
                             <li><a href="${ctx}/system/user/toAddPage.do?organizationId=${organizationId}" class="block c_white lh25 add mr10"><b class="allbtn_l block fl"></b><b class="allbtn_r pr13 block fl w_auto f14">新&nbsp;&nbsp;增</b></a></li>
@@ -156,18 +156,22 @@
                                     <a href="${ctx}/system/user/toViewPage.do?id={$T.row.id}" class=" block_inline s_detail_btn  globle_img ml10" title="详情"></a>
                                 </c:if>
                                 <c:if test="${VS_HAS_FUNCTIONS.userModify}">
+                                    {#if !$T.row.isInitialized}
                                     <a href="${ctx}/system/user/toModifyPage.do?id={$T.row.id}" class=" block_inline s_edit_btn globle_img ml10" title="编辑"></a>
+                                    {#/if}
                                 </c:if>
                                 <c:if test="${VS_HAS_FUNCTIONS.userDelete}">
+                                    {#if !$T.row.isInitialized}
                                     <a href="javascript:void(0)" uri="${ctx}/system/user/delete.do?id={$T.row.id}" class=" block_inline s_dump_btn  globle_img ml10 delete" title="删除"></a>
+                                    {#/if}
                                 </c:if>
                                 <c:if test="${VS_HAS_FUNCTIONS.userEnable}">
-                                    {#if !$T.row.isActive}
+                                    {#if !$T.row.isInitialized&&!$T.row.isActive}
                                     <a href="javascript:void(0)" uri="${ctx}/system/user/enable.do?id={$T.row.id}" class="globle_img h_on block_inline enable" title="启用"></a>
                                     {#/if}
                                 </c:if>
                                 <c:if test="${VS_HAS_FUNCTIONS.userDisable}">
-                                    {#if $T.row.isActive}
+                                    {#if !$T.row.isInitialized&&$T.row.isActive}
                                     <a href="javascript:void(0)" uri="${ctx}/system/user/disable.do?id={$T.row.id}" class="globle_img h_off block_inline disable" title="禁用"></a>
                                     {#/if}
                                 </c:if>

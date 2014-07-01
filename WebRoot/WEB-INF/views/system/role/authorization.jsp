@@ -111,13 +111,20 @@
         </div>
 
         <div id="tabs-component" class="tab-panel">
-            <c:forEach items="${allComponents}" var="item" varStatus="status">
-                <li style="width:16%" class="fl">
-                    <label class="box size81">
-                        <input type="checkbox" name="componentId" value="${item.id}" ${fn:contains(authorizationComponents,item)?"checked":""}>${item.name}
-                    </label>
-                </li>
-            </c:forEach>
+        	<div class="menus1">
+                <div class="clearfix bg_c_blue w menu1">
+	                <a href="javascript:void(0)" class="fl mt5 mb5 ml5 allright block menu menu1"></a>
+            		   <ul class="id_ul4 fr">
+			            <c:forEach items="${allComponents}" var="item" varStatus="status">
+			                <li style="width:16%" class="fl">
+			                    <label class="box size81">
+			                        <input type="checkbox" name="componentId" value="${item.id}" class="function" ${fn:contains(authorizationComponents,item)?"checked":""}>${item.name}
+			                    </label>
+			                </li>
+			            </c:forEach>
+            		  </ul>
+               </div>
+            </div>
         </div>
 
         <div class="h40"></div>

@@ -11,11 +11,6 @@
 <head>
     <title>修改密码</title>
     <link href="${ctx}/static/css/stressing/detail.css" rel="stylesheet" type="text/css" />
-    <script type="text/javascript" src="${ctx}/static/js/jquery.min.js"></script>
-    <script type="text/javascript" src="${ctx}/static/js/jquery.form.js"></script>
-    <script type="text/javascript" src="${ctx}/static/js/js-util.common.js"></script>
-    <script type="text/javascript" src="${ctx}/static/js/js-util.js"></script>
-    <script type="text/javascript" src="${ctx}/static/js/commonAjax.js"></script>
 	<script type="text/javascript" src="${ctx}/static/js/jquery.metadata.js"></script>
 	<script type="text/javascript" src="${ctx}/static/js/jquery.validate.js"></script>
 	<script type="text/javascript" src="${ctx}/static/js/validator.js"></script>
@@ -50,27 +45,54 @@
 			//验证与原密码是否相同
 			$("#oldpwd").blur(function(){
 				var oldpwd = $("#oldpwd").val();
-				RcmsAjax.ajax("${ctx}/system/user/checkPwd?oldpwd="+oldpwd,function(data){
-					if(data.successFlag){
-					    	$("#pwd").html("");
-					    }else{
-					    	$("#pwd").html("密码不一致");
-					    }
+				if(oldpwd!=""){
+				RcmsAjax.ajaxNoMsg("${ctx}/system/user/checkPwd?oldpwd="+oldpwd,function(data){
+					if(data.message!=""){
+						$("#pwd").html(data.message);
+						$("#oldpwd").focus();
+						$('#oldpwd').val(""); 
+					}else{
+						$('#pwd').html(""); 
+					}
 				});
+				}
+				$('#pwd').html(""); 
+			});
+			
+			//验证密码格式
+			$("#newpwd").blur(function(){
+				var regPwd = /^[A-Za-z0-9_\.]+$/;
+				var newpwd = $("#newpwd").val();
+				if(newpwd!=""){
+				if(!regPwd.test(newpwd)){
+					$("#newp").html("密码不符合规范");
+					$("#newpwd").focus();
+					$("#newpwd").val("");
+				}else{
+					$('#newp').html("");
+				}
+				}
+				else{
+					$('#newp').html("");
+				}
 			});
 			
 			//验证两次密码是否一致
 			$("#repwd").blur(function(){
 				var newpwd = $("#newpwd").val();
 				var repwd = $("#repwd").val();
+				if(repwd!=""){
 				if(newpwd!=repwd){
 					$("#diff").html("密码不一致");
 					$("#repwd").focus();
 					$('#repwd').val("");  
+				}
 				}else{
 					$('#diff').html(""); 
 				}
 			});
+			
+			
 		});
 	   
 	</script>
@@ -92,28 +114,29 @@
     <div class="ml35 mr35 bg_c_blue cb h590">
     <div  style="width:50%;" class="margin0">
        <form id="form" action="${ctx}${funcUrl}" method="post" onsubmit="return checkForm();">
-        <table class=" pt20">
+        <table class=" margin0 pt20">
         <tr class=" lh40">
-        <input type="hidden" name="id" value="${user.id}"/>
-        <td width="25%" align="right">请输入旧密码：</td>
+        <td width="40%" align="right">请输入旧密码：</td>
         <td>
         <input type="password" id="oldpwd" name="oldPwd" class="text_input1 required"/>
-        <span id="pwd" class="w_red"></span>
+        <div class="pr"><span class="pa" id="pwd" class="w_red" style="top:-30px; right:-90px; color:red;"></span></div>
         </td>
         </tr>
          <tr class=" lh40">
         <td align="right">请输入新密码：</td>
         <td><input type="password" id="newpwd" name="newPwd" class="text_input1 required"/>
+        <div class="pr"><span class="pa" id="newp" style="top:-30px; right:-90px; color:red;"></span></div>
         </td>
         </tr>
          <tr class=" lh40">
         <td align="right">请再输入一次新密码：</td>
         <td>
-        <input type="password" id="repwd" name="password" class="text_input1 required"/><span id="diff" class="w_red"></span>
-        
+        <input type="password" id="repwd" name="password" class="text_input1 required"/>
+        <div class="pr"><span class="pa" id="diff" style="top:-30px; right:-70px; color:red;"></span></div>
         </td>
         </tr>
         </table>
+        <p style="color:red;" class=" tc pt20" >注：使用字母、数字、下划线和小数点（6～20个字符）。</p>
         <div class="w240 margin0 mt60">
 	        <a class="block c_white lh25 mr10 fl" href="javascript:;" id="reset">
 	        <b class="allbtn_l block fl"></b>

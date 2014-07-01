@@ -12,14 +12,14 @@
 <script type="text/javascript" src="${ctx}/static/js/js-util.common.js?v=1"></script>
 <script type="text/javascript">${applicationScope.VC_PCAS}</script>
 <script type="text/javascript">
-$(function(){// 初始化 
-	jsUtil.bindSave(".add", "form");// 提交表单
+$(function(){
+	jsUtil.bindSave(".add", "form"); // 提交表单
 	new PCAS("province","city","county",'${contact.province.id}','${contact.city.id}','${contact.county.id}');
-	$(".empty").click(function(){// 清除
+	$(".empty").click(function(){ // 清除
 		$(this).prevAll("input").val('');
 	});
 });
-function searchData(action){// 搜索弹出框
+function searchData(action){ // 搜索弹出框
 	var url, title;
 	if(action == "owner"){
 		url = "${ctx}/system/user/toQueryPage.comp";
@@ -31,18 +31,13 @@ function searchData(action){// 搜索弹出框
 		url = "${ctx}/project/supplier/toQueryPage.comp";
 		title = "供应商";
 	}
-	jsUtil.dialogIframe(url, title, 800, 465, function(){// 确定回调
-		var selector;
-		if(action == "owner"){
-			selector = ".bor_e28d1f";
-		} else {
-			selector = ":checked";
-		}
-		var $userObj = $(selector, window.frames["dialogIframe"].document);
-		if($userObj.length > 0){
-			$("#txt_" + action).val($userObj.find("td:eq(1)").text());
-			$("#hide_" + action +"_id").val($userObj.attr("id"));
-		}
+	jsUtil.dialogIframe(url, title, 800, 465, 
+		function(){ // 确定回调
+			var $userObj = $('.bor_e28d1f', window.frames["dialogIframe"].document);
+			if($userObj.length > 0){
+				$("#txt_" + action).val($userObj.find("td:eq(0)").text());
+				$("#hide_" + action +"_id").val($userObj.attr("id"));
+			}
 	});
 }
 </script>

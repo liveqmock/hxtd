@@ -8,6 +8,7 @@ import com.baihui.hxtd.soa.base.utils.Search;
 import com.baihui.hxtd.soa.base.utils.mapper.HibernateAwareObjectMapper;
 import com.baihui.hxtd.soa.base.utils.mapper.JsonMapper;
 import com.baihui.hxtd.soa.base.utils.ztree.TreeNodeConverter;
+import com.baihui.hxtd.soa.common.controller.CommonController;
 import com.baihui.hxtd.soa.common.service.CommonService;
 import com.baihui.hxtd.soa.system.DictionaryConstant;
 import com.baihui.hxtd.soa.system.entity.Dictionary;
@@ -20,8 +21,6 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import org.apache.commons.collections.BidiMap;
 import org.apache.commons.io.FilenameUtils;
 import org.apache.commons.lang3.ArrayUtils;
-import org.apache.commons.lang3.StringUtils;
-import org.apache.commons.lang3.Validate;
 import org.apache.poi.openxml4j.exceptions.InvalidFormatException;
 import org.apache.poi.ss.usermodel.Workbook;
 import org.slf4j.Logger;
@@ -54,7 +53,7 @@ import java.util.Map;
         Constant.VS_ORG_ID, Constant.VS_ORG, Constant.VS_DATASHIFT,
         Constant.VS_MENUS, Constant.VS_ROLES, Constant.VS_FUNCTIONS, Constant.VS_COMPONENTS})
 @SuppressWarnings("unchecked")
-public class UserController {
+public class UserController extends CommonController<User> {
 
     private Logger logger = LoggerFactory.getLogger(this.getClass());
 
@@ -92,6 +91,7 @@ public class UserController {
 
     @Resource
     private MD5 md5;
+
     /**
      * 转至查询用户页面
      */
@@ -479,34 +479,35 @@ public class UserController {
         ImportExport.exportExcel(response, servletContext, "user", users).write(response.getOutputStream());
     }
 
+//    /**
+//     * 导出限制数据
+//     * 1.指定最大条数的
+//     */
+//    @RequestMapping(value = "/export.do", params = "TYPE=limit")
+//    public void exportLimit(HttpServletRequest request, ModelMap modelMap, HttpServletResponse response) throws IOException {
+//        logger.info("导出excel文件");
+//
+//        List<User> users = userService.find((Long) modelMap.get(Constant.VS_ORG_ID));
+//        logger.debug("列表信息数目“{}”", users.size());
+//
+//        logger.info("转换成excel文件并输出");
+//        ServletContext servletContext = request.getSession().getServletContext();
+//        ImportExport.exportExcel(response, servletContext, "user", users).write(response.getOutputStream());
+//    }
+
+
     /**
-     * 导出限制数据
-     * 1.指定最大条数的
-     */
-    @RequestMapping(value = "/export.do", params = "TYPE=limit")
-    public void exportLimit(HttpServletRequest request, ModelMap modelMap, HttpServletResponse response) throws IOException {
-        logger.info("导出excel文件");
-
-        List<User> users = userService.find((Long) modelMap.get(Constant.VS_ORG_ID));
-        logger.debug("列表信息数目“{}”", users.size());
-
-        logger.info("转换成excel文件并输出");
-        ServletContext servletContext = request.getSession().getServletContext();
-        ImportExport.exportExcel(response, servletContext, "user", users).write(response.getOutputStream());
-    }
-
-
-    /**
-      * toOwnerLstPage(跳转至所有者组件列表界面)
-      * @param page 分页设置
-      * @param model ModelMap
-      * @return String 用户组件视图
+     * toOwnerLstPage(跳转至所有者组件列表界面)
+     *
+     * @param page  分页设置
+     * @param model ModelMap
+     * @return String 用户组件视图
      */
     @RequestMapping(value = "/toQueryPage.comp")
     public String toOwnerLstPage(
             HibernatePage<User> page,
             ModelMap model) {
-    	page.setHibernatePageSize(12);// 设置每页显示12个用户
+        page.setHibernatePageSize(12);// 设置每页显示12个用户
         model.addAttribute("page", page);
         model.addAttribute("orgId", model.get(Constant.VS_ORG_ID));
 
@@ -536,11 +537,12 @@ public class UserController {
                     "org"
             }));
             for (User user : org.getOwners()) {//用户
-                sb.append(String.format("{id:%s, name:\"%s\", pId:-%s, type:\"%s\"},", new Object[]{
+                sb.append(String.format("{id:%s, name:\"%s\", pId:-%s, type:\"%s\",chkDisabled:%s},", new Object[]{
                         user.getId(),
                         user.getRealName(),
                         org.getId(),
-                        u.getId() == user.getId() ? "org" : "user"
+                        "user",
+                        user.getId() == u.getId() ? true : false
                 }));
             }
             oldOrgId = org.getId();
@@ -550,50 +552,52 @@ public class UserController {
         model.addAttribute("json", sb.toString());
         return "/system/message/listcomp";
     }
-    
+
     /**
      * 修改密码跳转页
+     *
      * @author huizijing
      * @since 2014-6-30
      */
     @RequestMapping(value = "/toModifyPasswordPage.do")
-    public String toModifyPwd(User user, ModelMap model,HttpServletRequest request) {
+    public String toModifyPwd(User user, ModelMap model, HttpServletRequest request) {
         logger.info("转至修改密码页面");
         user = (User) request.getSession().getAttribute(Constant.VS_USER);
-        String funcUrl="/system/user/modifyPassword.do";
+        String funcUrl = "/system/user/modifyPassword.do";
         model.addAttribute("user", user);
         model.addAttribute("funcUrl", funcUrl);
         logger.debug("用户“{}”", user.getName());
         return "/system/user/password";
     }
-    
+
     /**
      * 修改密码
+     *
      * @author huizijing
      * @since 2014-6-30
      */
     @ResponseBody
     @RequestMapping(value = "/modifyPassword.do")
-    public String modifyPwd(String password,Long id){
-    	userService.modifyPasswordById(id,password);
+    public String modifyPwd(String password, Long id) {
+        userService.modifyPasswordById(id, password);
         JsonDto jsonDto = new JsonDto("修改密码成功");
         jsonDto.setSuccessFlag(true);
         return jsonDto.toString();
     }
-    
+
     @ResponseBody
     @RequestMapping(value = "/checkPwd")
-    public String checkPwd(String oldpwd,HttpServletRequest request){
-    	User user = (User) request.getSession().getAttribute(Constant.VS_USER);
-    	if(md5.getMD5ofStr(oldpwd).equals(user.getPassword())){
-    		JsonDto jsonDto = new JsonDto("原密码输入正确");
+    public String checkPwd(String oldpwd, HttpServletRequest request) {
+        User user = (User) request.getSession().getAttribute(Constant.VS_USER);
+        if (md5.getMD5ofStr(oldpwd).equals(user.getPassword())) {
+            JsonDto jsonDto = new JsonDto("");
             jsonDto.setSuccessFlag(true);
             return jsonDto.toString();
-    	}else{
-    		JsonDto jsonDto = new JsonDto("原密码不正确");
-            jsonDto.setSuccessFlag(false);
+        } else {
+            JsonDto jsonDto = new JsonDto("原密码不正确");
+            jsonDto.setSuccessFlag(true);
             return jsonDto.toString();
-    	}
+        }
     }
-    
+
 }

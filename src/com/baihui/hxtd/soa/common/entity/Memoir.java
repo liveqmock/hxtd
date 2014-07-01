@@ -3,8 +3,6 @@ package com.baihui.hxtd.soa.common.entity;
 
 import java.io.Serializable;
 import java.util.Date;
-import java.util.HashSet;
-import java.util.Set;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -13,8 +11,6 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
-import javax.persistence.JoinTable;
-import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
@@ -98,13 +94,15 @@ public class Memoir implements Serializable {
 	 * 删除标记
 	 */
 	@Column(name = "IS_DELETED")
-	private Boolean isDeleted;
+	private Boolean isDeleted = false;
 	/**
 	 * 参与沟通用户
-	 */
+	 
 	@ManyToMany
     @JoinTable(name = "Memoir_User", joinColumns = {@JoinColumn(name = "MEMOIR_ID")}, inverseJoinColumns = {@JoinColumn(name = "USER_ID")})
     private Set<User> memoirUser = new HashSet<User>();
+    */
+	
 	/**
 	 * 创建者
 	 */
@@ -115,7 +113,7 @@ public class Memoir implements Serializable {
 	 * 创建时间
 	 */
 	@JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss", timezone = "GMT+08:00")
-	@Column(name = "CREATED_TIME")
+	@Column(name = "CREATED_TIME", updatable = false)
 	private Date createdTime;
 	/**
 	 * 最后修改者
@@ -190,12 +188,12 @@ public class Memoir implements Serializable {
 	public void setIsDeleted(Boolean isDeleted) {
 		this.isDeleted = isDeleted;
 	}
-	public Set<User> getMemoirUser() {
+	/**public Set<User> getMemoirUser() {
 		return memoirUser;
 	}
 	public void setMemoirUser(Set<User> memoirUser) {
 		this.memoirUser = memoirUser;
-	}
+	}*/
 	public User getCreator() {
 		return creator;
 	}

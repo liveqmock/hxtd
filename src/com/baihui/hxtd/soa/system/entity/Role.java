@@ -3,6 +3,7 @@ package com.baihui.hxtd.soa.system.entity;
 
 import com.baihui.hxtd.soa.common.entity.Initialized;
 import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 
@@ -41,19 +42,19 @@ public class Role implements Serializable, Comparable<Role>, Initialized {
     @Column(name = "IS_INITIALIZED", nullable = false, updatable = false)
     private Boolean isInitialized;
 
-    @JsonIgnore
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "CREATOR_ID", nullable = false, updatable = false)
     private User creator;
 
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss", timezone = "GMT+08:00")
     @Column(name = "CREATED_TIME", nullable = false, updatable = false)
     private Date createdTime;
 
-    @JsonIgnore
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "MODIFIER_ID")
     private User modifier;
 
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss", timezone = "GMT+08:00")
     @Column(name = "MODIFIED_TIME")
     private Date modifiedTime;
 

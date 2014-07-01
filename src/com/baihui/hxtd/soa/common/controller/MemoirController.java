@@ -29,6 +29,7 @@ import com.baihui.hxtd.soa.base.utils.mapper.HibernateAwareObjectMapper;
 import com.baihui.hxtd.soa.common.entity.Memoir;
 import com.baihui.hxtd.soa.common.service.MemoirService;
 import com.baihui.hxtd.soa.system.entity.Dictionary;
+import com.baihui.hxtd.soa.system.entity.Organization;
 import com.baihui.hxtd.soa.system.entity.User;
 import com.baihui.hxtd.soa.system.service.DictionaryService;
 import com.baihui.hxtd.soa.util.JsonDto;
@@ -46,7 +47,7 @@ import com.baihui.hxtd.soa.util.JsonDto;
  */
 @Controller
 @RequestMapping(value = "/common/memoir")
-@SessionAttributes(value = {Constant.VS_USER_ID})
+@SessionAttributes(value = {Constant.VS_USER_ID, Constant.VS_ORG})
 public class MemoirController {
 
 	@Resource
@@ -123,10 +124,14 @@ public class MemoirController {
 	public String add(Memoir memoir,
 			@RequestParam(value = "moduleId") Long moduleId,
 			@RequestParam(value = "moduleType") String moduleType,
-			@ModelAttribute(Constant.VS_USER_ID) Long userId) {
+			@ModelAttribute(Constant.VS_USER_ID) Long userId,
+			ModelMap map) {
 		Dictionary dic = dictionaryService.getByValue(moduleMap.get(moduleType));
 		memoir.setType(dic);//模块类型
 		memoir.setModuleId(moduleId);//模块主键ID
+		
+		Organization org = (Organization) map.get(Constant.VS_ORG);
+		memoir.setOrg(org);
 		
 		User user = new User(userId);
 		memoir.setCreator(user);
@@ -163,7 +168,7 @@ public class MemoirController {
 	  * @param moduleId 模块主键ID
 	  * @param moduleType 模块类型
 	  * @param userId 操作用户ID
-	  * @param request HttpServletRequest
+	  * @param map ModelMap
 	  * @return String 编辑页地址信息
 	 */
 	@ResponseBody
@@ -172,11 +177,17 @@ public class MemoirController {
 			@RequestParam(value = "moduleId") Long moduleId,
 			@RequestParam(value = "moduleType") String moduleType,
 			@ModelAttribute(Constant.VS_USER_ID) Long userId,
-			HttpServletRequest request) {
+			ModelMap map) {
 		Dictionary dic = dictionaryService.getByValue(moduleMap.get(moduleType));
 		memoir.setType(dic);//模块类型
 		memoir.setModuleId(moduleId);//模块主键ID
-		memoir.setModifier(new User(userId));
+		
+		Organization org = (Organization) map.get(Constant.VS_ORG);
+		memoir.setOrg(org);
+		
+		User user = new User(userId);
+		memoir.setModifier(user);
+		memoir.setEmployee(user);
 		
 		memoirService.save(memoir);
 		

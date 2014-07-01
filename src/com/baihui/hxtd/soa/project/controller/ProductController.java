@@ -249,4 +249,18 @@ public class ProductController {
 		model.addAttribute("dicUnit", dicService.findChildren(DictionaryConstant.VC_DEADLINEUNIT, true));// 期限单位
 		model.addAttribute("dicType", dicService.findChildren(DictionaryConstant.VC_PRODUCTTYPE, true));// 产品类型
 	}
+	
+	
+	/**
+     * toOwnerLstPage(跳转至所有者组件列表界面)
+     * @param page 分页设置
+     * @param model ModelMap
+     * @return String 用户组件视图
+    */
+	@RequestMapping(value = "/toQueryPage.comp")
+	public String toOwnerLstPage(HibernatePage<Product> page, ModelMap model) {
+		page.setHibernatePageSize(12);// 设置每页显示12个用户
+		model.addAttribute("page", page);
+		return "/project/product/listcomp";
+	}
 }

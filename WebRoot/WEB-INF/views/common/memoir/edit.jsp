@@ -1,6 +1,7 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <c:set var="ctx" value="${pageContext.request.contextPath}"/>
+<%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
 <html>
 <head>
 <title>联系纪要</title>
@@ -19,9 +20,9 @@
 <script type="text/javascript" src="${ctx}/static/js/ui/i18n/jquery.ui.datepicker-zh-CN.js"></script>
 <script type="text/javascript">
 $(function(){
-	jsUtil.datepickerNotNow("#time");
+	jsUtil.SingleLimitDate('#time', 'min', 0); // 日历
 });
-function submitForm(){
+function submitForm(){ // 提交表单
 	if($("#form").valid()){
 		var moduleType =$("#moduleType", parent.document).val();
 		var moduleId = $("#moduleId", parent.document).val();
@@ -29,7 +30,7 @@ function submitForm(){
 			$("form").serialize() + "&moduleType=" + moduleType + "&moduleId=" + moduleId);
 	}
 }
-function callback(obj){
+function callback(obj){ // ajax回调函数
 	if(obj.successFlag){
 		parent.DIALOG.dialog("close");
 		parent.grid.loadGrid();
@@ -47,8 +48,9 @@ function callback(obj){
           <td width="25%" align="right"><i class="mt3 block">下次联系时间：</i></td>
           <td>
           	<div class="vm">
+          	  <fmt:formatDate value="${memoir.nextContactTime}" pattern="yyyy-MM-dd" var="nextContactTime"/>
               <input id="time" name="nextContactTime" class="text_input2 input_close2 globle_img" 
-              	type="text" value="${memoir.nextContactTime}" readonly/>
+              	type="text" value="${nextContactTime}" readonly/>
             </div>
           </td>
         </tr>
@@ -62,7 +64,7 @@ function callback(obj){
         </tr>
         <tr class="h80">
           <td align="right"><i class="mt3 block">备注：</i></td>
-          <td><textarea name="remark" class="remarks_input3">${contact.remark}</textarea></td>
+          <td><textarea name="remark" class="remarks_input3">${memoir.remark}</textarea></td>
         </tr>
       </table>
     </div>

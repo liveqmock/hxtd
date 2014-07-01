@@ -43,6 +43,16 @@ public class DataShift {
         this.orderRange = orderRange;
     }
 
+    public String toHql(String aliasName) {
+        StringBuffer hql = new StringBuffer();
+        hql.append(String.format(" inner join fetch %s.%s %s", aliasName, getUserFieldName(), getUserAlias()));
+        hql.append(String.format(" inner join fetch %s.%s %s", getUserAlias(), getOrganizationFieldName(), getOrganizationAlias()));
+        String siftUserId = String.format("%s.id=%s", getUserAlias(), getUserId());
+        String siftOrganization = String.format("%s.order between %s and %s", getOrganizationAlias(), getOrderRange().getMinimum(), getOrderRange().getMaximum());
+        hql.append(String.format(" where (%s) or (%s)", siftUserId, siftOrganization));
+        return hql.toString();
+    }
+
     public Boolean getIsDataManager() {
         return isDataManager;
     }

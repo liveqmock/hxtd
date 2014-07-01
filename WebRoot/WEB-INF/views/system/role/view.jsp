@@ -38,8 +38,8 @@
             <tr>
                 <td align="right" width="15%">角色名：</td>
                 <td align="left">${role.name}</td>
-                <td align="right" width="15%">类型：</td>
-                <td align="left">${role.type.key}</td>
+                <td align="right" width="15%"><%--类型：--%></td>
+                <td align="left"><%--${role.type.key}--%></td>
             </tr>
         </table>
         <h1 class="f14 fbnone ml40 pt10">描述信息</h1>

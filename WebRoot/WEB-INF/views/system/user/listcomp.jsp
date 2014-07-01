@@ -12,7 +12,6 @@
 <link href="${ctx}/static/css/application.css" rel="stylesheet" type="text/css"/>
 <script type="text/javascript" src="${ctx}/static/js/jquery.min.js"></script>
 <script type="text/javascript" src="${ctx}/static/js/jquery.custom.js"></script>
-<script type="text/javascript" src="${ctx}/static/js/ui/jquery.ui.datepicker.js"></script>
 <script type="text/javascript" src="${ctx}/static/js/jquery.form.js"></script>
 <script type="text/javascript" src="${ctx}/static/js/api/api.string.js"></script>
 <script type="text/javascript" src="${ctx}/static/js/js-util.js"></script>
@@ -23,7 +22,7 @@
 $(function(){
 	new Grid().init({ paginationSizeShow:false, paginationCountLimit:13 });
 	$(".list .module").live({
-		click: function(){
+		click: function(){ // 样式优先级问题 待解决...
 			$(".module").removeAttr("style");
 			$(this).css({"border":"1px solid #e28d1f"});
 			$(".module").removeClass("bor_e28d1f");
@@ -46,14 +45,16 @@ $(function(){
 			<table class="w pr10 pl10">
 				<tr>
 				  <td class="f14" align="right" width="10%">用户名称：</td>
-				  <td class="f14" align="left" width="55%"><input type="text" class="text_input1" name="search_LIKE_realName" /></td>
-				  <td width="30%">
-				  	<a href="javascript:;"class="a_underline fr w_blue mt5 reset">清除</a>
+				  <td class="f14" align="left" width="16%"><input type="text" class="text_input1" name="search_LIKE_realName" /></td>
+				  <td>
+				  	<a href="javascript:;" class="reset block dump_btn globle_img fr mr10"></a>
 				  	<a href="javascript:;" class="block c_white lh25 fr mr10 submit">
 				  		<b class="allbtn_l block fl"></b>
 				  		<b class="allbtn_r pr13 block fl w_auto f14">查&nbsp;&nbsp;询</b>
 				  	</a>
 				  </td>
+				  <td class="f14"></td>
+				  <td class="f14"></td>
 				</tr>
 			</table>
 		</div>
@@ -66,15 +67,9 @@ $(function(){
 			    {#foreach $T.result as row}
 				<li>
 					<div class="module" id="{$T.row.id}">
-						<table class="w">
-							<tr>
-								<td align="right">用户名：</td>
-								<td>{$T.row.realName}</td>
-							</tr>
-							<tr>
-								<td align="right">部门：</td>
-								<td>{$T.row.organization.name}</td>
-							</tr>
+						<table class="w mt10">
+							<tr><td>{$T.row.realName}</td></tr>
+							<tr><td>{$T.row.organization.name}</td></tr>
 						</table>
 					</div>
 				</li>

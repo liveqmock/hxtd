@@ -250,18 +250,20 @@ public class ReflectionUtils {
     public static Object getTierFieldValue(Object object, String fieldName) {
         String[] tierFieldNames = fieldName.split("\\.");
         Object current = object;
+        String tierFieldName = null;
         try {
             for (int i = 0; i < tierFieldNames.length; i++) {
-                Method method = current.getClass().getMethod("get" + StringUtils.capitalize(tierFieldNames[i]));
+                tierFieldName = tierFieldNames[i];
+                Method method = current.getClass().getMethod("get" + StringUtils.capitalize(tierFieldName));
                 current = method.invoke(current);
             }
             return current;
         } catch (NoSuchMethodException e) {
-            throw new RuntimeException("获取层级字段异常", e);
+            throw new RuntimeException(String.format("获取层级字段%s异常", fieldName), e);
         } catch (IllegalAccessException e) {
-            throw new RuntimeException("获取层级字段异常", e);
+            throw new RuntimeException(String.format("获取层级字段%s异常", fieldName), e);
         } catch (InvocationTargetException e) {
-            throw new RuntimeException("获取层级字段异常", e);
+            throw new RuntimeException(String.format("获取层级字段%s异常", fieldName), e);
         }
     }
 }

@@ -22,8 +22,8 @@ $(function () {
     <form id="form" action="${ctx}/system/dictionary/query.do" onsubmit="return false;">
     <table class="fl mt5 w">
     	<tr>
-    		<td class="f14" align="right" width="6%">字典类型：</td>
-    		<td class="f14" align="left"  width="16%">
+    		<td class="f14 namewidth1" align="right">字典类型：</td>
+    		<td class="f14 namewidth2" align="left">
 	    		<select name="search_EQ_type" class="select2">
 					<option value="">全部</option>
 					<c:forEach var="item" items="${types}">
@@ -31,17 +31,15 @@ $(function () {
 		   			</c:forEach>
 				</select>
     		</td>
-    		<td class="f14" align="right" width="6%">字典名称：</td>
-    		<td class="f14" align="right" width="16%"><input type="text" class="text_input1" name="search_LIKE_key"/></td>
-    		<td width="8%">
+    		<td class="f14 namewidth1" align="right">字典名称：</td>
+    		<td class="f14 namewidth2" align="right"><input type="text" class="text_input1" name="search_LIKE_key"/></td>
+    		<td width="namewidth3">
     			<a href="javascript:;" class="reset a_underline fr w_blue mt5">清除</a>
-    			<a href="javascript:;" class="block c_white lh25 fr ml10">
+    			<a href="javascript:;" class="block c_white lh25 fr mr10">
     				<b class="allbtn_l block fl"></b>
     				<b class="allbtn_r pr13 block fl w_auto f14 submit">查&nbsp;&nbsp;询</b>
     			</a>
     		</td>
-    		<td class="f14" align="right" width="6%"></td>
-    		<td class="f14" align="right" width="16%"></td>
     		<td class="f14" align="right" width="6%"></td>
     		<td class="f14" align="right" width="16%"></td>
     	</tr>
@@ -76,19 +74,6 @@ $(function () {
 		</div>
 	</div>
 	<div class="ml35 mr35">
-	<div id="title" style="display: none;background-color: #f5f5f6;" class="mr35">
-		<table class="cb id_table2 w">
-			<tr>
-				<th width="4%"><input type="checkbox" class="checkall"/></th>
-			    <th>字典名称</th>
-			    <th>字典值</th>
-			    <th>字典类型</th>
-			    <th class="sortable orderby" orderby="createdTime">创建时间</th>
-			    <th class="sortable orderby" orderby="modifiedTime">最后修改时间</th>
-			    <th>操作</th>
-			</tr>
-		</table>
-	</div>
 	<table class="cb id_table2 w pr35">
 		<tr id="recordDiv">
 			<th width="4%"><input type="checkbox" class="checkall"/></th>
@@ -123,10 +108,14 @@ $(function () {
                  <a href="${ctx}/system/dictionary/toViewPage.do?id={$T.row.id}" class="block_inline s_detail_btn globle_img ml10" title="详情"></a>
              </c:if>
              <c:if test="${VS_HAS_FUNCTIONS.dictionaryModify}">
+                 {#if !$T.row.isInitialized}
                  <a href="${ctx}/system/dictionary/toModifyPage.do?id={$T.row.id}" class="block_inline s_edit_btn globle_img ml10" title="编辑"></a>
+                 {#/if}
              </c:if>
              <c:if test="${VS_HAS_FUNCTIONS.dictionaryDelete}">
+                 {#if !$T.row.isInitialized}
                  <a href="javascript:void(0);" class="block_inline s_dump_btn globle_img ml10 delete" uri="${ctx}/system/dictionary/delete.do?id={$T.row.id}" title="删除"></a>
+                 {#/if}
              </c:if>
            </td>
 	    </tr>

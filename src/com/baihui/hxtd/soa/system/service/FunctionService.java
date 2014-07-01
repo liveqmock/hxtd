@@ -51,8 +51,10 @@ public class FunctionService {
         criteria.setFetchMode("privilegeLevel", FetchMode.JOIN);
         criteria.setFetchMode("menu", FetchMode.JOIN);
         criteria.setFetchMode("menu.trigger", FetchMode.JOIN);
+        criteria.setFetchMode("menu.showLocation", FetchMode.JOIN);
         criteria.setFetchMode("parentMenu", FetchMode.JOIN);
         criteria.setFetchMode("parentMenu.trigger", FetchMode.JOIN);
+        criteria.setFetchMode("parentMenu.showLocation", FetchMode.JOIN);
         criteria.add(Restrictions.like("url", url + ".", MatchMode.START));
         return functionDao.findUnique(criteria);
     }

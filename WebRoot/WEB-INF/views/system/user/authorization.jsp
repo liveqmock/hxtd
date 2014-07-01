@@ -72,18 +72,22 @@
 
     <div class="margin0 ml35 mr35">
         <div class="w cb tab-panels">
-
-            <div id="tabs-role" class="tab-panel">
-                <ul class="w">
-                    <c:forEach items="${allRoles}" var="item" varStatus="status">
-                        <li class="fl" style="width:16%;">
-                            <label class="box size81 ${fn:contains(organizationInheritRoles,item)?" inherit-role":""}">
-                                <input type="checkbox" name="roleId" value="${item.id}" ${fn:contains(authorizationRoles,item)?"checked":""}>${item.name}
-                            </label>
-                        </li>
-                    </c:forEach>
-                </ul>
+         <div id="tabs-role" class="tab-panel">
+            <div class="menus1">
+                <div class="clearfix bg_c_blue w menu1">
+	                    <a href="javascript:void(0)" class="fl mt5 mb5 ml5 allright block menu menu1"></a>
+	                	<ul class="id_ul4 fr mt10">
+		                    <c:forEach items="${allRoles}" var="item" varStatus="status">
+		                        <li class="fl" style="width:16%;">
+		                            <label class="box size81 ${fn:contains(organizationInheritRoles,item)?" inherit-role":""}">
+		                                <input type="checkbox" name="roleId" value="${item.id}" class="function" ${fn:contains(authorizationRoles,item)?"checked":""}/>${item.name}
+		                            </label>
+		                        </li>
+		                    </c:forEach>
+	                	</ul>
+                </div>
             </div>
+        </div>
 
             <div id="tabs-function" class="tab-panel">
                 <c:forEach items="${allMenus}" var="item" varStatus="status">
@@ -109,17 +113,18 @@
                 <div class="clearfix w menu2">
                     <a href="javascript:void(0)" class="fl mt3 mb5 ml40 allright2 block menu menu2"></a>
                     <i class="vm block fl mt5 ml10 tr">${item.name}</i>
-                    <ul class="id_ul4 fr">
-                        <c:forEach items="${allFunctions[item.id]}" var="item">
-                            <li>
-                                <label class="box size51 ${fn:contains(allAuthorizationFunctions,item)?" inherit-function":""}">
-                                    <input type="checkbox" name="functionId" value="${item.id}" class="function" ${fn:contains(authorizationFunctions,item)?"checked":""}>${item.name}
-                                </label>
-                            </li>
-                        </c:forEach>
-                    </ul>
+	                    <ul class="id_ul4 fr">
+	                        <c:forEach items="${allFunctions[item.id]}" var="item">
+	                            <li>
+	                                <label class="box size51 ${fn:contains(allAuthorizationFunctions,item)?" inherit-function":""}">
+	                                    <input type="checkbox" name="functionId" value="${item.id}" class="function" ${fn:contains(authorizationFunctions,item)?"checked":""}>${item.name}
+	                                </label>
+	                            </li>
+	                        </c:forEach>
+	                    </ul>
                 </div>
-                <c:if test="${status.last||allMenus[status.index+1].level==1}"></div>
+                <c:if test="${status.last||allMenus[status.index+1].level==1}">
+             </div>
             </c:if>
             </c:when>
             </c:choose>
@@ -127,13 +132,20 @@
         </div>
 
         <div id="tabs-component" class="tab-panel">
-            <c:forEach items="${allComponents}" var="item" varStatus="status">
-                <li style="width:16%" class="fl">
-                    <label class="box size81 ${fn:contains(allAuthorizationComponents,item)?" inherit-component":""}">
-                        <input type="checkbox" name="componentId" value="${item.id}" ${fn:contains(authorizationComponents,item)?"checked":""}>${item.name}
-                    </label>
-                </li>
-            </c:forEach>
+        	<div class="menus1">
+                <div class="clearfix bg_c_blue w menu1">
+	                <a href="javascript:void(0)" class="fl mt5 mb5 ml5 allright block menu menu1"></a>
+            			<ul class="id_ul4 fr">
+            			<c:forEach items="${allComponents}" var="item" varStatus="status">
+			                <li style="width:16%" class="fl">
+			                    <label class="box size51 ${fn:contains(allAuthorizationComponents,item)?" inherit-component":""}">
+			                        <input type="checkbox" name="componentId" value="${item.id}" class="function" ${fn:contains(authorizationComponents,item)?"checked":""}>${item.name}
+			                    </label>
+			                </li>
+            			</c:forEach>
+            			</ul>
+               </div>
+            </div>
         </div>
 
         <div class="h40"></div>

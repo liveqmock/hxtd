@@ -19,6 +19,13 @@
     <script type="text/javascript">
         $(function () {
             jsUtil.bindSave();
+            
+            //选中/反选
+            var $menu1 = $("a.menu1");
+            $C.toggleClass($menu1, "allright", "allnoright");
+            $C.toggleBoolean($menu1, "checked");
+            $C.bindCheckAll($menu1, "div.menu1", ".role:checkbox");
+            $C.bindCheckAll($menu1, "div.menus1", "a.menu2", "click");
             $C.tab();
         });
     </script>
@@ -52,18 +59,22 @@
 
     <div class="margin0 ml35 mr35">
         <div class="w cb tab-panels">
-
-            <div id="tabs-role" class="role w">
-                <ul class="w">
-                    <c:forEach items="${allRoles}" var="item" varStatus="status">
-                        <li class="fl" style="width:16%;">
-                            <label class="box size81">
-                                <input type="checkbox" name="roleId" value="${item.id}" ${fn:contains(authorizationRoles,item)?"checked":""}>${item.name}
-                            </label>
-                        </li>
-                    </c:forEach>
-                </ul>
-            </div>
+			<div id="tabs-role" class="role w">
+				<div class="menus1">
+					<div class="clearfix bg_c_blue w menu1">
+						<a href="javascript:void(0)" class="fl mt5 mb5 ml5 allright block menu menu1"></a>
+						<ul class="id_ul4 fr mt10">
+							<c:forEach items="${allRoles}" var="item" varStatus="status">
+								<li class="fl" style="width:16%;">
+								    <label class="box size81">
+								        <input type="checkbox" name="roleId" value="${item.id}" class="role" ${fn:contains(authorizationRoles,item)?"checked":""}>${item.name}
+								    </label>
+								</li>
+							</c:forEach>
+						</ul>
+					</div>
+				</div>
+			</div>
             <div class="h40"></div>
             <div class="cb block h40 margin0 mt10" style="width:350px;">
                 <ul class="id_table1 cb">

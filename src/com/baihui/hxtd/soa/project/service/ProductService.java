@@ -81,7 +81,9 @@ public class ProductService {
         criteria.setFetchMode("project", FetchMode.JOIN);//项目
         criteria.setFetchMode("creator", FetchMode.JOIN);//创建者
        
-   		DataAuthFliter(criteria, searchParams, dataShift);
+   		//DataAuthFliter(criteria, searchParams, dataShift);
+        Map<String, SearchFilter> filters = Search.parse(searchParams);
+        Search.buildCriteria(filters, criteria, Product.class);
        
        	return productDao.find(criteria, 3000);
    }
@@ -92,14 +94,14 @@ public class ProductService {
     * @param searchParams 过滤条件
     * @param dataShift 数据权限
     * @throws NoSuchFieldException
-   */
+   
    private void DataAuthFliter(DetachedCriteria criteria,
    		Map<String, Object> searchParams,
    		DataShift dataShift) throws NoSuchFieldException {
    	 	Map<String, SearchFilter> filters = Search.parse(searchParams);
    	 	//userDao.visibleData(criteria, dataShift);
         Search.buildCriteria(filters, criteria, Product.class);
-   }
+   }*/
     
     /**
      * get(根据ID查询产品信息)

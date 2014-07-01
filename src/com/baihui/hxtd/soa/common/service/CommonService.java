@@ -6,6 +6,8 @@ import com.baihui.hxtd.soa.base.utils.serial.TierSerials;
 import com.baihui.hxtd.soa.common.dao.CommonDao;
 import com.baihui.hxtd.soa.common.entity.Initialized;
 import com.baihui.hxtd.soa.common.entity.TreeNode;
+import com.baihui.hxtd.soa.system.dao.UserDao;
+import com.baihui.hxtd.soa.system.service.DataShift;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.poi.ss.formula.functions.T;
 import org.slf4j.Logger;
@@ -33,6 +35,9 @@ public class CommonService {
     @Resource
     private CommonDao commonDao;
 
+    @Resource
+    private UserDao userDao;
+
     /**
      * 是否初始化数据
      */
@@ -50,6 +55,23 @@ public class CommonService {
             return commonDao.isInitialized(clazz, ids[0]);
         }
         return commonDao.isInitialized(clazz, ids);
+    }
+
+    /**
+     * 查找导出数据
+     */
+    @Transactional(readOnly = true)
+    public <T> List<T> findExport(Class<T> clazz, DataShift dataShift) {
+        String hql = String.format("select entity from %s entity %s", clazz.getSimpleName(), dataShift.toHql("entity"));
+        return findExport(hql);
+    }
+
+    /**
+     * 查找导出数据
+     */
+    @Transactional(readOnly = true)
+    public <T> List<T> findExport(String hql) {
+        return (List<T>) commonDao.getSession().createQuery(hql).setMaxResults(3000).list();
     }
 
     /**
@@ -249,14 +271,15 @@ public class CommonService {
     public HibernatePage<T> getDeletedDate(HibernatePage<T> page, String entityName, String recordName, Long deletorId, Date gteModifiedTime, Date lteModifiedTime) {
         return commonDao.getDeletedDate(page, entityName, recordName, deletorId, gteModifiedTime, lteModifiedTime);
     }
-    
+
     @Transactional
-	public void delete( String entityName, Long... ids) {
-		commonDao.delete(entityName, ids);
-		
-	}
+    public void delete(String entityName, Long... ids) {
+        commonDao.delete(entityName, ids);
+
+    }
+
     @Transactional
-	public void recovery(String entityName, Long... id) {
-		commonDao.recovery(entityName, id);
-	}
+    public void recovery(String entityName, Long... id) {
+        commonDao.recovery(entityName, id);
+    }
 }

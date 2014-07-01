@@ -21,6 +21,7 @@ import org.springframework.ui.Model;
 import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.WebDataBinder;
 import org.springframework.web.bind.annotation.InitBinder;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
@@ -153,7 +154,7 @@ public class CustomerController {
 	 */
 	@ResponseBody
 	@RequestMapping(value = "/modify.do")
-	public String modify(Customer customer, HttpServletRequest request,String type) {
+	public String modify(Customer customer,HttpServletRequest request,String type) {
 		logger.info("CustomerController.modify修改客户信息");
 		User u = (User) request.getSession().getAttribute(Constant.VS_USER);
 		logger.info("获得当前操作用户{}", u.getName());
@@ -167,7 +168,7 @@ public class CustomerController {
 			customer.setCity(null);
 			customer.setCounty(null);
 		}
-		customerService.save(customer);
+		customerService.modify(customer,u);
 		JsonDto json = JsonDto.modify(customer.getId());
 		return json.toString();
 	}
@@ -225,7 +226,7 @@ public class CustomerController {
 			customer.setCity(null);
 			customer.setCounty(null);
 		}
-		customerService.save(customer);
+		customerService.add(customer,u);
 		JsonDto json = JsonDto.add(customer.getId());
 		return json.toString();
 	}
@@ -237,9 +238,10 @@ public class CustomerController {
 	 */
 	@ResponseBody
 	@RequestMapping(value = "/delete.do",produces = "text/text;charset=UTF-8")
-	public String delete(Long... id){
+	public String delete(ModelMap modelMap, Long... id){
 		logger.info("CustomerController.delete删除客户id={}",StringUtils.join(id,","));
-		customerService.delete(id);
+		User sessionUser = (User)modelMap.get(Constant.VS_USER);
+		customerService.delete(sessionUser, id);
 		JsonDto json = JsonDto.delete(id);
 		return json.toString();
 	}
@@ -250,24 +252,16 @@ public class CustomerController {
      * todo: lihua 2014-05-22
      */
     @RequestMapping(value = "/toQueryPage.comp")
-    public String toCustomerLstPage(
-            @RequestParam(value = "pageNo", defaultValue = "1") int pageNumber,
-            @RequestParam(value = "pageSize", defaultValue = "10") int pageSize,
-            @RequestParam(value = "pageOrderBy", defaultValue = "createdTime") String orderBy,
-            @RequestParam(value = "order", defaultValue = "asc") String order,
+    public String toCustomerLstPage(HibernatePage<Customer> page,
             HttpServletRequest request, Model model) throws NoSuchFieldException {
         Map<String, Object> searchParams = Servlets.getParametersStartingWith(request, "search_");
         Search.clearBlankValue(searchParams);
         
-        HibernatePage<Customer> page=new HibernatePage<Customer>(pageNumber, pageSize);
-        page.setHibernateOrderBy(orderBy);
-        page.setHibernateOrder(order);
+        if(page==null){
+        	page=new HibernatePage<Customer>(12);
+        }
         //customerService.findPage(searchParams, page);
-        
-        JsonDto jsonDto = new JsonDto();
-        jsonDto.setResult(page);
-        model.addAttribute("jsondata", jsonDto.toString());
-        
+        model.addAttribute("page", page);
         return "/customer/customer/listcomp";
     }
 

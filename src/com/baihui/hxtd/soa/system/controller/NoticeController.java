@@ -75,7 +75,9 @@ public class NoticeController {
 	 */
 	@ResponseBody
 	@RequestMapping(value = "/query.do", produces = "text/text;charset=UTF-8")
-	public void query(HttpServletRequest request, HibernatePage<Notice> page, ModelMap model,String type, PrintWriter out) throws NoSuchFieldException, JsonGenerationException, JsonMappingException, IOException {
+	public void query(HttpServletRequest request, HibernatePage<Notice> page, ModelMap model,String type, PrintWriter out,
+			@RequestParam(value = "pageOrderBy", defaultValue = "sentTime") String orderBy,
+            @RequestParam(value = "pageOrder", defaultValue = "desc") String order) throws NoSuchFieldException, JsonGenerationException, JsonMappingException, IOException {
 		logger.info("查询信息");
 
         logger.info("解析页面查询条件");
@@ -85,6 +87,8 @@ public class NoticeController {
         logger.debug("查询条件数目“{}”", searchParams.size());
         logger.info("添加默认的查询条件");
         logger.info("获取分页数据");
+        page.setHibernateOrderBy(orderBy);
+        page.setHibernateOrder(order);
         page = noticeService.findPage(searchParams, page,type);
         logger.info("以DTO格式返回");
         JsonDto jsonDto = new JsonDto();

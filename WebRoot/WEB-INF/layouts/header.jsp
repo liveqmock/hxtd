@@ -4,7 +4,7 @@
 <%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions" %>
 <c:set var="ctx" value="${pageContext.request.contextPath}"/>
 <link href="${ctx}/static/css/stressing/detail.css" rel="stylesheet" type="text/css"/>
-<%--<script type="text/javascript" src="${ctx}/static/js/message.js"></script>--%>
+<script type="text/javascript" src="${ctx}/static/js/message.js"></script>
 
 <!--菜单开始-->
 <div class="h_head_bg pr">
@@ -51,7 +51,7 @@
 <div class="facing mt-5">
     <c:choose>
         <c:when test="${VR_LOCATION_TITLE!=null}">
-            <p class="f12 pt5 ml35 fl">当前位置：${VR_LOCATION_TITLE}</p>
+            <p class="f12 pt5 ml35 fl">当前位置：<a href="${ctx}${VR_LOCATION_TITLE.url}">${VR_LOCATION_TITLE.name}</a></p>
         </c:when>
         <c:otherwise>
             <c:if test="${VR_TITLE_MENUS!=null}">
@@ -63,7 +63,7 @@
                         </c:choose>
                         ${status.last?"":">"}
                     </c:forEach>
-                    <c:if test="${VR_TITLE_LAST_MENU.trigger!=VR_TITLE_FUNCTION}">
+                    <c:if test="${!isMenuFunction}">
                         > <a href="${ctx}${VR_TITLE_FUNCTION.url}?${VR_PARAMS}" class="c_orange">${VR_TITLE_FUNCTION.name}</a>
                     </c:if>
                 </p>
@@ -85,15 +85,51 @@
                 <b class="bb5"></b>
 		        <span class="block">
 		        <ul class=" block">
-                    <li><a href="${ctx}/market/marketactivity/toAddPage.do">新增市场活动</a></li>
-                    <li><a href="${ctx}/customer/lead/toAddPage.do">新增线索</a></li>
-                    <li><a href="${ctx}/customer/contact/toAddPage.do">新增联系人</a></li>
-                    <li><a href="${ctx}/customer/customer/toAddPage.do">新增客户</a></li>
-                    <li><a href="${ctx}/customer/supplier/toAddPage.do">新增供应商</a></li>
-                    <li><a href="${ctx}/customer/project/toAddPage.do">新增项目</a></li>
-                    <li><a href="${ctx}/customer/product/toAddPage.do">新增产品</a></li>
-                    <li><a href="javascript:;">新增订单</a></li>
-                    <li><a href="javascript:;">新增合同</a></li>
+                    <li>
+                    <c:if test="${VS_HAS_FUNCTIONS.marketactivityAdd}">
+                    <a href="${ctx}/market/marketactivity/toAddPage.do">新增市场活动</a>
+                    </c:if>
+                    </li>
+                    <li>
+                    <c:if test="${VS_HAS_FUNCTIONS.leadAdd}">
+                    <a href="${ctx}/customer/lead/toAddPage.do">新增线索</a>
+                    </c:if>
+                    </li>
+                    <li>
+                    <c:if test="${VS_HAS_FUNCTIONS.contactAdd}">
+                    <a href="${ctx}/customer/contact/toAddPage.do">新增联系人</a>
+                    </c:if>
+                    </li>
+                    <li>
+                    <c:if test="${VS_HAS_FUNCTIONS.customerAdd}">
+                    <a href="${ctx}/customer/customer/toAddPage.do">新增客户</a>
+                    </c:if>
+                    </li>
+                    <li>
+                    <c:if test="${VS_HAS_FUNCTIONS.supplierAdd}">
+                    <a href="${ctx}/project/supplier/toAddPage.do">新增供应商</a>
+                    </c:if>
+                    </li>
+                    <li>
+                    <c:if test="${VS_HAS_FUNCTIONS.projectAdd}">
+                    <a href="${ctx}/project/project/toAddPage.do">新增项目</a>
+                    </c:if>
+                    </li>
+                    <li>
+                    <c:if test="${VS_HAS_FUNCTIONS.productAdd}">
+                    <a href="${ctx}/project/product/toAddPage.do">新增产品</a>
+                    </c:if>
+                    </li>
+                    <li>
+                    <c:if test="${VS_HAS_FUNCTIONS.orderAdd}">
+                    <a href="${ctx}/order/order/toAddPage.do">新增订单</a>
+                    </c:if>
+                    </li>
+                    <li>
+                    <c:if test="${VS_HAS_FUNCTIONS.contractAdd}">
+                    <a href="javascript:;">新增合同</a>
+                    </c:if>
+                    </li>
                 </ul>
 		        </span>
                 <b class="bb6"></b>
@@ -107,9 +143,10 @@
             </div>
         </li>
 
+       <c:if test="${VS_HAS_FUNCTIONS.noticeQuery}">
         <li class="head_system globle_img fl mr15" id="notice">
             <a href="${ctx}/system/notice/toQueryPage.do" title="系统公告">&nbsp;&nbsp;&nbsp;&nbsp;</a>
-
+            <c:if test="${VS_HAS_FUNCTIONS.noticeView}">
             <div class="none w100 div2 pr">
                 <b class="tan_leftjian3 globle_img block pa"></b>
                 <b class="bb1"></b>
@@ -122,7 +159,8 @@
                 <b class="bb5"></b>
 		        <span class="block">
 		        <ul class=" block">
-                    <li id="notices"></li>
+		          <li>公告：</li>
+                  <li id="notices"></li>
                 </ul>
 		        </span>
                 <b class="bb6"></b>
@@ -134,10 +172,13 @@
                 <b class="bb9"></b>
                 <b class="bb0"></b>
             </div>
+            </c:if>
         </li>
+       </c:if>
+       <c:if test="${VS_HAS_FUNCTIONS.messageQuery}">
         <li class="head_news globle_img fl mr10" id="message">
             <a href="${ctx}/system/message/toQueryPage.do?type=reviced" title="系统消息">&nbsp;&nbsp;&nbsp;&nbsp;</a>
-
+            <c:if test="${VS_HAS_FUNCTIONS.messageView}">
             <div class="none w100 div3 pr">
                 <b class="tan_leftjian4 globle_img block pa"></b>
                 <b class="bb1"></b>
@@ -150,7 +191,7 @@
                 <b class="bb5"></b>
 		        <span class="block">
 		         <ul id="messages" class=" block">
-
+					
                  </ul>
 		        </span>
                 <b class="bb6"></b>
@@ -162,7 +203,9 @@
                 <b class="bb9"></b>
                 <b class="bb0"></b>
             </div>
+            </c:if>
         </li>
+       </c:if>
 
     </ul>
 </div>

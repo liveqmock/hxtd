@@ -368,7 +368,7 @@ public class Search {
             if (value instanceof String && !field.getType().equals(String.class)) {
                 PropertyEditor propertyEditor = defaultEditors.get(field.getType());
                 propertyEditor.setAsText((String) filter.value);
-                value = field.getType().cast(propertyEditor.getValue());
+                value = propertyEditor.getValue();
             }
 
             switch (filter.operator) {

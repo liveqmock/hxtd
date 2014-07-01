@@ -64,9 +64,18 @@ public class MarketActivityService {
 
 	/**
      * save(保存：修改/新建)
+     * modifier:xiaoli.luo
      * @param entity 市场活动实体
      */
-    public void save(MarketActivity entity) {
+    public void add(MarketActivity entity, Long sessionId) {
+    	marketActivityDao.save(entity);
+    }
+    /**
+     * modifier:xiaoli.luo
+     * @param entity
+     * @param sessionId
+     */
+    public void modify(MarketActivity entity, Long sessionId) {
     	marketActivityDao.save(entity);
     }
 	
@@ -87,10 +96,11 @@ public class MarketActivityService {
     
     /**
       * delete(删除活动记录)
+      * modifier:xiaoli.luo
       * @Description: 根据活动主键ID删除记录，支持批量删除
       * @param id 活动主键IDS
      */
-    public void delete(long... id) {
+    public void delete(Long sessionId, long... id) {
     	marketActivityDao.delete(id);
     }
     

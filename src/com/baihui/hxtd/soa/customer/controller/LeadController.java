@@ -10,6 +10,7 @@ import javax.servlet.ServletContext;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import com.baihui.hxtd.soa.common.controller.CommonController;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Controller;
@@ -34,22 +35,22 @@ import com.baihui.hxtd.soa.util.JsonDto;
 
 /**
  * 线索控制器
- * 
+ *
  * @author luoxiaoli
  * @version 1.0
  * @date 2014/5/12
  */
 @Controller
 @RequestMapping(value = "/customer/lead")
-@SessionAttributes(value = {Constant.VS_DATASHIFT})
-public class LeadController {
-	
+@SessionAttributes(value = {Constant.VS_USER,Constant.VS_DATASHIFT})
+public class LeadController extends CommonController<Lead>{
+
 	private Logger logger = LoggerFactory.getLogger(this.getClass());
-	
+
 	/** 注入LeadService */
 	@Resource
 	private LeadService leadService;
-	
+
 	@Resource
 	 private DictionaryService dictionaryService;
 
@@ -62,9 +63,9 @@ public class LeadController {
 	 */
 	@ResponseBody
 	@RequestMapping(value = "/query.do", produces = "text/text;charset=UTF-8")
-	public String query(HibernatePage<Lead> page,// 
+	public String query(HibernatePage<Lead> page,//
 			HttpServletRequest request,ModelMap model) throws NoSuchFieldException {
-		
+
 		logger.info("LeadController.query查询线索列表");
 		Map<String, Object> searchParams = Servlets.getParametersStartingWith(
 				request, "search_");
@@ -94,7 +95,7 @@ public class LeadController {
 
 	/**
 	 * 查看或编辑线索
-	 * 
+	 *
 	 * @param type
 	 * @param id
 	 * @param model
@@ -110,11 +111,11 @@ public class LeadController {
 		return returnStr;
 	}
 
-	
-	
+
+
 	@ResponseBody
 	@RequestMapping(value = "/modify.do", produces = "text/text;charset=UTF-8")
-	public String modify(Lead lead, 
+	public String modify(Lead lead,
 						HttpServletRequest request) {
 		logger.info("LeadController.modify修改线索信息");
 		User u = (User) request.getSession().getAttribute(Constant.VS_USER);
@@ -123,11 +124,11 @@ public class LeadController {
 		lead.setModifiedTime(new Date(new java.util.Date().getTime()));
 		lead.setModifier(u);
 		lead.setCreator(u);
-		leadService.save(lead);
+		leadService.modify(lead,u);
 		JsonDto json = JsonDto.modify(lead.getId());
 		return json.toString();
 	}
-	
+
 	@ResponseBody
 	@RequestMapping(value = "/modifyOwner.do",
 					produces = "text/text;charset=UTF-8")
@@ -137,8 +138,8 @@ public class LeadController {
 		json.setSuccessFlag(true);
 		return json.toString();
 	}
-	
-	
+
+
 	@RequestMapping(value = "/toModifyPage.do")
 	public String toModifyPage(Model model,Long id) {
 		logger.info("LeadController.toModifyPage修改线索所有者信息");
@@ -149,7 +150,7 @@ public class LeadController {
 		setDefaultDict(model);
 		return "/customer/lead/edit";
 	}
-	
+
 	/**
 	 *  delete(删除线索)
 	 * @param id
@@ -157,13 +158,14 @@ public class LeadController {
 	 */
 	@ResponseBody
 	@RequestMapping(value = "/delete.do",produces = "text/text;charset=UTF-8")
-	public String delete(Long[] id){
+	public String delete(ModelMap modelMap, Long[] id){
 		//logger.info("LeadController.delete删除线索id={}",id);
-		leadService.delete(id);
+		User sessionUser = (User)modelMap.get(Constant.VS_USER);
+		leadService.delete(sessionUser, id);
 		JsonDto json = JsonDto.delete(id);
 		return json.toString();
 	}
-	
+
 	/**
 	 * view(跳转到新增页面)
 	 * @param model
@@ -177,16 +179,16 @@ public class LeadController {
 		setDefaultDict(model);
 		return "/customer/lead/edit";
 	}
-	
+
 	private void setDefaultDict(Model model){
 		model.addAttribute("source",dictionaryService.findChildren("040101"));
 		model.addAttribute("status",dictionaryService.findChildren("040102"));
 		model.addAttribute("cardType",dictionaryService.findChildren("040103"));
 		model.addAttribute("industry",dictionaryService.findChildren("040305"));
 	}
-	
 
-	
+
+
 	/**
 	 * add(保存：新建)
 	 * @param lead
@@ -205,12 +207,12 @@ public class LeadController {
 		lead.setModifier(u);
 		lead.setCreatedTime(new Date());
 		lead.setModifiedTime(new Date());
-		leadService.save(lead);
+		leadService.add(lead, u);
 		JsonDto json = JsonDto.add(lead.getId());
 		return json.toString();
 	}
-	
-	
+
+
 	 /**
      * 导出分页数据
      * 1.在分页列表上根据当前条件进行导出
@@ -233,21 +235,22 @@ public class LeadController {
         ServletContext servletContext = request.getSession().getServletContext();
         ImportExport.exportExcel(response, servletContext, "lead", leads).write(response.getOutputStream());
     }
-	
+
     /**
      * 导出分页数据
      * 1.在分页列表上根据当前条件进行导出
      */
     @ResponseBody
     @RequestMapping(value = "/leadConverter.do", produces = "text/text;charset=UTF-8")
-    public String convCustomerAndContact(Long id) {
+    public String convCustomerAndContact(ModelMap modelMap, Long id) {
         logger.info("线索转换");
-        leadService.leadConverter(id);
+        User user = (User)modelMap.get(Constant.VS_USER);
+        leadService.leadConverter(user, id);
         JsonDto json = new JsonDto("转换成功");
         json.setSuccessFlag(true);
         return json.toString();
     }
-	
+
 	/**
 	 * @param args
 	 */

@@ -285,15 +285,19 @@ function formReset(){
 									title="详情" class=" block_inline s_detail_btn globle_img ml10"></a>
                         </c:if>
                         <c:if test="${VS_HAS_FUNCTIONS.functionModify}">
+                            {#if !$T.row.isInitialized}
                             <a
 									href="${ctx}/system/function/toModifyPage.do?id={$T.row.id}"
 									title="编辑" class=" block_inline s_edit_btn globle_img ml10"></a>
+                            {#/if}
                         </c:if>
                         <c:if test="${VS_HAS_FUNCTIONS.functionDelete}">
+                            {#if !$T.row.isInitialized}
                             <a href="javascript:void(0)"
 									uri="${ctx}/system/function/delete.do?id={$T.row.id}"
 									title="删除"
 									class="delete block_inline s_dump_btn globle_img ml10"></a>
+                            {#/if}
                         </c:if>
                 </td>
             </tr>

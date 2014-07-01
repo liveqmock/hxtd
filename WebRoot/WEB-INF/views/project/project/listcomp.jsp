@@ -20,7 +20,19 @@
 <script type="text/javascript" src="${ctx}/static/js/js-util.common.js"></script>
 <script type="text/javascript">
 $(function(){
-	new Grid().init().bindAuthorization();
+	new Grid().init({ paginationSizeShow:false, paginationCountLimit:13 });
+	$(".list .module").live({
+		click: function(){ // 样式优先级问题 待解决...
+			$(".module").removeAttr("style");
+			$(this).css({"border":"1px solid #e28d1f"});
+			$(".module").removeClass("bor_e28d1f");
+			$(this).addClass("bor_e28d1f");
+		},
+		dblclick: function(){
+			$(this).addClass("bor_e28d1f");
+			$(".ui-button", parent.document).eq(1).trigger("click");
+		}
+	});
 });
 </script>
 </head>
@@ -45,33 +57,19 @@ $(function(){
     <div class="cb"></div>
     <tags:paginationparams page="${page}"></tags:paginationparams>
 	</form>
-	<table class="cb id_table2 w pr35">
-        <tr>
-			<td></td>
-			<td>项目名</td>
-			<td>项目编号</td>
-			<td>供应商</td>
-			<td>融资额度</td>
-			<td>创建时间 </td>
-			<td>创建者</td>
-		</tr>
-   </table>
-   <div style="height: 270px; overflow: hidden; overflow-y:auto; background: #fff">
-   <table class="cb id_table2 w pr35">
-        <tbody id="lst" class="list"></tbody>
-   </table>
+   <div style="height: 300px; overflow: hidden; overflow-y:auto; background: #fff" class="grid">
+   <ul class="id_tantable1 w list"></ul>
    <div class="cb ml35 mt20 h40 pagination"></div>
    <textarea id="template-tbody" class="template template-tbody">
 		{#foreach $T.result as row}
-		<tr class="row">
-			<td><input name="ck" type="radio" value="{$T.row.id}"/></td>
-			<td>{$T.row.name}</td>
-			<td>{$T.row.code}</td>
-			<td>{$T.row.supplier.name}</td>
-			<td>{$T.row.financeLimit}</td>
-			<td>{$T.row.createdTime}</td>
-			<td>{$T.row.creator.name}</td>
-		</tr>
+		<li>
+			<div class="module" id="{$T.row.id}">
+				<table class="w mt10">
+					<tr><td>{$T.row.name}</td></tr>
+					<tr><td>{$T.row.supplier.name}</td></tr>
+				</table>
+			</div>
+		</li>
 	    {#/for} 
 	</textarea>
 	<%@include file="/WEB-INF/template/sort.jsp" %>

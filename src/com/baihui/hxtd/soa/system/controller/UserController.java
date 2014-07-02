@@ -204,7 +204,7 @@ public class UserController extends CommonController<User> {
         user.setModifier(user.getCreator());
         logger.debug("修改用户为当前用户“{}”", sessionUser.getName());
 
-        userService.add(user);
+        userService.add(user, sessionUser);
 
         return JsonDto.add(user.getId()).toString();
     }
@@ -270,7 +270,7 @@ public class UserController extends CommonController<User> {
         user.setModifier(sessionUser);
         logger.debug("修改用户为当前用户“{}”", sessionUser.getName());
 
-        userService.modify(user);
+        userService.modify(user, sessionUser);
 
         return JsonDto.modify(user.getId()).toString();
     }
@@ -291,8 +291,9 @@ public class UserController extends CommonController<User> {
         if (ArrayUtils.contains(id, sessionId)) {
             return new JsonDto("不允许删除当前操作用户").toString();
         }
+        User sessionUser = (User)userService.getById(sessionId);
 
-        userService.delete(id);
+        userService.delete(sessionUser, id);
 
         return JsonDto.delete(id).toString();
     }
@@ -444,7 +445,7 @@ public class UserController extends CommonController<User> {
         logger.debug("导入信息“{}”", HibernateAwareObjectMapper.DEFAULT.writeValueAsString(users));
         logger.debug("对象集合数目“{}”", users.size());
 
-        userService.add(users);
+        userService.addList(users, sessionUser);
 
         logger.info("添加操作提示");
         model.addFlashAttribute(Constant.VM_BUSINESS, "导入成功");
@@ -479,21 +480,21 @@ public class UserController extends CommonController<User> {
         ImportExport.exportExcel(response, servletContext, "user", users).write(response.getOutputStream());
     }
 
-//    /**
-//     * 导出限制数据
-//     * 1.指定最大条数的
-//     */
-//    @RequestMapping(value = "/export.do", params = "TYPE=limit")
-//    public void exportLimit(HttpServletRequest request, ModelMap modelMap, HttpServletResponse response) throws IOException {
-//        logger.info("导出excel文件");
-//
-//        List<User> users = userService.find((Long) modelMap.get(Constant.VS_ORG_ID));
-//        logger.debug("列表信息数目“{}”", users.size());
-//
-//        logger.info("转换成excel文件并输出");
-//        ServletContext servletContext = request.getSession().getServletContext();
-//        ImportExport.exportExcel(response, servletContext, "user", users).write(response.getOutputStream());
-//    }
+    /**
+     * 导出限制数据
+     * 1.指定最大条数的
+     */
+    @RequestMapping(value = "/export.do", params = "TYPE=limit")
+    public void exportLimit(HttpServletRequest request, ModelMap modelMap, HttpServletResponse response) throws IOException {
+        logger.info("导出excel文件");
+
+        List<User> users = userService.find((Long) modelMap.get(Constant.VS_ORG_ID));
+        logger.debug("列表信息数目“{}”", users.size());
+
+        logger.info("转换成excel文件并输出");
+        ServletContext servletContext = request.getSession().getServletContext();
+        ImportExport.exportExcel(response, servletContext, "user", users).write(response.getOutputStream());
+    }
 
 
     /**
@@ -589,15 +590,14 @@ public class UserController extends CommonController<User> {
     @RequestMapping(value = "/checkPwd")
     public String checkPwd(String oldpwd, HttpServletRequest request) {
         User user = (User) request.getSession().getAttribute(Constant.VS_USER);
+        JsonDto jsonDto = new JsonDto();
         if (md5.getMD5ofStr(oldpwd).equals(user.getPassword())) {
-            JsonDto jsonDto = new JsonDto("");
-            jsonDto.setSuccessFlag(true);
-            return jsonDto.toString();
+        	jsonDto.setMessage("");
         } else {
-            JsonDto jsonDto = new JsonDto("原密码不正确");
-            jsonDto.setSuccessFlag(true);
-            return jsonDto.toString();
+            jsonDto.setMessage("原密码不正确");
         }
+        jsonDto.setSuccessFlag(true);
+        return jsonDto.toString();
     }
 
 }

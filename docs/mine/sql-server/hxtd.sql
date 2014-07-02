@@ -4,7 +4,7 @@ Source Host: 192.168.111.141
 Source Database: hxtd
 Target Host: 192.168.111.141
 Target Database: hxtd
-Date: 2014/6/30 18:37:35
+Date: 2014/7/2 17:34:12
 */
 
 SET FOREIGN_KEY_CHECKS=0;
@@ -71,7 +71,7 @@ CREATE TABLE `attachment` (
   KEY `INDEX_TYPE` (`TYPE`),
   KEY `INDEX_CREATE_ID` (`CREATOR_ID`),
   KEY `INDEX_MODIFIER_ID` (`MODIFIER_ID`)
-) ENGINE=InnoDB AUTO_INCREMENT=228 DEFAULT CHARSET=utf8 COMMENT='附件表';
+) ENGINE=InnoDB AUTO_INCREMENT=273 DEFAULT CHARSET=utf8 COMMENT='附件表';
 
 -- ----------------------------
 -- Table structure for contact
@@ -109,7 +109,7 @@ CREATE TABLE `contact` (
   KEY `INDEX_SUPPLIER_ID` (`SUPPLIER_ID`) USING BTREE,
   KEY `INDEX_CREATOR_ID` (`CREATOR_ID`) USING BTREE,
   KEY `INDEX_MODIFIER_ID` (`MODIFIER_ID`) USING BTREE
-) ENGINE=InnoDB AUTO_INCREMENT=106532 DEFAULT CHARSET=utf8 COMMENT='联系人';
+) ENGINE=InnoDB AUTO_INCREMENT=106552 DEFAULT CHARSET=utf8 COMMENT='联系人';
 
 -- ----------------------------
 -- Table structure for contract
@@ -182,7 +182,7 @@ CREATE TABLE `customer` (
   KEY `INDEX_CREATOR_ID` (`CREATOR_ID`),
   KEY `INDEX_MODIFIER_ID` (`MODIFIER_ID`),
   KEY `INDEX_TYPE` (`TYPE`)
-) ENGINE=InnoDB AUTO_INCREMENT=98376 DEFAULT CHARSET=utf8 COMMENT='客户';
+) ENGINE=InnoDB AUTO_INCREMENT=98391 DEFAULT CHARSET=utf8 COMMENT='客户';
 
 -- ----------------------------
 -- Table structure for lead
@@ -222,7 +222,7 @@ CREATE TABLE `lead` (
   KEY `INDEX_STATUS` (`STATUS`),
   KEY `INDEX_CREATER_ID` (`CREATOR_ID`),
   KEY `INDEX_MODIFIER_ID` (`MODIFIER_ID`)
-) ENGINE=InnoDB AUTO_INCREMENT=35 DEFAULT CHARSET=utf8 COMMENT='线索';
+) ENGINE=InnoDB AUTO_INCREMENT=47 DEFAULT CHARSET=utf8 COMMENT='线索';
 
 -- ----------------------------
 -- Table structure for market_activity
@@ -252,7 +252,7 @@ CREATE TABLE `market_activity` (
   KEY `INDEX-CREATOR_ID` (`CREATOR_ID`),
   KEY `INDEX_MODIFIED_TIME` (`MODIFIED_TIME`),
   KEY `INDEX-MODIFIER_ID` (`MODIFIER_ID`)
-) ENGINE=InnoDB AUTO_INCREMENT=104450 DEFAULT CHARSET=utf8 COMMENT='市场活动';
+) ENGINE=InnoDB AUTO_INCREMENT=104460 DEFAULT CHARSET=utf8 COMMENT='市场活动';
 
 -- ----------------------------
 -- Table structure for memoir
@@ -271,7 +271,7 @@ CREATE TABLE `memoir` (
   `MODIFIER_ID` int(11) NOT NULL DEFAULT '0' COMMENT '修改者ID',
   `MODIFIED_TIME` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '修改时间',
   `REMARK` varchar(512) NOT NULL DEFAULT '' COMMENT '备注',
-  `IS_DELETED` int(11) DEFAULT '0' COMMENT '标记删除',
+  `IS_DELETED` int(11) NOT NULL DEFAULT '0' COMMENT '标记删除',
   PRIMARY KEY (`ID`),
   KEY `INDEX_ID` (`ID`),
   KEY `INDEX_TYPE` (`TYPE`),
@@ -280,7 +280,7 @@ CREATE TABLE `memoir` (
   KEY `INDEX_CREATOR_ID` (`CREATOR_ID`),
   KEY `INDEX_MODIFIER_ID` (`MODIFIER_ID`),
   KEY `INDEX_MODIFIED_TIME` (`MODIFIED_TIME`)
-) ENGINE=InnoDB AUTO_INCREMENT=84 DEFAULT CHARSET=utf8 COMMENT='沟通纪要';
+) ENGINE=InnoDB AUTO_INCREMENT=97 DEFAULT CHARSET=utf8 COMMENT='沟通纪要';
 
 -- ----------------------------
 -- Table structure for memoir_user
@@ -319,7 +319,7 @@ CREATE TABLE `notice` (
   KEY `INDEX_MODIFIED_TIME` (`MODIFIED_TIME`),
   KEY `INDEX_CREATOR_ID` (`CREATOR_ID`),
   KEY `INDEX_MODIFIER_ID` (`MODIFIER_ID`)
-) ENGINE=InnoDB AUTO_INCREMENT=62 DEFAULT CHARSET=utf8 COMMENT='公告表';
+) ENGINE=InnoDB AUTO_INCREMENT=68 DEFAULT CHARSET=utf8 COMMENT='公告表';
 
 -- ----------------------------
 -- Table structure for order
@@ -355,7 +355,7 @@ CREATE TABLE `order` (
   KEY `INDEX_CREATOR_ID` (`CREATOR_ID`),
   KEY `INDEX_MODIFIER_ID` (`MODIFIER_ID`),
   KEY `INDEX_MODIFIED_TIME` (`MODIFIED_TIME`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='订单表';
+) ENGINE=InnoDB AUTO_INCREMENT=6 DEFAULT CHARSET=utf8 COMMENT='订单表';
 
 -- ----------------------------
 -- Table structure for pro_city_area
@@ -433,7 +433,160 @@ CREATE TABLE `project` (
   KEY `INDEX_CREATOR_ID` (`CREATOR_ID`),
   KEY `INDEX_MODIFIER_ID` (`MODIFIER_ID`),
   KEY `INDEX_MODIFIED_TIME` (`MODIFIED_TIME`)
-) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8 COMMENT='项目表';
+) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8 COMMENT='项目表';
+
+-- ----------------------------
+-- Table structure for qrtz_blob_triggers
+-- ----------------------------
+CREATE TABLE `qrtz_blob_triggers` (
+  `TRIGGER_NAME` varchar(200) NOT NULL,
+  `TRIGGER_GROUP` varchar(200) NOT NULL,
+  `BLOB_DATA` blob,
+  PRIMARY KEY (`TRIGGER_NAME`,`TRIGGER_GROUP`),
+  CONSTRAINT `qrtz_blob_triggers_ibfk_1` FOREIGN KEY (`TRIGGER_NAME`, `TRIGGER_GROUP`) REFERENCES `qrtz_triggers` (`TRIGGER_NAME`, `TRIGGER_GROUP`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+-- ----------------------------
+-- Table structure for qrtz_calendars
+-- ----------------------------
+CREATE TABLE `qrtz_calendars` (
+  `CALENDAR_NAME` varchar(200) NOT NULL,
+  `CALENDAR` blob NOT NULL,
+  PRIMARY KEY (`CALENDAR_NAME`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+-- ----------------------------
+-- Table structure for qrtz_cron_triggers
+-- ----------------------------
+CREATE TABLE `qrtz_cron_triggers` (
+  `TRIGGER_NAME` varchar(200) NOT NULL,
+  `TRIGGER_GROUP` varchar(200) NOT NULL,
+  `CRON_EXPRESSION` varchar(200) NOT NULL,
+  `TIME_ZONE_ID` varchar(80) DEFAULT NULL,
+  PRIMARY KEY (`TRIGGER_NAME`,`TRIGGER_GROUP`),
+  CONSTRAINT `qrtz_cron_triggers_ibfk_1` FOREIGN KEY (`TRIGGER_NAME`, `TRIGGER_GROUP`) REFERENCES `qrtz_triggers` (`TRIGGER_NAME`, `TRIGGER_GROUP`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+-- ----------------------------
+-- Table structure for qrtz_fired_triggers
+-- ----------------------------
+CREATE TABLE `qrtz_fired_triggers` (
+  `ENTRY_ID` varchar(95) NOT NULL,
+  `TRIGGER_NAME` varchar(200) NOT NULL,
+  `TRIGGER_GROUP` varchar(200) NOT NULL,
+  `IS_VOLATILE` varchar(1) NOT NULL,
+  `INSTANCE_NAME` varchar(200) NOT NULL,
+  `FIRED_TIME` bigint(13) NOT NULL,
+  `PRIORITY` int(11) NOT NULL,
+  `STATE` varchar(16) NOT NULL,
+  `JOB_NAME` varchar(200) DEFAULT NULL,
+  `JOB_GROUP` varchar(200) DEFAULT NULL,
+  `IS_STATEFUL` varchar(1) DEFAULT NULL,
+  `REQUESTS_RECOVERY` varchar(1) DEFAULT NULL,
+  PRIMARY KEY (`ENTRY_ID`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+-- ----------------------------
+-- Table structure for qrtz_job_details
+-- ----------------------------
+CREATE TABLE `qrtz_job_details` (
+  `JOB_NAME` varchar(200) NOT NULL,
+  `JOB_GROUP` varchar(200) NOT NULL,
+  `DESCRIPTION` varchar(250) DEFAULT NULL,
+  `JOB_CLASS_NAME` varchar(250) NOT NULL,
+  `IS_DURABLE` varchar(1) NOT NULL,
+  `IS_VOLATILE` varchar(1) NOT NULL,
+  `IS_STATEFUL` varchar(1) NOT NULL,
+  `REQUESTS_RECOVERY` varchar(1) NOT NULL,
+  `JOB_DATA` blob,
+  PRIMARY KEY (`JOB_NAME`,`JOB_GROUP`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+-- ----------------------------
+-- Table structure for qrtz_job_listeners
+-- ----------------------------
+CREATE TABLE `qrtz_job_listeners` (
+  `JOB_NAME` varchar(200) NOT NULL,
+  `JOB_GROUP` varchar(200) NOT NULL,
+  `JOB_LISTENER` varchar(200) NOT NULL,
+  PRIMARY KEY (`JOB_NAME`,`JOB_GROUP`,`JOB_LISTENER`),
+  CONSTRAINT `qrtz_job_listeners_ibfk_1` FOREIGN KEY (`JOB_NAME`, `JOB_GROUP`) REFERENCES `qrtz_job_details` (`JOB_NAME`, `JOB_GROUP`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+-- ----------------------------
+-- Table structure for qrtz_locks
+-- ----------------------------
+CREATE TABLE `qrtz_locks` (
+  `LOCK_NAME` varchar(40) NOT NULL,
+  PRIMARY KEY (`LOCK_NAME`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+-- ----------------------------
+-- Table structure for qrtz_paused_trigger_grps
+-- ----------------------------
+CREATE TABLE `qrtz_paused_trigger_grps` (
+  `TRIGGER_GROUP` varchar(200) NOT NULL,
+  PRIMARY KEY (`TRIGGER_GROUP`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+-- ----------------------------
+-- Table structure for qrtz_scheduler_state
+-- ----------------------------
+CREATE TABLE `qrtz_scheduler_state` (
+  `INSTANCE_NAME` varchar(200) NOT NULL,
+  `LAST_CHECKIN_TIME` bigint(13) NOT NULL,
+  `CHECKIN_INTERVAL` bigint(13) NOT NULL,
+  PRIMARY KEY (`INSTANCE_NAME`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+-- ----------------------------
+-- Table structure for qrtz_simple_triggers
+-- ----------------------------
+CREATE TABLE `qrtz_simple_triggers` (
+  `TRIGGER_NAME` varchar(200) NOT NULL,
+  `TRIGGER_GROUP` varchar(200) NOT NULL,
+  `REPEAT_COUNT` bigint(7) NOT NULL,
+  `REPEAT_INTERVAL` bigint(12) NOT NULL,
+  `TIMES_TRIGGERED` bigint(10) NOT NULL,
+  PRIMARY KEY (`TRIGGER_NAME`,`TRIGGER_GROUP`),
+  CONSTRAINT `qrtz_simple_triggers_ibfk_1` FOREIGN KEY (`TRIGGER_NAME`, `TRIGGER_GROUP`) REFERENCES `qrtz_triggers` (`TRIGGER_NAME`, `TRIGGER_GROUP`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+-- ----------------------------
+-- Table structure for qrtz_trigger_listeners
+-- ----------------------------
+CREATE TABLE `qrtz_trigger_listeners` (
+  `TRIGGER_NAME` varchar(200) NOT NULL,
+  `TRIGGER_GROUP` varchar(200) NOT NULL,
+  `TRIGGER_LISTENER` varchar(200) NOT NULL,
+  PRIMARY KEY (`TRIGGER_NAME`,`TRIGGER_GROUP`,`TRIGGER_LISTENER`),
+  CONSTRAINT `qrtz_trigger_listeners_ibfk_1` FOREIGN KEY (`TRIGGER_NAME`, `TRIGGER_GROUP`) REFERENCES `qrtz_triggers` (`TRIGGER_NAME`, `TRIGGER_GROUP`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+-- ----------------------------
+-- Table structure for qrtz_triggers
+-- ----------------------------
+CREATE TABLE `qrtz_triggers` (
+  `TRIGGER_NAME` varchar(200) NOT NULL,
+  `TRIGGER_GROUP` varchar(200) NOT NULL,
+  `JOB_NAME` varchar(200) NOT NULL,
+  `JOB_GROUP` varchar(200) NOT NULL,
+  `IS_VOLATILE` varchar(1) NOT NULL,
+  `DESCRIPTION` varchar(250) DEFAULT NULL,
+  `NEXT_FIRE_TIME` bigint(13) DEFAULT NULL,
+  `PREV_FIRE_TIME` bigint(13) DEFAULT NULL,
+  `PRIORITY` int(11) DEFAULT NULL,
+  `TRIGGER_STATE` varchar(16) NOT NULL,
+  `TRIGGER_TYPE` varchar(8) NOT NULL,
+  `START_TIME` bigint(13) NOT NULL,
+  `END_TIME` bigint(13) DEFAULT NULL,
+  `CALENDAR_NAME` varchar(200) DEFAULT NULL,
+  `MISFIRE_INSTR` smallint(2) DEFAULT NULL,
+  `JOB_DATA` blob,
+  PRIMARY KEY (`TRIGGER_NAME`,`TRIGGER_GROUP`),
+  KEY `JOB_NAME` (`JOB_NAME`,`JOB_GROUP`),
+  CONSTRAINT `qrtz_triggers_ibfk_1` FOREIGN KEY (`JOB_NAME`, `JOB_GROUP`) REFERENCES `qrtz_job_details` (`JOB_NAME`, `JOB_GROUP`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 -- ----------------------------
 -- Table structure for sales_target
@@ -478,7 +631,7 @@ CREATE TABLE `sm_component` (
   KEY `INDEX_MODIFIED_TIME` (`MODIFIED_TIME`),
   KEY `INDEX_MODIFIER_ID` (`MODIFIER_ID`),
   KEY `INDEX_CREATOR_ID` (`CREATOR_ID`)
-) ENGINE=InnoDB AUTO_INCREMENT=110207 DEFAULT CHARSET=utf8 COMMENT='组件表';
+) ENGINE=InnoDB AUTO_INCREMENT=110211 DEFAULT CHARSET=utf8 COMMENT='组件表';
 
 -- ----------------------------
 -- Table structure for sm_dictionary
@@ -508,7 +661,7 @@ CREATE TABLE `sm_dictionary` (
 CREATE TABLE `sm_function` (
   `ID` int(11) NOT NULL AUTO_INCREMENT COMMENT '主键ID',
   `MENU_ID` int(11) DEFAULT NULL,
-  `CODE` varchar(32) NOT NULL DEFAULT '0' COMMENT '功能编号',
+  `CODE` varchar(32) DEFAULT NULL,
   `NAME` varchar(64) NOT NULL DEFAULT '' COMMENT '功能名称',
   `URL` varchar(64) DEFAULT NULL,
   `REMARK` varchar(512) NOT NULL DEFAULT '' COMMENT '备注',
@@ -528,14 +681,14 @@ CREATE TABLE `sm_function` (
   KEY `INDEX_NAME` (`NAME`) USING BTREE,
   KEY `INDEX_CREATOR_ID` (`CREATOR_ID`),
   KEY `INDEX_MODIFIER_ID` (`MODIFIER_ID`)
-) ENGINE=InnoDB AUTO_INCREMENT=140102 DEFAULT CHARSET=utf8 COMMENT='功能表';
+) ENGINE=InnoDB AUTO_INCREMENT=140104 DEFAULT CHARSET=utf8 COMMENT='功能表';
 
 -- ----------------------------
 -- Table structure for sm_menu
 -- ----------------------------
 CREATE TABLE `sm_menu` (
   `ID` int(11) NOT NULL AUTO_INCREMENT COMMENT '主键ID',
-  `CODE` varchar(32) DEFAULT '',
+  `CODE` varchar(32) DEFAULT NULL,
   `NAME` varchar(32) NOT NULL DEFAULT '' COMMENT '菜单名称',
   `PARENT_MENU_ID` int(11) DEFAULT NULL,
   `URL` varchar(64) DEFAULT '' COMMENT '链接地址',
@@ -555,11 +708,12 @@ CREATE TABLE `sm_menu` (
   `DEFAULT_SHOW` tinyint(1) NOT NULL DEFAULT '0',
   `IS_INITIALIZED` tinyint(1) NOT NULL DEFAULT '1',
   PRIMARY KEY (`ID`),
+  UNIQUE KEY `INDEX_CODE` (`CODE`),
   KEY `INDEX_NO` (`CODE`),
   KEY `INDEX_NAME` (`NAME`),
   KEY `INDEX_CREAOR_ID` (`CREATOR_ID`),
   KEY `INDEX_MODIFIER_ID` (`MODIFIER_ID`)
-) ENGINE=InnoDB AUTO_INCREMENT=1402 DEFAULT CHARSET=utf8 COMMENT='菜单表';
+) ENGINE=InnoDB AUTO_INCREMENT=1405 DEFAULT CHARSET=utf8 COMMENT='菜单表';
 
 -- ----------------------------
 -- Table structure for sm_org
@@ -593,7 +747,7 @@ CREATE TABLE `sm_org` (
   KEY `INDEX_CREATOR_ID` (`CREATOR_ID`),
   KEY `INDEX_MODIFIER_ID` (`MODIFIER_ID`),
   KEY `INDEX_SHORT_NAME` (`SHORT_NAME`)
-) ENGINE=InnoDB AUTO_INCREMENT=10322 DEFAULT CHARSET=utf8 COMMENT='机构表';
+) ENGINE=InnoDB AUTO_INCREMENT=10326 DEFAULT CHARSET=utf8 COMMENT='机构表';
 
 -- ----------------------------
 -- Table structure for sm_org_role
@@ -649,7 +803,7 @@ CREATE TABLE `sm_role` (
   UNIQUE KEY `INDEX_CODE` (`CODE`),
   KEY `INDEX_CREATOR_ID` (`CREATOR_ID`),
   KEY `INDEX_MODIFIER_ID` (`MODIFIER_ID`)
-) ENGINE=InnoDB AUTO_INCREMENT=45588 DEFAULT CHARSET=utf8 COMMENT='角色表';
+) ENGINE=InnoDB AUTO_INCREMENT=45595 DEFAULT CHARSET=utf8 COMMENT='角色表';
 
 -- ----------------------------
 -- Table structure for sm_role_com
@@ -680,12 +834,12 @@ CREATE TABLE `sm_trace_log` (
   `OPERATE_TIME` datetime DEFAULT NULL COMMENT '操作时间',
   `TYPE` int(11) DEFAULT '0' COMMENT '操作类型',
   `OPERATOR` int(11) DEFAULT '0' COMMENT '用户ID',
-  `RECORD_ID` varchar(64) NOT NULL DEFAULT '' COMMENT '日志内容',
+  `RECORD_ID` int(11) NOT NULL DEFAULT '0' COMMENT '日志内容',
   `RECORD_NAME` varchar(64) DEFAULT '',
   PRIMARY KEY (`ID`),
   KEY `INDEX_NAME` (`MODULE_NAME`),
   KEY `INDEX_USER_ID` (`OPERATOR`)
-) ENGINE=InnoDB AUTO_INCREMENT=44 DEFAULT CHARSET=utf8 COMMENT='日志表';
+) ENGINE=InnoDB AUTO_INCREMENT=170 DEFAULT CHARSET=utf8 COMMENT='日志表';
 
 -- ----------------------------
 -- Table structure for sm_user
@@ -720,7 +874,7 @@ CREATE TABLE `sm_user` (
   KEY `INDEX_NO` (`CODE`),
   KEY `INDEX_CREATOR_ID` (`CREATOR_ID`),
   KEY `INDEX_MODIFIER_ID` (`MODIFIER_ID`)
-) ENGINE=InnoDB AUTO_INCREMENT=26652 DEFAULT CHARSET=utf8 COMMENT='用户表';
+) ENGINE=InnoDB AUTO_INCREMENT=26659 DEFAULT CHARSET=utf8 COMMENT='用户表';
 
 -- ----------------------------
 -- Table structure for sm_user_com
@@ -831,7 +985,7 @@ CREATE TABLE `sysmessage` (
   KEY `INDEX_MODIFIED_TIME` (`MODIFIED_TIME`),
   KEY `INDEX_CREATOR_ID` (`CREATOR_ID`),
   KEY `INDEX_MODIFIER_ID` (`MODIFIER_ID`)
-) ENGINE=InnoDB AUTO_INCREMENT=176 DEFAULT CHARSET=utf8 COMMENT='系统消息';
+) ENGINE=InnoDB AUTO_INCREMENT=185 DEFAULT CHARSET=utf8 COMMENT='系统消息';
 
 -- ----------------------------
 -- Table structure for user_message
@@ -846,7 +1000,7 @@ CREATE TABLE `user_message` (
   `CREATED_TIME` datetime NOT NULL,
   `MODIFIED_TIME` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '最后修改时间',
   PRIMARY KEY (`ID`)
-) ENGINE=InnoDB AUTO_INCREMENT=632 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=650 DEFAULT CHARSET=utf8;
 
 -- ----------------------------
 -- Records 
@@ -866,50 +1020,157 @@ INSERT INTO `attachment` VALUES ('224', '11010201', '3', '11010101', 'mm.gif', '
 INSERT INTO `attachment` VALUES ('225', '11010201', '0', '11010102', 'Tulips.jpg', 'C:\\Program Files\\Apache Software Foundation\\Tomcat 7.0\\webapps\\hxtd\\res\\20140627095822190.jpg', '1', '2014-06-27 09:58:22', '1', '2014-06-27 09:58:22', '0');
 INSERT INTO `attachment` VALUES ('226', '11010201', '34', '11010103', '强大微产品报价方案14-5-28.jpg', '/home/resin/webapps/hxtd/res/20140701163959250.jpg', '1', '2014-07-01 16:39:59', '1', '2014-07-01 16:40:22', '1');
 INSERT INTO `attachment` VALUES ('227', '11010201', '34', '11010103', '强大微产品报价方案14-5-28.jpg', '/home/resin/webapps/hxtd/res/20140701164034545.jpg', '1', '2014-07-01 16:40:34', '1', '2014-07-01 16:40:34', '0');
-INSERT INTO `contact` VALUES ('106531', '98357', null, '2', '测试', null, '研发中心', '', '010123456789', '18620623071', 'hua.li@pcstars.com', '', '', null, null, null, '', '爱仕达', '1', '2014-06-26 18:23:27', '1', '2014-06-30 11:08:26', '0');
-INSERT INTO `customer` VALUES ('98357', '2', '测试', null, '4030206', null, '4010301', '', '', '', '', '', '', null, null, null, null, '4030501', null, null, null, '', '爱仕达', '1', '2014-06-26 18:23:27', '1', '2014-06-27 09:51:44', '1', '');
-INSERT INTO `customer` VALUES ('98358', '1', 'admin', null, '4030201', null, null, '', '03166123701', '13909878908', '', '11111111111', '百会科技', null, '', '', null, '4030501', '0', '0', '0', '', '', '1', '2014-06-26 19:21:18', '1', '2014-06-26 20:58:22', '1', '00000000@gmail.com');
-INSERT INTO `customer` VALUES ('98359', '1', '张小飞', null, '4030202', null, null, '', '03166123701', '13909878908', '', '11111111111', '百会科技', null, '', '', null, '4030501', null, null, null, '', '', '1', '2014-06-26 19:33:24', '1', '2014-06-26 20:58:22', '1', '00000000@gmail.com');
-INSERT INTO `customer` VALUES ('98360', '1', 'usermenu', '-1', '4030202', '-1', '-1', '', '03166123701', '13909878908', '12313', '11111111111', '百会科技', '-1', '', '', '-1', '4030501', '420000', '420300', '420321', '', '', '1', '2014-06-27 09:22:21', '1', '2014-06-27 10:27:16', '1', '00000000@gmail.com');
-INSERT INTO `customer` VALUES ('98361', '1', 'admin', '4030101', '4030201', '4030401', '4030301', '', '03166123701', '13909878908', '', '11111111111', '3123', '4030701', '', '430700005987456324', '4030601', '4030501', '130000', '130300', '130303', 'FDSFDS', '', '1', '2014-06-27 10:32:06', '1', '2014-06-27 11:52:10', '1', '00000000@gmail.com');
-INSERT INTO `customer` VALUES ('98362', '1', 'admin', '4030101', '4030201', '4030401', '4030301', '', '03166123701', '13909878908', '', '11111111111', '3123', '4030701', '', '430700005987456324', '4030601', '4030501', '130000', '130300', '130303', '', '', '1', '2014-06-27 10:32:23', '1', '2014-06-27 10:34:45', '1', '00000000@gmail.com');
-INSERT INTO `customer` VALUES ('98363', '1', 'admin', '4030101', '4030201', '4030401', '4030301', '', '03166123701', '13909878908', '', '11111111111', '3123', '4030701', '', '430700005987456324', '4030601', '4030501', '130000', '130300', '130303', '', '', '1', '2014-06-27 10:32:25', '1', '2014-06-27 11:52:10', '1', '00000000@gmail.com');
-INSERT INTO `customer` VALUES ('98364', '1', 'admin', '4030101', '4030201', '4030402', '4030301', '', '03166123701', '13909878908', '', '11111111111', '百会科技', '4030701', '', '', '4030601', '4030501', '110000', '110100', '110102', '', '', '1', '2014-06-27 10:34:10', '1', '2014-06-27 11:52:10', '1', '00000000@gmail.com');
-INSERT INTO `customer` VALUES ('98365', '1', 'admin', '4030101', '4030201', '4030402', '4030301', '', '03166123701', '13909878908', '', '11111111111', '百会科技', '4030701', '', '', '4030602', '4030501', '130000', '130400', '130432', '', '', '1', '2014-06-27 10:36:07', '1', '2014-06-27 11:52:10', '1', '00000000@gmail.com');
-INSERT INTO `customer` VALUES ('98366', '1', 'RTYERY65467', '4030102', '4030205', '4030402', '4030303', '', '12345647897', '13909878908', '', '11111111111', '3123的大树大', '4030701', '', '', '4030602', '4030501', '130000', '130300', '130302', '', '', '1', '2014-06-27 10:37:14', '1', '2014-06-27 10:37:14', '0', '00000000@gmail.com');
-INSERT INTO `customer` VALUES ('98367', '1', 'usermenu', '40301', '4030203', '4030401', '40303', '', '03166123701', '13909878908', '0000000', '11111111111', '百会科技', '40307', '', '', '40306', '4030501', '420000', '420300', '420302', '', '', '1', '2014-06-27 10:42:13', '1', '2014-06-27 10:58:43', '0', '00000000@gmail.com');
-INSERT INTO `customer` VALUES ('98368', '1', '324', '40301', '4030202', '40304', '40303', '', '03166123701', '13909878908', '', '11111111111', '百会科技', '40307', '', '', '40306', '4030501', null, null, null, '', '', '1', '2014-06-27 11:06:29', '1', '2014-06-27 11:06:29', '0', '00000000@gmail.com');
-INSERT INTO `customer` VALUES ('98371', '1', 'admin', '40301', '4030203', '40304', '40303', '', '03166123701', '13909878908', '', '12345678909', '百会科技', '40307', '', '', '40306', '4030501', null, null, null, '', '', '1', '2014-06-27 11:14:37', '1', '2014-06-27 11:14:37', '0', 'zsd0302@163.com');
-INSERT INTO `customer` VALUES ('98372', '1', '管理员', '40301', '4030202', '40304', '40303', '', '03166123701', '13909878908', '', '11111111111', '百会科技', '40307', '', '', '40306', '4030501', null, null, null, '', '', '1', '2014-06-27 11:15:32', '1', '2014-06-27 11:15:32', '0', '00000000@gmail.com');
-INSERT INTO `customer` VALUES ('98373', '1', '管理员', '40301', '4030202', '40304', '40303', '', '03166123701', '13909878908', '', '11111111111', '百会科技', '40307', '', '', '40306', '4030501', null, null, null, '', '', '1', '2014-06-27 16:39:25', '1', '2014-06-27 16:39:25', '0', 'zsd0302@163.com');
-INSERT INTO `customer` VALUES ('98374', '1', '6556', '40301', '4030205', '40304', '40303', '', '03166123701', '13909878908', '', '32131234567', '百会科技', '40307', '', '', '40306', '4030501', null, null, null, '', '', '1', '2014-06-27 17:53:44', '1', '2014-06-30 09:44:08', '0', '00000000@gmail.com');
-INSERT INTO `customer` VALUES ('98375', '1', 'dw', '4030102', '4030203', '40304', '40303', '', '03166123701', '13909878908', '', '11111111111', '百会科技', '40307', '', '', '40306', '4030501', '140000', '140300', '140302', '', '', '1', '2014-06-30 09:46:56', '1', '2014-06-30 09:46:56', '0', 'zsd0302@163.com');
-INSERT INTO `lead` VALUES ('31', '26643', '', 'fasfsaf', '', '', '', '', '', '', '4010101', '4010201', '4010301', '2215456464653223', '4030501', '', '420000', '420200', '420203', '', '', '1', '2014-07-01 16:46:23', '1', '2014-07-01 16:46:23', '0');
-INSERT INTO `lead` VALUES ('32', '26650', '', 'ggggggg', '', '', '', '', '', '', '4010101', '4010201', '4010301', '', '4030501', '', null, null, null, '', '', '1', '2014-06-27 11:50:57', '1', '2014-06-30 14:14:17', '1');
-INSERT INTO `lead` VALUES ('33', '26650', '', 'hhhhhhhhhhh', '', '', '', '', '', '', '4010101', '4010201', '4010301', '', '4030501', '', null, null, null, '', '', '1', '2014-06-27 11:51:10', '1', '2014-06-27 11:52:33', '1');
-INSERT INTO `lead` VALUES ('34', '26651', '', 'jjjjjjjjjj', '', '', '', '', '', '', '4010101', '4010201', '4010301', '', '4030501', '', null, null, null, '', '', '1', '2014-06-27 11:51:26', '1', '2014-06-27 11:51:26', '0');
-INSERT INTO `market_activity` VALUES ('104433', 'gsdgsdgf', null, null, '2014-06-26 00:00:00', '2014-06-26 00:00:00', '0.00', '0.00', '1', '', '0.00', '1', '26643', '', '1', '2014-06-26 21:01:55', '1', '2014-06-30 15:10:59', '1');
-INSERT INTO `market_activity` VALUES ('104436', 'f', null, null, '2014-06-26 00:00:00', '2014-06-26 00:00:00', '0.00', '0.00', '1', '', '0.00', '1', '3', '', '1', '2014-06-26 21:02:29', '1', '2014-06-30 15:14:50', '1');
-INSERT INTO `market_activity` VALUES ('104437', 'fasfasf', null, null, '2014-06-27 00:00:00', '2014-06-27 00:00:00', '0.00', '0.00', '1', '', '0.00', '1', '2', '', '1', '2014-06-27 11:50:03', '1', '2014-06-30 17:40:40', '1');
-INSERT INTO `market_activity` VALUES ('104438', 'ereqwr', null, null, '2014-06-27 00:00:00', '2014-06-27 00:00:00', '0.00', '0.00', '1', '', '0.00', '1', '26650', '', '1', '2014-06-27 11:50:10', '1', '2014-06-30 17:40:40', '1');
-INSERT INTO `market_activity` VALUES ('104439', 'hfghgf', null, null, '2014-06-27 00:00:00', '2014-06-27 00:00:00', '0.00', '0.00', '1', '', '0.00', '1', '26650', '', '1', '2014-06-27 11:50:18', '1', '2014-06-30 17:40:40', '1');
-INSERT INTO `market_activity` VALUES ('104440', 'jgfhj', null, null, '2014-06-27 00:00:00', '2014-06-27 00:00:00', '0.00', '0.00', '1', '', '0.00', '1', '26645', '', '1', '2014-06-27 11:50:27', '1', '2014-06-27 11:52:19', '1');
-INSERT INTO `market_activity` VALUES ('104441', 'fafas', null, null, '2014-06-27 00:00:00', '2014-06-27 00:00:00', '0.00', '0.00', '1', '', '0.00', '1', '1', '', '1', '2014-06-27 11:50:34', '1', '2014-06-27 11:52:19', '1');
-INSERT INTO `market_activity` VALUES ('104448', '新增活动测试', '3010101', '3010201', '2014-06-30 00:00:00', '2014-06-30 00:00:00', '0.00', '0.00', '1', '一般', '50.00', '1', '26643', '测试数据，测试数据，\n\n列表点击编辑再保存', '1', '2014-06-30 17:54:25', '1', '2014-06-30 18:00:05', '0');
-INSERT INTO `market_activity` VALUES ('104449', '活动保存编辑测试', '3010104', '3010201', '2014-06-30 00:00:00', '2014-06-30 00:00:00', '7000.00', '45000.00', '1', '按照长远规划OK', '70.00', '1', '1', '活动测试，先保存，后编辑，在保存！', '1', '2014-06-30 17:55:31', '1', '2014-06-30 17:55:37', '0');
-INSERT INTO `memoir` VALUES ('78', '11010104', '106531', '0', '1', 'dfgd', null, null, '1', '2014-06-27 16:58:51', '1', '2014-06-27 17:04:01', '', '1');
-INSERT INTO `memoir` VALUES ('79', '11010104', '106531', '0', '1', 'dfsfs', null, null, '1', '2014-06-27 17:00:37', '1', '2014-06-27 17:03:58', '', '1');
-INSERT INTO `memoir` VALUES ('80', '11010104', '106531', '0', '1', 'dfdsf', '2014-06-03 00:00:00', 'sdfsdf', '1', '2014-06-27 17:03:54', '1', '2014-06-30 11:08:59', 'sdfsdf', '1');
-INSERT INTO `memoir` VALUES ('81', '11010102', '98373', '0', '1', '环境', '2014-06-05 00:00:00', 'i欧 ', '1', '2014-06-27 17:36:39', '1', '2014-06-27 17:36:26', '', '0');
-INSERT INTO `memoir` VALUES ('82', '11010104', '106531', '0', '1', '第三方公司打工', '2014-06-03 00:00:00', '的防守对方斯蒂芬所发生的方式发生的事', '1', '2014-06-27 17:37:57', '1', '2014-06-30 11:09:04', ' 放松放松放松放松放松', '1');
-INSERT INTO `memoir` VALUES ('83', '11010103', '34', '0', '1', 'dsfds', '2014-07-01 00:00:00', 'asdfsdf', '1', '2014-07-01 16:41:14', '1', '2014-06-30 16:41:38', '', '0');
+INSERT INTO `attachment` VALUES ('228', '11010201', '106538', '11010104', 'list_2.jpg', 'E:\\Workspaces\\apache-tomcat-6.0.35\\webapps\\hxtd\\res\\20140702153458233.jpg', '1', '2014-07-02 15:34:58', '1', '2014-07-02 15:51:50', '0');
+INSERT INTO `attachment` VALUES ('229', '11010201', '106538', '11010104', 'logo.png', 'E:\\Workspaces\\apache-tomcat-6.0.35\\webapps\\hxtd\\res\\20140702153459676.png', '1', '2014-07-02 15:34:59', '1', '2014-07-02 15:51:50', '0');
+INSERT INTO `attachment` VALUES ('230', '11010201', '106538', '11010104', 'mm.gif', 'E:\\Workspaces\\apache-tomcat-6.0.35\\webapps\\hxtd\\res\\2014070215345912.gif', '1', '2014-07-02 15:34:59', '1', '2014-07-02 15:51:50', '0');
+INSERT INTO `attachment` VALUES ('231', '11010201', '106548', '11010104', '444d7111gw1egt8st6f16g208907x1ky.gif', 'E:\\Workspaces\\apache-tomcat-6.0.35\\webapps\\hxtd\\res\\20140702161049300.gif', '1', '2014-07-02 16:10:49', '1', '2014-07-02 17:01:12', '1');
+INSERT INTO `attachment` VALUES ('232', '11010201', '106548', '11010104', '123456.gif', 'E:\\Workspaces\\apache-tomcat-6.0.35\\webapps\\hxtd\\res\\20140702161049983.gif', '1', '2014-07-02 16:10:49', '1', '2014-07-02 17:01:12', '1');
+INSERT INTO `attachment` VALUES ('233', '11010201', '106548', '11010104', '20140501.gif', 'E:\\Workspaces\\apache-tomcat-6.0.35\\webapps\\hxtd\\res\\20140702161049663.gif', '1', '2014-07-02 16:10:49', '1', '2014-07-02 17:01:12', '0');
+INSERT INTO `attachment` VALUES ('234', '11010201', '106548', '11010104', '93981221jw1eg9gdx6ejrg206g05k7wh.gif', 'E:\\Workspaces\\apache-tomcat-6.0.35\\webapps\\hxtd\\res\\20140702161050273.gif', '1', '2014-07-02 16:10:50', '1', '2014-07-02 17:01:12', '0');
+INSERT INTO `attachment` VALUES ('235', '11010201', '106548', '11010104', 'ds.gif', 'E:\\Workspaces\\apache-tomcat-6.0.35\\webapps\\hxtd\\res\\20140702161050504.gif', '1', '2014-07-02 16:10:50', '1', '2014-07-02 17:01:12', '0');
+INSERT INTO `attachment` VALUES ('236', '11010201', '106548', '11010104', 'hz.gif', 'E:\\Workspaces\\apache-tomcat-6.0.35\\webapps\\hxtd\\res\\20140702161050569.gif', '1', '2014-07-02 16:10:50', '1', '2014-07-02 17:01:12', '0');
+INSERT INTO `attachment` VALUES ('237', '11010201', '106548', '11010104', 'jzds.gif', 'E:\\Workspaces\\apache-tomcat-6.0.35\\webapps\\hxtd\\res\\20140702161051667.gif', '1', '2014-07-02 16:10:51', '1', '2014-07-02 17:01:12', '0');
+INSERT INTO `attachment` VALUES ('238', '11010201', '106548', '11010104', 'list_1.jpg', 'E:\\Workspaces\\apache-tomcat-6.0.35\\webapps\\hxtd\\res\\20140702161051226.jpg', '1', '2014-07-02 16:10:51', '1', '2014-07-02 17:01:12', '0');
+INSERT INTO `attachment` VALUES ('239', '11010201', '106548', '11010104', 'list_2.jpg', 'E:\\Workspaces\\apache-tomcat-6.0.35\\webapps\\hxtd\\res\\20140702161051494.jpg', '1', '2014-07-02 16:10:51', '1', '2014-07-02 17:01:12', '0');
+INSERT INTO `attachment` VALUES ('240', '11010201', '106548', '11010104', 'logo.png', 'E:\\Workspaces\\apache-tomcat-6.0.35\\webapps\\hxtd\\res\\20140702161052272.png', '1', '2014-07-02 16:10:52', '1', '2014-07-02 17:01:12', '0');
+INSERT INTO `attachment` VALUES ('241', '11010201', '106551', '11010104', '444d7111gw1egt8st6f16g208907x1ky.gif', '/home/resin/webapps/hxtd/res/20140703161110447.gif', '1', '2014-07-03 16:11:10', '1', '2014-07-02 17:18:25', '0');
+INSERT INTO `attachment` VALUES ('242', '11010201', '106551', '11010104', '123456.gif', '/home/resin/webapps/hxtd/res/20140703161111297.gif', '1', '2014-07-03 16:11:11', '1', '2014-07-02 17:18:25', '0');
+INSERT INTO `attachment` VALUES ('243', '11010201', '106551', '11010104', '20140501.gif', '/home/resin/webapps/hxtd/res/20140703161112617.gif', '1', '2014-07-03 16:11:12', '1', '2014-07-02 17:18:25', '0');
+INSERT INTO `attachment` VALUES ('244', '11010201', '106551', '11010104', '123456.gif', '/home/resin/webapps/hxtd/res/20140703161121357.gif', '1', '2014-07-03 16:11:21', '1', '2014-07-02 17:18:25', '0');
+INSERT INTO `attachment` VALUES ('245', '11010201', '106551', '11010104', '444d7111gw1egt8st6f16g208907x1ky.gif', '/home/resin/webapps/hxtd/res/20140703161305908.gif', '1', '2014-07-03 16:13:05', '1', '2014-07-02 17:18:25', '0');
+INSERT INTO `attachment` VALUES ('246', '11010201', '106551', '11010104', '123456.gif', '/home/resin/webapps/hxtd/res/20140703161310619.gif', '1', '2014-07-03 16:13:10', '1', '2014-07-02 17:18:25', '0');
+INSERT INTO `attachment` VALUES ('247', '11010201', '106551', '11010104', '20140501.gif', '/home/resin/webapps/hxtd/res/20140703161311577.gif', '1', '2014-07-03 16:13:11', '1', '2014-07-02 17:18:25', '0');
+INSERT INTO `attachment` VALUES ('248', '11010201', '106551', '11010104', '93981221jw1eg9gdx6ejrg206g05k7wh.gif', '/home/resin/webapps/hxtd/res/20140703161312398.gif', '1', '2014-07-03 16:13:12', '1', '2014-07-02 17:18:25', '0');
+INSERT INTO `attachment` VALUES ('249', '11010202', '106548', '11010104', '20140501.gif', 'E:\\Workspaces\\apache-tomcat-6.0.35\\webapps\\hxtd\\res\\20140702161506389.gif', '1', '2014-07-02 16:15:06', '1', '2014-07-02 17:01:12', '0');
+INSERT INTO `attachment` VALUES ('250', '11010202', '106548', '11010104', '93981221jw1eg9gdx6ejrg206g05k7wh.gif', 'E:\\Workspaces\\apache-tomcat-6.0.35\\webapps\\hxtd\\res\\20140702161507104.gif', '1', '2014-07-02 16:15:07', '1', '2014-07-02 17:01:12', '0');
+INSERT INTO `attachment` VALUES ('251', '11010202', '106548', '11010104', 'ds.gif', 'E:\\Workspaces\\apache-tomcat-6.0.35\\webapps\\hxtd\\res\\20140702161507885.gif', '1', '2014-07-02 16:15:07', '1', '2014-07-02 17:01:12', '0');
+INSERT INTO `attachment` VALUES ('252', '11010202', '106548', '11010104', 'hz.gif', 'E:\\Workspaces\\apache-tomcat-6.0.35\\webapps\\hxtd\\res\\20140702161507538.gif', '1', '2014-07-02 16:15:07', '1', '2014-07-02 17:01:12', '0');
+INSERT INTO `attachment` VALUES ('253', '11010202', '106548', '11010104', 'jzds.gif', 'E:\\Workspaces\\apache-tomcat-6.0.35\\webapps\\hxtd\\res\\20140702161507963.gif', '1', '2014-07-02 16:15:07', '1', '2014-07-02 17:01:12', '0');
+INSERT INTO `attachment` VALUES ('254', '11010202', '106548', '11010104', 'list_1.jpg', 'E:\\Workspaces\\apache-tomcat-6.0.35\\webapps\\hxtd\\res\\20140702161508997.jpg', '1', '2014-07-02 16:15:08', '1', '2014-07-02 17:01:12', '0');
+INSERT INTO `attachment` VALUES ('255', '11010202', '106548', '11010104', 'list_2.jpg', 'E:\\Workspaces\\apache-tomcat-6.0.35\\webapps\\hxtd\\res\\20140702161508478.jpg', '1', '2014-07-02 16:15:08', '1', '2014-07-02 17:01:12', '0');
+INSERT INTO `attachment` VALUES ('256', '11010202', '106548', '11010104', 'logo.png', 'E:\\Workspaces\\apache-tomcat-6.0.35\\webapps\\hxtd\\res\\2014070216150842.png', '1', '2014-07-02 16:15:08', '1', '2014-07-02 17:01:12', '0');
+INSERT INTO `attachment` VALUES ('257', '11010202', '106548', '11010104', 'mm.gif', 'E:\\Workspaces\\apache-tomcat-6.0.35\\webapps\\hxtd\\res\\20140702161508344.gif', '1', '2014-07-02 16:15:08', '1', '2014-07-02 17:01:12', '0');
+INSERT INTO `attachment` VALUES ('258', '11010202', '106548', '11010104', 'sqg.gif', 'E:\\Workspaces\\apache-tomcat-6.0.35\\webapps\\hxtd\\res\\20140702161509160.gif', '1', '2014-07-02 16:15:09', '1', '2014-07-02 17:01:12', '0');
+INSERT INTO `attachment` VALUES ('259', '11010202', '106548', '11010104', 'tcm.gif', 'E:\\Workspaces\\apache-tomcat-6.0.35\\webapps\\hxtd\\res\\20140702161509183.gif', '1', '2014-07-02 16:15:09', '1', '2014-07-02 17:01:12', '0');
+INSERT INTO `attachment` VALUES ('260', '11010202', '106548', '11010104', 'ui-bg_gloss-wave_75_2191c0_500x100.png', 'E:\\Workspaces\\apache-tomcat-6.0.35\\webapps\\hxtd\\res\\20140702161509605.png', '1', '2014-07-02 16:15:09', '1', '2014-07-02 17:01:12', '0');
+INSERT INTO `attachment` VALUES ('261', '11010202', '106548', '11010104', 'v1.jpg', 'E:\\Workspaces\\apache-tomcat-6.0.35\\webapps\\hxtd\\res\\20140702161510929.jpg', '1', '2014-07-02 16:15:10', '1', '2014-07-02 17:01:12', '0');
+INSERT INTO `attachment` VALUES ('262', '11010202', '106548', '11010104', 'v2.jpg', 'E:\\Workspaces\\apache-tomcat-6.0.35\\webapps\\hxtd\\res\\20140702161510264.jpg', '1', '2014-07-02 16:15:10', '1', '2014-07-02 17:01:12', '0');
+INSERT INTO `attachment` VALUES ('263', '11010202', '106548', '11010104', 'v3.jpg', 'E:\\Workspaces\\apache-tomcat-6.0.35\\webapps\\hxtd\\res\\20140702161510174.jpg', '1', '2014-07-02 16:15:10', '1', '2014-07-02 17:01:12', '0');
+INSERT INTO `attachment` VALUES ('264', '11010202', '106548', '11010104', '房子.png', 'E:\\Workspaces\\apache-tomcat-6.0.35\\webapps\\hxtd\\res\\20140702161511613.png', '1', '2014-07-02 16:15:11', '1', '2014-07-02 17:01:12', '0');
+INSERT INTO `attachment` VALUES ('265', '11010202', '106548', '11010104', '工作台.jpg', 'E:\\Workspaces\\apache-tomcat-6.0.35\\webapps\\hxtd\\res\\20140702161511995.jpg', '1', '2014-07-02 16:15:11', '1', '2014-07-02 17:01:12', '0');
+INSERT INTO `attachment` VALUES ('266', '11010201', '106543', '11010104', '1.jpg', 'D:\\java\\apache-tomcat-6.0.35-windows-x64\\apache-tomcat-6.0.35\\webapps\\hxtd\\res\\20140702162336571.jpg', '1', '2014-07-02 16:23:36', '1', '2014-07-02 16:28:59', '1');
+INSERT INTO `attachment` VALUES ('267', '11010201', '106543', '11010104', '1.jpg', 'D:\\java\\apache-tomcat-6.0.35-windows-x64\\apache-tomcat-6.0.35\\webapps\\hxtd\\res\\20140702162425861.jpg', '1', '2014-07-02 16:24:25', '1', '2014-07-02 16:28:59', '0');
+INSERT INTO `attachment` VALUES ('268', '11010201', '40', '11010103', '18.jpg', '/home/resin/webapps/hxtd/res/20140703164154910.jpg', '1', '2014-07-03 16:41:54', '1', '2014-07-03 16:41:54', '0');
+INSERT INTO `attachment` VALUES ('269', '11010201', '40', '11010103', '19.jpg', '/home/resin/webapps/hxtd/res/2014070316415487.jpg', '1', '2014-07-03 16:41:54', '1', '2014-07-03 16:41:54', '0');
+INSERT INTO `attachment` VALUES ('270', '11010201', '40', '11010103', '14.jpg', '/home/resin/webapps/hxtd/res/20140703164538903.jpg', '1', '2014-07-03 16:45:38', '1', '2014-07-03 16:45:38', '0');
+INSERT INTO `attachment` VALUES ('271', '11010201', '106532', '11010104', '14.jpg', '/home/resin/webapps/hxtd/res/20140703170556754.jpg', '1', '2014-07-03 17:05:56', '1', '2014-07-03 17:05:56', '0');
+INSERT INTO `attachment` VALUES ('272', '11010201', '106532', '11010104', '19.jpg', '/home/resin/webapps/hxtd/res/20140703170621540.jpg', '1', '2014-07-03 17:06:21', '1', '2014-07-03 17:06:21', '0');
+INSERT INTO `contact` VALUES ('106531', '98357', null, '2', '测试', null, '研发中心', '', '010123456789', '18620623071', 'hua.li@pcstars.com', '', '', null, null, null, '', '爱仕达', '1', '2014-06-26 18:23:27', '1', '2014-07-03 16:59:39', '1');
+INSERT INTO `contact` VALUES ('106532', '98374', null, '2', 'fasdfa', null, '', '', '', '', '', '', '', null, null, null, '', '', '1', '2014-07-01 19:03:07', '1', '2014-07-03 17:15:20', '1');
+INSERT INTO `contact` VALUES ('106533', '98381', null, '26645', '刘岚', null, '', '', '', '', '', '', '', null, null, null, '', '', '1', '2014-07-03 13:18:42', '1', '2014-07-03 17:16:23', '1');
+INSERT INTO `contact` VALUES ('106534', '98382', null, '2', '刘岚（测试）', null, '', '123', '15911140672', '', '', '', '', null, null, null, '', '刘岚（测试）刘岚（测试）刘岚（测试）刘岚（测试）刘岚（测试）刘岚（测试）刘岚（测试）刘岚（测试）刘岚（测试）刘岚（测试）刘岚（测试）刘岚（测试）刘岚（测试）刘岚（测试）刘岚（测试）刘岚（测试）刘岚（测试）', '1', '2014-07-03 13:12:06', '1', '2014-07-03 13:12:06', '0');
+INSERT INTO `contact` VALUES ('106535', null, '3', '2', '刘岚', null, '', '', '15911140672', '15911140677', '', '', '', null, null, null, '', '', '1', '2014-07-03 14:40:15', '1', '2014-07-02 14:40:59', '0');
+INSERT INTO `contact` VALUES ('106536', null, '6', '26645', '刘岚', '4010101', '', '', '', '', '', '', '', '120000', null, null, '', '', '1', '2014-07-03 14:41:32', '1', '2014-07-02 14:50:20', '0');
+INSERT INTO `contact` VALUES ('106537', '98373', '6', '4', '刘岚', '4010101', '北京', '', '15911140672', '13500000000', '', '', '', '150000', '150500', null, '', '刘岚刘岚刘岚刘岚刘岚刘岚刘岚刘岚刘岚刘岚刘岚刘岚刘岚刘岚刘岚刘岚刘岚刘岚刘岚刘岚刘岚刘岚刘岚刘岚刘岚刘岚刘岚刘岚刘岚刘岚刘岚刘岚刘岚刘岚刘岚刘岚刘岚刘岚刘岚刘岚刘岚刘岚刘岚刘岚刘岚刘岚刘岚测测', '1', '2014-07-03 14:55:30', '1', '2014-07-02 14:56:46', '0');
+INSERT INTO `contact` VALUES ('106538', '98383', null, '26645', '刘岚2', null, '', '', '15911140672', '', '', '', '', null, null, null, '', '新浪体育讯　北京时间7月2日00:00(巴西当地时间1日13:00)，2014世界杯1/8决赛第7场比赛在圣保罗竞技场展开角逐，阿根廷加时赛1比0险胜瑞士，梅西第118分钟助攻迪马利亚绝杀。新浪体育讯　北京时间7月2日00:00(巴西当地时间1日13:00)，2014世界杯1/8决赛第7场比赛在圣保罗竞技场展开角逐，阿根廷加时赛1比0险胜瑞士，梅西第118分钟助攻迪马利亚绝杀。新浪体育讯　北京时间7月2日00:00(巴西当地时间1日13:00)，2014世界杯1/8决赛第7场比赛在圣保罗竞技场展开角逐，阿根廷加时赛1比0险胜瑞士，梅西第118分钟助攻迪马利亚绝杀。', '1', '2014-07-03 15:49:19', '1', '2014-07-03 15:49:19', '0');
+INSERT INTO `contact` VALUES ('106539', '98384', null, '3', '刘岚', null, '', '', '', '', '', '', '', null, null, null, '', '', '1', '2014-07-03 15:28:50', '1', '2014-07-02 15:30:27', '0');
+INSERT INTO `contact` VALUES ('106540', '98385', null, '4', 'liulan7', null, '', 'cfo', '15911111113', '15911111113', '', '', '', '110000', null, null, '', '新浪体育讯　北京时间7月2日00:00(巴西当地时间1日13:00)，2014世界杯1/8决赛第7场比赛在圣保罗竞技场展开角逐，阿根廷加时赛1比0险胜瑞士，梅西第118分钟助攻迪马利亚绝杀。', '1', '2014-07-03 15:15:15', '1', '2014-07-03 17:17:03', '1');
+INSERT INTO `contact` VALUES ('106541', null, '6', '3', '门店区域设置', '4010101', '', '', '', '', '', '', '', null, null, null, '', '', '1', '2014-07-03 16:00:41', '1', '2014-07-02 16:01:25', '0');
+INSERT INTO `contact` VALUES ('106542', '98382', null, '2', '关注', '4010101', '', '', '', '', '', '', '', null, null, null, '', '刘岚（测试）刘岚（测试）刘岚（测试）刘岚（测试）刘岚（测试）刘岚（测试）刘岚（测试）刘岚（测试）刘岚（测试）刘岚（测试）刘岚（测试）刘岚（测试）刘岚（测试）刘岚（测试）刘岚（测试）刘岚（测试）刘岚（测试）刘岚（测试）刘岚（测试）刘岚（测试）刘岚（测试）刘岚（测试）刘岚（测试）刘岚（测试）刘岚（测试）刘岚（测试）刘岚（测试）刘岚（测试）刘岚（测试）刘岚（测试）刘岚（测试）刘岚（测试）刘岚（测试）刘岚（测试）刘岚（测试）刘岚（测试）刘岚（测试）刘岚（测试）刘岚（测试）刘岚（测试）刘岚（测试）', '1', '2014-07-03 16:15:52', '1', '2014-07-02 16:16:36', '0');
+INSERT INTO `contact` VALUES ('106543', '98386', null, '26645', '刘岚2', null, '', '', '15911111111', '', '', '', '', null, null, null, '', '', '1', '2014-07-03 13:57:59', '1', '2014-07-02 14:01:13', '0');
+INSERT INTO `contact` VALUES ('106544', '98387', null, '26645', '刘岚华仔', null, '', '', '15911140679', '', '', '', '', null, null, null, '', '', '1', '2014-07-03 16:31:24', '1', '2014-07-03 16:31:24', '0');
+INSERT INTO `contact` VALUES ('106545', null, '6', '2', '门店区域设置', '4010101', '', '', '', '', '', '', '', null, null, null, '', '', '1', '2014-07-03 16:55:07', '1', '2014-07-02 16:55:51', '0');
+INSERT INTO `contact` VALUES ('106546', '98378', '3', '1', '关注78', '4010101', '', '', '', '', '', '', '', null, null, null, '', '', '1', '2014-07-03 16:55:58', '1', '2014-07-02 16:56:42', '0');
+INSERT INTO `contact` VALUES ('106547', '98373', '3', '2', '门店区域设置', '4010101', '', '', '', '', '', '', '', null, null, null, '', '', '1', '2014-07-03 17:00:21', '1', '2014-07-02 17:01:05', '0');
+INSERT INTO `contact` VALUES ('106548', '98388', null, '1', '刘岚3', null, '', '', '010-5601112', '', '', '', '', null, null, null, '', '', '1', '2014-07-03 13:58:42', '1', '2014-07-02 17:00:42', '0');
+INSERT INTO `contact` VALUES ('106549', '98389', null, '26645', '刘岚4', null, '', '', '15911140672', '', '', '', '', null, null, null, '', '刘岚2刘岚2刘岚2刘岚2刘岚2刘岚2刘岚2刘岚2刘岚2刘岚2刘岚2', '1', '2014-07-03 13:59:25', '1', '2014-07-02 14:01:13', '0');
+INSERT INTO `contact` VALUES ('106550', '98373', '3', '2', '微预约：支付功能', null, '', '', '', '', '', '', '', null, null, null, '', '', '1', '2014-07-03 17:13:20', '1', '2014-07-02 17:14:04', '0');
+INSERT INTO `contact` VALUES ('106551', '98390', null, '4', '刘岚（测试）', null, '', '', '', '', '', '', '', null, null, null, '', '刘岚（测试）刘岚（测试）刘岚（测试）刘岚（测试）刘岚（测试）刘岚（测试）刘岚（测试）刘岚（测试）刘岚（测试）刘岚（测试）刘岚（测试）刘岚（测试）刘岚（测试）刘岚（测试）刘岚（测试）', '1', '2014-07-02 13:39:02', '1', '2014-07-02 17:18:29', '0');
+INSERT INTO `customer` VALUES ('98357', '2', '测试', null, '4030206', null, '4010301', '', '', '', '', '', '', null, null, null, null, '4030501', null, null, null, '', '爱仕达', '1', '2014-06-26 18:23:27', '1', '2014-07-01 16:49:28', '1', '');
+INSERT INTO `customer` VALUES ('98358', '1', 'admin', null, '4030201', null, null, '', '03166123701', '13909878908', '', '11111111111', '百会科技', null, '', '', null, '4030501', '0', '0', '0', '', '', '1', '2014-06-26 19:21:18', '1', '2014-07-01 16:52:35', '1', '00000000@gmail.com');
+INSERT INTO `customer` VALUES ('98359', '1', '张小飞', null, '4030202', null, null, '', '03166123701', '13909878908', '', '11111111111', '百会科技', null, '', '', null, '4030501', null, null, null, '', '', '1', '2014-06-26 19:33:24', '1', '2014-07-01 16:52:35', '1', '00000000@gmail.com');
+INSERT INTO `customer` VALUES ('98360', '1', 'usermenu', '-1', '4030202', '-1', '-1', '', '03166123701', '13909878908', '12313', '11111111111', '百会科技', '-1', '', '', '-1', '4030501', '420000', '420300', '420321', '', '', '1', '2014-06-27 09:22:21', '1', '2014-07-01 16:54:33', '1', '00000000@gmail.com');
+INSERT INTO `customer` VALUES ('98361', '1', 'admin', '4030101', '4030201', '4030401', '4030301', '', '03166123701', '13909878908', '', '11111111111', '3123', '4030701', '', '430700005987456324', '4030601', '4030501', '130000', '130300', '130303', 'FDSFDS', '', '1', '2014-06-27 10:32:06', '1', '2014-07-01 16:55:34', '1', '00000000@gmail.com');
+INSERT INTO `customer` VALUES ('98362', '1', 'admin', '4030101', '4030201', '4030401', '4030301', '', '03166123701', '13909878908', '', '11111111111', '3123', '4030701', '', '430700005987456324', '4030601', '4030501', '130000', '130300', '130303', '', '', '1', '2014-06-27 10:32:23', '1', '2014-07-01 16:59:01', '1', '00000000@gmail.com');
+INSERT INTO `customer` VALUES ('98363', '1', 'admin', '4030101', '4030201', '4030401', '4030301', '', '03166123701', '13909878908', '', '11111111111', '3123', '4030701', '', '430700005987456324', '4030601', '4030501', '130000', '130300', '130303', '', '', '1', '2014-06-27 10:32:25', '1', '2014-07-01 16:59:01', '1', '00000000@gmail.com');
+INSERT INTO `customer` VALUES ('98364', '1', 'admin', '4030101', '4030201', '4030402', '4030301', '', '03166123701', '13909878908', '', '11111111111', '百会科技', '4030701', '', '', '4030601', '4030501', '110000', '110100', '110102', '', '', '1', '2014-06-27 10:34:10', '1', '2014-07-01 16:59:09', '1', '00000000@gmail.com');
+INSERT INTO `customer` VALUES ('98365', '1', 'admin', '4030101', '4030201', '4030402', '4030301', '', '03166123701', '13909878908', '', '11111111111', '百会科技', '4030701', '', '', '4030602', '4030501', '130000', '130400', '130432', '', '', '1', '2014-06-27 10:36:07', '1', '2014-07-01 16:59:09', '1', '00000000@gmail.com');
+INSERT INTO `customer` VALUES ('98366', '1', 'RTYERY65467', '4030102', '4030205', '4030402', '4030303', '', '12345647897', '13909878908', '', '11111111111', '3123的大树大', '4030701', '', '', '4030602', '4030501', '130000', '130300', '130302', '', '', '1', '2014-06-27 10:37:14', '1', '2014-07-01 16:59:09', '1', '00000000@gmail.com');
+INSERT INTO `customer` VALUES ('98367', '1', 'usermenu', '40301', '4030203', '4030401', '40303', '', '03166123701', '13909878908', '0000000', '11111111111', '百会科技', '40307', '', '', '40306', '4030501', '420000', '420300', '420302', '', '', '1', '2014-06-27 10:42:13', '1', '2014-07-01 16:59:09', '1', '00000000@gmail.com');
+INSERT INTO `customer` VALUES ('98368', '1', '324', '40301', '4030202', '40304', '40303', '', '03166123701', '13909878908', '', '11111111111', '百会科技', '40307', '', '', '40306', '4030501', null, null, null, '', '', '1', '2014-06-27 11:06:29', '1', '2014-07-01 16:59:15', '1', '00000000@gmail.com');
+INSERT INTO `customer` VALUES ('98371', '1', 'admin', '40301', '4030203', '40304', '40303', '', '03166123701', '13909878908', '', '12345678909', '百会科技', '40307', '', '', '40306', '4030501', null, null, null, '', '', '1', '2014-06-27 11:14:37', '1', '2014-07-01 17:07:48', '1', 'zsd0302@163.com');
+INSERT INTO `customer` VALUES ('98372', '1', '管理员', '40301', '4030202', '40304', '40303', '', '03166123701', '13909878908', '', '11111111111', '百会科技', '40307', '', '', '40306', '4030501', null, null, null, '', '', '1', '2014-06-27 11:15:32', '1', '2014-07-01 17:07:48', '1', '00000000@gmail.com');
+INSERT INTO `customer` VALUES ('98373', '1', '管理员', '40301', '4030202', '40304', '40303', '', '03166123701', '13909878908', '', '11111111111', '百会科技', '40307', '', '', '40306', '4030501', null, null, null, '', '', '1', '2014-06-27 16:39:25', '1', '2014-07-01 16:49:12', '0', 'zsd0302@163.com');
+INSERT INTO `customer` VALUES ('98374', '1', '6556', '40301', '4030205', '40304', '40303', '', '03166123701', '13909878908', '', '32131234567', '百会科技', '40307', '', '', '40306', '4030501', null, null, null, '', '', '1', '2014-06-27 17:53:44', '1', '2014-07-01 16:49:12', '0', '00000000@gmail.com');
+INSERT INTO `customer` VALUES ('98375', '1', 'dw', '4030102', '4030203', '40304', '40303', '', '03166123701', '13909878908', '', '11111111111', '百会科技', '40307', '', '', '40306', '4030501', '140000', '140300', '140302', '', '', '1', '2014-06-30 09:46:56', '1', '2014-07-01 16:49:12', '0', 'zsd0302@163.com');
+INSERT INTO `customer` VALUES ('98376', '1', '13648752548', '4030102', '4030202', '4030401', '40303', '13648752548', '13648752548', '13648752548', '100000', '13648752548', '13648752548', '4030701', '13648752548', '13648752548', '4030601', '4030501', '120000', '120100', '120102', '', '', '1', '2014-07-01 17:33:46', '1', '2014-07-01 17:33:46', '0', '13648752548@qq.com');
+INSERT INTO `customer` VALUES ('98377', '1', '13648752548', '4030102', '4030201', '4030402', '40303', '13648752548', '13648752548', '13648752548', '', '13648752548', '13648752548', '40307', '', '', '40306', '4030501', null, null, null, '', '', '1', '2014-07-01 17:35:28', '1', '2014-07-01 17:35:28', '0', '13648752548@qq.com');
+INSERT INTO `customer` VALUES ('98378', '1', '13648752548', '40301', '4030201', '40304', '40303', '', '13648752548', '13648752548', '', '13648752548', '13648752548', '40307', '', '', '40306', '4030501', null, null, null, '', '', '1', '2014-07-01 17:49:41', '1', '2014-07-01 17:50:32', '0', '13648752548@qq.com');
+INSERT INTO `customer` VALUES ('98379', '1', 'usermenu', '40301', '4030202', '40304', '40303', '', '13909878908', '13909878908', '', '11111111111', '13909878908', '40307', '', '', '40306', '4030501', null, null, null, '', '', '1', '2014-07-01 17:58:35', '1', '2014-07-01 18:08:12', '0', '00000000@gmail.com');
+INSERT INTO `customer` VALUES ('98380', '1', 'usermenu78', '40301', '4030201', '40304', '40303', '', '03166123701', '13909878908', '', '11111111111', '百会科技', '40307', '', '', '40306', '4030501', '230000', '230300', '230302', '', '', '1', '2014-07-02 10:33:16', '1', '2014-07-02 10:33:16', '0', '00000000@gmail.com');
+INSERT INTO `customer` VALUES ('98381', '26645', '刘岚', null, '4030206', null, '4010301', '', '', '', '', '', '', null, null, null, null, '4030501', null, null, null, '', '', '1', '2014-07-03 13:18:42', '1', '2014-07-03 13:18:42', '0', '');
+INSERT INTO `customer` VALUES ('98382', '2', '刘岚（测试）', null, '4030206', null, '4010301', '', '15911140672', '', '', '', '海泰', null, null, null, null, '4030501', null, null, null, '', '刘岚（测试）刘岚（测试）刘岚（测试）刘岚（测试）刘岚（测试）刘岚（测试）刘岚（测试）刘岚（测试）刘岚（测试）刘岚（测试）刘岚（测试）刘岚（测试）刘岚（测试）刘岚（测试）刘岚（测试）刘岚（测试）刘岚（测试）', '1', '2014-07-03 13:12:06', '1', '2014-07-03 13:12:06', '0', '');
+INSERT INTO `customer` VALUES ('98383', '26645', '刘岚2', null, '4030206', null, '4010301', '', '15911140672', '', '', '', '', null, null, null, null, '4030501', null, null, null, '', '新浪体育讯　北京时间7月2日00:00(巴西当地时间1日13:00)，2014世界杯1/8决赛第7场比赛在圣保罗竞技场展开角逐，阿根廷加时赛1比0险胜瑞士，梅西第118分钟助攻迪马利亚绝杀。新浪体育讯　北京时间7月2日00:00(巴西当地时间1日13:00)，2014世界杯1/8决赛第7场比赛在圣保罗竞技场展开角逐，阿根廷加时赛1比0险胜瑞士，梅西第118分钟助攻迪马利亚绝杀。新浪体育讯　北京时间7月2日00:00(巴西当地时间1日13:00)，2014世界杯1/8决赛第7场比赛在圣保罗竞技场展开角逐，阿根廷加时赛1比0险胜瑞士，梅西第118分钟助攻迪马利亚绝杀。', '1', '2014-07-03 15:49:19', '1', '2014-07-03 15:49:19', '0', '');
+INSERT INTO `customer` VALUES ('98384', '3', '刘岚', null, '4030206', null, '4010301', '', '', '', '', '', '', null, null, null, null, '4030501', null, null, null, '', '', '1', '2014-07-03 15:28:50', '1', '2014-07-02 15:30:27', '0', '');
+INSERT INTO `customer` VALUES ('98385', '4', 'liulan7', null, '4030206', null, '4010301', '', '15911111113', '15911111113', '', '', '强大微', null, null, null, null, '4030501', '110000', null, null, '', '新浪体育讯　北京时间7月2日00:00(巴西当地时间1日13:00)，2014世界杯1/8决赛第7场比赛在圣保罗竞技场展开角逐，阿根廷加时赛1比0险胜瑞士，梅西第118分钟助攻迪马利亚绝杀。', '1', '2014-07-03 15:15:15', '1', '2014-07-02 15:28:29', '0', '');
+INSERT INTO `customer` VALUES ('98386', '26645', '刘岚2', null, '4030206', null, '4010301', '', '15911111111', '', '', '', '', null, null, null, null, '4030501', null, null, null, '', '', '1', '2014-07-03 13:57:59', '1', '2014-07-02 14:01:13', '0', '');
+INSERT INTO `customer` VALUES ('98387', '26645', '刘岚华仔', null, '4030206', null, '4010301', '', '15911140679', '', '', '', '', null, null, null, null, '4030501', null, null, null, '', '', '1', '2014-07-03 16:31:24', '1', '2014-07-03 16:31:24', '0', '');
+INSERT INTO `customer` VALUES ('98388', '1', '刘岚3', null, '4030206', null, '4010301', '', '010-5601112', '', '', '', '', null, null, null, null, '4030501', null, null, null, '', '', '1', '2014-07-03 13:58:42', '1', '2014-07-02 17:00:42', '0', '');
+INSERT INTO `customer` VALUES ('98389', '26645', '刘岚4', null, '4030206', null, '4010301', '', '15911140672', '', '', '', '', null, null, null, null, '4030501', null, null, null, '', '刘岚2刘岚2刘岚2刘岚2刘岚2刘岚2刘岚2刘岚2刘岚2刘岚2刘岚2', '1', '2014-07-03 13:59:25', '1', '2014-07-02 14:01:13', '0', '');
+INSERT INTO `customer` VALUES ('98390', '4', '刘岚（测试）', null, '4030206', null, '4010301', '', '', '', '', '', '', null, null, null, null, '4030501', null, null, null, '', '刘岚（测试）刘岚（测试）刘岚（测试）刘岚（测试）刘岚（测试）刘岚（测试）刘岚（测试）刘岚（测试）刘岚（测试）刘岚（测试）刘岚（测试）刘岚（测试）刘岚（测试）刘岚（测试）刘岚（测试）', '1', '2014-07-02 13:39:02', '1', '2014-07-02 17:18:29', '0', '');
+INSERT INTO `lead` VALUES ('31', '26643', '', 'fasfsaf', '', '', '', '', '', '', '4010101', '4010201', '4010301', '2215456464653223', '4030501', '', '420000', '420200', '420203', '', '', '1', '2014-07-01 16:46:23', '1', '2014-07-01 18:39:39', '1');
+INSERT INTO `lead` VALUES ('32', '26650', '', 'ggggggg', '', '', '', '', '', '', '4010101', '4010201', '4010301', '', '4030501', '', null, null, null, '', '', '1', '2014-07-01 18:47:38', '1', '2014-07-01 18:47:38', '0');
+INSERT INTO `lead` VALUES ('33', '26650', '', 'hhhhhhhhhhh', '', '', '', '', '', '', '4010101', '4010201', '4010301', '', '4030501', '', null, null, null, '', '', '1', '2014-06-27 11:51:10', '1', '2014-07-01 18:39:27', '0');
+INSERT INTO `lead` VALUES ('34', '26651', '', 'jjjjjjjjjj', '', '', '', '', '', '', '4010101', '4010201', '4010301', '', '4030501', '', null, null, null, '', '', '1', '2014-06-27 11:51:26', '1', '2014-07-01 18:39:27', '0');
+INSERT INTO `lead` VALUES ('35', '26650', '', 'fasfasfd', '', '', '', '', '', '', '4010101', '4010201', '4010301', '', '4030501', '', null, null, null, '', '', '1', '2014-07-01 18:45:15', '1', '2014-07-01 18:45:15', '0');
+INSERT INTO `lead` VALUES ('36', '2', '海泰', '刘岚（测试）', '', '123', '', '15911140672', '', '', '4010101', '4010201', '4010301', '', '4030501', '', null, null, null, '', '刘岚（测试）刘岚（测试）刘岚（测试）刘岚（测试）刘岚（测试）刘岚（测试）刘岚（测试）刘岚（测试）刘岚（测试）刘岚（测试）刘岚（测试）刘岚（测试）刘岚（测试）刘岚（测试）刘岚（测试）刘岚（测试）刘岚（测试）', '1', '2014-07-03 13:12:06', '1', '2014-07-03 13:23:03', '1');
+INSERT INTO `lead` VALUES ('37', '4', '', '刘岚（测试）', '', '', '', '', '', '', '4010101', '4010201', '4010301', '', '4030501', '', null, null, null, '', '刘岚（测试）刘岚（测试）刘岚（测试）刘岚（测试）刘岚（测试）刘岚（测试）刘岚（测试）刘岚（测试）刘岚（测试）刘岚（测试）刘岚（测试）刘岚（测试）刘岚（测试）刘岚（测试）刘岚（测试）', '1', '2014-07-02 13:39:02', '1', '2014-07-02 17:18:29', '1');
+INSERT INTO `lead` VALUES ('38', '26645', '', '刘岚', '', '', '', '', '', '', '4010101', '4010201', '4010301', '', '4030501', '', null, null, null, '', '', '1', '2014-07-03 13:18:42', '1', '2014-07-03 13:21:01', '1');
+INSERT INTO `lead` VALUES ('39', '26645', '华夏', 'liulan1', '', '测试', '', '15911140672', '', '', '4010101', '4010201', '4010301', '', '4030501', '', null, null, null, '', '测试', '1', '2014-07-03 13:36:06', '1', '2014-07-03 14:36:45', '1');
+INSERT INTO `lead` VALUES ('40', '26645', '', '刘岚2', '', '', '', '15911140672', '', '', '4010101', '4010201', '4010301', '', '4030501', '', null, null, null, '', '新浪体育讯　北京时间7月2日00:00(巴西当地时间1日13:00)，2014世界杯1/8决赛第7场比赛在圣保罗竞技场展开角逐，阿根廷加时赛1比0险胜瑞士，梅西第118分钟助攻迪马利亚绝杀。新浪体育讯　北京时间7月2日00:00(巴西当地时间1日13:00)，2014世界杯1/8决赛第7场比赛在圣保罗竞技场展开角逐，阿根廷加时赛1比0险胜瑞士，梅西第118分钟助攻迪马利亚绝杀。新浪体育讯　北京时间7月2日00:00(巴西当地时间1日13:00)，2014世界杯1/8决赛第7场比赛在圣保罗竞技场展开角逐，阿根廷加时赛1比0险胜瑞士，梅西第118分钟助攻迪马利亚绝杀。', '1', '2014-07-03 15:49:19', '1', '2014-07-03 15:51:06', '1');
+INSERT INTO `lead` VALUES ('41', '26645', '', '刘岚2', '', '', '', '15911111111', '', '', '4010101', '4010201', '4010301', '', '4030501', '', null, null, null, '', '', '1', '2014-07-03 13:57:59', '1', '2014-07-03 16:28:15', '1');
+INSERT INTO `lead` VALUES ('42', '1', '', '刘岚3', '', '', '', '010-5601112', '', '', '4010101', '4010201', '4010301', '', '4030501', '', null, null, null, '', '', '1', '2014-07-03 13:58:42', '1', '2014-07-02 17:01:16', '1');
+INSERT INTO `lead` VALUES ('43', '26645', '', '刘岚4', '', '', '', '15911140672', '', '', '4010101', '4010201', '4010301', '', '4030501', '', null, null, null, '', '刘岚2刘岚2刘岚2刘岚2刘岚2刘岚2刘岚2刘岚2刘岚2刘岚2刘岚2', '1', '2014-07-03 13:59:25', '1', '2014-07-02 17:09:15', '1');
+INSERT INTO `lead` VALUES ('44', '4', '强大微', 'liulan7', '', 'cfo', '', '15911111113', '', '15911111113', '4010101', '4010201', '4010301', '', '4030501', '', '110000', null, null, '', '新浪体育讯　北京时间7月2日00:00(巴西当地时间1日13:00)，2014世界杯1/8决赛第7场比赛在圣保罗竞技场展开角逐，阿根廷加时赛1比0险胜瑞士，梅西第118分钟助攻迪马利亚绝杀。', '1', '2014-07-03 15:15:15', '1', '2014-07-03 15:51:51', '1');
+INSERT INTO `lead` VALUES ('45', '3', '', '刘岚', '', '', '', '', '', '', '4010101', '4010201', '4010301', '', '4030501', '', null, null, null, '', '', '1', '2014-07-03 15:28:50', '1', '2014-07-03 15:51:22', '1');
+INSERT INTO `lead` VALUES ('46', '26645', '', '刘岚华仔', '', '', '', '15911140679', '', '', '4010101', '4010201', '4010301', '', '4030501', '', null, null, null, '', '', '1', '2014-07-03 16:31:24', '1', '2014-07-03 16:32:32', '1');
+INSERT INTO `market_activity` VALUES ('104433', '客户野外集训', '3010104', '3010201', '2014-06-26 00:00:00', '2014-06-26 00:00:00', '0.00', '0.00', '1', '', '0.00', '1', '26643', '', '1', '2014-06-26 21:01:55', '1', '2014-07-02 10:06:03', '0');
+INSERT INTO `market_activity` VALUES ('104448', '新增活动测试', '3010101', '3010201', '2014-06-30 00:00:00', '2014-06-30 00:00:00', '0.00', '0.00', '1', '一般', '50.00', '1', '26643', '测试数据，测试数据，\n\n列表点击编辑再保存', '1', '2014-06-30 17:54:25', '1', '2014-07-01 19:55:06', '0');
+INSERT INTO `market_activity` VALUES ('104449', '活动保存编辑测试', '3010104', '3010201', '2014-06-30 00:00:00', '2014-06-30 00:00:00', '7000.00', '45000.00', '1', '按照长远规划OK', '70.00', '1', '1', '活动测试，先保存，后编辑，在保存！', '1', '2014-06-30 17:55:31', '1', '2014-07-01 19:55:06', '0');
+INSERT INTO `market_activity` VALUES ('104450', 'test1', null, null, '2014-07-01 00:00:00', '2014-07-01 00:00:00', '0.00', '0.00', '1', '', '0.00', '1', '26643', '', '1', '2014-07-01 09:24:35', '1', '2014-07-02 09:49:55', '1');
+INSERT INTO `market_activity` VALUES ('104451', 'test2', null, null, '2014-07-01 00:00:00', '2014-07-01 00:00:00', '0.00', '0.00', '1', '', '0.00', '1', '3', '', '1', '2014-07-01 09:25:19', '1', '2014-07-02 09:49:55', '1');
+INSERT INTO `market_activity` VALUES ('104452', 'test3', null, null, '2014-07-01 00:00:00', '2014-07-01 00:00:00', '0.00', '0.00', '1', '', '0.00', '1', '26650', '', '1', '2014-07-01 09:25:29', '1', '2014-07-02 09:49:55', '1');
+INSERT INTO `market_activity` VALUES ('104453', 'test4', null, null, '2014-07-01 00:00:00', '2014-07-01 00:00:00', '0.00', '0.00', '1', '', '0.00', '1', '4', '', '1', '2014-07-01 09:25:53', '1', '2014-07-02 09:49:55', '1');
+INSERT INTO `market_activity` VALUES ('104454', 'test6', null, null, '2014-07-01 00:00:00', '2014-07-01 00:00:00', '0.00', '0.00', '1', '', '0.00', '1', '26644', '', '1', '2014-07-01 11:15:55', '1', '2014-07-02 09:49:55', '1');
+INSERT INTO `market_activity` VALUES ('104455', 'test7', null, null, '2014-07-01 00:00:00', '2014-07-01 00:00:00', '0.00', '0.00', '1', '', '0.00', '1', '26645', '', '1', '2014-07-01 11:17:03', '1', '2014-07-02 09:49:55', '1');
+INSERT INTO `market_activity` VALUES ('104457', 'test7', null, null, '2014-07-01 00:00:00', '2014-07-01 00:00:00', '0.00', '0.00', '1', '', '0.00', '1', '26649', '', '1', '2014-07-01 11:20:30', '1', '2014-07-02 09:49:55', '1');
+INSERT INTO `market_activity` VALUES ('104458', '济南泉城', '3010105', '3010201', '2014-07-01 00:00:00', '2014-07-01 00:00:00', '0.00', '0.00', '1', 'OK', '50.00', '1', '3', 'Very Good!', '1', '2014-07-01 15:00:24', '1', '2014-07-01 15:01:15', '0');
+INSERT INTO `market_activity` VALUES ('104459', '管理员', '3010101', '3010203', '2014-07-01 00:00:00', '2014-07-01 00:00:00', '0.00', '0.00', '1', '', '0.00', '1', '3', '', '1', '2014-07-01 18:03:26', '1', '2014-07-02 10:06:26', '0');
+INSERT INTO `memoir` VALUES ('85', '11010103', '31', '1', '1', '电风扇搜索XXX', '2014-07-08 00:00:00', '所发生的方式的地方', '1', '2014-07-01 16:27:25', '1', '2014-07-01 17:00:49', '是的方式的方式', '0');
+INSERT INTO `memoir` VALUES ('86', '11010103', '31', '1', '1', '联系纪要联系纪要', '2014-07-09 00:00:00', '联系要点', '1', '2014-07-01 16:54:09', '1', '2014-07-01 16:56:46', '备注', '1');
+INSERT INTO `memoir` VALUES ('87', '11010102', '98380', '1', '1', '312', '2014-07-17 00:00:00', '123', '1', '2014-07-02 10:33:35', '1', '2014-07-02 10:33:30', '2131', '0');
+INSERT INTO `memoir` VALUES ('88', '11010104', '106540', '1', '1', '1.关于产品和客户家庭调查\r\n2.关于产品和客户家庭调查\r\n3.关于产品和客户家庭调查\r\n4.关于产品和客户家庭调查', '2014-07-13 00:00:00', '关于产品和客户家庭调查', '1', '2014-07-03 15:26:43', '1', '2014-07-02 15:52:35', '下班后联系', '0');
+INSERT INTO `memoir` VALUES ('89', '11010104', '106538', '1', '1', '去', '2014-07-03 00:00:00', '1', '1', '2014-07-03 15:31:02', '1', '2014-07-02 15:51:50', '去', '0');
+INSERT INTO `memoir` VALUES ('90', '11010104', '106538', '1', '1', '1', '2014-07-03 00:00:00', '1', '1', '2014-07-03 15:35:30', '1', '2014-07-02 15:51:50', '1', '0');
+INSERT INTO `memoir` VALUES ('91', '11010104', '106538', '1', '1', 'we', '2014-07-03 00:00:00', '23', '1', '2014-07-03 15:35:50', '1', '2014-07-02 15:51:50', '234', '0');
+INSERT INTO `memoir` VALUES ('92', '11010104', '106538', '1', '1', '33', '2014-07-03 00:00:00', '33', '1', '2014-07-03 15:36:05', '1', '2014-07-02 15:51:50', '3333', '0');
+INSERT INTO `memoir` VALUES ('93', '11010104', '106543', '1', '1', '我和..', '2014-07-02 00:00:00', '我和..', '1', '2014-07-02 16:28:46', '1', '2014-07-02 16:28:59', '我和..', '0');
+INSERT INTO `memoir` VALUES ('94', '11010103', '41', '1', '1', 'ddd', '2014-07-03 00:00:00', 'ddd', '1', '2014-07-02 16:29:04', '1', '2014-07-02 16:29:00', 'ddd', '0');
+INSERT INTO `memoir` VALUES ('95', '11010104', '106531', '1', '1', 'fasdfasd', '2014-07-17 00:00:00', 'fasfa', '1', '2014-07-02 16:37:46', '1', '2014-07-02 16:39:26', 'fsadfsd', '0');
+INSERT INTO `memoir` VALUES ('96', '11010104', '106531', '1', '1', 'asddfasdf', '2014-07-02 00:00:00', 'fasdf', '1', '2014-07-02 16:46:59', '1', '2014-07-02 16:47:21', 'fasfas', '1');
 INSERT INTO `notice` VALUES ('0055', '大范甘迪', '下面这是AJAX的公用类了。\r\nvar myXmlHttp=null;\r\nvar doResultString=\"\";//问题在这里了。 a函数调用了MyAjax把doResultString设成了doA,然后等待返回，后呢。b函数调用了MyAjax把doResultString设成了doB,这样a函数就无法返回了。。这是我的理解，因为用IE8的开发人员工具，一步一步跑的话呢，a函数和b函数都能执行。。\r\nfunction MyAjax(doResult,queryString,sendMethod,showWait)\r\n{\r\n this.queryString=queryString;\r\n doResultString=doResult;//成功返回后作的操作', '2014-06-25 08:35:00', '1', '2014-06-26 11:45:39', '1', '2014-06-27 11:35:31', '2014-06-28 10:25:00', '1');
 INSERT INTO `notice` VALUES ('0056', '22', '热舞\r\ndas\r\ndasd\r\n', '2014-06-26 08:26:00', '1', '2014-06-26 12:44:42', '1', '2014-06-26 12:47:59', '2014-06-29 11:47:00', '0');
 INSERT INTO `notice` VALUES ('0057', '下面这是AJAX的公', '下面这是AJAX的公用类了。\r\nvar myXmlHttp=null;\r\nvar doResultString=\"\";//问题在这里了。 a函数调用了MyAjax把doResultString设成了doA,然后等待返回，后呢。b函数调用了MyAjax把doResultString设成了doB,这样a函数就无法返回了。。这是我的理解，因为用IE8的开发人员工具，一步一步跑的话呢，a函数和b函数都能执行。。\r\nfunction MyAjax(doResult,queryString,sendMethod,showWait)\r\n{\r\n this.queryString=queryString;\r\n doResultString=doResult;//成功返回后作的操作', '2014-06-26 11:29:00', '1', '2014-06-26 12:49:18', '1', '2014-06-26 12:49:18', '2014-06-30 10:17:00', '0');
 INSERT INTO `notice` VALUES ('0058', '百会', '1\n1\n1\n1\n1\n1\n1', '2014-06-26 07:21:00', '1', '2014-06-27 11:34:02', '1', '2014-06-27 11:35:14', '2014-07-26 08:45:00', '0');
 INSERT INTO `notice` VALUES ('0059', '厉以宁：中国经济增速长', '北京6月27日电 (记者 李晓喻)“不要把硬性增长率指标作为奋斗目标。\n”这是中国知名经济学家、北京大学教授厉以宁27日对决策层的建议。\n在他看来，中国经济增速长期保持在6.5%以上就好。', '2014-06-27 14:40:00', '1', '2014-06-27 17:05:14', '1', '2014-06-27 17:05:14', '2014-07-26 07:00:00', '0');
 INSERT INTO `notice` VALUES ('0060', '0630', '0630 ceshi', '2014-06-30 17:16:00', '1', '2014-07-01 17:14:24', '1', '2014-07-01 17:14:24', '2014-06-30 17:17:00', '0');
-INSERT INTO `notice` VALUES ('0061', '的污染', '1212\n2121\n2121\n', '2014-07-01 12:35:00', '1', '2014-06-30 18:05:35', '1', '2014-06-30 18:05:35', '2014-07-31 10:24:00', '0');
+INSERT INTO `notice` VALUES ('0061', '的污染', '1212\n2121\n2121\n23', '2014-07-01 12:35:00', '1', '2014-06-30 18:05:35', '1', '2014-07-02 09:20:16', '2014-07-31 10:24:00', '0');
+INSERT INTO `notice` VALUES ('0062', '8799', 'iyui', '2014-07-28 10:15:00', '1', '2014-07-01 11:59:40', '1', '2014-07-02 09:19:33', '2014-07-31 16:15:00', '0');
+INSERT INTO `notice` VALUES ('0063', 'vvvv', 'vvvv', '2014-07-02 00:00:00', '1', '2014-07-02 14:45:36', '1', '2014-07-02 14:45:54', '2014-07-03 00:00:00', '1');
+INSERT INTO `notice` VALUES ('0064', 'xinzeng', 'xinzeng', '2014-07-02 00:00:00', '1', '2014-07-02 14:57:57', '1', '2014-07-02 14:57:57', '2014-07-03 00:00:00', '0');
+INSERT INTO `notice` VALUES ('0067', 'adfag', 'adfag', '2014-07-02 00:00:00', '1', '2014-07-02 15:17:51', '1', '2014-07-02 15:18:34', '2014-07-03 00:00:00', '1');
+INSERT INTO `order` VALUES ('1', '24566', '98368', 'OD201407010001', '6010201', '6010101', '3000000', '10', '30', '发热个人', '2', '4', '2', '2014-07-04 00:00:00', '肉体与', '1', '2014-07-01 16:25:14', '1', '2014-07-01 19:37:38', '1');
+INSERT INTO `order` VALUES ('3', '24566', '98372', 'OD201407010002', '6010201', '6010101', '21312312', '123', '123', '123123123', '1', '26644', '4', '2014-07-24 00:00:00', '请问', '1', '2014-07-01 17:01:42', '1', '2014-07-01 19:13:31', '0');
 INSERT INTO `pro_city_area` VALUES ('0', ' 未知', null);
 INSERT INTO `pro_city_area` VALUES ('110000', '北京市', '0');
 INSERT INTO `pro_city_area` VALUES ('110100', '北京市', '110000');
@@ -4432,8 +4693,20 @@ INSERT INTO `pro_city_area` VALUES ('659004', '五家渠市', '659000');
 INSERT INTO `pro_city_area` VALUES ('710000', '台湾省', '0');
 INSERT INTO `pro_city_area` VALUES ('810000', '香  港', '0');
 INSERT INTO `pro_city_area` VALUES ('820000', '澳  门', '0');
-INSERT INTO `product` VALUES ('24566', '2', '201407011652375237', '201407011652375237', '11010213', '10', '3', '5', '5', '1', '11010211', '2014-06-30 00:00:00', '2014-08-17 00:00:00', '8', '', '', 'sdfdgf', '1', '2014-07-01 16:54:52', '1', '2014-06-30 16:55:16', '0');
-INSERT INTO `project` VALUES ('2', '3', 'ggggg', 'ggggg', '123', '2014-06-05 00:00:00', '12', '23', '2014-06-04 00:00:00', '2014-06-17 00:00:00', '12', '12', '4020101', '', '1', '2014-06-30 11:43:18', '1', '2014-06-30 11:43:18', '0');
+INSERT INTO `product` VALUES ('24566', '2', '华兴泰达融资1', '201407011652375237', '11010213', '10', '3', '5', '5', '1', '11010211', '2014-06-30 00:00:00', '2014-08-17 00:00:00', '8', '', '', 'sdfdgf', '1', '2014-07-01 16:54:52', '1', '2014-07-01 20:03:39', '0');
+INSERT INTO `project` VALUES ('2', '3', 'ggggg', 'ggggg', '123', '2014-06-05 00:00:00', '12', '23', '2014-06-04 00:00:00', '2014-06-17 00:00:00', '12', '12', '4020101', '', '1', '2014-07-01 19:58:56', '1', '2014-07-01 19:58:56', '0');
+INSERT INTO `project` VALUES ('3', '3', 'ssss', 'ssss', '123', '2014-07-01 19:56:42', '12', '23', '2014-07-01 19:56:49', '2014-07-01 19:56:52', '12', '12', '4020101', '', '1', '2014-07-01 19:57:08', '1', '2014-07-01 19:57:23', '1');
+INSERT INTO `qrtz_cron_triggers` VALUES ('cleanRecycleBinJobTrigger', 'DEFAULT', '0/5 * * * * ?', 'Asia/Shanghai');
+INSERT INTO `qrtz_fired_triggers` VALUES ('F0ZSUPXX8IZ7XL814042886064771404288607250', 'cleanRecycleBinJobTrigger', 'DEFAULT', '0', 'F0ZSUPXX8IZ7XL81404288606477', '1404293665000', '5', 'ACQUIRED', null, null, '0', '0');
+INSERT INTO `qrtz_job_details` VALUES ('cleanRecycleBinJob', 'DEFAULT', null, 'com.baihui.hxtd.soa.job.CleanRecycleBinJob', '0', '0', '0', '1', 0xACED0005737200156F72672E71756172747A2E4A6F62446174614D61709FB083E8BFA9B0CB020000787200266F72672E71756172747A2E7574696C732E537472696E674B65794469727479466C61674D61708208E8C3FBC55D280200015A0013616C6C6F77735472616E7369656E74446174617872001D6F72672E71756172747A2E7574696C732E4469727479466C61674D617013E62EAD28760ACE0200025A000564697274794C00036D617074000F4C6A6176612F7574696C2F4D61703B787000737200116A6176612E7574696C2E486173684D61700507DAC1C31660D103000246000A6C6F6164466163746F724900097468726573686F6C6478703F4000000000000C770800000010000000007800);
+INSERT INTO `qrtz_locks` VALUES ('CALENDAR_ACCESS');
+INSERT INTO `qrtz_locks` VALUES ('JOB_ACCESS');
+INSERT INTO `qrtz_locks` VALUES ('MISFIRE_ACCESS');
+INSERT INTO `qrtz_locks` VALUES ('STATE_ACCESS');
+INSERT INTO `qrtz_locks` VALUES ('TRIGGER_ACCESS');
+INSERT INTO `qrtz_scheduler_state` VALUES ('3R3BUR0OJ0tgyu1404291501220', '1404293607673', '60000');
+INSERT INTO `qrtz_scheduler_state` VALUES ('F0ZSUPXX8IZ7XL81404288606477', '1404293652942', '60000');
+INSERT INTO `qrtz_triggers` VALUES ('cleanRecycleBinJobTrigger', 'DEFAULT', 'cleanRecycleBinJob', 'DEFAULT', '0', null, '1404293670000', '1404293665000', '5', 'ACQUIRED', 'CRON', '1404271150000', '0', null, '0', '');
 INSERT INTO `sm_component` VALUES ('1', '001', '省市区三级联动', '/common/pcas/getChildren.docomp', '请问士大夫', '1', '2014-06-17 00:00:00', '1', '2014-06-19 14:57:12', '1060101', '1', '1');
 INSERT INTO `sm_component` VALUES ('2', '003', '查询组件联系纪要', '/common/memoir/query.do', '查询组件联系纪要', '1', '2014-06-19 00:00:00', '1', '2014-06-19 00:00:00', '1060103', '0', '1');
 INSERT INTO `sm_component` VALUES ('3', '002', '新增联系纪要', '/common/memoir/add.docomp', '新增联系纪要', '1', '2014-06-19 00:00:00', '1', '2014-06-19 00:00:00', '1060103', '0', '1');
@@ -4444,6 +4717,9 @@ INSERT INTO `sm_component` VALUES ('101', '000101', '唯一性验证', '/common/
 INSERT INTO `sm_component` VALUES ('110204', '007', '项目列表组件', '/project/project/toQueryPage.comp', '项目列表组件', '1', '2014-06-10 00:00:00', '1', '2014-06-10 00:00:00', '1060101', '0', '1');
 INSERT INTO `sm_component` VALUES ('110205', '1222', '无法认同', '爱仕达f', ' 等方式', '1', '2014-06-14 00:00:00', '1', '2014-06-19 14:57:05', '1060101', '0', '1');
 INSERT INTO `sm_component` VALUES ('110206', '0200', '线索名称', '/workbanch/toViewPage.do', 'FDASF', '1', '2014-06-19 00:00:00', '1', '2014-06-19 00:00:00', '1060101', '0', '1');
+INSERT INTO `sm_component` VALUES ('110207', '008', '产品组件', '/project/product/toQueryPage.comp', '', '1', '2014-07-01 09:35:35', '1', '2014-07-01 09:35:38', '1060101', '0', '1');
+INSERT INTO `sm_component` VALUES ('110208', '024568', 'ceshi 11', '/service/doPost', '', '1', '2014-07-02 00:00:00', '1', '2014-07-02 00:00:00', '1060101', '0', '0');
+INSERT INTO `sm_component` VALUES ('110210', 'ce2', 'ce2', 'ce2', '', '1', '2014-07-02 00:00:00', '1', '2014-07-02 00:00:00', '1060101', '0', '0');
 INSERT INTO `sm_dictionary` VALUES ('1', '打开方式', '01', '1030101', null, '0', '显示位置', '1', '', '1', '2014-06-06 13:32:39', '1', '2014-06-25 10:31:51', '1', '1');
 INSERT INTO `sm_dictionary` VALUES ('2', '显示位置', '02', null, null, null, null, '1', '', '1', '2014-06-06 13:34:20', '1', '2014-06-19 14:23:56', '0', '1');
 INSERT INTO `sm_dictionary` VALUES ('3', '机构类型', '03', null, null, null, null, '1', '', '1', '2014-06-06 13:35:25', '1', '2014-06-06 13:36:14', '0', '1');
@@ -4469,6 +4745,9 @@ INSERT INTO `sm_dictionary` VALUES ('40305', '行业', '040305', null, '0', '0',
 INSERT INTO `sm_dictionary` VALUES ('40306', '所有权', '040306', null, '0', '0', null, '1', '所有权', '1', '2014-05-27 18:05:37', '1', '2014-05-27 18:05:43', '0', '1');
 INSERT INTO `sm_dictionary` VALUES ('40307', '开户行', '040307', null, '0', '0', null, '1', '开户行', '1', '2014-05-27 18:29:45', '1', '2014-05-27 18:29:50', '0', '1');
 INSERT INTO `sm_dictionary` VALUES ('50101', '供应商类型', '050101', null, '0', '0', null, '1', '供应商类型', '1', '2014-05-26 00:00:00', '1', '2014-05-29 10:10:02', '0', '1');
+INSERT INTO `sm_dictionary` VALUES ('60101', '投资方式', '060101', null, '0', '0', null, '1', '投资方式', '1', '2014-07-01 10:51:17', '1', '2014-07-01 10:51:17', '0', '1');
+INSERT INTO `sm_dictionary` VALUES ('60102', '订单状态', '060102', null, '0', '0', null, '1', '订单状态', '1', '2014-07-01 10:55:02', '1', '2014-07-01 10:55:01', '0', '1');
+INSERT INTO `sm_dictionary` VALUES ('60103', '财务审核状态', '060103', null, '0', '0', null, '1', '财务审核状态', '1', '2014-06-23 18:38:02', '1', '2014-06-23 18:38:16', '0', '1');
 INSERT INTO `sm_dictionary` VALUES ('100401', '操作类型', '100401', '0', '0', '0', null, '1', '操作类型', '1', '2014-06-23 18:36:54', '1', '2014-06-23 18:37:07', '0', '1');
 INSERT INTO `sm_dictionary` VALUES ('110101', '关联模块', '110101', null, '0', '0', null, '1', '附件关联模块', '1', '2014-05-27 10:29:14', '1', '2014-05-27 10:29:21', '0', '1');
 INSERT INTO `sm_dictionary` VALUES ('110102', '附件类型', '110102', null, '0', '0', null, '1', '附件类型', '1', '2014-05-27 10:29:53', '1', '2014-05-27 10:29:50', '0', '1');
@@ -4519,14 +4798,24 @@ INSERT INTO `sm_dictionary` VALUES ('4030303', '其他', '04030303', '40303', '0
 INSERT INTO `sm_dictionary` VALUES ('4030401', '一级', '04030401', '40304', '0', '0', '风险等级', '1', '一级', '1', '2014-05-27 17:49:01', '1', '2014-05-28 14:05:17', '0', '1');
 INSERT INTO `sm_dictionary` VALUES ('4030402', '二级', '04030402', '40304', '0', '0', '风险等级', '1', '二级', '2', '2014-05-27 17:49:32', '1', '2014-05-28 14:05:31', '0', '1');
 INSERT INTO `sm_dictionary` VALUES ('4030501', '金融', '04030501', '40305', '0', '0', '行业', '1', '金融', '1', '2014-05-27 18:00:44', '1', '2014-05-28 14:05:26', '0', '1');
-INSERT INTO `sm_dictionary` VALUES ('4030601', '国有', '04030601', '40306', '0', '0', '行业', '1', '国有', '1', '2014-05-27 18:06:39', '1', '2014-05-28 14:05:23', '0', '1');
-INSERT INTO `sm_dictionary` VALUES ('4030602', '私营', '04030602', '40306', '0', '0', '行业', '1', '私营', '1', '2014-05-29 14:01:39', '1', '2014-05-29 14:01:47', '0', '1');
-INSERT INTO `sm_dictionary` VALUES ('4030701', '农行', '04030701', '40307', '0', '0', '行业', '1', '农行', '1', '2014-05-27 18:30:35', '1', '2014-05-28 14:05:20', '0', '1');
+INSERT INTO `sm_dictionary` VALUES ('4030601', '国有', '04030601', '40306', '0', '0', '所有权', '1', '国有', '1', '2014-05-27 18:06:39', '1', '2014-05-28 14:05:23', '0', '1');
+INSERT INTO `sm_dictionary` VALUES ('4030602', '私营', '04030602', '40306', '0', '0', '所有权', '1', '私营', '1', '2014-05-29 14:01:39', '1', '2014-05-29 14:01:47', '0', '1');
+INSERT INTO `sm_dictionary` VALUES ('4030701', '农行', '04030701', '40307', '0', '0', '开户行', '1', '农行', '1', '2014-05-27 18:30:35', '1', '2014-05-28 14:05:20', '0', '1');
 INSERT INTO `sm_dictionary` VALUES ('5010101', '普通供应商', '01050101', '50101', '0', '0', '供应商类型', '1', '供应商类型', '1', '2014-05-26 00:00:00', '1', '2014-05-26 19:29:03', '0', '1');
 INSERT INTO `sm_dictionary` VALUES ('5010102', '非普通供应商', '05010102', '50101', '0', '0', '供应商类型', '1', '供应商类型', '1', '2014-05-26 00:00:00', '1', '2014-05-27 14:20:17', '0', '1');
+INSERT INTO `sm_dictionary` VALUES ('6010101', '短期', '06010101', '60101', '0', '0', '投资方式', '1', '短期', '1', '2014-07-01 10:52:09', '1', '2014-07-01 10:52:09', '0', '1');
+INSERT INTO `sm_dictionary` VALUES ('6010102', '长期', '06010102', '60101', '0', '0', '投资方式', '1', '长期', '1', '2014-07-01 10:52:46', '1', '2014-07-01 10:52:46', '0', '1');
+INSERT INTO `sm_dictionary` VALUES ('6010201', '未审核', '06010201', '60102', '0', '0', '订单状态', '1', '订单状态', '1', '2014-06-23 18:38:02', '1', '2014-06-23 18:38:16', '0', '1');
+INSERT INTO `sm_dictionary` VALUES ('6010202', '待主管审核', '06010202', '60102', '0', '0', '订单状态', '1', '订单状态', '1', '2014-06-23 18:38:02', '1', '2014-06-23 18:38:16', '0', '1');
+INSERT INTO `sm_dictionary` VALUES ('6010203', '待总监审核', '06010203', '60102', '0', '0', '订单状态', '1', '订单状态', '1', '2014-06-23 18:38:02', '1', '2014-06-23 18:38:16', '0', '1');
+INSERT INTO `sm_dictionary` VALUES ('6010204', '审核通过', '06010204', '60102', '0', '0', '订单状态', '1', '订单状态', '1', '2014-06-23 18:38:02', '1', '2014-06-23 18:38:16', '0', '1');
+INSERT INTO `sm_dictionary` VALUES ('6010301', '未收款', '06010301', '60103', '0', '0', '订单状态', '1', '订单状态', '1', '2014-06-23 18:38:02', '1', '2014-06-23 18:38:16', '0', '1');
+INSERT INTO `sm_dictionary` VALUES ('6010302', '已收款', '06010302', '60103', '0', '0', '订单状态', '1', '订单状态', '1', '2014-06-23 18:38:02', '1', '2014-06-23 18:38:16', '0', '1');
 INSERT INTO `sm_dictionary` VALUES ('10040101', '新增', '10040101', '100401', '0', '0', '操作类型', '1', '新增', '1', '2014-06-23 18:38:02', '1', '2014-06-23 18:38:16', '0', '1');
 INSERT INTO `sm_dictionary` VALUES ('10040102', '修改', '10040102', '100401', '0', '0', '操作类型', '1', '修改', '1', '2014-06-23 18:39:20', '1', '2014-06-23 18:39:31', '0', '1');
 INSERT INTO `sm_dictionary` VALUES ('10040103', '删除', '10040103', '100401', '0', '0', '操作类型', '1', '删除', '1', '2014-06-23 18:39:59', '1', '2014-06-23 18:40:08', '0', '1');
+INSERT INTO `sm_dictionary` VALUES ('10040104', '线索转换', '10040104', '100401', '0', '0', '操作类型', '1', '线索转换', '1', '2014-07-02 16:55:17', '1', '2014-07-02 16:55:18', '0', '1');
+INSERT INTO `sm_dictionary` VALUES ('10040105', '更改所有者', '10040105', '10040105', '0', '0', '操作类型', '1', '更改所有者', '1', '2014-07-02 17:25:16', '1', '2014-07-02 17:25:16', '0', '1');
 INSERT INTO `sm_dictionary` VALUES ('11010101', '供应商', '11010101', '110101', '0', '0', '模块类型', '1', '供应商模块', '1', '2014-05-27 10:30:55', '1', '2014-05-27 10:30:52', '0', '1');
 INSERT INTO `sm_dictionary` VALUES ('11010102', '客户', '11010102', '110101', '0', '0', '模块类型', '1', '客户模块', '1', '2014-05-28 13:21:01', '1', '2014-05-28 13:20:54', '0', '1');
 INSERT INTO `sm_dictionary` VALUES ('11010103', '线索', '11010103', '110101', '0', '0', '模块类型', '1', '线索模块', '1', '2014-05-28 13:21:37', '1', '2014-05-28 13:21:30', '0', '1');
@@ -4552,7 +4841,7 @@ INSERT INTO `sm_function` VALUES ('2', null, '000002', '新增', '/add.do', '', 
 INSERT INTO `sm_function` VALUES ('3', null, '000003', '详情', '/view.do', '', '1', '2014-05-26 00:00:00', '1', '2014-06-18 11:04:29', '1060101', '0', null, '1');
 INSERT INTO `sm_function` VALUES ('4', null, '000004', '编辑', '/modify.do', '', '1', '2014-05-26 00:00:00', '1', '2014-06-18 11:04:45', '1060103', '0', null, '1');
 INSERT INTO `sm_function` VALUES ('5', null, '000005', '删除', '/delete.do', '', '1', '2014-05-26 00:00:00', '1', '2014-05-26 19:29:05', '1060103', '0', null, '1');
-INSERT INTO `sm_function` VALUES ('6', null, '000006', '导出', '/export.do', '', '1', '2014-05-26 00:00:00', '1', '2014-05-26 19:29:05', '1060103', '0', null, '1');
+INSERT INTO `sm_function` VALUES ('6', null, '000006', '导出', '/export.do', '', '1', '2014-05-26 00:00:00', '1', '2014-07-01 16:24:07', '1060103', '0', '6', '1');
 INSERT INTO `sm_function` VALUES ('22', '402', '2', '联系纪要查询', '/common/memoir/query.do', '', '1', '2014-05-29 15:03:40', '1', '2014-05-30 10:36:13', '1060103', '0', null, '1');
 INSERT INTO `sm_function` VALUES ('23', '402', '3', '联系纪要新增', '/common/memoir/add.do', '', '1', '2014-05-30 10:02:38', '1', '2014-05-30 10:38:49', '1060103', '0', null, '1');
 INSERT INTO `sm_function` VALUES ('24', '402', '4', '联系纪要编辑', '/common/memoir/modify.do', '', '1', '2014-05-30 16:07:58', '1', '2014-05-30 16:09:16', '1060103', '0', null, '1');
@@ -4570,14 +4859,14 @@ INSERT INTO `sm_function` VALUES ('30102', '301', '030102', '新增', '/market/m
 INSERT INTO `sm_function` VALUES ('30103', '301', '030103', '详情', '/market/marketactivity/view.do', '', '1', '2014-05-26 00:00:00', '1', '2014-06-18 11:04:29', '1060103', '0', null, '1');
 INSERT INTO `sm_function` VALUES ('30104', '301', '030104', '编辑', '/market/marketactivity/modify.do', '', '1', '2014-05-26 00:00:00', '1', '2014-06-18 11:04:45', '1060103', '0', null, '1');
 INSERT INTO `sm_function` VALUES ('30105', '301', '030105', '删除', '/market/marketactivity/delete.do', '', '1', '2014-05-26 00:00:00', '1', '2014-05-27 09:49:30', '1060103', '0', null, '1');
-INSERT INTO `sm_function` VALUES ('30106', '301', '030106', '导出', '/market/marketactivity/export.do', '', '1', '2014-06-25 15:40:02', '1', '2014-06-25 15:40:19', '1060103', '0', null, '1');
+INSERT INTO `sm_function` VALUES ('30106', '301', '030106', '市场活动导出', '/market/marketactivity/export.do', '', '1', '2014-06-25 15:40:02', '1', '2014-07-01 16:26:21', '1060103', '0', '6', '1');
 INSERT INTO `sm_function` VALUES ('40101', '401', '040101', '查询', '/customer/lead/query.do', '', '1', '2014-05-26 00:00:00', '1', '2014-05-26 19:29:07', '1060103', '0', null, '1');
 INSERT INTO `sm_function` VALUES ('40102', '401', '040102', '新增', '/customer/lead/add.do', '', '1', '2014-05-26 00:00:00', '1', '2014-05-26 19:29:07', '1060103', '0', null, '1');
 INSERT INTO `sm_function` VALUES ('40103', '401', '040103', '详情', '/customer/lead/view.do', '', '1', '2014-05-26 00:00:00', '1', '2014-06-18 11:04:29', '1060103', '0', null, '1');
 INSERT INTO `sm_function` VALUES ('40104', '401', '040104', '编辑', '/customer/lead/modify.do', '', '1', '2014-05-26 00:00:00', '1', '2014-06-18 11:04:45', '1060103', '0', null, '1');
 INSERT INTO `sm_function` VALUES ('40105', '401', '040105', '删除', '/customer/lead/delete.do', '', '1', '2014-05-26 00:00:00', '1', '2014-05-26 19:29:07', '1060103', '0', null, '1');
 INSERT INTO `sm_function` VALUES ('40106', '401', '040106', '修改所有者', '/customer/lead/modifyOwner.do', '', '1', '2014-06-04 10:01:11', '1', '2014-06-04 10:01:15', '1060103', '0', null, '1');
-INSERT INTO `sm_function` VALUES ('40107', '401', '040107', '导出', '/customer/lead/export.do', '', '1', '2014-06-18 20:31:35', '1', '2014-06-18 20:30:43', '1060103', '0', null, '1');
+INSERT INTO `sm_function` VALUES ('40107', '401', '040107', '线索导出', '/customer/lead/export.do', '', '1', '2014-06-18 20:31:35', '1', '2014-07-01 16:26:26', '1060103', '0', '6', '1');
 INSERT INTO `sm_function` VALUES ('40108', '401', '040108', '附件列表', '/lead/attachment/query.do', '', '1', '2014-06-22 16:34:33', '1', '2014-06-24 18:10:47', '1060103', '0', null, '1');
 INSERT INTO `sm_function` VALUES ('40109', '401', '040109', '附件上传', '/lead/attachment/upload.do', '', '1', '2014-06-22 16:35:39', '1', '2014-06-24 18:10:48', '1060103', '0', null, '1');
 INSERT INTO `sm_function` VALUES ('40110', '401', '040110', '附件预览', '/lead/attachment/view.comp', '', '1', '2014-06-22 16:37:16', '1', '2014-06-24 18:10:50', '1060103', '0', null, '1');
@@ -4589,13 +4878,13 @@ INSERT INTO `sm_function` VALUES ('40202', '402', '040202', '新增', '/customer
 INSERT INTO `sm_function` VALUES ('40203', '402', '040203', '详情', '/customer/contact/view.do', '', '1', '2014-05-26 00:00:00', '1', '2014-06-18 11:04:29', '1060103', '0', null, '1');
 INSERT INTO `sm_function` VALUES ('40204', '402', '040204', '编辑', '/customer/contact/modify.do', '', '1', '2014-05-26 00:00:00', '1', '2014-06-18 11:04:45', '1060103', '0', null, '1');
 INSERT INTO `sm_function` VALUES ('40205', '402', '040205', '删除', '/customer/contact/delete.do', '', '1', '2014-05-26 00:00:00', '1', '2014-05-26 19:29:07', '1060103', '0', null, '1');
-INSERT INTO `sm_function` VALUES ('40206', '402', '040206', '导出', '/customer/contact/export.do', '', '1', '2014-06-25 15:41:18', '1', '2014-06-25 15:41:31', '1060103', '0', null, '1');
+INSERT INTO `sm_function` VALUES ('40206', '402', '040206', '联系人导出', '/customer/contact/export.do', '', '1', '2014-06-25 15:41:18', '1', '2014-07-01 16:26:31', '1060103', '0', '6', '1');
 INSERT INTO `sm_function` VALUES ('40301', '403', '040301', '查询', '/customer/customer/query.do', '', '1', '2014-05-26 00:00:00', '1', '2014-05-26 19:29:07', '1060103', '0', null, '1');
 INSERT INTO `sm_function` VALUES ('40302', '403', '040302', '新增', '/customer/customer/add.do', '', '1', '2014-05-26 00:00:00', '1', '2014-05-26 19:29:07', '1060103', '0', null, '1');
 INSERT INTO `sm_function` VALUES ('40303', '403', '040303', '详情', '/customer/customer/view.do', '', '1', '2014-05-26 00:00:00', '1', '2014-06-18 11:04:29', '1060103', '0', null, '1');
 INSERT INTO `sm_function` VALUES ('40304', '403', '040304', '编辑', '/customer/customer/modify.do', '', '1', '2014-05-26 00:00:00', '1', '2014-06-18 11:04:45', '1060103', '0', null, '1');
 INSERT INTO `sm_function` VALUES ('40305', '403', '040305', '删除', '/customer/customer/delete.do', '', '1', '2014-05-26 00:00:00', '1', '2014-05-26 19:29:07', '1060103', '0', null, '1');
-INSERT INTO `sm_function` VALUES ('40306', '403', '040306', '客户导出', '/customer/customer/export.do', '', '1', '2014-06-18 20:54:48', '1', '2014-06-18 20:55:11', '1060103', '0', null, '1');
+INSERT INTO `sm_function` VALUES ('40306', '403', '040306', '客户导出', '/customer/customer/export.do', '', '1', '2014-06-18 20:54:48', '1', '2014-07-01 16:24:05', '1060103', '0', '6', '1');
 INSERT INTO `sm_function` VALUES ('40307', '403', '040307', '附件上传', '/customer/attachment/query.do', '', '1', '2014-06-22 16:34:33', '1', '2014-06-22 16:34:39', '1060103', '0', null, '1');
 INSERT INTO `sm_function` VALUES ('40308', '403', '040308', '附件上传', '/customer/attachment/upload.do', '', '1', '2014-06-22 16:35:39', '1', '2014-06-22 16:35:44', '1060103', '0', null, '1');
 INSERT INTO `sm_function` VALUES ('40309', '403', '040309', '附件预览', '/customer/attachment/view.comp', '', '1', '2014-06-22 16:37:16', '1', '2014-06-22 16:37:20', '1060103', '0', null, '1');
@@ -4610,25 +4899,26 @@ INSERT INTO `sm_function` VALUES ('50106', '501', '050106', '附件查询', '/su
 INSERT INTO `sm_function` VALUES ('50107', '501', '050107', '附件上传', '/supplier/attachment/upload.do', '地方官', '1', '2014-05-27 14:06:48', '1', '2014-06-20 14:22:52', '1060103', '0', null, '1');
 INSERT INTO `sm_function` VALUES ('50108', '501', '050108', '附件预览', '/supplier/attachment/view.comp', '', '1', '2014-05-27 10:16:13', '1', '2014-05-27 10:16:28', '1060103', '0', null, '1');
 INSERT INTO `sm_function` VALUES ('50109', '501', '050109', '附件下载', '/supplier/attachment/download.do', '', '1', '2014-05-27 10:17:17', '1', '2014-05-27 10:17:31', '1060103', '0', null, '1');
-INSERT INTO `sm_function` VALUES ('50110', '501', '050110', '导出', '/project/supplier/export.do', '', '1', '2014-06-19 14:48:13', '1', '2014-06-19 14:47:17', '1060103', '0', null, '1');
+INSERT INTO `sm_function` VALUES ('50110', '501', '050110', '供应商导出', '/project/supplier/export.do', '', '1', '2014-06-19 14:48:13', '1', '2014-07-01 16:26:38', '1060103', '0', '6', '1');
 INSERT INTO `sm_function` VALUES ('50111', '501', '050111', '附件删除', '/supplier/attachment/delete.do', '', '1', '2014-06-26 19:14:18', '1', '2014-06-26 19:14:14', '1060103', '0', null, '1');
 INSERT INTO `sm_function` VALUES ('50201', '502', '050201', '查询', '/project/project/query.do', '', '1', '2014-05-26 00:00:00', '1', '2014-06-08 11:08:55', '1060103', '0', null, '1');
 INSERT INTO `sm_function` VALUES ('50202', '502', '050202', '新增', '/project/project/add.do', '', '1', '2014-05-26 00:00:00', '1', '2014-06-08 11:09:07', '1060103', '0', null, '1');
 INSERT INTO `sm_function` VALUES ('50203', '502', '050203', '详情', '/project/project/view.do', '', '1', '2014-05-26 00:00:00', '1', '2014-06-18 11:04:29', '1060103', '0', null, '1');
 INSERT INTO `sm_function` VALUES ('50204', '502', '050204', '编辑', '/project/project/modify.do', '', '1', '2014-05-26 00:00:00', '1', '2014-06-18 11:04:45', '1060103', '0', null, '1');
 INSERT INTO `sm_function` VALUES ('50205', '502', '050205', '删除', '/project/project/delete.do', '', '1', '2014-05-26 00:00:00', '1', '2014-06-08 11:09:23', '1060103', '0', null, '1');
-INSERT INTO `sm_function` VALUES ('50206', '502', '050206', '导出', '/project/project/export.do', '', '1', '2014-06-26 16:37:17', '1', '2014-06-26 16:37:13', '1060103', '0', null, '1');
+INSERT INTO `sm_function` VALUES ('50206', '502', '050206', '项目导出', '/project/project/export.do', '', '1', '2014-06-26 16:37:17', '1', '2014-07-01 16:26:40', '1060103', '0', '6', '1');
 INSERT INTO `sm_function` VALUES ('50301', '503', '050301', '查询', '/project/product/query.do', '', '1', '2014-05-26 00:00:00', '1', '2014-06-08 16:31:32', '1060103', '0', null, '1');
 INSERT INTO `sm_function` VALUES ('50302', '503', '050302', '新增', '/project/product/add.do', '', '1', '2014-05-26 00:00:00', '1', '2014-06-08 16:31:35', '1060103', '0', null, '1');
 INSERT INTO `sm_function` VALUES ('50303', '503', '050303', '详情', '/project/product/view.do', '', '1', '2014-05-26 00:00:00', '1', '2014-06-18 11:04:29', '1060103', '0', null, '1');
 INSERT INTO `sm_function` VALUES ('50304', '503', '050304', '编辑', '/project/product/modify.do', '', '1', '2014-05-26 00:00:00', '1', '2014-06-18 11:04:45', '1060103', '0', null, '1');
 INSERT INTO `sm_function` VALUES ('50305', '503', '050305', '删除', '/project/product/delete.do', '', '1', '2014-05-26 00:00:00', '1', '2014-06-08 16:31:45', '1060103', '0', null, '1');
-INSERT INTO `sm_function` VALUES ('50306', '503', '050306', '导出', '/project/product/export.do', '', '1', '2014-06-25 15:42:30', '1', '2014-06-25 15:42:41', '1060103', '0', null, '1');
+INSERT INTO `sm_function` VALUES ('50306', '503', '050306', '产品导出', '/project/product/export.do', '', '1', '2014-06-25 15:42:30', '1', '2014-07-01 16:26:43', '1060103', '0', '6', '1');
 INSERT INTO `sm_function` VALUES ('60101', '601', '060101', '查询', '/order/order/query.do', '', '1', '2014-05-26 00:00:00', '1', '2014-06-30 18:03:55', '1060103', '0', null, '1');
 INSERT INTO `sm_function` VALUES ('60102', '601', '060102', '新增', '/order/order/add.do', '', '1', '2014-05-26 00:00:00', '1', '2014-06-30 18:03:58', '1060103', '0', null, '1');
 INSERT INTO `sm_function` VALUES ('60103', '601', '060103', '详情', '/order/order/view.do', '', '1', '2014-05-26 00:00:00', '1', '2014-06-30 18:04:03', '1060103', '0', null, '1');
 INSERT INTO `sm_function` VALUES ('60104', '601', '060104', '编辑', '/order/order/modify.do', '', '1', '2014-05-26 00:00:00', '1', '2014-06-30 18:04:08', '1060103', '0', null, '1');
 INSERT INTO `sm_function` VALUES ('60105', '601', '060105', '删除', '/order/order/delete.do', '', '1', '2014-05-26 00:00:00', '1', '2014-06-30 18:04:14', '1060103', '0', null, '1');
+INSERT INTO `sm_function` VALUES ('60106', '601', '060106', '导出', '/order/order/export.do', '', '1', '2014-07-01 16:59:44', '1', '2014-07-01 16:59:51', '1060103', '0', null, '1');
 INSERT INTO `sm_function` VALUES ('60201', '602', '060201', '查询', null, '', '1', '2014-05-26 00:00:00', '1', '2014-06-19 15:01:13', '1060103', '0', null, '1');
 INSERT INTO `sm_function` VALUES ('60202', '602', '060202', '新增', null, '', '1', '2014-05-26 00:00:00', '1', '2014-06-19 15:52:54', '1060103', '0', null, '1');
 INSERT INTO `sm_function` VALUES ('60203', '602', '060203', '详情', null, '', '1', '2014-05-26 00:00:00', '1', '2014-06-19 15:52:54', '1060103', '0', null, '1');
@@ -4652,37 +4942,32 @@ INSERT INTO `sm_function` VALUES ('80105', '801', '070105', '删除', null, '', 
 INSERT INTO `sm_function` VALUES ('100101', '1001', '100101', '详情', '/system/user/view.do', '', '1', '2014-05-26 00:00:00', '1', '2014-06-30 15:50:25', '1060103', '0', null, '1');
 INSERT INTO `sm_function` VALUES ('100201', '1002', '100201', '修改密码', '/system/user/modifyPassword.do', '', '1', '2014-05-26 00:00:00', '1', '2014-06-30 15:50:29', '1060103', '0', null, '1');
 INSERT INTO `sm_function` VALUES ('100301', '1003', '100301', '详情', '/system/workbench/custom.do', '', '1', '2014-05-26 00:00:00', '1', '2014-06-18 11:04:29', '1060103', '0', null, '1');
-INSERT INTO `sm_function` VALUES ('100401', '1004', '100401', '查询', '/system/auditlog/query.do', '', '1', '2014-05-26 00:00:00', '1', '2014-06-18 11:04:29', '1060103', '0', null, '1');
-INSERT INTO `sm_function` VALUES ('100402', '1004', '100402', '新增', '/system/auditlog/add.do', '', '1', '2014-05-26 00:00:00', '1', '2014-06-18 11:04:29', '1060103', '0', null, '1');
-INSERT INTO `sm_function` VALUES ('100403', '1004', '100403', '详情', '/system/auditlog/view.do', '', '1', '2014-05-26 00:00:00', '1', '2014-06-18 11:04:29', '1060103', '0', null, '1');
-INSERT INTO `sm_function` VALUES ('100404', '1004', '100404', '编辑', '/system/auditlog/modify.do', '', '1', '2014-05-26 00:00:00', '1', '2014-06-18 11:04:29', '1060103', '0', null, '1');
-INSERT INTO `sm_function` VALUES ('100405', '1004', '100405', '删除', '/system/auditlog/delete.do', '', '1', '2014-05-26 00:00:00', '1', '2014-06-18 11:04:29', '1060103', '0', null, '1');
 INSERT INTO `sm_function` VALUES ('100501', '1005', '100501', '查询', '/system/message/query.do', '', '1', '2014-05-31 00:00:00', '1', '2014-06-30 14:39:09', '1060103', '0', null, '1');
 INSERT INTO `sm_function` VALUES ('100502', '1005', '100502', '新增', '/system/message/add.do', '', '1', '2014-05-31 00:00:00', '1', '2014-06-30 14:39:11', '1060103', '0', null, '1');
 INSERT INTO `sm_function` VALUES ('100503', '1005', '100503', '详情', '/system/message/view.do', '', '1', '2014-05-31 00:00:00', '1', '2014-06-30 14:39:13', '1060103', '0', null, '1');
 INSERT INTO `sm_function` VALUES ('100504', '1005', '100504', '编辑', '/system/message/modify.do', '', '1', '2014-05-31 00:00:00', '1', '2014-06-30 14:39:15', '1060103', '0', null, '1');
 INSERT INTO `sm_function` VALUES ('100505', '1005', '100505', '删除', '/system/message/delete.do', '', '1', '2014-05-31 00:00:00', '1', '2014-06-30 14:39:18', '1060103', '0', null, '1');
-INSERT INTO `sm_function` VALUES ('100506', '1005', '100506', '系统消息导出', '/system/message/export.do', '', '1', '2014-06-19 11:40:13', '1', '2014-06-30 14:39:20', '1060103', '0', null, '1');
+INSERT INTO `sm_function` VALUES ('100506', '1005', '100506', '系统消息导出', '/system/message/export.do', '', '1', '2014-06-19 11:40:13', '1', '2014-07-01 16:24:02', '1060103', '0', '6', '1');
 INSERT INTO `sm_function` VALUES ('100601', '1006', '100601', '查询', '/system/notice/query.do', '', '1', '2014-05-31 00:00:00', '1', '2014-06-30 12:47:17', '1060103', '0', null, '1');
 INSERT INTO `sm_function` VALUES ('100602', '1006', '100602', '新增', '/system/notice/add.do', '', '1', '2014-05-31 00:00:00', '1', '2014-06-30 12:47:19', '1060103', '0', null, '1');
 INSERT INTO `sm_function` VALUES ('100603', '1006', '100603', '详情', '/system/notice/view.do', '', '1', '2014-05-31 00:00:00', '1', '2014-06-30 12:47:22', '1060103', '0', null, '1');
 INSERT INTO `sm_function` VALUES ('100604', '1006', '100604', '编辑', '/system/notice/modify.do', '', '1', '2014-05-31 00:00:00', '1', '2014-06-30 12:47:24', '1060103', '0', null, '1');
 INSERT INTO `sm_function` VALUES ('100605', '1006', '100605', '删除', '/system/notice/delete.do', '', '1', '2014-05-31 00:00:00', '1', '2014-06-30 12:47:26', '1060103', '0', null, '1');
 INSERT INTO `sm_function` VALUES ('100606', '1006', '100606', '导入', '/system/notice/import.do', '', '1', '2014-06-18 19:47:57', '1', '2014-06-30 12:47:29', '1060103', '0', null, '1');
-INSERT INTO `sm_function` VALUES ('100607', '1006', '100607', '导出', '/system/notice/export.do', '', '1', '2014-06-18 19:50:14', '1', '2014-06-30 12:47:31', '1060103', '0', null, '1');
+INSERT INTO `sm_function` VALUES ('100607', '1006', '100607', '系统公告导出', '/system/notice/export.do', '', '1', '2014-06-18 19:50:14', '1', '2014-07-01 16:26:54', '1060103', '0', '6', '1');
 INSERT INTO `sm_function` VALUES ('100701', '1007', '100701', '详情', '/system/help/view.do', '', '1', '2014-05-26 00:00:00', '1', '2014-06-18 11:04:29', '1060103', '0', null, '1');
 INSERT INTO `sm_function` VALUES ('110101', '1101', '110101', '查询', '/system/user/query.do', '', '1', '2014-05-26 00:00:00', '1', '2014-06-30 12:50:34', '1060103', '0', null, '1');
-INSERT INTO `sm_function` VALUES ('110102', '1101', '10402', '新增', '/system/user/add.do', '', '1', '2014-05-26 00:00:00', '1', '2014-06-30 12:49:37', '1060103', '0', null, '1');
-INSERT INTO `sm_function` VALUES ('110103', '1101', '10404', '编辑', '/system/user/modify.do', '', '1', '2014-05-26 00:00:00', '1', '2014-06-30 12:49:44', '1060103', '0', null, '1');
-INSERT INTO `sm_function` VALUES ('110104', '1101', '10405', '删除', '/system/user/delete.do', '', '1', '2014-05-26 00:00:00', '1', '2014-06-30 12:49:49', '1060103', '0', null, '1');
-INSERT INTO `sm_function` VALUES ('110105', '1101', '10406', '授权', '/system/user/authorization.do', '', '1', '2014-05-26 00:00:00', '1', '2014-06-30 12:49:53', '1060103', '0', null, '1');
-INSERT INTO `sm_function` VALUES ('110106', '1101', '10407', '重置密码', '/system/user/resetPassword.do', '', '1', '2014-05-31 00:00:00', '1', '2014-06-30 12:49:57', '1060103', '0', null, '1');
-INSERT INTO `sm_function` VALUES ('110107', '1101', '10408', '启用', '/system/user/enable.do', '', '1', '2014-05-31 00:00:00', '1', '2014-06-30 12:50:01', '1060103', '0', null, '1');
-INSERT INTO `sm_function` VALUES ('110108', '1101', '10409', '禁用', '/system/user/disable.do', '', '1', '2014-05-31 00:00:00', '1', '2014-06-30 12:50:05', '1060103', '0', null, '1');
-INSERT INTO `sm_function` VALUES ('110109', '1101', '10412', '导入', '/system/user/import.do', '', '1', '2014-05-31 00:00:00', '1', '2014-06-30 12:50:11', '1060103', '0', null, '1');
+INSERT INTO `sm_function` VALUES ('110102', '1101', '110102', '新增', '/system/user/add.do', '', '1', '2014-05-26 00:00:00', '1', '2014-07-01 10:47:03', '1060103', '0', null, '1');
+INSERT INTO `sm_function` VALUES ('110103', '1101', '110103', '编辑', '/system/user/modify.do', '', '1', '2014-05-26 00:00:00', '1', '2014-07-01 10:47:05', '1060103', '0', null, '1');
+INSERT INTO `sm_function` VALUES ('110104', '1101', '110104', '删除', '/system/user/delete.do', '', '1', '2014-05-26 00:00:00', '1', '2014-07-01 10:47:06', '1060103', '0', null, '1');
+INSERT INTO `sm_function` VALUES ('110105', '1101', '110105', '授权', '/system/user/authorization.do', '', '1', '2014-05-26 00:00:00', '1', '2014-07-01 10:47:08', '1060103', '0', null, '1');
+INSERT INTO `sm_function` VALUES ('110106', '1101', '110106', '重置密码', '/system/user/resetPassword.do', '', '1', '2014-05-31 00:00:00', '1', '2014-07-01 10:47:10', '1060103', '0', null, '1');
+INSERT INTO `sm_function` VALUES ('110107', '1101', '110107', '启用', '/system/user/enable.do', '', '1', '2014-05-31 00:00:00', '1', '2014-07-01 10:47:12', '1060103', '0', null, '1');
+INSERT INTO `sm_function` VALUES ('110108', '1101', '110108', '禁用', '/system/user/disable.do', '', '1', '2014-05-31 00:00:00', '1', '2014-07-01 10:46:55', '1060103', '0', null, '1');
+INSERT INTO `sm_function` VALUES ('110109', '1101', '110109', '导入', '/system/user/import.do', '', '1', '2014-05-31 00:00:00', '1', '2014-07-01 10:47:18', '1060103', '0', null, '1');
 INSERT INTO `sm_function` VALUES ('110110', '10410', '10410', '登录', '/login.doself', '', '1', '2014-05-31 00:00:00', '1', '2014-06-30 12:54:40', '1060101', '0', null, '1');
 INSERT INTO `sm_function` VALUES ('110111', '10411', '10411', '注销', '/logout.doself', '', '1', '2014-05-31 00:00:00', '1', '2014-06-30 12:55:12', '1060101', '0', null, '1');
-INSERT INTO `sm_function` VALUES ('110112', '1101', '10413', '用户导出', '/system/user/export.do', '', '1', '2014-05-31 00:00:00', '1', '2014-06-30 12:55:44', '1060103', '0', '6', '1');
+INSERT INTO `sm_function` VALUES ('110112', '1101', '110112', '用户导出', '/system/user/export.do', '', '1', '2014-05-31 00:00:00', '1', '2014-07-01 10:47:21', '1060103', '0', '6', '1');
 INSERT INTO `sm_function` VALUES ('110201', '1102', '110201', '查询', '/system/role/query.do', '', '1', '2014-05-26 00:00:00', '1', '2014-06-30 16:24:09', '1060103', '0', null, '1');
 INSERT INTO `sm_function` VALUES ('110202', '1102', '110202', '新增', '/system/role/add.do', '', '1', '2014-05-26 00:00:00', '1', '2014-06-30 16:24:11', '1060103', '0', null, '1');
 INSERT INTO `sm_function` VALUES ('110203', '1102', '110203', '详情', '/system/role/view.do', '', '1', '2014-05-26 00:00:00', '1', '2014-06-30 16:24:14', '1060103', '0', null, '1');
@@ -4723,7 +5008,13 @@ INSERT INTO `sm_function` VALUES ('130201', '1302', '130201', '详情', '/system
 INSERT INTO `sm_function` VALUES ('130301', '1303', '130301', '查询', '/system/recyclebin/query.do', '', '1', '2014-06-26 11:09:36', '1', '2014-06-30 13:45:18', '1060103', '0', null, '1');
 INSERT INTO `sm_function` VALUES ('130302', '1303', '130302', '删除', '/system/recyclebin/delete.do', '', '1', '2014-06-26 11:10:30', '1', '2014-06-30 13:45:18', '1060103', '0', null, '1');
 INSERT INTO `sm_function` VALUES ('130303', '1303', '130303', '恢复', '/system/recyclebin/recovery.do', '', '1', '2014-06-26 11:11:14', '1', '2014-06-30 13:45:18', '1060103', '0', null, '1');
+INSERT INTO `sm_function` VALUES ('130401', '1304', '130401', '查询', '/system/auditlog/query.do', '', '1', '2014-05-26 00:00:00', '1', '2014-07-01 17:19:29', '1060103', '0', null, '1');
+INSERT INTO `sm_function` VALUES ('130402', '1304', '130402', '新增', '/system/auditlog/add.do', '', '1', '2014-05-26 00:00:00', '1', '2014-07-01 17:19:33', '1060103', '0', null, '1');
+INSERT INTO `sm_function` VALUES ('130403', '1304', '130403', '详情', '/system/auditlog/view.do', '', '1', '2014-05-26 00:00:00', '1', '2014-07-01 17:19:37', '1060103', '0', null, '1');
+INSERT INTO `sm_function` VALUES ('130404', '1304', '130404', '编辑', '/system/auditlog/modify.do', '', '1', '2014-05-26 00:00:00', '1', '2014-07-01 17:19:40', '1060103', '0', null, '1');
+INSERT INTO `sm_function` VALUES ('130405', '1304', '130405', '删除', '/system/auditlog/delete.do', '', '1', '2014-05-26 00:00:00', '1', '2014-07-01 17:19:46', '1060103', '0', null, '1');
 INSERT INTO `sm_function` VALUES ('140101', '1401', '140101', '详情', '/system/developer/view.do', '', '1', '2014-05-26 00:00:00', '1', '2014-06-18 11:04:29', '1060103', '0', null, '1');
+INSERT INTO `sm_function` VALUES ('140102', '301', '024568', 'ceshi ', '/service/doPost', '', '1', '2014-07-02 13:18:41', '1', '2014-07-02 13:18:41', '1060101', '0', null, '0');
 INSERT INTO `sm_menu` VALUES ('2', '0200', '工作台', null, '/workbanch/toViewPage.do', '1', '20000', '0', '1', '', '1', '2014-05-26 00:00:00', '1', '2014-06-24 16:42:47', '1020202', '20001', '1', '0', '1', '1');
 INSERT INTO `sm_menu` VALUES ('3', '0300', '市场营销', null, null, '1', '30000', '0', '1', '', '1', '2014-05-26 00:00:00', '1', '2014-05-26 19:29:04', '1020202', null, '0', '0', '0', '1');
 INSERT INTO `sm_menu` VALUES ('4', '0400', '客户管理', null, null, '1', '40000', '0', '1', '', '1', '2014-05-26 00:00:00', '1', '2014-05-26 19:29:04', '1020202', null, '0', '0', '0', '1');
@@ -4732,11 +5023,12 @@ INSERT INTO `sm_menu` VALUES ('6', '0600', '订单管理', null, null, '1', '600
 INSERT INTO `sm_menu` VALUES ('7', '0700', '财务管理', null, null, '1', '70000', '0', '1', '', '1', '2014-05-26 00:00:00', '1', '2014-05-26 19:29:05', '1020202', null, '0', '0', '0', '1');
 INSERT INTO `sm_menu` VALUES ('8', '0800', '销售管理', null, null, '1', '80000', '0', '1', '', '1', '2014-05-26 00:00:00', '1', '2014-05-26 19:29:05', '1020202', null, '0', '0', '0', '1');
 INSERT INTO `sm_menu` VALUES ('9', '0900', '报表管理', null, '/report/toViewPage.do', '1', '90000', '0', '1', '', '1', '2014-05-26 00:00:00', '1', '2014-05-26 19:29:05', '1020202', '90001', '1', '0', '0', '1');
-INSERT INTO `sm_menu` VALUES ('10', '1000', '个人设置', null, '', '1', '100000', '0', '1', '', '1', '2014-05-26 00:00:00', '1', '2014-05-26 19:29:04', '1020201', null, '1', '0', '0', '1');
+INSERT INTO `sm_menu` VALUES ('10', '1000', '个人设置', null, '', '1', '100000', '0', '1', '', '1', '2014-05-26 00:00:00', '1', '2014-05-26 19:29:04', '1020201', null, '0', '0', '0', '1');
 INSERT INTO `sm_menu` VALUES ('11', '1100', '用户及权限', null, null, '1', '110000', '0', '1', '', '1', '2014-05-26 00:00:00', '1', '2014-05-26 19:29:04', '1020201', null, '0', '0', '0', '1');
 INSERT INTO `sm_menu` VALUES ('12', '1200', '机构设置', null, null, '1', '120000', '0', '1', '', '1', '2014-05-26 00:00:00', '1', '2014-05-26 19:29:04', '1020201', null, '0', '0', '0', '1');
 INSERT INTO `sm_menu` VALUES ('13', '1300', '数据管理', null, '', '1', '130000', '0', '1', '', '1', '2014-05-26 00:00:00', '1', '2014-05-26 19:29:04', '1020201', null, '0', '0', '0', '1');
 INSERT INTO `sm_menu` VALUES ('14', '1400', '开发者空间', null, '', '1', '140000', '0', '1', '', '1', '2014-05-26 00:00:00', '1', '2014-05-26 19:29:04', '1020201', null, '0', '0', '0', '1');
+INSERT INTO `sm_menu` VALUES ('15', '1500', '帮助', null, '', '1', '150000', '0', '1', '', '1', '2014-07-01 17:39:20', '1', '2014-07-01 17:39:27', '1020201', null, '0', '0', '0', '1');
 INSERT INTO `sm_menu` VALUES ('301', '0301', '市场活动', '3', '/market/marketactivity/toQueryPage.do', '1', '30100', '0', '2', '', '1', '2014-05-26 00:00:00', '1', '2014-05-26 19:29:04', '1020202', '30101', '1', '0', '0', '1');
 INSERT INTO `sm_menu` VALUES ('401', '0401', '线索', '4', '/customer/lead/toQueryPage.do', '1', '40100', '0', '2', '', '1', '2014-05-26 00:00:00', '1', '2014-05-26 19:29:04', '1020202', '40101', '1', '0', '0', '1');
 INSERT INTO `sm_menu` VALUES ('402', '0402', '联系人', '4', '/customer/contact/toQueryPage.do', '1', '40200', '0', '2', '', '1', '2014-05-26 00:00:00', '1', '2014-05-26 19:29:04', '1020202', '40201', '1', '0', '0', '1');
@@ -4752,10 +5044,8 @@ INSERT INTO `sm_menu` VALUES ('801', '0801', '销售目标', '8', null, '1', '80
 INSERT INTO `sm_menu` VALUES ('1001', '1001', '账号信息', '10', '/system/user/toViewPage.do', '1', '100100', '0', '2', '', '1', '2014-05-26 00:00:00', '1', '2014-05-26 19:29:04', '1020201', '100101', '1', '0', '0', '1');
 INSERT INTO `sm_menu` VALUES ('1002', '1002', '更改密码', '10', '/system/user/toModifyPasswordPage.do', '1', '100200', '0', '2', '', '1', '2014-05-26 00:00:00', '1', '2014-05-26 19:29:04', '1020201', '100201', '1', '0', '0', '1');
 INSERT INTO `sm_menu` VALUES ('1003', '1003', '自定义工作台', '10', '/system/workbench/toCustomPage.do', '1', '100300', '0', '2', '', '1', '2014-05-26 00:00:00', '1', '2014-05-26 19:29:04', '1020201', '100301', '1', '0', '0', '1');
-INSERT INTO `sm_menu` VALUES ('1004', '1004', '审计日志', '10', '/system/auditlog/toQueryPage.do', '1', '100400', '0', '2', '', '1', '2014-06-22 16:41:41', '1', '2014-06-22 16:41:05', '1020201', '100401', '1', '0', '0', '1');
 INSERT INTO `sm_menu` VALUES ('1005', '1005', '系统消息', '10', '/system/message/toQueryPage.do', '1', '100500', '0', '2', '', '1', '2014-06-26 11:35:41', '0', '2014-06-26 11:36:14', '1020201', '100501', '1', '0', '0', '1');
 INSERT INTO `sm_menu` VALUES ('1006', '1006', '系统公告', '10', '/system/notice/toQueryPage.do', '1', '100600', '0', '2', '', '1', '2014-05-26 00:00:00', '1', '2014-05-26 19:29:04', '1020201', '100601', '1', '0', '0', '1');
-INSERT INTO `sm_menu` VALUES ('1007', '1007', '系统操作手册', '10', '/system/help/toViewPage.do', '1', '100700', '0', '2', '', '1', '2014-05-26 00:00:00', '1', '2014-05-26 19:29:04', '1020201', '100701', '1', '0', '0', '1');
 INSERT INTO `sm_menu` VALUES ('1101', '1101', '用户', '11', '/system/user/toQueryPage.do', '1', '110100', '0', '2', '', '1', '2014-05-26 00:00:00', '1', '2014-05-26 19:29:04', '1020201', '110101', '1', '0', '0', '1');
 INSERT INTO `sm_menu` VALUES ('1102', '1102', '角色', '11', '/system/role/toQueryPage.do', '1', '110200', '0', '2', '', '1', '2014-05-26 00:00:00', '1', '2014-05-26 19:29:04', '1020201', '110201', '1', '0', '0', '1');
 INSERT INTO `sm_menu` VALUES ('1103', '1103', '菜单', '11', '/system/menu/toQueryPage.do', '1', '110300', '0', '2', '', '1', '2014-05-26 00:00:00', '1', '2014-05-26 19:29:04', '1020201', '110301', '1', '0', '0', '1');
@@ -4766,13 +5056,17 @@ INSERT INTO `sm_menu` VALUES ('1201', '1201', '组织机构', '12', '/system/org
 INSERT INTO `sm_menu` VALUES ('1301', '1301', '字典维护', '13', '/system/dictionary/toQueryPage.do', '1', '130100', '0', '2', '', '1', '2014-05-26 00:00:00', '1', '2014-05-26 19:29:04', '1020201', '130101', '1', '0', '0', '1');
 INSERT INTO `sm_menu` VALUES ('1302', '1302', '导出数据', '13', '/system/data/toExportPage.do', '1', '130200', '0', '2', '', '1', '2014-05-26 00:00:00', '1', '2014-05-26 19:29:04', '1020201', '130201', '1', '0', '0', '1');
 INSERT INTO `sm_menu` VALUES ('1303', '1303', '回收站', '13', '/system/recyclebin/toQueryPage.do', '1', '130300', '0', '2', '', '1', '2014-05-26 00:00:00', '1', '2014-05-26 19:29:04', '1020201', '130301', '1', '0', '0', '1');
+INSERT INTO `sm_menu` VALUES ('1304', '1304', '审计日志', '13', '/system/auditlog/toQueryPage.do', '1', '130400', '0', '2', '', '1', '2014-06-22 16:41:41', '1', '2014-06-22 16:41:05', '1020201', '130401', '1', '0', '0', '1');
 INSERT INTO `sm_menu` VALUES ('1401', '1401', 'CRM API', '14', '/system/developer/toViewPage.do', '1', '140100', '0', '2', '', '1', '2014-05-26 00:00:00', '1', '2014-05-26 19:29:04', '1020201', '140101', '1', '0', '0', '1');
+INSERT INTO `sm_menu` VALUES ('1501', '1501', '系统操作手册', '15', '/system/help/toViewPage.do', '1', '150100', '0', '2', '', '1', '2014-05-26 00:00:00', '1', '2014-05-26 19:29:04', '1020201', '100701', '1', '0', '0', '1');
 INSERT INTO `sm_org` VALUES ('1', '010000', '1030101', null, '华兴控股', '华兴控股', '北京市海淀区', '100000', '18620088324', '1429457@163.com', 'http://hxtd.crm.com', null, '1000000', '', '1', '2014-05-26 00:00:00', '1', '2014-06-24 18:50:31', '0', '1', '0', '1');
-INSERT INTO `sm_org` VALUES ('101', '010100', '1030101', '1', '董事会', '董事会', '北京市海淀区', '100000', '18620088324', '1429457@163.com', 'http://hxtd.crm.com', null, '1010000', '', '1', '2014-05-26 00:00:00', '1', '2014-06-24 17:05:44', '1', '2', '0', '1');
+INSERT INTO `sm_org` VALUES ('101', '010100', '1030101', '1', '董事会', '董事会', '北京市海淀区', '100000', '18620088324', '1429457@163.com', 'http://hxtd.crm.com', null, '1010000', '', '1', '2014-05-26 00:00:00', '1', '2014-06-24 17:05:44', '0', '2', '0', '1');
 INSERT INTO `sm_org` VALUES ('102', '010200', '1030101', '1', '三级委员会', null, '北京市海淀区', '100000', '1862008324', '1429457@163.com', 'http://hxtd.crm.com', null, '1020000', '', '1', '2014-05-26 00:00:00', '1', '2014-05-26 19:29:03', '1', '2', '0', '1');
 INSERT INTO `sm_org` VALUES ('103', '010300', '1030101', '1', '技术管理中心', null, '北京市海淀区', '100000', '1862008324', '1429457@163.com', 'http://hxtd.crm.com', null, '1030000', '', '1', '2014-05-26 00:00:00', '1', '2014-05-26 19:29:03', '0', '2', '0', '1');
 INSERT INTO `sm_org` VALUES ('10301', '010302', '1030101', '103', '企划营销中心', null, '北京市海淀区', '100000', '1862008324', '1429457@163.com', 'http://hxtd.crm.com', null, '1030200', '', '1', '2014-05-26 00:00:00', '1', '2014-05-26 19:29:03', '1', '3', '0', '1');
 INSERT INTO `sm_org` VALUES ('10321', '', '1030103', '1', '测试111', '溜溜', '', '', '', '', '', null, '1040000', '', '1', '2014-06-28 17:45:17', '1', '2014-06-28 17:45:17', '1', '2', '0', '1');
+INSERT INTO `sm_org` VALUES ('10322', '', '1030101', '1', 'ceshi', 'ceshi', '13698751458', '100000', '13698751458', '13698751458@qq.com', 'http://www.baidu.com', null, '1050000', '13698751458', '1', '2014-07-02 14:23:47', '1', '2014-07-02 14:26:41', '1', '2', '1', '0');
+INSERT INTO `sm_org` VALUES ('10325', '010101', '1030101', '101', 'ceshi34', 'ceshi34', 'www.baihui.com', '100000', '13698745879', 'ceshi@qq.com', 'http://www.baihui.com', null, '1010100', '', '1', '2014-07-02 14:38:47', '1', '2014-07-02 14:42:03', '1', '3', '1', '0');
 INSERT INTO `sm_org_role` VALUES ('1', '1');
 INSERT INTO `sm_org_role` VALUES ('103', '3');
 INSERT INTO `sm_org_role` VALUES ('10301', '4');
@@ -4789,6 +5083,8 @@ INSERT INTO `sm_role` VALUES ('1', '1', '管理员', '1050101', '管理员', '1'
 INSERT INTO `sm_role` VALUES ('2', '2', '数据管理员', '1050101', '数据管理员', '1', '2014-06-19 13:49:31', '1', '2014-06-19 13:49:31', '0', '1');
 INSERT INTO `sm_role` VALUES ('3', '3', '技术管理中心', '1050101', '技术管理中心', '1', '2014-06-19 13:49:31', '1', '2014-06-19 13:49:31', '0', '1');
 INSERT INTO `sm_role` VALUES ('4', '4', '企划营销中心', '1050101', '企划营销中心', '1', '2014-06-19 13:49:31', '1', '2014-06-19 13:49:31', '0', '1');
+INSERT INTO `sm_role` VALUES ('45588', '', '测试', '1050101', '测试', '1', '2014-07-01 14:35:47', '1', '2014-07-02 12:00:11', '0', '0');
+INSERT INTO `sm_role` VALUES ('45594', null, '测试1', '1050101', '测', '1', '2014-07-02 13:26:03', '1', '2014-07-02 13:26:03', '0', '0');
 INSERT INTO `sm_role_com` VALUES ('2', '73');
 INSERT INTO `sm_role_com` VALUES ('3', '2');
 INSERT INTO `sm_role_com` VALUES ('3', '3');
@@ -4800,59 +5096,141 @@ INSERT INTO `sm_role_func` VALUES ('3', '30102');
 INSERT INTO `sm_role_func` VALUES ('3', '30103');
 INSERT INTO `sm_role_func` VALUES ('3', '30104');
 INSERT INTO `sm_role_func` VALUES ('3', '30105');
-INSERT INTO `sm_trace_log` VALUES ('1', '联系人', '2014-06-23 15:32:15', '10040103', '1', '100010', '测试');
-INSERT INTO `sm_trace_log` VALUES ('2', '客户', '2014-06-23 19:20:37', '10040102', '1', '100011', '测试内容');
-INSERT INTO `sm_trace_log` VALUES ('3', '线索', '2014-06-24 14:12:25', '10040101', '1', '100012', '审计日志');
-INSERT INTO `sm_trace_log` VALUES ('4', '产品', '2014-06-24 14:13:11', '10040101', '1', '100013', '审计日志');
-INSERT INTO `sm_trace_log` VALUES ('5', '项目', '2014-06-24 14:13:35', '10040101', '1', '100014', '审计日志');
-INSERT INTO `sm_trace_log` VALUES ('6', '订单', '2014-06-24 14:14:04', '10040101', '1', '100015', '订单');
-INSERT INTO `sm_trace_log` VALUES ('7', '供应商', '2014-06-24 14:14:26', '10040101', '1', '100016', '供应商');
-INSERT INTO `sm_trace_log` VALUES ('12', '市场活动', '2014-06-25 19:14:04', '10040101', '1', '100017', '产品');
-INSERT INTO `sm_trace_log` VALUES ('13', '市场活动', '2014-06-24 14:14:04', '10040101', '1', '100017', '产品');
-INSERT INTO `sm_trace_log` VALUES ('14', '市场活动', '2014-06-25 10:14:04', '10040101', '1', '100017', '产品');
-INSERT INTO `sm_trace_log` VALUES ('15', '产品', '2014-06-24 14:14:04', '10040101', '1', '100017', '产品');
-INSERT INTO `sm_trace_log` VALUES ('18', '产品', '2014-06-24 14:14:04', '10040101', '1', '100017', '产品');
-INSERT INTO `sm_trace_log` VALUES ('19', '产品', '2014-06-24 14:14:04', '10040101', '1', '100017', '产品');
-INSERT INTO `sm_trace_log` VALUES ('23', '产品', '2014-06-24 14:14:04', '10040101', '1', '100017', '产品');
-INSERT INTO `sm_trace_log` VALUES ('24', '产品', '2014-06-24 14:14:04', '10040101', '1', '100017', '产品');
-INSERT INTO `sm_trace_log` VALUES ('25', '产品', '2014-06-24 14:14:04', '10040101', '1', '100017', '产品');
-INSERT INTO `sm_trace_log` VALUES ('26', '产品', '2014-06-24 14:14:04', '10040101', '1', '100017', '产品');
-INSERT INTO `sm_trace_log` VALUES ('27', '产品', '2014-06-24 14:14:04', '10040101', '1', '100017', '产品');
-INSERT INTO `sm_trace_log` VALUES ('28', '产品', '2014-06-24 14:14:04', '10040101', '1', '100017', '产品');
-INSERT INTO `sm_trace_log` VALUES ('29', '产品', '2014-06-24 14:14:04', '10040101', '1', '100017', '产品');
-INSERT INTO `sm_trace_log` VALUES ('30', '产品', '2014-06-24 14:14:04', '10040101', '1', '100017', '产品');
-INSERT INTO `sm_trace_log` VALUES ('31', '产品', '2014-06-24 14:14:04', '10040101', '1', '100017', '产品');
-INSERT INTO `sm_trace_log` VALUES ('32', '产品', '2014-06-24 14:14:04', '10040101', '1', '100017', '产品');
-INSERT INTO `sm_trace_log` VALUES ('33', '产品', '2014-06-24 14:14:04', '10040101', '1', '100017', '产品');
-INSERT INTO `sm_trace_log` VALUES ('34', '产品', '2014-06-24 14:14:04', '10040101', '1', '100017', '产品');
-INSERT INTO `sm_trace_log` VALUES ('35', '产品', '2014-06-24 14:14:04', '10040101', '1', '100017', '产品');
-INSERT INTO `sm_trace_log` VALUES ('36', '产品', '2014-06-24 14:14:04', '10040101', '1', '100017', '产品');
-INSERT INTO `sm_trace_log` VALUES ('37', '产品', '2014-06-24 14:14:04', '10040101', '1', '100017', '产品');
-INSERT INTO `sm_trace_log` VALUES ('38', '产品', '2014-06-24 14:14:04', '10040101', '1', '100017', '产品');
-INSERT INTO `sm_trace_log` VALUES ('39', '产品', '2014-06-24 14:14:04', '10040101', '1', '100017', '产品');
-INSERT INTO `sm_trace_log` VALUES ('40', '产品', '2014-06-24 14:14:04', '10040101', '1', '100017', '产品');
-INSERT INTO `sm_trace_log` VALUES ('41', '产品', '2014-06-24 14:14:04', '10040101', '1', '100017', '产品');
-INSERT INTO `sm_trace_log` VALUES ('42', '产品', '2014-06-24 14:14:04', '10040101', '1', '100017', '产品');
-INSERT INTO `sm_trace_log` VALUES ('43', '产品', '2014-06-24 14:14:04', '10040101', '1', '100017', '产品');
+INSERT INTO `sm_trace_log` VALUES ('45', '市场活动', '2014-07-01 10:57:06', '10040103', '1', '104452', 'test3');
+INSERT INTO `sm_trace_log` VALUES ('46', '市场活动', '2014-07-01 11:00:56', '10040103', '1', '104453', 'test4');
+INSERT INTO `sm_trace_log` VALUES ('47', '市场活动', null, '10040101', '1', '104457', 'test7');
+INSERT INTO `sm_trace_log` VALUES ('54', '市场活动', '2014-07-01 15:40:57', '10040103', '104448', '104448', '新增活动测试');
+INSERT INTO `sm_trace_log` VALUES ('55', '市场活动', '2014-07-01 15:41:40', '10040103', '104450', '104450', 'test1');
+INSERT INTO `sm_trace_log` VALUES ('56', '市场活动', '2014-07-01 15:43:58', '10040103', '104451', '104451', 'test2');
+INSERT INTO `sm_trace_log` VALUES ('57', '市场活动', '2014-07-01 15:46:21', '10040103', '104433', '104433', 'gsdgsdgf');
+INSERT INTO `sm_trace_log` VALUES ('58', '客户', '2014-07-01 16:48:18', '10040103', '98372', '98372', '管理员');
+INSERT INTO `sm_trace_log` VALUES ('59', '客户', '2014-07-01 16:49:01', '10040103', '98366', '98366', 'RTYERY65467');
+INSERT INTO `sm_trace_log` VALUES ('60', '客户', '2014-07-01 16:49:28', '10040103', '98357', '98357', '测试');
+INSERT INTO `sm_trace_log` VALUES ('61', '客户', '2014-07-01 17:33:46', '10040101', '1', '98376', '13648752548');
+INSERT INTO `sm_trace_log` VALUES ('62', '客户', '2014-07-01 17:35:28', '10040101', '1', '98377', '13648752548');
+INSERT INTO `sm_trace_log` VALUES ('63', '客户', '2014-07-01 17:49:41', '10040101', '1', '98378', '13648752548');
+INSERT INTO `sm_trace_log` VALUES ('64', '客户', '2014-07-01 17:50:32', '10040102', '1', '98378', '13648752548');
+INSERT INTO `sm_trace_log` VALUES ('65', '市场活动', '2014-07-01 18:02:59', '10040103', '1', '104448', '新增活动测试');
+INSERT INTO `sm_trace_log` VALUES ('66', '市场活动', '2014-07-01 18:03:07', '10040103', '1', '104452', 'test3');
+INSERT INTO `sm_trace_log` VALUES ('67', '市场活动', null, '10040101', '1', '104459', '管理员');
+INSERT INTO `sm_trace_log` VALUES ('71', '客户', '2014-07-01 18:08:12', '10040102', '1', '98379', 'usermenu');
+INSERT INTO `sm_trace_log` VALUES ('74', '线索', '2014-07-01 18:21:59', '10040103', null, '32', 'ggggggg');
+INSERT INTO `sm_trace_log` VALUES ('75', '线索', '2014-07-01 18:29:52', '10040103', null, '33', 'hhhhhhhhhhh');
+INSERT INTO `sm_trace_log` VALUES ('76', '线索', '2014-07-01 18:36:31', '10040103', '1', '34', 'jjjjjjjjjj');
+INSERT INTO `sm_trace_log` VALUES ('77', '线索', '2014-07-01 18:39:39', '10040103', '1', '31', 'fasfsaf');
+INSERT INTO `sm_trace_log` VALUES ('78', '线索', '2014-07-01 18:45:15', '10040101', '1', '35', 'fasfasfd');
+INSERT INTO `sm_trace_log` VALUES ('79', '线索', '2014-07-01 18:47:38', '10040102', '1', '32', 'ggggggg');
+INSERT INTO `sm_trace_log` VALUES ('80', '联系人', '2014-07-01 19:01:36', '10040103', null, '106531', '测试');
+INSERT INTO `sm_trace_log` VALUES ('81', '联系人', null, '10040101', '1', '106532', 'fasdfa');
+INSERT INTO `sm_trace_log` VALUES ('82', '联系人', '2014-07-01 19:03:28', '10040103', '1', '106532', 'fasdfa');
+INSERT INTO `sm_trace_log` VALUES ('83', '联系人', null, '10040102', '1', '106531', '测试');
+INSERT INTO `sm_trace_log` VALUES ('84', null, null, '10040103', '1', '3', null);
+INSERT INTO `sm_trace_log` VALUES ('85', null, null, '10040103', '1', '1', null);
+INSERT INTO `sm_trace_log` VALUES ('86', '订单', '2014-07-01 19:37:38', '10040103', '1', '1', null);
+INSERT INTO `sm_trace_log` VALUES ('87', '供应商', '2014-07-01 15:21:10', '10040103', '1', '3', '中国人民银行');
+INSERT INTO `sm_trace_log` VALUES ('88', '供应商', '2014-07-01 19:49:59', '10040103', '1', '5', 'cccc');
+INSERT INTO `sm_trace_log` VALUES ('89', '供应商', '2014-07-01 19:50:37', '10040102', '1', '6', 'admin');
+INSERT INTO `sm_trace_log` VALUES ('90', '项目', '2014-06-30 11:43:18', '10040103', '1', '2', 'ggggg');
+INSERT INTO `sm_trace_log` VALUES ('91', '项目', '2014-07-01 19:57:23', '10040103', '1', '3', 'ssss');
+INSERT INTO `sm_trace_log` VALUES ('92', '项目', '2014-06-30 11:43:18', '10040103', '1', '2', 'ggggg');
+INSERT INTO `sm_trace_log` VALUES ('93', '项目', '2014-07-01 19:58:56', '10040102', '1', '2', 'ggggg');
+INSERT INTO `sm_trace_log` VALUES ('94', '产品', '2014-07-01 20:03:14', '10040103', '1', '24566', '华兴泰达融资1');
+INSERT INTO `sm_trace_log` VALUES ('95', '产品', null, '10040102', '1', '24566', '华兴泰达融资1');
+INSERT INTO `sm_trace_log` VALUES ('96', null, null, '10040103', '1', '26643', null);
+INSERT INTO `sm_trace_log` VALUES ('97', null, null, '10040103', '1', '26649', null);
+INSERT INTO `sm_trace_log` VALUES ('98', '用户', '2014-07-02 11:36:46', '10040102', '1', '26655', 'vvvvc');
+INSERT INTO `sm_trace_log` VALUES ('99', '用户', '2014-07-02 11:38:59', '10040103', '1', '26653', '123');
+INSERT INTO `sm_trace_log` VALUES ('100', '用户', '2014-07-02 11:45:10', '10040101', '1', '26656', 'cccc');
+INSERT INTO `sm_trace_log` VALUES ('101', '用户', '2014-07-02 11:45:46', '10040103', '1', '26656', 'ccccc');
+INSERT INTO `sm_trace_log` VALUES ('102', '用户', '2014-07-02 11:45:57', '10040102', '1', '26648', 'test1');
+INSERT INTO `sm_trace_log` VALUES ('103', '用户', '2014-07-02 11:46:48', '10040101', '1', '26657', 'nnnn');
+INSERT INTO `sm_trace_log` VALUES ('104', '用户', '2014-07-02 11:48:45', '10040103', '1', '26648', '1');
+INSERT INTO `sm_trace_log` VALUES ('105', '用户', '2014-07-02 11:49:26', '10040101', '1', '26658', 'xxxx');
+INSERT INTO `sm_trace_log` VALUES ('106', '用户', '2014-07-02 11:50:08', '10040102', '1', '26658', 'xxxx');
+INSERT INTO `sm_trace_log` VALUES ('107', '线索', '2014-07-03 13:12:06', '10040101', '1', '36', '刘岚（测试）');
+INSERT INTO `sm_trace_log` VALUES ('108', '线索', '2014-07-03 13:13:33', '10040101', '1', '37', '刘岚（测试）');
+INSERT INTO `sm_trace_log` VALUES ('109', '线索', '2014-07-03 13:18:42', '10040101', '1', '38', '刘岚');
+INSERT INTO `sm_trace_log` VALUES ('110', '线索', '2014-07-03 13:27:52', '10040101', '1', '39', 'liulan1');
+INSERT INTO `sm_trace_log` VALUES ('111', '线索', '2014-07-03 13:36:06', '10040102', '1', '39', 'liulan1');
+INSERT INTO `sm_trace_log` VALUES ('112', '线索', '2014-07-02 13:39:02', '10040102', '1', '37', '刘岚（测试）');
+INSERT INTO `sm_trace_log` VALUES ('113', '线索', '2014-07-03 13:56:22', '10040101', '1', '40', '刘岚2');
+INSERT INTO `sm_trace_log` VALUES ('114', '线索', '2014-07-03 13:57:59', '10040101', '1', '41', '刘岚2');
+INSERT INTO `sm_trace_log` VALUES ('115', '线索', '2014-07-03 13:58:42', '10040101', '1', '42', '刘岚3');
+INSERT INTO `sm_trace_log` VALUES ('116', '线索', '2014-07-03 13:59:25', '10040101', '1', '43', '刘岚4');
+INSERT INTO `sm_trace_log` VALUES ('117', '线索', '2014-07-03 14:14:39', '10040102', '1', '40', '刘岚2');
+INSERT INTO `sm_trace_log` VALUES ('118', '线索', '2014-07-03 14:17:38', '10040101', '1', '44', 'liulan7');
+INSERT INTO `sm_trace_log` VALUES ('119', '线索', '2014-07-03 14:18:38', '10040102', '1', '44', 'liulan7');
+INSERT INTO `sm_trace_log` VALUES ('120', '线索', '2014-07-03 14:19:04', '10040102', '1', '44', 'liulan7');
+INSERT INTO `sm_trace_log` VALUES ('121', '组件', '2014-07-02 14:20:03', '10040101', '1', '110210', 'ce2');
+INSERT INTO `sm_trace_log` VALUES ('122', '组件', '2014-07-02 14:20:17', '10040102', '1', '110210', 'ce2');
+INSERT INTO `sm_trace_log` VALUES ('123', '线索', '2014-07-03 14:24:29', '10040102', '1', '44', 'liulan7');
+INSERT INTO `sm_trace_log` VALUES ('124', '线索', '2014-07-03 14:36:45', '10040103', '1', '39', 'liulan1');
+INSERT INTO `sm_trace_log` VALUES ('125', '组织机构', '2014-07-02 14:38:47', '10040101', '1', '10325', 'ceshi34');
+INSERT INTO `sm_trace_log` VALUES ('126', '联系人', null, '10040101', '1', '106535', '刘岚');
+INSERT INTO `sm_trace_log` VALUES ('127', '组织机构', '2014-07-02 14:41:55', '10040102', '1', '10325', 'ceshi34');
+INSERT INTO `sm_trace_log` VALUES ('128', '组织机构', '2014-07-02 14:42:03', '10040103', '1', '10325', 'ceshi34');
+INSERT INTO `sm_trace_log` VALUES ('129', '联系人', null, '10040101', '1', '106536', '刘岚');
+INSERT INTO `sm_trace_log` VALUES ('130', '联系人', null, '10040102', '1', '106536', '刘岚');
+INSERT INTO `sm_trace_log` VALUES ('131', '联系人', null, '10040101', '1', '106537', '刘岚');
+INSERT INTO `sm_trace_log` VALUES ('132', '联系人', null, '10040102', '1', '106537', '刘岚');
+INSERT INTO `sm_trace_log` VALUES ('133', '线索', '2014-07-03 15:14:34', '10040102', '1', '44', 'liulan7');
+INSERT INTO `sm_trace_log` VALUES ('134', '线索', '2014-07-03 15:15:15', '10040102', '1', '44', 'liulan7');
+INSERT INTO `sm_trace_log` VALUES ('135', '系统公告', '2014-07-02 15:17:51', '10040101', '1', '67', 'adfag');
+INSERT INTO `sm_trace_log` VALUES ('136', '系统公告', '2014-07-02 15:18:08', '10040102', '1', '67', 'adfag');
+INSERT INTO `sm_trace_log` VALUES ('137', '系统公告', '2014-07-02 15:18:34', '10040103', '1', '67', 'adfag');
+INSERT INTO `sm_trace_log` VALUES ('138', '线索', '2014-07-03 15:28:50', '10040101', '1', '45', '刘岚');
+INSERT INTO `sm_trace_log` VALUES ('139', '系统消息', '2014-07-02 15:31:44', '10040101', '1', '184', 'tttt');
+INSERT INTO `sm_trace_log` VALUES ('140', '系统消息', '2014-07-02 15:48:08', '10040103', '1', '648', 'tttt');
+INSERT INTO `sm_trace_log` VALUES ('141', '系统消息', '2014-07-02 15:48:44', '10040103', '1', '601', '323');
+INSERT INTO `sm_trace_log` VALUES ('142', '线索', '2014-07-03 15:49:19', '10040102', '1', '40', '刘岚2');
+INSERT INTO `sm_trace_log` VALUES ('143', '联系人', null, '10040101', '1', '106541', '门店区域设置');
+INSERT INTO `sm_trace_log` VALUES ('144', '联系人', null, '10040101', '1', '106542', '关注');
+INSERT INTO `sm_trace_log` VALUES ('145', '附件', '2014-07-02 16:23:36', '10040101', '1', '266', '1.jpg');
+INSERT INTO `sm_trace_log` VALUES ('146', '附件', '2014-07-02 16:24:25', '10040101', '1', '267', '1.jpg');
+INSERT INTO `sm_trace_log` VALUES ('147', '附件', '2014-07-02 16:23:36', '10040103', null, '266', '1.jpg');
+INSERT INTO `sm_trace_log` VALUES ('148', '沟通纪要', null, '10040101', '1', '93', '我和..');
+INSERT INTO `sm_trace_log` VALUES ('149', '沟通纪要', null, '10040101', '1', '94', 'ddd');
+INSERT INTO `sm_trace_log` VALUES ('150', '线索', '2014-07-03 16:31:24', '10040101', '1', '46', '刘岚华仔');
+INSERT INTO `sm_trace_log` VALUES ('151', '沟通纪要', null, '10040101', '1', '95', 'fasdfasd');
+INSERT INTO `sm_trace_log` VALUES ('152', '沟通纪要', null, '10040102', '1', '95', 'fasdfasd');
+INSERT INTO `sm_trace_log` VALUES ('153', '沟通纪要', '2014-07-02 16:46:59', '10040101', '1', '96', 'asddfasdf');
+INSERT INTO `sm_trace_log` VALUES ('154', '沟通纪要', '2014-07-02 16:47:21', '10040103', '1', '96', 'asddfasdf');
+INSERT INTO `sm_trace_log` VALUES ('155', '联系人', null, '10040101', '1', '106545', '门店区域设置');
+INSERT INTO `sm_trace_log` VALUES ('156', '联系人', null, '10040101', '1', '106546', '关注78');
+INSERT INTO `sm_trace_log` VALUES ('157', '联系人', '2014-07-03 16:59:39', '10040103', '1', '106531', '测试');
+INSERT INTO `sm_trace_log` VALUES ('158', '联系人', null, '10040101', '1', '106547', '门店区域设置');
+INSERT INTO `sm_trace_log` VALUES ('159', '联系人', '2014-07-02 17:00:42', '10040104', '1', '42', '刘岚3');
+INSERT INTO `sm_trace_log` VALUES ('160', '客户', '2014-07-02 14:01:13', '10040101', '1', '98389', '刘岚4');
+INSERT INTO `sm_trace_log` VALUES ('161', '联系人', '2014-07-02 14:01:13', '10040101', '1', '106549', '刘岚4');
+INSERT INTO `sm_trace_log` VALUES ('162', '线索', '2014-07-02 14:01:13', '10040104', '1', '43', '刘岚4');
+INSERT INTO `sm_trace_log` VALUES ('163', '联系人', null, '10040101', '1', '106550', '微预约：支付功能');
+INSERT INTO `sm_trace_log` VALUES ('164', '联系人', '2014-07-03 17:15:20', '10040103', '1', '106532', 'fasdfa');
+INSERT INTO `sm_trace_log` VALUES ('165', '联系人', '2014-07-03 17:16:23', '10040103', '1', '106533', '刘岚');
+INSERT INTO `sm_trace_log` VALUES ('166', '联系人', '2014-07-03 17:17:03', '10040103', '1', '106540', 'liulan7');
+INSERT INTO `sm_trace_log` VALUES ('167', '客户', '2014-07-02 17:18:29', '10040101', '1', '98390', '刘岚（测试）');
+INSERT INTO `sm_trace_log` VALUES ('168', '联系人', '2014-07-02 17:18:29', '10040101', '1', '106551', '刘岚（测试）');
+INSERT INTO `sm_trace_log` VALUES ('169', '线索', '2014-07-02 17:18:30', '10040104', '1', '37', '刘岚（测试）');
 INSERT INTO `sm_user` VALUES ('1', 'admin', 'e10adc3949ba59abbe56e057f20f883e', '', '管理员', '1', '1', '1040301', '11010215', '18620088324', '0000000000', '00000000@gmail.com', '000000000', '1', '工程师', '', '1', '2014-05-26 00:00:00', '1', '2014-05-26 19:29:03', '1040401', '1', '0', '1');
 INSERT INTO `sm_user` VALUES ('2', 'majingliang', 'e10adc3949ba59abbe56e057f20f883e', '', '马敬亮', '2', '1', '1040301', '11010215', '18620088324', '0000000000', '00000000@gmail.com', '000000000', '0', '工程师', '', '1', '2014-05-26 00:00:00', '1', '2014-05-26 19:29:03', '1040401', '101', '0', '1');
 INSERT INTO `sm_user` VALUES ('3', 'lihua', 'e10adc3949ba59abbe56e057f20f883e', '', '李华', '3', '1', '1040301', '11010215', '18620088324', '0000000000', '00000000@gmail.com', '000000000', '0', '工程师', '', '1', '2014-05-26 00:00:00', '1', '2014-05-26 00:00:00', '1040401', '103', '0', '1');
 INSERT INTO `sm_user` VALUES ('4', 'luanruisong', 'e10adc3949ba59abbe56e057f20f883e', '', '栾瑞松', '4', '1', '1040301', '11010215', '18620088324', '0000000000', '00000000@gmail.com', '000000000', '0', '工程师', '', '1', '2014-05-26 00:00:00', '1', '2014-05-26 00:00:00', '1040402', '10301', '0', '1');
-INSERT INTO `sm_user` VALUES ('26643', 'test', 'e10adc3949ba59abbe56e057f20f883e', '', '测试', '1', '1', '1040301', '11010215', '', '', '', '', '0', '', '', '1', '2014-06-24 17:06:54', '1', '2014-06-25 15:17:56', '278786', '1', '0', '1');
-INSERT INTO `sm_user` VALUES ('26644', 'huizijing', 'e10adc3949ba59abbe56e057f20f883e', '', 'huizi', '1', '1', '1040301', '11010216', '', '', '', '', '1', '', '', '1', '2014-06-26 13:54:22', '1', '2014-06-26 13:54:22', '278786', '10301', '0', '1');
+INSERT INTO `sm_user` VALUES ('26643', 'test', 'e10adc3949ba59abbe56e057f20f883e', '', '测试', '1', '1', '1040301', '11010215', '', '', '', '', '0', '', '', '1', '2014-06-24 17:06:54', '1', '2014-07-02 11:11:26', '278786', '1', '1', '0');
+INSERT INTO `sm_user` VALUES ('26644', 'huizijing', 'e10adc3949ba59abbe56e057f20f883e', '', 'huizi', '1', '1', '1040301', '11010216', '', '', '', '', '1', '', '', '1', '2014-06-26 13:54:22', '1', '2014-06-26 13:54:22', '1040402', '10301', '0', '1');
 INSERT INTO `sm_user` VALUES ('26645', 'huali', 'e10adc3949ba59abbe56e057f20f883e', '', '李华', '1', '1', '1040301', '11010215', '', '', '', '', '0', '', '', '1', '2014-06-27 17:30:39', '1', '2014-06-27 17:30:39', '278786', '101', '0', '1');
-INSERT INTO `sm_user` VALUES ('26648', 'test1', 'c4ca4238a0b923820dcc509a6f75849b', '', '1', '1', '1', '1040301', '11010215', '', '', '', '', '0', '', '', '1', '2014-06-27 08:55:14', '1', '2014-06-27 08:55:23', '278786', '102', '1', '0');
-INSERT INTO `sm_user` VALUES ('26649', 'ceshi1', 'e10adc3949ba59abbe56e057f20f883e', '', '测试A', '1', '1', '1040301', '11010215', '18620623071', '18620623071', '', '976973857', '0', 'XXX', '', '1', '2014-06-27 11:26:04', '1', '2014-06-27 11:26:04', '278786', '102', '0', '0');
+INSERT INTO `sm_user` VALUES ('26648', 'test1', 'c4ca4238a0b923820dcc509a6f75849b', '', '1', '1', '1', '1040301', '11010215', '', '', '', '', '0', '', '', '1', '2014-06-27 08:55:14', '1', '2014-07-02 11:48:45', '278786', '102', '1', '0');
+INSERT INTO `sm_user` VALUES ('26649', 'ceshi1', 'e10adc3949ba59abbe56e057f20f883e', '', '测试A', '1', '1', '1040301', '11010215', '18620623071', '18620623071', '', '976973857', '0', 'XXX', '', '1', '2014-06-27 11:26:04', '1', '2014-07-02 11:11:39', '278786', '102', '1', '0');
 INSERT INTO `sm_user` VALUES ('26650', 'ceshi2', 'e10adc3949ba59abbe56e057f20f883e', '', '测试2', '1', '1', '1040301', '11010215', '', '', '', '', '0', '', 'sfsf', '1', '2014-06-27 11:26:36', '1', '2014-06-27 11:26:36', '278786', '101', '0', '0');
-INSERT INTO `sm_user` VALUES ('26651', 'ceshi3', 'e10adc3949ba59abbe56e057f20f883e', '', '测试3', '1', '1', '1040301', '11010215', '', '', '', '', '0', '', '', '1', '2014-06-27 11:26:59', '1', '2014-06-30 15:36:16', '278786', '102', '1', '0');
+INSERT INTO `sm_user` VALUES ('26651', 'ceshi3', 'e10adc3949ba59abbe56e057f20f883e', '', '测试3', '1', '1', '1040301', '11010215', '', '', '', '', '0', '', '', '1', '2014-06-27 11:26:59', '1', '2014-07-02 11:11:39', '278786', '102', '1', '0');
+INSERT INTO `sm_user` VALUES ('26653', '123', '202cb962ac59075b964b07152d234b70', '', '123', '1', '1', '1040301', '11010215', '13636409512', '13636409512', '13636409512@qq.com', '236598785', '1', '13636409512', '13636409512', '1', '2014-07-02 10:56:37', '1', '2014-07-02 11:38:59', '1040402', '102', '1', '0');
+INSERT INTO `sm_user` VALUES ('26655', 'vvvv', '4786f3282f04de5b5c7317c490c6d922', '', 'vvvv', '1', '1', '1040301', '11010215', '13636409512', '13636409512', '13636409512@qq.com', '13636425', '0', '', '', '1', '2014-07-02 11:16:07', '1', '2014-07-02 11:45:46', '278786', '10321', '1', '0');
+INSERT INTO `sm_user` VALUES ('26656', 'cccc', '41fcba09f2bdcdf315ba4119dc7978dd', '', 'ccccc', '1', '1', '1040301', '11010215', '13636409578', '13636409578', '13636409578@qq.com', '13636409', '0', '13636409578', '', '1', '2014-07-02 11:45:10', '1', '2014-07-02 11:45:46', '278786', '102', '1', '0');
+INSERT INTO `sm_user` VALUES ('26657', 'nnnn', 'ae135ba6ad9f5b531e9c3a379bedfc67', '', 'nnnnn', '1', '1', '1040301', '11010215', '13636409578', '13636409578', '13636409578@qq.com', '13636409', '0', '', '13636409578', '1', '2014-07-02 11:46:48', '1', '2014-07-02 11:46:48', '278786', '101', '0', '0');
+INSERT INTO `sm_user` VALUES ('26658', 'xxxx', 'ea416ed0759d46a8de58f63a59077499', '', 'xxxx', '1', '1', '1040301', '11010215', '13636895789', '13636895789', '13636895789@qq.com', '13636895', '0', '', '', '1', '2014-07-02 11:49:26', '1', '2014-07-02 11:50:08', '278786', '102', '0', '0');
 INSERT INTO `sm_user_com` VALUES ('4', '3');
 INSERT INTO `sm_user_com` VALUES ('7', '81');
-INSERT INTO `sm_user_func` VALUES ('3', '10901');
-INSERT INTO `sm_user_func` VALUES ('3', '10902');
-INSERT INTO `sm_user_func` VALUES ('3', '10903');
-INSERT INTO `sm_user_func` VALUES ('3', '10904');
-INSERT INTO `sm_user_func` VALUES ('3', '10905');
-INSERT INTO `sm_user_func` VALUES ('3', '10906');
+INSERT INTO `sm_user_func` VALUES ('3', '24');
+INSERT INTO `sm_user_func` VALUES ('3', '100501');
+INSERT INTO `sm_user_func` VALUES ('3', '100601');
 INSERT INTO `sm_user_func` VALUES ('4', '40101');
 INSERT INTO `sm_user_func` VALUES ('4', '40103');
 INSERT INTO `sm_user_func` VALUES ('7', '20001');
@@ -4912,9 +5290,9 @@ INSERT INTO `sm_user_org` VALUES ('3', '1');
 INSERT INTO `sm_user_org` VALUES ('4', '1');
 INSERT INTO `sm_user_org` VALUES ('5', '1');
 INSERT INTO `sm_user_role` VALUES ('4', '3');
-INSERT INTO `supplier` VALUES ('3', '一11', '5010101', '18613891430', '18613891430', '18613891430', '150000', '150300', '150302', '', 'as的', '暗示的', '1', '2014-06-30 11:42:56', '1', '2014-06-30 11:42:56', '0', '1');
-INSERT INTO `supplier` VALUES ('5', 'cccc', '5010101', '13636409512', '13636409512', '13636409512', '110000', '110100', '110101', '13636409512@qq.com', '', '', '1', '2014-06-27 11:53:09', '1', '2014-06-27 11:53:44', '1', '26645');
-INSERT INTO `supplier` VALUES ('6', 'admin', '5010101', '13636409512', '13636409512', '13636409512', '130000', '130400', '130401', '13636409512@qq.com', '', '', '1', '2014-06-27 11:53:37', '1', '2014-06-27 11:53:44', '1', '26649');
+INSERT INTO `supplier` VALUES ('3', '中国人民银行', '5010101', '18613891430', '18613891430', '18613891430', '150000', '150300', '150302', '', 'as的', '暗示的', '1', '2014-07-01 15:21:10', '1', '2014-07-01 15:21:10', '0', '1');
+INSERT INTO `supplier` VALUES ('5', 'cccc', '5010101', '13636409512', '13636409512', '13636409512', '110000', '110100', '110101', '13636409512@qq.com', '', '', '1', '2014-06-27 11:53:09', '1', '2014-07-01 19:49:59', '1', '26645');
+INSERT INTO `supplier` VALUES ('6', 'admin', '5010101', '13636409512', '13636409512', '13636409512', '130000', '130400', '130401', '13636409512@qq.com', '', '', '1', '2014-07-01 19:50:37', '1', '2014-07-01 19:50:37', '0', '26649');
 INSERT INTO `sysmessage` VALUES ('163', '撒', 'scsddsdfs\r\ndsd\r\ndsdf\r\n', '3', '2014-06-26 16:41:45', '3', '2014-06-26 16:41:45', '0');
 INSERT INTO `sysmessage` VALUES ('164', '的污染', '发斯蒂芬\ndasffsdf\nfdsf\n', '1', '2014-06-27 11:46:50', '1', '2014-06-27 11:46:50', '0');
 INSERT INTO `sysmessage` VALUES ('165', '11', '32324\n4234234\n4324234\n', '1', '2014-06-27 11:48:23', '1', '2014-06-27 11:48:23', '0');
@@ -4928,6 +5306,12 @@ INSERT INTO `sysmessage` VALUES ('172', '将对经济发展和', '在厉以宁�
 INSERT INTO `sysmessage` VALUES ('173', '厉以宁：中国经济增速长', '在厉以宁看来，如果不改变单纯以增长率作为“硬指标”的做法，\n将对经济发展和城镇化建设产生不利影响。\n即使能够勉力实现目标，效果也不一定好，\n“因为没有遵照‘市场在资源配置中起决定性作用’\n这一方针”。', '1', '2014-06-27 17:03:19', '1', '2014-06-27 17:03:19', '0');
 INSERT INTO `sysmessage` VALUES ('174', 'sdfsdf', 'sdfsadf', '1', '2014-07-01 17:07:24', '1', '2014-07-01 17:07:24', '0');
 INSERT INTO `sysmessage` VALUES ('175', '063001', 'sfsd', '1', '2014-07-01 17:08:22', '1', '2014-07-01 17:08:22', '0');
+INSERT INTO `sysmessage` VALUES ('176', '1212', '21212', '1', '2014-07-01 10:12:39', '1', '2014-07-01 10:12:39', '0');
+INSERT INTO `sysmessage` VALUES ('177', '12', '45646', '1', '2014-07-01 13:37:30', '1', '2014-07-01 13:37:30', '0');
+INSERT INTO `sysmessage` VALUES ('178', '查询端口被占用', 'js截取掉字符串最后一段字符 \n获取多个checkbox的值后，经过处理如:\"101,113,69,\" 但是还得再进一步去掉最后一个\",\"。这可以采用很多的办法，我今天就想试试用js本身提供的几个基本的函数来完成。有了想法，就开了一个临时的文件测试了一下。下面是一个总结。 １、indexOf/lastIndexOf/length \n前两个是获取一个字符串在', '1', '2014-07-02 09:22:21', '1', '2014-07-02 09:22:21', '0');
+INSERT INTO `sysmessage` VALUES ('179', '21', '21212', '1', '2014-07-02 09:24:04', '1', '2014-07-02 09:24:04', '0');
+INSERT INTO `sysmessage` VALUES ('180', 'dddd', 'ddddd', '1', '2014-07-02 14:46:17', '1', '2014-07-02 14:46:17', '0');
+INSERT INTO `sysmessage` VALUES ('184', 'tttt', 'tttt', '1', '2014-07-02 15:31:44', '1', '2014-07-02 15:31:44', '0');
 INSERT INTO `user_message` VALUES ('526', '163', '26643', '0', '0', '1', '2014-06-26 16:41:45', '2014-06-26 16:41:37');
 INSERT INTO `user_message` VALUES ('527', '163', '26643', '0', '0', '0', '2014-06-26 16:41:45', '2014-06-26 16:41:37');
 INSERT INTO `user_message` VALUES ('528', '163', '1', '0', '0', '1', '2014-06-26 16:41:45', '2014-06-26 16:41:38');
@@ -5003,7 +5387,7 @@ INSERT INTO `user_message` VALUES ('597', '167', '1', '1', '1', '0', '2014-06-27
 INSERT INTO `user_message` VALUES ('598', '168', '1', '0', '0', '1', '2014-06-27 16:34:45', '2014-06-27 16:34:33');
 INSERT INTO `user_message` VALUES ('599', '168', '1', '1', '1', '0', '2014-06-27 16:34:45', '2014-06-27 16:57:08');
 INSERT INTO `user_message` VALUES ('600', '169', '1', '0', '0', '1', '2014-06-27 16:57:47', '2014-06-27 16:57:36');
-INSERT INTO `user_message` VALUES ('601', '169', '1', '0', '0', '0', '2014-06-27 16:57:48', '2014-06-27 16:57:36');
+INSERT INTO `user_message` VALUES ('601', '169', '1', '1', '1', '0', '2014-06-27 16:57:48', '2014-07-02 15:48:44');
 INSERT INTO `user_message` VALUES ('602', '170', '1', '0', '0', '1', '2014-06-27 17:00:05', '2014-06-27 16:59:53');
 INSERT INTO `user_message` VALUES ('603', '170', '1', '1', '1', '0', '2014-06-27 17:00:05', '2014-07-01 17:06:18');
 INSERT INTO `user_message` VALUES ('604', '171', '1', '0', '0', '1', '2014-06-27 17:00:35', '2014-06-27 17:00:23');
@@ -5022,15 +5406,33 @@ INSERT INTO `user_message` VALUES ('616', '173', '26651', '0', '0', '1', '2014-0
 INSERT INTO `user_message` VALUES ('617', '173', '26651', '0', '0', '0', '2014-06-27 17:03:20', '2014-06-27 17:03:08');
 INSERT INTO `user_message` VALUES ('618', '173', '26649', '0', '0', '1', '2014-06-27 17:03:20', '2014-06-27 17:03:08');
 INSERT INTO `user_message` VALUES ('619', '173', '26649', '0', '0', '0', '2014-06-27 17:03:20', '2014-06-27 17:03:08');
-INSERT INTO `user_message` VALUES ('620', '173', '26648', '0', '0', '1', '2014-06-27 17:03:20', '2014-06-27 17:03:08');
+INSERT INTO `user_message` VALUES ('620', '173', '26648', '1', '0', '1', '2014-06-27 17:03:20', '2014-07-01 18:05:42');
 INSERT INTO `user_message` VALUES ('621', '173', '26648', '0', '0', '0', '2014-06-27 17:03:20', '2014-06-27 17:03:08');
 INSERT INTO `user_message` VALUES ('622', '173', '3', '0', '0', '1', '2014-06-27 17:03:20', '2014-06-27 17:03:08');
 INSERT INTO `user_message` VALUES ('623', '173', '3', '0', '0', '0', '2014-06-27 17:03:20', '2014-06-27 17:03:08');
 INSERT INTO `user_message` VALUES ('624', '173', '4', '0', '0', '1', '2014-06-27 17:03:21', '2014-06-27 17:03:09');
 INSERT INTO `user_message` VALUES ('625', '173', '4', '0', '0', '0', '2014-06-27 17:03:21', '2014-06-27 17:03:09');
-INSERT INTO `user_message` VALUES ('626', '173', '26644', '0', '0', '1', '2014-06-27 17:03:21', '2014-06-27 17:03:09');
+INSERT INTO `user_message` VALUES ('626', '173', '26644', '1', '0', '1', '2014-06-27 17:03:21', '2014-07-01 18:37:50');
 INSERT INTO `user_message` VALUES ('627', '173', '26644', '0', '0', '0', '2014-06-27 17:03:21', '2014-06-27 17:03:09');
 INSERT INTO `user_message` VALUES ('628', '174', '2', '0', '0', '1', '2014-07-01 17:07:24', '2014-06-30 17:07:48');
 INSERT INTO `user_message` VALUES ('629', '174', '2', '0', '0', '0', '2014-07-01 17:07:24', '2014-06-30 17:07:48');
-INSERT INTO `user_message` VALUES ('630', '175', '2', '0', '0', '1', '2014-07-01 17:08:22', '2014-06-30 17:08:46');
+INSERT INTO `user_message` VALUES ('630', '175', '2', '1', '0', '1', '2014-07-01 17:08:22', '2014-07-01 18:09:43');
 INSERT INTO `user_message` VALUES ('631', '175', '2', '0', '0', '0', '2014-07-01 17:08:22', '2014-06-30 17:08:46');
+INSERT INTO `user_message` VALUES ('632', '176', '26643', '0', '0', '1', '2014-07-01 10:12:39', '2014-07-01 10:12:38');
+INSERT INTO `user_message` VALUES ('633', '176', '26643', '0', '0', '0', '2014-07-01 10:12:39', '2014-07-01 10:12:38');
+INSERT INTO `user_message` VALUES ('634', '177', '26643', '0', '0', '1', '2014-07-01 13:37:30', '2014-07-01 13:37:28');
+INSERT INTO `user_message` VALUES ('635', '177', '26643', '0', '0', '0', '2014-07-01 13:37:30', '2014-07-01 13:37:28');
+INSERT INTO `user_message` VALUES ('636', '178', '2', '1', '0', '1', '2014-07-02 09:22:21', '2014-07-02 09:28:59');
+INSERT INTO `user_message` VALUES ('637', '178', '2', '0', '0', '0', '2014-07-02 09:22:21', '2014-07-02 09:22:17');
+INSERT INTO `user_message` VALUES ('638', '178', '26650', '1', '0', '1', '2014-07-02 09:22:21', '2014-07-02 09:28:23');
+INSERT INTO `user_message` VALUES ('639', '178', '26650', '0', '0', '0', '2014-07-02 09:22:21', '2014-07-02 09:22:17');
+INSERT INTO `user_message` VALUES ('640', '179', '3', '0', '0', '1', '2014-07-02 09:24:04', '2014-07-02 09:24:00');
+INSERT INTO `user_message` VALUES ('641', '179', '3', '0', '0', '0', '2014-07-02 09:24:04', '2014-07-02 09:24:00');
+INSERT INTO `user_message` VALUES ('642', '179', '26644', '1', '0', '1', '2014-07-02 09:24:05', '2014-07-02 10:51:16');
+INSERT INTO `user_message` VALUES ('643', '179', '26644', '0', '0', '0', '2014-07-02 09:24:05', '2014-07-02 09:24:00');
+INSERT INTO `user_message` VALUES ('644', '179', '4', '1', '0', '1', '2014-07-02 09:24:05', '2014-07-02 09:27:50');
+INSERT INTO `user_message` VALUES ('645', '179', '4', '0', '0', '0', '2014-07-02 09:24:05', '2014-07-02 09:24:00');
+INSERT INTO `user_message` VALUES ('646', '180', '26643', '1', '1', '1', '2014-07-02 14:46:17', '2014-07-02 14:46:52');
+INSERT INTO `user_message` VALUES ('647', '180', '26643', '0', '0', '0', '2014-07-02 14:46:17', '2014-07-02 14:46:13');
+INSERT INTO `user_message` VALUES ('648', '184', '26651', '1', '1', '1', '2014-07-02 15:32:01', '2014-07-02 15:48:11');
+INSERT INTO `user_message` VALUES ('649', '184', '26651', '0', '0', '0', '2014-07-02 15:32:02', '2014-07-02 15:31:58');

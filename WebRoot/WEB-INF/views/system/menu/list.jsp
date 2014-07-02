@@ -34,11 +34,11 @@
                 data:${menuTree==null?"[]":menuTree},
                 selectedId: "${parentId}",
                 ztreeOptions: {
-                    edit: {
-                        enable: true,
-                        showRemoveBtn: false,
-                        showRenameBtn: false
-                    },
+//                    edit: {
+//                        enable: true,
+//                        showRemoveBtn: false,
+//                        showRenameBtn: false
+//                    },
                     callback: {
                         beforeClick: $.Ztree.switchSelected(function () {
                             $("[name=id]").val("");
@@ -50,21 +50,22 @@
                             var $add = $(".add");
                             $add.attr("href", $add.attr("href").split("=").shift() + "=" + treeNode.id);
                             grid.loadGrid();
-                        },
-                        beforeDrop: function (treeId, treeNodes, targetNode, moveType) {
-                            var isBrother = treeNodes[0].parentTId == targetNode.parentTId;
-                            if (!isBrother) {
-                                jsUtil.alert("只能在同级节点之间移动，不能跨越上级节点！");
-                            }
-                            return  isBrother;
-                        },
-                        onDrop: function (event, treeId, treeNodes, targetNode, moveType) {
-                            var $id = $("[name=id]");
-                            RcmsAjax.ajax("${ctx}/system/menu/move.doself", function () {
-                                $id.val(targetNode.pId);
-                                grid.loadGrid();
-                            }, null, $.param({sourceId: treeNodes[0].id, targetId: targetNode.id, moveType: moveType}));
                         }
+                        /* ,
+                         beforeDrop: function (treeId, treeNodes, targetNode, moveType) {
+                         var isBrother = treeNodes[0].parentTId == targetNode.parentTId;
+                         if (!isBrother) {
+                         jsUtil.alert("只能在同级节点之间移动，不能跨越上级节点！");
+                         }
+                         return  isBrother;
+                         },
+                         onDrop: function (event, treeId, treeNodes, targetNode, moveType) {
+                         var $id = $("[name=id]");
+                         RcmsAjax.ajax("${ctx}/system/menu/move.doself", function () {
+                         $id.val(targetNode.pId);
+                         grid.loadGrid();
+                         }, null, $.param({sourceId: treeNodes[0].id, targetId: targetNode.id, moveType: moveType}));
+                         }*/
                     }
                 }
             });
@@ -164,6 +165,12 @@
                                 <c:if test="${VS_HAS_FUNCTIONS.menuModify}">
                                     {#if !$T.row.isInitialized}
                                     <a href="${ctx}/system/menu/toModifyPage.do?id={$T.row.id}" class=" block_inline s_edit_btn globle_img ml10" title="编辑"></a>
+                                    {#/if}
+                                    {#if !$T.row$first}
+                                    <a href="javascript:void(0)" uri="${ctx}/system/menu/move.doself?sourceId={$T.row.id}&targetId={$T.list[$T.row$index-1].id}" class="block_inline s_toup globle_img ml10 move" title="上移"></a>
+                                    {#/if}
+                                    {#if !$T.row$last}
+                                    <a href="javascript:void(0)" uri="${ctx}/system/menu/move.doself?sourceId={$T.row.id}&targetId={$T.list[$T.row$index+1].id}" class="block_inline s_todown globle_img ml10 move" title="下移"></a>
                                     {#/if}
                                 </c:if>
                                 <c:if test="${VS_HAS_FUNCTIONS.menuDelete}">

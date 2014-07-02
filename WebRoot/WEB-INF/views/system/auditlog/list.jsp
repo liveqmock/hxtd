@@ -152,6 +152,42 @@
 							<b class="h_tabbtn_l w25 block fl"></b>
 							<b class="h_tabbtn_r pr25 w_auto f14 block fr lh32 cp id_nav pr">产品</b>
 						</li>
+						<li class="tab-title" fortabpanel="#tabs-order" id="order" name="订单">
+							<b class="h_tabbtn_l w25 block fl"></b>
+							<b class="h_tabbtn_r pr25 w_auto f14 block fr lh32 cp id_nav pr">订单</b>
+						</li>
+						<li class="tab-title" fortabpanel="#tabs-user" id="user" name="用户">
+							<b class="h_tabbtn_l w25 block fl"></b>
+							<b class="h_tabbtn_r pr25 w_auto f14 block fr lh32 cp id_nav pr">用户</b>
+						</li>
+						<li class="tab-title" fortabpanel="#tabs-order" id="order" name="角色">
+							<b class="h_tabbtn_l w25 block fl"></b>
+							<b class="h_tabbtn_r pr25 w_auto f14 block fr lh32 cp id_nav pr">角色</b>
+						</li>
+						<li class="tab-title" fortabpanel="#tabs-menu" id="menu" name="菜单">
+							<b class="h_tabbtn_l w25 block fl"></b>
+							<b class="h_tabbtn_r pr25 w_auto f14 block fr lh32 cp id_nav pr">菜单</b>
+						</li>
+						<li class="tab-title" fortabpanel="#tabs-function" id="function" name="功能">
+							<b class="h_tabbtn_l w25 block fl"></b>
+							<b class="h_tabbtn_r pr25 w_auto f14 block fr lh32 cp id_nav pr">功能</b>
+						</li>
+						<li class="tab-title" fortabpanel="#tabs-component" id="component" name="组件">
+							<b class="h_tabbtn_l w25 block fl"></b>
+							<b class="h_tabbtn_r pr25 w_auto f14 block fr lh32 cp id_nav pr">组件</b>
+						</li>
+						<li class="tab-title" fortabpanel="#tabs-identityAuthemtication" id="identityAuthemtication" name="权限">
+							<b class="h_tabbtn_l w25 block fl"></b>
+							<b class="h_tabbtn_r pr25 w_auto f14 block fr lh32 cp id_nav pr">权限</b>
+						</li>
+						<li class="tab-title" fortabpanel="#tabs-message" id="message" name="系统消息">
+							<b class="h_tabbtn_l w25 block fl"></b>
+							<b class="h_tabbtn_r pr25 w_auto f14 block fr lh32 cp id_nav pr">消息</b>
+						</li>
+						<li class="tab-title" fortabpanel="#tabs-notice" id="notice" name="系统公告">
+							<b class="h_tabbtn_l w25 block fl"></b>
+							<b class="h_tabbtn_r pr25 w_auto f14 block fr lh32 cp id_nav pr">公告</b>
+						</li>
 					</ul>
 
 					<div class="cb"></div>

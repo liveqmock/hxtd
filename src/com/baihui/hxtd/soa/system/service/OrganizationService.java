@@ -8,6 +8,8 @@ import com.baihui.hxtd.soa.system.dao.OrganizationDao;
 import com.baihui.hxtd.soa.system.dao.RoleDao;
 import com.baihui.hxtd.soa.system.entity.Organization;
 import com.baihui.hxtd.soa.system.entity.Role;
+import com.baihui.hxtd.soa.system.entity.User;
+
 import org.apache.commons.lang3.StringUtils;
 import org.hibernate.FetchMode;
 import org.hibernate.criterion.*;
@@ -179,7 +181,7 @@ public class OrganizationService {
      * //TODO 不支持直接新增根节点
      */
     @Transactional
-    public void add(Organization organization) {
+    public void add(Organization organization, User user) {
         logger.info("新增");
         Organization parent = organizationDao.get(organization.getParent().getId());
 
@@ -273,7 +275,7 @@ public class OrganizationService {
      * 修改
      */
     @Transactional
-    public void modify(Organization organization) {
+    public void modify(Organization organization, User user) {
         logger.info("修改");
 
         Long parentId = organization.getParent() == null ? null : organization.getParent().getId();
@@ -322,8 +324,6 @@ public class OrganizationService {
             organizationDao.update(organization);
             toParent(parent);
         }
-
-
     }
 
     /**
@@ -364,7 +364,7 @@ public class OrganizationService {
      * 1.级联删除子节点
      */
     @Transactional
-    public void delete(Long... ids) {
+    public void delete(User user, Long... ids) {
         logger.info("删除");
         organizationDao.logicalDelete(ids);
     }

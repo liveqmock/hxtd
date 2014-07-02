@@ -18,10 +18,17 @@ public class MenuToTreeNode implements Converter<Menu, TreeNode> {
     @Override
     public TreeNode convert(Menu menu) {
         TreeNode treeNode = mapper.map(menu, TreeNode.class);
-        treeNode.setIsParent(!menu.getIsLeaf());
-        Menu parent = menu.getParent();
-        treeNode.setpId(parent == null ? 0l : parent.getId());
-        treeNode.setOpen(false);
+        if (menu.equals(Menu.ROOT)) {
+            treeNode.setpId(0l);
+            treeNode.setIsParent(true);
+            treeNode.setOpen(true);
+        } else if (menu.getLevel() == 1) {
+            treeNode.setpId(Menu.ROOT.getId());
+            treeNode.setIsParent(!menu.getIsLeaf());
+        } else if (menu.getLevel() == 2) {
+            treeNode.setpId(menu.getParent().getId());
+            treeNode.setIsParent(!menu.getIsLeaf());
+        }
         return treeNode;
     }
 

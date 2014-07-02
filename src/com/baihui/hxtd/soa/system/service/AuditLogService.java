@@ -81,7 +81,7 @@ public class AuditLogService {
 		
 	}
 	
-	public void add(AuditLog auditLog){
+	public void save(AuditLog auditLog){
 		auditLogDao.save(auditLog);
 	}
 }

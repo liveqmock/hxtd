@@ -30,7 +30,8 @@
             }
             }
             );
-	        $C.tab({defaultSelected: window.location.href.indexOf("revice") > -1 ? 0 : 1})
+            
+	        $C.tab({defaultSelected: window.location.href.indexOf("send") > -1 ? 1 : 0})
         });
     </script>
 </head>

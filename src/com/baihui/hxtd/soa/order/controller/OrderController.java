@@ -45,7 +45,7 @@ import com.baihui.hxtd.soa.util.JsonDto;
  */
 @Controller
 @RequestMapping(value = "/order/order")
-@SessionAttributes(value = {Constant.VS_DATASHIFT})
+@SessionAttributes(value = {Constant.VS_USER, Constant.VS_DATASHIFT})
 public class OrderController {
 
 	private Logger logger = LoggerFactory.getLogger(this.getClass());
@@ -125,7 +125,7 @@ public class OrderController {
 		order.setModifiedTime(new Date(new java.util.Date().getTime()));
 		order.setModifier(u);
 		order.setCreator(u);
-		orderService.save(order);
+		orderService.modify(order, u);
 		JsonDto json = JsonDto.modify(order.getId());
 		return json.toString();
 	}
@@ -149,9 +149,10 @@ public class OrderController {
 	 */
 	@ResponseBody
 	@RequestMapping(value = "/delete.do",produces = "text/text;charset=UTF-8")
-	public String delete(Long[] id){
+	public String delete(ModelMap modelMap, Long[] id){
 		logger.info("OrderController.delete删除线索");
-		orderService.delete(id);
+		User user = (User)modelMap.get(Constant.VS_USER);
+		orderService.delete(user, id);
 		JsonDto json = JsonDto.delete(id);
 		return json.toString();
 	}
@@ -197,7 +198,7 @@ public class OrderController {
 		order.setModifier(u);
 		order.setCreatedTime(new Date());
 		order.setModifiedTime(new Date());
-		orderService.save(order);
+		orderService.add(order, u);
 		JsonDto json = JsonDto.add(order.getId());
 		return json.toString();
 	}
@@ -218,12 +219,12 @@ public class OrderController {
         Search.toRangeDate(searchParams, "createdTime");
         logger.debug("查询条件数目“{}”", searchParams.size());
         DataShift dataShift = (DataShift) model.get(Constant.VS_DATASHIFT);
-        List<Order> Orders = orderService.export(searchParams,dataShift);
-        logger.debug("列表信息数目“{}”", Orders.size());
+        List<Order> orders = orderService.export(searchParams,dataShift);
+        logger.debug("列表信息数目“{}”", orders.size());
 
         logger.info("转换成excel文件并输出");
         ServletContext servletContext = request.getSession().getServletContext();
-        ImportExport.exportExcel(response, servletContext, "Order", Orders).write(response.getOutputStream());
+        ImportExport.exportExcel(response, servletContext, "order", orders).write(response.getOutputStream());
     }
 	
 	

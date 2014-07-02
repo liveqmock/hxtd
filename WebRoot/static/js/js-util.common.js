@@ -65,6 +65,7 @@ Grid.defaults = {
     deleteOneSelector: ".delete",
     disableButtonClass: ["allbtnno_l", "allbtnno_r"],
     enableButtonClass: ["allbtn_l", "allbtn_r"],
+    moveSelector: ".move",
     //排序
     sortableSelector: ".sortable",
     orderBySelector: ".orderby",
@@ -111,17 +112,18 @@ Grid.prototype = {
         this.form = this.container.find(options.formSelector);
         this.form.length == 0 && (this.form = $(options.formSelector));
         this.action = this.form.attr("action");
+        this.paginationData = {};
         if (this.options.paginationActive) {
             this.formPageSize = $(options.formPageSizeSelector, this.form);
             this.formPageNo = $(options.formPageNoSelector, this.form);
             this.formPageOrderBy = $(options.formPageOrderBySelector, this.form);
             this.formPageOrder = $(options.formPageOrderSelector, this.form);
-            this.paginationData = {
+            $.extend(this.paginationData, {
                 hibernatePageSize: this.formPageSize.val(),
                 hibernatePageNo: this.formPageNo.val(),
                 hibernateOrderBy: this.formPageOrderBy.val(),
                 hibernateOrder: this.formPageOrder.val()
-            };
+            });
         }
         this.btnQuery = this.form.find(options.submitSelector);
         this.btnReset = this.form.find(options.resetSelector);
@@ -146,10 +148,11 @@ Grid.prototype = {
         this.header.length == 0 && (this.header = this.grid.find("tr:has(th):first"));
         this.sortCells = this.header.find(options.sortableSelector);
         this.result = this.grid.find(options.resultSelector);
-        this.deleteOne = this.result.find(options.deleteOneSelector);
+        this.btnDeleteOne = this.result.find(options.deleteOneSelector);
         this.btnEnable = this.result.find(options.enableSelector);
         this.btnDisable = this.result.find(options.disableSelector);
         this.btnResetPassword = this.result.find(options.resetPasswordSelector);
+        this.btnMove = this.result.find(options.moveSelector);
 
         this.paginationbar = this.container.find(options.paginationbarSelector);
         var forpagination = this.grid.attr(options.gridForPagination);
@@ -169,6 +172,7 @@ Grid.prototype = {
         this.renderSort();
         this.bindSort();
         this.bindDeleteOne();
+        this.bindMove();
         this.setPagination();
         this.enterShortcut();
         return this;
@@ -257,7 +261,7 @@ Grid.prototype = {
         var _this = this;
         var click = function () {
             if (_this.result.is(":visible")) {
-                _this.formPageNo.val(1);
+                _this.paginationData.hibernatePageNo = 1;
                 _this.loadGridWithDisable({button: $(this)});
             }
         };
@@ -488,7 +492,7 @@ Grid.prototype = {
     /**绑定删除一个事件*/
     bindDeleteOne: function () {
         var _this = this;
-        this.deleteOne.live("click", function () {
+        this.btnDeleteOne.live("click", function () {
             var $this = $(this);
             jsUtil.confirm("确定要删除吗？", function () {
                 var url = $this.attr("uri");
@@ -496,6 +500,18 @@ Grid.prototype = {
                     _this.options.onDelete.call(this, [$.URL.jsonParamsByUrl(url).id]);
                     _this.loadGrid();
                 });
+            });
+        });
+        return this;
+    },
+    /**绑定移动事件*/
+    bindMove: function () {
+        var _this = this;
+        this.btnMove.live("click", function () {
+            var $this = $(this);
+            var url = $this.attr("uri");
+            RcmsAjax.ajax(url, function () {
+                _this.loadGrid();
             });
         });
         return this;

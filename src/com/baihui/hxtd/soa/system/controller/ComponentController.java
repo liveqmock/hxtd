@@ -185,7 +185,7 @@ public class ComponentController {
         User u = (User) request.getSession().getAttribute(Constant.VS_USER);
         logger.info("获得当前操作用户{}", u.getName());
         component.setModifier(u);
-        componentService.save(component);
+        componentService.modify(component, u);
         JsonDto json = new JsonDto(component.getId(), "保存成功!");
         return json.toString();
     }
@@ -210,7 +210,7 @@ public class ComponentController {
         logger.info("ComponentController.query 获得当前操作的用户{}", u.getName());
         component.setCreator(u);
         component.setModifier(u);
-        componentService.save(component);
+        componentService.add(component, u);
         JsonDto json = new JsonDto(component.getId(), "保存成功!");
         return json.toString();
     }
@@ -225,14 +225,14 @@ public class ComponentController {
      */
     @ResponseBody
     @RequestMapping(value = "/delete.do", produces = "text/text;charset=UTF-8")
-    public String delete(Long[] id) {
+    public String delete(User user, Long[] id) {
         logger.info("ComponentController.delete删除组件id={}", StringUtils.join(id, ","));
 
         if (commonService.isInitialized(Component.class, id)) {
             return new JsonDto("系统初始化数据不允许删除！").toString();
         }
 
-        componentService.delete(id);
+        componentService.delete(user, id);
         JsonDto json = new JsonDto();
         json.setMessage("删除成功");
         return json.toString();

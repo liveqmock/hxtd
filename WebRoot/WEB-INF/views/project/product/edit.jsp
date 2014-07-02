@@ -113,7 +113,7 @@ function searchData(action){ // 搜索
 			<td align="left">
 				<a href="javascript:;" class="pa time_closenone1"></a>
 				<fmt:formatDate value="${product.saleBeginTime}" pattern="yyyy-MM-dd" var="saleBeginTime"/>
-				<input id="start" name="saleBeginTime" type="text" value="${product.saleBeginTime}" 
+				<input id="start" name="saleBeginTime" type="text" value="${saleBeginTime}" 
 					class="text_input3 input_close1 required" readonly/>
 			</td>
 			<td align="right">赎回赔率%：</td>
@@ -124,7 +124,7 @@ function searchData(action){ // 搜索
 			<td align="left">
 				<a href="javascript:;" class="pa time_closenone1"></a>
 				<fmt:formatDate value="${product.saleEndTime}" pattern="yyyy-MM-dd" var="saleEndTime"/>
-				<input id="end" name="saleEndTime" type="text" value="${product.saleEndTime}" readonly 
+				<input id="end" name="saleEndTime" type="text" value="${saleEndTime}" readonly 
 					class="text_input3 input_close1 required"/>
 			</td>
 			<td align="right">赎回公式：</td>

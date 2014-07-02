@@ -162,7 +162,7 @@ public class MarketActivityController {
 		}
 		
 		/************保存*****************************/
-		marketActivityService.add(activity, userId);
+		marketActivityService.add(activity, user);
 		System.out.println(activity.getId());
 		return JsonDto.add(activity.getId()).toString();
 	}
@@ -194,8 +194,9 @@ public class MarketActivityController {
 	@RequestMapping(value = "/modify.do")
 	public String modify(MarketActivity activity, 
 			@ModelAttribute(Constant.VS_USER_ID) Long userId) {
-		activity.setModifier(new User(userId));
-		marketActivityService.modify(activity, userId);
+		User user = new User(userId);
+		activity.setModifier(user);
+		marketActivityService.modify(activity, user);
 		
 		return JsonDto.modify(activity.getId()).toString();
 	}
@@ -224,8 +225,9 @@ public class MarketActivityController {
 	 */
 	@ResponseBody
 	@RequestMapping(value = "/delete.do")
-	public String delete(long[] id, @ModelAttribute(Constant.VS_USER_ID) Long sessionId) {
-		marketActivityService.delete(sessionId, id);
+	public String delete(ModelMap modelMap, Long... id) {
+		User user = (User) modelMap.get(Constant.VS_USER);
+		marketActivityService.delete(user, id);
 		
 		JsonDto json = new JsonDto("删除成功");
 		json.setSuccessFlag(true);

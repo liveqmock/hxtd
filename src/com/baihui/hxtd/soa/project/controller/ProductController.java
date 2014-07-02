@@ -148,7 +148,7 @@ public class ProductController {
 		product.setModifier(user);
 		
 		/************保存*****************************/
-		productService.save(product);
+		productService.add(product, user);
 		
 		return JsonDto.add(product.getId()).toString();
 	}
@@ -180,8 +180,9 @@ public class ProductController {
 	@RequestMapping(value = "/modify.do")
 	public String modify(Product product, 
 			@ModelAttribute(Constant.VS_USER_ID) Long userId) {
-		product.setModifier(new User(userId));
-		productService.save(product);
+		User user = new User(userId);
+		product.setModifier(user);
+		productService.modify(product, user);
 		
 		return JsonDto.modify(product.getId()).toString();
 	}
@@ -209,9 +210,9 @@ public class ProductController {
 	 */
 	@ResponseBody
 	@RequestMapping(value = "/delete.do")
-	public String delete(Long[] id) {
-		productService.delete(id);
-		
+	public String delete(ModelMap modelMap, Long[] id) {
+		User user = (User)modelMap.get(Constant.VS_USER);
+		productService.delete(user, id);
 		JsonDto json = new JsonDto("删除成功");
 		json.setSuccessFlag(true);
 		

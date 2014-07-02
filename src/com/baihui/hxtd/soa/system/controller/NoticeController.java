@@ -165,7 +165,7 @@ public class NoticeController {
 		notice.setModifieTime(new Date());
 		notice.setModifier(u);
 		notice.setCreater(u);
-		noticeService.save(notice);
+		noticeService.modify(notice, u);
 		JsonDto json = JsonDto.modify(notice.getId());
 		return json.toString();
 	}
@@ -203,7 +203,7 @@ public class NoticeController {
 		notice.setCreatedTime(new Date());
 		notice.setModifieTime(new Date());
 		notice.setIsDeleted(false);
-		noticeService.save(notice);
+		noticeService.add(notice, u);
 		JsonDto json = JsonDto.add(notice.getId());
 		return json.toString();
 	}
@@ -215,9 +215,10 @@ public class NoticeController {
 	 */
 	@ResponseBody
 	@RequestMapping(value = "/delete.do",produces = "text/text;charset=UTF-8")
-	public String delete(Long... id){
+	public String delete(ModelMap modelMap, Long... id){
 		logger.info("NoticeController.delete删除公告id={}",StringUtils.join(id,","));
-		noticeService.delete(id);
+		User user = (User)modelMap.get(Constant.VS_USER);
+		noticeService.delete(user, id);
 		JsonDto json = JsonDto.delete(id);
 		return json.toString();
 	}

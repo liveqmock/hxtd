@@ -21,16 +21,7 @@
 			$(function() {
 				jsUtil.datepicker(".time");//加载时间控件
 				grid = new Grid().init();
-				  //选中/反选
-	            var $menu2 = $("a.menu2");
-	            $C.toggleClass($menu2, "allright2", "allnoright2");
-	            $C.toggleBoolean($menu2, "checked");
-	            $C.bindCheckAll($menu2, "div.menu2", ".function:checkbox");
-	
-	            var $menu1 = $("a.menu1");
-	            $C.toggleClass($menu1, "allright", "allnoright");
-	            $C.toggleBoolean($menu1, "checked");
-	            $C.bindCheckAll($menu1, "div.menus1", "a.menu2", "click");
+
 				var m;
 	           
 	            $C.tab({onSelected:function(event,title,panel){
@@ -171,6 +162,10 @@
 						<li class="tab-title" fortabpanel="#tabs-product" id="product" name="Product">
 							<b class="h_tabbtn_l w25 block fl"></b>
 							<b class="h_tabbtn_r pr25 w_auto f14 block fr lh32 cp id_nav pr">产品</b>
+						</li>
+						<li class="tab-title" fortabpanel="#tabs-order" id="order" name="Order">
+							<b class="h_tabbtn_l w25 block fl"></b>
+							<b class="h_tabbtn_r pr25 w_auto f14 block fr lh32 cp id_nav pr">订单</b>
 						</li>
 						<div class="ie_head">
 						<li style="float:right;">

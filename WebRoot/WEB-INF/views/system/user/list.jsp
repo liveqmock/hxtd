@@ -130,7 +130,7 @@
                         <th style="width:5%">性别</th>
                         <th style="width:10%">联系电话</th>
                         <th style="width:10%">职位</th>
-                        <th style="width:25%">操作</th>
+                        <th style="width:20%">操作</th>
                     </tr>
                     <%@include file="/WEB-INF/template/sort.jsp" %>
                     <tbody class="list"></tbody>
@@ -151,7 +151,7 @@
                             <td>{$T.row.sex.key}</td>
                             <td style="text-align: right">{$T.row.phone}</td>
                             <td>{$T.row.jobName}</td>
-                            <td align="center">
+                            <td style="text-align: left">
                                 <c:if test="${VS_HAS_FUNCTIONS.userView}">
                                     <a href="${ctx}/system/user/toViewPage.do?id={$T.row.id}" class=" block_inline s_detail_btn  globle_img ml10" title="详情"></a>
                                 </c:if>

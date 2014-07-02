@@ -16,21 +16,20 @@
 	<script type="text/javascript" src="${ctx}/static/js/validator.js"></script>
 	<script type="text/javascript">
 			$(function(){
-			$("#save").click(function(){
-				var $form = $("#form");
-				if($form.valid()){
-					RcmsAjax.ajax($form.attr("action"),function(result){
-						//redirect
-						//var id = result.result.result;
-						setTimeout(function(){
-							window.location.replace("${ctx}/system/user/toViewPage.do")
-						},500);
-					},null,$form.formSerialize());
-				}
-				return false;
+				$("#save").click(function(){
+					var $form = $("#form");
+					if($form.valid()){
+						RcmsAjax.ajax($form.attr("action"),function(result){
+							//redirect
+							//var id = result.result.result;
+							setTimeout(function(){
+								window.location.replace("${ctx}/system/user/toViewPage.do")
+							},500);
+						},null,$form.formSerialize());
+					}
+					return false;
+				});
 			});
-		});
-	
 	</script>
 	<script type="text/javascript">
 		$(document).ready(function(){
@@ -46,17 +45,18 @@
 			$("#oldpwd").blur(function(){
 				var oldpwd = $("#oldpwd").val();
 				if(oldpwd!=""){
-				RcmsAjax.ajaxNoMsg("${ctx}/system/user/checkPwd?oldpwd="+oldpwd,function(data){
-					if(data.message!=""){
-						$("#pwd").html(data.message);
-						$("#oldpwd").focus();
-						$('#oldpwd').val(""); 
-					}else{
-						$('#pwd').html(""); 
-					}
-				});
+					RcmsAjax.ajaxNoMsg("${ctx}/system/user/checkPwd?oldpwd="+oldpwd,function(data){
+						if(data.message!=""){
+							$("#pwd").html(data.message);
+							$("#oldpwd").focus();
+							$('#oldpwd').val(""); 
+						}else{
+							$('#pwd').html(""); 
+						}
+					});
+				}else{
+					$('#pwd').html(""); 
 				}
-				$('#pwd').html(""); 
 			});
 			
 			//验证密码格式
@@ -64,15 +64,14 @@
 				var regPwd = /^[A-Za-z0-9_\.]+$/;
 				var newpwd = $("#newpwd").val();
 				if(newpwd!=""){
-				if(!regPwd.test(newpwd)){
-					$("#newp").html("密码不符合规范");
-					$("#newpwd").focus();
-					$("#newpwd").val("");
+					if(!regPwd.test(newpwd)){
+						$("#newp").html("密码不符合规范");
+						$("#newpwd").focus();
+						$("#newpwd").val("");
+					}else{
+						$('#newp').html("");
+					}
 				}else{
-					$('#newp').html("");
-				}
-				}
-				else{
 					$('#newp').html("");
 				}
 			});
@@ -82,24 +81,19 @@
 				var newpwd = $("#newpwd").val();
 				var repwd = $("#repwd").val();
 				if(repwd!=""){
-				if(newpwd!=repwd){
-					$("#diff").html("密码不一致");
-					$("#repwd").focus();
-					$('#repwd').val("");  
-				}
+					if(newpwd!=repwd){
+						$("#diff").html("密码不一致");
+						$("#repwd").focus();
+						$('#repwd').val("");  
+					}
 				}else{
 					$('#diff').html(""); 
 				}
-			});
-			
-			
-		});
-	   
+			 });
+		    });
 	</script>
 </head>
-  
   <body>
-  
   <div style="min-height:750px;">
     <div class="cb"></div>
     <div class="ml35 mr35 mt10 block cb cb">
@@ -107,46 +101,46 @@
        <b class="b2"></b>
        <b class="b3"></b>
        <b class="b4"></b>
-        <div class="ie_head" >
-            <h1 class="f14 fbnone mt10 ml10 fl">密码修改</h1>    
-        </div>    
+       <div class="ie_head" >
+           <h1 class="f14 fbnone mt10 ml10 fl">密码修改</h1>    
+       </div>    
     </div>   
     <div class="ml35 mr35 bg_c_blue cb h590">
     <div  style="width:50%;" class="margin0">
        <form id="form" action="${ctx}${funcUrl}" method="post" onsubmit="return checkForm();">
-        <table class=" margin0 pt20">
-        <tr class=" lh40">
-        <td width="40%" align="right">请输入旧密码：</td>
-        <td>
-        <input type="password" id="oldpwd" name="oldPwd" class="text_input1 required"/>
-        <div class="pr"><span class="pa" id="pwd" class="w_red" style="top:-30px; right:-90px; color:red;"></span></div>
-        </td>
-        </tr>
-         <tr class=" lh40">
-        <td align="right">请输入新密码：</td>
-        <td><input type="password" id="newpwd" name="newPwd" class="text_input1 required"/>
-        <div class="pr"><span class="pa" id="newp" style="top:-30px; right:-90px; color:red;"></span></div>
-        </td>
-        </tr>
-         <tr class=" lh40">
-        <td align="right">请再输入一次新密码：</td>
-        <td>
-        <input type="password" id="repwd" name="password" class="text_input1 required"/>
-        <div class="pr"><span class="pa" id="diff" style="top:-30px; right:-70px; color:red;"></span></div>
-        </td>
-        </tr>
-        </table>
-        <p style="color:red;" class=" tc pt20" >注：使用字母、数字、下划线和小数点（6～20个字符）。</p>
-        <div class="w240 margin0 mt60">
-	        <a class="block c_white lh25 mr10 fl" href="javascript:;" id="reset">
-	        <b class="allbtn_l block fl"></b>
-	        <b class="allbtn_r pr13 block fl w_auto f14">重&nbsp;&nbsp;置</b>
-	        </a>
-	        <a class="block c_white lh25 mr10 fr" href="javascript:;"id="save">
-	        <b class="allbtn_l block fl"></b>
-	        <b class="allbtn_r pr13 block fl w_auto f14">提&nbsp;&nbsp;交</b>
-	        </a>
-        </div>
+	       <table class=" margin0 pt20">
+	        <tr class=" lh40">
+		        <td width="40%" align="right">请输入旧密码：</td>
+		        <td>
+		        <input type="password" id="oldpwd" name="oldPwd" class="text_input1 required"/>
+		        <div class="pr"><span class="pa" id="pwd" class="w_red" style="top:-30px; right:-90px; color:red;"></span></div>
+		        </td>
+	        </tr>
+	        <tr class=" lh40">
+		        <td align="right">请输入新密码：</td>
+		        <td><input type="password" id="newpwd" name="newPwd" class="text_input1 required"/>
+		        <div class="pr"><span class="pa" id="newp" style="top:-30px; right:-90px; color:red;"></span></div>
+		        </td>
+	        </tr>
+	        <tr class=" lh40">
+		        <td align="right">请再输入一次新密码：</td>
+		        <td>
+		        <input type="password" id="repwd" name="password" class="text_input1 required"/>
+		        <div class="pr"><span class="pa" id="diff" style="top:-30px; right:-70px; color:red;"></span></div>
+		        </td>
+	        </tr>
+	       </table>
+	       <p style="color:red;" class=" tc pt20" >注：使用字母、数字、下划线和小数点（6～20个字符）。</p>
+	       <div class="w240 margin0 mt60">
+		        <a class="block c_white lh25 mr10 fl" href="javascript:;" id="reset">
+		        <b class="allbtn_l block fl"></b>
+		        <b class="allbtn_r pr13 block fl w_auto f14">重&nbsp;&nbsp;置</b>
+		        </a>
+		        <a class="block c_white lh25 mr10 fr" href="javascript:;"id="save">
+		        <b class="allbtn_l block fl"></b>
+		        <b class="allbtn_r pr13 block fl w_auto f14">提&nbsp;&nbsp;交</b>
+		        </a>
+	       </div>
        </form>
     </div>
         <div class="h40"></div>

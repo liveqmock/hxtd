@@ -121,18 +121,6 @@
 				<td align="left">${customer.email}</td>
 			</tr>
 			<tr>
-			    <td align="right" width="15%">省:</td>
-				<td align="left">${customer.province.name}</td>
-				<td align="right" width="15%">市：</td>
-				<td align="left">${customer.city.name}</td>
-			</tr>
-			<tr>
-			    <td align="right" width="15%">县:</td>
-				<td align="left">${customer.county.name}</td>
-				<td align="right" width="15%">详细地址：</td>
-				<td align="left">${customer.address}</td>
-			</tr>
-			<tr>
 			    <td align="right" width="15%">创建时间：</td>
 				<td align="left">${customer.createdTime}</td>
 				<td align="right" width="15%">创建者:</td>
@@ -143,6 +131,21 @@
 				<td align="left">${customer.modifiedTime}</td>
 				<td align="right" width="15%">修改者:</td>
 				<td align="left">${customer.modifier.name}</td>
+			</tr>
+			</table>
+			<h1 class="f14 fbnone ml40 pt10">地址信息</h1>
+			<table class="cb id_table3 w95b bg_c_white margin0 mt10">
+			<tr>
+			    <td align="right" width="15%">省:</td>
+				<td align="left">${customer.province.name}</td>
+				<td align="right" width="15%">市：</td>
+				<td align="left">${customer.city.name}</td>
+			</tr>
+			<tr>
+			    <td align="right" width="15%">县:</td>
+				<td align="left">${customer.county.name}</td>
+				<td align="right" width="15%">详细地址：</td>
+				<td align="left">${customer.address}</td>
 			</tr>
 			</table>
 			<h1 class="f14 fbnone ml40 pt10">描述信息</h1>

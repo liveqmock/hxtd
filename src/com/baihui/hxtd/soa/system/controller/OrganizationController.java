@@ -196,7 +196,7 @@ public class OrganizationController {
         organization.setModifier(organization.getCreator());
         logger.debug("修改用户为当前用户“{}”", user.getName());
 
-        organizationService.add(organization);
+        organizationService.add(organization, user);
 
         return JsonDto.add(organization.getId()).toString();
     }
@@ -255,7 +255,7 @@ public class OrganizationController {
         organization.setModifier(user);
         logger.debug("修改用户为当前用户“{}”", user.getName());
 
-        organizationService.modify(organization);
+        organizationService.modify(organization, user);
 
         return JsonDto.modify(organization.getId()).toString();
     }
@@ -265,12 +265,13 @@ public class OrganizationController {
      */
     @ResponseBody
     @RequestMapping(value = "/delete.do")
-    public String delete(Long[] id) {
+    public String delete(ModelMap modelMap, Long[] id) {
         logger.info("删除");
         if (commonService.isInitialized(Organization.class, id)) {
             return new JsonDto("系统初始化数据不允许修改！").toString();
         }
-        organizationService.delete(id);
+        User user = (User)modelMap.get(Constant.VS_USER);
+        organizationService.delete(user, id);
         return JsonDto.delete(id).toString();
     }
 

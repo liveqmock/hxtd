@@ -184,6 +184,10 @@ ALTER TABLE hxtd.sm_function ADD PRIVILEGE_LEVEL_ID int NOT NULL;
 --显示设置页，取出session中的数据，显示在设置页
 --显示icon，暂无处理
 
+--07-02--
+1.联系纪要 ie9 $(document).ready问题
+2.
+
 
 
 

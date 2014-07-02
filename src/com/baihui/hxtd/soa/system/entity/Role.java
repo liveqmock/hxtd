@@ -4,7 +4,6 @@ package com.baihui.hxtd.soa.system.entity;
 import com.baihui.hxtd.soa.common.entity.Initialized;
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonFormat;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 
 import javax.persistence.*;
@@ -26,7 +25,7 @@ public class Role implements Serializable, Comparable<Role>, Initialized {
     @Column(name = "CODE", length = 32)
     private String code;
 
-    @Column(name = "NAME", length = 255, nullable = false, unique = true)
+    @Column(name = "NAME", length = 255, unique = true)
     private String name;
 
     @ManyToOne(fetch = FetchType.LAZY)

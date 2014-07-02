@@ -6,8 +6,6 @@ import com.baihui.hxtd.soa.base.utils.serial.TierSerials;
 import com.baihui.hxtd.soa.common.dao.CommonDao;
 import com.baihui.hxtd.soa.common.entity.Initialized;
 import com.baihui.hxtd.soa.common.entity.TreeNode;
-import com.baihui.hxtd.soa.system.dao.UserDao;
-import com.baihui.hxtd.soa.system.service.DataShift;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.poi.ss.formula.functions.T;
 import org.slf4j.Logger;
@@ -28,15 +26,13 @@ import java.util.List;
  * @date 2014/6/20
  */
 @Service
+@SuppressWarnings("unchecked")
 public class CommonService {
 
     private Logger logger = LoggerFactory.getLogger(this.getClass());
 
     @Resource
     private CommonDao commonDao;
-
-    @Resource
-    private UserDao userDao;
 
     /**
      * 是否初始化数据
@@ -61,17 +57,8 @@ public class CommonService {
      * 查找导出数据
      */
     @Transactional(readOnly = true)
-    public <T> List<T> findExport(Class<T> clazz, DataShift dataShift) {
-        String hql = String.format("select entity from %s entity %s", clazz.getSimpleName(), dataShift.toHql("entity"));
-        return findExport(hql);
-    }
-
-    /**
-     * 查找导出数据
-     */
-    @Transactional(readOnly = true)
     public <T> List<T> findExport(String hql) {
-        return (List<T>) commonDao.getSession().createQuery(hql).setMaxResults(3000).list();
+        return (List<T>) commonDao.getSession().createQuery(hql).setMaxResults(10000).list();
     }
 
     /**
@@ -85,6 +72,14 @@ public class CommonService {
     }
 
     private int orgTierLength = 2;
+
+    /**
+     * 移动位置
+     */
+    @Transactional
+    public void move(Class<TreeNode> clazz, Long sourceId, int offset) {
+
+    }
 
     /**
      * 移动位置

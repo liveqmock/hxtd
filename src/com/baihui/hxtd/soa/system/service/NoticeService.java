@@ -21,6 +21,7 @@ import com.baihui.hxtd.soa.base.orm.hibernate.HibernatePage;
 import com.baihui.hxtd.soa.base.utils.Search;
 import com.baihui.hxtd.soa.system.dao.NoticeDao;
 import com.baihui.hxtd.soa.system.entity.Notice;
+import com.baihui.hxtd.soa.system.entity.User;
 
 /**
  * 公告服务类
@@ -85,7 +86,14 @@ public class NoticeService {
 	 * 保存公告信息
 	 * @param notice
 	 */
-	public void save(Notice notice) {
+	public void add(Notice notice, User user) {
+		logger.info("保存公告信息{}", notice);
+		notice.setIsDeleted(false);
+		noticeDao.save(notice);
+		
+	}
+	
+	public void modify(Notice notice, User user) {
 		logger.info("保存公告信息{}", notice);
 		notice.setIsDeleted(false);
 		noticeDao.save(notice);
@@ -97,7 +105,7 @@ public class NoticeService {
 	 * 删除公告
 	 * @param id
 	 */
-	public void delete(Long[] id) {
+	public void delete(User user, Long[] id) {
 		noticeDao.logicalDelete(id);
 		
 	}
@@ -105,18 +113,18 @@ public class NoticeService {
 	/**
      * 新增
      */
-    @Transactional
+   /* @Transactional
     public void add(List<Notice> notices) {
         logger.info("批量新增");
         for (Notice notice : notices) {
             add(notice);
         }
-    }
+    }*/
 
 	 /**
      * 新增
      */
-    @Transactional
+    /*@Transactional
     public void add(Notice notice) {
         logger.info("添加默认属性值");
         notice.setIsDeleted(false);
@@ -126,7 +134,7 @@ public class NoticeService {
         logger.debug("修改时间为当前时间“{}”", notice.getModifieTime());
         logger.debug("是否删除的为“{}”", notice.getIsDeleted());
         noticeDao.save(notice);
-    }
+    }*/
 
     /**
      * 导出全部

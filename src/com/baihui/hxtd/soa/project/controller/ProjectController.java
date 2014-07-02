@@ -22,14 +22,15 @@ import org.springframework.web.bind.WebDataBinder;
 import org.springframework.web.bind.annotation.InitBinder;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.SessionAttributes;
 import org.springside.modules.web.Servlets;
 
 import com.baihui.hxtd.soa.base.Constant;
 import com.baihui.hxtd.soa.base.orm.hibernate.HibernatePage;
 import com.baihui.hxtd.soa.base.utils.ImportExport;
 import com.baihui.hxtd.soa.base.utils.Search;
+import com.baihui.hxtd.soa.common.controller.CommonController;
 import com.baihui.hxtd.soa.project.entity.Project;
-import com.baihui.hxtd.soa.project.entity.Supplier;
 import com.baihui.hxtd.soa.project.service.ProjectService;
 import com.baihui.hxtd.soa.system.entity.User;
 import com.baihui.hxtd.soa.system.service.DataShift;
@@ -48,7 +49,8 @@ import com.baihui.hxtd.soa.util.JsonDto;
  */
 @RequestMapping(value="/project/project")
 @Controller
-public class ProjectController {
+@SessionAttributes(value = {Constant.VS_USER})
+public class ProjectController extends CommonController<Project> {
 	
 	private Logger logger = LoggerFactory.getLogger(this.getClass());
 	
@@ -147,7 +149,7 @@ public class ProjectController {
 		User u = (User) request.getSession().getAttribute(Constant.VS_USER);
 		logger.info("获得当前操作用户{}",u.getName());
 		project.setModifier(u);
-		projectService.save(project);
+		projectService.modify(project, u);
 		JsonDto json = new JsonDto(project.getId(),"保存成功!");
 		return json.toString();
 	}
@@ -190,7 +192,7 @@ public class ProjectController {
 		logger.info("获得当前操作用户{}",u.getName());
 		project.setModifier(u);
 		project.setCreator(u);
-		projectService.save(project);
+		projectService.add(project, u);
 		JsonDto json = new JsonDto(project.getId(),"保存成功!");
 		return json.toString();
 	}
@@ -206,9 +208,10 @@ public class ProjectController {
 	 */
 	@ResponseBody
 	@RequestMapping(value = "/delete.do",produces = "text/text;charset=UTF-8")
-	public String delete(Long[] id){
+	public String delete(ModelMap modelMap, Long[] id){
 		logger.info("projectController.delete删除组件");
-		boolean flag = projectService.delete(id);
+		User user = (User)modelMap.get(Constant.VS_USER);
+		boolean flag = projectService.delete(user,id);
 		if(flag){
 			return new JsonDto().toString();
 		}else{

@@ -37,7 +37,7 @@ public class AuditLog {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	@Column(name = "ID")
-	private int id;
+	private Long id;
 	
 	/**操作时间*/
 	@JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss", timezone = "GMT+08:00")
@@ -60,17 +60,17 @@ public class AuditLog {
 	
 	/**操作记录的id*/
 	@Column(name = "RECORD_ID")
-	private String recordId;
+	private Long recordId;
 	
 	/**操作记录的名称*/
 	@Column(name = "RECORD_NAME")
 	private String recordName;
 	
 	
-	public int getId() {
+	public Long getId() {
 		return id;
 	}
-	public void setId(int id) {
+	public void setId(Long id) {
 		this.id = id;
 	}
 	public String getModuleName() {
@@ -85,10 +85,10 @@ public class AuditLog {
 	public void setOperateTime(Date operateTime) {
 		this.operateTime = operateTime;
 	}
-	public String getRecordId() {
+	public Long getRecordId() {
 		return recordId;
 	}
-	public void setRecordId(String recordId) {
+	public void setRecordId(Long recordId) {
 		this.recordId = recordId;
 	}
 	public String getRecordName() {

@@ -35,9 +35,9 @@
     </bean>
 
     <!-- 加入AOP自动代理 -->
-    <aop:aspectj-autoproxy/>
+    <!--<aop:aspectj-autoproxy/>
 
-    <!-- @Async标签支持 -->
+    --><!-- @Async标签支持 -->
     <task:annotation-driven/>
 
 </beans>

@@ -17,6 +17,7 @@ import com.baihui.hxtd.soa.base.utils.Search;
 import com.baihui.hxtd.soa.market.dao.MarketActivityDao;
 import com.baihui.hxtd.soa.market.entity.MarketActivity;
 import com.baihui.hxtd.soa.system.dao.UserDao;
+import com.baihui.hxtd.soa.system.entity.User;
 import com.baihui.hxtd.soa.system.service.DataShift;
 
 /**
@@ -67,7 +68,7 @@ public class MarketActivityService {
      * modifier:xiaoli.luo
      * @param entity 市场活动实体
      */
-    public void add(MarketActivity entity, Long sessionId) {
+    public void add(MarketActivity entity, User user) {
     	marketActivityDao.save(entity);
     }
     /**
@@ -75,7 +76,7 @@ public class MarketActivityService {
      * @param entity
      * @param sessionId
      */
-    public void modify(MarketActivity entity, Long sessionId) {
+    public void modify(MarketActivity entity, User user) {
     	marketActivityDao.save(entity);
     }
 	
@@ -100,7 +101,7 @@ public class MarketActivityService {
       * @Description: 根据活动主键ID删除记录，支持批量删除
       * @param id 活动主键IDS
      */
-    public void delete(Long sessionId, long... id) {
+    public void delete(User user, Long... id) {
     	marketActivityDao.delete(id);
     }
     

@@ -16,6 +16,7 @@ import com.baihui.hxtd.soa.base.orm.hibernate.HibernatePage;
 import com.baihui.hxtd.soa.base.utils.Search;
 import com.baihui.hxtd.soa.project.dao.ProductDao;
 import com.baihui.hxtd.soa.project.entity.Product;
+import com.baihui.hxtd.soa.system.entity.User;
 import com.baihui.hxtd.soa.system.service.DataShift;
 
 /**
@@ -122,7 +123,11 @@ public class ProductService {
      * save(保存：修改/新建)
      * @param entity 产品实体
      */
-    public void save(Product entity) {
+    public void add(Product entity, User user) {
+        productDao.save(entity);
+    }
+    
+    public void modify(Product entity, User user) {
         productDao.save(entity);
     }
     
@@ -130,7 +135,7 @@ public class ProductService {
      * delete(根据产品主键ID删除记录，支持批量删除)
      * @param id 产品主键IDS
     */
-   public void delete(Long... ids) {
+   public void delete(User user, Long... ids) {
 	   productDao.logicalDelete(ids);
    }
 }

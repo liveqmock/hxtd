@@ -58,8 +58,8 @@ public class RoleService {
         logger.info("分页查找");
         DetachedCriteria criteria = DetachedCriteria.forClass(Role.class);
 //        criteria.setFetchMode("type", FetchMode.JOIN);
-        criteria.setFetchMode("creator",FetchMode.JOIN);
-        criteria.setFetchMode("modifier",FetchMode.JOIN);
+        criteria.setFetchMode("creator", FetchMode.JOIN);
+        criteria.setFetchMode("modifier", FetchMode.JOIN);
         userDao.visibleData(criteria, dataShift);
         Map<String, SearchFilter> filters = Search.parse(searchParams);
         Search.buildCriteria(filters, criteria, Role.class);
@@ -78,10 +78,11 @@ public class RoleService {
         role.setModifiedTime(role.getCreatedTime());
         role.setIsDeleted(false);
         role.setIsInitialized(false);
+        role.setCode(null);
 
         roleDao.save(role);
 
-        userDao.updateManagerStoreStatus();
+//        userDao.updateManagerStoreStatus();
     }
 
 

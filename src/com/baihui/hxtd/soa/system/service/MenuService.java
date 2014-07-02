@@ -351,6 +351,37 @@ public class MenuService {
     }
 
     /**
+     * 查找子菜单通过主键编号
+     */
+    public List<Menu> findChildrenById(List<Menu> menus, Long id) {
+        List<Menu> findMenus = new ArrayList<Menu>();
+        boolean isEquals;
+        for (Menu menu : menus) {
+            //判断非根节点相等
+            isEquals = menu.getParent() != null && menu.getParent().getId() != null && menu.getParent().getId().equals(id);
+            //判断根节点相等
+            isEquals = isEquals || id == null && menu.getParent() == null;
+            if (isEquals) {
+                findMenus.add(menu);
+            }
+        }
+
+        return findMenus;
+    }
+
+    /**
+     * 查找菜单通过主键编号
+     */
+    public Menu findById(List<Menu> menus, Long id) {
+        for (Menu menu : menus) {
+            if (menu.getId().equals(id)) {
+                return menu;
+            }
+        }
+        return null;
+    }
+
+    /**
      * 转换菜单触发功能的URL为toXXPage形式
      */
     public void toTriggerUrl(List<Menu> menus) {
@@ -455,7 +486,7 @@ public class MenuService {
         logger.info("新增");
 
         logger.info("添加默认属性值");
-        menu.setCode("");
+        menu.setCode(null);
         logger.debug("编号默认为空");
         menu.setIsLeaf(true);
         Menu parent = menu.getParent();

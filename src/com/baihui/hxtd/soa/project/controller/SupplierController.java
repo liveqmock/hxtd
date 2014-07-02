@@ -25,7 +25,7 @@ import com.baihui.hxtd.soa.base.Constant;
 import com.baihui.hxtd.soa.base.orm.hibernate.HibernatePage;
 import com.baihui.hxtd.soa.base.utils.ImportExport;
 import com.baihui.hxtd.soa.base.utils.Search;
-import com.baihui.hxtd.soa.customer.entity.Lead;
+import com.baihui.hxtd.soa.common.controller.CommonController;
 import com.baihui.hxtd.soa.project.entity.Supplier;
 import com.baihui.hxtd.soa.project.service.SupplierService;
 import com.baihui.hxtd.soa.system.entity.Dictionary;
@@ -36,8 +36,8 @@ import com.baihui.hxtd.soa.util.JsonDto;
 
 @Controller
 @RequestMapping(value = "/project/supplier")
-@SessionAttributes(value = {Constant.VS_DATASHIFT})
-public class SupplierController {
+@SessionAttributes(value = {Constant.VS_DATASHIFT, Constant.VS_USER})
+public class SupplierController extends CommonController<Supplier> {
 	
 	 private Logger logger = LoggerFactory.getLogger(this.getClass());
 	 /**
@@ -184,7 +184,7 @@ public class SupplierController {
 		User u = (User) request.getSession().getAttribute(Constant.VS_USER);
 		logger.info("获得当前操作用户{}",u.getName());
 		supplier.setModifier(u);
-		supplierService.save(supplier);
+		supplierService.modify(supplier, u);
 		JsonDto json = new JsonDto(supplier.getId(),"保存成功!");
 		return json.toString();
 	}
@@ -208,7 +208,7 @@ public class SupplierController {
 		logger.info("SupplierController.query 获得当前操作的用户{}",u.getName());
 		supplier.setCreator(u);
 		supplier.setModifier(u);
-		supplierService.save(supplier);
+		supplierService.add(supplier, u);
 		JsonDto json = new JsonDto(supplier.getId(),"保存成功!");
 		return json.toString();
 	}
@@ -223,9 +223,10 @@ public class SupplierController {
 	 */
 	@ResponseBody
 	@RequestMapping(value = "/delete.do",produces = "text/text;charset=UTF-8")
-	public String delete(Long[] id){
+	public String delete(ModelMap modelMap, Long[] id){
 		logger.info("SupplierController.delete删除组件");
-		boolean flag = supplierService.delete(id);
+		User user = (User) modelMap.get(Constant.VS_USER);
+		boolean flag = supplierService.delete(user, id);
 		if(flag){
 			return new JsonDto().toString();
 		}else{

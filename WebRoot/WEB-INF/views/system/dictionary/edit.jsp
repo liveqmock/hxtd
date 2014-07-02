@@ -11,23 +11,23 @@
 <script type="text/javascript" src="${ctx}/static/js/validator.js?v=1"></script>
 <script type="text/javascript">
 $(function(){
-	$(".add").click(function(){// 表单验证
+	$(".add").click(function(){ // 表单验证
 		if($("#form").valid()){
 			form.action = form.action + "?redirectUri=" + encodeURI($(this).attr("redirecturi"));
 			form.submit();
 		}
 		return false;
 	});
-	$("#pName").focus(function(){// 所属字典名称
+	$("#pName").focus(function(){ // 所属字典名称
 		jsUtil.easyTree.show('#pName');
 	});;
-	jsUtil.easyTree.init(${dict}, function(node){// 字典树形下拉
+	jsUtil.easyTree.init(${dict}, function(node){ // 字典树形下拉
 		$("#pName").val(node.name);
 		$("#pId").val(node.id);
 		$("#dicType").val(node.typename);
 		jsUtil.easyTree.hide();
 	});
-	$("#dicType").change(function(){// 改变字典类型
+	$("#dicType").change(function(){ // 改变字典类型
 		if(this.value == '0'){
 			$("#pName").val('');
 			$("#pId").val('');

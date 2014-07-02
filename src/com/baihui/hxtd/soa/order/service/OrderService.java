@@ -7,7 +7,6 @@ import java.util.Map;
 import javax.annotation.Resource;
 
 import org.hibernate.FetchMode;
-import org.hibernate.Query;
 import org.hibernate.criterion.DetachedCriteria;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -21,6 +20,7 @@ import com.baihui.hxtd.soa.order.dao.OrderDao;
 import com.baihui.hxtd.soa.order.entity.Order;
 import com.baihui.hxtd.soa.order.util.Contacts;
 import com.baihui.hxtd.soa.system.dao.UserDao;
+import com.baihui.hxtd.soa.system.entity.User;
 import com.baihui.hxtd.soa.system.service.DataShift;
 import com.baihui.hxtd.soa.util.Tools;
 
@@ -101,8 +101,17 @@ public class OrderService {
 	
 	
 	
-	public void save(Order order){
-		order.setCode(getOrderCode());
+	public void add(Order order, User user){
+		if(order.getId()==null||"".equals(order.getId())){
+			order.setCode(getOrderCode());
+		}
+		orderDao.save(order);
+	}
+	
+	public void modify(Order order, User user){
+		if(order.getId()==null||"".equals(order.getId())){
+			order.setCode(getOrderCode());
+		}
 		orderDao.save(order);
 	}
 	
@@ -124,7 +133,7 @@ public class OrderService {
 	}
 	
 	
-	public void delete(Long[] ids){
+	public void delete(User user, Long[] ids){
 		orderDao.delete(ids);
 	}
 }

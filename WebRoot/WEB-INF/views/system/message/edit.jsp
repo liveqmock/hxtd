@@ -35,7 +35,7 @@
 						//redirect
 						var id = result.result.result;
 						setTimeout(function(){
-							window.location.replace("${ctx}/system/message/toQueryPage.do?type=recived")
+							window.location.replace("${ctx}/system/message/toQueryPage.do?type=send")
 						},500);
 					},null,$form.formSerialize());
 				}
@@ -101,7 +101,7 @@
 		<ul class="id_table1 cb">
 		<li><a id="save" href="javascript:;" class="block c_white lh25 mr10"><b class="allbtn_l block fl"></b><b class="allbtn_r pr13 block fl w_auto f14 ">发&nbsp;&nbsp;送</b></a></li>
 		<li><a id="saveAndAdd" href="javascript:;"class="block c_white lh25 mr10"><b class="allbtn_l block fl"></b><b class="allbtn_r pr13 block fl w_auto f14 ">发送并新建</b></a></li>
-		<li><a href="javascript:history.back(-1)"class="block c_white lh25 mr10"><b class="allbtn_l block fl"></b><b class="allbtn_r pr13 block fl w_auto f14 ">取&nbsp;&nbsp;消</b></a></li>
+		<li><a href="${ctx}/system/message/toQueryPage.do?type=send"class="block c_white lh25 mr10"><b class="allbtn_l block fl"></b><b class="allbtn_r pr13 block fl w_auto f14 ">取&nbsp;&nbsp;消</b></a></li>
 		</ul>
 	<div class="clear"></div>
 	</div>

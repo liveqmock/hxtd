@@ -206,7 +206,7 @@ public class UserService {
      * 新增
      */
     @Transactional
-    public void add(User user) {
+    public void add(User user, User sessionUser) {
         logger.info("新增用户");
 
         logger.info("添加默认属性值");
@@ -228,10 +228,10 @@ public class UserService {
      * 新增
      */
     @Transactional
-    public void add(List<User> users) {
+    public void addList(List<User> users, User sessionUser) {
         logger.info("批量新增");
         for (User user : users) {
-            add(user);
+            add(user, sessionUser);
         }
     }
 
@@ -273,7 +273,7 @@ public class UserService {
      * 修改
      */
     @Transactional
-    public void modify(User user) {
+    public void modify(User user, User sessionUser) {
         logger.info("修改用户");
 
         logger.info("添加默认属性值");
@@ -287,7 +287,7 @@ public class UserService {
      * 批量删除
      */
     @Transactional
-    public void delete(Long... ids) {
+    public void delete(User sessionUser, Long... ids) {
         logger.info("删除用户");
         userDao.logicalDelete(ids);
     }

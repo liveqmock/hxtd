@@ -51,7 +51,9 @@
 <div class="facing mt-5">
     <c:choose>
         <c:when test="${VR_LOCATION_TITLE!=null}">
-            <p class="f12 pt5 ml35 fl">当前位置：<a href="${ctx}${VR_LOCATION_TITLE.url}">${VR_LOCATION_TITLE.name}</a></p>
+            <p class="f12 pt5 ml35 fl">当前位置：
+                <a href="${ctx}${VR_LOCATION_TITLE.url}" class="c_orange">${VR_LOCATION_TITLE.name}</a>
+            </p>
         </c:when>
         <c:otherwise>
             <c:if test="${VR_TITLE_MENUS!=null}">
@@ -59,7 +61,7 @@
                     <c:forEach items="${VR_TITLE_MENUS}" var="item" varStatus="status">
                         <c:choose>
                             <c:when test="${item.trigger==null}"><span>${item.name}</span></c:when>
-                            <c:otherwise><a href="${ctx}${item.trigger.url}">${item.name}</a> </c:otherwise>
+                            <c:otherwise><a href="${ctx}${item.trigger.url}" ${status.last&&isMenuFunction?"class='c_orange'":"style='color: #000000'"} >${item.name}</a> </c:otherwise>
                         </c:choose>
                         ${status.last?"":">"}
                     </c:forEach>
@@ -86,49 +88,49 @@
 		        <span class="block">
 		        <ul class=" block">
                     <li>
-                    <c:if test="${VS_HAS_FUNCTIONS.marketactivityAdd}">
-                    <a href="${ctx}/market/marketactivity/toAddPage.do">新增市场活动</a>
-                    </c:if>
+                        <c:if test="${VS_HAS_FUNCTIONS.marketactivityAdd}">
+                            <a href="${ctx}/market/marketactivity/toAddPage.do">新增市场活动</a>
+                        </c:if>
                     </li>
                     <li>
-                    <c:if test="${VS_HAS_FUNCTIONS.leadAdd}">
-                    <a href="${ctx}/customer/lead/toAddPage.do">新增线索</a>
-                    </c:if>
+                        <c:if test="${VS_HAS_FUNCTIONS.leadAdd}">
+                            <a href="${ctx}/customer/lead/toAddPage.do">新增线索</a>
+                        </c:if>
                     </li>
                     <li>
-                    <c:if test="${VS_HAS_FUNCTIONS.contactAdd}">
-                    <a href="${ctx}/customer/contact/toAddPage.do">新增联系人</a>
-                    </c:if>
+                        <c:if test="${VS_HAS_FUNCTIONS.contactAdd}">
+                            <a href="${ctx}/customer/contact/toAddPage.do">新增联系人</a>
+                        </c:if>
                     </li>
                     <li>
-                    <c:if test="${VS_HAS_FUNCTIONS.customerAdd}">
-                    <a href="${ctx}/customer/customer/toAddPage.do">新增客户</a>
-                    </c:if>
+                        <c:if test="${VS_HAS_FUNCTIONS.customerAdd}">
+                            <a href="${ctx}/customer/customer/toAddPage.do">新增客户</a>
+                        </c:if>
                     </li>
                     <li>
-                    <c:if test="${VS_HAS_FUNCTIONS.supplierAdd}">
-                    <a href="${ctx}/project/supplier/toAddPage.do">新增供应商</a>
-                    </c:if>
+                        <c:if test="${VS_HAS_FUNCTIONS.supplierAdd}">
+                            <a href="${ctx}/project/supplier/toAddPage.do">新增供应商</a>
+                        </c:if>
                     </li>
                     <li>
-                    <c:if test="${VS_HAS_FUNCTIONS.projectAdd}">
-                    <a href="${ctx}/project/project/toAddPage.do">新增项目</a>
-                    </c:if>
+                        <c:if test="${VS_HAS_FUNCTIONS.projectAdd}">
+                            <a href="${ctx}/project/project/toAddPage.do">新增项目</a>
+                        </c:if>
                     </li>
                     <li>
-                    <c:if test="${VS_HAS_FUNCTIONS.productAdd}">
-                    <a href="${ctx}/project/product/toAddPage.do">新增产品</a>
-                    </c:if>
+                        <c:if test="${VS_HAS_FUNCTIONS.productAdd}">
+                            <a href="${ctx}/project/product/toAddPage.do">新增产品</a>
+                        </c:if>
                     </li>
                     <li>
-                    <c:if test="${VS_HAS_FUNCTIONS.orderAdd}">
-                    <a href="${ctx}/order/order/toAddPage.do">新增订单</a>
-                    </c:if>
+                        <c:if test="${VS_HAS_FUNCTIONS.orderAdd}">
+                            <a href="${ctx}/order/order/toAddPage.do">新增订单</a>
+                        </c:if>
                     </li>
                     <li>
-                    <c:if test="${VS_HAS_FUNCTIONS.contractAdd}">
-                    <a href="javascript:;">新增合同</a>
-                    </c:if>
+                        <c:if test="${VS_HAS_FUNCTIONS.contractAdd}">
+                            <a href="javascript:;">新增合同</a>
+                        </c:if>
                     </li>
                 </ul>
 		        </span>
@@ -143,69 +145,69 @@
             </div>
         </li>
 
-       <c:if test="${VS_HAS_FUNCTIONS.noticeQuery}">
-        <li class="head_system globle_img fl mr15" id="notice">
-            <a href="${ctx}/system/notice/toQueryPage.do" title="系统公告">&nbsp;&nbsp;&nbsp;&nbsp;</a>
-            <c:if test="${VS_HAS_FUNCTIONS.noticeView}">
-            <div class="none w100 div2 pr">
-                <b class="tan_leftjian3 globle_img block pa"></b>
-                <b class="bb1"></b>
-                <b class="bb2"></b>
-                <b class="bb3"></b>
-                <b class="bb4"></b>
-                <b class="bb5"></b>
-                <b class="bb5"></b>
-                <b class="bb5"></b>
-                <b class="bb5"></b>
+        <c:if test="${VS_HAS_FUNCTIONS.noticeQuery}">
+            <li class="head_system globle_img fl mr15" id="notice">
+                <a href="${ctx}/system/notice/toQueryPage.do" title="系统公告">&nbsp;&nbsp;&nbsp;&nbsp;</a>
+                <c:if test="${VS_HAS_FUNCTIONS.noticeView}">
+                    <div class="none w100 div2 pr">
+                        <b class="tan_leftjian3 globle_img block pa"></b>
+                        <b class="bb1"></b>
+                        <b class="bb2"></b>
+                        <b class="bb3"></b>
+                        <b class="bb4"></b>
+                        <b class="bb5"></b>
+                        <b class="bb5"></b>
+                        <b class="bb5"></b>
+                        <b class="bb5"></b>
 		        <span class="block">
 		        <ul class=" block">
-		          <li>公告：</li>
-                  <li id="notices"></li>
+                    <li>公告：</li>
+                    <li id="notices"></li>
                 </ul>
 		        </span>
-                <b class="bb6"></b>
-                <b class="bb6"></b>
-                <b class="bb6"></b>
-                <b class="bb6"></b>
-                <b class="bb7"></b>
-                <b class="bb8"></b>
-                <b class="bb9"></b>
-                <b class="bb0"></b>
-            </div>
-            </c:if>
-        </li>
-       </c:if>
-       <c:if test="${VS_HAS_FUNCTIONS.messageQuery}">
-        <li class="head_news globle_img fl mr10" id="message">
-            <a href="${ctx}/system/message/toQueryPage.do?type=reviced" title="系统消息">&nbsp;&nbsp;&nbsp;&nbsp;</a>
-            <c:if test="${VS_HAS_FUNCTIONS.messageView}">
-            <div class="none w100 div3 pr">
-                <b class="tan_leftjian4 globle_img block pa"></b>
-                <b class="bb1"></b>
-                <b class="bb2"></b>
-                <b class="bb3"></b>
-                <b class="bb4"></b>
-                <b class="bb5"></b>
-                <b class="bb5"></b>
-                <b class="bb5"></b>
-                <b class="bb5"></b>
+                        <b class="bb6"></b>
+                        <b class="bb6"></b>
+                        <b class="bb6"></b>
+                        <b class="bb6"></b>
+                        <b class="bb7"></b>
+                        <b class="bb8"></b>
+                        <b class="bb9"></b>
+                        <b class="bb0"></b>
+                    </div>
+                </c:if>
+            </li>
+        </c:if>
+        <c:if test="${VS_HAS_FUNCTIONS.messageQuery}">
+            <li class="head_news globle_img fl mr10" id="message">
+                <a href="${ctx}/system/message/toQueryPage.do?type=reviced" title="系统消息">&nbsp;&nbsp;&nbsp;&nbsp;</a>
+                <c:if test="${VS_HAS_FUNCTIONS.messageView}">
+                    <div class="none w100 div3 pr">
+                        <b class="tan_leftjian4 globle_img block pa"></b>
+                        <b class="bb1"></b>
+                        <b class="bb2"></b>
+                        <b class="bb3"></b>
+                        <b class="bb4"></b>
+                        <b class="bb5"></b>
+                        <b class="bb5"></b>
+                        <b class="bb5"></b>
+                        <b class="bb5"></b>
 		        <span class="block">
 		         <ul id="messages" class=" block">
-					
+
                  </ul>
 		        </span>
-                <b class="bb6"></b>
-                <b class="bb6"></b>
-                <b class="bb6"></b>
-                <b class="bb6"></b>
-                <b class="bb7"></b>
-                <b class="bb8"></b>
-                <b class="bb9"></b>
-                <b class="bb0"></b>
-            </div>
-            </c:if>
-        </li>
-       </c:if>
+                        <b class="bb6"></b>
+                        <b class="bb6"></b>
+                        <b class="bb6"></b>
+                        <b class="bb6"></b>
+                        <b class="bb7"></b>
+                        <b class="bb8"></b>
+                        <b class="bb9"></b>
+                        <b class="bb0"></b>
+                    </div>
+                </c:if>
+            </li>
+        </c:if>
 
     </ul>
 </div>

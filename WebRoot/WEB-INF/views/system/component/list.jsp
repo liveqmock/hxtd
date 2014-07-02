@@ -113,7 +113,7 @@ function formReset() {
 					</li>
 				</c:if>
 				<li>
-					<a href="javascript:;" class="submit block c_white lh25 ml10"><b
+					<a href="javascript:;" class="refresh block c_white lh25 ml10"><b
 						class="allbtn_l block fl"></b><b
 						class="allbtn_r pr13 block fl w_auto f14">刷&nbsp;&nbsp;新</b>
 					</a>

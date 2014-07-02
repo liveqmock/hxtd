@@ -22,6 +22,7 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -66,6 +67,8 @@ public class MenuController {
 
         logger.info("存储查询条件表单初始化数据");
         List<Menu> menus = (List<Menu>) modelMap.get(Constant.VS_MENUS);
+        menus = new ArrayList<Menu>(menus);
+        menus.add(0, Menu.ROOT);
         String menuTree = JsonMapper.nonEmptyMapper().toJson(TreeNodeConverter.convert(menus));
         modelMap.addAttribute("menuTree", menuTree);
         modelMap.addAttribute("parentId", menus.get(0).getId());
@@ -81,17 +84,26 @@ public class MenuController {
      */
     @ResponseBody
     @RequestMapping(value = "/query.do")
-    public String query(@RequestParam(required = false) Long id, ModelMap modelMap) throws NoSuchFieldException, IOException {
+    public String query(Long id, ModelMap modelMap) throws NoSuchFieldException, IOException {
         logger.info("查询信息");
+        logger.debug("id={}", id);
 
         List<Menu> menus = (List<Menu>) modelMap.get(Constant.VS_MENUS);
-        menus = menuService.findSelfChildrenById(menus, id);
+        //查找子节点
+        List<Menu> findMenus = menuService.findChildrenById(menus, Menu.ROOT.getId().equals(id) ? null : id);
+        //没有子节点，查找自己
+        if (findMenus.size() == 0) {
+            Menu self = menuService.findById(menus, id);
+            if (self != null) {
+                findMenus.add(self);
+            }
+        }
 
         logger.info("以DTO格式返回");
         JsonDto jsonDto = new JsonDto();
         jsonDto.setSuccessFlag(true);
         ListModel<Menu> result = new ListModel<Menu>();
-        result.setList(menus);
+        result.setList(findMenus);
         jsonDto.setResult(result);
 
         return HibernateAwareObjectMapper.DEFAULT.writeValueAsString(jsonDto);

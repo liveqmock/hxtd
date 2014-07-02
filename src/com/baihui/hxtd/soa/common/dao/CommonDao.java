@@ -4,17 +4,17 @@ import com.baihui.hxtd.soa.base.orm.hibernate.HibernateDAOImpl;
 import com.baihui.hxtd.soa.base.orm.hibernate.HibernatePage;
 import com.baihui.hxtd.soa.common.entity.Common;
 import com.baihui.hxtd.soa.common.entity.Initialized;
-import com.baihui.hxtd.soa.system.service.DataShift;
+import org.apache.commons.lang3.StringUtils;
 import org.apache.poi.ss.formula.functions.T;
-import org.hibernate.criterion.DetachedCriteria;
+import org.hibernate.Query;
+import org.hibernate.criterion.Order;
 import org.springframework.stereotype.Repository;
+import org.springframework.util.Assert;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
-
-import javax.transaction.Transactional;
 
 
 @Repository
@@ -58,7 +58,6 @@ public class CommonDao extends HibernateDAOImpl<Common, Long> {
         String hql = String.format("select entity.order from %s entity where entity.id=?", entityName);
         return findUnique(hql, id);
     }
-
 
 
     /**
@@ -110,6 +109,7 @@ public class CommonDao extends HibernateDAOImpl<Common, Long> {
         SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm");
 
         String hql = String.format("select entity from %s entity inner join fetch entity.modifier where entity.isDeleted=true ", entityName);
+        String countHql = String.format("select entity from %s entity where entity.isDeleted=true ", entityName);
         List<Object> listParams = new ArrayList<Object>();
         //删除者
         if (null != deletorId) {
@@ -132,30 +132,44 @@ public class CommonDao extends HibernateDAOImpl<Common, Long> {
             hql += " and entity.modifiedTime<?";
             listParams.add(gteModifiedTime);
         }
+
         Object[] o = listParams.toArray();
-        page.setResult(createQuery(hql, o).list());
+        Query query = createQuery(hql, o);
+        page.setResult(query.list());
+        if (page.isAutoCount()) {
+            long totalCount = countHqlResult(countHql, o);
+            page.setTotalCount(totalCount);
+        }
+
+        if (page.getHibernatePageSize() < 0) {
+            page.setHibernatePageSize((int) page.getTotalCount());
+        }
+
+        query.setFirstResult(page.getFirst() - 1);
+        query.setMaxResults(page.getHibernatePageSize());
+
         return page;
     }
 
-    
-    
+
     /**
      * 物理删除回收站中的数据
      */
-	public void delete(String entityName, Long... id) {
-		String hql = String.format("delete from %s entity where entity.isDeleted=true and id in (:id)", entityName);
-		getSession().createQuery(hql).setParameterList("id", id).executeUpdate();
-    	logger.debug("delete entity {},hql is {},id is {}", entityClass.getSimpleName(),hql, id);
+    public void delete(String entityName, Long... id) {
+        String hql = String.format("delete from %s entity where entity.isDeleted=true and id in (:id)", entityName);
+        getSession().createQuery(hql).setParameterList("id", id).executeUpdate();
+        logger.debug("delete entity {},hql is {},id is {}", entityClass.getSimpleName(), hql, id);
 //		/super.delete(hql,ids);
-	}
-	/**
+    }
+
+    /**
      * 恢复回收站中的数据
      */
-	public void recovery(String entityName, Long[] id) {
-		String hql = String.format("update %s entity set entity.isDeleted=false where id in (:id)", entityName);
-		getSession().createQuery(hql).setParameterList("id", id).executeUpdate();
-    	logger.debug("recovery entity {},hql is {},id is {}", entityClass.getSimpleName(),hql, id);
-		//super.recovery(hql,id);
-	}
+    public void recovery(String entityName, Long[] id) {
+        String hql = String.format("update %s entity set entity.isDeleted=false where id in (:id)", entityName);
+        getSession().createQuery(hql).setParameterList("id", id).executeUpdate();
+        logger.debug("recovery entity {},hql is {},id is {}", entityClass.getSimpleName(), hql, id);
+        //super.recovery(hql,id);
+    }
 
 }

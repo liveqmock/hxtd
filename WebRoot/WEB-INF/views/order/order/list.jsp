@@ -10,7 +10,7 @@
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
 <html>
 <head>
-<title>线索列表</title>
+<title>订单列表</title>
 <link rel="stylesheet" href="${ctx}/static/css/application.css" type="text/css" />
 <link rel="stylesheet" href="${ctx}/static/css/recommend/detail.css" type="text/css" />
 <script type="text/javascript" src="${ctx}/static/js/jquery-json.2.4.js"></script>
@@ -129,7 +129,7 @@ function reset() {
 							</li>
 						</c:if>
 						<li>
-							<a href="javascript:;" class="submit block c_white lh25 ml10"><b
+							<a href="javascript:;" class="refresh block c_white lh25 ml10"><b
 								class="allbtn_l block fl"></b><b
 								class="allbtn_r pr13 block fl w_auto f14">刷&nbsp;&nbsp;新</b> </a>
 						</li>

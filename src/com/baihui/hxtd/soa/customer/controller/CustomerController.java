@@ -21,7 +21,6 @@ import org.springframework.ui.Model;
 import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.WebDataBinder;
 import org.springframework.web.bind.annotation.InitBinder;
-import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
@@ -32,6 +31,7 @@ import com.baihui.hxtd.soa.base.Constant;
 import com.baihui.hxtd.soa.base.orm.hibernate.HibernatePage;
 import com.baihui.hxtd.soa.base.utils.ImportExport;
 import com.baihui.hxtd.soa.base.utils.Search;
+import com.baihui.hxtd.soa.common.controller.CommonController;
 import com.baihui.hxtd.soa.customer.entity.Customer;
 import com.baihui.hxtd.soa.customer.service.CustomerService;
 import com.baihui.hxtd.soa.system.entity.Dictionary;
@@ -50,7 +50,7 @@ import com.baihui.hxtd.soa.util.JsonDto;
 @Controller
 @SessionAttributes(value = {Constant.VS_USER,Constant.VS_DATASHIFT})
 @RequestMapping(value = "/customer/customer")
-public class CustomerController {
+public class CustomerController extends CommonController<Customer>{
 
     private Logger logger = LoggerFactory.getLogger(CustomerController.class);
 	

@@ -25,7 +25,11 @@ import java.util.List;
 @SuppressWarnings("serial")
 public class Menu implements Serializable, Cloneable, TreeNode<Menu>, Initialized {
 
+    /**设置虚拟菜单，显示当前位置时，需要使用*/
     public final static Menu SETTING = new Menu();
+
+    /**根虚拟菜单，在菜单列表页显示*/
+    public final static Menu ROOT = new Menu();
 
     static {
         SETTING.setName("设置");
@@ -33,6 +37,10 @@ public class Menu implements Serializable, Cloneable, TreeNode<Menu>, Initialize
         Function function = new Function();
         function.setUrl("/system/toViewPage.do");
         SETTING.setTrigger(function);
+
+        ROOT.setId(1l);
+        ROOT.setName("华兴控股");
+        ROOT.setParent(null);
     }
 
     @Id

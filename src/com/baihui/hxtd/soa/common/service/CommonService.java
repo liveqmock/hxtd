@@ -5,6 +5,7 @@ import com.baihui.hxtd.soa.base.utils.serial.TierSerial;
 import com.baihui.hxtd.soa.base.utils.serial.TierSerials;
 import com.baihui.hxtd.soa.common.dao.CommonDao;
 import com.baihui.hxtd.soa.common.entity.Initialized;
+import com.baihui.hxtd.soa.common.entity.Orderable;
 import com.baihui.hxtd.soa.common.entity.TreeNode;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.poi.ss.formula.functions.T;
@@ -54,6 +55,15 @@ public class CommonService {
     }
 
     /**
+     * 获取序列值通过
+     */
+    @Transactional(readOnly = true)
+    public Long getOrderById(Class<? extends Orderable> clazz, Long id) {
+        String hql = String.format("select entity.order from %s entity where id=?", clazz.getSimpleName());
+        return commonDao.findUnique(hql, id);
+    }
+
+    /**
      * 查找导出数据
      */
     @Transactional(readOnly = true)
@@ -75,14 +85,14 @@ public class CommonService {
 
     /**
      * 移动位置
-     */
-    @Transactional
-    public void move(Class<TreeNode> clazz, Long sourceId, int offset) {
-
-    }
-
-    /**
-     * 移动位置
+     * 1.缓存源节点序号
+     * 2.更新源节点的父节点
+     * 3.上移源节点的兄弟节点
+     * 4.更新目标节点的父节点
+     * 5.下移目标节点的兄弟节点
+     * 6.从缓存位置填充源节点序号至目标节点
+     * 7.设置源节点的父节点
+     * 8.更新源节点的级别
      */
     @Transactional
     public void move(String entityName, Long sourceId, Long targetId, String moveType) {
@@ -107,21 +117,18 @@ public class CommonService {
 
         logger.info("处理源节点的父节点及其兄弟节点");
         TreeNode sourceParent = source.getParent();
-        if (sourceParent != null) {
-            if (sourceParent.getChildren().size() == 1) {
-                logger.info("更新源节点的原父节点（父节点仅含有该子节点时，更新为叶子节点）");
-                commonDao.updateIsLeafById(entityName, sourceParent.getId(), true);
-            } else {
-                logger.info("源节点以下兄弟节点上移");
-                min = source.getOrder() + sourceTierSerial.getIncrease();
-                Long parentOrder = TierSerials.getParent(source.getOrder(), orgTierLength);
-                max = parentOrder + TierSerials.getIncrease(parentOrder, orgTierLength) - 1;
-                increase = -sourceTierSerial.getIncrease();
-                commonDao.increaseOrderByOrderRange(entityName, min, max, increase);
-            }
-        } else {
-            logger.info("根节点，无需处理");
+        if (sourceParent != null && sourceParent.getChildren().size() == 1) {
+            logger.debug("更新源节点的原父节点（父节点仅含有该子节点时，更新为叶子节点）");
+            commonDao.updateIsLeafById(entityName, sourceParent.getId(), true);
         }
+
+        logger.info("源节点以下兄弟节点上移");
+        min = source.getOrder() + sourceTierSerial.getIncrease();
+        max = TierSerials.getMax(min, orgTierLength);
+        increase = -sourceTierSerial.getIncrease();
+        logger.debug("序号范围：{}-{}", min, max);
+        commonDao.increaseOrderByOrderRange(entityName, min, max, increase);
+
 
         if ("inner".equals(moveType)) {
             logger.info("移动到内部");
@@ -143,8 +150,7 @@ public class CommonService {
             logger.info("目标节点及其以下兄弟节点下移");
             TierSerial targetTierSerial = TierSerials.parse(target.getOrder(), orgTierLength);
             min = target.getOrder();
-            Long parentOrder = TierSerials.getParent(target.getOrder(), orgTierLength);
-            max = parentOrder + TierSerials.getIncrease(parentOrder, orgTierLength) - 1;
+            max = TierSerials.getMax(min, orgTierLength);
             increase = targetTierSerial.getIncrease();
             commonDao.increaseOrderByOrderRange(entityName, min, max, increase);
 

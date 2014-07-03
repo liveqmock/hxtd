@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns:context="http://www.springframework.org/schema/context"
+	xsi:schemaLocation="
+	http://www.springframework.org/schema/beans 
+	http://www.springframework.org/schema/beans/spring-beans-3.0.xsd
+	http://www.springframework.org/schema/context
+	http://www.springframework.org/schema/context/spring-context-3.0.xsd">
+	<!--
+	<bean id="cleanRecycleBinJob" class="org.springframework.scheduling.quartz.JobDetailBean"> 
+		<property name="jobClass" value="com.baihui.hxtd.soa.job.CleanRecycleBinJob" />   
+		<property name="requestsRecovery" value="true"/>  
+	</bean>
+
+	<bean id="cleanRecycleBinJobTrigger" class="org.springframework.scheduling.quartz.CronTriggerBean">
+		<property name="jobDetail" ref="cleanRecycleBinJob" />
+		<property name="cronExpression" value="0/5 * * * * ?" />
+	</bean>
+
+
+	<bean id="springBeanJobFactory" class="org.springframework.scheduling.quartz.SpringBeanJobFactory"/>
+	
+	<bean id="schedulerFactoryForClusters" class="org.springframework.scheduling.quartz.SchedulerFactoryBean">  
+		<property name="schedulerContextAsMap">  
+			<map>
+				&lt;!&ndash; Environment Variable &ndash;&gt;
+				<entry key="test.timeout" value="5"/>
+				<entry key="commonService" value-ref="commonService"/>
+			</map>   
+		</property>  
+		<property name="triggers">  
+			<list> 
+				<ref bean="cleanRecycleBinJobTrigger"/>
+			</list>  
+		</property>
+		<property name="quartzProperties">
+			<props>
+				<prop key="org.quartz.jobStore.tablePrefix">QRTZ_</prop>
+				<prop key="org.quartz.jobStore.driverDelegateClass">org.quartz.impl.jdbcjobstore.PostgreSQLDelegate</prop>
+				<prop key="org.quartz.scheduler.instanceName">myClusteredScheduler</prop>
+				<prop key="org.quartz.scheduler.instanceId">AUTO</prop>
+				<prop key="org.quartz.jobStore.isClustered">true</prop>
+				<prop key="org.quartz.threadPool.threadCount">5</prop>
+				<prop key="org.quartz.jobStore.clusterCheckinInterval">60000</prop>
+			</props>
+		</property>
+		<property name="dataSource" ref="dataSource"/>
+		<property name="applicationContextSchedulerContextKey" value="applicationContext"/>  
+		<property name="startupDelay" value="5"/>  
+		<property name="jobFactory" ref="springBeanJobFactory"/>
+	</bean>
+	-->
+</beans>

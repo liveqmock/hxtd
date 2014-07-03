@@ -15,7 +15,8 @@ jQuery.extend(jQuery.validator.messages, {
     rangelength: jQuery.validator.format("请输入一个长度介于 {0} 和 {1} 之间的字符串"),
     range: jQuery.validator.format("请输入一个介于 {0} 和 {1} 之间的值"),
     max: jQuery.validator.format("请输入一个最大为 {0} 的值"),
-    min: jQuery.validator.format("请输入一个最小为 {0} 的值")
+    min: jQuery.validator.format("请输入一个最小为 {0} 的值"),
+    password:"密码不符合规范"
 });
 $('head').append('<style type="text/css">input.error{border:1px solid red}label.error {padding-left:18px;color:red;}</style>');
 jQuery.validator.addMethod("stringCheck", function (value, element) {
@@ -161,4 +162,11 @@ function _previousValue(element) {
 jQuery.validator.addMethod("qq", function (value, element) {
     return this.optional(element) || value.search(/^[1-9]\d{4,8}$/) != -1;
 }, "QQ号格式错误");
+
+/**密码规则验证*/
+jQuery.validator.addMethod("password", function (val, element) {
+    var reg = /^([A-Za-z0-9_\.]+){6,20}$/;
+    return this.optional(element) || (reg.test(val));
+}, "密码不符合规范");
+
 

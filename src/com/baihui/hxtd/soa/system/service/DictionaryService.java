@@ -4,6 +4,8 @@ import com.baihui.hxtd.soa.base.orm.hibernate.HibernatePage;
 import com.baihui.hxtd.soa.base.utils.Search;
 import com.baihui.hxtd.soa.system.dao.DictionaryDao;
 import com.baihui.hxtd.soa.system.entity.Dictionary;
+import com.baihui.hxtd.soa.system.entity.User;
+
 import org.hibernate.criterion.DetachedCriteria;
 import org.hibernate.criterion.Restrictions;
 import org.springframework.stereotype.Service;
@@ -67,7 +69,17 @@ public class DictionaryService {
      * @param entity 参数类型
      * @return void 返回类型
      */
-    public void save(Dictionary entity) {
+    public void add(Dictionary entity,User user) {
+        entity.setIsInitialized(false);
+        dictionaryDao.save(entity);
+    }
+    
+    /**
+     * 修改
+     * @param entity
+     * @param user
+     */
+    public void modify(Dictionary entity,User user) {
         entity.setIsInitialized(false);
         dictionaryDao.save(entity);
     }
@@ -108,7 +120,7 @@ public class DictionaryService {
      * @param id 字典主键IDS
      * @Description: 根据字典主键ID删除，支持批量删除
      */
-    public void delete(Long... id) {
+    public void delete(User user, Long... id) {
         dictionaryDao.logicalDelete(id);
     }
 

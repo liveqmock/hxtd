@@ -47,7 +47,7 @@ import com.baihui.hxtd.soa.util.JsonDto;
  */
 @Controller
 @RequestMapping(value = "/common/memoir")
-@SessionAttributes(value = {Constant.VS_USER_ID, Constant.VS_ORG})
+@SessionAttributes(value = {Constant.VS_USER, Constant.VS_USER_ID, Constant.VS_ORG})
 public class MemoirController {
 
 	@Resource
@@ -137,9 +137,10 @@ public class MemoirController {
 		memoir.setCreator(user);
 		memoir.setModifier(user);
 		memoir.setCreatedTime(new Date());
+		memoir.setModifiedTime(new Date());
 		memoir.setEmployee(user);
 		
-		memoirService.save(memoir);
+		memoirService.add(memoir, user);
 		
 		JsonDto json = new JsonDto("保存成功");
 		json.setSuccessFlag(true);
@@ -189,7 +190,7 @@ public class MemoirController {
 		memoir.setModifier(user);
 		memoir.setEmployee(user);
 		
-		memoirService.save(memoir);
+		memoirService.modify(memoir, user);
 		
 		JsonDto json = new JsonDto("保存成功");
 		json.setSuccessFlag(true);
@@ -220,8 +221,9 @@ public class MemoirController {
 	 */
 	@ResponseBody
 	@RequestMapping(value = "/delete.do")
-	public String delete(Long id) {
-		memoirService.delete(id);
+	public String delete(ModelMap modelMap, Long[] id) {
+		User user = (User)modelMap.get(Constant.VS_USER);
+		memoirService.delete(user, id);
 		
 		JsonDto json = new JsonDto("删除成功");
 		json.setSuccessFlag(true);

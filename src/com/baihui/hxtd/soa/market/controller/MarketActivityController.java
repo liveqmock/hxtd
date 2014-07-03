@@ -163,7 +163,6 @@ public class MarketActivityController {
 		
 		/************保存*****************************/
 		marketActivityService.add(activity, user);
-		System.out.println(activity.getId());
 		return JsonDto.add(activity.getId()).toString();
 	}
 	

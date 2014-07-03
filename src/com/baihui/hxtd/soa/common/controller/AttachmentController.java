@@ -16,9 +16,11 @@ import java.util.Random;
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -49,7 +51,7 @@ import com.baihui.hxtd.soa.util.Tools;
  * @date 2014-5-26 上午11:17:53
  */
 @Controller
-@SessionAttributes(value = {Constant.VS_USER_ID})
+@SessionAttributes(value = {Constant.VS_USER, Constant.VS_USER_ID})
 public class AttachmentController {
 	
 	private static Map<String,String> moduleMap;
@@ -85,7 +87,7 @@ public class AttachmentController {
 		Attachment att = attachmentService.view(id);
 		String separator = File.separator;
 		String[] urls =att.getAddress().split("\\"+separator);
-		String url = separator+FOLDER+separator+urls[urls.length-1];
+		String url = "/"+FOLDER+"/"+urls[urls.length-1];
 		model.addAttribute("url",url);
 		return "/common/attachment/view";
 	}
@@ -127,14 +129,15 @@ public class AttachmentController {
             names = file.getOriginalFilename().split("\\.");
             fName = uploadpath+randomFilename()+"."+names[names.length-1];
             att.setAddress(fName);
-            att.setCreator(new User(userId));
-            att.setModifier(new User(userId));
+            User user = new User(userId);
+            att.setCreator(user);
+            att.setModifier(user);
             att.setCreatedTime(new Date());
             att.setModifiedTime(new Date());
             fileOS =new FileOutputStream(fName);
             fileOS.write(file.getBytes());
             fileOS.close();
-            attachmentService.save2DB(att);
+            attachmentService.add(att, user);
         }
         JsonDto json = new JsonDto(); 
         json.setMessage("上传成功");
@@ -145,8 +148,9 @@ public class AttachmentController {
 	
 	@ResponseBody
 	@RequestMapping(value="/{module}/attachment/delete.do",produces = "text/text;charset=UTF-8")
-	public String query(Long[] id){
-		attachmentService.delete(id);
+	public String query(ModelMap modelMap, Long[] id){
+		User user = (User)modelMap.get(Constant.VS_USER); 
+		attachmentService.delete(user, id);
 		JsonDto json = JsonDto.delete(id);
 		return json.toString();
 	}

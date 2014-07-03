@@ -21,6 +21,36 @@ public class TierSerialsTest {
     }
 
     @Test
+    public void testGetFullLevel() {
+        Assert.assertEquals(3, TierSerials.getFullLevel(10000l, 2));
+        Assert.assertEquals(2, TierSerials.getFullLevel(10000l, 3));
+    }
+
+    @Test
+    public void testGetLevelDiffer() {
+        Assert.assertEquals(0, TierSerials.getLevelDiffer(1l, 2));
+        Assert.assertEquals(2, TierSerials.getLevelDiffer(10000l, 2));
+        Assert.assertEquals(1, TierSerials.getLevelDiffer(10000l, 3));
+    }
+
+    @Test
+    public void testGetLevel() {
+        Assert.assertEquals(1, TierSerials.getLevel(1l, 2));
+        Assert.assertEquals(1, TierSerials.getLevel(1l, 2));
+        Assert.assertEquals(1, TierSerials.getLevel(10000l, 2));
+        Assert.assertEquals(1, TierSerials.getLevel(10000l, 3));
+        Assert.assertEquals(2, TierSerials.getLevel(10100l, 3));
+        Assert.assertEquals(3, TierSerials.getLevel(10101l, 2));
+    }
+
+    @Test
+    public void testGetMaxBrother() {
+        Assert.assertEquals((Long) 999999l, TierSerials.getMax(10000l, 2));
+        Assert.assertEquals((Long) 99l, TierSerials.getMax(10l, 2));
+        Assert.assertEquals((Long) 99l, TierSerials.getMax(0l, 2));
+    }
+
+    @Test
     public void testGetTierIncrease() throws Exception {
         Long order = TierSerials.getMaxChild(10000l, 2);
         System.out.println(order);
@@ -32,6 +62,18 @@ public class TierSerialsTest {
     public void testGetIncrease() throws Exception {
         long order = TierSerials.getIncrease(20000l, 2);
         Assert.assertEquals(10000l, order);
+    }
+
+    @Test
+    public void testGetParent() throws Exception {
+        Long id = TierSerials.getParent(10101l, 2);
+        Assert.assertEquals((Long) 10100l, id);
+
+        id = TierSerials.getParent(10000l, 2);
+        Assert.assertEquals((Long) 0l, id);
+
+        id = TierSerials.getParent(0l, 2);
+        Assert.assertEquals((Long) 0l, id);
     }
 
     @Test

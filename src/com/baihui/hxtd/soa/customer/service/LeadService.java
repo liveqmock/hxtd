@@ -1,5 +1,6 @@
 package com.baihui.hxtd.soa.customer.service;
 
+import java.util.Date;
 import java.util.List;
 import java.util.Map;
 
@@ -60,6 +61,12 @@ public class LeadService {
 
 	@Resource
 	private AttachmentDao attachementDao;
+	
+	@Resource
+	private ContactService contactService;
+	
+	@Resource
+	private CustomerService customerService;
 
 	@Resource
 	private MemoirDao memoirDao;
@@ -184,7 +191,8 @@ public class LeadService {
 		logger.debug("客户来源指定为线索转换");
 		cus.setSource(new Dictionary(4030206L));
 		cus.setId(null);
-		customerDao.save(cus);
+		cus.setModifiedTime(new Date());
+		customerService.add(cus, user);
 		
 		logger.debug("转换联系人信息");
 		Contact con = new Contact();
@@ -192,7 +200,8 @@ public class LeadService {
 		con.setSource(null);
 		con.setId(null);
 		con.setCustomer(cus);
-		contactDao.save(con);
+		con.setModifiedTime(new Date());
+		contactService.add(con,user);
 		
 		logger.debug("修改线索的附件以及联系纪要给联系人");
 		attachementDao.leadConverter(lead, con);
@@ -201,7 +210,7 @@ public class LeadService {
 		logger.info("删除线索信息 ID={}",id);
 		this.delete(user, id);
 	}
-	public int modifyOwner(Long ownerId, Long... ids) {
+	public int modifyOwner(User user, Long ownerId, Long... ids) {
 		return leadDao.modifyOwner(ownerId, ids);
 
 	}

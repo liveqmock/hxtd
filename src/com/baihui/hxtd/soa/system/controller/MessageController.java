@@ -180,7 +180,7 @@ public class MessageController {
 		message.setModifier(u);
 		message.setModifiedTime(new Date());
 		message.setCreater(u);
-		messageService.save(message);
+		messageService.modify(message, u);
 		User user=userService.getById(userId);
 		messageService.saveShip(message,user);
 		JsonDto json = JsonDto.modify(message.getId());
@@ -218,7 +218,7 @@ public class MessageController {
 		logger.info("ComponentController.query 获得当前操作的用户{}",u.getName());
 		message.setCreater(u);
 		message.setModifier(u);
-		message=messageService.save(message);
+		message=messageService.add(message, u);
 		//批量发送消息
 		String[] userstr=userId.split(",");
 		for(int i=0;i<userstr.length;i++){
@@ -236,9 +236,10 @@ public class MessageController {
 	 */
 	@ResponseBody
 	@RequestMapping(value = "/delete.do",produces = "text/text;charset=UTF-8")
-	public String delete(Long... id){
+	public String delete(ModelMap modelMap, Long... id){
 		logger.info("MessageController.delete删除系统消息id={}",StringUtils.join(id,","));
-		messageService.delete(id);
+		User user = (User)modelMap.get(Constant.VS_USER);
+		messageService.delete(user, id);
 		JsonDto json = JsonDto.delete(id);
 		return json.toString();
 	}

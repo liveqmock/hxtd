@@ -30,43 +30,55 @@ import javax.persistence.Table;
 import com.fasterxml.jackson.annotation.JsonFormat;
 
 @Entity
-@Table(name = "SM_TRACE_LOG")
+@Table(name = "SM_AUDIT_LOG")
 public class AuditLog {
 	
-	/**审计日志编号*/
+	/** 审计日志id */
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	@Column(name = "ID")
 	private Long id;
 	
-	/**操作时间*/
-	@JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss", timezone = "GMT+08:00")
-	@Column(name = "OPERATE_TIME")
-	private Date operateTime;
-	
-	/**执行操作的类型*/
-	@ManyToOne(fetch = FetchType.LAZY)
-	@JoinColumn(name = "TYPE")
-	private Dictionary type;
-	
-	/**操作者*/
-	@ManyToOne(fetch = FetchType.LAZY)
-	@JoinColumn(name = "OPERATOR")
-	private User operator;
-	
-	/**操作模块的名称*/
+	/** 操作模块的名称 */
 	@Column(name = "MODULE_NAME")
 	private String moduleName;
 	
-	/**操作记录的id*/
+	/** 操作记录的id */
 	@Column(name = "RECORD_ID")
 	private Long recordId;
 	
-	/**操作记录的名称*/
+	/** 操作记录的名称 */
 	@Column(name = "RECORD_NAME")
 	private String recordName;
 	
+	/** 执行操作的类型 */
+	@JoinColumn(name = "TYPE")
+	private Integer type;
 	
+	/** 操作者 */
+	@ManyToOne(fetch = FetchType.LAZY)
+	@JoinColumn(name = "CREATOR_ID", updatable = false)
+	private User creator;
+
+	/** 操作时间 */
+	@JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss", timezone = "GMT+08:00")
+	@Column(name = "CREATED_TIME", insertable = false, updatable=false)
+	private Date createdTime;
+	
+	
+	public AuditLog(){
+		
+	}
+	
+	public AuditLog(String moduleName, Long recordId, String recordName, Integer type, User creator) {
+		super();
+		this.moduleName = moduleName;
+		this.recordId = recordId;
+		this.recordName = recordName;
+		this.type = type;
+		this.creator = creator;
+	}
+
 	public Long getId() {
 		return id;
 	}
@@ -78,12 +90,6 @@ public class AuditLog {
 	}
 	public void setModuleName(String moduleName) {
 		this.moduleName = moduleName;
-	}
-	public Date getOperateTime() {
-		return operateTime;
-	}
-	public void setOperateTime(Date operateTime) {
-		this.operateTime = operateTime;
 	}
 	public Long getRecordId() {
 		return recordId;
@@ -97,17 +103,23 @@ public class AuditLog {
 	public void setRecordName(String recordName) {
 		this.recordName = recordName;
 	}
-	public Dictionary getType() {
+	public Integer getType() {
 		return type;
 	}
-	public void setType(Dictionary type) {
+	public void setType(Integer type) {
 		this.type = type;
 	}
-	public User getOperator() {
-		return operator;
+	public User getCreator() {
+		return creator;
 	}
-	public void setOperator(User operator) {
-		this.operator = operator;
+	public void setCreator(User creator) {
+		this.creator = creator;
+	}
+	public Date getCreatedTime() {
+		return createdTime;
+	}
+	public void setCreatedTime(Date createdTime) {
+		this.createdTime = createdTime;
 	}
 	
 }

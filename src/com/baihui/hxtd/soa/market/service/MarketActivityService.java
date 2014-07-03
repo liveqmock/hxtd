@@ -17,8 +17,11 @@ import com.baihui.hxtd.soa.base.utils.Search;
 import com.baihui.hxtd.soa.market.dao.MarketActivityDao;
 import com.baihui.hxtd.soa.market.entity.MarketActivity;
 import com.baihui.hxtd.soa.system.dao.UserDao;
+import com.baihui.hxtd.soa.system.entity.AuditLog;
 import com.baihui.hxtd.soa.system.entity.User;
 import com.baihui.hxtd.soa.system.service.DataShift;
+import com.baihui.hxtd.soa.util.EnumModule;
+import com.baihui.hxtd.soa.util.EnumOperationType;
 
 /**
  * 功能描述：供应商模块service层
@@ -69,17 +72,32 @@ public class MarketActivityService {
      * @param entity 市场活动实体
      */
     public void add(MarketActivity entity, User user) {
-    	marketActivityDao.save(entity);
+    	AuditLog auditLog = new AuditLog(EnumModule.MARKETACTIVITY.getModuleName(), 
+    			entity.getId(), entity.getName(), EnumOperationType.ADD.getOperationType(), user);
+    	add(entity, user, auditLog);
     }
+    
+    public void add(MarketActivity entity, User user, AuditLog auditLog) {
+    	marketActivityDao.save(entity);
+    	auditLog.setRecordId(entity.getId());
+    }
+    
     /**
      * modifier:xiaoli.luo
      * @param entity
      * @param sessionId
      */
     public void modify(MarketActivity entity, User user) {
-    	marketActivityDao.save(entity);
+    	AuditLog auditLog = new AuditLog(EnumModule.MARKETACTIVITY.getModuleName(), 
+    			entity.getId(), entity.getName(), EnumOperationType.ADD.getOperationType(), user);
+    	modify(entity, user, auditLog);
     }
 	
+    
+    public void modify(MarketActivity entity, User user, AuditLog auditLog) {
+    	marketActivityDao.save(entity);
+    }
+    
 	/**
      * get(根据ID查询市场活动)
      * @param id 活动主键ID

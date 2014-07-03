@@ -100,7 +100,15 @@ public class TierSerials {
     }
 
     /**
+     * 是否根节点
+     */
+    public static boolean isRoot(long serial, int length) {
+        return serial == 0l;
+    }
+
+    /**
      * 获取上级序号值
+     * 1.无父节点时，返回0
      */
     public static Long getParent(long serial, int length) {
         long increase = getIncrease(serial, length) * getTierIncrease(length);
@@ -162,6 +170,15 @@ public class TierSerials {
         int tierIncrease = getTierIncrease(length);
         long increase = getIncrease(serial, length);
         return serial + increase - increase / tierIncrease;
+    }
+
+    /**
+     * 获取最大的序号
+     */
+    public static Long getMax(long serial, int length) {
+        int tierIncrease = getTierIncrease(length);
+        long increase = getIncrease(serial, length);
+        return tierIncrease * increase - 1;
     }
 
     /**

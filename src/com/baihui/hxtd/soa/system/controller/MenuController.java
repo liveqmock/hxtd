@@ -7,6 +7,7 @@ import com.baihui.hxtd.soa.base.utils.mapper.JsonMapper;
 import com.baihui.hxtd.soa.base.utils.ztree.TreeNodeConverter;
 import com.baihui.hxtd.soa.common.controller.model.ListModel;
 import com.baihui.hxtd.soa.common.service.CommonService;
+import com.baihui.hxtd.soa.system.DictionaryConstant;
 import com.baihui.hxtd.soa.system.entity.Dictionary;
 import com.baihui.hxtd.soa.system.entity.Menu;
 import com.baihui.hxtd.soa.system.entity.User;
@@ -23,7 +24,9 @@ import org.springframework.web.bind.annotation.*;
 import javax.annotation.Resource;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
+import java.util.Map;
 
 /**
  * 功能描述： 菜单管理控制器
@@ -40,7 +43,7 @@ import java.util.List;
 @RequestMapping(value = "/system/menu")
 @SessionAttributes(value = {Constant.VS_USER_ID, Constant.VS_USER_NAME, Constant.VS_USER,
         Constant.VS_ORG_ID, Constant.VS_DATASHIFT, Constant.VS_ORG,
-        Constant.VS_MENUS, Constant.VS_FUNCTIONS, Constant.VS_COMPONENTS})
+        Constant.VS_MENUS, Constant.VS_MENUBAR_FIRST_MENUS, Constant.VS_MENUBAR_SECOUND_MENUS, Constant.VS_SETPAGE_MENUS, Constant.VS_FUNCTIONS, Constant.VS_COMPONENTS})
 @SuppressWarnings("unchecked")
 public class MenuController {
 
@@ -62,7 +65,7 @@ public class MenuController {
      * 转至查询页面
      */
     @RequestMapping(value = "/toQueryPage.do")
-    public String toQueryPage(HibernatePage<Menu> page, ModelMap modelMap) {
+    public String toQueryPage(HibernatePage<Menu> page, Long defaultSelected, ModelMap modelMap) {
         logger.info("转至查询页面");
 
         logger.info("存储查询条件表单初始化数据");
@@ -71,7 +74,10 @@ public class MenuController {
         menus.add(0, Menu.ROOT);
         String menuTree = JsonMapper.nonEmptyMapper().toJson(TreeNodeConverter.convert(menus));
         modelMap.addAttribute("menuTree", menuTree);
-        modelMap.addAttribute("parentId", menus.get(0).getId());
+        if (defaultSelected == null) {
+            defaultSelected = Menu.ROOT.getId();
+        }
+        modelMap.addAttribute("parentId", defaultSelected);
 
         logger.info("存储分页数据");
         modelMap.addAttribute("page", page);
@@ -267,9 +273,32 @@ public class MenuController {
     @RequestMapping("/move.doself")
     public JsonDto move(ModelMap modelMap, Long sourceId, Long targetId, String moveType) {
         logger.info("移动");
+
+        Long sourceOrder = commonService.getOrderById(Menu.class, sourceId);
+        Long targetOrder = commonService.getOrderById(Menu.class, targetId);
+
         commonService.move("Menu", sourceId, targetId, moveType);
         commonService.moveSynSession((List<Menu>) modelMap.get(Constant.VS_MENUS), sourceId, targetId);
-        JsonDto jsonDto = new JsonDto("成功");
+
+        Menu menu = menuService.get(sourceId);
+        //同步菜单栏菜单
+        if (menu.getShowLocation().getValue().equals(DictionaryConstant.MENU_SHOWLOCATION_MENUBAR)) {
+            //同步一级菜单
+            if (menu.getLevel().equals(1)) {
+                Collections.sort((List<Menu>) modelMap.get(Constant.VS_MENUBAR_FIRST_MENUS));
+            }
+            //同步二级菜单
+            else if (menu.getLevel().equals(2)) {
+                Map<Long, List<Menu>> secoundMenus = (Map<Long, List<Menu>>) modelMap.get(Constant.VS_MENUBAR_SECOUND_MENUS);
+                Collections.sort(secoundMenus.get(menu.getParent().getId()));
+            }
+        }
+        //同步设置页菜单
+        else if (menu.getShowLocation().getValue().equals(DictionaryConstant.MENU_SHOWLOCATION_MENUBAR)) {
+            Collections.sort((List<Menu>) modelMap.get(Constant.VS_SETPAGE_MENUS));
+        }
+
+        JsonDto jsonDto = new JsonDto((sourceOrder < targetOrder ? "下移" : "上移") + "成功！");
         jsonDto.setSuccessFlag(true);
         return jsonDto;
     }

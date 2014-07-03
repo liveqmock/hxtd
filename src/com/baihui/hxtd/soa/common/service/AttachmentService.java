@@ -20,6 +20,7 @@ import com.baihui.hxtd.soa.base.orm.hibernate.HibernatePage;
 import com.baihui.hxtd.soa.base.utils.Search;
 import com.baihui.hxtd.soa.common.dao.AttachmentDao;
 import com.baihui.hxtd.soa.common.entity.Attachment;
+import com.baihui.hxtd.soa.system.entity.User;
 /**
  * 
  * 功能描述：附件表service层
@@ -79,7 +80,7 @@ public class AttachmentService {
 	  * @return void    返回类型
 	  * @throws
 	 */
-	public void save2DB(Attachment att){
+	public void add(Attachment att,User user){
 		attachementDao.save(att);
 	}
 	
@@ -122,7 +123,7 @@ public class AttachmentService {
 	  * @return void    返回类型
 	  * @throws
 	 */
-	public void delete(Long[] id){
+	public void delete(User user, Long[] id){
 		for(int i=0;i<id.length;i++){
 			Attachment att = this.getById(id[i]);
 			File f = new File(att.getAddress());

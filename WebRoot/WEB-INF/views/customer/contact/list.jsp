@@ -52,7 +52,7 @@ $(function(){
     	<tr class="more-content">
     		<td class="f14 namewidth1" align="right">区县：</td>
     		<td class="f14 namewidth2" align="left"><select id="county" name="search_EQ_county.id" class="select2"></select></td>
-    		<td class="f14 namewidth1" align="right">创建时间：</td>
+    		<td class="f14 namewiwwdth1" align="right">创建时间：</td>
     		<td class="f14 namewidth2" align="left">
     			<div class="vm">
 	    			<input class="text_input2 input_close globle_img time" name="search_GTE_createdTime" 

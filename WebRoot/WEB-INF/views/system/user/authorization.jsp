@@ -154,7 +154,7 @@
                 <c:if test="${VS_HAS_FUNCTIONS.userAuthorization}">
                     <li><a href="javascript:void(0)" class="block c_white lh25 submit mr10"><b class="allbtn_l block fl"></b><b class="allbtn_r pr13 block fl w_auto f14">保&nbsp;&nbsp;存</b></a></li>
                 </c:if>
-                <li><a href="${ctx}/system/user/toQueryPage.do" class="block c_white lh25 mr10"><b class="allbtn_l block fl"></b><b class="allbtn_r pr13 block fl w_auto f14">取消</b></a></li>
+                <li><a href="javascript:history.back(-1);" class="block c_white lh25 mr10"><b class="allbtn_l block fl"></b><b class="allbtn_r pr13 block fl w_auto f14">取消</b></a></li>
             </ul>
         </div>
     </div>

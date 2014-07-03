@@ -76,7 +76,7 @@
 <div class="listcontainer">
     <div class="margin0 ml35 mr35">
         <div class="fl treepanel" style="width:20%">
-            <div class="mt20 block cb cb mr20">
+            <div class="mt10 block cb cb mr20">
                 <b class="ba"></b>
                 <b class="bb"></b>
                 <b class="bc"></b>
@@ -158,7 +158,7 @@
                             <td>{$T.row.defaultShow?"是":"否"}</td>
                             <td>{$T.row.showLocation.key}</td>
                             <td style="text-align: right">{$T.row.order}</td>
-                            <td>
+                            <td style="text-align: left">
                                 <c:if test="${VS_HAS_FUNCTIONS.menuView}">
                                     <a href="${ctx}/system/menu/toViewPage.do?id={$T.row.id}" class=" block_inline s_detail_btn  globle_img ml10" title="详情"></a>
                                 </c:if>
@@ -167,10 +167,10 @@
                                     <a href="${ctx}/system/menu/toModifyPage.do?id={$T.row.id}" class=" block_inline s_edit_btn globle_img ml10" title="编辑"></a>
                                     {#/if}
                                     {#if !$T.row$first}
-                                    <a href="javascript:void(0)" uri="${ctx}/system/menu/move.doself?sourceId={$T.row.id}&targetId={$T.list[$T.row$index-1].id}" class="block_inline s_toup globle_img ml10 move" title="上移"></a>
+                                    <a href="javascript:void(0)" uri="${ctx}/system/menu/move.doself?sourceId={$T.row.id}&targetId={$T.list[$T.row$index-1].id}" redirecturi="${ctx}/system/menu/toQueryPage.do?defaultSelected={$T.row.parent.id}" class="block_inline s_toup globle_img ml10 move" title="上移"></a>
                                     {#/if}
                                     {#if !$T.row$last}
-                                    <a href="javascript:void(0)" uri="${ctx}/system/menu/move.doself?sourceId={$T.row.id}&targetId={$T.list[$T.row$index+1].id}" class="block_inline s_todown globle_img ml10 move" title="下移"></a>
+                                    <a href="javascript:void(0)" uri="${ctx}/system/menu/move.doself?sourceId={$T.row.id}&targetId={$T.list[$T.row$index+1].id}" redirecturi="${ctx}/system/menu/toQueryPage.do?defaultSelected={$T.row.parent.id}" class="block_inline s_todown globle_img ml10 move" title="下移"></a>
                                     {#/if}
                                 </c:if>
                                 <c:if test="${VS_HAS_FUNCTIONS.menuDelete}">

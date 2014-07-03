@@ -12,6 +12,7 @@ import com.baihui.hxtd.soa.util.JsonDto;
 import org.springframework.beans.propertyeditors.CustomDateEditor;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.WebDataBinder;
 import org.springframework.web.bind.annotation.*;
 import org.springside.modules.web.Servlets;
@@ -129,7 +130,7 @@ public class DictionaryController {
         dict.setModifier(user);
         dict.setCreatedTime(new Date());
 
-        dicService.save(dict);
+        dicService.add(dict, user);
 
         return "redirect:" + String.format(redirectUri, dict.getId());
     }
@@ -179,9 +180,11 @@ public class DictionaryController {
         } else {
             dict.setType(null);
         }
-        dict.setModifier(new User(userId));
+        
+        User user = new User(userId);
+        dict.setModifier(user);
 
-        dicService.save(dict);
+        dicService.modify(dict, user);
 
         return "redirect:" + String.format(redirectUri, dict.getId());
     }
@@ -210,13 +213,14 @@ public class DictionaryController {
      */
     @ResponseBody
     @RequestMapping(value = "/delete.do")
-    public String delete(Long[] id) {
+    public String delete(ModelMap modelMap, Long[] id) {
 
         if (commonService.isInitialized(Dictionary.class, id)) {
             return new JsonDto("系统初始化数据不允许删除！").toString();
         }
 
-        dicService.delete(id);
+        User user = (User)modelMap.get(Constant.VS_USER);
+        dicService.delete(user, id);
 
         JsonDto json = new JsonDto("删除成功");
         json.setSuccessFlag(true);

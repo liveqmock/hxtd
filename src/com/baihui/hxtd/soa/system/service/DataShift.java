@@ -43,6 +43,17 @@ public class DataShift {
         this.orderRange = orderRange;
     }
 
+    /**
+     * 重命名用户字段名称
+     * 1.根据当前对象创建出修改用户字段名称后的对象
+     */
+    public DataShift renameUserFieldName(String userFieldName) {
+        return new DataShift(this.getIsDataManager(), userFieldName, this.getUserId(), this.getOrderRange());
+    }
+
+    /**
+     * 转换为部分HQL语句，包括级联抓取和条件筛选部分
+     */
     public String toHql(String aliasName) {
         StringBuffer hql = new StringBuffer();
         hql.append(String.format(" inner join fetch %s.%s %s", aliasName, getUserFieldName(), getUserAlias()));

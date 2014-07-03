@@ -1,5 +1,6 @@
 package com.baihui.hxtd.soa.system.service;
 
+import java.util.List;
 import java.util.Map;
 
 import javax.annotation.Resource;
@@ -53,26 +54,6 @@ public class AuditLogService {
     }
 
     /**
-     * get(根据ID查询组件信息)
-     * @param page
-     * @param @return 参数类型
-     * @return HibernatePage<AuditLog>返回类型
-     */
-    public Contact get(Long id) {
-    	String hql = "select contact from Contact contact " +
-    			"left join fetch contact.supplier " +
-    			"left join fetch contact.customer " +
-    			"left join fetch contact.owner " +
-    			"left join fetch contact.source " +
-    			"left join fetch contact.province " +
-    			"left join fetch contact.city " +
-    			"left join fetch contact.county " +
-    			"where contact.id = ?";
-    	
-        return auditLogDao.findUnique(hql, id);
-    }
-
-    /**
      * 根据属性isDeleted删除
      * @param id
      */
@@ -83,5 +64,9 @@ public class AuditLogService {
 	
 	public void save(AuditLog auditLog){
 		auditLogDao.save(auditLog);
+	}
+	
+	public void save(List<AuditLog> entities){
+		auditLogDao.save(entities);
 	}
 }

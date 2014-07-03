@@ -12,6 +12,7 @@ import org.springframework.transaction.annotation.Transactional;
 import com.baihui.hxtd.soa.base.orm.hibernate.HibernatePage;
 import com.baihui.hxtd.soa.common.dao.MemoirDao;
 import com.baihui.hxtd.soa.common.entity.Memoir;
+import com.baihui.hxtd.soa.system.entity.User;
 /**
  * 
  * 功能描述：联系纪要service层
@@ -53,7 +54,11 @@ public class MemoirService {
         memoirDao.findPage(page, criteria);
 	}
 	
-	public void save(Memoir att){
+	public void add(Memoir att, User user){
+		memoirDao.save(att);
+	}
+	
+	public void modify(Memoir att, User user){
 		memoirDao.save(att);
 	}
 	/**
@@ -70,7 +75,7 @@ public class MemoirService {
      * @Description: 根据联系纪要主键ID删除记录
      * @param id 联系纪要主键ID
     */
-   public void delete(long... id) {
+   public void delete(User user, Long... id) {
 	   memoirDao.delete(id);
    }
 	

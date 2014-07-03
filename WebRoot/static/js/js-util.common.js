@@ -498,7 +498,7 @@ Grid.prototype = {
                 var url = $this.attr("uri");
                 RcmsAjax.ajax(url, function () {
                     _this.options.onDelete.call(this, [$.URL.jsonParamsByUrl(url).id]);
-                    _this.loadGrid();
+                    setTimeout(function () {_this.loadGrid();}, 500);
                 });
             });
         });
@@ -506,12 +506,12 @@ Grid.prototype = {
     },
     /**绑定移动事件*/
     bindMove: function () {
-        var _this = this;
         this.btnMove.live("click", function () {
             var $this = $(this);
             var url = $this.attr("uri");
+            var redirectUri = $this.attr("redirecturi");
             RcmsAjax.ajax(url, function () {
-                _this.loadGrid();
+                setTimeout(function () {window.open(redirectUri, "_self")}, 500);
             });
         });
         return this;

@@ -97,13 +97,23 @@ public class MessageService {
 		userMessageDao.saveUserMessage(userMessage);
 		return userMessage;
 	}
+	
 
 	/**
 	 * 保存系统消息信息
 	 * @param Message
 	 * @param userId
 	 */
-	public Message save(Message message) {
+	public Message add(Message message, User user) {
+		logger.info("保存系统消息信息{}", message);
+		message.setCreatedTime(new Date());
+		message.setModifiedTime(new Date());
+		message.setIsDeleted(false);
+		return messageDao.save(message);
+
+	}
+	
+	public Message modify(Message message, User user) {
 		logger.info("保存系统消息信息{}", message);
 		message.setCreatedTime(new Date());
 		message.setModifiedTime(new Date());
@@ -117,7 +127,7 @@ public class MessageService {
 	 * 删除系统消息
 	 * @param id
 	 */
-	public void delete(Long[] id) {
+	public void delete(User user, Long[] id) {
 		userMessageDao.logicalDelete(id);
 
 	}

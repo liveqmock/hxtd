@@ -176,9 +176,9 @@
 							<b class="h_tabbtn_l w25 block fl"></b>
 							<b class="h_tabbtn_r pr25 w_auto f14 block fr lh32 cp id_nav pr">组件</b>
 						</li>
-						<li class="tab-title" fortabpanel="#tabs-identityAuthemtication" id="identityAuthemtication" name="权限">
+						<li class="tab-title" fortabpanel="#tabs-organization" id="organization" name="组织机构">
 							<b class="h_tabbtn_l w25 block fl"></b>
-							<b class="h_tabbtn_r pr25 w_auto f14 block fr lh32 cp id_nav pr">权限</b>
+							<b class="h_tabbtn_r pr25 w_auto f14 block fr lh32 cp id_nav pr">组织机构</b>
 						</li>
 						<li class="tab-title" fortabpanel="#tabs-message" id="message" name="系统消息">
 							<b class="h_tabbtn_l w25 block fl"></b>

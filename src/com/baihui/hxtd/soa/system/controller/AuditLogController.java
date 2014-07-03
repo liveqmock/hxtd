@@ -7,14 +7,12 @@ import java.util.Map;
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
 
-import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.ResponseBody;
 import org.springside.modules.web.Servlets;
 
 import com.baihui.hxtd.soa.base.orm.hibernate.HibernatePage;
@@ -49,15 +47,18 @@ public class AuditLogController {
 	private DictionaryService dictionaryService;
 	
 	@RequestMapping(value = "/toQueryPage.do")
+	
     public String toQueryPage(@RequestParam(value = "pageNo", defaultValue = "1") int pageNumber,
             @RequestParam(value = "pageSize", defaultValue = "10") int pageSize,
             @RequestParam(value = "pageOrderBy", defaultValue = "operateTime") String orderBy,
+            @RequestParam(value = "pageOrder", defaultValue = "desc") String order,
             Model model) {
         logger.info("FunctionController.query跳转列表页");
         model.addAttribute("types", dictionaryService.findChildren("100401"));//字典类型
+        
         HibernatePage<AuditLog> page = new HibernatePage<AuditLog>(pageNumber, pageSize);
         page.setHibernateOrderBy(orderBy);
-        //page.setHibernateOrder(order);
+        page.setHibernateOrder(order);
         model.addAttribute("page", page);
         return "/system/auditlog/list";
     }

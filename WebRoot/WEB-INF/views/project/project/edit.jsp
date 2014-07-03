@@ -59,11 +59,11 @@ function searchData(action){//搜索弹出框
 	var url = "${ctx}/project/supplier/toQueryPage.comp",
 		title = "供应商";
 	jsUtil.dialogIframe(url, title, 800, 465, function(){//确定回调
-		var ckObj = $(":checked", window.frames["dialogIframe"].document);
-		if(ckObj.length > 0){
-			$("#txt_" + action).val(ckObj.parent().next().text());
-			$("#hide_" + action +"_id").val(ckObj.val());
-		}
+		var $userObj = $(".bor_e28d1f", window.frames["dialogIframe"].document);
+			if($userObj.length > 0){
+				$("#txt_" + action).val($userObj.find("td:eq(1)").text());
+				$("#hide_" + action +"_id").val($userObj.attr("id"));
+			}
 	});
 }
 function clearInputVal(obj){//清除

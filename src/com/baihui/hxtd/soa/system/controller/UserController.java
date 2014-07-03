@@ -517,10 +517,16 @@ public class UserController extends CommonController<User> {
 
 
     /**
-     * toOwnerLst(跳转至所有者组件列表界面)
+     * 弹出组织结构树
+     * @author huizijing
+     * @param model
+     * @param request
+     * @return json
+     * @since 2014-6-17
+     * @throws NoSuchFieldException
      */
     @RequestMapping(value = "/toQueryUser.comp")
-    public String toOwnerLst(ModelMap model, HttpServletRequest request) throws NoSuchFieldException {
+    public String toOwnerOrgTree(ModelMap model, HttpServletRequest request) throws NoSuchFieldException {
         User u = (User) request.getSession().getAttribute(Constant.VS_USER);
         List<Organization> orgList = organizationService.getOrgAndUsers();
         StringBuffer sb = new StringBuffer("[");

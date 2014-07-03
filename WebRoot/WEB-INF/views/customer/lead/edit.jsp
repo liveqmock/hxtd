@@ -124,7 +124,7 @@ function clearInputVal(obj){ //清除
 					<span class="w_red">*&nbsp;</span>所有者：
 				</td>
 				<td align="left">
-					<input type="text" id="txt_owner" value="${lead.owner.name }"
+					<input type="text" id="txt_owner" value="${lead.owner.realName }"
 						 class="text_input3 cp required" onclick="searchData('owner');" readonly />
 					<input type="hidden" id="hide_owner_id" name="owner.id"
 						value="${lead.owner.id }" />

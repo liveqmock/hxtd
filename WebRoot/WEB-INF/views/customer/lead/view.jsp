@@ -66,7 +66,7 @@
 					所有者：
 				</td>
 				<td align="left">
-					${lead.owner.name }
+					${lead.owner.realName }
 				</td>
 			</tr>
 			<tr>

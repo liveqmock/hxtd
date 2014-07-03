@@ -40,7 +40,7 @@
 	<table class="cb id_table3 w95b bg_c_white margin0 mt10">
 		<tr>
 			<td width="15%" align="right">联系人所有者：</td>
-			<td align="left">${contact.owner.name}</td>
+			<td align="left">${contact.owner.realName}</td>
 			<td width="15%" align="right">线索来源：</td>
 			<td align="left">${contact.source.key}</td>
 		</tr>

@@ -33,64 +33,30 @@
 	</script>
 	<script type="text/javascript">
 		$(document).ready(function(){
-			
+			var flag;
 			//重置按钮事件
 			$("#reset").click(function(){
-			   $("#repwd").val("");
+			   $("#confirm_password").val("");
 			   $("#oldpwd").val("");
 			   $("#newpwd").val("");
 		   });
 			
-			//验证与原密码是否相同
+			//失去焦点时验证密码一致性
 			$("#oldpwd").blur(function(){
 				var oldpwd = $("#oldpwd").val();
-				if(oldpwd!=""){
-					RcmsAjax.ajaxNoMsg("${ctx}/system/user/checkPwd?oldpwd="+oldpwd,function(data){
-						if(data.message!=""){
-							$("#pwd").html(data.message);
-							$("#oldpwd").focus();
-							$('#oldpwd').val(""); 
-						}else{
-							$('#pwd').html(""); 
-						}
-					});
-				}else{
-					$('#pwd').html(""); 
-				}
-			});
-			
-			//验证密码格式
-			$("#newpwd").blur(function(){
-				var regPwd = /^[A-Za-z0-9_\.]+$/;
-				var newpwd = $("#newpwd").val();
-				if(newpwd!=""){
-					if(!regPwd.test(newpwd)){
-						$("#newp").html("密码不符合规范");
-						$("#newpwd").focus();
-						$("#newpwd").val("");
+				RcmsAjax.ajaxNoMsg("${ctx}/system/user/checkPwd?oldpwd="+oldpwd,function(data){
+					if(data.message==""){
+						flag= true;
 					}else{
-						$('#newp').html("");
+						flag= false;
 					}
-				}else{
-					$('#newp').html("");
-				}
+				});
 			});
-			
-			//验证两次密码是否一致
-			$("#repwd").blur(function(){
-				var newpwd = $("#newpwd").val();
-				var repwd = $("#repwd").val();
-				if(repwd!=""){
-					if(newpwd!=repwd){
-						$("#diff").html("密码不一致");
-						$("#repwd").focus();
-						$('#repwd').val("");  
-					}
-				}else{
-					$('#diff').html(""); 
-				}
-			 });
-		    });
+			//验证与原密码是否相同
+			jQuery.validator.addMethod("same",function(){
+		        return flag;
+			},"旧密码输入不正确");
+		});
 	</script>
 </head>
   <body>
@@ -112,21 +78,18 @@
 	        <tr class=" lh40">
 		        <td width="40%" align="right">请输入旧密码：</td>
 		        <td>
-		        <input type="password" id="oldpwd" name="oldPwd" class="text_input1 required"/>
-		        <div class="pr"><span class="pa" id="pwd" class="w_red" style="top:-30px; right:-90px; color:red;"></span></div>
+		        <input type="password" id="oldpwd" name="oldPwd" class="text_input1 same required"/>
 		        </td>
 	        </tr>
 	        <tr class=" lh40">
 		        <td align="right">请输入新密码：</td>
-		        <td><input type="password" id="newpwd" name="newPwd" class="text_input1 required"/>
-		        <div class="pr"><span class="pa" id="newp" style="top:-30px; right:-90px; color:red;"></span></div>
+		        <td><input maxlength=20 type="password" id="newpwd" name="newPwd" class="text_input1 password"/>
 		        </td>
 	        </tr>
 	        <tr class=" lh40">
 		        <td align="right">请再输入一次新密码：</td>
 		        <td>
-		        <input type="password" id="repwd" name="password" class="text_input1 required"/>
-		        <div class="pr"><span class="pa" id="diff" style="top:-30px; right:-70px; color:red;"></span></div>
+		        <input type="password" id="confirm_password" name="password" class="text_input1 {required:true,equalTo:'#newpwd'}"/>
 		        </td>
 	        </tr>
 	       </table>
@@ -136,9 +99,13 @@
 		        <b class="allbtn_l block fl"></b>
 		        <b class="allbtn_r pr13 block fl w_auto f14">重&nbsp;&nbsp;置</b>
 		        </a>
-		        <a class="block c_white lh25 mr10 fr" href="javascript:;"id="save">
+		        <a class="block c_white lh25 mr10 fl" href="javascript:;"id="save">
 		        <b class="allbtn_l block fl"></b>
 		        <b class="allbtn_r pr13 block fl w_auto f14">提&nbsp;&nbsp;交</b>
+		        </a>
+		        <a class="block c_white lh25 mr10 fl" href="${ctx}/system/toViewPage.do">
+		        <b class="allbtn_l block fl"></b>
+		        <b class="allbtn_r pr13 block fl w_auto f14">取&nbsp;&nbsp;消</b>
 		        </a>
 	       </div>
        </form>

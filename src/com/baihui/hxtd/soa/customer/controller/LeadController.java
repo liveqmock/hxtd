@@ -132,8 +132,9 @@ public class LeadController extends CommonController<Lead>{
 	@ResponseBody
 	@RequestMapping(value = "/modifyOwner.do",
 					produces = "text/text;charset=UTF-8")
-	public String modifyOwner(Long[] id, Long ownerId) {
-		leadService.modifyOwner(ownerId, id);
+	public String modifyOwner(Long[] id, Long ownerId,ModelMap modelMap) {
+		User user = (User)modelMap.get(Constant.VS_USER);
+		leadService.modifyOwner(user, ownerId, id);
 		JsonDto json = new JsonDto("转换成功");
 		json.setSuccessFlag(true);
 		return json.toString();

@@ -20,6 +20,7 @@ import com.baihui.hxtd.soa.base.utils.Search;
 import com.baihui.hxtd.soa.customer.dao.CustomerDao;
 import com.baihui.hxtd.soa.customer.entity.Customer;
 import com.baihui.hxtd.soa.system.dao.UserDao;
+import com.baihui.hxtd.soa.system.entity.AuditLog;
 import com.baihui.hxtd.soa.system.entity.Notice;
 import com.baihui.hxtd.soa.system.entity.User;
 import com.baihui.hxtd.soa.system.service.DataShift;
@@ -84,19 +85,20 @@ public class CustomerService {
 	
     /**
      * 保存客户信息
-     * @param lead
+     * @param customer
      */
-	public void add(Customer customer,User user) {
-		logger.info("保存客户信息{}", customer);
-		customer.setIsDeleted(false);
-		customerDao.save(customer);
+	public void add(Customer entity,User user,AuditLog auditLog) {
+		logger.info("保存客户信息{}", entity);
+		entity.setIsDeleted(false);
+		customerDao.save(entity);
+		auditLog.setRecordId(entity.getId());
 	}
 	
 	/**
      * 保存客户信息
-     * @param lead
+     * @param customer
      */
-	public void modify(Customer customer,User user) {
+	public void modify(Customer customer,User user, AuditLog auditLog) {
 		logger.info("保存客户信息{}", customer);
 		customer.setIsDeleted(false);
 		customerDao.save(customer);
@@ -108,7 +110,7 @@ public class CustomerService {
      * delete(删除客户信息)
      * @param id
      */
-    public void delete(User user, Long... id) {
+    public void delete(User user, Long[] id,AuditLog [] auditLog) {
     	customerDao.logicalDelete(id);
     }
     
@@ -157,11 +159,26 @@ public class CustomerService {
         detachedCriteria.setFetchMode("creator", FetchMode.JOIN);
         detachedCriteria.setFetchMode("type", FetchMode.JOIN);
         detachedCriteria.setFetchMode("modifier", FetchMode.JOIN);
+        detachedCriteria.setFetchMode("source", FetchMode.JOIN);
+        detachedCriteria.setFetchMode("riskGrade", FetchMode.JOIN);
+        detachedCriteria.setFetchMode("industry", FetchMode.JOIN);
         detachedCriteria.add(Restrictions.eq("isDeleted", false));
         Map<String, SearchFilter> filters = Search.parse(searchParams);
         Search.buildCriteria(filters, detachedCriteria, Customer.class);
         return customerDao.find(detachedCriteria, exportCounts);
 	}
+
+
+	/**
+      * getNameById
+      * @Title: getNameById
+      * @Description: 通过id获取名称
+      * @param id
+      * @return String
+     */
+    public String getNameById(Long id){
+    	return customerDao.get(id).getName();
+    }
 	
 }
 

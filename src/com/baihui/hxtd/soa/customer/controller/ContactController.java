@@ -29,10 +29,13 @@ import com.baihui.hxtd.soa.base.utils.Search;
 import com.baihui.hxtd.soa.base.utils.mapper.HibernateAwareObjectMapper;
 import com.baihui.hxtd.soa.customer.entity.Contact;
 import com.baihui.hxtd.soa.customer.service.ContactService;
+import com.baihui.hxtd.soa.system.entity.AuditLog;
 import com.baihui.hxtd.soa.system.entity.Dictionary;
 import com.baihui.hxtd.soa.system.entity.User;
 import com.baihui.hxtd.soa.system.service.DataShift;
 import com.baihui.hxtd.soa.system.service.DictionaryService;
+import com.baihui.hxtd.soa.util.EnumModule;
+import com.baihui.hxtd.soa.util.EnumOperationType;
 import com.baihui.hxtd.soa.util.JsonDto;
 
 /**
@@ -155,7 +158,10 @@ public class ContactController {
 			contact.setCounty(null);
 		}
 		
-		contactService.add(contact, user);
+		/************ 新增 *****************************/
+		AuditLog auditLog = new AuditLog(EnumModule.CONTACT.getModuleName(), 
+				contact.getId(), contact.getName(), EnumOperationType.ADD.getOperationType(), user);
+		contactService.add(contact, user, auditLog);
 		
 		return JsonDto.add(contact.getId()).toString();
 	}
@@ -210,7 +216,9 @@ public class ContactController {
 			contact.setCounty(null);
 		}
 		
-		contactService.modify(contact, user);
+		AuditLog auditLog = new AuditLog(EnumModule.CONTACT.getModuleName(), 
+				contact.getId(), contact.getName(), EnumOperationType.MODIFY.getOperationType(), user);
+		contactService.modify(contact, user, auditLog);
 		
 		return JsonDto.modify(contact.getId()).toString();
 	}
@@ -237,9 +245,15 @@ public class ContactController {
 	 */
 	@ResponseBody
 	@RequestMapping(value = "/delete.do")
-	public String delete(ModelMap modelMap, Long... id) {
+	public String delete(ModelMap modelMap, Long[] id) {
 		User user = (User)modelMap.get(Constant.VS_USER);
-		contactService.delete(user, id);
+		
+		AuditLog [] auditLogArr = new AuditLog [id.length];
+		for(int i=0; i<id.length; i++){
+			auditLogArr[i] = new AuditLog(EnumModule.CONTACT.getModuleName(), 
+					id[i], contactService.getNameById(id[i]), EnumOperationType.DELETE.getOperationType(), user);
+		}
+		contactService.delete(user, id, auditLogArr);
 		
 		JsonDto json = new JsonDto("删除成功");
 		json.setSuccessFlag(true);

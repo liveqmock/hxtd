@@ -221,7 +221,7 @@ public class RoleController {
     public String delete(Long[] id) {
         logger.info("删除");
 
-        if (commonService.isInitialized(User.class, id)) {
+        if (commonService.isInitialized(Role.class, id)) {
             return new JsonDto("系统初始化数据不允许删除！").toString();
         }
 

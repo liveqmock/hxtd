@@ -28,10 +28,13 @@ import com.baihui.hxtd.soa.base.utils.Search;
 import com.baihui.hxtd.soa.common.controller.CommonController;
 import com.baihui.hxtd.soa.project.entity.Supplier;
 import com.baihui.hxtd.soa.project.service.SupplierService;
+import com.baihui.hxtd.soa.system.entity.AuditLog;
 import com.baihui.hxtd.soa.system.entity.Dictionary;
 import com.baihui.hxtd.soa.system.entity.User;
 import com.baihui.hxtd.soa.system.service.DataShift;
 import com.baihui.hxtd.soa.system.service.DictionaryService;
+import com.baihui.hxtd.soa.util.EnumModule;
+import com.baihui.hxtd.soa.util.EnumOperationType;
 import com.baihui.hxtd.soa.util.JsonDto;
 
 @Controller
@@ -184,7 +187,9 @@ public class SupplierController extends CommonController<Supplier> {
 		User u = (User) request.getSession().getAttribute(Constant.VS_USER);
 		logger.info("获得当前操作用户{}",u.getName());
 		supplier.setModifier(u);
-		supplierService.modify(supplier, u);
+		AuditLog auditLog = new AuditLog(EnumModule.SUPPILER.getModuleName(), 
+				supplier.getId(), supplier.getName(), EnumOperationType.MODIFY.getOperationType(), u);
+		supplierService.modify(supplier,auditLog);
 		JsonDto json = new JsonDto(supplier.getId(),"保存成功!");
 		return json.toString();
 	}
@@ -208,8 +213,10 @@ public class SupplierController extends CommonController<Supplier> {
 		logger.info("SupplierController.query 获得当前操作的用户{}",u.getName());
 		supplier.setCreator(u);
 		supplier.setModifier(u);
-		supplierService.add(supplier, u);
-		JsonDto json = new JsonDto(supplier.getId(),"保存成功!");
+		AuditLog auditLog = new AuditLog(EnumModule.SUPPILER.getModuleName(), 
+				supplier.getId(), supplier.getName(), EnumOperationType.ADD.getOperationType(), u);
+		supplierService.add(supplier, auditLog);
+		JsonDto json = JsonDto.add(supplier.getId());
 		return json.toString();
 	}
 	/**
@@ -226,7 +233,12 @@ public class SupplierController extends CommonController<Supplier> {
 	public String delete(ModelMap modelMap, Long[] id){
 		logger.info("SupplierController.delete删除组件");
 		User user = (User) modelMap.get(Constant.VS_USER);
-		boolean flag = supplierService.delete(user, id);
+		AuditLog [] auditLogArr = new AuditLog [id.length];
+		for(int i=0; i<id.length; i++){
+			auditLogArr[i] = new AuditLog(EnumModule.LEAD.getModuleName(), 
+					id[i], supplierService.get(id[i]).getName(), EnumOperationType.DELETE.getOperationType(), user);
+		}
+		boolean flag = supplierService.delete(auditLogArr,id);
 		if(flag){
 			return new JsonDto().toString();
 		}else{

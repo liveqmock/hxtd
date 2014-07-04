@@ -173,8 +173,6 @@ public class ImportExport {
      */
     public static Workbook exportExcel(HttpServletResponse response, ServletContext servletContext, String objectName, List entities) {
         logger.info("导出excel");
-        response.setContentType("application/octet-stream; charset=utf-8");
-        response.setHeader("Content-Disposition", "attachment; filename=" + objectName + ".xls");
         Map<String, BidiMap> nameDescs = (Map<String, BidiMap>) servletContext.getAttribute(Constant.VC_NAMEDESCS);
         BidiMap userNameDescs = nameDescs.get(objectName);
         Map<String, String> export = (Map<String, String>) servletContext.getAttribute(Constant.VC_IMPORTEXPORTS);

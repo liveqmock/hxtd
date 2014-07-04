@@ -20,6 +20,7 @@ import org.springside.modules.persistence.SearchFilter;
 import com.baihui.hxtd.soa.base.orm.hibernate.HibernatePage;
 import com.baihui.hxtd.soa.base.utils.Search;
 import com.baihui.hxtd.soa.system.dao.NoticeDao;
+import com.baihui.hxtd.soa.system.entity.AuditLog;
 import com.baihui.hxtd.soa.system.entity.Notice;
 import com.baihui.hxtd.soa.system.entity.User;
 
@@ -86,15 +87,15 @@ public class NoticeService {
 	 * 保存公告信息
 	 * @param notice
 	 */
-	public void add(Notice notice, User user) {
+	public void add(Notice notice, User user,AuditLog auditLog) {
 		logger.info("保存公告信息{}", notice);
 		notice.setIsDeleted(false);
 		noticeDao.save(notice);
-		
+		auditLog.setRecordId(notice.getId());
 	}
 	
-	public void modify(Notice notice, User user) {
-		logger.info("保存公告信息{}", notice);
+	public void modify(Notice notice, User user,AuditLog auditLog) {
+		logger.info("修改公告信息{}", notice);
 		notice.setIsDeleted(false);
 		noticeDao.save(notice);
 		
@@ -105,7 +106,7 @@ public class NoticeService {
 	 * 删除公告
 	 * @param id
 	 */
-	public void delete(User user, Long[] id) {
+	public void delete(User user, Long[] id, AuditLog [] auditLog) {
 		noticeDao.logicalDelete(id);
 		
 	}
@@ -172,4 +173,15 @@ public class NoticeService {
         detachedCriteria.addOrder(Order.asc("sentTime"));
         return noticeDao.find(detachedCriteria, exportCounts);
 	}
+
+	/**
+      * getTitleById
+      * @Title: getTitleById
+      * @Description: 通过id获取名称
+      * @param id
+      * @return String
+     */
+    public String getTitleById(Long id){
+    	return noticeDao.get(id).getTitle();
+    }
 }

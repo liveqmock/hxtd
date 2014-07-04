@@ -34,10 +34,13 @@ import com.baihui.hxtd.soa.base.utils.Search;
 import com.baihui.hxtd.soa.common.controller.CommonController;
 import com.baihui.hxtd.soa.customer.entity.Customer;
 import com.baihui.hxtd.soa.customer.service.CustomerService;
+import com.baihui.hxtd.soa.system.entity.AuditLog;
 import com.baihui.hxtd.soa.system.entity.Dictionary;
 import com.baihui.hxtd.soa.system.entity.User;
 import com.baihui.hxtd.soa.system.service.DataShift;
 import com.baihui.hxtd.soa.system.service.DictionaryService;
+import com.baihui.hxtd.soa.util.EnumModule;
+import com.baihui.hxtd.soa.util.EnumOperationType;
 import com.baihui.hxtd.soa.util.JsonDto;
 
 /**
@@ -162,13 +165,20 @@ public class CustomerController extends CommonController<Customer>{
 		customer.setModifier(u);
 		customer.setIsDeleted(false);
 		//customer.setCreator(u);
-		if(customer.getProvince().getId()==null||customer.getCity()==null||
-				customer.getCounty()==null){
+		if(customer.getProvince().getId()==null){
 			customer.setProvince(null);
+		}
+		if(customer.getCity().getId()==null){
 			customer.setCity(null);
+		}
+		if(customer.getCounty().getId()==null){
 			customer.setCounty(null);
 		}
-		customerService.modify(customer,u);
+		
+		/************ 修改 *****************************/
+		AuditLog auditLog = new AuditLog(EnumModule.CUSTOMER.getModuleName(), 
+				customer.getId(), customer.getName(), EnumOperationType.MODIFY.getOperationType(), u);
+		customerService.modify(customer, u, auditLog);
 		JsonDto json = JsonDto.modify(customer.getId());
 		return json.toString();
 	}
@@ -220,13 +230,20 @@ public class CustomerController extends CommonController<Customer>{
 		customer.setModifier(u);
 		customer.setCreatedTime(new Date(new java.util.Date().getTime()));
 		customer.setModifiedTime(new Date(new java.util.Date().getTime()));
-		if(customer.getProvince().getId()==null||customer.getCity()==null||
-				customer.getCounty()==null){
+		if(customer.getProvince().getId()==null){
 			customer.setProvince(null);
+		}
+		if(customer.getCity().getId()==null){
 			customer.setCity(null);
+		}
+		if(customer.getCounty().getId()==null){
 			customer.setCounty(null);
 		}
-		customerService.add(customer,u);
+		
+		/************ 新增 *****************************/
+		AuditLog auditLog = new AuditLog(EnumModule.CUSTOMER.getModuleName(), 
+				customer.getId(), customer.getName(), EnumOperationType.ADD.getOperationType(), u);
+		customerService.add(customer, u, auditLog);
 		JsonDto json = JsonDto.add(customer.getId());
 		return json.toString();
 	}
@@ -238,10 +255,15 @@ public class CustomerController extends CommonController<Customer>{
 	 */
 	@ResponseBody
 	@RequestMapping(value = "/delete.do",produces = "text/text;charset=UTF-8")
-	public String delete(ModelMap modelMap, Long... id){
+	public String delete(ModelMap modelMap, Long[] id){
 		logger.info("CustomerController.delete删除客户id={}",StringUtils.join(id,","));
-		User sessionUser = (User)modelMap.get(Constant.VS_USER);
-		customerService.delete(sessionUser, id);
+		User user = (User)modelMap.get(Constant.VS_USER);
+		AuditLog [] auditLogArr = new AuditLog [id.length];
+		for(int i=0; i<id.length; i++){
+			auditLogArr[i] = new AuditLog(EnumModule.CUSTOMER.getModuleName(), 
+					id[i], customerService.getNameById(id[i]), EnumOperationType.DELETE.getOperationType(), user);
+		}
+		customerService.delete(user, id, auditLogArr);
 		JsonDto json = JsonDto.delete(id);
 		return json.toString();
 	}
@@ -294,36 +316,6 @@ public class CustomerController extends CommonController<Customer>{
 		
 	}
 	
-//	/**
-//	 * 如果数据字典类型的属性不是必填，就把其置为null
-//	 * @author huizijing
-//	 */
-//	private void setDictinaryNull(Customer customer){
-//		if(customer.getCardType().getId()==-1){
-//			customer.setCardType(null);
-//		}
-//		if(customer.getOpenBank().getId()==-1){
-//			customer.setOpenBank(null);
-//		}
-//		if(customer.getOwnerShip().getId()==-1){
-//			customer.setOwnerShip(null);
-//		}
-//		if(customer.getRiskGrade().getId()==-1){
-//			customer.setRiskGrade(null);
-//		}
-//		if(customer.getType().getId()==-1){
-//			customer.setType(null);
-//		}
-//		if(customer.getProvince().getId()==null){
-//			customer.setProvince(null);
-//		}
-//		if(customer.getCity().getId()==null){
-//			customer.setCity(null);
-//		}
-//		if(customer.getCounty().getId()==null){
-//			customer.setCounty(null);
-//		}
-//	}
 	  /**
      * 导出分页数据
      * 1.在分页列表上根据当前条件进行导出

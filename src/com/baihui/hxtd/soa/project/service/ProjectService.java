@@ -20,7 +20,7 @@ import com.baihui.hxtd.soa.base.utils.Search;
 import com.baihui.hxtd.soa.project.dao.ProductDao;
 import com.baihui.hxtd.soa.project.dao.ProjectDao;
 import com.baihui.hxtd.soa.project.entity.Project;
-import com.baihui.hxtd.soa.system.entity.User;
+import com.baihui.hxtd.soa.system.entity.AuditLog;
 import com.baihui.hxtd.soa.system.service.DataShift;
 /**
  * 
@@ -93,11 +93,11 @@ public class ProjectService {
       * @return void    返回类型
       * @throws
      */
-	public void add(Project project,User user){
+	public void add(Project project,AuditLog auditLog){
     	projectDao.save(project);
     }
 	
-	public void modify(Project project,User user){
+	public void modify(Project project,AuditLog auditLog){
     	projectDao.save(project);
     }
 	
@@ -108,7 +108,7 @@ public class ProjectService {
 	  * @return void    返回类型
 	  * @throws
 	 */
-	public boolean delete(User user,Long[] id){
+	public boolean delete(AuditLog[] auditLogArr,Long[] id){
 		if(productDao.getCount(id)==0){
 			projectDao.logicalDelete(id);
 			return true;

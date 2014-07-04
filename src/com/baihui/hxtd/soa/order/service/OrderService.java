@@ -20,7 +20,7 @@ import com.baihui.hxtd.soa.order.dao.OrderDao;
 import com.baihui.hxtd.soa.order.entity.Order;
 import com.baihui.hxtd.soa.order.util.Contacts;
 import com.baihui.hxtd.soa.system.dao.UserDao;
-import com.baihui.hxtd.soa.system.entity.User;
+import com.baihui.hxtd.soa.system.entity.AuditLog;
 import com.baihui.hxtd.soa.system.service.DataShift;
 import com.baihui.hxtd.soa.util.Tools;
 
@@ -101,17 +101,13 @@ public class OrderService {
 	
 	
 	
-	public void add(Order order, User user){
-		if(order.getId()==null||"".equals(order.getId())){
-			order.setCode(getOrderCode());
-		}
+	public void add(Order order, AuditLog auditLog){
+		order.setCode(getOrderCode());
 		orderDao.save(order);
+		auditLog.setRecordId(order.getId());
 	}
 	
-	public void modify(Order order, User user){
-		if(order.getId()==null||"".equals(order.getId())){
-			order.setCode(getOrderCode());
-		}
+	public void modify(Order order, AuditLog auditLog){
 		orderDao.save(order);
 	}
 	
@@ -133,7 +129,7 @@ public class OrderService {
 	}
 	
 	
-	public void delete(User user, Long[] ids){
+	public void delete( Long[] ids,AuditLog[] auditLogArr){
 		orderDao.delete(ids);
 	}
 }

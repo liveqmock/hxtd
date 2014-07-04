@@ -47,7 +47,7 @@ public class AuditLogService {
     		HibernatePage<AuditLog> page) throws NoSuchFieldException {
     	DetachedCriteria criteria = DetachedCriteria.forClass(AuditLog.class);
     	criteria.setFetchMode("type", FetchMode.JOIN);
-    	criteria.setFetchMode("operator", FetchMode.JOIN);
+    	criteria.setFetchMode("creator", FetchMode.JOIN);
 		Map<String, SearchFilter> filters = Search.parse(searchParams);// 构建参数
 		Search.buildCriteria(filters, criteria, AuditLog.class);
         return auditLogDao.findPage(page, criteria);

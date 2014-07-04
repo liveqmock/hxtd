@@ -33,9 +33,12 @@ import com.baihui.hxtd.soa.base.utils.Search;
 import com.baihui.hxtd.soa.base.utils.mapper.HibernateAwareObjectMapper;
 import com.baihui.hxtd.soa.market.entity.MarketActivity;
 import com.baihui.hxtd.soa.market.service.MarketActivityService;
+import com.baihui.hxtd.soa.system.entity.AuditLog;
 import com.baihui.hxtd.soa.system.entity.User;
 import com.baihui.hxtd.soa.system.service.DataShift;
 import com.baihui.hxtd.soa.system.service.DictionaryService;
+import com.baihui.hxtd.soa.util.EnumModule;
+import com.baihui.hxtd.soa.util.EnumOperationType;
 import com.baihui.hxtd.soa.util.JsonDto;
 
 /**
@@ -77,6 +80,9 @@ public class MarketActivityController {
 	@RequestMapping(value = "/toQueryPage.do")
 	public String toQueryPage(HibernatePage<MarketActivity> page, ModelMap model) {
 		model.addAttribute("page", page);
+		// 默认按照修改时间倒序排序
+		page.setHibernateOrderBy("modifiedTime");
+		page.setHibernateOrder(HibernatePage.DESC);
 		initPageDic(model);
 		
 		return "/market/marketactivity/list";
@@ -154,15 +160,17 @@ public class MarketActivityController {
 		activity.setCreator(user);
 		activity.setCreatedTime(date);
 		activity.setModifier(user);
-		if(activity.getStatus().getId() == null){
-			activity.setStatus(null);
+		if(activity.getStatusDic().getId() == null){
+			activity.setStatusDic(null);
 		}
-		if(activity.getDic().getId() == null){
-			activity.setDic(null);
+		if(activity.getTypeDic().getId() == null){
+			activity.setTypeDic(null);
 		}
 		
-		/************保存*****************************/
-		marketActivityService.add(activity, user);
+		/************ 新增 *****************************/
+		AuditLog auditLog = new AuditLog(EnumModule.MARKETACTIVITY.getModuleName(), 
+				activity.getId(), activity.getName(), EnumOperationType.ADD.getOperationType(), user);
+		marketActivityService.add(activity, user, auditLog);
 		return JsonDto.add(activity.getId()).toString();
 	}
 	
@@ -195,7 +203,9 @@ public class MarketActivityController {
 			@ModelAttribute(Constant.VS_USER_ID) Long userId) {
 		User user = new User(userId);
 		activity.setModifier(user);
-		marketActivityService.modify(activity, user);
+		AuditLog auditLog = new AuditLog(EnumModule.MARKETACTIVITY.getModuleName(), 
+				activity.getId(), activity.getName(), EnumOperationType.MODIFY.getOperationType(), user);
+		marketActivityService.modify(activity, user, auditLog);
 		
 		return JsonDto.modify(activity.getId()).toString();
 	}
@@ -224,13 +234,22 @@ public class MarketActivityController {
 	 */
 	@ResponseBody
 	@RequestMapping(value = "/delete.do")
-	public String delete(ModelMap modelMap, Long... id) {
+	public String delete(ModelMap modelMap, Long[] id) {
+		if(id == null || id.length == 0){
+			JsonDto json = new JsonDto("请至少选择一条记录删除!");
+			json.setSuccessFlag(false);
+			return json.toString();
+		}
 		User user = (User) modelMap.get(Constant.VS_USER);
-		marketActivityService.delete(user, id);
+		AuditLog [] auditLogArr = new AuditLog [id.length];
+		for(int i=0; i<id.length; i++){
+			auditLogArr[i] = new AuditLog(EnumModule.MARKETACTIVITY.getModuleName(), 
+					id[i], marketActivityService.getNameById(id[i]), EnumOperationType.DELETE.getOperationType(), user);
+		}
+		marketActivityService.delete(user, id, auditLogArr);
 		
 		JsonDto json = new JsonDto("删除成功");
 		json.setSuccessFlag(true);
-		
 		return json.toString();
 	}
 	
@@ -262,7 +281,7 @@ public class MarketActivityController {
 	  * @param model Model
 	 */
 	private void initPageDic(ModelMap model){
-		model.addAttribute("dicStatus", dicService.findChildren("030102"));// 活动状态
-		model.addAttribute("dicType", dicService.findChildren("030101"));// 活动类型
+		model.addAttribute("statusDic", dicService.findChildren("030102"));// 活动状态
+		model.addAttribute("typeDic", dicService.findChildren("030101"));// 活动类型
 	}
 }

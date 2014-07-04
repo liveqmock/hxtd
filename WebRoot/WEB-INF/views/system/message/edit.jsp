@@ -41,6 +41,10 @@
 				}
 				return false;
 			});
+			
+			$(".empty").click(function(){ // 清除
+			$(this).prevAll("input").val('');
+		});
 		});
 		
 		//搜索弹出框
@@ -88,10 +92,10 @@
     <tr>
 	    <td align="right" width="15%"><span class="w_red">*&nbsp;</span>消息发至用户：</td>
 	    <td align="left">
-			<input readonly  id="txt_owner" class="text_input3 required"type="text" "/>
+			<input readonly id="txt_owner" class="text_input3 required" type="text" />
 			<input id="hide_owner_id" name="userId" type="hidden" />
 			<i class="s_inquiry globle_img block_inline ml5 vm cp" title="搜索所有者" onclick="searchData('org');"></i>
-			<i class="dump_btn globle_img block_inline ml5 vm cp" title="清除" onclick="clearInputVal(this);"></i>
+			<i class="dump_btn globle_img block_inline ml5 vm cp empty" title="清除"></i>
 		</td>
     </tr>
     </table>

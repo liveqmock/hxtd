@@ -15,11 +15,6 @@ import com.baihui.hxtd.soa.system.service.AuditLogService;
 
 /**
  * 审计日志切面
- * 1.新增
- * 2.修改
- * 3.逻辑删除
- * 4.物理删除 AuditLogController.delete
- * 忽略查询、查看
  */
 @Component
 @Aspect
@@ -30,31 +25,47 @@ public class AuditLogAspect {
     @Resource
     private AuditLogService auditLogService;
     
-    @Pointcut("execution(* com.baihui.hxtd.soa.*.service..delete(..))")
-    public void delete() {
-    	
-    }
+    @Pointcut("execution(public * com.baihui.hxtd.soa.*.service..add*(..))")
+    public void add(){}
     
-    @Pointcut("execution(* com.baihui.hxtd.soa.*.service..add(..))")
-    public void add(){
-    	System.out.println("AuditLogAspect add");
-    }
+    @Pointcut("execution(public * com.baihui.hxtd.soa.*.service..modify*(..))")
+    public void modify(){}
     
-    @Pointcut("execution(* com.baihui.hxtd.soa.*.service..modify(..))")
-    public void modify(){
-    	System.out.println("AuditLogAspect modify");
-    }
-
-
-    /**
-     * 为逻辑删除功能添加审计日志
-     * @param jp
-     * @param result
-     */
-    @AfterReturning(pointcut = "(delete() || add() || modify()) && args(.., auditLog)")
-    public void doAfter(JoinPoint jp, AuditLog auditLog) {
+    @Pointcut("execution(public * com.baihui.hxtd.soa.*.service..delete*(..))")
+    public void delete(){}
+    
+    @Pointcut("execution(public * com.baihui.hxtd.soa.*.service..export*(..))")
+    public void exportFile(){}
+    
+    @Pointcut("execution(public * com.baihui.hxtd.soa.*.service..import*(..))")
+    public void importFile() {}
+    
+    @Pointcut("add() || modify() || delete() || exportFile() || importFile()")
+    public void anyOperation(){}
+    
+    @AfterReturning("anyOperation() && args(.., auditLog)")
+    public void doBeforeAudit(JoinPoint jp, AuditLog auditLog) {
     	logger.debug("==========进入after advice=========== \n");
     	auditLogService.save(auditLog);
+    	logger.debug("切入点方法执行完了 \n");
+    }
+    
+    
+    /**
+      * doBeforeAuditBatch 批量操作
+      * @Title: doBeforeAuditBatch
+      * @Description: 批量操作
+      * @param @param jp
+      * @param @param auditLogArr
+      * @return void 
+      * @throws
+     */
+    @AfterReturning("anyOperation() && args(.., auditLogArr[])")
+    public void doBeforeAuditBatch(JoinPoint jp, AuditLog [] auditLogArr) {
+    	logger.debug("==========进入after advice=========== \n");
+    	for(AuditLog auditLog : auditLogArr){
+    		auditLogService.save(auditLog);
+    	}
     	logger.debug("切入点方法执行完了 \n");
     }
     

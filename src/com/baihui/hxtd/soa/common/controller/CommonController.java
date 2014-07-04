@@ -6,6 +6,7 @@ import com.baihui.hxtd.soa.base.utils.ReflectionUtils;
 import com.baihui.hxtd.soa.common.service.CommonService;
 import com.baihui.hxtd.soa.system.service.DataShift;
 import org.apache.commons.lang3.StringUtils;
+import org.apache.poi.ss.usermodel.Workbook;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Controller;
@@ -25,7 +26,6 @@ import java.util.Map;
  * 基础公用的控制器
  *
  * @author xiayouxue
- * @date 2014/6/20
  */
 @Controller
 @RequestMapping("/common/common")
@@ -53,6 +53,32 @@ public class CommonController<T> {
         logger.debug("实体“{}”字段“{}”值“{}”", entityName, fieldName, fieldValue);
         return commonService.checkUnique(entityName, fieldName, fieldValue);
     }
+
+    /**
+     * 选中导出
+     * 1.在分页列表上导出选中的数据行
+     */
+    @RequestMapping(value = "/export.do", params = "TYPE=selected")
+    public void exportSelected(HttpServletRequest request, Long[] id, HttpServletResponse response) throws NoSuchFieldException, IOException {
+        logger.info("导出excel文件");
+        logger.debug("id={}", StringUtils.join(id, ","));
+
+        logger.info("获取对象集合");
+        String name = StringUtils.uncapitalize(entityClass.getSimpleName());
+        ServletContext servletContext = request.getSession().getServletContext();
+        Map<String, String> export = (Map<String, String>) servletContext.getAttribute(Constant.VC_IMPORTEXPORTS);
+        String fetch = export.get(name + ".export.hql.fetch");
+        String[] fetchs = StringUtils.isBlank(fetch) ? null : fetch.split(",");
+        List<?> entities = commonService.findById(entityClass, fetchs, id);
+        logger.debug("列表信息数目“{}”", entities.size());
+
+        logger.info("转换成excel文件并输出");
+        Workbook workbook = ImportExport.exportExcel(response, servletContext, StringUtils.uncapitalize(entityClass.getSimpleName()), entities);
+        response.setContentType("application/octet-stream; charset=utf-8");
+        response.setHeader("Content-Disposition", "attachment; filename=" + "user" + ".xls");
+        workbook.write(response.getOutputStream());
+    }
+
 
     /**
      * 限制数据条数导出

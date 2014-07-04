@@ -32,11 +32,14 @@ import com.baihui.hxtd.soa.base.orm.hibernate.HibernatePage;
 import com.baihui.hxtd.soa.base.utils.ImportExport;
 import com.baihui.hxtd.soa.base.utils.Search;
 import com.baihui.hxtd.soa.base.utils.mapper.HibernateAwareObjectMapper;
+import com.baihui.hxtd.soa.system.entity.AuditLog;
 import com.baihui.hxtd.soa.system.entity.Message;
 import com.baihui.hxtd.soa.system.entity.User;
 import com.baihui.hxtd.soa.system.entity.UserMessage;
 import com.baihui.hxtd.soa.system.service.MessageService;
 import com.baihui.hxtd.soa.system.service.UserService;
+import com.baihui.hxtd.soa.util.EnumModule;
+import com.baihui.hxtd.soa.util.EnumOperationType;
 import com.baihui.hxtd.soa.util.JsonDto;
 import com.fasterxml.jackson.core.JsonGenerationException;
 import com.fasterxml.jackson.databind.JsonMappingException;
@@ -164,7 +167,7 @@ public class MessageController {
 	}
 	
 	/**
-	 * 修改系统消息信息
+	 * 系统消息回复信息
 	 * @param Message
 	 * @param request
 	 * @param type
@@ -173,16 +176,19 @@ public class MessageController {
 	@ResponseBody
 	@RequestMapping(value = "/modify.do")
 	public String modify(Message message,long userId, HttpServletRequest request,String type) {
-		logger.info("MessageController.modify修改系统消息信息");
+		logger.info("MessageController.modify修改系统消息回复信息");
 		User u = (User) request.getSession().getAttribute(Constant.VS_USER);
 		logger.info("获得当前操作用户{}", u.getName());
 		message.setCreatedTime(new Date());
 		message.setModifier(u);
 		message.setModifiedTime(new Date());
 		message.setCreater(u);
-		messageService.modify(message, u);
+		message=messageService.addMessage(message);
 		User user=userService.getById(userId);
-		messageService.saveShip(message,user);
+		/************ 回复 *****************************/
+		AuditLog auditLog = new AuditLog(EnumModule.USERMESSAGE.getModuleName(), 
+				message.getId(), message.getTitle(), EnumOperationType.ADD.getOperationType(), u);
+		messageService.add(message, user, auditLog);
 		JsonDto json = JsonDto.modify(message.getId());
 		return json.toString();
 	}
@@ -204,7 +210,7 @@ public class MessageController {
 	
 	/**
 	 * add(保存：新建)
-	 * @param Message
+	 * @param UserMessage
 	 * @param request
 	 * @param type
 	 * @return
@@ -213,17 +219,19 @@ public class MessageController {
 	@RequestMapping(value = "/add.do")
 	public String add(Message message,HttpServletRequest request,String type,String userId){
 		logger.info("ComponentController.query查询组件列表");
-		//临时代码，时间类型应从数据库中取
 		User u = (User) request.getSession().getAttribute(Constant.VS_USER);
 		logger.info("ComponentController.query 获得当前操作的用户{}",u.getName());
 		message.setCreater(u);
 		message.setModifier(u);
-		message=messageService.add(message, u);
+		message=messageService.addMessage(message);
 		//批量发送消息
 		String[] userstr=userId.split(",");
 		for(int i=0;i<userstr.length;i++){
 			User user=userService.getById(Long.parseLong(userstr[i]));
-			messageService.saveShip(message,user);
+			/************ 新增 *****************************/
+			AuditLog auditLog = new AuditLog(EnumModule.MARKETACTIVITY.getModuleName(), 
+					message.getId(), message.getTitle(), EnumOperationType.ADD.getOperationType(), u);
+			messageService.add(message, user, auditLog);
 		}
 		JsonDto json = JsonDto.add(message.getId());
 		return json.toString();
@@ -236,10 +244,15 @@ public class MessageController {
 	 */
 	@ResponseBody
 	@RequestMapping(value = "/delete.do",produces = "text/text;charset=UTF-8")
-	public String delete(ModelMap modelMap, Long... id){
+	public String delete(ModelMap modelMap, Long[] id){
 		logger.info("MessageController.delete删除系统消息id={}",StringUtils.join(id,","));
 		User user = (User)modelMap.get(Constant.VS_USER);
-		messageService.delete(user, id);
+		AuditLog [] auditLogArr = new AuditLog [id.length];
+		for(int i=0; i<id.length; i++){
+			auditLogArr[i] = new AuditLog(EnumModule.USERMESSAGE.getModuleName(), 
+					id[i], messageService.getTitleById(id[i]), EnumOperationType.DELETE.getOperationType(), user);
+		}
+		messageService.delete(user, id, auditLogArr);
 		JsonDto json = JsonDto.delete(id);
 		return json.toString();
 	}

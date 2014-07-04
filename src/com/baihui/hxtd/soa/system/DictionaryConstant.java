@@ -91,7 +91,7 @@ public class DictionaryConstant {
     /**身份认证*/
     public final static String FUNCTION_PRIVILEGELEVEL_IDENTITY = "01060102";
     /**权限认证*/
-    public final static String FUNCTION_PRIVILEGELEVEL_AUTHORITY = "01060104";
+    public final static String FUNCTION_PRIVILEGELEVEL_AUTHORITY = "01060103";
 
 
 

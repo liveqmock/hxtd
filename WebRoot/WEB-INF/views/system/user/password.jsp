@@ -15,8 +15,27 @@
 	<script type="text/javascript" src="${ctx}/static/js/jquery.validate.js"></script>
 	<script type="text/javascript" src="${ctx}/static/js/validator.js"></script>
 	<script type="text/javascript">
-			$(function(){
-				$("#save").click(function(){
+		$(document).ready(function(){
+			//重置按钮事件
+			$("#reset").click(function(){
+			   $("#confirm_password").val("");
+			   $("#oldpwd").val("");
+			   $("#newpwd").val("");
+		   });
+			
+			//验证与原密码是否相同
+			jQuery.validator.addMethod("same",function(){
+				var oldpwd = $("#oldpwd").val(), flag = false;
+				$.ajaxSetup({ async: false });
+				RcmsAjax.ajaxNoMsg("${ctx}/system/user/checkPwd?oldpwd=" + oldpwd, function(data){
+					$.ajaxSetup({ async: true });
+					flag = (data.message == "");
+				});
+				return flag;
+			},"旧密码输入不正确");
+		
+			//保存按钮绑定事件
+		    $("#save").click(function(){
 					var $form = $("#form");
 					if($form.valid()){
 						RcmsAjax.ajax($form.attr("action"),function(result){
@@ -29,33 +48,6 @@
 					}
 					return false;
 				});
-			});
-	</script>
-	<script type="text/javascript">
-		$(document).ready(function(){
-			var flag;
-			//重置按钮事件
-			$("#reset").click(function(){
-			   $("#confirm_password").val("");
-			   $("#oldpwd").val("");
-			   $("#newpwd").val("");
-		   });
-			
-			//失去焦点时验证密码一致性
-			$("#oldpwd").blur(function(){
-				var oldpwd = $("#oldpwd").val();
-				RcmsAjax.ajaxNoMsg("${ctx}/system/user/checkPwd?oldpwd="+oldpwd,function(data){
-					if(data.message==""){
-						flag= true;
-					}else{
-						flag= false;
-					}
-				});
-			});
-			//验证与原密码是否相同
-			jQuery.validator.addMethod("same",function(){
-		        return flag;
-			},"旧密码输入不正确");
 		});
 	</script>
 </head>
@@ -73,7 +65,7 @@
     </div>   
     <div class="ml35 mr35 bg_c_blue cb h590">
     <div  style="width:50%;" class="margin0">
-       <form id="form" action="${ctx}${funcUrl}" method="post" onsubmit="return checkForm();">
+       <form id="form" action="${ctx}${funcUrl}" method="post">
 	       <table class=" margin0 pt20">
 	        <tr class=" lh40">
 		        <td width="40%" align="right">请输入旧密码：</td>

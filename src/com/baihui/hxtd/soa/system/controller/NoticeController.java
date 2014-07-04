@@ -32,9 +32,12 @@ import com.baihui.hxtd.soa.base.orm.hibernate.HibernatePage;
 import com.baihui.hxtd.soa.base.utils.ImportExport;
 import com.baihui.hxtd.soa.base.utils.Search;
 import com.baihui.hxtd.soa.base.utils.mapper.HibernateAwareObjectMapper;
+import com.baihui.hxtd.soa.system.entity.AuditLog;
 import com.baihui.hxtd.soa.system.entity.Notice;
 import com.baihui.hxtd.soa.system.entity.User;
 import com.baihui.hxtd.soa.system.service.NoticeService;
+import com.baihui.hxtd.soa.util.EnumModule;
+import com.baihui.hxtd.soa.util.EnumOperationType;
 import com.baihui.hxtd.soa.util.JsonDto;
 import com.fasterxml.jackson.core.JsonGenerationException;
 import com.fasterxml.jackson.databind.JsonMappingException;
@@ -165,7 +168,9 @@ public class NoticeController {
 		notice.setModifieTime(new Date());
 		notice.setModifier(u);
 		notice.setCreater(u);
-		noticeService.modify(notice, u);
+		AuditLog auditLog = new AuditLog(EnumModule.MARKETACTIVITY.getModuleName(), 
+				notice.getId(), notice.getTitle(), EnumOperationType.MODIFY.getOperationType(), u);
+		noticeService.modify(notice, u, auditLog);
 		JsonDto json = JsonDto.modify(notice.getId());
 		return json.toString();
 	}
@@ -203,7 +208,10 @@ public class NoticeController {
 		notice.setCreatedTime(new Date());
 		notice.setModifieTime(new Date());
 		notice.setIsDeleted(false);
-		noticeService.add(notice, u);
+		/************ 新增 *****************************/
+		AuditLog auditLog = new AuditLog(EnumModule.MARKETACTIVITY.getModuleName(), 
+				notice.getId(), notice.getTitle(), EnumOperationType.ADD.getOperationType(), u);
+		noticeService.add(notice, u, auditLog);
 		JsonDto json = JsonDto.add(notice.getId());
 		return json.toString();
 	}
@@ -215,10 +223,15 @@ public class NoticeController {
 	 */
 	@ResponseBody
 	@RequestMapping(value = "/delete.do",produces = "text/text;charset=UTF-8")
-	public String delete(ModelMap modelMap, Long... id){
+	public String delete(ModelMap modelMap, Long[] id){
 		logger.info("NoticeController.delete删除公告id={}",StringUtils.join(id,","));
 		User user = (User)modelMap.get(Constant.VS_USER);
-		noticeService.delete(user, id);
+		AuditLog [] auditLogArr = new AuditLog [id.length];
+		for(int i=0; i<id.length; i++){
+			auditLogArr[i] = new AuditLog(EnumModule.MARKETACTIVITY.getModuleName(), 
+					id[i], noticeService.getTitleById(id[i]), EnumOperationType.DELETE.getOperationType(), user);
+		}
+		noticeService.delete(user, id, auditLogArr);
 		JsonDto json = JsonDto.delete(id);
 		return json.toString();
 	}

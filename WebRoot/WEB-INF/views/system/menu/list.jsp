@@ -99,7 +99,7 @@
             </form>
             <div class="cb"></div>
 
-            <div class="mt20 block cb cb">
+            <div class="mt10 block cb cb">
                 <b class="b1"></b>
                 <b class="b2"></b>
                 <b class="b3"></b>
@@ -126,7 +126,7 @@
                     <tr>
                         <th style="width: 2%"><input type="checkbox" class="checkall"/></th>
                         <th style="width: 10%">菜单名称</th>
-                        <th style="width: 20%">调用入口</th>
+                        <th style="width: 15%">调用入口</th>
                         <th style="width: 10%">上级菜单</th>
                         <th style="width: 5%">级别</th>
                         <th style="width: 10%">包含下级</th>

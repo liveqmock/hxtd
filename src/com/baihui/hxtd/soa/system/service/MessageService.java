@@ -21,6 +21,7 @@ import com.baihui.hxtd.soa.base.orm.hibernate.HibernatePage;
 import com.baihui.hxtd.soa.base.utils.Search;
 import com.baihui.hxtd.soa.system.dao.MessageDao;
 import com.baihui.hxtd.soa.system.dao.UserMessageDao;
+import com.baihui.hxtd.soa.system.entity.AuditLog;
 import com.baihui.hxtd.soa.system.entity.Message;
 import com.baihui.hxtd.soa.system.entity.User;
 import com.baihui.hxtd.soa.system.entity.UserMessage;
@@ -104,7 +105,7 @@ public class MessageService {
 	 * @param Message
 	 * @param userId
 	 */
-	public Message add(Message message, User user) {
+	public Message addMessage(Message message) {
 		logger.info("保存系统消息信息{}", message);
 		message.setCreatedTime(new Date());
 		message.setModifiedTime(new Date());
@@ -126,8 +127,9 @@ public class MessageService {
 	/**
 	 * 删除系统消息
 	 * @param id
+	 * @param auditLogArr 
 	 */
-	public void delete(User user, Long[] id) {
+	public void delete(User user, Long[] id, AuditLog[] auditLogArr) {
 		userMessageDao.logicalDelete(id);
 
 	}
@@ -136,7 +138,7 @@ public class MessageService {
 	 * 保存消息关系表
 	 * @param userMessage
 	 */
-	public void saveShip(Message message,User user) {
+	public void add(Message message,User user,AuditLog auditLog) {
 		UserMessage userMessage=new UserMessage();
 		userMessage.setMessage(message);
 		userMessage.setStatus(false);
@@ -224,7 +226,17 @@ public class MessageService {
         criteria.setMaxResults(exportCounts);
         return (List<UserMessage>) criteria.list();
 	}
-
+	
+	 /**
+     * getTitleById
+     * @Title: getTitleById
+     * @Description: 通过id获取名称
+     * @param id
+     * @return String
+    */
+   public String getTitleById(Long id){
+   	return userMessageDao.getById(id).getMessage().getTitle();
+   }
 
 
 }

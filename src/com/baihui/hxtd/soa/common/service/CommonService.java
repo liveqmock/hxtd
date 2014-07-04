@@ -55,12 +55,44 @@ public class CommonService {
     }
 
     /**
-     * 获取序列值通过
+     * 获取序列值通过主键编号
      */
     @Transactional(readOnly = true)
     public Long getOrderById(Class<? extends Orderable> clazz, Long id) {
         String hql = String.format("select entity.order from %s entity where id=?", clazz.getSimpleName());
         return commonDao.findUnique(hql, id);
+    }
+
+    /**
+     * 查询实体通过主键编号
+     */
+    public <T> List<T> findById(Class<T> clazz, Long... id) {
+        String hql = String.format("select entity from %s entity where entity.id in (:id)", clazz.getSimpleName());
+        logger.debug("/*hql=*/{}", hql);
+        return commonDao.getSession().createQuery(hql).setParameterList("id", id).list();
+    }
+
+    /**
+     * 查询实体通过主键编号
+     * 1.可以设置级联抓取字段
+     */
+    @Transactional(readOnly = true)
+    public <T> List<T> findById(Class<T> clazz, String[] fetchs, Long... id) {
+        String hql = String.format("select entity from %s entity %s where entity.id in (:id)", clazz.getSimpleName(), toFetchHql("entity", fetchs));
+        logger.debug("/*hql=*/{}", hql);
+        return commonDao.getSession().createQuery(hql).setParameterList("id", id).list();
+    }
+
+    /**
+     * 转换为级联抓取语句
+     */
+    private String toFetchHql(String entityName, String... fetchs) {
+        if (fetchs == null || fetchs.length == 0) {
+            return "";
+        }
+
+        String join = String.format(" inner join fetch %s.", entityName);
+        return join + StringUtils.join(fetchs, join);
     }
 
     /**

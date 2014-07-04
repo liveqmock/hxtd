@@ -8,52 +8,59 @@
 <c:set var="ctx" value="${pageContext.request.contextPath}"/>
 <html>
 <head>
-<title>客户编辑页</title>
-<link href="${ctx}/static/css/stressing/detail.css" rel="stylesheet" type="text/css" />
-<script type="text/javascript" src="${ctx}/static/js/jquery.metadata.js"></script>
-<script type="text/javascript" src="${ctx}/static/js/jquery.validate.js"></script>
-<script type="text/javascript" src="${ctx}/static/js/validator.js"></script>
-<script type="text/javascript" src="${ctx}/static/js/pacs.js"></script>
-<script type="text/javascript">${applicationScope.VC_PCAS}</script>
-<script type="text/javascript">
-$(function(){
-	new PCAS("province", "city", "county", '${customer.province.id}', 
-		'${customer.city.id}', '${customer.county.id}'); // 修改为根据ID选择组件，之前用name选择组件当name中出现“.”时有问题
-	$("#save").click(function(){
-		var $form = $("#form");
-		if($("#form").valid()){
-			RcmsAjax.ajax($form.attr("action"), function(result){
-				var id = result.result.result;
-				setTimeout(function(){
-					window.location.replace("${ctx}/customer/customer/toViewPage.do?id=" + id);
-				},500);
-			}, null, $form.formSerialize());
+	<title>客户编辑页</title>
+	<link href="${ctx}/static/css/stressing/detail.css" rel="stylesheet" type="text/css" />
+	<script type="text/javascript" src="${ctx}/static/js/jquery.metadata.js"></script>
+	<script type="text/javascript" src="${ctx}/static/js/jquery.validate.js"></script>
+	<script type="text/javascript" src="${ctx}/static/js/validator.js"></script>
+	<script type="text/javascript" src="${ctx}/static/js/pacs.js"></script>
+	<script type="text/javascript">${applicationScope.VC_PCAS}</script>
+	<script type="text/javascript">
+		$(function(){
+			new PCAS("province", "city", "county", '${customer.province.id}', 
+				'${customer.city.id}', '${customer.county.id}'); // 修改为根据ID选择组件，之前用name选择组件当name中出现“.”时有问题
+			
+			//保存按钮事件
+			$("#save").click(function(){
+				var $form = $("#form");
+				if($("#form").valid()){
+					RcmsAjax.ajax($form.attr("action"), function(result){
+						var id = result.result.result;
+						setTimeout(function(){
+							window.location.replace("${ctx}/customer/customer/toViewPage.do?id=" + id);
+						},500);
+					}, null, $form.formSerialize());
+				}
+				return false;
+			});
+			$("#saveAndAdd").click(function(){
+				var $form = $("#form");
+				if($form.valid()){
+					RcmsAjax.ajax($form.attr("action"), function(result){
+						setTimeout(function(){
+							window.location.replace("${ctx}/customer/customer/toAddPage.do");
+						},500);
+					}, null, $form.formSerialize());
+				}
+				return false;
+			});
+		}); 
+		
+		function searchData(action){ // 搜索
+			jsUtil.dialogIframe("${ctx}/system/user/toQueryPage.comp", "负责人", 800, 420, 
+				function(){ // 确定回调
+					var $userObj = $(".bor_e28d1f", window.frames["dialogIframe"].document);
+					if($userObj.length > 0){
+						$("#txt_" + action).val($userObj.find("td:eq(0)").text());
+						$("#hide_" + action +"_id").val($userObj.attr("id"));
+					}
+			});
+		
+		$(".empty").click(function(){ // 清除
+				$(this).prevAll("input").val('');
+			});
 		}
-		return false;
-	});
-	$("#saveAndAdd").click(function(){
-		var $form = $("#form");
-		if($form.valid()){
-			RcmsAjax.ajax($form.attr("action"), function(result){
-				setTimeout(function(){
-					window.location.replace("${ctx}/customer/customer/toAddPage.do");
-				},500);
-			}, null, $form.formSerialize());
-		}
-		return false;
-	});
-}); 
-function searchData(action){ // 搜索
-	jsUtil.dialogIframe("${ctx}/system/user/toQueryPage.comp", "负责人", 800, 420, 
-		function(){ // 确定回调
-			var $userObj = $(".bor_e28d1f", window.frames["dialogIframe"].document);
-			if($userObj.length > 0){
-				$("#txt_" + action).val($userObj.find("td:eq(0)").text());
-				$("#hide_" + action +"_id").val($userObj.attr("id"));
-			}
-	});
-}
-</script> 
+	</script> 
 </head>
 <body>
 <form id="form" action="${ctx}${funcUrl}" method="post">
@@ -71,10 +78,10 @@ function searchData(action){ // 搜索
 		<tr>
 			<td  align="right" width="15%"><span class="w_red">*&nbsp;</span>客户所有者：</td>
 			<td align="left">
-				<input id="txt_owner" type="text" value="${customer.owner.realName}" readonly="readonly" class="text_input3"/>
+				<input id="txt_owner" type="text" value="${customer.owner.realName}" readonly="readonly" class="text_input3 required"/>
 				<input id="hide_owner_id" type="hidden" name="owner.id" value="${customer.owner.id}"/>
 				<i class="s_inquiry globle_img block_inline ml5 vm cp" title="搜索所有者" onclick="searchData('owner');"></i>
-				<i class="dump_btn globle_img block_inline ml5 vm cp" title="清除" onclick="clearInputVal(this);"></i>
+				<i class="dump_btn globle_img block_inline ml5 vm cp empty" title="清除"></i>
 			</td>
 			<td align="right" width="15%">客户类型：</td>
 			<td align="left">

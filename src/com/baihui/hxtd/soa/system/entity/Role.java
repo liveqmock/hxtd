@@ -22,7 +22,7 @@ public class Role implements Serializable, Comparable<Role>, Initialized {
     @Column(name = "ID")
     private Long id;
 
-    @Column(name = "CODE", length = 32)
+    @Column(name = "CODE", length = 32, updatable = false, unique = true)
     private String code;
 
     @Column(name = "NAME", length = 255, unique = true)

@@ -15,8 +15,9 @@ jQuery.extend(jQuery.validator.messages, {
     rangelength: jQuery.validator.format("请输入一个长度介于 {0} 和 {1} 之间的字符串"),
     range: jQuery.validator.format("请输入一个介于 {0} 和 {1} 之间的值"),
     max: jQuery.validator.format("请输入一个最大为 {0} 的值"),
-    min: jQuery.validator.format("请输入一个最小为 {0} 的值"),
-    password:"密码不符合规范"
+    min: jQuery.validator.format("请输入一个最小为 {0} 的值")
+    //ps：自定义方法的提示信息不要再这里写
+    //方法中就有提示信息的设置
 });
 $('head').append('<style type="text/css">input.error{border:1px solid red}label.error {padding-left:18px;color:red;}</style>');
 jQuery.validator.addMethod("stringCheck", function (value, element) {

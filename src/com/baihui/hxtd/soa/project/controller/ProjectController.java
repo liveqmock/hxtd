@@ -32,9 +32,12 @@ import com.baihui.hxtd.soa.base.utils.Search;
 import com.baihui.hxtd.soa.common.controller.CommonController;
 import com.baihui.hxtd.soa.project.entity.Project;
 import com.baihui.hxtd.soa.project.service.ProjectService;
+import com.baihui.hxtd.soa.system.entity.AuditLog;
 import com.baihui.hxtd.soa.system.entity.User;
 import com.baihui.hxtd.soa.system.service.DataShift;
 import com.baihui.hxtd.soa.system.service.DictionaryService;
+import com.baihui.hxtd.soa.util.EnumModule;
+import com.baihui.hxtd.soa.util.EnumOperationType;
 import com.baihui.hxtd.soa.util.JsonDto;
 /**
  * 
@@ -149,7 +152,9 @@ public class ProjectController extends CommonController<Project> {
 		User u = (User) request.getSession().getAttribute(Constant.VS_USER);
 		logger.info("获得当前操作用户{}",u.getName());
 		project.setModifier(u);
-		projectService.modify(project, u);
+		AuditLog auditLog = new AuditLog(EnumModule.PROJECT.getModuleName(), 
+				project.getId(), project.getName(), EnumOperationType.MODIFY.getOperationType(), u);
+		projectService.modify(project, auditLog);
 		JsonDto json = new JsonDto(project.getId(),"保存成功!");
 		return json.toString();
 	}
@@ -192,7 +197,9 @@ public class ProjectController extends CommonController<Project> {
 		logger.info("获得当前操作用户{}",u.getName());
 		project.setModifier(u);
 		project.setCreator(u);
-		projectService.add(project, u);
+		AuditLog auditLog = new AuditLog(EnumModule.PROJECT.getModuleName(), 
+				project.getId(), project.getName(), EnumOperationType.ADD.getOperationType(), u);
+		projectService.add(project, auditLog);
 		JsonDto json = new JsonDto(project.getId(),"保存成功!");
 		return json.toString();
 	}
@@ -211,7 +218,12 @@ public class ProjectController extends CommonController<Project> {
 	public String delete(ModelMap modelMap, Long[] id){
 		logger.info("projectController.delete删除组件");
 		User user = (User)modelMap.get(Constant.VS_USER);
-		boolean flag = projectService.delete(user,id);
+		AuditLog [] auditLogArr = new AuditLog [id.length];
+		for(int i=0; i<id.length; i++){
+			auditLogArr[i] = new AuditLog(EnumModule.PRODUCT.getModuleName(), 
+					id[i], projectService.get(id[i]).getName(), EnumOperationType.DELETE.getOperationType(), user);
+		}
+		boolean flag = projectService.delete(auditLogArr,id);
 		if(flag){
 			return new JsonDto().toString();
 		}else{

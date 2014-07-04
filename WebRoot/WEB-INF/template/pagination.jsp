@@ -23,7 +23,8 @@
         <li><a href="javascript:void(0)" class="block prev globle_img page-pre" title="上一页"></a></li>
         <li class="pr">
             <input type="text" class="pa fenye_ipt_text page-no" pageno="{$T.hibernatePageNo}" value="{$T.hibernatePageNo}"/>
-            <a href="javascript:void(0)" class="fenye_go globle_img block page-anyone"></a>
+            <a href="javascript:void(0)" class="fenye_go cd globle_img block "></a>
+            <a href="javascript:void(0);" class="go_true page-anyone"></a>
         </li>
         <li class="mt3">共<label class="page-totalpages">{$T.totalPages}</label>页</li>
         <li><a href="javascript:void(0)" class="next globle_img block page-next" title="下一页"></a></li>

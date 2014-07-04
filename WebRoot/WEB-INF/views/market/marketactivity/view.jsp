@@ -40,13 +40,13 @@
 			<td width="15%" align="right">活动所有者：</td>
 			<td align="left">${activity.sponsor.realName}</td>
 			<td width="15%" align="right">类型：</td>
-			<td align="left">${activity.dic.key}</td>
+			<td align="left">${activity.typeDic.key}</td>
 		</tr>
 		<tr>
 			<td align="right">活动名称：</td>
 			<td align="left">${activity.name}</td>
 			<td align="right">状态：</td>
-			<td align="left">${activity.status.key}</td>
+			<td align="left">${activity.statusDic.key}</td>
 		</tr>
 		<tr>
 			<td align="right">开始日期：</td>

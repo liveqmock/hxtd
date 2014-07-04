@@ -73,6 +73,7 @@ public class FunctionDao extends HibernateDAOImpl<Function, Long> {
         function.setCreatedTime(new Date());
         function.setModifiedTime(function.getCreatedTime());
         function.setIsDeleted(false);
+        function.setIsInitialized(false);
         save(function);
     }
 

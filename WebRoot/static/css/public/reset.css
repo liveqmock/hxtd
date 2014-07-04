@@ -7,6 +7,7 @@
 .pr{ position:relative;}
 .pa{ position:absolute;}
 .cp{ cursor:pointer;}
+.cd{ cursor:default;}
 .cb{ clear:both;}
 .bdnone{ border:none;}
 .bgnone{ background:none;}

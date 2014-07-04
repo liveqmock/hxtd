@@ -2,11 +2,6 @@
 package com.baihui.hxtd.soa.project.dao;
 
 
-import java.util.List;
-
-import org.hibernate.Query;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Repository;
 
 import com.baihui.hxtd.soa.base.orm.hibernate.HibernateDAOImpl;
@@ -25,6 +20,23 @@ import com.baihui.hxtd.soa.project.entity.Supplier;
 @Repository
 public class SupplierDao extends HibernateDAOImpl<Supplier, Long> {
 	
-
+	/**
+	  *重写save方法，针对于处理一下参数 
+	  * @param supplier
+	  * @return
+	  * @see com.baihui.hxtd.soa.base.orm.hibernate.HibernateDAOImpl#save(java.lang.Object)
+	 */
+	public Supplier save(Supplier supplier){
+		if(supplier.getProvince().getId()==null){
+			supplier.setProvince(null);
+		}
+		if(supplier.getCity()==null){
+			supplier.setCity(null);
+		}
+		if(supplier.getCounty()==null){
+			supplier.setCounty(null);
+		}
+		return super.save(supplier);
+	}
 	
 }

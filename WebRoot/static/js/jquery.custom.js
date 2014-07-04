@@ -3,6 +3,13 @@
     /**jQuery的自定义扩展*/
     $.Custom = function () {}
     $.extend($.Custom, {
+        vals: function (jqele) {
+            var vals = [];
+            for (var i = 0; i < jqele.length; i++) {
+                vals.push(jqele.eq(i).val());
+            }
+            return vals;
+        },
         /**
          * 克隆json对象
          * @param json json对象

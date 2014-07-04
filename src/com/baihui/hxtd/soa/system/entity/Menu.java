@@ -48,7 +48,7 @@ public class Menu implements Serializable, Cloneable, TreeNode<Menu>, Initialize
     @Column(name = "ID")
     private Long id;
 
-    @Column(name = "CODE", length = 32, nullable = false)
+    @Column(name = "CODE", length = 32)
     private String code;
 
     @Column(name = "NAME", length = 32, nullable = false, unique = true)

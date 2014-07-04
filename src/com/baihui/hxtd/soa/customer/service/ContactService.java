@@ -16,6 +16,7 @@ import com.baihui.hxtd.soa.base.utils.Search;
 import com.baihui.hxtd.soa.customer.dao.ContactDao;
 import com.baihui.hxtd.soa.customer.entity.Contact;
 import com.baihui.hxtd.soa.system.dao.UserDao;
+import com.baihui.hxtd.soa.system.entity.AuditLog;
 import com.baihui.hxtd.soa.system.entity.User;
 import com.baihui.hxtd.soa.system.service.DataShift;
 
@@ -116,21 +117,34 @@ public class ContactService {
     }
 
     /**
+     * getNameById
+     * @Title: getNameById
+     * @Description: 通过id获取名称
+     * @param id
+     * @return String
+    */
+    public String getNameById(Long id){
+    	return contactDao.get(id).getName();
+    }
+    
+    /**
      * save(保存：修改/新建)
      * @param entity 参数类型
      * @return void 返回类型
      * modifier:xiaoli.luo
      */
-    public void add(Contact entity, User user) {
+    public void add(Contact entity, User user, AuditLog auditLog) {
         contactDao.save(entity);
+        auditLog.setRecordId(entity.getId());
     }
     /**
      *  modifier:xiaoli.luo
      * @param entity
      * @param userId
      */
-    public void modify(Contact entity, User user) {
+    public void modify(Contact entity, User user, AuditLog auditLog) {
         contactDao.save(entity);
+        auditLog.setRecordId(entity.getId());
     }
 
     /**
@@ -138,7 +152,7 @@ public class ContactService {
      * @param id 参数类型
      * @return void 返回类型
      */
-    public void delete(User user, Long... id) {
+    public void delete(User user, Long[] id, AuditLog [] auditLog) {
         contactDao.delete(id);
     }
 }

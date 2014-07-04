@@ -20,7 +20,7 @@ import com.baihui.hxtd.soa.project.dao.ProjectDao;
 import com.baihui.hxtd.soa.project.dao.SupplierDao;
 import com.baihui.hxtd.soa.project.entity.Supplier;
 import com.baihui.hxtd.soa.system.dao.UserDao;
-import com.baihui.hxtd.soa.system.entity.User;
+import com.baihui.hxtd.soa.system.entity.AuditLog;
 import com.baihui.hxtd.soa.system.service.DataShift;
 
 /**
@@ -102,12 +102,12 @@ public class SupplierService {
      * @throws
      * @Title: save
      */
-    public void add(Supplier entity,User user) {
+    public void add(Supplier entity,AuditLog auditLog) {
         logger.info("保存组件信息{}", entity);
         supplierDao.save(entity);
     }
     
-    public void modify(Supplier entity,User user) {
+    public void modify(Supplier entity,AuditLog auditLog) {
         logger.info("保存组件信息{}", entity);
         supplierDao.save(entity);
     }
@@ -120,7 +120,7 @@ public class SupplierService {
      * @throws
      * @Title: delete
      */
-    public boolean delete(User user, Long[] id) {
+    public boolean delete(AuditLog[] auditLogArr, Long[] id) {
     	if(projectDao.getCount(id)==0){
     		supplierDao.logicalDelete(id);
     		return true;

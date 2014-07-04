@@ -26,8 +26,8 @@ import com.baihui.hxtd.soa.customer.entity.Contact;
 import com.baihui.hxtd.soa.customer.entity.Customer;
 import com.baihui.hxtd.soa.customer.entity.Lead;
 import com.baihui.hxtd.soa.system.dao.UserDao;
+import com.baihui.hxtd.soa.system.entity.AuditLog;
 import com.baihui.hxtd.soa.system.entity.Dictionary;
-import com.baihui.hxtd.soa.system.entity.User;
 import com.baihui.hxtd.soa.system.service.DataShift;
 
 /**
@@ -54,19 +54,13 @@ public class LeadService {
 	private UserDao userDao;
 	
 	@Resource
-	private CustomerDao customerDao;
-	
-	@Resource
-	private ContactDao contactDao;
-
-	@Resource
 	private AttachmentDao attachementDao;
 	
 	@Resource
-	private ContactService contactService;
+	private ContactDao contactDao;
 	
 	@Resource
-	private CustomerService customerService;
+	private CustomerDao customerDao;
 
 	@Resource
 	private MemoirDao memoirDao;
@@ -103,31 +97,14 @@ public class LeadService {
 		leadDao.update(lead);
 	}
 
-	public void add(Lead lead,User u) {
+	public void add(Lead lead,AuditLog auditLog) {
 		logger.info("保存线索信息{}", lead);
-		if(lead.getProvince().getId()==null){
-			lead.setProvince(null);
-		}
-		if(lead.getCity().getId()==null){
-			lead.setCity(null);
-		}
-		if(lead.getCounty().getId()==null){
-			lead.setCounty(null);
-		}
 		leadDao.save(lead);
+		auditLog.setRecordId(lead.getId());
 	}
 	
-	public void modify(Lead lead, User u) {
+	public void modify(Lead lead, AuditLog auditLog) {
 		logger.info("保存线索信息{}", lead);
-		if(lead.getProvince().getId()==null){
-			lead.setProvince(null);
-		}
-		if(lead.getCity().getId()==null){
-			lead.setCity(null);
-		}
-		if(lead.getCounty().getId()==null){
-			lead.setCounty(null);
-		}
 		leadDao.save(lead);
 	}
 
@@ -141,8 +118,17 @@ public class LeadService {
 		DetachedCriteria criteria = biuldQuery(searchParams,dataShift,Lead.class);
 		return leadDao.findPage(page, criteria);
 	}
-	
-	public List<Lead> export(Map<String, Object> searchParams,DataShift dataShift)
+	/**
+	  * export(导出)
+	  * @Title: export
+	  * @param @param searchParams
+	  * @param @param dataShift
+	  * @param @return
+	  * @param @throws NoSuchFieldException    参数类型
+	  * @return List<Lead>    返回类型
+	  * @throws
+	 */
+	public List<Lead> export(Map<String, Object> searchParams,DataShift dataShift,AuditLog auditLog)
 			throws NoSuchFieldException {
 		DetachedCriteria criteria = biuldQuery(searchParams,dataShift,Lead.class);
 		return leadDao.find(criteria, 3000);
@@ -165,23 +151,22 @@ public class LeadService {
 		return criteria;
 	}
 	/**
-	 * delete(删除线索信息)
-	 * 
+	 * delete(删除线索AuditLog auditLog * 
 	 * @param id
 	 */
-	public void delete(User user, Long... id) {
+	public void delete(AuditLog [] auditLogArr, Long...id) {
 		leadDao.logicalDelete(id);
 	}
 
 	/**
 	 * 
-	  * leadConverter(线索转换为客户和联系人)
+	  * modifyLeadConverter(线索转换为客户和联系人)
 	  * @Title: leadConverter
 	  * @param @param id    参数类型
 	  * @return void    返回类型
 	  * @throws
 	 */
-	public void leadConverter(User user, Long id){
+	public void modifyLeadConverter(AuditLog auditLog, Long id){
 		logger.info("线索转换开始，ID={}",id);
 		Lead lead = this.get(id);
 		
@@ -192,7 +177,7 @@ public class LeadService {
 		cus.setSource(new Dictionary(4030206L));
 		cus.setId(null);
 		cus.setModifiedTime(new Date());
-		customerService.add(cus, user);
+		customerDao.save(cus);
 		
 		logger.debug("转换联系人信息");
 		Contact con = new Contact();
@@ -201,16 +186,28 @@ public class LeadService {
 		con.setId(null);
 		con.setCustomer(cus);
 		con.setModifiedTime(new Date());
-		contactService.add(con,user);
+		contactDao.save(con);
 		
 		logger.debug("修改线索的附件以及联系纪要给联系人");
 		attachementDao.leadConverter(lead, con);
 		memoirDao.leadConverter(lead, con);
 		
 		logger.info("删除线索信息 ID={}",id);
-		this.delete(user, id);
+		leadDao.delete(id);
 	}
-	public int modifyOwner(User user, Long ownerId, Long... ids) {
+	
+	/**
+	 * 
+	  * modifyOwner(转换所有者)
+	  * @Title: modifyOwner
+	  * @param @param ownerId
+	  * @param @param ids
+	  * @param @param auditLogArr
+	  * @param @return    参数类型
+	  * @return int    返回类型
+	  * @throws
+	 */
+	public int modifyOwner( Long ownerId, Long[] ids,AuditLog [] auditLogArr) {
 		return leadDao.modifyOwner(ownerId, ids);
 
 	}

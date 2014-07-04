@@ -490,12 +490,13 @@ public class MenuService {
         logger.debug("编号默认为空");
         menu.setIsLeaf(true);
         Menu parent = menu.getParent();
-        if (parent == null || parent.getId() != null) {
+        if (parent == null || parent.getId() == null) {
             menu.setLevel(1);
             Long order = getMaxChildOrder(null, 1);
             TierSerial tierSerial = TierSerials.parse(order, 2);
             tierSerial.increaseValue(1);
             menu.setOrder(tierSerial.getSerial());
+            menu.setParent(null);
         } else {
             parent = menuDao.get(parent.getId());
             menu.setLevel(parent.getLevel() + 1);
@@ -527,6 +528,7 @@ public class MenuService {
         if (menu.getDefaultShow()) {
             menuDao.updateToNotDefaultShow();
         }
+
         menuDao.save(menu);
 
         //级联新增功能
@@ -561,7 +563,7 @@ public class MenuService {
         menu.setTrigger(trigger);
         menuDao.save(menu);
 
-        userDao.updateManagerStoreStatus();
+//        userDao.updateManagerStoreStatus();
     }
 
     /**

@@ -74,14 +74,13 @@
         <table class="cb id_table2 w pr35">
             <tr>
                 <th style="width:2%"><input type="checkbox" class="checkall"/></th>
-                <th style="width:20%" class="sortable orderby" orderby="name">角色名称</th>
-                <%--<th style="width:20%" class="sortable orderby" orderby="type">类型</th>--%>
-                <th style="width:20%">备注</th>
-                <th style="width:20%">创建者</th>
-                <th style="width:20%">创建时间</th>
-                <th style="width:20%">修改者</th>
-                <th style="width:20%">最后修改时间</th>
-                <th style="width:20%">操作</th>
+                <th style="width:10%" class="sortable orderby" orderby="name">角色名称</th>
+                <th style="width:10%">备注</th>
+                <th style="width:10%">创建者</th>
+                <th style="width:10%">创建时间</th>
+                <th style="width:10%">修改者</th>
+                <th style="width:10%">最后修改时间</th>
+                <th style="width:10%">操作</th>
             </tr>
             <%@include file="/WEB-INF/template/sort.jsp" %>
             <tbody class="list"></tbody>
@@ -95,7 +94,6 @@
                             <c:otherwise>{$T.row.name}</c:otherwise>
                         </c:choose>
                     </td>
-                    <%--<td>{$T.row.type.key}</td>--%>
                     <td>{$T.row.remark}</td>
                     <td>{$T.row.creator.realName}</td>
                     <td>{$T.row.createdTime}</td>

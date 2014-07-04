@@ -21,6 +21,8 @@ import com.baihui.hxtd.soa.base.utils.mapper.HibernateAwareObjectMapper;
 import com.baihui.hxtd.soa.system.entity.AuditLog;
 import com.baihui.hxtd.soa.system.service.AuditLogService;
 import com.baihui.hxtd.soa.system.service.DictionaryService;
+import com.baihui.hxtd.soa.util.EnumModule;
+import com.baihui.hxtd.soa.util.EnumOperationType;
 import com.baihui.hxtd.soa.util.JsonDto;
 
 /**
@@ -38,6 +40,7 @@ import com.baihui.hxtd.soa.util.JsonDto;
 @Controller
 @RequestMapping(value = "/system/auditlog")
 public class AuditLogController {
+
 	private Logger logger = LoggerFactory.getLogger(this.getClass());
 	
 	@Resource
@@ -50,12 +53,12 @@ public class AuditLogController {
 	
     public String toQueryPage(@RequestParam(value = "pageNo", defaultValue = "1") int pageNumber,
             @RequestParam(value = "pageSize", defaultValue = "10") int pageSize,
-            @RequestParam(value = "pageOrderBy", defaultValue = "operateTime") String orderBy,
+            @RequestParam(value = "pageOrderBy", defaultValue = "createdTime") String orderBy,
             @RequestParam(value = "pageOrder", defaultValue = "desc") String order,
             Model model) {
         logger.info("FunctionController.query跳转列表页");
-        model.addAttribute("types", dictionaryService.findChildren("100401"));//字典类型
-        
+        model.addAttribute("operationTypes", EnumOperationType.values());//操作类型
+        model.addAttribute("moduleNames", EnumModule.values());//模块名称
         HibernatePage<AuditLog> page = new HibernatePage<AuditLog>(pageNumber, pageSize);
         page.setHibernateOrderBy(orderBy);
         page.setHibernateOrder(order);
@@ -78,11 +81,12 @@ public class AuditLogController {
 
 		Map<String, Object> searchParams = Servlets.getParametersStartingWith(request, "search_");
 		Search.clearBlankValue(searchParams);
-		Search.toRangeDate(searchParams, "operateTime");
+		Search.toRangeDate(searchParams, "createdTime");
 		logger.debug("查询条件数目“{}”", searchParams.size());
 		logger.info("添加默认的查询条件");
 		logger.info("获取分页数据");
 		page = auditLogService.findPage(searchParams, page);
+		
 		logger.info("以DTO格式返回");
 		JsonDto json = new JsonDto();
 		json.setSuccessFlag(true);
@@ -92,5 +96,19 @@ public class AuditLogController {
 		HibernateAwareObjectMapper.DEFAULT.writeValue(out, json);
 	}
 	
+	public static void main(String[] args){
+		System.out.println(EnumModule.CUSTOMER.getModuleName());
+		EnumModule[] enumModules = EnumModule.values();
+		for(EnumModule e : enumModules){
+			System.out.println(e.getModuleName());
+			System.out.println(e.name());
+		}
+		
+		EnumOperationType[] enumOperationTypes = EnumOperationType.values();
+		for(EnumOperationType e:enumOperationTypes){
+			System.out.println(e.getOperationType());
+			System.out.println(e.name());
+		}
+	}
 	
 }

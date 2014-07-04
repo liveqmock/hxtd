@@ -28,9 +28,12 @@ import com.baihui.hxtd.soa.base.utils.ImportExport;
 import com.baihui.hxtd.soa.base.utils.Search;
 import com.baihui.hxtd.soa.customer.entity.Lead;
 import com.baihui.hxtd.soa.customer.service.LeadService;
+import com.baihui.hxtd.soa.system.entity.AuditLog;
 import com.baihui.hxtd.soa.system.entity.User;
 import com.baihui.hxtd.soa.system.service.DataShift;
 import com.baihui.hxtd.soa.system.service.DictionaryService;
+import com.baihui.hxtd.soa.util.EnumModule;
+import com.baihui.hxtd.soa.util.EnumOperationType;
 import com.baihui.hxtd.soa.util.JsonDto;
 
 /**
@@ -42,7 +45,7 @@ import com.baihui.hxtd.soa.util.JsonDto;
  */
 @Controller
 @RequestMapping(value = "/customer/lead")
-@SessionAttributes(value = {Constant.VS_USER,Constant.VS_DATASHIFT})
+@SessionAttributes(value = {Constant.VS_USER,Constant.VS_USER_ID,Constant.VS_DATASHIFT})
 public class LeadController extends CommonController<Lead>{
 
 	private Logger logger = LoggerFactory.getLogger(this.getClass());
@@ -120,11 +123,13 @@ public class LeadController extends CommonController<Lead>{
 		logger.info("LeadController.modify修改线索信息");
 		User u = (User) request.getSession().getAttribute(Constant.VS_USER);
 		logger.info("获得当前操作用户{}", u.getName());
-		lead.setCreatedTime(new Date(new java.util.Date().getTime()));
-		lead.setModifiedTime(new Date(new java.util.Date().getTime()));
+		lead.setCreatedTime(new Date());
+		lead.setModifiedTime(new Date());
 		lead.setModifier(u);
 		lead.setCreator(u);
-		leadService.modify(lead,u);
+		AuditLog auditLog = new AuditLog(EnumModule.LEAD.getModuleName(), 
+				lead.getId(), lead.getName(), EnumOperationType.MODIFY.getOperationType(), u);
+		leadService.modify(lead,auditLog);
 		JsonDto json = JsonDto.modify(lead.getId());
 		return json.toString();
 	}
@@ -134,7 +139,13 @@ public class LeadController extends CommonController<Lead>{
 					produces = "text/text;charset=UTF-8")
 	public String modifyOwner(Long[] id, Long ownerId,ModelMap modelMap) {
 		User user = (User)modelMap.get(Constant.VS_USER);
-		leadService.modifyOwner(user, ownerId, id);
+        AuditLog [] auditLogArr = new AuditLog [id.length];
+		for(int i=0; i<id.length; i++){
+			auditLogArr[i] = new AuditLog(EnumModule.LEAD.getModuleName(), 
+					id[i], leadService.get(id[i]).getName(), EnumOperationType.MODIFY.getOperationType(), user,"批量更改所有者");
+		}
+		
+		leadService.modifyOwner(ownerId, id,auditLogArr);
 		JsonDto json = new JsonDto("转换成功");
 		json.setSuccessFlag(true);
 		return json.toString();
@@ -161,8 +172,15 @@ public class LeadController extends CommonController<Lead>{
 	@RequestMapping(value = "/delete.do",produces = "text/text;charset=UTF-8")
 	public String delete(ModelMap modelMap, Long[] id){
 		//logger.info("LeadController.delete删除线索id={}",id);
-		User sessionUser = (User)modelMap.get(Constant.VS_USER);
-		leadService.delete(sessionUser, id);
+		User user = (User)modelMap.get(Constant.VS_USER);
+		
+		AuditLog [] auditLogArr = new AuditLog [id.length];
+		for(int i=0; i<id.length; i++){
+			auditLogArr[i] = new AuditLog(EnumModule.LEAD.getModuleName(), 
+					id[i], leadService.get(id[i]).getName(), EnumOperationType.DELETE.getOperationType(), user);
+		}
+		
+		leadService.delete(auditLogArr, id);
 		JsonDto json = JsonDto.delete(id);
 		return json.toString();
 	}
@@ -208,7 +226,9 @@ public class LeadController extends CommonController<Lead>{
 		lead.setModifier(u);
 		lead.setCreatedTime(new Date());
 		lead.setModifiedTime(new Date());
-		leadService.add(lead, u);
+		AuditLog auditLog = new AuditLog(EnumModule.LEAD.getModuleName(), 
+				lead.getId(), lead.getName(), EnumOperationType.ADD.getOperationType(), u);
+		leadService.add(lead, auditLog);
 		JsonDto json = JsonDto.add(lead.getId());
 		return json.toString();
 	}
@@ -229,7 +249,10 @@ public class LeadController extends CommonController<Lead>{
         Search.toRangeDate(searchParams, "createdTime");
         logger.debug("查询条件数目“{}”", searchParams.size());
         DataShift dataShift = (DataShift) model.get(Constant.VS_DATASHIFT);
-        List<Lead> leads = leadService.export(searchParams,dataShift);
+        User user = (User)model.get(Constant.VS_USER);
+        AuditLog auditLog = new AuditLog(EnumModule.LEAD.getModuleName(), 
+				null, null, EnumOperationType.EXPORT.getOperationType(), user,"导出线索");
+        List<Lead> leads = leadService.export(searchParams,dataShift,auditLog);
         logger.debug("列表信息数目“{}”", leads.size());
 
         logger.info("转换成excel文件并输出");
@@ -246,7 +269,9 @@ public class LeadController extends CommonController<Lead>{
     public String convCustomerAndContact(ModelMap modelMap, Long id) {
         logger.info("线索转换");
         User user = (User)modelMap.get(Constant.VS_USER);
-        leadService.leadConverter(user, id);
+        AuditLog auditLog = new AuditLog(EnumModule.LEAD.getModuleName(), 
+				id, leadService.get(id).getName(), EnumOperationType.MODIFY.getOperationType(), user,"线索转换客户，联系人");
+        leadService.modifyLeadConverter(auditLog,id);
         JsonDto json = new JsonDto("转换成功");
         json.setSuccessFlag(true);
         return json.toString();

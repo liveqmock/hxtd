@@ -26,11 +26,16 @@ import com.baihui.hxtd.soa.base.Constant;
 import com.baihui.hxtd.soa.base.orm.hibernate.HibernatePage;
 import com.baihui.hxtd.soa.base.utils.ImportExport;
 import com.baihui.hxtd.soa.base.utils.Search;
+import com.baihui.hxtd.soa.common.controller.CommonController;
 import com.baihui.hxtd.soa.order.entity.Order;
 import com.baihui.hxtd.soa.order.service.OrderService;
+import com.baihui.hxtd.soa.project.entity.Project;
+import com.baihui.hxtd.soa.system.entity.AuditLog;
 import com.baihui.hxtd.soa.system.entity.User;
 import com.baihui.hxtd.soa.system.service.DataShift;
 import com.baihui.hxtd.soa.system.service.DictionaryService;
+import com.baihui.hxtd.soa.util.EnumModule;
+import com.baihui.hxtd.soa.util.EnumOperationType;
 import com.baihui.hxtd.soa.util.JsonDto;
 /**
  * 
@@ -46,7 +51,7 @@ import com.baihui.hxtd.soa.util.JsonDto;
 @Controller
 @RequestMapping(value = "/order/order")
 @SessionAttributes(value = {Constant.VS_USER, Constant.VS_DATASHIFT})
-public class OrderController {
+public class OrderController extends CommonController<Project> {
 
 	private Logger logger = LoggerFactory.getLogger(this.getClass());
 	
@@ -125,7 +130,9 @@ public class OrderController {
 		order.setModifiedTime(new Date(new java.util.Date().getTime()));
 		order.setModifier(u);
 		order.setCreator(u);
-		orderService.modify(order, u);
+		AuditLog auditLog = new AuditLog(EnumModule.ORDER.getModuleName(), 
+				order.getId(), order.getCode(), EnumOperationType.MODIFY.getOperationType(), u);
+		orderService.modify(order,auditLog);
 		JsonDto json = JsonDto.modify(order.getId());
 		return json.toString();
 	}
@@ -152,7 +159,12 @@ public class OrderController {
 	public String delete(ModelMap modelMap, Long[] id){
 		logger.info("OrderController.delete删除线索");
 		User user = (User)modelMap.get(Constant.VS_USER);
-		orderService.delete(user, id);
+		AuditLog [] auditLogArr = new AuditLog [id.length];
+		for(int i=0; i<id.length; i++){
+			auditLogArr[i] = new AuditLog(EnumModule.LEAD.getModuleName(), 
+					id[i], orderService.get(id[i]).getCode(), EnumOperationType.DELETE.getOperationType(), user);
+		}
+		orderService.delete(id,auditLogArr);
 		JsonDto json = JsonDto.delete(id);
 		return json.toString();
 	}
@@ -198,7 +210,9 @@ public class OrderController {
 		order.setModifier(u);
 		order.setCreatedTime(new Date());
 		order.setModifiedTime(new Date());
-		orderService.add(order, u);
+		AuditLog auditLog = new AuditLog(EnumModule.ORDER.getModuleName(), 
+				order.getId(), order.getCode(), EnumOperationType.ADD.getOperationType(), u);
+		orderService.add(order, auditLog);
 		JsonDto json = JsonDto.add(order.getId());
 		return json.toString();
 	}

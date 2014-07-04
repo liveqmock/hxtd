@@ -33,4 +33,23 @@ public class LeadDao extends HibernateDAOImpl<Lead, Long>{
 		q.setParameterList("list", ids);
 		return q.executeUpdate();
 	}
+	/**
+ 	  *重写save方法，设定参数 
+	  * @param lead
+	  * @return
+	  * @see com.baihui.hxtd.soa.base.orm.hibernate.HibernateDAOImpl#save(java.lang.Object)
+	 */
+	public Lead save(Lead lead){
+		if(lead.getProvince().getId()==null){
+			lead.setProvince(null);
+		}
+		if(lead.getCity().getId()==null){
+			lead.setCity(null);
+		}
+		if(lead.getCounty().getId()==null){
+			lead.setCounty(null);
+		}
+		return super.save(lead);
+	}
+	
 }

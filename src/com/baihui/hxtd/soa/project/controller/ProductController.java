@@ -34,9 +34,12 @@ import com.baihui.hxtd.soa.base.utils.mapper.HibernateAwareObjectMapper;
 import com.baihui.hxtd.soa.project.entity.Product;
 import com.baihui.hxtd.soa.project.service.ProductService;
 import com.baihui.hxtd.soa.system.DictionaryConstant;
+import com.baihui.hxtd.soa.system.entity.AuditLog;
 import com.baihui.hxtd.soa.system.entity.User;
 import com.baihui.hxtd.soa.system.service.DataShift;
 import com.baihui.hxtd.soa.system.service.DictionaryService;
+import com.baihui.hxtd.soa.util.EnumModule;
+import com.baihui.hxtd.soa.util.EnumOperationType;
 import com.baihui.hxtd.soa.util.JsonDto;
 
 /**
@@ -147,8 +150,10 @@ public class ProductController {
 		product.setCreatedTime(date);
 		product.setModifier(user);
 		
-		/************保存*****************************/
-		productService.add(product, user);
+		/************ 新增 *****************************/
+		AuditLog auditLog = new AuditLog(EnumModule.PRODUCT.getModuleName(), 
+				product.getId(), product.getName(), EnumOperationType.ADD.getOperationType(), user);
+		productService.add(product, user, auditLog);
 		
 		return JsonDto.add(product.getId()).toString();
 	}
@@ -182,7 +187,10 @@ public class ProductController {
 			@ModelAttribute(Constant.VS_USER_ID) Long userId) {
 		User user = new User(userId);
 		product.setModifier(user);
-		productService.modify(product, user);
+		
+		AuditLog auditLog = new AuditLog(EnumModule.PRODUCT.getModuleName(), 
+				product.getId(), product.getName(), EnumOperationType.MODIFY.getOperationType(), user);
+		productService.modify(product, user, auditLog);
 		
 		return JsonDto.modify(product.getId()).toString();
 	}
@@ -212,7 +220,14 @@ public class ProductController {
 	@RequestMapping(value = "/delete.do")
 	public String delete(ModelMap modelMap, Long[] id) {
 		User user = (User)modelMap.get(Constant.VS_USER);
-		productService.delete(user, id);
+		
+		AuditLog [] auditLogArr = new AuditLog [id.length];
+		for(int i=0; i<id.length; i++){
+			auditLogArr[i] = new AuditLog(EnumModule.PRODUCT.getModuleName(), 
+					id[i], productService.getNameById(id[i]), EnumOperationType.DELETE.getOperationType(), user);
+		}
+		productService.delete(user, id, auditLogArr);
+		
 		JsonDto json = new JsonDto("删除成功");
 		json.setSuccessFlag(true);
 		

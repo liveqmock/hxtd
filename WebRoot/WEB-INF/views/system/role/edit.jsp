@@ -55,7 +55,7 @@
                     <td align="right" width="15%"><%--类型：--%></td>
                     <td align="left">
                         <div class="pr none">
-                            <select name="type.id" class="{required:true} select1 pr">
+                            <select name="type.id" class=" select1 pr">
                                 <%--<option value="1">--无--</option>--%>
                                 <c:forEach items="${types}" var="item">
                                     <option value="${item.id}" ${item.value==role.type.value?"selected":""}>${item.key}</option>

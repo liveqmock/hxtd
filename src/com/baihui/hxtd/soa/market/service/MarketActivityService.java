@@ -20,8 +20,6 @@ import com.baihui.hxtd.soa.system.dao.UserDao;
 import com.baihui.hxtd.soa.system.entity.AuditLog;
 import com.baihui.hxtd.soa.system.entity.User;
 import com.baihui.hxtd.soa.system.service.DataShift;
-import com.baihui.hxtd.soa.util.EnumModule;
-import com.baihui.hxtd.soa.util.EnumOperationType;
 
 /**
  * 功能描述：供应商模块service层
@@ -45,6 +43,33 @@ public class MarketActivityService {
 	private UserDao userDao;
 
 	/**
+     * get(根据ID查询市场活动)
+     * @param id 活动主键ID
+     * @return MarketActivity 活动实体
+     */
+    public MarketActivity get(Long id) {
+    	String hql = "select market from MarketActivity market " +
+    			"left join fetch market.typeDic " +
+    			"left join fetch market.statusDic " +
+    			"left join fetch market.sponsor " +
+    			"left join fetch market.bossHead " +
+    			"where market.id = ?";
+        return marketActivityDao.findUnique(hql, id);
+    }
+    
+    /**
+      * getNameById
+      * @Title: getNameById
+      * @Description: 通过id获取名称
+      * @param id
+      * @return String
+     */
+    public String getNameById(Long id){
+    	return marketActivityDao.get(id).getName();
+    }
+    
+	
+	/**
 	 * findPage(分页查询市场活动列表、非全model)
 	 * @param searchParams 查询条件
 	 * @param page 分页对象
@@ -57,11 +82,11 @@ public class MarketActivityService {
 			HibernatePage<MarketActivity> page)
 			throws NoSuchFieldException {
 		DetachedCriteria criteria = DetachedCriteria.forClass(MarketActivity.class);
-		criteria.setFetchMode("dic", FetchMode.JOIN);// 活动类型
-		criteria.setFetchMode("status", FetchMode.JOIN);// 活动状态
+		criteria.setFetchMode("typeDic", FetchMode.JOIN);// 活动类型
+		criteria.setFetchMode("statusDic", FetchMode.JOIN);// 活动状态
 		criteria.add(Restrictions.eq("isDeleted", false));// 过滤已删除
 		
-		DataAuthFliter(criteria, searchParams, dataShift);
+		dataAuthFliter(criteria, searchParams, dataShift);
 
 		return marketActivityDao.findPage(page, criteria);
 	}
@@ -71,12 +96,6 @@ public class MarketActivityService {
      * modifier:xiaoli.luo
      * @param entity 市场活动实体
      */
-    public void add(MarketActivity entity, User user) {
-    	AuditLog auditLog = new AuditLog(EnumModule.MARKETACTIVITY.getModuleName(), 
-    			entity.getId(), entity.getName(), EnumOperationType.ADD.getOperationType(), user);
-    	add(entity, user, auditLog);
-    }
-    
     public void add(MarketActivity entity, User user, AuditLog auditLog) {
     	marketActivityDao.save(entity);
     	auditLog.setRecordId(entity.getId());
@@ -87,31 +106,10 @@ public class MarketActivityService {
      * @param entity
      * @param sessionId
      */
-    public void modify(MarketActivity entity, User user) {
-    	AuditLog auditLog = new AuditLog(EnumModule.MARKETACTIVITY.getModuleName(), 
-    			entity.getId(), entity.getName(), EnumOperationType.ADD.getOperationType(), user);
-    	modify(entity, user, auditLog);
-    }
-	
-    
     public void modify(MarketActivity entity, User user, AuditLog auditLog) {
     	marketActivityDao.save(entity);
     }
-    
-	/**
-     * get(根据ID查询市场活动)
-     * @param id 活动主键ID
-     * @return MarketActivity 活动实体
-     */
-    public MarketActivity get(Long id) {
-    	String hql = "select market from MarketActivity market " +
-    			"left join fetch market.dic " +
-    			"left join fetch market.status " +
-    			"left join fetch market.sponsor " +
-    			"left join fetch market.bossHead " +
-    			"where market.id = ?";
-        return marketActivityDao.findUnique(hql, id);
-    }
+	
     
     /**
       * delete(删除活动记录)
@@ -119,8 +117,8 @@ public class MarketActivityService {
       * @Description: 根据活动主键ID删除记录，支持批量删除
       * @param id 活动主键IDS
      */
-    public void delete(User user, Long... id) {
-    	marketActivityDao.delete(id);
+    public void delete(User user, Long[] id, AuditLog [] auditLog) {
+    	marketActivityDao.logicalDelete(id);
     }
     
     /**
@@ -133,22 +131,22 @@ public class MarketActivityService {
     		DataShift dataShift) throws NoSuchFieldException {
     	DetachedCriteria criteria = DetachedCriteria.forClass(MarketActivity.class);
     	criteria.add(Restrictions.eq("isDeleted", false));
-        criteria.setFetchMode("dic", FetchMode.JOIN);
-        criteria.setFetchMode("status", FetchMode.JOIN);
+        criteria.setFetchMode("typeDic", FetchMode.JOIN);
+        criteria.setFetchMode("statusDic", FetchMode.JOIN);
         
-        DataAuthFliter(criteria, searchParams, dataShift);
+        dataAuthFliter(criteria, searchParams, dataShift);
         
         return marketActivityDao.find(criteria, 3000);
     }
     
     /**
-     * DataAuthFliter(数据级权限过滤)
+     * dataAuthFliter(数据级权限过滤)
      * @param criteria 
      * @param searchParams 过滤条件
      * @param dataShift 数据权限
      * @throws NoSuchFieldException
     */
-    private void DataAuthFliter(DetachedCriteria criteria,
+    private void dataAuthFliter(DetachedCriteria criteria,
     		Map<String, Object> searchParams,
     		DataShift dataShift) throws NoSuchFieldException {
     	 Map<String, SearchFilter> filters = Search.parse(searchParams);

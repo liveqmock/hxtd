@@ -61,6 +61,7 @@ Grid.defaults = {
     resultSelector: ".list",
     resultTemplateId: "template-tbody",
     checkItemSelector: ".checkitem",
+    operateCellSelector: ".operate-cell",
     onDelete: function (ids) {},//删除回调函数，参数=删除数据的主键编号
     deleteOneSelector: ".delete",
     disableButtonClass: ["allbtnno_l", "allbtnno_r"],
@@ -146,6 +147,7 @@ Grid.prototype = {
 
         this.header = this.grid.find(options.headerSelector);
         this.header.length == 0 && (this.header = this.grid.find("tr:has(th):first"));
+        this.btnCheckAll = this.header.find(options.checkAllSelector);
         this.sortCells = this.header.find(options.sortableSelector);
         this.result = this.grid.find(options.resultSelector);
         this.btnDeleteOne = this.result.find(options.deleteOneSelector);
@@ -369,14 +371,25 @@ Grid.prototype = {
         var _this = this;
         this.btnExport.click(function () {
             var exportButton = $(this);
-            jsUtil.confirm("最多导出符合条件的前3000条数据", function () {
-                var params = {};
-                _this.form.find(_this.options.exportFiledSelector).each(function () {
-                    var $this = $(this);
-                    params[$this.attr("name")] = $.map($this.fieldValue(), function (value) {return encodeURI(value);});
-                });
-                window.open($.URL.appendParams(exportButton.attr("uri"), $.param(params, true)), "_self");
-            });
+            var jqIds = _this.result.find(_this.options.checkItemSelector + ":checked");
+            if (jqIds.length == 0) {
+                jsUtil.alert("请选择一条或多条需要导出的数据！");
+                return;
+            }
+            var url = exportButton.attr("uri");
+            url = url.replace("pagination", "selected");
+            window.open($.URL.appendParams(url, $.param({id: $C.vals(jqIds)}, true)), "_blank");
+
+            /*
+             jsUtil.confirm("最多导出符合条件的前3000条数据", function () {
+             var params = {};
+             _this.form.find(_this.options.exportFiledSelector).each(function () {
+             var $this = $(this);
+             params[$this.attr("name")] = $.map($this.fieldValue(), function (value) {return encodeURI(value);});
+             });
+             window.open($.URL.appendParams(exportButton.attr("uri"), $.param(params, true)), "_self");
+             });
+             */
         });
         return this;
     },
@@ -413,15 +426,11 @@ Grid.prototype = {
     },
     /**绑定选择所有事件*/
     bindCheckAll: function () {
-        var container = this.result;
-        var checkAllSelector = this.options.checkAllSelector;
-        var checkItemSelector = this.options.checkItemSelector;
-        $(checkAllSelector, this.grid).click(function () {
-            $(checkItemSelector, container).attr("checked", this.checked);
-        });
-        $(checkItemSelector, this.result).live("click", function (e) {
-            $(checkAllSelector, container).attr("checked", $(checkItemSelector + ":not(:checked)", container).length == 0);
-            e.stopPropagation();//jquery 阻止冒泡事件
+        var _this = this;
+        this.btnCheckAll.click(function () {_this.result.find(_this.options.checkItemSelector).attr("checked", this.checked);});
+        this.result.find(this.options.checkItemSelector).live("click", function (e) {
+            _this.btnCheckAll.attr("checked", _this.result.find(_this.options.checkItemSelector + ":not(:checked)").length == 0);
+            e.stopPropagation();
         });
         return this;
     },
@@ -487,6 +496,13 @@ Grid.prototype = {
         } else if (order == "desc") {
             target.removeClass(this.options.sortDescUnselectedClass).addClass(this.options.sortDescSelectedClass);
         }
+        return this;
+    },
+    /**取消操作单元格行选中*/
+    cancelRowChecked: function () {
+        var operateCells = this.result.find(this.options.operateCellSelector);
+        operateCells.length == 0 && (operateCells = this.result.find("tr").find("td a"));
+        operateCells.bind("click", function (event) {event.stopPropagation();});
         return this;
     },
     /**绑定删除一个事件*/
@@ -643,23 +659,25 @@ Grid.prototype = {
         return this.loadGrid(options);
     },
     /**禁用按钮*/
-    disableButton: function (button) {
-        var disableButtonClass = this.options.disableButtonClass;
-        var enableButtonClass = this.options.enableButtonClass;
+    disableButton: function (button, enableClass, disableClass, gridName) {
+        var enableButtonClass = enableClass || this.options.enableButtonClass;
+        var disableButtonClass = disableClass || this.options.disableButtonClass;
+        gridName = gridName || this.gridName;
         for (var i = 0; i < disableButtonClass.length; i++) {
             button.children().eq(i).removeClass(enableButtonClass[i]).addClass(disableButtonClass[i]);
         }
-        button.unbind("click", button.data(this.gridName + "click"));
+        button.unbind("click", button.data(gridName + "click"));
         return this;
     },
     /**启用按钮*/
-    enableButton: function (button) {
-        var disableButtonClass = this.options.disableButtonClass;
-        var enableButtonClass = this.options.enableButtonClass;
+    enableButton: function (button, enableClass, disableClass, gridName) {
+        var enableButtonClass = enableClass || this.options.enableButtonClass;
+        var disableButtonClass = disableClass || this.options.disableButtonClass;
+        gridName = gridName || this.gridName;
         for (var i = 0; i < disableButtonClass.length; i++) {
             button.children().eq(i).removeClass(disableButtonClass[i]).addClass(enableButtonClass[i]);
         }
-        button.bind("click", button.data(this.gridName + "click"));
+        button.bind("click", button.data(gridName + "click"));
         return this;
     },
     /**清除表格内容*/
@@ -682,6 +700,7 @@ Grid.prototype = {
         } else {
             this.result.setTemplateElement(options.resultTemplateId).processTemplate(data);
         }
+        this.cancelRowChecked();
         return this;
     },
     /**绑定提交
@@ -744,26 +763,25 @@ jsUtil.bindSave = function (submitselector, formselector) {
     formselector = formselector || "form";
     var $form = $(formselector);
     var action = $form.attr("action");
-    $(submitselector).click(function () {
+    var click = function () {
+        var $this = $(this);
         var submitAction = action;
-        var redirectUri = $(this).attr("redirecturi");
-
-//        if (redirectUri) {
-//            submitAction += "?redirectUri=" + encodeURI(redirectUri);
-//        }
-//        $form.attr("action", submitAction);
-
+        var redirectUri = $this.attr("redirecturi");
         if (!$form.valid || ($form.valid && $form.valid())) {
+            Grid.prototype.disableButton($this, Grid.defaults.enableButtonClass, Grid.defaults.disableButtonClass, "");
             RcmsAjax.ajax(submitAction, function (result) {
                 if (redirectUri) {
                     redirectUri = redirectUri.replace("%s", "{}");
                     setTimeout(function () {window.open(window.ctx + redirectUri.format(result.result.result), "_self");}, 500);
                 }
-            }, null, $form.formSerialize());
+            }, function () {
+                setTimeout(function () {Grid.prototype.enableButton($this, Grid.defaults.enableButtonClass, Grid.defaults.disableButtonClass, "")}, 800);
+            }, $form.formSerialize());
         } else {
             return false;
         }
-    });
+    };
+    $(submitselector).click(click).data("click", click);
     return this;
 }
 

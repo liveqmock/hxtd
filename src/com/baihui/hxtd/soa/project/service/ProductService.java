@@ -16,6 +16,7 @@ import com.baihui.hxtd.soa.base.orm.hibernate.HibernatePage;
 import com.baihui.hxtd.soa.base.utils.Search;
 import com.baihui.hxtd.soa.project.dao.ProductDao;
 import com.baihui.hxtd.soa.project.entity.Product;
+import com.baihui.hxtd.soa.system.entity.AuditLog;
 import com.baihui.hxtd.soa.system.entity.User;
 import com.baihui.hxtd.soa.system.service.DataShift;
 
@@ -120,14 +121,34 @@ public class ProductService {
     }
 
     /**
+     * getNameById
+     * @Title: getNameById
+     * @Description: 通过id获取名称
+     * @param id
+     * @return String
+    */
+   public String getNameById(Long id){
+	   return productDao.get(id).getName();
+   }
+    
+    /**
      * save(保存：修改/新建)
      * @param entity 产品实体
+     * @param user 操作用户
+     * @param auditLog 审计日志
      */
-    public void add(Product entity, User user) {
+    public void add(Product entity, User user, AuditLog auditLog) {
         productDao.save(entity);
+        auditLog.setRecordId(entity.getId());
     }
     
-    public void modify(Product entity, User user) {
+    /**
+     * modify
+     * @param entity 产品实体
+     * @param user 操作用户
+     * @param auditLog 审计日志
+     */
+    public void modify(Product entity, User user, AuditLog auditLog) {
         productDao.save(entity);
     }
     
@@ -135,7 +156,7 @@ public class ProductService {
      * delete(根据产品主键ID删除记录，支持批量删除)
      * @param id 产品主键IDS
     */
-   public void delete(User user, Long... ids) {
+   public void delete(User user, Long[] ids, AuditLog[] auditLog) {
 	   productDao.logicalDelete(ids);
    }
 }

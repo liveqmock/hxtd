@@ -15,9 +15,20 @@ package com.baihui.hxtd.soa.util;
 public enum EnumOperationType {
 	
 	ADD(1),
-	UPDATE(2),
+	
+	MODIFY(2),
+	
+	/** 逻辑删除 */
 	LOGIC_DELETE(3),
-	DELETE(4);
+	
+	/** 删除（清空） */
+	DELETE(4),
+	
+	/** 导入 */
+	IMPORT(5),
+	
+	/** 导出 */
+	EXPORT(6);
 	
 	private int operationType;
 	

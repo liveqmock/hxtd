@@ -121,10 +121,6 @@ public class MenuController {
     public void detail(ModelMap model) {
         logger.info("存储表单初始化数据");
 
-        List<Dictionary> openTypes = dictionaryService.findChildren("010201");
-        model.addAttribute("openTypes", openTypes);
-        logger.debug("打开类型长度“{}”", openTypes.size());
-
         List<Dictionary> showLocations = dictionaryService.findChildren("010202");
         model.addAttribute("showLocations", showLocations);
         logger.debug("显示位置长度“{}”", showLocations.size());
@@ -140,7 +136,7 @@ public class MenuController {
      * 转至新增页面
      */
     @RequestMapping(value = "/toAddPage.do", method = RequestMethod.GET)
-    public String toAddPage(@RequestParam(required = false) Long parentId, ModelMap model) {
+    public String toAddPage(Long parentId, ModelMap model) {
         logger.info("转至新增页面");
 
         detail(model);
@@ -150,10 +146,10 @@ public class MenuController {
         menu.setIsActive(true);
         menu.setDefaultShow(false);
         menu.setIsLeaf(true);
-        if (parentId != null) {
-            menu.setParent(menuService.get(parentId));
-            menu.setLevel(menu.getParent().getLevel() + 1);
-        }
+//        if (parentId != null) {
+//            menu.setParent(menuService.get(parentId));
+//            menu.setLevel(menu.getParent().getLevel() + 1);
+//        }
         model.addAttribute("menu", menu);
 
         return "/system/menu/edit";

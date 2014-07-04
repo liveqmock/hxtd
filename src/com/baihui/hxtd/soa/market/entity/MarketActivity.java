@@ -16,6 +16,8 @@ import javax.persistence.Table;
 
 import org.hibernate.annotations.DynamicInsert;
 import org.hibernate.annotations.DynamicUpdate;
+import org.hibernate.annotations.NotFound;
+import org.hibernate.annotations.NotFoundAction;
 
 import com.baihui.hxtd.soa.system.entity.Dictionary;
 import com.baihui.hxtd.soa.system.entity.User;
@@ -44,12 +46,14 @@ public class MarketActivity implements Serializable {
 	/**活动类型*/
 	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "TYPE")
-	private Dictionary dic;
+	@NotFound(action = NotFoundAction.IGNORE)
+	private Dictionary typeDic;
 	
 	/**活动状态*/
 	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "STATUS")
-	private Dictionary status;
+	@NotFound(action = NotFoundAction.IGNORE)
+	private Dictionary statusDic;
 	
 	/**开始日期*/
 	@JsonFormat(pattern = "yyyy-MM-dd", timezone = "GMT+08:00")
@@ -85,12 +89,14 @@ public class MarketActivity implements Serializable {
 	@JsonIgnore
 	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "SPONSOR", updatable = false)
+	@NotFound(action = NotFoundAction.IGNORE)
 	private User sponsor;
 	
 	/**负责人*/
 	@JsonIgnore
 	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "BOSSHEAD")
+	@NotFound(action = NotFoundAction.IGNORE)
 	private User bossHead;
 	
 	/**备注*/
@@ -105,6 +111,7 @@ public class MarketActivity implements Serializable {
 	@JsonIgnore
 	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "CREATOR_ID", updatable = false)
+	@NotFound(action = NotFoundAction.IGNORE)
 	private User creator;
 	
 	/**创建时间*/
@@ -115,6 +122,7 @@ public class MarketActivity implements Serializable {
 	/**最后修改者*/
 	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "MODIFIER_ID")
+	@NotFound(action = NotFoundAction.IGNORE)
 	private User modifier;
 	
 	/**最后修改时间*/
@@ -137,21 +145,21 @@ public class MarketActivity implements Serializable {
 	public void setName(String name) {
 		this.name = name;
 	}
-
-	public Dictionary getDic() {
-		return dic;
+	
+	public Dictionary getTypeDic() {
+		return typeDic;
 	}
 
-	public void setDic(Dictionary dic) {
-		this.dic = dic;
+	public void setTypeDic(Dictionary typeDic) {
+		this.typeDic = typeDic;
 	}
 
-	public Dictionary getStatus() {
-		return status;
+	public Dictionary getStatusDic() {
+		return statusDic;
 	}
 
-	public void setStatus(Dictionary status) {
-		this.status = status;
+	public void setStatusDic(Dictionary statusDic) {
+		this.statusDic = statusDic;
 	}
 
 	public Date getBeginDate() {

@@ -61,10 +61,10 @@ function searchData(action){ // 搜索
 			</td>
 			<td width="15%" align="right">类型：</td>
 			<td align="left">
-				<select name="dic.id" class="select1 pr">
+				<select name="typeDic.id" class="select1 pr">
 					<option value="">--无--</option>
-					<c:forEach items="${dicType}" var="dic">
-						<option value="${dic.id}" ${dic.id==activity.dic.id?"selected":""}>${dic.key}</option>
+					<c:forEach items="${typeDic}" var="dic">
+						<option value="${dic.id}" ${dic.id==activity.typeDic.id?"selected":""}>${dic.key}</option>
 					</c:forEach>
 				</select>
 			</td>
@@ -74,10 +74,10 @@ function searchData(action){ // 搜索
 			<td align="left"><input name="name" type="text" value="${activity.name}" class="text_input3 required"/></td>
 			<td align="right">状态：</td>
 			<td align="left">
-				<select name="status.id" class="select1 pr">
+				<select name="statusDic.id" class="select1 pr">
 					<option value="">--无--</option>
-					<c:forEach items="${dicStatus}" var="dic">
-						<option value="${dic.id}" ${dic.id==activity.status.id?"selected":""}>${dic.key}</option>
+					<c:forEach items="${statusDic}" var="dic">
+						<option value="${dic.id}" ${dic.id==activity.statusDic.id?"selected":""}>${dic.key}</option>
 					</c:forEach>
 				</select>
 			</td>

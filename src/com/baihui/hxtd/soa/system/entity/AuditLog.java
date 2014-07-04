@@ -54,6 +54,9 @@ public class AuditLog {
 	/** 执行操作的类型 */
 	@JoinColumn(name = "TYPE")
 	private Integer type;
+	/** 备注（如：系统清空回收站） */
+	@JoinColumn(name = "REMARK")
+	private String remark;
 	
 	/** 操作者 */
 	@ManyToOne(fetch = FetchType.LAZY)
@@ -77,6 +80,16 @@ public class AuditLog {
 		this.recordName = recordName;
 		this.type = type;
 		this.creator = creator;
+	}
+	
+	public AuditLog(String moduleName, Long recordId, String recordName, Integer type, User creator, String remark) {
+		super();
+		this.moduleName = moduleName;
+		this.recordId = recordId;
+		this.recordName = recordName;
+		this.type = type;
+		this.creator = creator;
+		this.remark = remark;
 	}
 
 	public Long getId() {
@@ -120,6 +133,14 @@ public class AuditLog {
 	}
 	public void setCreatedTime(Date createdTime) {
 		this.createdTime = createdTime;
+	}
+
+	public void setRemark(String remark) {
+		this.remark = remark;
+	}
+
+	public String getRemark() {
+		return remark;
 	}
 	
 }

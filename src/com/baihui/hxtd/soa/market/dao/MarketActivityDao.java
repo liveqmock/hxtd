@@ -51,7 +51,7 @@ public class MarketActivityDao extends HibernateDAOImpl<MarketActivity, Long>{
 	 * @return void 返回类型
 	 * @throws
 	 */
-	public void delete(Long... id) {
+	public void logicalDelete(Long... id) {
 		for (int i = 0; i < id.length; i++) {
 			super.logicalDelete(id[i]);
 		}

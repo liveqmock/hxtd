@@ -130,7 +130,7 @@
                                        <b class="bb5"></b>
                                        <b class="bb5"></b>
                                        <b class="bb5"></b>
-      									<span class="block" style="background-color:#f5f5f6; 
+      									<span class="block" style="background-color:#fff; 
      												 width:238px; height:100%; border-left:1px solid #666666; border-right:1px solid #666666;">
        									<span class=" block ml10 mr10">
     								    <h1>名称：</h1>

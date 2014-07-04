@@ -15,10 +15,55 @@ package com.baihui.hxtd.soa.util;
 
 
 public enum EnumModule {
+	
+	/** 市场活动 */
+	MARKETACTIVITY("marketActivity"),
 
+	/** 线索 */
 	LEAD("lead"),
+	
+	/** 联系人 */
 	CONTACT("contact"),
-	MARKETACTIVITY("MarketActivity");
+	
+	/** 客户 */
+	CUSTOMER("customer"),
+	
+	/** 供应商 */
+	SUPPILER("supplier"),
+	
+	/** 项目 */
+	PROJECT("project"),
+	
+	
+	/** 产品 */
+	PRODUCT("product"),
+	
+	/** 订单 */
+	ORDER("order"),
+	
+	/** 用户 */
+	USER("user"),
+	
+	/** 角色 */
+	ROLE("role"),
+	
+	/** 菜单 */
+	MENU("menu"),
+	
+	/** 功能 */
+	FUNCTION("function"),
+	
+	/** 组件 */
+	COMPONENT("component"),
+	
+	/** 组织机构 */
+	ORGANIZATION("organization"),
+	
+	/** 系统消息 */
+	USERMESSAGE("userMessage"),
+	
+	/** 系统公告*/
+	NOTICE("notice");
 	
 	private String moduleName;
 	

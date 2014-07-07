@@ -105,6 +105,7 @@ public class OrderService {
 		order.setCode(getOrderCode());
 		orderDao.save(order);
 		auditLog.setRecordId(order.getId());
+		auditLog.setRecordName(order.getCode());
 	}
 	
 	public void modify(Order order, AuditLog auditLog){

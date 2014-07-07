@@ -31,6 +31,7 @@ import com.baihui.hxtd.soa.base.orm.hibernate.HibernatePage;
 import com.baihui.hxtd.soa.base.utils.ImportExport;
 import com.baihui.hxtd.soa.base.utils.Search;
 import com.baihui.hxtd.soa.base.utils.mapper.HibernateAwareObjectMapper;
+import com.baihui.hxtd.soa.common.controller.CommonController;
 import com.baihui.hxtd.soa.market.entity.MarketActivity;
 import com.baihui.hxtd.soa.market.service.MarketActivityService;
 import com.baihui.hxtd.soa.system.entity.AuditLog;

@@ -121,8 +121,12 @@ function searchData(action){//搜索弹出框
 				</td>
 				<td align="left">
 					<input type="text" id="txt_owner" value="${com.owner.realName}"
-						class="text_input3 required" onclick="searchData('owner')" readonly>
+						class="text_input3 required cp" onclick="searchData('owner')" readonly>
 					<input type="hidden" id="hide_owner" name="owner.id" value="${com.owner.id}"/>
+					<i class="s_inquiry globle_img block_inline ml5 vm cp"
+						title="搜索用户" onclick="searchData('owner');"></i>
+					<i class="dump_btn globle_img block_inline ml5 vm cp empty"
+						title="清除"></i>
 				</td>
 			</tr>
 
@@ -136,7 +140,7 @@ function searchData(action){//搜索弹出框
 						<option value="-1">
 							--请选择--
 						</option>
-						<c:forEach items="${dict}" var="d">
+						<c:forEach items="${type}" var="d">
 							<option value="${d.id}"
 								<c:if test="${d.id==com.type.id}">
              				selected
@@ -176,11 +180,45 @@ function searchData(action){//搜索弹出框
 			</tr>
 			<tr>
 				<td align="right">
-					供应商邮箱：
+					邮箱：
 				</td>
 				<td align="left">
 					<input type="text" name="email" value="${com.email}"
 						class="text_input3 email">
+				</td>
+				<td align="right">
+					法人：
+				</td>
+				<td align="left">
+					<input type="text" name="corporation" value="${com.corporation}"
+						class="text_input3 isTel">
+				</td>
+			</tr>
+			<tr>
+				<td align="right">
+					<span class="w_red">*&nbsp;</span>证件类型：
+				</td>
+				<td align="left">
+					<select name="cardType.id" class="select1 pr requiredSelect">
+						<option value="-1">
+							--请选择--
+						</option>
+						<c:forEach items="${cardType}" var="d">
+							<option value="${d.id}"
+								<c:if test="${d.id==com.cardType.id}">
+             					selected
+             					</c:if>
+             				>${d.key}
+							</option>
+						</c:forEach>
+					</select>
+				</td>
+				<td align="right">
+					证件号码：
+				</td>
+				<td align="left">
+					<input type="text" name="cardNum" value="${com.cardNum}"
+						class="text_input3 number">
 				</td>
 			</tr>
 		</table>

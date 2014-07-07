@@ -58,6 +58,23 @@ public class Supplier {
 	@JoinColumn(name = "OWNER")
 	private User owner;
 	/**
+	 * 法人
+	 */
+	@Column(name = "CORPORATION")
+	private String corporation;
+	/**
+	 * 证件号码
+	 */
+	@Column(name = "CARD_NUM")
+	private String cardNum;
+	/**
+	 * 证件类型
+	 */
+	@ManyToOne(fetch = FetchType.LAZY)
+	@JoinColumn(name = "CARD_TYPE")
+	private Dictionary cardType;
+	
+	/**
 	 * 电话
 	 */
 	@Column(name = "PHONE")
@@ -133,14 +150,6 @@ public class Supplier {
 	@Column(name = "IS_DELETED", nullable = false, updatable = false)
     private Boolean isDeleted = false;
 
-	public Boolean getIsDeleted() {
-		return isDeleted;
-	}
-
-	public void setIsDeleted(Boolean isDeleted) {
-		this.isDeleted = isDeleted;
-	}
-
 	public Long getId() {
 		return id;
 	}
@@ -163,6 +172,38 @@ public class Supplier {
 
 	public void setType(Dictionary type) {
 		this.type = type;
+	}
+
+	public User getOwner() {
+		return owner;
+	}
+
+	public void setOwner(User owner) {
+		this.owner = owner;
+	}
+
+	public String getCorporation() {
+		return corporation;
+	}
+
+	public void setCorporation(String corporation) {
+		this.corporation = corporation;
+	}
+
+	public String getCardNum() {
+		return cardNum;
+	}
+
+	public void setCardNum(String cardNum) {
+		this.cardNum = cardNum;
+	}
+
+	public Dictionary getCardType() {
+		return cardType;
+	}
+
+	public void setCardType(Dictionary cardType) {
+		this.cardType = cardType;
 	}
 
 	public String getPhone() {
@@ -221,6 +262,14 @@ public class Supplier {
 		this.address = address;
 	}
 
+	public String getEmail() {
+		return email;
+	}
+
+	public void setEmail(String email) {
+		this.email = email;
+	}
+
 	public String getRemark() {
 		return remark;
 	}
@@ -261,20 +310,14 @@ public class Supplier {
 		this.modifiedTime = modifiedTime;
 	}
 
-	public String getEmail() {
-		return email;
+	public Boolean getIsDeleted() {
+		return isDeleted;
 	}
 
-	public void setEmail(String email) {
-		this.email = email;
+	public void setIsDeleted(Boolean isDeleted) {
+		this.isDeleted = isDeleted;
 	}
 
-	public User getOwner() {
-		return owner;
-	}
-
-	public void setOwner(User owner) {
-		this.owner = owner;
-	}
+	
 
 }

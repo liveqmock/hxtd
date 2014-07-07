@@ -61,7 +61,7 @@ function searchData(action){//搜索弹出框
 	jsUtil.dialogIframe(url, title, 800, 465, function(){//确定回调
 		var $userObj = $(".bor_e28d1f", window.frames["dialogIframe"].document);
 			if($userObj.length > 0){
-				$("#txt_" + action).val($userObj.find("td:eq(1)").text());
+				$("#txt_" + action).val($userObj.find("td:eq(0)").text());
 				$("#hide_" + action +"_id").val($userObj.attr("id"));
 			}
 	});
@@ -126,8 +126,9 @@ function clearInputVal(obj){//清除
 				<td align="left">
 					<fmt:formatDate value="${project.beginTime }"
 						pattern="yyyy-MM-dd" var="beginTime" />
+					<a href="javascript:;" class="pa time_closenone1"></a>
 					<input type="text" value="${beginTime }" name="beginTime"
-						class="time text_input3">
+						class="time text_input3 input_close1" readonly/>
 				</td>
 			</tr>
 
@@ -146,8 +147,9 @@ function clearInputVal(obj){//清除
 				<td align="left">
 					<fmt:formatDate value="${project.dendlineTime}"
 						pattern="yyyy-MM-dd" var="dendlineTime" />
+					<a href="javascript:;" class="pa time_closenone1"></a>
 					<input type="text" value="${dendlineTime}" name="dendlineTime"
-						class="time text_input3">
+						class="time text_input3 input_close1" readonly>
 				</td>
 			</tr>
 
@@ -210,8 +212,9 @@ function clearInputVal(obj){//清除
 				<td align="left">
 					<fmt:formatDate value="${project.openTime}" pattern="yyyy-MM-dd"
 						var="openTime" />
+					<a href="javascript:;" class="pa time_closenone1"></a>
 					<input type="text" value="${openTime}" name="openTime"
-						class="text_input3 time">
+						class="text_input3 time input_close1" readonly>
 				</td>
 			</tr>
 

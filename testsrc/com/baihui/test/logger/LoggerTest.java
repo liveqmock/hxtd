@@ -3,13 +3,13 @@ package com.baihui.test.logger;
 import org.junit.Test;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.test.context.ContextConfiguration;
-import org.springframework.test.context.junit4.AbstractJUnit4SpringContextTests;
 
-public class LoggerTest  {
+public class LoggerTest {
     @Test
     public void testLoginForm() throws Exception {
         Logger logger = LoggerFactory.getLogger(this.getClass());
+        System.out.println(new String("1") == "1");
+        logger.debug("");
         logger.debug("调试");
         logger.info("信息");
         logger.warn("警告");

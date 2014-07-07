@@ -203,7 +203,7 @@ function formReset() {
 						<c:if test="${VS_HAS_FUNCTIONS.supplierExport}">
 							<li>
 									<a href="javascript:void(0)"
-										uri="${ctx}/project/supplier/export.do?TYPE=pagination"
+										uri="${ctx}/project/supplier/export.do?TYPE=selected"
 										class="leading_out globle_img block_inline mr10 export"
 										title="导出"></a>
 							</li>
@@ -215,42 +215,42 @@ function formReset() {
 				class=" ml35 mr35">
 				<table class="cb id_table2 w">
 					<tr>
-						<th>
-							<input type="checkbox" id="id" class="checkall" />
-						</th>
-						<th>
-							供应商名
-						</th>
-						<th>
-							所有者
-						</th>
-						<th>
-							供应商类型
-						</th>
-						<th>
-							电话
-						</th>
-						<th>
-							手机
-						</th>
-						<th>
-							传真
-						</th>
-						<th width="15%" class="sortable orderby" orderby="createdTime">
-							创建时间
-						</th>
-						<th>
-							创建者
-						</th>
-						<th width="15%" class="sortable orderby" orderby="modifiedTime">
-							修改时间
-						</th>
-						<th>
-							修改者
-						</th>
-						<th width="15%">
-							操作
-						</th>
+							<th>
+								<input type="checkbox" id="id" class="checkall" />
+							</th>
+							<th>
+								供应商名
+							</th>
+							<th>
+								所有者
+							</th>
+							<th>
+								供应商类型
+							</th>
+							<th>
+								电话
+							</th>
+							<th>
+								手机
+							</th>
+							<th>
+								传真
+							</th>
+							<th>
+								创建者
+							</th>
+							<th width="10%" class="sortable orderby" orderby="createdTime">
+								创建时间
+							</th>
+							<th>
+								修改者
+							</th>
+							<th width="10%" class="sortable orderby" orderby="modifiedTime">
+								修改时间
+							</th>
+							<th width="9%">
+								操作
+							</th>
 					</tr>
 				</table>
 			</div>
@@ -279,19 +279,19 @@ function formReset() {
 							<th>
 								传真
 							</th>
-							<th width="15%" class="sortable orderby" orderby="createdTime">
-								创建时间
-							</th>
 							<th>
 								创建者
 							</th>
-							<th width="15%" class="sortable orderby" orderby="modifiedTime">
-								修改时间
+							<th width="10%" class="sortable orderby" orderby="createdTime">
+								创建时间
 							</th>
 							<th>
 								修改者
 							</th>
-							<th width="15%">
+							<th width="10%" class="sortable orderby" orderby="modifiedTime">
+								修改时间
+							</th>
+							<th width="9%">
 								操作
 							</th>
 						</tr>
@@ -320,10 +320,10 @@ function formReset() {
                 <td>{$T.row.phone}</td>
                 <td>{$T.row.mobile}</td>
                 <td>{$T.row.fax}</td>
-                <td>{$T.row.createdTime}</td>
                 <td>{$T.row.creator.realName}</td>
-                <td>{$T.row.modifiedTime}</td>
+                <td>{$T.row.createdTime}</td>
                 <td>{$T.row.modifier.realName}</td>
+                <td>{$T.row.modifiedTime}</td>
                 <td align="center">
                         <c:if test="${VS_HAS_FUNCTIONS.supplierView}">
                             <a

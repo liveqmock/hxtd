@@ -31,6 +31,7 @@ import com.baihui.hxtd.soa.base.orm.hibernate.HibernatePage;
 import com.baihui.hxtd.soa.base.utils.ImportExport;
 import com.baihui.hxtd.soa.base.utils.Search;
 import com.baihui.hxtd.soa.base.utils.mapper.HibernateAwareObjectMapper;
+import com.baihui.hxtd.soa.common.controller.CommonController;
 import com.baihui.hxtd.soa.project.entity.Product;
 import com.baihui.hxtd.soa.project.service.ProductService;
 import com.baihui.hxtd.soa.system.DictionaryConstant;
@@ -57,7 +58,7 @@ import com.baihui.hxtd.soa.util.JsonDto;
 @Controller
 @RequestMapping(value = "/project/product")
 @SessionAttributes(value = { Constant.VS_USER_ID, Constant.VS_USER, Constant.VS_DATASHIFT })
-public class ProductController {
+public class ProductController extends CommonController<Product> {
 
 	//IOC注入
 	@Resource

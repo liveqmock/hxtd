@@ -138,7 +138,7 @@ function reset() {
 					<c:if test="${VS_HAS_FUNCTIONS.orderExport}">
 								<li>
 									<a href="javascript:void(0)"
-										uri="${ctx}/order/order/export.do?TYPE=pagination"
+										uri="${ctx}/order/order/export.do?TYPE=selected"
 										class="leading_out globle_img block_inline mr10 export"
 										title="导出"></a>
 								</li>

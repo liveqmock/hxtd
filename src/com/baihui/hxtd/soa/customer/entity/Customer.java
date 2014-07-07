@@ -162,13 +162,71 @@ public class Customer implements Serializable {
 	@Column(name = "EMAIL")
 	private String email;
 	
+	/**
+	 * 客户属性
+	 */
+	@ManyToOne(fetch = FetchType.LAZY)
+	@JoinColumn(name = "PROPERTY")
+	private Dictionary property;
 	
 	/**
-	 * 
+	 * 出资方式
 	 */
+	@Column(name = "CONTRIBUTION_TYPE")
+	private String contributionType;
+	
+
+	/**
+	 * 出资规模
+	 */
+	@Column(name = "CONTRIBUTION_SCALE")
+	private String contributionScale;
+	
+	/**
+	 * 家庭住址
+	 */
+	@Column(name = "FAMILY_ADDR")
+	private String familyAddr;
+	
+	/**
+	 * 理财顾问
+	 */
+	@Column(name = "FINANCIAL_ADVISOR")
+	private String financialAdvisor;
+	
+	/**
+	 * 理财经理
+	 */
+	@Column(name = "FINANCIAL_MANAGER")
+	private String financialManager;
+	
+	/**
+	 * 邀约人
+	 */
+	@Column(name = "APPOINTMENT")
+	private String appointment;
+
+	/**
+	 * 理财总监
+	 */
+	@Column(name = "FINANCIAL_DIRECTOR")
+	private String financialDirector;
+
+	/**
+	 * 所在部门
+	 */
+	@Column(name = "DEPT")
+	private String dept;
+	
+	/**
+	 * 职务名称
+	 */
+	@Column(name = "JOB")
+	private String job;
+	
 	@Column(name = "IS_DELETED",updatable=false)
 	private Boolean isDeleted;
-	
+
 	public Long getId() {
 		return id;
 	}
@@ -297,7 +355,6 @@ public class Customer implements Serializable {
 		this.bankAccount = bankAccount;
 	}
 
-
 	public Dictionary getOwnerShip() {
 		return ownerShip;
 	}
@@ -312,68 +369,6 @@ public class Customer implements Serializable {
 
 	public void setIndustry(Dictionary industry) {
 		this.industry = industry;
-	}
-
-	
-	public String getAddress() {
-		return address;
-	}
-
-	public void setAddress(String address) {
-		this.address = address;
-	}
-
-
-
-
-	public Boolean getIsDeleted() {
-		return isDeleted;
-	}
-
-	public void setIsDeleted(Boolean isDeleted) {
-		this.isDeleted = isDeleted;
-	}
-
-	public String getRemark() {
-		return remark;
-	}
-
-	public void setRemark(String remark) {
-		this.remark = remark;
-	}
-
-	
-
-	public Date getCreatedTime() {
-		return createdTime;
-	}
-
-	public void setCreatedTime(Date createdTime) {
-		this.createdTime = createdTime;
-	}
-
-	public Date getModifiedTime() {
-		return modifiedTime;
-	}
-
-	public void setModifiedTime(Date modifiedTime) {
-		this.modifiedTime = modifiedTime;
-	}
-
-	public User getCreator() {
-		return creator;
-	}
-
-	public void setCreator(User creator) {
-		this.creator = creator;
-	}
-
-	public User getModifier() {
-		return modifier;
-	}
-
-	public void setModifier(User modifier) {
-		this.modifier = modifier;
 	}
 
 	public PCAS getProvince() {
@@ -400,6 +395,54 @@ public class Customer implements Serializable {
 		this.county = county;
 	}
 
+	public String getAddress() {
+		return address;
+	}
+
+	public void setAddress(String address) {
+		this.address = address;
+	}
+
+	public String getRemark() {
+		return remark;
+	}
+
+	public void setRemark(String remark) {
+		this.remark = remark;
+	}
+
+	public User getCreator() {
+		return creator;
+	}
+
+	public void setCreator(User creator) {
+		this.creator = creator;
+	}
+
+	public Date getCreatedTime() {
+		return createdTime;
+	}
+
+	public void setCreatedTime(Date createdTime) {
+		this.createdTime = createdTime;
+	}
+
+	public User getModifier() {
+		return modifier;
+	}
+
+	public void setModifier(User modifier) {
+		this.modifier = modifier;
+	}
+
+	public Date getModifiedTime() {
+		return modifiedTime;
+	}
+
+	public void setModifiedTime(Date modifiedTime) {
+		this.modifiedTime = modifiedTime;
+	}
+
 	public String getEmail() {
 		return email;
 	}
@@ -408,6 +451,95 @@ public class Customer implements Serializable {
 		this.email = email;
 	}
 
+	public Dictionary getProperty() {
+		return property;
+	}
+
+	public void setProperty(Dictionary property) {
+		this.property = property;
+	}
+
+	public String getContributionType() {
+		return contributionType;
+	}
+
+	public void setContributionType(String contributionType) {
+		this.contributionType = contributionType;
+	}
+
+	public String getContributionScale() {
+		return contributionScale;
+	}
+
+	public void setContributionScale(String contributionScale) {
+		this.contributionScale = contributionScale;
+	}
+
+	public String getFamilyAddr() {
+		return familyAddr;
+	}
+
+	public void setFamilyAddr(String familyAddr) {
+		this.familyAddr = familyAddr;
+	}
+
+	public String getFinancialAdvisor() {
+		return financialAdvisor;
+	}
+
+	public void setFinancialAdvisor(String financialAdvisor) {
+		this.financialAdvisor = financialAdvisor;
+	}
+
+	public String getFinancialManager() {
+		return financialManager;
+	}
+
+	public void setFinancialManager(String financialManager) {
+		this.financialManager = financialManager;
+	}
+
+	public String getAppointment() {
+		return appointment;
+	}
+
+	public void setAppointment(String appointment) {
+		this.appointment = appointment;
+	}
+
+	public String getFinancialDirector() {
+		return financialDirector;
+	}
+
+	public void setFinancialDirector(String financialDirector) {
+		this.financialDirector = financialDirector;
+	}
+
+	public String getDept() {
+		return dept;
+	}
+
+	public void setDept(String dept) {
+		this.dept = dept;
+	}
+
+	public String getJob() {
+		return job;
+	}
+
+	public void setJob(String job) {
+		this.job = job;
+	}
+
+	public Boolean getIsDeleted() {
+		return isDeleted;
+	}
+
+	public void setIsDeleted(Boolean isDeleted) {
+		this.isDeleted = isDeleted;
+	}
+	
+	
 
 	
 }

@@ -67,7 +67,7 @@ function searchData(action){//搜索弹出框
 	jsUtil.dialogIframe(url, title, 800, 465, function(){//确定回调
 		var $userObj = $(".bor_e28d1f", window.frames["dialogIframe"].document);
 			if($userObj.length > 0){
-				$("#txt_" + action).val($userObj.find("td:eq(1)").text());
+				$("#txt_" + action).val($userObj.find("td:eq(0)").text());
 				$("#hide_" + action +"_id").val($userObj.attr("id"));
 			}
 	});
@@ -117,7 +117,8 @@ function clearInputVal(obj){//清除
 				</td>
 				<td align="left">
 					<input type="text" id="txt_owner" value="${order.owner.name }"
-						class="text_input3 required" readonly />
+						class="text_input3 cp required" readonly 
+						onclick="searchData('owner');" />
 					<input type="hidden" id="hide_owner_id" name="owner.id"
 						value="${order.owner.id }" />
 					<i class="s_inquiry globle_img block_inline ml5 vm cp"
@@ -132,7 +133,9 @@ function clearInputVal(obj){//清除
 				</td>
 				<td align="left">
 					<input type="text" value="${order.product.name }"
-						class="text_input3 required" id="txt_product" readonly/>
+						class="text_input3 cp required" id="txt_product" 
+						onclick="searchData('product');" 
+						readonly/>
 					<input type="hidden" value="${order.product.id}"
 						id="hide_product_id" name="product.id" />
 					<i class="s_inquiry globle_img block_inline ml5 vm cp"
@@ -145,7 +148,9 @@ function clearInputVal(obj){//清除
 				</td>
 				<td align="left">
 					<input type="text" id="txt_customer"
-						value="${order.customer.name }" class="text_input3 required" readonly/>
+						value="${order.customer.name }" 
+						class="text_input3 cp required" readonly
+						 onclick="searchData('customer');"/>
 					<input type="hidden" value="${order.customer.id}"
 						id="hide_customer_id" name="customer.id" />
 					<i class="s_inquiry globle_img block_inline ml5 vm cp"
@@ -229,7 +234,8 @@ function clearInputVal(obj){//清除
 				<td align="left">
 					<input type="text" id="txt_salesManager"
 						value="${order.salesManager.name }"
-						class="text_input3 required" readonly />
+						class="text_input3 cp required" readonly 
+						onclick="searchData('salesManager');"/>
 					<input type="hidden" id="hide_salesManager_id"
 						name="salesManager.id" value="${order.salesManager.id }" />
 					<i class="s_inquiry globle_img block_inline ml5 vm cp"
@@ -243,7 +249,8 @@ function clearInputVal(obj){//清除
 				<td align="left">
 					<input type="text" id="txt_salesMajordomo"
 						value="${order.salesMajordomo.name }"
-						class="text_input3 required" readonly />
+						class="text_input3 cp required" readonly
+						onclick="searchData('salesMajordomo');" />
 					<input type="hidden" id="hide_salesMajordomo_id"
 						name="salesMajordomo.id" value="${order.owner.id }" />
 					<i class="s_inquiry globle_img block_inline ml5 vm cp"
@@ -259,8 +266,9 @@ function clearInputVal(obj){//清除
 				<td align="left">
 				<fmt:formatDate value="${order.orderEndTime }"
 						pattern="yyyy-MM-dd" var="endTime" />
+						<a href="javascript:;" class="pa time_closenone1"></a>
 					<input type="text" name="orderEndTime" value="${endTime }"
-						class="text_input3 time required" readonly />
+						class="text_input3 input_close1 time required" readonly />
 				</td>
 			</tr>
 		</table>

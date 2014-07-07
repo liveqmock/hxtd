@@ -501,14 +501,14 @@ Grid.prototype = {
     /**取消操作单元格行选中*/
     cancelRowChecked: function () {
         var operateCells = this.result.find(this.options.operateCellSelector);
-        operateCells.length == 0 && (operateCells = this.result.find("tr").find("td a"));
+        operateCells.length == 0 && (operateCells = this.result.find("tr").find("td a:not({})".format(this.options.deleteOneSelector)));
         operateCells.bind("click", function (event) {event.stopPropagation();});
         return this;
     },
     /**绑定删除一个事件*/
     bindDeleteOne: function () {
         var _this = this;
-        this.btnDeleteOne.live("click", function () {
+        this.btnDeleteOne.live("click", function (event) {
             var $this = $(this);
             jsUtil.confirm("确定要删除吗？", function () {
                 var url = $this.attr("uri");
@@ -517,6 +517,7 @@ Grid.prototype = {
                     setTimeout(function () {_this.loadGrid();}, 500);
                 });
             });
+            event.stopPropagation();
         });
         return this;
     },

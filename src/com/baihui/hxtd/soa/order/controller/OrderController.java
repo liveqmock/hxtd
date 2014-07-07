@@ -29,7 +29,6 @@ import com.baihui.hxtd.soa.base.utils.Search;
 import com.baihui.hxtd.soa.common.controller.CommonController;
 import com.baihui.hxtd.soa.order.entity.Order;
 import com.baihui.hxtd.soa.order.service.OrderService;
-import com.baihui.hxtd.soa.project.entity.Project;
 import com.baihui.hxtd.soa.system.entity.AuditLog;
 import com.baihui.hxtd.soa.system.entity.User;
 import com.baihui.hxtd.soa.system.service.DataShift;
@@ -51,7 +50,7 @@ import com.baihui.hxtd.soa.util.JsonDto;
 @Controller
 @RequestMapping(value = "/order/order")
 @SessionAttributes(value = {Constant.VS_USER, Constant.VS_DATASHIFT})
-public class OrderController extends CommonController<Project> {
+public class OrderController extends CommonController<Order> {
 
 	private Logger logger = LoggerFactory.getLogger(this.getClass());
 	
@@ -161,7 +160,7 @@ public class OrderController extends CommonController<Project> {
 		User user = (User)modelMap.get(Constant.VS_USER);
 		AuditLog [] auditLogArr = new AuditLog [id.length];
 		for(int i=0; i<id.length; i++){
-			auditLogArr[i] = new AuditLog(EnumModule.LEAD.getModuleName(), 
+			auditLogArr[i] = new AuditLog(EnumModule.ORDER.getModuleName(), 
 					id[i], orderService.get(id[i]).getCode(), EnumOperationType.DELETE.getOperationType(), user);
 		}
 		orderService.delete(id,auditLogArr);

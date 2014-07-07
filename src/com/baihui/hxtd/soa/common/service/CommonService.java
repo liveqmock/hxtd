@@ -91,7 +91,7 @@ public class CommonService {
             return "";
         }
 
-        String join = String.format(" inner join fetch %s.", entityName);
+        String join = String.format(" left join fetch %s.", entityName);
         return join + StringUtils.join(fetchs, join);
     }
 

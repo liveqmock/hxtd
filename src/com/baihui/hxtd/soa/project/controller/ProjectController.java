@@ -225,9 +225,9 @@ public class ProjectController extends CommonController<Project> {
 		}
 		boolean flag = projectService.delete(auditLogArr,id);
 		if(flag){
-			return new JsonDto().toString();
+			return JsonDto.delete(id).toString();
 		}else{
-			return new JsonDto("数据存在关联,删除失败!").toString(); 
+			return new JsonDto("被删除数据存在关联产品，删除失败!").toString(); 
 		}
 	}
 	

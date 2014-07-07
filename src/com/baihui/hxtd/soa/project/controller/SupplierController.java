@@ -2,6 +2,7 @@
 package com.baihui.hxtd.soa.project.controller;
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
@@ -122,8 +123,6 @@ public class SupplierController extends CommonController<Supplier> {
 			returnStr= "/project/supplier/edit";
 		}
 		com = supplierService.get(id);
-		List<Dictionary> dict = dictionaryService.findChildren("050101");
-		model.addAttribute("dict",dict);
 		model.addAttribute("com",com);
 		model.addAttribute("funcUrl", funcUrl);
 		return returnStr;
@@ -143,8 +142,7 @@ public class SupplierController extends CommonController<Supplier> {
 	public String toAddPage(Model model){
 		logger.info("SupplierController.view查询组件");
 		String funcUrl="/project/supplier/add.do";
-		List<Dictionary> dict = dictionaryService.findChildren("050101");
-		model.addAttribute("dict",dict);
+		setDefaultDict(model);
 		model.addAttribute("funcUrl", funcUrl);
 		return "/project/supplier/edit";
 	}
@@ -164,11 +162,18 @@ public class SupplierController extends CommonController<Supplier> {
 		logger.info("SupplierController.toModifyPage查询组件");
 		String funcUrl="/project/supplier/modify.do";
 		Supplier com  = supplierService.get(id);
-		List<Dictionary> dict = dictionaryService.findChildren("050101");
-		model.addAttribute("dict",dict);
+		setDefaultDict(model);
 		model.addAttribute("com",com);
 		model.addAttribute("funcUrl", funcUrl);
 		return "/project/supplier/edit";
+	}
+	
+	
+	
+	
+	private void setDefaultDict(Model model){
+		model.addAttribute("type",dictionaryService.findChildren("050101"));
+		model.addAttribute("cardType",dictionaryService.findChildren("040303"));
 	}
 	/**
 	  * modify(保存：修改)
@@ -240,9 +245,9 @@ public class SupplierController extends CommonController<Supplier> {
 		}
 		boolean flag = supplierService.delete(auditLogArr,id);
 		if(flag){
-			return new JsonDto().toString();
+			return JsonDto.delete(id).toString();
 		}else{
-			return new JsonDto("数据存在关联,删除失败!").toString(); 
+			return new JsonDto("被删除数据存在关联项目，无法删除!").toString(); 
 		}
 	}
 	

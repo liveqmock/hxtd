@@ -39,10 +39,6 @@
 			<tr>
 				<td align="right" width="15%">客户所有者：</td>
 				<td align="left">${customer.owner.realName}</td>
-				<td align="right" width="15%">客户名：</td>
-				<td align="left">${customer.name}</td>
-			</tr>
-			<tr>
 				<td align="right" width="15%">客户类型：</td>
 				<td align="left">
 					<c:choose>
@@ -50,6 +46,11 @@
 					<c:otherwise>${customer.type.key}</c:otherwise>
 					</c:choose>
 				</td>
+			</tr>
+			<tr>
+				<td align="right" width="15%">客户名称：</td>
+				<td align="left">${customer.name}</td>
+				
 				<td align="right" width="15%">客户来源：</td>
 				<td align="left">
 					<c:choose>
@@ -59,26 +60,21 @@
 				</td>
 			</tr>
 			<tr>
-				<td align="right" width="15%">风险等级：</td>
+				<td align="right" width="15%">客户属性：</td>
 				<td align="left">
-					<c:choose>
-						<c:when test="${customer.riskGrade.id=='040304'}"></c:when>
-						<c:otherwise>${customer.riskGrade.key}</c:otherwise>
-					</c:choose>
+				<c:choose>
+						<c:when test="${customer.property.id=='40308'}"></c:when>
+						<c:otherwise>${customer.property.key}</c:otherwise>
+				</c:choose>
 				</td>
-				<td align="right" width="15%">证件类型：</td>
-				<td align="left">
-					<c:choose>
-						<c:when test="${customer.cardType.id=='040303'}"></c:when>
-						<c:otherwise>${customer.cardType.key}</c:otherwise>
-					</c:choose>
-				</td>
+				<td align="right" width="15%">邮箱：</td>
+				<td align="left">${customer.email}</td>
 			</tr>
 			<tr>
-				<td align="right" width="15%">证件号：</td>
-				<td align="left">${customer.cardNum}</td>
 				<td align="right" width="15%">电话：</td>
 				<td align="left">${customer.phone}</td>
+				<td align="right" width="15%">传真：</td>
+				<td align="left">${customer.fax }</td>
 			</tr>
 			<tr>
 				<td align="right" width="15%">手机：</td>
@@ -87,12 +83,15 @@
 				<td align="left">${customer.postCode}</td>
 			</tr>
 			<tr>
-				<td align="right" width="15%">传真：</td>
-				<td align="left">${customer.fax }</td>
 				<td align="right" width="15%">公司：</td>
 				<td align="left">${customer.company}</td>
+				<td align="right" width="15%">所在部门：</td>
+				<td align="left">${customer.dept}</td>
+				
 			</tr>
 			<tr>
+				<td align="right" width="15%">职务名称：</td>
+				<td align="left">${customer.job}</td>
 				<td align="right" width="15%">开户银行：</td>
 				<td align="left">
 					<c:choose>
@@ -100,12 +99,14 @@
 						<c:otherwise>${customer.openBank.key}</c:otherwise>
 					</c:choose>
 				</td>
-				<td align="right" width="15%">银行户名：</td>
-				<td align="left">${customer.bankName}</td>
 			</tr>
 			<tr>
+				<td align="right" width="15%">银行户名：</td>
+				<td align="left">${customer.bankName}</td>
 				<td align="right" width="15%">账号：</td>
 				<td align="left">${customer.bankAccount}</td>
+			</tr>
+			<tr>
 				<td align="right" width="15%">所有权：</td>
 				<td align="left">
 					<c:choose>
@@ -113,13 +114,48 @@
 						<c:otherwise>${customer.ownerShip.key}</c:otherwise>
 					</c:choose>
 				</td>
-			</tr>
-			<tr>
 				<td align="right" width="15%">行业：</td>
 				<td align="left">${customer.industry.key}</td>
-				<td align="right" width="15%">邮箱：</td>
-				<td align="left">${customer.email}</td>
 			</tr>
+			<tr>
+				<td align="right" width="15%">证件类型：</td>
+				<td align="left">
+					<c:choose>
+						<c:when test="${customer.cardType.id=='040303'}"></c:when>
+						<c:otherwise>${customer.cardType.key}</c:otherwise>
+					</c:choose>
+				</td>
+				<td align="right" width="15%">证件号：</td>
+				<td align="left">${customer.cardNum}</td>
+			</tr>
+			
+			<tr>
+				<td align="right" width="15%">出资方式：</td>
+				<td align="left">${customer.contributionType}</td>
+				<td align="right" width="15%">出资规模：</td>
+				<td align="left">${customer.contributionScale}</td>
+			</tr>
+			<tr>
+				<td align="right" width="15%">理财顾问：</td>
+				<td align="left">${customer.financialAdvisor}</td>
+				<td align="right" width="15%">理财经理：</td>
+				<td align="left">${customer.financialManager}</td>
+			</tr>
+			<tr>
+				<td align="right" width="15%">理财总监：</td>
+				<td align="left">${customer.financialDirector}</td>
+				<td align="right" width="15%">邀约人：</td>
+				<td align="left">${customer.appointment}</td>
+		    </tr>
+			<!--<tr>
+				<td align="right" width="15%">风险等级：</td>
+				<td align="left">
+					<c:choose>
+						<c:when test="${customer.riskGrade.id=='040304'}"></c:when>
+						<c:otherwise>${customer.riskGrade.key}</c:otherwise>
+					</c:choose>
+				</td>
+			</tr>  -->
 			<tr>
 			    <td align="right" width="15%">创建时间：</td>
 				<td align="left">${customer.createdTime}</td>
@@ -147,6 +183,12 @@
 				<td align="right" width="15%">详细地址：</td>
 				<td align="left">${customer.address}</td>
 			</tr>
+			<tr>
+			<td align="right" width="15%">家庭地址：</td>
+			<td align="left">${customer.familyAddr}</td>
+			<td align="right"></td>
+			<td align="left"></td>
+		</tr>
 			</table>
 			<h1 class="f14 fbnone ml40 pt10">描述信息</h1>
 			<table class="cb id_table4 w95b bg_c_white margin0 mt10">

@@ -3,6 +3,7 @@ package com.baihui.hxtd.soa.util;
 
 /**
  * 功能描述：模块名称枚举
+ * 请确保EnumModule的moduleName=实体类类名小写首字母
  * @author jason 
  * @company 北京市百会纵横科技有限公司
  * @copyright (版权)  本文件归属 北京市百会纵横科技有限公司 

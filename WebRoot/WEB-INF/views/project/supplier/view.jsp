@@ -96,26 +96,52 @@
 			</tr>
 			<tr>
 				<td align="right">
-					地区：
-				</td>
-				<td align="left">
-					${com.province.name}&nbsp;${com.city.name}&nbsp;${com.county.name}&nbsp;
-				</td>
-				<td align="right">
 					传真：
 				</td>
 				<td align="left">
 					${com.fax }
 				</td>
+				<td align="right">
+					法人：
+				</td>
+				<td align="left">
+					${com.corporation }
+				</td>
 			</tr>
 			<tr>
 				<td align="right">
+					证件类型：
+				</td>
+				<td align="left">
+					${com.cardType.key }
+				</td>
+				<td align="right">
+					证件号码：
+				</td>
+				<td align="left">
+					${com.cardNum }
+				</td>
+			</tr>
+		</table>
+		<h1 class="f14 fbnone ml40 pt10">
+			地址信息
+		</h1>
+		<table class="cb id_table3 w95b bg_c_white margin0 mt10">
+			<tr>
+				<td align="right" width="15%">
+					地区：
+				</td>
+				<td align="left">
+					${com.province.name}&nbsp;${com.city.name}&nbsp;${com.county.name}&nbsp;
+				</td>
+				<td align="right" width="15%">
 					详细地址：
 				</td>
 				<td align="left">
 					${com.address }
 				</td>
 			</tr>
+
 		</table>
 		<h1 class="f14 fbnone ml40 pt10">
 			描述信息

@@ -4,7 +4,11 @@ import com.baihui.hxtd.soa.base.Constant;
 import com.baihui.hxtd.soa.base.utils.ImportExport;
 import com.baihui.hxtd.soa.base.utils.ReflectionUtils;
 import com.baihui.hxtd.soa.common.service.CommonService;
+import com.baihui.hxtd.soa.system.entity.AuditLog;
+import com.baihui.hxtd.soa.system.entity.User;
+import com.baihui.hxtd.soa.system.service.AuditLogService;
 import com.baihui.hxtd.soa.system.service.DataShift;
+import com.baihui.hxtd.soa.util.EnumOperationType;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.poi.ss.usermodel.Workbook;
 import org.slf4j.Logger;
@@ -19,6 +23,7 @@ import javax.servlet.ServletContext;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
+import java.util.Date;
 import java.util.List;
 import java.util.Map;
 
@@ -41,6 +46,9 @@ public class CommonController<T> {
 
     @Resource
     private CommonService commonService;
+
+    @Resource
+    private AuditLogService auditLogService;
 
     /**
      * 唯一性验证
@@ -70,15 +78,22 @@ public class CommonController<T> {
         String fetch = export.get(name + ".export.hql.fetch");
         String[] fetchs = StringUtils.isBlank(fetch) ? null : fetch.split(",");
         List<?> entities = commonService.findById(entityClass, fetchs, id);
-        logger.debug("列表信息数目“{}”", entities.size());
+        int size = entities.size();
+        logger.debug("列表信息数目“{}”", size);
 
         logger.info("转换成excel文件并输出");
-        Workbook workbook = ImportExport.exportExcel(response, servletContext, StringUtils.uncapitalize(entityClass.getSimpleName()), entities);
+//        try {
+        Workbook workbook = ImportExport.exportExcel(response, servletContext, name, entities);
         response.setContentType("application/octet-stream; charset=utf-8");
-        response.setHeader("Content-Disposition", "attachment; filename=" + "user" + ".xls");
+        response.setHeader("Content-Disposition", "attachment; filename=" + name + ".xls");
         workbook.write(response.getOutputStream());
-    }
 
+        User user = (User) request.getSession().getAttribute(Constant.VS_USER);
+        saveAuditlog(name, user, size);
+//        } catch (Exception e) {
+//            e.printStackTrace();
+//        }
+    }
 
     /**
      * 限制数据条数导出
@@ -101,7 +116,7 @@ public class CommonController<T> {
             String fetchNames = export.get(name + ".export.hql.fetch");
             String fetchHql = "";
             if (StringUtils.isNotBlank(fetchNames)) {
-                String join = String.format(" inner join fetch %s.", name);
+                String join = String.format(" left join fetch %s.", name);
                 fetchHql = join + StringUtils.join(fetchNames.split(","), join);
             }
             fetchHql += dataShift.toHql(name);
@@ -111,11 +126,37 @@ public class CommonController<T> {
             hql += dataShift.toHql(name);
         }
         entities = commonService.findExport(hql);
-        logger.debug("列表信息数目“{}”", entities.size());
+        int size = entities.size();
+        logger.debug("列表信息数目“{}”", size);
 
         logger.info("转换成excel文件并输出");
+//        try {
+        Workbook workbook = ImportExport.exportExcel(response, servletContext, name, entities);
+        response.setContentType("application/octet-stream; charset=utf-8");
+        response.setHeader("Content-Disposition", "attachment; filename=" + name + ".xls");
+        workbook.write(response.getOutputStream());
+        User user = (User) request.getSession().getAttribute(Constant.VS_USER);
+        saveAuditlog(name, user, size);
+//        } catch (Exception e) {
+//            e.printStackTrace();
+//        }
+    }
 
-        ImportExport.exportExcel(response, servletContext, name, entities).write(response.getOutputStream());
+
+    /**
+     * 保存审计日志
+     * 1.EnumModule的moduleName必须和实体类类名首字母小写相匹配，暂时没有建立相关映射
+     */
+    private void saveAuditlog(String name, User user, int size) {
+        AuditLog auditLog = new AuditLog();
+        auditLog.setModuleName(name);
+        auditLog.setRecordId(null);
+        auditLog.setRecordName("导出列表选中的数据");
+        auditLog.setType(EnumOperationType.EXPORT.getOperationType());
+        auditLog.setCreator(user);
+        auditLog.setCreatedTime(new Date());
+        auditLog.setRemark(String.format("共导出%s条数据", size));
+        auditLogService.save(auditLog);
     }
 
     public Class<T> getEntityClass() {

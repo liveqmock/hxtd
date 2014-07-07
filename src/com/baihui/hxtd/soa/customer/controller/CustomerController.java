@@ -313,7 +313,9 @@ public class CustomerController extends CommonController<Customer>{
 		//设置开户行
 		List<Dictionary> openBank = dictionaryService.findChildren("040307");
 		model.addAttribute("openBank", openBank);
-		
+		//客户属性
+		List<Dictionary> property = dictionaryService.findChildren("040308");
+		model.addAttribute("property", property);
 	}
 	
 	  /**

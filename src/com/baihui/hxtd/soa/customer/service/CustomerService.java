@@ -17,6 +17,7 @@ import org.springside.modules.persistence.SearchFilter;
 
 import com.baihui.hxtd.soa.base.orm.hibernate.HibernatePage;
 import com.baihui.hxtd.soa.base.utils.Search;
+import com.baihui.hxtd.soa.customer.dao.ContactDao;
 import com.baihui.hxtd.soa.customer.dao.CustomerDao;
 import com.baihui.hxtd.soa.customer.entity.Customer;
 import com.baihui.hxtd.soa.system.dao.UserDao;
@@ -49,6 +50,8 @@ public class CustomerService {
 	
 	private Integer exportCounts = 5000;
 	
+	@Resource
+	private ContactDao contactDao;
 	/**
      * 分页查找
      */
@@ -111,7 +114,7 @@ public class CustomerService {
      * @param id
      */
     public void delete(User user, Long[] id,AuditLog [] auditLog) {
-    	customerDao.logicalDelete(id);
+    		customerDao.logicalDelete(id);
     }
     
     /**
@@ -144,6 +147,7 @@ public class CustomerService {
         detachedCriteria.setFetchMode("creator", FetchMode.JOIN);
         detachedCriteria.setFetchMode("type", FetchMode.JOIN);
         detachedCriteria.setFetchMode("modifier", FetchMode.JOIN);
+        detachedCriteria.setFetchMode("property", FetchMode.JOIN);
         detachedCriteria.add(Restrictions.eq("isDeleted", false));
 
         Criteria criteria = detachedCriteria.getExecutableCriteria(customerDao.getSession());
@@ -162,6 +166,7 @@ public class CustomerService {
         detachedCriteria.setFetchMode("source", FetchMode.JOIN);
         detachedCriteria.setFetchMode("riskGrade", FetchMode.JOIN);
         detachedCriteria.setFetchMode("industry", FetchMode.JOIN);
+        detachedCriteria.setFetchMode("property", FetchMode.JOIN);
         detachedCriteria.add(Restrictions.eq("isDeleted", false));
         Map<String, SearchFilter> filters = Search.parse(searchParams);
         Search.buildCriteria(filters, detachedCriteria, Customer.class);

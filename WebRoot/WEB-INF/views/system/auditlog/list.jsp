@@ -77,8 +77,8 @@
 												全部
 											</option>
 											<c:forEach var="item" items="${operationTypes}">
-												<option value="${item.operationType}">
-													${item.operationType}
+												<option value="${item.key}">
+												${item.value}
 												</option>
 											</c:forEach>
 										</select>
@@ -94,8 +94,8 @@
 												全部
 											</option>
 											<c:forEach var="item" items="${moduleNames}">
-												<option value="${item.moduleName}">
-													${item.moduleName}
+												<option value="${item.key}">
+													${item.value}
 												</option>
 											</c:forEach>
 										</select>
@@ -177,7 +177,13 @@
 							          <tr class="{$T.row$index%2==1?'':'bg_c_blue'} row w">
 							         	  <td>{$T.row.moduleName}</td>
 							              <td>{$T.row.creator.realName}</td>
-							              <td>{$T.row.type}</td>
+							              <td>
+							              {#if $T.row.type==1}增加{#/if}
+							              {#if $T.row.type==2}修改{#/if}
+							              {#if $T.row.type==3}逻辑删除{#/if}
+							              {#if $T.row.type==4}删除{#/if}
+							              {#if $T.row.type==5}导入{#/if}
+							              {#if $T.row.type==6}导出{#/if}</td>
 							              <td>{$T.row.recordId}</td>
 							              <td>{$T.row.recordName}</td>
 							              <td>{$T.row.createdTime}</td>

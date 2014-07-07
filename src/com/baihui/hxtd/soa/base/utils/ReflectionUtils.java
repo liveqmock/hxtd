@@ -250,9 +250,12 @@ public class ReflectionUtils {
     public static Object getTierFieldValue(Object object, String fieldName) {
         String[] tierFieldNames = fieldName.split("\\.");
         Object current = object;
-        String tierFieldName = null;
+        String tierFieldName;
         try {
             for (int i = 0; i < tierFieldNames.length; i++) {
+                if (current == null) {
+                    return null;
+                }
                 tierFieldName = tierFieldNames[i];
                 Method method = current.getClass().getMethod("get" + StringUtils.capitalize(tierFieldName));
                 current = method.invoke(current);

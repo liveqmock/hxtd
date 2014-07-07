@@ -88,6 +88,7 @@ public class SupplierService {
         String hql = "select supplier from Supplier supplier  " +
         				"left join fetch supplier.type " +
         				"left join fetch supplier.owner " +
+        				"left join fetch supplier.cardType " +
         				"left join fetch supplier.province " +
         				"left join fetch supplier.city " +
         				"left join fetch supplier.county where supplier.id = ?";

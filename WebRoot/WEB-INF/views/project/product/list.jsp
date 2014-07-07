@@ -99,7 +99,7 @@ $(function(){
 			</ul>
 			<ul class="fr id_table1 mt10 mr10">
 				<li>
-					<a href="javascript:;" uri="${ctx}/project/product/export.do?TYPE=pagination" 
+					<a href="javascript:;" uri="${ctx}/project/product/export.do?TYPE=selected" 
 						class="leading_out block_inline mr10 export" title="导出"></a>
 				</li>
 			</ul>

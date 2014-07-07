@@ -27,6 +27,7 @@ import com.baihui.hxtd.soa.base.orm.hibernate.HibernatePage;
 import com.baihui.hxtd.soa.base.utils.ImportExport;
 import com.baihui.hxtd.soa.base.utils.Search;
 import com.baihui.hxtd.soa.base.utils.mapper.HibernateAwareObjectMapper;
+import com.baihui.hxtd.soa.common.controller.CommonController;
 import com.baihui.hxtd.soa.customer.entity.Contact;
 import com.baihui.hxtd.soa.customer.service.ContactService;
 import com.baihui.hxtd.soa.system.entity.AuditLog;
@@ -53,7 +54,7 @@ import com.baihui.hxtd.soa.util.JsonDto;
 @Controller
 @RequestMapping(value = "/customer/contact")
 @SessionAttributes(value = { Constant.VS_USER, Constant.VS_USER_ID, Constant.VS_DATASHIFT })
-public class ContactController {
+public class ContactController extends CommonController<Contact> {
 
 	//private Logger logger = LoggerFactory.getLogger(this.getClass());
 	

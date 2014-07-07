@@ -13,7 +13,6 @@ import org.springside.modules.persistence.SearchFilter;
 
 import com.baihui.hxtd.soa.base.orm.hibernate.HibernatePage;
 import com.baihui.hxtd.soa.base.utils.Search;
-import com.baihui.hxtd.soa.customer.entity.Contact;
 import com.baihui.hxtd.soa.system.dao.AuditLogDao;
 import com.baihui.hxtd.soa.system.entity.AuditLog;
 /**
@@ -50,9 +49,71 @@ public class AuditLogService {
     	criteria.setFetchMode("creator", FetchMode.JOIN);
 		Map<String, SearchFilter> filters = Search.parse(searchParams);// 构建参数
 		Search.buildCriteria(filters, criteria, AuditLog.class);
-        return auditLogDao.findPage(page, criteria);
+         HibernatePage<AuditLog> pageResult=auditLogDao.findPage(page, criteria);
+         List<AuditLog> result=pageResult.getResult();
+         pageResult.setResult(convertResult(result));
+         return pageResult;
     }
-
+    
+    /**
+     * 枚举类型EnumModule转换成中文
+     * @param result
+     * @return List<AuditLog>
+     */
+	 private List<AuditLog> convertResult( List<AuditLog> result){
+		 for(int i=0;i<result.size();i++){
+        	 if(result.get(i).getModuleName().equals("marketActivity")){
+        		 result.get(i).setModuleName("市场活动");
+        	 }
+        	 if(result.get(i).getModuleName().equals("lead")){
+        		 result.get(i).setModuleName("线索");
+        	 }
+        	 if(result.get(i).getModuleName().equals("contact")){
+        		 result.get(i).setModuleName("联系人");
+        	 }
+        	 if(result.get(i).getModuleName().equals("customer")){
+        		 result.get(i).setModuleName("客户");
+        	 }
+        	 if(result.get(i).getModuleName().equals("supplier")){
+        		 result.get(i).setModuleName("供应商");
+        	 }
+        	 if(result.get(i).getModuleName().equals("project")){
+        		 result.get(i).setModuleName("项目");
+        	 }
+        	 if(result.get(i).getModuleName().equals("product")){
+        		 result.get(i).setModuleName("产品");
+        	 }
+        	 if(result.get(i).getModuleName().equals("order")){
+        		 result.get(i).setModuleName("订单");
+        	 }
+        	 if(result.get(i).getModuleName().equals("user")){
+        		 result.get(i).setModuleName("用户");
+        	 }
+        	 if(result.get(i).getModuleName().equals("role")){
+        		 result.get(i).setModuleName("角色");
+        	 }
+        	 if(result.get(i).getModuleName().equals("menu")){
+        		 result.get(i).setModuleName("菜单");
+        	 }
+        	 if(result.get(i).getModuleName().equals("function")){
+        		 result.get(i).setModuleName("功能");
+        	 }
+        	 if(result.get(i).getModuleName().equals("component")){
+        		 result.get(i).setModuleName("组件");
+        	 }
+        	 if(result.get(i).getModuleName().equals("organization")){
+        		 result.get(i).setModuleName("组织机构");
+        	 }
+        	 if(result.get(i).getModuleName().equals("userMessage")){
+        		 result.get(i).setModuleName("系统消息");
+        	 }
+        	 if(result.get(i).getModuleName().equals("notice")){
+        		 result.get(i).setModuleName("系统公告");
+        	 }
+         }
+		return result;
+		 
+	 }
     /**
      * 根据属性isDeleted删除
      * @param id

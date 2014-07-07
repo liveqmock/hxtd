@@ -212,7 +212,7 @@ function formReset() {
 						<c:if test="${VS_HAS_FUNCTIONS.projectExport}">
 							<li>
 									<a href="javascript:void(0)"
-										uri="${ctx}/project/project/export.do?TYPE=pagination"
+										uri="${ctx}/project/project/export.do?TYPE=selected"
 										class="leading_out globle_img block_inline mr10 export"
 										title="导出"></a>
 							</li>
@@ -239,17 +239,17 @@ function formReset() {
 				<th>
 					融资额度
 				</th>
-				<th class="sortable orderby" orderby="createdTime">
-					创建时间
-				</th>
 				<th width="10%">
 					创建者
 				</th>
-				<th class="sortable orderby" orderby="modifiedTime">
-					修改时间
+				<th class="sortable orderby" orderby="createdTime">
+					创建时间
 				</th>
 				<th>
 					修改者
+				</th>
+				<th class="sortable orderby" orderby="modifiedTime">
+					修改时间
 				</th>
 				<th width="15%">
 					操作
@@ -277,17 +277,17 @@ function formReset() {
 				<th>
 					融资额度
 				</th>
-				<th class="sortable orderby" orderby="createdTime">
-					创建时间
-				</th>
 				<th width="10%">
 					创建者
 				</th>
-				<th class="sortable orderby" orderby="modifiedTime">
-					修改时间
+				<th class="sortable orderby" orderby="createdTime">
+					创建时间
 				</th>
 				<th>
 					修改者
+				</th>
+				<th class="sortable orderby" orderby="modifiedTime">
+					修改时间
 				</th>
 				<th width="15%">
 					操作

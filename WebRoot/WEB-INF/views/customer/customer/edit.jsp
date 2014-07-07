@@ -115,38 +115,31 @@
 			</td>
 		</tr>
 		<tr>
-			<td  align="right" width="15%">证件类型：</td>
-			<td align="left">
-				<select name="cardType.id" class="select1 pr">
-					<option value="040303">--无--</option>
-						<c:forEach items="${cardType}" var="cardType">
-					       <option value="${cardType.id}"
-							<c:if test="${customer.cardType.id == cardType.id}">
+		<td align="right" width="15%">客户属性：</td>
+		<td align="left">
+		<select name="property.id" class="select1 pr">
+					<option value="040308">--无--</option>
+						<c:forEach items="${property}" var="property">
+					       <option value="${property.id}"
+							<c:if test="${customer.property.id == property.id}">
 								selected
 							</c:if>
-							>${cardType.key}</option>
-					   </c:forEach>
-				</select>
-			</td>
-			<td align="right" width="15%">风险等级：</td>
-			<td align="left">
-				<select name="riskGrade.id" class="select1 pr">
-					<option value="040304">--无--</option>
-						<c:forEach items="${riskGrade}" var="riskGrade">
-					       <option value="${riskGrade.id}"
-							<c:if test="${customer.riskGrade.id == riskGrade.id}">
-								selected
-							</c:if>
-							>${riskGrade.key}</option>
+							>${property.key}</option>
 						</c:forEach>
 				</select>
+		</td>
+			<td align="right" width="15%"><span class="w_red">*&nbsp;</span>邮箱：</td>
+			<td align="left">
+			<input name="email" type="text" value="${customer.email}" class="text_input3 required"/>
 			</td>
+			
 		</tr>
 		<tr>
-			<td align="right" width="15%">证件号：</td>
-			<td align="left"><input class="text_input3" name="cardNum" type="text" value="${customer.cardNum}"/></td>
+			
 			<td align="right" width="15%"><span class="w_red">*&nbsp;</span>电话：</td>
 			<td align="left"><input class="text_input3 required isPhone" name="phone" type="text" value="${customer.phone}"/></td>
+			<td align="right" width="15%"><span class="w_red">*&nbsp;</span>传真：</td>
+			<td align="left"><input class="text_input3 required isTel" name="fax" type="text" value="${customer.fax}"/></td>
 		</tr>
 		<tr>
 			<td align="right" width="15%"><span class="w_red">*&nbsp;</span>手机：</td>
@@ -155,12 +148,14 @@
 			<td align="left"><input class="text_input3" name="postCode" type="text" value="${customer.postCode}"/></td>
 		</tr>
 		<tr>
-			<td align="right" width="15%"><span class="w_red">*&nbsp;</span>传真：</td>
-			<td align="left"><input class="text_input3 required isTel" name="fax" type="text" value="${customer.fax}"/></td>
 			<td align="right" width="15%"><span class="w_red">*&nbsp;</span>公司：</td>
 			<td align="left"><input class="text_input3 required" name="company" type="text" value="${customer.company}"/></td>
+			<td align="right" width="15%">所在部门：</td>
+			<td align="left"><input class="text_input3" name="dept" type="text" value="${customer.dept}"/></td>
 		</tr>
 		<tr>
+			<td align="right" width="15%">职务名称：</td>
+			<td align="left"><input class="text_input3" name="job" type="text" value="${customer.job}"/></td>
 			<td  align="right" width="15%">开户银行：</td>
 			<td align="left">
 				<select name="openBank.id" class="select1 pr">
@@ -174,12 +169,15 @@
 						</c:forEach>
 				</select>
 			</td>
-			<td align="right" width="15%">银行户名：</td>
-			<td align="left"><input class="text_input3" name="bankName" type="text" value="${customer.bankName}"/></td>
+			
 		</tr>
 		<tr>
+			<td align="right" width="15%">银行户名：</td>
+			<td align="left"><input class="text_input3" name="bankName" type="text" value="${customer.bankName}"/></td>
 			<td align="right" width="15%">账号：</td>
 			<td align="left"><input class="text_input3" name="bankAccount" type="text" value="${customer.bankAccount}"/></td>
+		</tr>
+		<tr>
 			<td align="right" width="15%">所有权：</td>
 			<td align="left">
 			<select name="ownerShip.id" class="select1 pr ">
@@ -193,8 +191,6 @@
 					</c:forEach>
 				</select>
 			</td>
-		</tr>
-		<tr>
 			<td align="right" width="15%"><span class="w_red">*&nbsp;</span>行业：</td>
 			<td align="left">
 				<select name="industry.id" class="select1 pr requiredSelect ">
@@ -208,10 +204,52 @@
 						</c:forEach>
 				</select>
 			</td>
-			<td align="right" width="15%"><span class="w_red">*&nbsp;</span>邮箱：</td>
+			
+		</tr>
+		<tr>
+		<td  align="right" width="15%">证件类型：</td>
 			<td align="left">
-			<input name="email" type="text" value="${customer.email}" class="text_input3 required"/>
+				<select name="cardType.id" class="select1 pr">
+					<option value="040303">--无--</option>
+						<c:forEach items="${cardType}" var="cardType">
+					       <option value="${cardType.id}"
+							<c:if test="${customer.cardType.id == cardType.id}">
+								selected
+							</c:if>
+							>${cardType.key}</option>
+					   </c:forEach>
+				</select>
 			</td>
+			<td align="right" width="15%">证件号：</td>
+			<td align="left"><input class="text_input3" name="cardNum" type="text" value="${customer.cardNum}"/></td>
+		</tr>
+		<tr>
+		<td align="right" width="15%">出资方式：</td>
+		<td align="left">
+		<input name="contributionType" type="text" value="${customer.contributionType}" class="text_input3"/>
+		</td>
+			<td align="right" width="15%">出资规模：</td>
+			<td align="left"><input class="text_input3" name="contributionScale" type="text" value="${customer.contributionScale}"/></td>
+			
+		</tr>
+		<tr>
+		<td align="right" width="15%">理财顾问：</td>
+			<td align="left"><input class="text_input3" name="financialAdvisor" type="text" value="${customer.financialAdvisor}"/></td>
+			<td align="right" width="15%">理财经理：</td>
+			<td align="left"><input class="text_input3" name="financialManager" type="text" value="${customer.financialManager}"/></td>
+			
+		</tr>
+		<tr>
+			<td align="right" width="15%">理财总监：</td>
+			<td align="left"><input class="text_input3" name="financialDirector" type="text" value="${customer.financialDirector}"/></td>
+			<td align="right" width="15%">邀约人：</td>
+			<td align="left"><input class="text_input3" name="appointment" type="text" value="${customer.appointment}"/></td>
+			
+		</tr>
+		<tr>
+			
+			<td align="right" width="15%"></td>
+			<td align="left"></td>
 		</tr>
 		</table>
 		<h1 class="f14 fbnone ml40 pt10">地址信息</h1>
@@ -227,6 +265,12 @@
 			<td align="left"><select id="county" name="county.id" class="select1"></select></td>
 			<td align="right">详细地址：</td>
 			<td align="left"><input name="address" type="text" value="${customer.address}" class="text_input3"/></td>
+		</tr>
+		<tr>
+			<td align="right" width="15%">家庭地址：</td>
+			<td align="left"><input name="familyAddr" type="text" value="${customer.familyAddr}" class="text_input3"/></td>
+			<td align="right"></td>
+			<td align="left"></td>
 		</tr>
 		</table>
 		<h1 class="f14 fbnone ml40 pt10">描述信息</h1>

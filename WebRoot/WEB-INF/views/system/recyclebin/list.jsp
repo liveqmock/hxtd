@@ -167,20 +167,20 @@
 							<b class="h_tabbtn_l w25 block fl"></b>
 							<b class="h_tabbtn_r pr25 w_auto f14 block fr lh32 cp id_nav pr">订单</b>
 						</li>
-						<div class="ie_head">
-						<li style="float:right;">
+						<ul class="fr id_table1  ml10">
+						<li>
 							<a class="block c_white lh25 mr10" href="javascript:;" id="recoveryData" uri="${ctx}/system/recyclebin/recovery.do?entityName=MarketActivity">
 								<b class="allbtn_l block fl"></b>
 								<b class="allbtn_r pr13 block fl w_auto f14">还&nbsp;&nbsp;原</b>
 							</a>
 						</li>
-                		<li style="float:right;">
+                		<li>
                 			<a class="block c_white lh25 mr10 deletesome" id="deleteData" href="javascript:;"  uri="${ctx}/system/recyclebin/delete.do?entityName=MarketActivity">
                 				<b class="allbtn_l block fl"></b>
                 				<b class="allbtn_r pr13 block fl w_auto f14">删&nbsp;&nbsp;除</b>
                 			</a>
                 		</li>
-						</div>
+                		</ul>
 					</ul>
 
 					<div class="cb"></div>

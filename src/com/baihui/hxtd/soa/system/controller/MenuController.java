@@ -8,12 +8,15 @@ import com.baihui.hxtd.soa.base.utils.ztree.TreeNodeConverter;
 import com.baihui.hxtd.soa.common.controller.model.ListModel;
 import com.baihui.hxtd.soa.common.service.CommonService;
 import com.baihui.hxtd.soa.system.DictionaryConstant;
+import com.baihui.hxtd.soa.system.entity.AuditLog;
 import com.baihui.hxtd.soa.system.entity.Dictionary;
 import com.baihui.hxtd.soa.system.entity.Menu;
 import com.baihui.hxtd.soa.system.entity.User;
 import com.baihui.hxtd.soa.system.service.DictionaryService;
 import com.baihui.hxtd.soa.system.service.FunctionService;
 import com.baihui.hxtd.soa.system.service.MenuService;
+import com.baihui.hxtd.soa.util.EnumModule;
+import com.baihui.hxtd.soa.util.EnumOperationType;
 import com.baihui.hxtd.soa.util.JsonDto;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -168,12 +171,16 @@ public class MenuController {
         logger.debug("名称“{}”", menu.getName());
 
         logger.info("添加服务端属性值");
-        menu.setCreator(new User(userId));
+        User user=new User(userId);
+        menu.setCreator(user);
         logger.debug("创建用户为当前用户“{}”", userId);
         menu.setModifier(menu.getCreator());
         logger.debug("修改用户为当前用户“{}”", userId);
 
-        menuService.add(menu);
+        /************ 新增 *****************************/
+		AuditLog auditLog = new AuditLog(EnumModule.MENU.getModuleName(), 
+				menu.getId(), menu.getName(), EnumOperationType.ADD.getOperationType(), user,"增加菜单");
+        menuService.add(menu,auditLog);
 
         return JsonDto.add(menu.getId()).toString();
     }
@@ -190,6 +197,7 @@ public class MenuController {
         model.addAttribute("menuTree", menuTree);
 
         logger.info("存储表单默认值");
+        
         Menu menu = menuService.get(id);
         model.addAttribute("menu", menu);
         logger.debug("名称“{}”", menu.getName());
@@ -235,7 +243,9 @@ public class MenuController {
         menu.setModifier(new User(user.getId()));
         logger.debug("修改用户为当前用户“{}”", user.getName());
 
-        menuService.modify(menu);
+        AuditLog auditLog = new AuditLog(EnumModule.MENU.getModuleName(), 
+        		menu.getId(), menu.getName(), EnumOperationType.MODIFY.getOperationType(), user,"菜单修改");
+        menuService.modify(menu,auditLog);
 
         return JsonDto.modify(menu.getId()).toString();
     }
@@ -245,14 +255,20 @@ public class MenuController {
      */
     @ResponseBody
     @RequestMapping(value = "/delete.do")
-    public String delete(Long[] id) {
+    public String delete(Long[] id,ModelMap modelMap) {
         logger.info("删除菜单");
 
         if (commonService.isInitialized(Menu.class, id)) {
             return new JsonDto("系统初始化数据不允许删除！").toString();
         }
 
-        menuService.delete(id);
+        User user = (User)modelMap.get(Constant.VS_USER);
+        AuditLog [] auditLogArr = new AuditLog [id.length];
+		for(int i=0; i<id.length; i++){
+			auditLogArr[i] = new AuditLog(EnumModule.MENU.getModuleName(), 
+					id[i], menuService.getNameById(id[i]), EnumOperationType.DELETE.getOperationType(), user,"菜单删除");
+		}
+        menuService.delete(id,auditLogArr);
 
         return JsonDto.delete(id).toString();
     }

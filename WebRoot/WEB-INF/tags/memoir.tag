@@ -13,12 +13,12 @@
 <script type="text/javascript" src="${ctx}/static/js/scrollTitle.js?v=1"></script>
 <script type="text/javascript" src="${ctx}/static/js/js-util.common.js"></script>
 <script type="text/javascript">
-$(function(){
+window.onload = function(){
 	grid = new Grid().init({containerSelector: '.memoircontainer', paginationCountLimit: 11});
 	$(".contactrecords").click(function(){
 		iframeRemoir('add', '');
 	});
-});
+}
 function iframeRemoir(act, id){
 	var url, title;
 	if(act == "add"){
@@ -64,14 +64,15 @@ function iframeRemoir(act, id){
 		</c:choose>
 	</form>
 	<c:if test="${edit}">
-	<div class="pt10">
-		<a href="javascript:;" class="block c_white lh25 fl ml10 contactrecords">
+	<h1 class="pt10 w90b margin0 fbnone f12 mt10 block">
+		<a href="javascript:;" class="block c_white lh25 fr mr60 mb5 contactrecords">
 			<b class="allbtn_l block fl"></b>
 			<b class="allbtn_r pr13 block fl w_auto f14">新&nbsp;&nbsp;增</b>
 		</a>
-	</div>
+	</h1>
 	</c:if>
-	<table class="cb id_table2 w pr35">
+	<b class="w90b f_line2 block margin0 cb mt5"></b>
+	<table class="cb id_table2 w pr35 w90b margin0">
 		<tr>
 		    <th>联系纪要</th>
 		    <th>下次联系时间</th>

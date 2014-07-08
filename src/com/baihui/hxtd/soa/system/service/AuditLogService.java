@@ -110,6 +110,9 @@ public class AuditLogService {
         	 if(result.get(i).getModuleName().equals("notice")){
         		 result.get(i).setModuleName("系统公告");
         	 }
+        	 if(result.get(i).getModuleName().equals("dictionary")){
+        		 result.get(i).setModuleName("数据字典");
+        	 }
          }
 		return result;
 		 

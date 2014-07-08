@@ -6,6 +6,7 @@ import com.baihui.hxtd.soa.base.utils.serial.TierSerial;
 import com.baihui.hxtd.soa.base.utils.serial.TierSerials;
 import com.baihui.hxtd.soa.system.dao.OrganizationDao;
 import com.baihui.hxtd.soa.system.dao.RoleDao;
+import com.baihui.hxtd.soa.system.entity.AuditLog;
 import com.baihui.hxtd.soa.system.entity.Organization;
 import com.baihui.hxtd.soa.system.entity.Role;
 import com.baihui.hxtd.soa.system.entity.User;
@@ -181,7 +182,7 @@ public class OrganizationService {
      * //TODO 不支持直接新增根节点
      */
     @Transactional
-    public void add(Organization organization, User user) {
+    public void add(Organization organization,AuditLog auditLog) {
         logger.info("新增");
         Organization parent = organizationDao.get(organization.getParent().getId());
 
@@ -219,6 +220,7 @@ public class OrganizationService {
 
         organizationDao.save(organization);
 
+        auditLog.setRecordId(organization.getId());
         toParent(parent);
     }
 
@@ -275,7 +277,7 @@ public class OrganizationService {
      * 修改
      */
     @Transactional
-    public void modify(Organization organization, User user) {
+    public void modify(Organization organization,AuditLog auditLog) {
         logger.info("修改");
 
         Long parentId = organization.getParent() == null ? null : organization.getParent().getId();
@@ -364,7 +366,7 @@ public class OrganizationService {
      * 1.级联删除子节点
      */
     @Transactional
-    public void delete(User user, Long... ids) {
+    public void delete(Long[] ids,AuditLog [] auditLogArr) {
         logger.info("删除");
         organizationDao.logicalDelete(ids);
     }
@@ -391,7 +393,7 @@ public class OrganizationService {
      * 1.分配角色
      */
     @Transactional
-    public void authorization(Long id, Long[] roleIds) {
+    public void authorization(Long id, Long[] roleIds,AuditLog auditLog) {
         logger.info("授权");
         Organization organization = organizationDao.get(id);
 
@@ -421,5 +423,18 @@ public class OrganizationService {
         String hql = "select org from Organization org left join fetch org.owners";
         return organizationDao.find(hql);
     }
+
+    
+	/**
+     * getNameById
+     * @Title: getNameById
+     * @Description: 通过id获取组织名称
+     * @param id
+     * @return String
+    */
+    @Transactional
+	public String getNameById(Long id) {
+		return organizationDao.get(id).getName();
+	}
 
 }

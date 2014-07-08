@@ -43,10 +43,6 @@ Grid.defaults = {
     //操作栏
     operatebarSelector: ".operatebar",
     deleteSomeSelector: ".deletesome",
-    authorizationSelector: ".authorization",
-    resetPasswordSelector: ".resetpassword",
-    enableSelector: ".enable",
-    disableSelector: ".disable",
     exportSelector: ".export",
     operatebarRefreshSelector: ".refresh",
     exportFiledSelector: "[name^=search]",
@@ -61,12 +57,16 @@ Grid.defaults = {
     resultSelector: ".list",
     resultTemplateId: "template-tbody",
     checkItemSelector: ".checkitem",
-    operateCellSelector: ".operate-cell",
+    operateSelector: ".operate",
     onDelete: function (ids) {},//删除回调函数，参数=删除数据的主键编号
     deleteOneSelector: ".delete",
     disableButtonClass: ["allbtnno_l", "allbtnno_r"],
     enableButtonClass: ["allbtn_l", "allbtn_r"],
     moveSelector: ".move",
+    authorizationSelector: ".authorization",
+    resetPasswordSelector: ".resetpassword",
+    enableSelector: ".enable",
+    disableSelector: ".disable",
     //排序
     sortableSelector: ".sortable",
     orderBySelector: ".orderby",
@@ -173,8 +173,6 @@ Grid.prototype = {
         this.initFloatHeader();
         this.renderSort();
         this.bindSort();
-        this.bindDeleteOne();
-        this.bindMove();
         this.setPagination();
         this.enterShortcut();
         return this;
@@ -255,7 +253,7 @@ Grid.prototype = {
             });
         };
 
-        this.btnDeleteSome.live("click", click).data(this.gridName + "click", click);
+        this.btnDeleteSome.click(click).data(this.gridName + "click", click);
         return this;
     },
     /**绑定刷新*/
@@ -270,26 +268,11 @@ Grid.prototype = {
         this.btnRefresh.click(click).data(this.gridName + "click", click);
         return this;
     },
-    /**绑定授权事件*/
-    bindAuthorization: function () {
-        var _this = this;
-        var checkItemSelector = this.options.checkItemSelector;
-        $(this.options.authorizationSelector, this.operatebar).click(function () {
-            var ids = $(checkItemSelector + ":checked", _this.grid);
-            if (ids.length != 1) {
-                jsUtil.alert("请选择一条且仅限一条数据！");
-                return this;
-            }
-            var $this = $(this);
-            window.open($this.attr("uri") + "?id=" + ids.val(), "_self");
-        });
-        return this;
-    },
     /**绑定重置密码事件*/
     bindResetPassword: function () {
         var _this = this;
         var checkItemSelector = this.options.checkItemSelector;
-        this.btnResetPassword.live("click", function () {
+        this.result.find(this.options.resetPasswordSelector).click(function () {
             var $this = $(this);
             var uri = $this.attr("uri");
             var idValue = $.URL.jsonParamsByUrl(uri).id;
@@ -318,7 +301,7 @@ Grid.prototype = {
     bindEnable: function () {
         var _this = this;
         var checkItemSelector = this.options.checkItemSelector;
-        this.btnEnable.live("click", function () {
+        this.result.find(this.options.enableSelector).click(function () {
             var $this = $(this);
             var uri = $this.attr("uri");
             var idValue = $.URL.jsonParamsByUrl(uri).id;
@@ -336,7 +319,7 @@ Grid.prototype = {
                 idValue = undefined;
             }
 
-            RcmsAjax.ajax(uri, function () {_this.loadGrid();}, null, idValue);
+            RcmsAjax.ajax(uri, function () {setTimeout(function () {_this.loadGrid();}, 500);}, null, idValue);
         });
         return this;
     },
@@ -344,7 +327,7 @@ Grid.prototype = {
     bindDisable: function () {
         var _this = this;
         var checkItemSelector = this.options.checkItemSelector;
-        this.btnDisable.live("click", function () {
+        this.result.find(this.options.disableSelector).click(function () {
             var $this = $(this);
             var uri = $this.attr("uri");
             var idValue = $.URL.jsonParamsByUrl(uri).id;
@@ -362,7 +345,7 @@ Grid.prototype = {
                 idValue = undefined;
             }
 
-            RcmsAjax.ajax(uri, function () {_this.loadGrid();}, null, idValue);
+            RcmsAjax.ajax(uri, function () {setTimeout(function () {_this.loadGrid();}, 500);}, null, idValue);
         });
         return this;
     },
@@ -500,15 +483,15 @@ Grid.prototype = {
     },
     /**取消操作单元格行选中*/
     cancelRowChecked: function () {
-        var operateCells = this.result.find(this.options.operateCellSelector);
-        operateCells.length == 0 && (operateCells = this.result.find("tr").find("td a:not({})".format(this.options.deleteOneSelector)));
-        operateCells.bind("click", function (event) {event.stopPropagation();});
+        var btnOperates = this.result.find(this.options.operateSelector);
+        btnOperates.length == 0 && (btnOperates = this.result.find("tr").find("td a"));
+        btnOperates.bind("click", function (event) {event.stopPropagation();});
         return this;
     },
     /**绑定删除一个事件*/
     bindDeleteOne: function () {
         var _this = this;
-        this.btnDeleteOne.live("click", function (event) {
+        this.result.find(this.options.deleteOneSelector).click(function () {
             var $this = $(this);
             jsUtil.confirm("确定要删除吗？", function () {
                 var url = $this.attr("uri");
@@ -517,13 +500,12 @@ Grid.prototype = {
                     setTimeout(function () {_this.loadGrid();}, 500);
                 });
             });
-            event.stopPropagation();
         });
         return this;
     },
     /**绑定移动事件*/
     bindMove: function () {
-        this.btnMove.live("click", function () {
+        this.result.find(this.options.moveSelector).click(function () {
             var $this = $(this);
             var url = $this.attr("uri");
             var redirectUri = $this.attr("redirecturi");
@@ -701,6 +683,11 @@ Grid.prototype = {
         } else {
             this.result.setTemplateElement(options.resultTemplateId).processTemplate(data);
         }
+        this.bindDeleteOne();
+        this.bindEnable();
+        this.bindDisable();
+        this.bindResetPassword();
+        this.bindMove();
         this.cancelRowChecked();
         return this;
     },

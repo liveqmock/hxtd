@@ -5,9 +5,12 @@ import com.baihui.hxtd.soa.base.orm.hibernate.HibernatePage;
 import com.baihui.hxtd.soa.base.utils.Search;
 import com.baihui.hxtd.soa.base.utils.mapper.HibernateAwareObjectMapper;
 import com.baihui.hxtd.soa.common.service.CommonService;
+import com.baihui.hxtd.soa.system.entity.AuditLog;
 import com.baihui.hxtd.soa.system.entity.Dictionary;
 import com.baihui.hxtd.soa.system.entity.User;
 import com.baihui.hxtd.soa.system.service.DictionaryService;
+import com.baihui.hxtd.soa.util.EnumModule;
+import com.baihui.hxtd.soa.util.EnumOperationType;
 import com.baihui.hxtd.soa.util.JsonDto;
 import org.springframework.beans.propertyeditors.CustomDateEditor;
 import org.springframework.stereotype.Controller;
@@ -130,7 +133,9 @@ public class DictionaryController {
         dict.setModifier(user);
         dict.setCreatedTime(new Date());
 
-        dicService.add(dict, user);
+        AuditLog auditLog = new AuditLog(EnumModule.DICTIONARY.getModuleName(), 
+        		dict.getId(), dict.getKey(), EnumOperationType.ADD.getOperationType(), user,"字典增加");
+        dicService.add(dict, auditLog);
 
         return "redirect:" + String.format(redirectUri, dict.getId());
     }
@@ -184,7 +189,9 @@ public class DictionaryController {
         User user = new User(userId);
         dict.setModifier(user);
 
-        dicService.modify(dict, user);
+        AuditLog auditLog = new AuditLog(EnumModule.DICTIONARY.getModuleName(), 
+        		dict.getId(), dict.getKey(), EnumOperationType.MODIFY.getOperationType(), user,"字典修改");
+        dicService.modify(dict,auditLog);
 
         return "redirect:" + String.format(redirectUri, dict.getId());
     }
@@ -220,7 +227,12 @@ public class DictionaryController {
         }
 
         User user = (User)modelMap.get(Constant.VS_USER);
-        dicService.delete(user, id);
+        AuditLog [] auditLogArr = new AuditLog [id.length];
+		for(int i=0; i<id.length; i++){
+			auditLogArr[i] = new AuditLog(EnumModule.DICTIONARY.getModuleName(), 
+					id[i], dicService.getNameById(id[i]), EnumOperationType.DELETE.getOperationType(), user,"字典删除");
+		}
+        dicService.delete(id,auditLogArr);
 
         JsonDto json = new JsonDto("删除成功");
         json.setSuccessFlag(true);

@@ -31,7 +31,17 @@ public enum EnumOperationType {
 	EXPORT(6),
 
     /** 授权 */
-    AUTHORIZATION(7);
+    AUTHORIZATION(7),
+    
+    /** 重置密码 */
+    RESETPASSWORD(8),
+    
+    /**启用用户*/
+    ENABLE(9),
+    
+    /**禁用用户*/
+    DISABLE(10),
+    ;
 
 	private int operationType;
 

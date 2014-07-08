@@ -162,12 +162,6 @@ public class Customer implements Serializable {
 	@Column(name = "EMAIL")
 	private String email;
 	
-	/**
-	 * 客户属性
-	 */
-	@ManyToOne(fetch = FetchType.LAZY)
-	@JoinColumn(name = "PROPERTY")
-	private Dictionary property;
 	
 	/**
 	 * 出资方式
@@ -451,13 +445,6 @@ public class Customer implements Serializable {
 		this.email = email;
 	}
 
-	public Dictionary getProperty() {
-		return property;
-	}
-
-	public void setProperty(Dictionary property) {
-		this.property = property;
-	}
 
 	public String getContributionType() {
 		return contributionType;

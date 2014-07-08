@@ -9,12 +9,15 @@ import com.baihui.hxtd.soa.base.utils.serial.TierSerial;
 import com.baihui.hxtd.soa.base.utils.serial.TierSerials;
 import com.baihui.hxtd.soa.base.utils.ztree.TreeNodeConverter;
 import com.baihui.hxtd.soa.common.service.CommonService;
+import com.baihui.hxtd.soa.system.entity.AuditLog;
 import com.baihui.hxtd.soa.system.entity.Dictionary;
 import com.baihui.hxtd.soa.system.entity.Organization;
 import com.baihui.hxtd.soa.system.entity.User;
 import com.baihui.hxtd.soa.system.service.DictionaryService;
 import com.baihui.hxtd.soa.system.service.OrganizationService;
 import com.baihui.hxtd.soa.system.service.RoleService;
+import com.baihui.hxtd.soa.util.EnumModule;
+import com.baihui.hxtd.soa.util.EnumOperationType;
 import com.baihui.hxtd.soa.util.JsonDto;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import org.slf4j.Logger;
@@ -196,7 +199,9 @@ public class OrganizationController {
         organization.setModifier(organization.getCreator());
         logger.debug("修改用户为当前用户“{}”", user.getName());
 
-        organizationService.add(organization, user);
+        AuditLog auditLog = new AuditLog(EnumModule.ORGANIZATION.getModuleName(), 
+        		organization.getId(), organization.getName(), EnumOperationType.ADD.getOperationType(), user,"组织增加");
+        organizationService.add(organization,auditLog);
 
         return JsonDto.add(organization.getId()).toString();
     }
@@ -255,7 +260,9 @@ public class OrganizationController {
         organization.setModifier(user);
         logger.debug("修改用户为当前用户“{}”", user.getName());
 
-        organizationService.modify(organization, user);
+        AuditLog auditLog = new AuditLog(EnumModule.ORGANIZATION.getModuleName(), 
+        		organization.getId(), organization.getName(), EnumOperationType.MODIFY.getOperationType(), user,"组织修改");
+        organizationService.modify(organization,auditLog);
 
         return JsonDto.modify(organization.getId()).toString();
     }
@@ -271,7 +278,12 @@ public class OrganizationController {
             return new JsonDto("系统初始化数据不允许修改！").toString();
         }
         User user = (User)modelMap.get(Constant.VS_USER);
-        organizationService.delete(user, id);
+        AuditLog [] auditLogArr = new AuditLog [id.length];
+		for(int i=0; i<id.length; i++){
+			auditLogArr[i] = new AuditLog(EnumModule.ORGANIZATION.getModuleName(), 
+					id[i], organizationService.getNameById(id[i]), EnumOperationType.DELETE.getOperationType(), user,"组织删除");
+		}
+        organizationService.delete(id,auditLogArr);
         return JsonDto.delete(id).toString();
     }
 
@@ -320,9 +332,14 @@ public class OrganizationController {
      */
     @ResponseBody
     @RequestMapping(value = "/authorization.do")
-    public String authorization(Long id, @RequestParam(value = "roleId", required = false) Long[] roleIds) {
+    public String authorization(Long id, @RequestParam(value = "roleId", required = false) Long[] roleIds,HttpServletRequest request) {
         logger.info("授权");
-        organizationService.authorization(id, roleIds);
+        User u = (User) request.getSession().getAttribute(Constant.VS_USER);
+       
+        /**组织授权*/
+        AuditLog auditLog = new AuditLog(EnumModule.ORGANIZATION.getModuleName(), 
+        		id, organizationService.getById(id).getName(), EnumOperationType.AUTHORIZATION.getOperationType(), u,"组织授权");
+        organizationService.authorization(id, roleIds,auditLog);
         return new JsonDto(id, "授权成功").toString();
     }
 

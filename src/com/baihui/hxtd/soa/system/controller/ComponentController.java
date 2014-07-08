@@ -4,11 +4,14 @@ import com.baihui.hxtd.soa.base.Constant;
 import com.baihui.hxtd.soa.base.orm.hibernate.HibernatePage;
 import com.baihui.hxtd.soa.base.utils.Search;
 import com.baihui.hxtd.soa.common.service.CommonService;
+import com.baihui.hxtd.soa.system.entity.AuditLog;
 import com.baihui.hxtd.soa.system.entity.Component;
 import com.baihui.hxtd.soa.system.entity.Dictionary;
 import com.baihui.hxtd.soa.system.entity.User;
 import com.baihui.hxtd.soa.system.service.ComponentService;
 import com.baihui.hxtd.soa.system.service.DictionaryService;
+import com.baihui.hxtd.soa.util.EnumModule;
+import com.baihui.hxtd.soa.util.EnumOperationType;
 import com.baihui.hxtd.soa.util.JsonDto;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
@@ -185,7 +188,10 @@ public class ComponentController {
         User u = (User) request.getSession().getAttribute(Constant.VS_USER);
         logger.info("获得当前操作用户{}", u.getName());
         component.setModifier(u);
-        componentService.modify(component, u);
+        
+        AuditLog auditLog = new AuditLog(EnumModule.COMPONENT.getModuleName(), 
+        		component.getId(), component.getName(), EnumOperationType.MODIFY.getOperationType(), u,"修改组件");
+        componentService.modify(component, auditLog);
         JsonDto json = new JsonDto(component.getId(), "保存成功!");
         return json.toString();
     }
@@ -210,7 +216,10 @@ public class ComponentController {
         logger.info("ComponentController.query 获得当前操作的用户{}", u.getName());
         component.setCreator(u);
         component.setModifier(u);
-        componentService.add(component, u);
+        
+        AuditLog auditLog = new AuditLog(EnumModule.COMPONENT.getModuleName(), 
+        		component.getId(), component.getName(), EnumOperationType.ADD.getOperationType(), u,"增加组件");
+        componentService.add(component,auditLog);
         JsonDto json = new JsonDto(component.getId(), "保存成功!");
         return json.toString();
     }
@@ -232,7 +241,12 @@ public class ComponentController {
             return new JsonDto("系统初始化数据不允许删除！").toString();
         }
 
-        componentService.delete(user, id);
+        AuditLog [] auditLogArr = new AuditLog [id.length];
+		for(int i=0; i<id.length; i++){
+			auditLogArr[i] = new AuditLog(EnumModule.COMPONENT.getModuleName(), 
+					id[i], componentService.getNameById(id[i]), EnumOperationType.DELETE.getOperationType(), user);
+		}
+        componentService.delete(id,auditLogArr);
         JsonDto json = new JsonDto();
         json.setMessage("删除成功");
         return json.toString();

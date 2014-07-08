@@ -155,7 +155,7 @@ public class MessageService {
 		um.setType(false);
 		um.setIsDeleted(false);
 		userMessageDao.saveUserMessage(um);
-
+		auditLog.setRecordId(um.getId());
 	}
 
 	/**

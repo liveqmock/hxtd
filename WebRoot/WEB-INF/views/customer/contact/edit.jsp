@@ -60,7 +60,8 @@ function searchData(action){ // 搜索弹出框
 		<tr>
 			<td width="15%" align="right">联系人所有者：</td>
 			<td align="left">
-				<input id="txt_owner" type="text" value="${contact.owner.realName}" readonly="readonly" class="text_input3"/>
+				<input id="txt_owner" type="text" value="${contact.owner.realName}" class="text_input3" readonly 
+					onfocus="searchData('owner');"/>
 				<input id="hide_owner_id" type="hidden" name="owner.id" value="${contact.owner.id}"/>
 				<i class="s_inquiry globle_img block_inline ml5 vm cp" title="搜索所有者" onclick="searchData('owner');"></i>
 				<i class="dump_btn globle_img block_inline ml5 vm cp empty" title="清除"></i>
@@ -80,7 +81,8 @@ function searchData(action){ // 搜索弹出框
 			<td align="left"><input name="name" type="text" value="${contact.name}" class="text_input3 required"/></td>
 			<td align="right">客户名：</td>
 			<td align="left">
-				<input id="txt_customer" type="text" value="${contact.customer.name}" readonly="readonly" class="text_input3"/>
+				<input id="txt_customer" type="text" value="${contact.customer.name}" readonly class="text_input3" 
+					onfocus="searchData('customer');"/>
 				<input id="hide_customer_id" name="customer.id" type="hidden" value="${contact.customer.id}"/>
 				<i class="s_inquiry globle_img block_inline ml5 vm cp" title="搜索客户" onclick="searchData('customer');"></i>
 				<i class="dump_btn globle_img block_inline ml5 vm cp empty" title="清除"></i>
@@ -89,7 +91,8 @@ function searchData(action){ // 搜索弹出框
 		<tr>
 			<td align="right">供应商名：</td>
 			<td align="left">
-				<input id="txt_supplier" type="text" value="${contact.supplier.name}" readonly="readonly" class="text_input3"/>
+				<input id="txt_supplier" type="text" value="${contact.supplier.name}" readonly class="text_input3" 
+					onfocus="searchData('supplier');"/>
 				<input id="hide_supplier_id" name="supplier.id" type="hidden" value="${contact.supplier.id}"/>
 				<i class="s_inquiry globle_img block_inline ml5 vm cp" title="搜索供应商" onclick="searchData('supplier');"></i>
 				<i class="dump_btn globle_img block_inline ml5 vm cp empty" title="清除"></i>

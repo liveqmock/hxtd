@@ -11,11 +11,14 @@ import com.baihui.hxtd.soa.base.utils.ztree.TreeNodeConverter;
 import com.baihui.hxtd.soa.common.controller.CommonController;
 import com.baihui.hxtd.soa.common.service.CommonService;
 import com.baihui.hxtd.soa.system.DictionaryConstant;
+import com.baihui.hxtd.soa.system.entity.AuditLog;
 import com.baihui.hxtd.soa.system.entity.Dictionary;
 import com.baihui.hxtd.soa.system.entity.Function;
 import com.baihui.hxtd.soa.system.entity.Organization;
 import com.baihui.hxtd.soa.system.entity.User;
 import com.baihui.hxtd.soa.system.service.*;
+import com.baihui.hxtd.soa.util.EnumModule;
+import com.baihui.hxtd.soa.util.EnumOperationType;
 import com.baihui.hxtd.soa.util.JsonDto;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import org.apache.commons.collections.BidiMap;
@@ -204,7 +207,9 @@ public class UserController extends CommonController<User> {
         user.setModifier(user.getCreator());
         logger.debug("修改用户为当前用户“{}”", sessionUser.getName());
 
-        userService.add(user, sessionUser);
+        AuditLog auditLog = new AuditLog(EnumModule.USER.getModuleName(), 
+        		user.getId(), user.getRealName(), EnumOperationType.ADD.getOperationType(), sessionUser);
+        userService.add(user,auditLog);
 
         return JsonDto.add(user.getId()).toString();
     }
@@ -270,7 +275,9 @@ public class UserController extends CommonController<User> {
         user.setModifier(sessionUser);
         logger.debug("修改用户为当前用户“{}”", sessionUser.getName());
 
-        userService.modify(user, sessionUser);
+        AuditLog auditLog = new AuditLog(EnumModule.USER.getModuleName(), 
+        		user.getId(), user.getRealName(), EnumOperationType.MODIFY.getOperationType(), sessionUser);
+        userService.modify(user,auditLog);
 
         return JsonDto.modify(user.getId()).toString();
     }
@@ -293,7 +300,12 @@ public class UserController extends CommonController<User> {
         }
         User sessionUser = (User)userService.getById(sessionId);
 
-        userService.delete(sessionUser, id);
+        AuditLog [] auditLogArr = new AuditLog [id.length];
+		for(int i=0; i<id.length; i++){
+			auditLogArr[i] = new AuditLog(EnumModule.USER.getModuleName(), 
+					id[i], userService.getNameById(id[i]), EnumOperationType.DELETE.getOperationType(), sessionUser);
+		}
+        userService.delete(id,auditLogArr);
 
         return JsonDto.delete(id).toString();
     }
@@ -346,9 +358,13 @@ public class UserController extends CommonController<User> {
     public String authorization(Long id,
                                 @RequestParam(value = "roleId", required = false) Long[] roleIds,
                                 @RequestParam(value = "functionId", required = false) Long[] functionIds,
-                                @RequestParam(value = "componentId", required = false) Long[] componentIds) {
+                                @RequestParam(value = "componentId", required = false) Long[] componentIds,
+                                HttpServletRequest request) {
         logger.info("授权");
-        userService.authorization(id, roleIds, functionIds, componentIds);
+        User u = (User) request.getSession().getAttribute(Constant.VS_USER);
+        AuditLog auditLog = new AuditLog(EnumModule.USER.getModuleName(), 
+        		null==id?u.getId():id, null==id?u.getRealName():userService.getById(id).getRealName(), EnumOperationType.AUTHORIZATION.getOperationType(), u,"用户授权");
+        userService.authorization(id, roleIds, functionIds, componentIds,auditLog);
         return new JsonDto(id, "授权成功").toString();
     }
 
@@ -357,10 +373,16 @@ public class UserController extends CommonController<User> {
      */
     @ResponseBody
     @RequestMapping(value = "/resetPassword.do")
-    public String resetPassword(Long[] id) {
+    public String resetPassword(Long[] id,HttpServletRequest request) {
         logger.info("重置密码");
 
-        userService.resetPasswordByIds(id);
+        User user = (User) request.getSession().getAttribute(Constant.VS_USER);
+        AuditLog [] auditLogArr = new AuditLog [id.length];
+		for(int i=0; i<id.length; i++){
+			auditLogArr[i] = new AuditLog(EnumModule.USER.getModuleName(), 
+					id[i], userService.getNameById(id[i]), EnumOperationType.RESETPASSWORD.getOperationType(), user,"重置密码");
+		}
+        userService.resetPasswordByIds(id,auditLogArr);
 
         JsonDto jsonDto = new JsonDto("重置密码成功");
         jsonDto.setSuccessFlag(true);
@@ -372,10 +394,16 @@ public class UserController extends CommonController<User> {
      */
     @ResponseBody
     @RequestMapping(value = "/enable.do")
-    public String enable(Long[] id) {
+    public String enable(Long[] id,HttpServletRequest request) {
         logger.info("启用用户");
 
-        userService.modifyIsActiveByIds(id, true);
+        User user = (User) request.getSession().getAttribute(Constant.VS_USER);
+        AuditLog [] auditLogArr = new AuditLog [id.length];
+		for(int i=0; i<id.length; i++){
+			auditLogArr[i] = new AuditLog(EnumModule.USER.getModuleName(), 
+					id[i], userService.getNameById(id[i]), EnumOperationType.ENABLE.getOperationType(), user,"启用用户");
+		}
+        userService.modifyIsActiveByIds(id, true,auditLogArr);
 
         JsonDto jsonDto = new JsonDto("启用成功");
         jsonDto.setSuccessFlag(true);
@@ -387,10 +415,16 @@ public class UserController extends CommonController<User> {
      */
     @ResponseBody
     @RequestMapping(value = "/disable.do")
-    public String disable(Long[] id) {
+    public String disable(Long[] id,HttpServletRequest request) {
         logger.info("禁用用户");
 
-        userService.modifyIsActiveByIds(id, false);
+        User user = (User) request.getSession().getAttribute(Constant.VS_USER);
+        AuditLog [] auditLogArr = new AuditLog [id.length];
+		for(int i=0; i<id.length; i++){
+			auditLogArr[i] = new AuditLog(EnumModule.USER.getModuleName(), 
+					id[i], userService.getNameById(id[i]), EnumOperationType.DISABLE.getOperationType(), user,"禁用用户");
+		}
+        userService.modifyIsActiveByIds(id, false,auditLogArr);
 
         JsonDto jsonDto = new JsonDto("禁用成功");
         jsonDto.setSuccessFlag(true);
@@ -445,7 +479,7 @@ public class UserController extends CommonController<User> {
         logger.debug("导入信息“{}”", HibernateAwareObjectMapper.DEFAULT.writeValueAsString(users));
         logger.debug("对象集合数目“{}”", users.size());
 
-        userService.addList(users, sessionUser);
+        //userService.addList(users, sessionUser);
 
         logger.info("添加操作提示");
         model.addFlashAttribute(Constant.VM_BUSINESS, "导入成功");

@@ -1,5 +1,5 @@
 <%--
-  功能描述：线索详情
+  功能描述：订单详情
   User: xiaoli.luo
   Date:2014/5/19
 --%>
@@ -11,7 +11,7 @@
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
 <html>
 <head>
-<title>线索详情</title>
+<title>订单详情</title>
 <meta http-equiv="pragma" content="no-cache">
 <meta http-equiv="cache-control" content="no-cache">
 <meta http-equiv="expires" content="0">    
@@ -31,16 +31,25 @@
 		<b class="b4"></b>
 		<div class="ie_head">
 			<h1 class="f14 fbnone mt10 ml10 fl">
-				线索详情信息
+				订单详情信息
 			</h1>
 			<ul class="fr id_table1 mt10 ml10">
 				<li>
 					<a class=" pl35 c_white f14 lh25 cp block fr"
-						href="${ctx }/order/order/toModifyPage.do?id=${order.id}"><b
+						href="javascript:;" onclick="window.print()"><b
 						class="allbtn_l block fl"></b><b
-						class="allbtn_r pr13 block fl w_auto f14">编&nbsp;&nbsp;辑</b>
+						class="allbtn_r pr13 block fl w_auto f14">打&nbsp;&nbsp;印</b>
 					</a>
 				</li>
+				<c:if test="${VS_HAS_FUNCTIONS.orderModify}">
+					<li>
+						<a class=" pl10 c_white f14 lh25 cp block fr"
+							href="${ctx }/order/order/toModifyPage.do?id=${order.id}"><b
+							class="allbtn_l block fl"></b><b
+							class="allbtn_r pr13 block fl w_auto f14">编&nbsp;&nbsp;辑</b>
+						</a>
+					</li>
+				</c:if>
 				<li>
 					<a class=" pl10 c_white f14 lh25 cp block fr mr10"
 						href="${ctx }/order/order/toQueryPage.do"><b

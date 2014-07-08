@@ -4,6 +4,7 @@ import com.baihui.hxtd.soa.base.orm.hibernate.HibernatePage;
 import com.baihui.hxtd.soa.base.utils.Search;
 import com.baihui.hxtd.soa.system.dao.ComponentDao;
 import com.baihui.hxtd.soa.system.entity.*;
+
 import org.hibernate.FetchMode;
 import org.hibernate.criterion.*;
 import org.slf4j.Logger;
@@ -302,14 +303,15 @@ public class ComponentService {
      * @Title: save
      */
     @Transactional
-    public void add(Component entity, User user) {
+    public void add(Component entity,AuditLog auditLog) {
         logger.info("保存组件信息{}", entity);
         entity.setIsInitialized(false);
         componentDao.save(entity);
+        auditLog.setRecordId(entity.getId());
     }
     
     @Transactional
-    public void modify(Component entity, User user) {
+    public void modify(Component entity,AuditLog auditLog) {
         logger.info("保存组件信息{}", entity);
         entity.setIsInitialized(false);
         componentDao.save(entity);
@@ -324,9 +326,21 @@ public class ComponentService {
      * @Title: delete
      */
     @Transactional
-    public void delete(User user, Long... id) {
+    public void delete(Long[] id,AuditLog [] auditLogArr) {
         componentDao.logicalDelete(id);
     }
+
+	/**
+     * getNameById
+     * @Title: getNameById
+     * @Description: 通过id获取组件名称
+     * @param id
+     * @return String
+    */
+    @Transactional
+	public String getNameById(Long id) {
+		return componentDao.get(id).getName();
+	}
 
 
 }

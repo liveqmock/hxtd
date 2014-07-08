@@ -4,7 +4,7 @@
 <c:set var="ctx" value="${pageContext.request.contextPath}"/>
 <html>
 <head>
-<title>产品列表</title>
+<title>产品</title>
 <link href="${ctx}/static/css/recommend/detail.css?v=1" rel="stylesheet" type="text/css"/>
 <link href="${ctx}/static/css/application.css?v=1" rel="stylesheet" type="text/css"/>
 <script type="text/javascript" src="${ctx}/static/js/jquery-jtemplates.js?v=1"></script>
@@ -12,8 +12,9 @@
 <script type="text/javascript" src="${ctx}/static/js/scrollTitle.js?v=1"></script>
 <script type="text/javascript">
 $(function(){
-	jsUtil.datepicker(".time");// 绑定日历
-	new Grid().init().bindExport();// 生成Grid
+	jsUtil.twoOrMoreRestrictDate('.time', 'max', 0); // 绑定日历
+	jsUtil.twoOrMoreRestrictDate('.saletime', 'max', null); //绑定销售日历 
+	new Grid().init().bindExport(); // 生成Grid
 });
 </script>
 </head>
@@ -46,8 +47,8 @@ $(function(){
     		<td class="f14 namewidth1" align="right">销售日期：</td>
     		<td class="f14 namewidth2" align="left">
     			<div class="vm">
-	    			<input class="text_input2 input_close globle_img time" name="search_GTE_saleBeginTime" 
-	    				type="text" readonly/>-<input class="text_input2 input_close globle_img time" name="search_LTE_saleEndTime" 
+	    			<input class="text_input2 input_close globle_img saletime" name="search_GTE_saleBeginTime" 
+	    				type="text" readonly/>-<input class="text_input2 input_close globle_img saletime" name="search_LTE_saleEndTime" 
 	    				type="text" readonly/>
     			</div>
     		</td>
@@ -96,6 +97,12 @@ $(function(){
 						</a>
 					</li>
 				</c:if>
+				<li>
+					<a href="javascript:;" class="block c_white lh25 mr10 refresh">
+						<b class="allbtn_l block fl"></b>
+						<b class="allbtn_r pr13 block fl w_auto f14">刷&nbsp;&nbsp;新</b>
+					</a>
+				</li>
 			</ul>
 			<ul class="fr id_table1 mt10 mr10">
 				<li>

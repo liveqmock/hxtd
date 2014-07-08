@@ -64,7 +64,12 @@ public enum EnumModule {
 	USERMESSAGE("userMessage"),
 	
 	/** 系统公告*/
-	NOTICE("notice");
+	NOTICE("notice"),
+	
+	/** 数据字典*/
+	DICTIONARY("dictionary")
+	;
+	
 	
 	private String moduleName;
 	

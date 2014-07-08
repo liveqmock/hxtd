@@ -168,7 +168,7 @@ public class NoticeController {
 		notice.setModifieTime(new Date());
 		notice.setModifier(u);
 		notice.setCreater(u);
-		AuditLog auditLog = new AuditLog(EnumModule.MARKETACTIVITY.getModuleName(), 
+		AuditLog auditLog = new AuditLog(EnumModule.NOTICE.getModuleName(), 
 				notice.getId(), notice.getTitle(), EnumOperationType.MODIFY.getOperationType(), u);
 		noticeService.modify(notice, u, auditLog);
 		JsonDto json = JsonDto.modify(notice.getId());
@@ -209,7 +209,7 @@ public class NoticeController {
 		notice.setModifieTime(new Date());
 		notice.setIsDeleted(false);
 		/************ 新增 *****************************/
-		AuditLog auditLog = new AuditLog(EnumModule.MARKETACTIVITY.getModuleName(), 
+		AuditLog auditLog = new AuditLog(EnumModule.NOTICE.getModuleName(), 
 				notice.getId(), notice.getTitle(), EnumOperationType.ADD.getOperationType(), u);
 		noticeService.add(notice, u, auditLog);
 		JsonDto json = JsonDto.add(notice.getId());
@@ -228,7 +228,7 @@ public class NoticeController {
 		User user = (User)modelMap.get(Constant.VS_USER);
 		AuditLog [] auditLogArr = new AuditLog [id.length];
 		for(int i=0; i<id.length; i++){
-			auditLogArr[i] = new AuditLog(EnumModule.MARKETACTIVITY.getModuleName(), 
+			auditLogArr[i] = new AuditLog(EnumModule.NOTICE.getModuleName(), 
 					id[i], noticeService.getTitleById(id[i]), EnumOperationType.DELETE.getOperationType(), user);
 		}
 		noticeService.delete(user, id, auditLogArr);

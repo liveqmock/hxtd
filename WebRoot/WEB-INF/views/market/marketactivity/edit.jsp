@@ -109,13 +109,13 @@ function searchData(action){ // 搜索
 			<td align="left"><input name="times" type="text" value="${activity.times}" class="text_input3 digits"/></td>
 		</tr>
 		<tr>
-			<td align="right">期望成功率%：</td>
+			<td align="right">期望成功率（%）：</td>
 			<td align="left"><input type="text" name="expectSuccessRate" value="${activity.expectSuccessRate}" 
 				class="text_input3 amount"/></td>
 			<td align="right"><span class="w_red">*&nbsp;</span>负责人：</td>
 			<td align="left">
 				<input type="text" id="txt_boss" name="bossname" value="${activity.bossHead.realName}" readonly="readonly"
-					 class="text_input3 required"/>
+					 class="text_input3 required cp"/>
 				<input type="hidden"id="hide_boss_id" name="bossHead.id" value="${activity.bossHead.id}"/>
 				<i class="s_inquiry globle_img block_inline ml5 vm cp" title="搜索责任人" onclick="searchData('boss');"></i>
 				<i class="dump_btn globle_img block_inline ml5 vm cp empty" title="清除"></i>

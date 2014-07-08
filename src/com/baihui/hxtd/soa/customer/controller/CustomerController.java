@@ -263,9 +263,12 @@ public class CustomerController extends CommonController<Customer>{
 			auditLogArr[i] = new AuditLog(EnumModule.CUSTOMER.getModuleName(), 
 					id[i], customerService.getNameById(id[i]), EnumOperationType.DELETE.getOperationType(), user);
 		}
-		customerService.delete(user, id, auditLogArr);
-		JsonDto json = JsonDto.delete(id);
-		return json.toString();
+		boolean flag=customerService.delete(user, id, auditLogArr);
+		if(flag){
+			return JsonDto.delete(id).toString();
+		}else{
+			return new JsonDto("被删除数据存在关联项目，无法删除!").toString(); 
+		}
 	}
 	
 	
@@ -313,9 +316,6 @@ public class CustomerController extends CommonController<Customer>{
 		//设置开户行
 		List<Dictionary> openBank = dictionaryService.findChildren("040307");
 		model.addAttribute("openBank", openBank);
-		//客户属性
-		List<Dictionary> property = dictionaryService.findChildren("040308");
-		model.addAttribute("property", property);
 	}
 	
 	  /**

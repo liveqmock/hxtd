@@ -14,7 +14,7 @@
 $(function(){
 	jsUtil.twoOrMoreRestrictDate('.time', 'max', 0);// 绑定日历
 	jsUtil.twoOrMoreRestrictDate('.mintime', 'min', 0);
-	new Grid().init().bindExport(); // 生成Gird
+	new Grid().init(); // 生成Gird
 });
 </script>
 </head>
@@ -103,6 +103,12 @@ $(function(){
 						</a>
 					</li>
 				</c:if>
+				<li>
+					<a href="javascript:;" class="block c_white lh25 mr10 refresh">
+						<b class="allbtn_l block fl"></b>
+						<b class="allbtn_r pr13 block fl w_auto f14">刷&nbsp;&nbsp;新</b>
+					</a>
+				</li>
 			</ul>
 			<ul class="fr id_table1 mt10 mr10" style="display:none;">
 				<li>

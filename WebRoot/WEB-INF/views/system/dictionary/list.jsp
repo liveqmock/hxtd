@@ -5,7 +5,7 @@
 <c:set var="ctx" value="${pageContext.request.contextPath}"/>
 <html>
 <head>
-<title>字典管理</title>
+<title>字典维护</title>
 <link rel="stylesheet" href="${ctx}/static/css/recommend/detail.css" type="text/css"/>
 <link href="${ctx}/static/css/application.css" rel="stylesheet" type="text/css"/>
 <script type="text/javascript" src="${ctx}/static/js/jquery-jtemplates.js"></script>
@@ -70,6 +70,12 @@ $(function () {
 						</a>
 					</li>
 				</c:if>
+				<li>
+					<a href="javascript:;" class="block c_white lh25 mr10 refresh">
+						<b class="allbtn_l block fl"></b>
+						<b class="allbtn_r pr13 block fl w_auto f14">刷&nbsp;&nbsp;新</b>
+					</a>
+				</li>
 			</ul>
 		</div>
 	</div>

@@ -229,7 +229,7 @@ public class MessageController {
 		for(int i=0;i<userstr.length;i++){
 			User user=userService.getById(Long.parseLong(userstr[i]));
 			/************ 新增 *****************************/
-			AuditLog auditLog = new AuditLog(EnumModule.MARKETACTIVITY.getModuleName(), 
+			AuditLog auditLog = new AuditLog(EnumModule.USERMESSAGE.getModuleName(), 
 					message.getId(), message.getTitle(), EnumOperationType.ADD.getOperationType(), u);
 			messageService.add(message, user, auditLog);
 		}

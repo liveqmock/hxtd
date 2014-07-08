@@ -98,7 +98,7 @@ public class CustomerService {
 	}
 	
 	/**
-     * 保存客户信息
+     * 修改客户信息
      * @param customer
      */
 	public void modify(Customer customer,User user, AuditLog auditLog) {
@@ -113,8 +113,12 @@ public class CustomerService {
      * delete(删除客户信息)
      * @param id
      */
-    public void delete(User user, Long[] id,AuditLog [] auditLog) {
+    public boolean delete(User user, Long[] id,AuditLog [] auditLog) {
+    	if(contactDao.getCount(id,"customer")==0){
     		customerDao.logicalDelete(id);
+    		return true;
+    	}
+    	return false;
     }
     
     /**
@@ -147,7 +151,6 @@ public class CustomerService {
         detachedCriteria.setFetchMode("creator", FetchMode.JOIN);
         detachedCriteria.setFetchMode("type", FetchMode.JOIN);
         detachedCriteria.setFetchMode("modifier", FetchMode.JOIN);
-        detachedCriteria.setFetchMode("property", FetchMode.JOIN);
         detachedCriteria.add(Restrictions.eq("isDeleted", false));
 
         Criteria criteria = detachedCriteria.getExecutableCriteria(customerDao.getSession());
@@ -166,7 +169,6 @@ public class CustomerService {
         detachedCriteria.setFetchMode("source", FetchMode.JOIN);
         detachedCriteria.setFetchMode("riskGrade", FetchMode.JOIN);
         detachedCriteria.setFetchMode("industry", FetchMode.JOIN);
-        detachedCriteria.setFetchMode("property", FetchMode.JOIN);
         detachedCriteria.add(Restrictions.eq("isDeleted", false));
         Map<String, SearchFilter> filters = Search.parse(searchParams);
         Search.buildCriteria(filters, detachedCriteria, Customer.class);

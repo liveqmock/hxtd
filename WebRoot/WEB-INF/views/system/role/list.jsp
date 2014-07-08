@@ -21,7 +21,7 @@
 
     <script type="text/javascript">
         $(function () {
-            new Grid().init().bindAuthorization();
+            new Grid().init();
         });
     </script>
 </head>

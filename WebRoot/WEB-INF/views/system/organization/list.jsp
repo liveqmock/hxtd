@@ -43,8 +43,8 @@
                 }
             });
 
-            window.gridUser = new Grid().init({onDelete: Grid.deleteSynTree(ztree, $("[name=id]")), gridName: "user", gridSelector: ".user", resultTemplateId: "user-template"}).bindAuthorization().bindResetPassword().bindEnable().bindDisable().bindExport();
-            window.gridOrg = new Grid().init({onDelete: Grid.deleteSynTree(ztree, $("[name=organizationId]")), gridName: "org", gridSelector: ".org", resultTemplateId: "org-template"}).bindAuthorization();
+            window.gridUser = new Grid().init({onDelete: Grid.deleteSynTree(ztree, $("[name=id]")), gridName: "user", gridSelector: ".user", resultTemplateId: "user-template"}).bindExport();
+            window.gridOrg = new Grid().init({onDelete: Grid.deleteSynTree(ztree, $("[name=organizationId]")), gridName: "org", gridSelector: ".org", resultTemplateId: "org-template"});
             window.gridOrgdetail = new Grid().init({gridName: "orgdetail", gridSelector: ".orgdetail", resultTemplateId: "orgdetail-template"});
             $C.tab({onSelected: function (event, title, panel) {
                 $("[name=hibernatePageNo]").val(1);
@@ -69,7 +69,7 @@
             <%--<a class="c_white f14 fr mt10 fb mr10" href="javascript:;">&lt;&lt;</a>--%>
         </div>
     </div>
-    <div class="cb mb20 mr20 bor_636363" style=" height:495px;overflow:auto">
+    <div class="cb mb20 mr20 bor_636363" style=" height:495px;overflow-y:auto;">
         <ul id="organizationTree" class="ztree"></ul>
     </div>
 </div>
@@ -142,7 +142,7 @@
                     <li><a href="${ctx}/system/user/toImportPage.do" class="leading_in globle_img block_inline mr10" title="导入"></a></li>
                 </c:if>
                 <c:if test="${VS_HAS_FUNCTIONS.userExport}">
-                    <li><a href="javascript:void(0)" uri="${ctx}/system/user/export.do?TYPE=pagination" class="leading_out globle_img block_inline mr10 export" title="导出"></a></li>
+                    <li><a href="javascript:void(0)" uri="${ctx}/system/user/export.do?TYPE=selected" class="leading_out globle_img block_inline mr10 export" title="导出"></a></li>
                 </c:if>
             </ul>
         </div>

@@ -60,12 +60,12 @@
 				</td>
 			</tr>
 			<tr>
-				<td align="right" width="15%">客户属性：</td>
+				<td align="right" width="15%">风险等级：</td>
 				<td align="left">
-				<c:choose>
-						<c:when test="${customer.property.id=='40308'}"></c:when>
-						<c:otherwise>${customer.property.key}</c:otherwise>
-				</c:choose>
+					<c:choose>
+						<c:when test="${customer.riskGrade.id=='040304'}"></c:when>
+						<c:otherwise>${customer.riskGrade.key}</c:otherwise>
+					</c:choose>
 				</td>
 				<td align="right" width="15%">邮箱：</td>
 				<td align="left">${customer.email}</td>
@@ -147,15 +147,6 @@
 				<td align="right" width="15%">邀约人：</td>
 				<td align="left">${customer.appointment}</td>
 		    </tr>
-			<!--<tr>
-				<td align="right" width="15%">风险等级：</td>
-				<td align="left">
-					<c:choose>
-						<c:when test="${customer.riskGrade.id=='040304'}"></c:when>
-						<c:otherwise>${customer.riskGrade.key}</c:otherwise>
-					</c:choose>
-				</td>
-			</tr>  -->
 			<tr>
 			    <td align="right" width="15%">创建时间：</td>
 				<td align="left">${customer.createdTime}</td>

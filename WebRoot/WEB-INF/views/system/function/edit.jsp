@@ -24,6 +24,7 @@
 <script type="text/javascript" src="${ctx}/static/js/validator.js"></script>
 <script type="text/javascript" src="${ctx}/static/js/js-util.common.js"></script>
 <script type="text/javascript">
+var zNode = ${zNode};
 $(function(){
 	//$("#form").valid();
 	$("#saveAndAdd").click(function(){
@@ -50,28 +51,11 @@ $(function(){
 		}
 		return false;
 	});
-	
-	jsUtil.renderRequiredFromInput();
-});
-</script>
-<script type="text/javascript">
-var zNode = ${zNode};
-$(function(){
 	jsUtil.easyTree.init(zNode,childFun);
 	$("#menuText").click(function(){
 		jsUtil.easyTree.show("#menuText");
 	});
-	$("#save").click(function(){
-		if($("#form").valid()){
-			$("#form").submit();
-		}
-	});
-	$("#saveAndAdd").click(function(){
-		$("#form").attr("action",$("#form").attr("action")+"?type=add");
-		if($("#form").valid()){
-			$("#form").submit();
-		}
-	});
+	jsUtil.renderRequiredFromInput();
 });
 function childFun(treeNode){
 	$("#menuText").val(treeNode.name);

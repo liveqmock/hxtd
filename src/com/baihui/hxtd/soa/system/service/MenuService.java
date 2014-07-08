@@ -9,6 +9,7 @@ import com.baihui.hxtd.soa.system.dao.DictionaryDao;
 import com.baihui.hxtd.soa.system.dao.FunctionDao;
 import com.baihui.hxtd.soa.system.dao.MenuDao;
 import com.baihui.hxtd.soa.system.dao.UserDao;
+import com.baihui.hxtd.soa.system.entity.AuditLog;
 import com.baihui.hxtd.soa.system.entity.Dictionary;
 import com.baihui.hxtd.soa.system.entity.Function;
 import com.baihui.hxtd.soa.system.entity.Menu;
@@ -482,7 +483,7 @@ public class MenuService {
      * 6.影响父节点
      */
     @Transactional
-    public void add(Menu menu) {
+    public void add(Menu menu,AuditLog auditLog) {
         logger.info("新增");
 
         logger.info("添加默认属性值");
@@ -562,7 +563,7 @@ public class MenuService {
 
         menu.setTrigger(trigger);
         menuDao.save(menu);
-
+        auditLog.setRecordId(menu.getId());
 //        userDao.updateManagerStoreStatus();
     }
 
@@ -595,7 +596,7 @@ public class MenuService {
      * 修改
      */
     @Transactional
-    public void modify(Menu menu) {
+    public void modify(Menu menu,AuditLog auditLog) {
         logger.info("修改");
 
         logger.info("添加默认属性值");
@@ -616,12 +617,24 @@ public class MenuService {
      * 批量删除
      */
     @Transactional
-    public void delete(Long... ids) {
+    public void delete(Long[] ids,AuditLog [] auditLogArr) {
         logger.info("删除");
         menuDao.logicalDelete(ids);
 
         userDao.updateAllStoreStatus();
     }
+
+	/**
+     * getNameById
+     * @Title: getNameById
+     * @Description: 通过id获取角色名称
+     * @param id
+     * @return String
+    */
+    @Transactional
+	public String getNameById(Long id) {
+		return menuDao.get(id).getName();
+	}
 
 
 }

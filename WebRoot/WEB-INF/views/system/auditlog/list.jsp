@@ -183,7 +183,12 @@
 							              {#if $T.row.type==3}逻辑删除{#/if}
 							              {#if $T.row.type==4}删除{#/if}
 							              {#if $T.row.type==5}导入{#/if}
-							              {#if $T.row.type==6}导出{#/if}</td>
+							              {#if $T.row.type==6}导出{#/if}
+							              {#if $T.row.type==7}授权{#/if}
+							              {#if $T.row.type==8}重置密码{#/if}
+							              {#if $T.row.type==9}启用用户{#/if}
+							              {#if $T.row.type==10}禁用用户{#/if}
+							              </td>
 							              <td>{$T.row.recordId}</td>
 							              <td>{$T.row.recordName}</td>
 							              <td>{$T.row.createdTime}</td>

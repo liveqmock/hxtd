@@ -3,6 +3,7 @@ package com.baihui.hxtd.soa.system.service;
 import com.baihui.hxtd.soa.base.orm.hibernate.HibernatePage;
 import com.baihui.hxtd.soa.base.utils.Search;
 import com.baihui.hxtd.soa.system.dao.DictionaryDao;
+import com.baihui.hxtd.soa.system.entity.AuditLog;
 import com.baihui.hxtd.soa.system.entity.Dictionary;
 import com.baihui.hxtd.soa.system.entity.User;
 
@@ -69,9 +70,10 @@ public class DictionaryService {
      * @param entity 参数类型
      * @return void 返回类型
      */
-    public void add(Dictionary entity,User user) {
+    public void add(Dictionary entity,AuditLog auditLog) {
         entity.setIsInitialized(false);
         dictionaryDao.save(entity);
+        auditLog.setRecordId(entity.getId());
     }
     
     /**
@@ -79,7 +81,7 @@ public class DictionaryService {
      * @param entity
      * @param user
      */
-    public void modify(Dictionary entity,User user) {
+    public void modify(Dictionary entity,AuditLog auditLog ) {
         entity.setIsInitialized(false);
         dictionaryDao.save(entity);
     }
@@ -120,7 +122,7 @@ public class DictionaryService {
      * @param id 字典主键IDS
      * @Description: 根据字典主键ID删除，支持批量删除
      */
-    public void delete(User user, Long... id) {
+    public void delete(Long[] id,AuditLog [] auditLogArr) {
         dictionaryDao.logicalDelete(id);
     }
 
@@ -175,4 +177,17 @@ public class DictionaryService {
         }
         return dictionaryDao.find(hql, dicType);
     }
+
+	/**
+     * getNameById
+     * @Title: getNameById
+     * @Description: 通过id获取字典key值
+     * @param id
+     * @return String
+    */
+    @Transactional
+	public String getNameById(Long id) {
+		return dictionaryDao.get(id).getKey();
+	}
+
 }

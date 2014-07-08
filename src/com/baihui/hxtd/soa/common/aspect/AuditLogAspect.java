@@ -39,6 +39,15 @@ public class AuditLogAspect {
 
     @Pointcut("execution(public * com.baihui.hxtd.soa.*.service..authorization*(..))")
     public void authorization(){}
+    
+    @Pointcut("execution(public * com.baihui.hxtd.soa.*.service..resetPassword*(..))")
+    public void resetPassword(){}
+    
+    @Pointcut("execution(public * com.baihui.hxtd.soa.*.service..enable*(..))")
+    public void enable(){}
+    
+    @Pointcut("execution(public * com.baihui.hxtd.soa.*.service..disable*(..))")
+    public void disable(){}
 
     @Pointcut("execution(public * com.baihui.hxtd.soa.*.service..delete*(..))")
     public void delete(){}
@@ -49,7 +58,7 @@ public class AuditLogAspect {
     @Pointcut("execution(public * com.baihui.hxtd.soa.*.service..import*(..))")
     public void importFile() {}
 
-    @Pointcut("add() || modify() ||  authorization()|| delete() || exportFile() || importFile()")
+    @Pointcut("add() || modify() ||  authorization()||resetPassword()|| delete() || exportFile() || importFile()")
     public void anyOperation(){}
 
     @AfterReturning("anyOperation() && args(.., auditLog)")

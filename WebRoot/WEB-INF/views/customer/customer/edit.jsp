@@ -115,19 +115,19 @@
 			</td>
 		</tr>
 		<tr>
-		<td align="right" width="15%">客户属性：</td>
-		<td align="left">
-		<select name="property.id" class="select1 pr">
-					<option value="040308">--无--</option>
-						<c:forEach items="${property}" var="property">
-					       <option value="${property.id}"
-							<c:if test="${customer.property.id == property.id}">
+			<td align="right" width="15%">风险等级：</td>
+			<td align="left">
+				<select name="riskGrade.id" class="select1 pr">
+					<option value="040304">--无--</option>
+						<c:forEach items="${riskGrade}" var="riskGrade">
+					       <option value="${riskGrade.id}"
+							<c:if test="${customer.riskGrade.id == riskGrade.id}">
 								selected
 							</c:if>
-							>${property.key}</option>
+							>${riskGrade.key}</option>
 						</c:forEach>
 				</select>
-		</td>
+			</td>
 			<td align="right" width="15%"><span class="w_red">*&nbsp;</span>邮箱：</td>
 			<td align="left">
 			<input name="email" type="text" value="${customer.email}" class="text_input3 required"/>

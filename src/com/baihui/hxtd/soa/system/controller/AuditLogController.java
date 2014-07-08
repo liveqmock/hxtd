@@ -21,6 +21,7 @@ import com.baihui.hxtd.soa.base.utils.Search;
 import com.baihui.hxtd.soa.base.utils.mapper.HibernateAwareObjectMapper;
 import com.baihui.hxtd.soa.system.entity.AuditLog;
 import com.baihui.hxtd.soa.system.service.AuditLogService;
+import com.baihui.hxtd.soa.util.EnumModule;
 import com.baihui.hxtd.soa.util.JsonDto;
 
 /**
@@ -51,7 +52,7 @@ public class AuditLogController {
             @RequestParam(value = "pageOrderBy", defaultValue = "createdTime") String orderBy,
             @RequestParam(value = "pageOrder", defaultValue = "desc") String order,
             Model model) {
-        logger.info("FunctionController.query跳转列表页");
+        logger.info("AuditLogController.query跳转列表页");
         
         HibernatePage<AuditLog> page = new HibernatePage<AuditLog>(pageNumber, pageSize);
         page.setHibernateOrderBy(orderBy);
@@ -102,24 +103,29 @@ public class AuditLogController {
         operationTypes.put(4,"删除");
         operationTypes.put(5,"导入");
         operationTypes.put(6,"导出");
+        operationTypes.put(7,"授权");
+        operationTypes.put(8,"重置密码");
+        operationTypes.put(9,"启用用户");
+        operationTypes.put(10,"禁用用户");
         model.addAttribute("operationTypes", operationTypes);//操作类型
-        Map<Integer,String> moduleNames=new HashMap<Integer,String>();
-        moduleNames.put(1, "市场活动");
-        moduleNames.put(2, "线索");
-        moduleNames.put(3, "联系人");
-        moduleNames.put(4, "客户");
-        moduleNames.put(5, "供应商");
-        moduleNames.put(6, "项目");
-        moduleNames.put(7, "产品");
-        moduleNames.put(8, "订单");
-        moduleNames.put(9, "用户");
-        moduleNames.put(10, "角色");
-        moduleNames.put(11, "菜单");
-        moduleNames.put(12, "功能");
-        moduleNames.put(13, "组件");
-        moduleNames.put(14, "组织机构");
-        moduleNames.put(15, "系统消息");
-        moduleNames.put(16, "系统公告");
+        Map<EnumModule,String> moduleNames=new HashMap<EnumModule,String>();
+        moduleNames.put(EnumModule.MARKETACTIVITY, "市场活动");
+        moduleNames.put(EnumModule.LEAD, "线索");
+        moduleNames.put(EnumModule.CONTACT, "联系人");
+        moduleNames.put(EnumModule.CUSTOMER, "客户");
+        moduleNames.put(EnumModule.SUPPILER, "供应商");
+        moduleNames.put(EnumModule.PROJECT, "项目");
+        moduleNames.put(EnumModule.PRODUCT, "产品");
+        moduleNames.put(EnumModule.ORDER, "订单");
+        moduleNames.put(EnumModule.USER, "用户");
+        moduleNames.put(EnumModule.ROLE, "角色");
+        moduleNames.put(EnumModule.MENU, "菜单");
+        moduleNames.put(EnumModule.FUNCTION, "功能");
+        moduleNames.put(EnumModule.COMPONENT, "组件");
+        moduleNames.put(EnumModule.ORGANIZATION, "组织机构");
+        moduleNames.put(EnumModule.USERMESSAGE, "系统消息");
+        moduleNames.put(EnumModule.NOTICE, "系统公告");
+        moduleNames.put(EnumModule.DICTIONARY, "数据字典");
         model.addAttribute("moduleNames", moduleNames);//模块名称
 	}
 	

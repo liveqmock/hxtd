@@ -167,7 +167,7 @@ public class FunctionController {
      * @Title: modify
      */
     @ResponseBody
-    @RequestMapping(value = "/modify.do")
+    @RequestMapping(value = "/modify.do", produces = "text/text;charset=UTF-8")
     public String modify(Function function, String type, HttpServletRequest request) {
         logger.info("FunctionController.modify修改组件信息");
         if (commonService.isInitialized(Function.class, function.getId())) {
@@ -180,7 +180,7 @@ public class FunctionController {
         logger.info("获得当前操作用户{}", u.getName());
         function.setModifier(u);
         functionService.save(function);
-        JsonDto json = new JsonDto(function.getId(), "保存成功!");
+        JsonDto json = JsonDto.modify(function.getId());
         return json.toString();
     }
 
@@ -193,7 +193,7 @@ public class FunctionController {
      * @Title: add
      */
     @ResponseBody
-    @RequestMapping(value = "/add.do")
+    @RequestMapping(value = "/add.do", produces = "text/text;charset=UTF-8")
     public String add(Function function,
                       String type,
                       HttpServletRequest request) {
@@ -206,7 +206,7 @@ public class FunctionController {
         function.setCreator(u);
         function.setModifier(u);
         functionService.save(function);
-        JsonDto json = new JsonDto(function.getId(), "保存成功!");
+        JsonDto json = JsonDto.add(function.getId());
         return json.toString();
     }
 
@@ -225,10 +225,8 @@ public class FunctionController {
         if (commonService.isInitialized(Function.class, id)) {
             return new JsonDto("系统初始化数据不允许修改！").toString();
         }
-
         functionService.delete(id);
-        JsonDto json = new JsonDto();
-        json.setMessage("删除成功");
+        JsonDto json = JsonDto.delete();
         return json.toString();
     }
 

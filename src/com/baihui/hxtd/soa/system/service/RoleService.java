@@ -5,6 +5,7 @@ import com.baihui.hxtd.soa.base.orm.hibernate.HibernatePage;
 import com.baihui.hxtd.soa.base.utils.Search;
 import com.baihui.hxtd.soa.system.dao.RoleDao;
 import com.baihui.hxtd.soa.system.dao.UserDao;
+import com.baihui.hxtd.soa.system.entity.AuditLog;
 import com.baihui.hxtd.soa.system.entity.Component;
 import com.baihui.hxtd.soa.system.entity.Function;
 import com.baihui.hxtd.soa.system.entity.Role;
@@ -71,7 +72,7 @@ public class RoleService {
      * 新增
      */
     @Transactional
-    public void add(Role role) {
+    public void add(Role role,AuditLog auditLog) {
         logger.info("新增");
 
         role.setCreatedTime(new Date());
@@ -81,6 +82,7 @@ public class RoleService {
         role.setCode(null);
 
         roleDao.save(role);
+        auditLog.setRecordId(role.getId());
 
 //        userDao.updateManagerStoreStatus();
     }
@@ -103,7 +105,7 @@ public class RoleService {
      * 修改
      */
     @Transactional
-    public void modify(Role role) {
+    public void modify(Role role,AuditLog auditLog) {
         logger.info("修改");
         role.setModifiedTime(new Date());
         roleDao.update(role);
@@ -113,7 +115,7 @@ public class RoleService {
      * 批量删除
      */
     @Transactional
-    public void delete(Long... ids) {
+    public void delete(Long[] ids,AuditLog [] auditLogArr) {
         logger.info("删除");
         roleDao.logicalDelete(ids);
     }
@@ -206,7 +208,7 @@ public class RoleService {
      * 授权
      */
     @Transactional
-    public void authorization(Long id, Long[] functionIds, Long[] componentIds) {
+    public void authorization(Long id, Long[] functionIds, Long[] componentIds,AuditLog auditLog) {
         logger.info("授权");
         Role role = roleDao.get(id);
 
@@ -228,5 +230,17 @@ public class RoleService {
 
         roleDao.update(role);
     }
+
+	/**
+     * getNameById
+     * @Title: getNameById
+     * @Description: 通过id获取角色名称
+     * @param id
+     * @return String
+    */
+    @Transactional
+	public String getNameById(Long id) {
+		return roleDao.get(id).getName();
+	}
 
 }

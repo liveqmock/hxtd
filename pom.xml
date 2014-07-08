@@ -373,7 +373,7 @@
                     <!--<warSourceExcludes>**/lib</warSourceExcludes>-->
                 </configuration>
             </plugin>
-
+                                      1
             <!-- tomcat7 插件 -->
             <plugin>
                 <groupId>org.apache.tomcat.maven</groupId>

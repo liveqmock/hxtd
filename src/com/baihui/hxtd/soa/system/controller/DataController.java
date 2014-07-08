@@ -4,11 +4,14 @@ import com.baihui.hxtd.soa.base.Constant;
 import com.baihui.hxtd.soa.base.orm.hibernate.HibernatePage;
 import com.baihui.hxtd.soa.base.utils.Search;
 import com.baihui.hxtd.soa.base.utils.mapper.HibernateAwareObjectMapper;
+import com.baihui.hxtd.soa.system.entity.AuditLog;
 import com.baihui.hxtd.soa.system.entity.Dictionary;
 import com.baihui.hxtd.soa.system.entity.Function;
 import com.baihui.hxtd.soa.system.entity.Role;
 import com.baihui.hxtd.soa.system.entity.User;
 import com.baihui.hxtd.soa.system.service.*;
+import com.baihui.hxtd.soa.util.EnumModule;
+import com.baihui.hxtd.soa.util.EnumOperationType;
 import com.baihui.hxtd.soa.util.JsonDto;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -143,18 +146,21 @@ public class DataController {
                       @RequestParam(defaultValue = "/system/role/toModifyPage.do?id=%s") String redirectUri,
                       @ModelAttribute(Constant.VS_USER_ID) Long userId,
                       @ModelAttribute(Constant.VS_USER_NAME) String userName,
-                      RedirectAttributes model) {
+                      RedirectAttributes model,ModelMap modelMap) {
         logger.info("新增");
         logger.debug("名称“{}”", role.getName());
         role.setId(null);
-
+        
         logger.info("添加服务端属性值");
         role.setCreator(new User(userId));
         logger.debug("创建用户为当前用户“{}”", userId);
         role.setModifier(role.getCreator());
         logger.debug("修改用户为当前用户“{}”", userId);
 
-        roleService.add(role);
+        User user = (User) modelMap.get(Constant.VS_USER);
+        AuditLog auditLog = new AuditLog(EnumModule.ROLE.getModuleName(), 
+        		role.getId(), role.getName(), EnumOperationType.ADD.getOperationType(), user,"角色增加");
+        roleService.add(role,auditLog);
 
         logger.info("添加操作提示");
         model.addFlashAttribute(Constant.VM_BUSINESS, "新增成功");
@@ -205,7 +211,7 @@ public class DataController {
                          @RequestParam(defaultValue = "/system/role/toModifyPage.do?id=%s") String redirectUri,
                          @ModelAttribute(Constant.VS_USER_ID) Long userId,
                          @ModelAttribute(Constant.VS_USER_NAME) String userName,
-                         RedirectAttributes model) {
+                         RedirectAttributes model,ModelMap modelMap) {
         logger.info("修改");
 
         logger.info("添加服务端属性值");
@@ -214,7 +220,10 @@ public class DataController {
         role.setModifier(new User(userId));
         logger.debug("修改用户为当前用户“{}”", userName);
 
-        roleService.modify(role);
+        User user = (User) modelMap.get(Constant.VS_USER);
+        AuditLog auditLog = new AuditLog(EnumModule.ROLE.getModuleName(), 
+        		role.getId(), role.getName(), EnumOperationType.MODIFY.getOperationType(), user,"角色修改");
+        roleService.modify(role,auditLog);
 
         logger.info("添加操作提示");
         model.addFlashAttribute(Constant.VM_BUSINESS, "修改成功");
@@ -231,9 +240,15 @@ public class DataController {
      */
     @ResponseBody
     @RequestMapping(value = "/delete.do")
-    public String delete(Long[] id) {
+    public String delete(Long[] id,ModelMap modelMap) {
         logger.info("删除");
-        roleService.delete(id);
+        User user = (User)modelMap.get(Constant.VS_USER);
+        AuditLog [] auditLogArr = new AuditLog [id.length];
+		for(int i=0; i<id.length; i++){
+			auditLogArr[i] = new AuditLog(EnumModule.ROLE.getModuleName(), 
+					id[i], roleService.getNameById(id[i]), EnumOperationType.DELETE.getOperationType(), user,"角色删除");
+		}
+        roleService.delete(id,auditLogArr);
         JsonDto jsonDto = new JsonDto("删除成功");
         jsonDto.setSuccessFlag(true);
         return jsonDto.toString();
@@ -276,9 +291,12 @@ public class DataController {
                                 @RequestParam(value = "functionId", required = true, defaultValue = "") Long[] functionIds,
                                 @RequestParam(value = "componentId", required = true, defaultValue = "") Long[] componentIds,
                                 @RequestParam(defaultValue = "/system/role/toAuthorizationPage.do?id=%s") String redirectUri,
-                                RedirectAttributes model) {
+                                RedirectAttributes model,HttpServletRequest request) {
         logger.info("授权");
-        roleService.authorization(id, functionIds, componentIds);
+        User u = (User) request.getSession().getAttribute(Constant.VS_USER);
+        AuditLog auditLog = new AuditLog(EnumModule.ROLE.getModuleName(), 
+        		id, roleService.getById(id).getName(), EnumOperationType.AUTHORIZATION.getOperationType(), u,"角色授权");
+        roleService.authorization(id, functionIds, componentIds,auditLog);
 
         logger.info("添加操作提示");
         model.addFlashAttribute(Constant.VM_BUSINESS, "授权成功");

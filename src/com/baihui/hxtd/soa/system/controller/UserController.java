@@ -11,11 +11,7 @@ import com.baihui.hxtd.soa.base.utils.ztree.TreeNodeConverter;
 import com.baihui.hxtd.soa.common.controller.CommonController;
 import com.baihui.hxtd.soa.common.service.CommonService;
 import com.baihui.hxtd.soa.system.DictionaryConstant;
-import com.baihui.hxtd.soa.system.entity.AuditLog;
-import com.baihui.hxtd.soa.system.entity.Dictionary;
-import com.baihui.hxtd.soa.system.entity.Function;
-import com.baihui.hxtd.soa.system.entity.Organization;
-import com.baihui.hxtd.soa.system.entity.User;
+import com.baihui.hxtd.soa.system.entity.*;
 import com.baihui.hxtd.soa.system.service.*;
 import com.baihui.hxtd.soa.util.EnumModule;
 import com.baihui.hxtd.soa.util.EnumOperationType;
@@ -99,7 +95,7 @@ public class UserController extends CommonController<User> {
      * 转至查询用户页面
      */
     @RequestMapping(value = "/toQueryPage.do")
-    public String toQueryPage(HibernatePage<User> page, ModelMap model) throws NoSuchFieldException {
+    public String toQueryPage(HibernatePage<User> page, ModelMap model) {
         logger.info("转至查询页面");
 
         logger.info("存储表单初始化数据");
@@ -207,9 +203,9 @@ public class UserController extends CommonController<User> {
         user.setModifier(user.getCreator());
         logger.debug("修改用户为当前用户“{}”", sessionUser.getName());
 
-        AuditLog auditLog = new AuditLog(EnumModule.USER.getModuleName(), 
-        		user.getId(), user.getRealName(), EnumOperationType.ADD.getOperationType(), sessionUser);
-        userService.add(user,auditLog);
+        AuditLog auditLog = new AuditLog(EnumModule.USER.getModuleName(),
+                user.getId(), user.getRealName(), EnumOperationType.ADD.getOperationType(), sessionUser);
+        userService.add(user, auditLog);
 
         return JsonDto.add(user.getId()).toString();
     }
@@ -275,9 +271,9 @@ public class UserController extends CommonController<User> {
         user.setModifier(sessionUser);
         logger.debug("修改用户为当前用户“{}”", sessionUser.getName());
 
-        AuditLog auditLog = new AuditLog(EnumModule.USER.getModuleName(), 
-        		user.getId(), user.getRealName(), EnumOperationType.MODIFY.getOperationType(), sessionUser);
-        userService.modify(user,auditLog);
+        AuditLog auditLog = new AuditLog(EnumModule.USER.getModuleName(),
+                user.getId(), user.getRealName(), EnumOperationType.MODIFY.getOperationType(), sessionUser);
+        userService.modify(user, auditLog);
 
         return JsonDto.modify(user.getId()).toString();
     }
@@ -298,14 +294,14 @@ public class UserController extends CommonController<User> {
         if (ArrayUtils.contains(id, sessionId)) {
             return new JsonDto("不允许删除当前操作用户").toString();
         }
-        User sessionUser = (User)userService.getById(sessionId);
+        User sessionUser = (User) userService.getById(sessionId);
 
-        AuditLog [] auditLogArr = new AuditLog [id.length];
-		for(int i=0; i<id.length; i++){
-			auditLogArr[i] = new AuditLog(EnumModule.USER.getModuleName(), 
-					id[i], userService.getNameById(id[i]), EnumOperationType.DELETE.getOperationType(), sessionUser);
-		}
-        userService.delete(id,auditLogArr);
+        AuditLog[] auditLogArr = new AuditLog[id.length];
+        for (int i = 0; i < id.length; i++) {
+            auditLogArr[i] = new AuditLog(EnumModule.USER.getModuleName(),
+                    id[i], userService.getNameById(id[i]), EnumOperationType.DELETE.getOperationType(), sessionUser);
+        }
+        userService.delete(id, auditLogArr);
 
         return JsonDto.delete(id).toString();
     }
@@ -362,9 +358,9 @@ public class UserController extends CommonController<User> {
                                 HttpServletRequest request) {
         logger.info("授权");
         User u = (User) request.getSession().getAttribute(Constant.VS_USER);
-        AuditLog auditLog = new AuditLog(EnumModule.USER.getModuleName(), 
-        		null==id?u.getId():id, null==id?u.getRealName():userService.getById(id).getRealName(), EnumOperationType.AUTHORIZATION.getOperationType(), u,"用户授权");
-        userService.authorization(id, roleIds, functionIds, componentIds,auditLog);
+        AuditLog auditLog = new AuditLog(EnumModule.USER.getModuleName(),
+                null == id ? u.getId() : id, null == id ? u.getRealName() : userService.getById(id).getRealName(), EnumOperationType.AUTHORIZATION.getOperationType(), u, "用户授权");
+        userService.authorization(id, roleIds, functionIds, componentIds, auditLog);
         return new JsonDto(id, "授权成功").toString();
     }
 
@@ -373,16 +369,16 @@ public class UserController extends CommonController<User> {
      */
     @ResponseBody
     @RequestMapping(value = "/resetPassword.do")
-    public String resetPassword(Long[] id,HttpServletRequest request) {
+    public String resetPassword(Long[] id, HttpServletRequest request) {
         logger.info("重置密码");
 
         User user = (User) request.getSession().getAttribute(Constant.VS_USER);
-        AuditLog [] auditLogArr = new AuditLog [id.length];
-		for(int i=0; i<id.length; i++){
-			auditLogArr[i] = new AuditLog(EnumModule.USER.getModuleName(), 
-					id[i], userService.getNameById(id[i]), EnumOperationType.RESETPASSWORD.getOperationType(), user,"重置密码");
-		}
-        userService.resetPasswordByIds(id,auditLogArr);
+        AuditLog[] auditLogArr = new AuditLog[id.length];
+        for (int i = 0; i < id.length; i++) {
+            auditLogArr[i] = new AuditLog(EnumModule.USER.getModuleName(),
+                    id[i], userService.getNameById(id[i]), EnumOperationType.RESETPASSWORD.getOperationType(), user, "重置密码");
+        }
+        userService.resetPasswordByIds(id, auditLogArr);
 
         JsonDto jsonDto = new JsonDto("重置密码成功");
         jsonDto.setSuccessFlag(true);
@@ -394,16 +390,16 @@ public class UserController extends CommonController<User> {
      */
     @ResponseBody
     @RequestMapping(value = "/enable.do")
-    public String enable(Long[] id,HttpServletRequest request) {
+    public String enable(Long[] id, HttpServletRequest request) {
         logger.info("启用用户");
 
         User user = (User) request.getSession().getAttribute(Constant.VS_USER);
-        AuditLog [] auditLogArr = new AuditLog [id.length];
-		for(int i=0; i<id.length; i++){
-			auditLogArr[i] = new AuditLog(EnumModule.USER.getModuleName(), 
-					id[i], userService.getNameById(id[i]), EnumOperationType.ENABLE.getOperationType(), user,"启用用户");
-		}
-        userService.modifyIsActiveByIds(id, true,auditLogArr);
+        AuditLog[] auditLogArr = new AuditLog[id.length];
+        for (int i = 0; i < id.length; i++) {
+            auditLogArr[i] = new AuditLog(EnumModule.USER.getModuleName(),
+                    id[i], userService.getNameById(id[i]), EnumOperationType.ENABLE.getOperationType(), user, "启用用户");
+        }
+        userService.modifyIsActiveByIds(id, true, auditLogArr);
 
         JsonDto jsonDto = new JsonDto("启用成功");
         jsonDto.setSuccessFlag(true);
@@ -415,16 +411,16 @@ public class UserController extends CommonController<User> {
      */
     @ResponseBody
     @RequestMapping(value = "/disable.do")
-    public String disable(Long[] id,HttpServletRequest request) {
+    public String disable(Long[] id, HttpServletRequest request) {
         logger.info("禁用用户");
 
         User user = (User) request.getSession().getAttribute(Constant.VS_USER);
-        AuditLog [] auditLogArr = new AuditLog [id.length];
-		for(int i=0; i<id.length; i++){
-			auditLogArr[i] = new AuditLog(EnumModule.USER.getModuleName(), 
-					id[i], userService.getNameById(id[i]), EnumOperationType.DISABLE.getOperationType(), user,"禁用用户");
-		}
-        userService.modifyIsActiveByIds(id, false,auditLogArr);
+        AuditLog[] auditLogArr = new AuditLog[id.length];
+        for (int i = 0; i < id.length; i++) {
+            auditLogArr[i] = new AuditLog(EnumModule.USER.getModuleName(),
+                    id[i], userService.getNameById(id[i]), EnumOperationType.DISABLE.getOperationType(), user, "禁用用户");
+        }
+        userService.modifyIsActiveByIds(id, false, auditLogArr);
 
         JsonDto jsonDto = new JsonDto("禁用成功");
         jsonDto.setSuccessFlag(true);
@@ -552,12 +548,13 @@ public class UserController extends CommonController<User> {
 
     /**
      * 弹出组织结构树
-     * @author huizijing
+     *
      * @param model
      * @param request
      * @return json
-     * @since 2014-6-17
      * @throws NoSuchFieldException
+     * @author huizijing
+     * @since 2014-6-17
      */
     @RequestMapping(value = "/toQueryUser.comp")
     public String toOwnerOrgTree(ModelMap model, HttpServletRequest request) throws NoSuchFieldException {
@@ -632,7 +629,7 @@ public class UserController extends CommonController<User> {
         User user = (User) request.getSession().getAttribute(Constant.VS_USER);
         JsonDto jsonDto = new JsonDto();
         if (md5.getMD5ofStr(oldpwd).equals(user.getPassword())) {
-        	jsonDto.setMessage("");
+            jsonDto.setMessage("");
         } else {
             jsonDto.setMessage("原密码不正确");
         }

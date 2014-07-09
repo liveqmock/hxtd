@@ -1,7 +1,9 @@
 package com.baihui.hxtd.soa.base;
 
 import com.baihui.hxtd.soa.common.controller.model.ListModel;
+import com.baihui.hxtd.soa.common.entity.Module;
 import com.baihui.hxtd.soa.common.entity.PCAS;
+import com.baihui.hxtd.soa.common.service.ModuleService;
 import com.baihui.hxtd.soa.common.service.PCASService;
 import com.baihui.hxtd.soa.system.entity.Component;
 import com.baihui.hxtd.soa.system.entity.Function;
@@ -19,6 +21,7 @@ import javax.annotation.Resource;
 import javax.servlet.ServletContext;
 import javax.servlet.ServletContextEvent;
 import java.io.IOException;
+import java.lang.reflect.Field;
 import java.util.*;
 
 /**
@@ -46,6 +49,11 @@ public class InitApplicationConstant implements StartupListener {
      */
     public final static List<Component> COMPONENTS = new ArrayList<Component>();
 
+    /**
+     * 系统模块
+     */
+    public final static List<Module> MODULES = new ArrayList<Module>();
+
     @Resource
     private PCASService pcasService;
 
@@ -58,6 +66,9 @@ public class InitApplicationConstant implements StartupListener {
     @Resource
     private ComponentService componentService;
 
+    @Resource
+    private ModuleService moduleService;
+
 
     @Override
     public void onStartup(ServletContextEvent event) {
@@ -69,6 +80,8 @@ public class InitApplicationConstant implements StartupListener {
         loadImportExport(servletContext);
         loadSystemPrivi();
         loadPCAS(servletContext);
+        loadModules();
+        loadFields();
     }
 
     /**
@@ -169,5 +182,35 @@ public class InitApplicationConstant implements StartupListener {
         JsonDto json = new JsonDto();
         json.setResult(new ListModel(pcas));
         servletContext.setAttribute(Constant.VC_PCAS, "var pcasJson=" + json.toString());
+    }
+
+    /**
+     * 加载系统模块
+     */
+    private void loadModules() {
+        logger.info("加载系统模块");
+        MODULES.addAll(moduleService.findAll());
+        logger.debug("系统模块数目“{}”", MODULES.size());
+
+    }
+
+    public final static Map<Class, Field[]> FIELDS = new HashMap<Class, Field[]>();
+
+    /**
+     * 加载系统字段
+     */
+    private void loadFields() {
+        logger.info("加载系统字段");
+        String entityClass = null;
+        try {
+            for (int i = 0; i < MODULES.size(); i++) {
+                entityClass = MODULES.get(i).getEntityClass();
+                Class clazz = Class.forName(entityClass);
+                FIELDS.put(clazz, clazz.getDeclaredFields());
+                logger.debug("{}字段数目“{}”", entityClass, FIELDS.get(clazz).length);
+            }
+        } catch (ClassNotFoundException e) {
+            throw new RuntimeException(String.format("加载系统字段异常，未找到对应的类%s！", entityClass), e);
+        }
     }
 }

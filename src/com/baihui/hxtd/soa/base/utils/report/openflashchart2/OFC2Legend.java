@@ -8,7 +8,7 @@ package com.baihui.hxtd.soa.base.utils.report.openflashchart2;
  */
 public class OFC2Legend {
 
-    private String title;
+    private String text;
     private String style;
 
     public OFC2Legend() {
@@ -18,17 +18,17 @@ public class OFC2Legend {
         this.style = style;
     }
 
-    public OFC2Legend(String title, String style) {
-        this.title = title;
+    public OFC2Legend(String text, String style) {
+        this.text = text;
         this.style = style;
     }
 
-    public String getTitle() {
-        return title;
+    public String getText() {
+        return text;
     }
 
-    public void setTitle(String title) {
-        this.title = title;
+    public void setText(String text) {
+        this.text = text;
     }
 
     public String getStyle() {

@@ -27,6 +27,7 @@ public class OFC2Axis {
     private OFC2Labels labels;
 
     public OFC2Axis() {
+        labels = new OFC2Labels();
     }
 
     public Integer getStroke() {

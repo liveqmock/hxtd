@@ -66,6 +66,12 @@ public class DictionaryConstant {
     /**女性*/
     public final static String PUBLIC_SEX_WOMAN = "000102";
 
+    /*模块*/
+    /**模块类型*/
+    public final static String MODULE_TYPE = "990101";
+    /**报表*/
+    public final static String MODULE_TYPE_REPORT = "99010101";
+
     /*菜单*/
     /**显示位置*/
     public final static String MENU_SHOWLOCATION = "010404";

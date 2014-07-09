@@ -1,5 +1,6 @@
 package com.baihui.hxtd.soa.base.utils.report.openflashchart2;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -10,20 +11,20 @@ import java.util.List;
  */
 public class OFC2Labels {
 
-    private List<OFC2Label> labels;
+    private List labels = new ArrayList();
 
     public OFC2Labels() {
     }
 
-    public OFC2Labels(List<OFC2Label> labels) {
+    public OFC2Labels(List labels) {
         this.labels = labels;
     }
 
-    public List<OFC2Label> getLabels() {
+    public List getLabels() {
         return labels;
     }
 
-    public void setLabels(List<OFC2Label> labels) {
+    public void setLabels(List labels) {
         this.labels = labels;
     }
 }

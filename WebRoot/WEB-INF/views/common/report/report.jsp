@@ -133,6 +133,8 @@
             }
         };
 
+        data =${data};
+
     </script>
 </head>
 <body>

@@ -11,7 +11,7 @@ import java.util.List;
  * @author xiayouxue
  * @date 2014/7/8
  */
-public class OFC2Data {
+public class OFC2Chart {
 
     private OFC2Legend title = new OFC2Legend();   //图表标题
 
@@ -44,7 +44,7 @@ public class OFC2Data {
     private OFC2Tooltip tooltip = new OFC2Tooltip();
 
 
-    public OFC2Data() {
+    public OFC2Chart() {
         this.title.setStyle("{font-size: 20px; color:#0000ff; font-family: Verdana; text-align: center;}");
         this.xLegend.setStyle("{font-size: 12px; color:#736AFF;}");
         this.yLegend.setStyle("{color: #736AFF; font-size: 12px;}");

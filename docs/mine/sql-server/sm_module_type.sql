@@ -1,0 +1,22 @@
+insert into sm_module_type (TYPE_ID, MODULE_ID) values (99010101,1);
+insert into sm_module_type (TYPE_ID, MODULE_ID) values (99010101,2);
+insert into sm_module_type (TYPE_ID, MODULE_ID) values (99010101,3);
+insert into sm_module_type (TYPE_ID, MODULE_ID) values (99010101,4);
+insert into sm_module_type (TYPE_ID, MODULE_ID) values (99010101,5);
+insert into sm_module_type (TYPE_ID, MODULE_ID) values (99010101,6);
+insert into sm_module_type (TYPE_ID, MODULE_ID) values (99010101,7);
+insert into sm_module_type (TYPE_ID, MODULE_ID) values (99010101,8);
+insert into sm_module_type (TYPE_ID, MODULE_ID) values (99010101,9);
+insert into sm_module_type (TYPE_ID, MODULE_ID) values (99010101,10);
+insert into sm_module_type (TYPE_ID, MODULE_ID) values (99010101,11);
+insert into sm_module_type (TYPE_ID, MODULE_ID) values (99010101,12);
+insert into sm_module_type (TYPE_ID, MODULE_ID) values (99010101,13);
+insert into sm_module_type (TYPE_ID, MODULE_ID) values (99010101,14);
+insert into sm_module_type (TYPE_ID, MODULE_ID) values (99010101,15);
+insert into sm_module_type (TYPE_ID, MODULE_ID) values (99010101,16);
+insert into sm_module_type (TYPE_ID, MODULE_ID) values (99010101,17);
+insert into sm_module_type (TYPE_ID, MODULE_ID) values (99010101,18);
+insert into sm_module_type (TYPE_ID, MODULE_ID) values (99010101,19);
+insert into sm_module_type (TYPE_ID, MODULE_ID) values (99010101,20);
+insert into sm_module_type (TYPE_ID, MODULE_ID) values (99010101,21);
+

@@ -77,7 +77,7 @@ public class ReportService {
         Module module = report.getModule();
         String entityName = module.getEntityClazz().getSimpleName();
         String entityAlias = module.getName();
-        String hql = String.format("select :select from %s %s :inner where :where group by :group", entityName, entityAlias);
+        String hql = String.format("select :select from %s %s :inner where  :where group by :group", entityName, entityAlias);
         List<String> selectParts = new ArrayList<String>();
         List<String> innerParts = new ArrayList<String>();
         List<String> groupParts = new ArrayList<String>();

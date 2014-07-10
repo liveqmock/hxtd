@@ -1,20 +1,17 @@
 package com.baihui.hxtd.soa.common.dao;
 
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.List;
+
+import org.apache.poi.ss.formula.functions.T;
+import org.hibernate.Query;
+import org.springframework.stereotype.Repository;
+
 import com.baihui.hxtd.soa.base.orm.hibernate.HibernateDAOImpl;
 import com.baihui.hxtd.soa.base.orm.hibernate.HibernatePage;
 import com.baihui.hxtd.soa.common.entity.Common;
 import com.baihui.hxtd.soa.common.entity.Initialized;
-import org.apache.commons.lang3.StringUtils;
-import org.apache.poi.ss.formula.functions.T;
-import org.hibernate.Query;
-import org.hibernate.criterion.Order;
-import org.springframework.stereotype.Repository;
-import org.springframework.util.Assert;
-
-import java.text.SimpleDateFormat;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
 
 
 @Repository
@@ -106,8 +103,6 @@ public class CommonDao extends HibernateDAOImpl<Common, Long> {
      * 查询已删除的数据
      */
     public HibernatePage<T> getDeletedDate(HibernatePage<T> page, String entityName, String recordName, Long deletorId, Date gteModifiedTime, Date lteModifiedTime) {
-        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm");
-
         String hql = String.format("select entity from %s entity inner join fetch entity.modifier where entity.isDeleted=true ", entityName);
         String countHql = String.format("select entity from %s entity where entity.isDeleted=true ", entityName);
         List<Object> listParams = new ArrayList<Object>();
@@ -156,7 +151,8 @@ public class CommonDao extends HibernateDAOImpl<Common, Long> {
      * 物理删除回收站中的数据
      */
     public void delete(String entityName, Long... id) {
-        String hql = String.format("delete from %s entity where entity.isDeleted=true and id in (:id)", entityName);
+        String hql = String.format("delete from %s entity where entity.isDeleted=true and id in (:id)", 
+        		Character.toUpperCase(entityName.charAt(0))+entityName.substring(1));
         getSession().createQuery(hql).setParameterList("id", id).executeUpdate();
         logger.debug("delete entity {},hql is {},id is {}", entityClass.getSimpleName(), hql, id);
 //		/super.delete(hql,ids);
@@ -166,7 +162,8 @@ public class CommonDao extends HibernateDAOImpl<Common, Long> {
      * 恢复回收站中的数据
      */
     public void recovery(String entityName, Long[] id) {
-        String hql = String.format("update %s entity set entity.isDeleted=false where id in (:id)", entityName);
+        String hql = String.format("update %s entity set entity.isDeleted=false where id in (:id)", 
+        		Character.toUpperCase(entityName.charAt(0))+entityName.substring(1));
         getSession().createQuery(hql).setParameterList("id", id).executeUpdate();
         logger.debug("recovery entity {},hql is {},id is {}", entityClass.getSimpleName(), hql, id);
         //super.recovery(hql,id);

@@ -31,7 +31,6 @@ import com.baihui.hxtd.soa.base.orm.hibernate.HibernatePage;
 import com.baihui.hxtd.soa.base.utils.ImportExport;
 import com.baihui.hxtd.soa.base.utils.Search;
 import com.baihui.hxtd.soa.base.utils.mapper.HibernateAwareObjectMapper;
-import com.baihui.hxtd.soa.common.controller.CommonController;
 import com.baihui.hxtd.soa.market.entity.MarketActivity;
 import com.baihui.hxtd.soa.market.service.MarketActivityService;
 import com.baihui.hxtd.soa.system.entity.AuditLog;
@@ -80,10 +79,10 @@ public class MarketActivityController {
 	 */
 	@RequestMapping(value = "/toQueryPage.do")
 	public String toQueryPage(HibernatePage<MarketActivity> page, ModelMap model) {
-		model.addAttribute("page", page);
-		// 默认按照修改时间倒序排序
-		page.setHibernateOrderBy("modifiedTime");
+		page.setHibernateOrderBy("modifiedTime");// 默认按照修改时间倒序排序
 		page.setHibernateOrder(HibernatePage.DESC);
+		model.addAttribute("page", page);
+		
 		initPageDic(model);
 		
 		return "/market/marketactivity/list";
@@ -202,8 +201,15 @@ public class MarketActivityController {
 	@RequestMapping(value = "/modify.do")
 	public String modify(MarketActivity activity, 
 			@ModelAttribute(Constant.VS_USER_ID) Long userId) {
+		if(activity.getStatusDic().getId() == null){
+			activity.setStatusDic(null);
+		}
+		if(activity.getTypeDic().getId() == null){
+			activity.setTypeDic(null);
+		}
 		User user = new User(userId);
 		activity.setModifier(user);
+		
 		AuditLog auditLog = new AuditLog(EnumModule.MARKETACTIVITY.getModuleName(), 
 				activity.getId(), activity.getName(), EnumOperationType.MODIFY.getOperationType(), user);
 		marketActivityService.modify(activity, user, auditLog);

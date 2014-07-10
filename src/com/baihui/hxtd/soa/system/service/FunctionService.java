@@ -4,6 +4,7 @@ import com.baihui.hxtd.soa.base.orm.hibernate.HibernatePage;
 import com.baihui.hxtd.soa.base.utils.Search;
 import com.baihui.hxtd.soa.system.dao.FunctionDao;
 import com.baihui.hxtd.soa.system.dao.UserDao;
+import com.baihui.hxtd.soa.system.entity.AuditLog;
 import com.baihui.hxtd.soa.system.entity.Function;
 import com.baihui.hxtd.soa.system.entity.Organization;
 import com.baihui.hxtd.soa.system.entity.Role;
@@ -390,7 +391,7 @@ public class FunctionService {
     }
 
     /**
-     * save(保存：修改/新建)
+     * add(新建)
      *
      * @param @param entity    参数类型
      * @return void    返回类型
@@ -398,7 +399,23 @@ public class FunctionService {
      * @Title: save
      */
     @Transactional
-    public void save(Function entity) {
+    public void add(Function entity,AuditLog auditLog) {
+        logger.info("保存功能信息{}", entity);
+        entity.setIsInitialized(false);
+        functionDao.save(entity);
+        auditLog.setRecordId(entity.getId());
+    }
+    
+    /**
+     * add(新建)
+     *
+     * @param @param entity    参数类型
+     * @return void    返回类型
+     * @throws
+     * @Title: save
+     */
+    @Transactional
+    public void modify(Function entity,AuditLog auditLog) {
         logger.info("保存功能信息{}", entity);
         entity.setIsInitialized(false);
         functionDao.save(entity);
@@ -413,8 +430,21 @@ public class FunctionService {
      * @Title: delete
      */
     @Transactional
-    public void delete(Long... id) {
+    public void delete(Long[] id,AuditLog [] auditLogArr) {
         functionDao.logicalDelete(id);
     }
+
+
+	/**
+     * getNameById
+     * @Title: getNameById
+     * @Description: 通过id获取组件名称
+     * @param id
+     * @return String
+    */
+    @Transactional
+	public String getNameById(Long id) {
+		return functionDao.get(id).getName();
+	}
 
 }

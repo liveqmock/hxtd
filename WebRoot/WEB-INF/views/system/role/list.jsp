@@ -99,7 +99,7 @@
                     <td>{$T.row.createdTime}</td>
                     <td>{$T.row.modifier.realName}</td>
                     <td>{$T.row.modifiedTime}</td>
-                    <td align="center">
+                    <td align="left">
                         <c:if test="${VS_HAS_FUNCTIONS.roleView}">
                             <a href="${ctx}/system/role/toViewPage.do?id={$T.row.id}" class=" block_inline s_detail_btn globle_img ml10" title="详情"></a>
                         </c:if>

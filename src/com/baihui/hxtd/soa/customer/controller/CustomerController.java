@@ -164,17 +164,9 @@ public class CustomerController extends CommonController<Customer>{
 		customer.setModifiedTime(new Date(new java.util.Date().getTime()));
 		customer.setModifier(u);
 		customer.setIsDeleted(false);
-		//customer.setCreator(u);
-		if(customer.getProvince().getId()==null){
-			customer.setProvince(null);
-		}
-		if(customer.getCity().getId()==null){
-			customer.setCity(null);
-		}
-		if(customer.getCounty().getId()==null){
-			customer.setCounty(null);
-		}
 		
+		//如果所传属性的id为空就设置属性为空
+		setPropertyNull(customer);
 		/************ 修改 *****************************/
 		AuditLog auditLog = new AuditLog(EnumModule.CUSTOMER.getModuleName(), 
 				customer.getId(), customer.getName(), EnumOperationType.MODIFY.getOperationType(), u);
@@ -226,20 +218,12 @@ public class CustomerController extends CommonController<Customer>{
 		User u = (User) request.getSession().getAttribute(Constant.VS_USER);
 		logger.info("ComponentController.query 获得当前操作的用户{}",u.getName());
 		customer.setCreator(u);
-		customer.setOwner(u);
 		customer.setModifier(u);
 		customer.setCreatedTime(new Date(new java.util.Date().getTime()));
 		customer.setModifiedTime(new Date(new java.util.Date().getTime()));
-		if(customer.getProvince().getId()==null){
-			customer.setProvince(null);
-		}
-		if(customer.getCity().getId()==null){
-			customer.setCity(null);
-		}
-		if(customer.getCounty().getId()==null){
-			customer.setCounty(null);
-		}
 		
+		//如果所传属性的id为空就设置属性为空
+		setPropertyNull(customer);
 		/************ 新增 *****************************/
 		AuditLog auditLog = new AuditLog(EnumModule.CUSTOMER.getModuleName(), 
 				customer.getId(), customer.getName(), EnumOperationType.ADD.getOperationType(), u);
@@ -247,6 +231,7 @@ public class CustomerController extends CommonController<Customer>{
 		JsonDto json = JsonDto.add(customer.getId());
 		return json.toString();
 	}
+	
 	
 	/**
 	 *  delete(删除客户)
@@ -318,6 +303,36 @@ public class CustomerController extends CommonController<Customer>{
 		model.addAttribute("openBank", openBank);
 	}
 	
+	/**
+	 * 如果所传属性的id为空就设置属性为空
+	 * @param customer
+	 */
+	private void setPropertyNull(Customer customer){
+		if(null==customer.getType().getId()){
+			customer.setType(null);
+		}
+		if(null==customer.getRiskGrade().getId()){
+			customer.setRiskGrade(null);
+		}
+		if(null==customer.getCardType().getId()){
+			customer.setCardType(null);
+		}
+		if(null==customer.getOwnerShip().getId()){
+			customer.setOwnerShip(null);
+		}
+		if(null==customer.getOpenBank().getId()){
+			customer.setOpenBank(null);
+		}
+		if(null==customer.getProvince().getId()){
+			customer.setProvince(null);
+		}
+		if(null==customer.getCity().getId()){
+			customer.setCity(null);
+		}
+		if(null==customer.getCounty().getId()){
+			customer.setCounty(null);
+		}
+	}
 	  /**
      * 导出分页数据
      * 1.在分页列表上根据当前条件进行导出

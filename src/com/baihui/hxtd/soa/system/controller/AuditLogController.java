@@ -28,7 +28,7 @@ import com.baihui.hxtd.soa.util.JsonDto;
  * 
  * 功能描述：审计日志控制器
  * @see: 与该类相关的类，写出具体的路径：包括完整的包名和类名.java
- * @author xiaoli.luo
+ * @author huizijing
  * @company 北京百会纵横科技有限公司
  * @copyright (版权)  本文件归属 北京百会纵横科技有限公司 
  * @since (该版本支持的 JDK 版本) ： 1.5 
@@ -99,7 +99,7 @@ public class AuditLogController {
 		Map<Integer,String> operationTypes=new HashMap<Integer,String>();
         operationTypes.put(1,"增加");
         operationTypes.put(2,"修改");
-        operationTypes.put(3,"逻辑删除");
+        //operationTypes.put(3,"逻辑删除");
         operationTypes.put(4,"删除");
         operationTypes.put(5,"导入");
         operationTypes.put(6,"导出");
@@ -107,6 +107,9 @@ public class AuditLogController {
         operationTypes.put(8,"重置密码");
         operationTypes.put(9,"启用用户");
         operationTypes.put(10,"禁用用户");
+        operationTypes.put(11,"修改密码");
+        operationTypes.put(12,"物理删除");
+        operationTypes.put(13,"恢复数据");
         model.addAttribute("operationTypes", operationTypes);//操作类型
         Map<EnumModule,String> moduleNames=new HashMap<EnumModule,String>();
         moduleNames.put(EnumModule.MARKETACTIVITY, "市场活动");
@@ -126,6 +129,7 @@ public class AuditLogController {
         moduleNames.put(EnumModule.USERMESSAGE, "系统消息");
         moduleNames.put(EnumModule.NOTICE, "系统公告");
         moduleNames.put(EnumModule.DICTIONARY, "数据字典");
+        moduleNames.put(EnumModule.RECYCLEBIN, "回收站");
         model.addAttribute("moduleNames", moduleNames);//模块名称
 	}
 	

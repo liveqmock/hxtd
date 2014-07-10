@@ -12,9 +12,9 @@
 <script type="text/javascript" src="${ctx}/static/js/scrollTitle.js?v=1"></script>
 <script type="text/javascript">
 $(function(){
-	jsUtil.twoOrMoreRestrictDate('.time', 'max', 0);// 绑定日历
-	jsUtil.twoOrMoreRestrictDate('.mintime', 'min', 0);
-	new Grid().init(); // 生成Gird
+	jsUtil.twoOrMoreRestrictDate('.time', 'max', 0); //创建、修改时间
+	jsUtil.twoOrMoreRestrictDate('.untime', 'min', null); //举办时间
+	new Grid().init(); //生成Gird
 });
 </script>
 </head>
@@ -53,8 +53,8 @@ $(function(){
     		<td class="f14 namewidth1" align="right">举办时间：</td>
     		<td class="f14 namewidth2" align="left" width="16%">
     			<div class="vm">
-	    			<input class="text_input2 input_close globle_img mintime" name="search_GTE_beginDate"
-	    				type="text" readonly/>-<input class="text_input2 input_close globle_img mintime" name="search_LTE_endDate"
+	    			<input class="text_input2 input_close globle_img untime" name="search_GTE_beginDate"
+	    				type="text" readonly/>-<input class="text_input2 input_close globle_img untime" name="search_LTE_endDate"
 	    				type="text" readonly/>
     			</div>
     		</td>
@@ -97,7 +97,7 @@ $(function(){
 				</c:if>
 				<c:if test="${VS_HAS_FUNCTIONS.marketactivityAdd}">
 					<li>
-						<a href="${ctx}/market/marketactivity/toAddPage.do" class="block c_white lh25">
+						<a href="${ctx}/market/marketactivity/toAddPage.do" class="block c_white lh25 mr10">
 							<b class="allbtn_l block fl"></b>
 							<b class="allbtn_r pr13 block fl w_auto f14">新&nbsp;&nbsp;增</b>
 						</a>
@@ -163,9 +163,9 @@ $(function(){
            		<c:otherwise>{$T.row.name}</c:otherwise>
            	</c:choose>
            </td>
-           <td>{$T.row.dic.key}</td>
-           <td>{$T.row.status.key}</td>
-           <td align="right">{$T.row.predictCost}</td>
+           <td>{$T.row.typeDic.key}</td>
+           <td>{$T.row.statusDic.key}</td>
+           <td align="right">{jsUtil.formatDiff($T.row.predictCost, 2)}</td>
            <td align="right">{$T.row.expectSuccessRate}</td>
            <td>{$T.row.beginDate}</td>
            <td>{$T.row.endDate}</td>

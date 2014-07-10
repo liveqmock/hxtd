@@ -12,8 +12,9 @@
 <script type="text/javascript" src="${ctx}/static/js/js-util.common.js?v=1"></script>
 <script type="text/javascript">
 $(function(){
-	jsUtil.bindSave(".add", "form"); // 提交表单
-	var dates=$("#start,#end"); // 日历设置
+	jsUtil.bindSave(".add", "form"); //提交表单
+	jsUtil.formatMoney(".money"); //设置千分位
+	var dates=$("#start,#end"); //日历设置
 	dates.datepicker({
 		closeText : '关闭',
 		minDate: 0,
@@ -22,13 +23,13 @@ $(function(){
 	       dates.not(this).datepicker("option", option, selectedDate);
 	    }
 	});
-	$(".empty").click(function(){ // 清除
+	$(".empty").click(function(){ //清除
 		$(this).prevAll("input").val('');
 	});
 });
-function searchData(action){ // 搜索
+function searchData(action){ //搜索
 	jsUtil.dialogIframe("${ctx}/system/user/toQueryPage.comp", "负责人", 800, 420,
-		function(){ // 确定回调
+		function(){ //确定回调
 			var $userObj = $(".bor_e28d1f", window.frames["dialogIframe"].document);
 			if($userObj.length > 0){
 				$("#txt_" + action).val($userObj.find("td:eq(0)").text());
@@ -56,8 +57,8 @@ function searchData(action){ // 搜索
 		<tr>
 			<td width="15%" align="right"><span class="w_red">*&nbsp;</span>活动所有者：</td>
 			<td align="left"> 
-				<input name="sponsorname" type="text" value="${activity.sponsor.realName}" readonly="readonly" class="text_input3"/>
-				<input type="hidden" name="sponsor.id"/>
+				<input name="sponsorname" type="text" value="${activity.sponsor.realName}" readonly class="text_input3"/>
+				<input type="hidden" name="sponsor.id" value="${activity.sponsor.id}"/>
 			</td>
 			<td width="15%" align="right">类型：</td>
 			<td align="left">
@@ -90,7 +91,11 @@ function searchData(action){ // 搜索
 				<input type="text" id="start" name="beginDate" value="${beginDate}" readonly="readonly" class="text_input3 input_close1"/>
 			</td>
 			<td align="right">预计成本：</td>
-			<td align="left"><input name="predictCost" type="text" value="${activity.predictCost}" class="text_input3 amount"/></td>
+			<td align="left">
+				<fmt:formatNumber value="${activity.predictCost}" pattern="###,##0.00" var="predictCost"/>
+				<input type="text" value="${predictCost}" class="text_input3 money" maxlength="13" style="ime-mode:disabled"/>
+				<input type="hidden" name="predictCost" value="${activity.predictCost}"/>
+			</td>
 		</tr>
 		<tr>
 			<td align="right">结束日期：</td>
@@ -100,7 +105,11 @@ function searchData(action){ // 搜索
 				<input type="text" id="end" name="endDate" value="${endDate}" readonly="readonly" class="text_input3 input_close1"/>
 			</td>
 			<td align="right">实际成本：</td>
-			<td align="left"><input type="text" name="realityCost" value="${activity.realityCost}" class="text_input3 amount"/></td>
+			<td align="left">
+				<fmt:formatNumber value="${activity.realityCost}" pattern="###,##0.00" var="realityCost"/>
+				<input type="text" value="${realityCost}" class="text_input3 money" maxlength="13" style="ime-mode:disabled"/>
+				<input type="hidden" name="realityCost" value="${activity.predictCost}"/>
+			</td>
 		</tr>
 		<tr>
 			<td align="right">预期效果：</td>
@@ -109,13 +118,13 @@ function searchData(action){ // 搜索
 			<td align="left"><input name="times" type="text" value="${activity.times}" class="text_input3 digits"/></td>
 		</tr>
 		<tr>
-			<td align="right">期望成功率（%）：</td>
+			<td align="right">期望成功率(%)：</td>
 			<td align="left"><input type="text" name="expectSuccessRate" value="${activity.expectSuccessRate}" 
-				class="text_input3 amount"/></td>
+				class="text_input3 amount" maxlength="3" style="ime-mode:disabled"/></td>
 			<td align="right"><span class="w_red">*&nbsp;</span>负责人：</td>
 			<td align="left">
-				<input type="text" id="txt_boss" name="bossname" value="${activity.bossHead.realName}" readonly="readonly"
-					 class="text_input3 required cp"/>
+				<input type="text" id="txt_boss" name="bossname" value="${activity.bossHead.realName}" readonly
+					 class="text_input3 required cp" onclick="searchData('boss');"/>
 				<input type="hidden"id="hide_boss_id" name="bossHead.id" value="${activity.bossHead.id}"/>
 				<i class="s_inquiry globle_img block_inline ml5 vm cp" title="搜索责任人" onclick="searchData('boss');"></i>
 				<i class="dump_btn globle_img block_inline ml5 vm cp empty" title="清除"></i>

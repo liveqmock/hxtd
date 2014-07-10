@@ -1,7 +1,12 @@
 package com.baihui.hxtd.soa.common.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import javax.persistence.*;
 import java.io.Serializable;
+import java.lang.reflect.Field;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * 模块实体类
@@ -11,7 +16,7 @@ import java.io.Serializable;
  */
 @Entity
 @Table(name = "SM_MODULE")
-public class Module implements Serializable {
+public class Module implements Serializable, Idable {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -26,6 +31,16 @@ public class Module implements Serializable {
 
     @Column(name = "ENTITY_CLASS", length = 255, nullable = false)
     private String entityClass;
+
+    @Transient
+    private Class entityClazz;
+
+    @JsonIgnore
+    @Transient
+    private Field[] fields;
+
+    @Transient
+    private List<ModuleField> moduleFields = new ArrayList<ModuleField>();
 
     public Module() {
     }
@@ -64,5 +79,29 @@ public class Module implements Serializable {
 
     public void setEntityClass(String entityClass) {
         this.entityClass = entityClass;
+    }
+
+    public Class getEntityClazz() {
+        return entityClazz;
+    }
+
+    public void setEntityClazz(Class entityClazz) {
+        this.entityClazz = entityClazz;
+    }
+
+    public Field[] getFields() {
+        return fields;
+    }
+
+    public void setFields(Field[] fields) {
+        this.fields = fields;
+    }
+
+    public List<ModuleField> getModuleFields() {
+        return moduleFields;
+    }
+
+    public void setModuleFields(List<ModuleField> moduleFields) {
+        this.moduleFields = moduleFields;
     }
 }

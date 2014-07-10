@@ -1,6 +1,7 @@
 package com.baihui.hxtd.soa.system.entity;
 
 
+import com.baihui.hxtd.soa.base.Desc;
 import com.baihui.hxtd.soa.common.entity.Initialized;
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonFormat;
@@ -17,61 +18,76 @@ import java.util.Set;
 @SuppressWarnings("serial")
 public class Role implements Serializable, Comparable<Role>, Initialized {
 
+    @Desc("主键编号")
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "ID")
     private Long id;
 
+    @Desc("编号")
     @Column(name = "CODE", length = 32, updatable = false, unique = true)
     private String code;
 
+    @Desc("名称")
     @Column(name = "NAME", length = 255, unique = true)
     private String name;
 
+    @Desc("类型")
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "TYPE")
     private Dictionary type;
 
+    @Desc("备注")
     @Column(name = "REMARK", length = 255)
     private String remark;
 
+    @Desc("已被删除")
     @Column(name = "IS_DELETED", nullable = false, updatable = false)
     private Boolean isDeleted;
 
+    @Desc("初始化数据")
     @Column(name = "IS_INITIALIZED", nullable = false, updatable = false)
     private Boolean isInitialized;
 
+    @Desc("创建者")
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "CREATOR_ID", nullable = false, updatable = false)
     private User creator;
 
+    @Desc("创建时候")
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss", timezone = "GMT+08:00")
     @Column(name = "CREATED_TIME", nullable = false, updatable = false)
     private Date createdTime;
 
+    @Desc("修改者")
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "MODIFIER_ID")
     private User modifier;
 
+    @Desc("修改时间")
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss", timezone = "GMT+08:00")
     @Column(name = "MODIFIED_TIME")
     private Date modifiedTime;
 
+    @Desc("功能")
     @JsonManagedReference
     @ManyToMany
     @JoinTable(name = "SM_ROLE_FUNC", joinColumns = {@JoinColumn(name = "ROLE_ID")}, inverseJoinColumns = {@JoinColumn(name = "FUNC_ID")})
     private Set<Function> functions = new HashSet<Function>();
 
+    @Desc("组件")
     @JsonManagedReference
     @ManyToMany
     @JoinTable(name = "SM_ROLE_COM", joinColumns = {@JoinColumn(name = "ROLE_ID")}, inverseJoinColumns = {@JoinColumn(name = "COM_ID")})
     private Set<Component> components = new HashSet<Component>();
 
+    @Desc("组织")
     @JsonManagedReference
     @ManyToMany
     @JoinTable(name = "SM_ORG_ROLE", joinColumns = {@JoinColumn(name = "ROLE_ID")}, inverseJoinColumns = {@JoinColumn(name = "ORG_ID")})
     private Set<Organization> organizations = new HashSet<Organization>();
 
+    @Desc("所有者")
     @JsonBackReference
     @ManyToMany(mappedBy = "roles")
     private Set<User> owners = new HashSet<User>();

@@ -51,26 +51,26 @@
 			<td align="left">${contact.customer.name}</td>
 		</tr>
 		<tr>
+			<td align="right">电话：</td>
+			<td align="left">${contact.phone}</td>
 			<td align="right">供应商名：</td>
 			<td align="left">${contact.supplier.name}</td>
+		</tr>
+		<tr>
+			<td align="right">手机：</td>
+			<td align="left">${contact.mobile}</td>
 			<td align="right">邮箱：</td>
 			<td align="left">${contact.email}</td>
 		</tr>
 		<tr>
 			<td align="right">部门：</td>
 			<td align="left">${contact.department}</td>
-			<td align="right">职位：</td>
-			<td align="left">${contact.position}</td>
-		</tr>
-		<tr>
-			<td align="right">电话：</td>
-			<td align="left">${contact.phone}</td>
 			<td align="right">传真：</td>
 			<td align="left">${contact.fax}</td>
 		</tr>
 		<tr>
-			<td align="right">手机：</td>
-			<td align="left">${contact.mobile}</td>
+			<td align="right">职位：</td>
+			<td align="left">${contact.position}</td>
 			<td align="right">邮编：</td>
 			<td align="left">${contact.postCode}</td>
 		</tr>

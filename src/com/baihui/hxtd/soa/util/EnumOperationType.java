@@ -41,6 +41,15 @@ public enum EnumOperationType {
     
     /**禁用用户*/
     DISABLE(10),
+    
+    /**修改密码*/
+    MODIFYPASSWORD(11),
+    
+    /**真实删除数据*/
+    DELETEREAL(12),
+    
+    /**恢复数据*/
+    RECOVERY(13)
     ;
 
 	private int operationType;

@@ -189,5 +189,16 @@ public class DictionaryService {
 	public String getNameById(Long id) {
 		return dictionaryDao.get(id).getKey();
 	}
+    
+    /**
+     * 根据parentId 和 指定的key获取value
+     * @param key
+     * @param parentId
+     * @return
+     */
+    public Dictionary getValue(String key,Long parentId){
+    	 return dictionaryDao.getValue(key, parentId);
+    }
+
 
 }

@@ -111,12 +111,14 @@ public class NoticeController {
             @RequestParam(value = "pageSize", defaultValue = "10") int pageSize,
             @RequestParam(value = "pageOrderBy", defaultValue = "sentTime") String orderBy,
             @RequestParam(value = "pageOrder", defaultValue = "desc") String order,
-            Model model) {
+            Model model,HttpServletRequest request) {
 		logger.info("NoticeController.toQueryPage跳转公告列表页");
+		User user = (User) request.getSession().getAttribute(Constant.VS_USER);
 		HibernatePage<Notice> page = new HibernatePage<Notice>(pageNumber, pageSize);
         page.setHibernateOrderBy(orderBy);
         page.setHibernateOrder(order);
         model.addAttribute("page", page);
+        model.addAttribute("isManager", user.getIsManager());
 		return "/system/notice/list";
 	}
 

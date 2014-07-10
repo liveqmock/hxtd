@@ -44,6 +44,10 @@ import com.fasterxml.jackson.annotation.JsonFormat;
 @Table(name = "LEAD")
 public class Lead {
 
+	public Lead(){}
+	public Lead(User owner,String name){
+		
+	}
 	/**
 	 * 序列化
 	 */
@@ -167,6 +171,7 @@ public class Lead {
 
 	@Column(name = "IS_DELETED", nullable = false, updatable = false)
 	private Boolean isDeleted = false;
+	
 
 	public Boolean getIsDeleted() {
 		return isDeleted;
@@ -375,5 +380,4 @@ public class Lead {
 	public void setCounty(PCAS county) {
 		this.county = county;
 	}
-
 }

@@ -46,7 +46,7 @@
         <table class="cb id_table3 w95b bg_c_white margin0 mt10">
             <tr>
                 <td align="right" width="15%">组件名：</td>
-                <td align="left">${com.name }></td>
+                <td align="left">${com.name }</td>
                 <td align="right" width="15%">组件编号：</td>
                 <td align="left">${com.code }</td>
             </tr>

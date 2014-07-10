@@ -1,27 +1,44 @@
 package com.baihui.hxtd.soa.common.controller;
 
 import com.baihui.hxtd.soa.base.Constant;
+import com.baihui.hxtd.soa.base.InitApplicationConstant;
 import com.baihui.hxtd.soa.base.orm.hibernate.HibernatePage;
+import com.baihui.hxtd.soa.base.utils.ReflectionUtils;
 import com.baihui.hxtd.soa.base.utils.Search;
 import com.baihui.hxtd.soa.base.utils.mapper.HibernateAwareObjectMapper;
+import com.baihui.hxtd.soa.common.entity.Module;
+import com.baihui.hxtd.soa.common.entity.ModuleField;
 import com.baihui.hxtd.soa.common.entity.Report;
+import com.baihui.hxtd.soa.common.service.CommonService;
+import com.baihui.hxtd.soa.common.service.ModuleService;
 import com.baihui.hxtd.soa.common.service.ModuleTypeService;
 import com.baihui.hxtd.soa.common.service.ReportService;
 import com.baihui.hxtd.soa.system.DictionaryConstant;
+import com.baihui.hxtd.soa.system.entity.AuditLog;
+import com.baihui.hxtd.soa.system.entity.Dictionary;
+import com.baihui.hxtd.soa.system.entity.User;
 import com.baihui.hxtd.soa.system.service.DataShift;
+import com.baihui.hxtd.soa.system.service.DictionaryService;
+import com.baihui.hxtd.soa.util.BusinessResult;
+import com.baihui.hxtd.soa.util.EnumModule;
+import com.baihui.hxtd.soa.util.EnumOperationType;
 import com.baihui.hxtd.soa.util.JsonDto;
 import com.fasterxml.jackson.core.JsonProcessingException;
+import org.apache.commons.lang3.ArrayUtils;
+import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.ResponseBody;
-import org.springframework.web.bind.annotation.SessionAttributes;
+import org.springframework.web.bind.annotation.*;
 import org.springside.modules.web.Servlets;
 
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
+import java.lang.reflect.Field;
+import java.util.Arrays;
+import java.util.Date;
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -43,7 +60,16 @@ public class ReportController {
     private ReportService reportService;
 
     @Resource
+    private ModuleService moduleService;
+
+    @Resource
     private ModuleTypeService moduleTypeService;
+
+    @Resource
+    private DictionaryService dictionaryService;
+
+    @Resource
+    private CommonService commonService;
 
     @RequestMapping("/toQueryPage")
     public String toQueryPage(HibernatePage<Report> page, ModelMap modelMap) {
@@ -52,13 +78,17 @@ public class ReportController {
         page.setHibernateOrder("desc");
         modelMap.addAttribute("page", page);
 
-        modelMap.addAttribute("modules", moduleTypeService.findByTypeValue(DictionaryConstant.MODULE_TYPE_REPORT));
+        Long moduleTypeId = dictionaryService.getIdByValue(DictionaryConstant.MODULE_TYPE_REPORT);
+        List<Long> moduleIds = moduleTypeService.findModuleIdByTypeId(moduleTypeId);
+        List<Module> modules = ReflectionUtils.findNameValueMatched(InitApplicationConstant.MODULES, "id", moduleIds);
+        modelMap.addAttribute("modules", modules);
+        modelMap.addAttribute("charts", dictionaryService.findChildren(DictionaryConstant.REPORT_CHART));
 
         return "/common/report/list";
     }
 
     @ResponseBody
-    @RequestMapping(value = "/query.do")
+    @RequestMapping("/query.do")
     public String query(HttpServletRequest request, HibernatePage<Report> page, ModelMap modelMap) throws NoSuchFieldException, JsonProcessingException {
         logger.info("查询");
 
@@ -82,11 +112,209 @@ public class ReportController {
     }
 
 
+    /**
+     * 存储表单初始化数据
+     */
+    public void detail(ModelMap modelMap) {
+        logger.info("存储表单初始化数据");
+
+        //查询并存储所属模块
+        Long moduleTypeId = dictionaryService.getIdByValue(DictionaryConstant.MODULE_TYPE_REPORT);
+        List<Long> moduleId = moduleTypeService.findModuleIdByTypeId(moduleTypeId);
+        List<Module> modules = commonService.findByIds(InitApplicationConstant.MODULES, moduleId);
+        modelMap.addAttribute("modules", modules);
+        logger.debug("所属模块数目“{}”", modules.size());
+
+        //查询并存图表类型
+        List<Dictionary> charts = dictionaryService.findChildren(DictionaryConstant.REPORT_CHART);
+        modelMap.addAttribute("charts", charts);
+        logger.debug("图表类型数目“{}”", charts.size());
+
+
+        //查询并存储聚合类型
+        List<Dictionary> aggregates = dictionaryService.findChildren(DictionaryConstant.REPORT_AGGREGATE);
+        modelMap.addAttribute("aggregates", aggregates);
+        logger.debug("聚合类型数目“{}”", aggregates.size());
+    }
+
+    /**
+     * 转至新增页面
+     */
+    @RequestMapping(value = "/toAddPage.do", method = RequestMethod.GET)
+    public String toAddPage(ModelMap modelMap) {
+        logger.info("转至新增页面");
+
+        detail(modelMap);
+
+        logger.info("存储表单默认值");
+
+        return "/common/report/edit";
+    }
+
+    /**
+     * 查找分组类型通过模块主键编号和字段名称
+     */
+    @ResponseBody
+    @RequestMapping("/findGroupType.docomp")
+    public String findGroupType(Long moduleId, String fieldName) {
+        logger.info("查找分组类型通过模块主键编号和字段名称");
+        logger.debug("模块ID=“{}”，字段名称=“{}”", moduleId, fieldName);
+
+        Module module = ReflectionUtils.findNameValueMatched(InitApplicationConstant.MODULES, "id", moduleId);
+        Field field = ReflectionUtils.findNameValueMatched(Arrays.asList(module.getFields()), "name", fieldName);
+        List<Dictionary> groupTypes = reportService.findGroupType(field.getType());
+
+        JsonDto jsonDto = new JsonDto();
+        jsonDto.setResult(new BusinessResult<List<Dictionary>>(groupTypes));
+        String result = jsonDto.toString();
+        logger.debug("result={}", result);
+        return result;
+    }
+
+    /**
+     * 新增
+     */
+    @ResponseBody
+    @RequestMapping(value = "/add.do", method = RequestMethod.POST)
+    public String add(Report report, ModelMap modelMap) {
+        logger.info("新增");
+        logger.debug("名称=“{}”", report.getName());
+
+        logger.info("添加服务端属性值");
+        report.setCreator((User) modelMap.get(Constant.VS_USER));
+        report.setModifier(report.getCreator());
+
+        AuditLog auditLog = new AuditLog(EnumModule.REPORT.getModuleName(), report.getName(), EnumOperationType.ADD.getOperationType(), report.getCreator());
+        reportService.add(report, auditLog);
+
+        return JsonDto.add(report.getId()).toString();
+    }
+
+    /**
+     * 转至查看用户页面
+     * 1.从用户列表页点击详情
+     * 2.从个人设置->账号信息点击进入，此时id=session.user.id
+     */
+    @RequestMapping(value = "/toViewPage.do", method = RequestMethod.GET)
+    public String toViewPage(Long id, ModelMap modelMap) {
+        logger.info("转至查看页面");
+
+        Report report = reportService.get(id);
+        modelMap.addAttribute("report", report);
+
+        logger.info("存储表单初默认值");
+
+        return "/common/report/view";
+    }
+
+    /**
+     * 转至修改用户页面
+     */
+    @RequestMapping(value = "/toModifyPage.do", method = RequestMethod.GET)
+    public String toModifyPage(Long id, ModelMap modelMap) {
+        logger.info("转至修改页面");
+        logger.debug("主键编号“{}”", id);
+
+        detail(modelMap);
+
+        Report report = reportService.get(id);
+        modelMap.addAttribute("report", report);
+        modelMap.addAttribute("fieldModules", moduleService.findModuleAndAssociation(report.getModule().getId()));
+        if (StringUtils.isNotBlank(report.getxFieldName())) {
+            String[] names = report.getxFieldName().split("\\.");
+            modelMap.addAttribute("xGroupTypes", reportService.findGroupType(findType(names[0], names[1])));
+        }
+
+        if (StringUtils.isNotBlank(report.getzFieldName())) {
+            String[] names = report.getzFieldName().split("\\.");
+            modelMap.addAttribute("zGroupTypes", reportService.findGroupType(findType(names[0], names[1])));
+        }
+
+        logger.info("存储表单默认值");
+
+        return "/common/report/edit";
+    }
+
+    private Class findType(String moduleName, String fieldName) {
+        Module module = ReflectionUtils.findNameValueMatched(InitApplicationConstant.MODULES, "name", moduleName);
+        Field field = ReflectionUtils.findNameValueMatched(Arrays.asList(module.getFields()), "name", fieldName);
+        return field.getType();
+    }
+
+    /**
+     * 修改用户
+     */
+    @ResponseBody
+    @RequestMapping(value = "/modify.do", method = RequestMethod.POST)
+    public String modify(Report report, ModelMap modelMap) {
+        logger.info("修改用户");
+
+        if (commonService.isInitialized(Report.class, report.getId())) {
+            return new JsonDto("系统初始化数据不允许修改！").toString();
+        }
+
+
+        return JsonDto.modify(report.getId()).toString();
+    }
+
+    /**
+     * 删除用户
+     */
+    @ResponseBody
+    @RequestMapping(value = "/delete.do")
+    public String delete(Long[] id, @ModelAttribute(Constant.VS_USER_ID) Long sessionId) {
+        logger.info("删除用户");
+
+        if (commonService.isInitialized(User.class, id)) {
+            return new JsonDto("系统初始化数据不允许删除！").toString();
+        }
+
+        logger.info("检查是否包含当前用户");
+        if (ArrayUtils.contains(id, sessionId)) {
+            return new JsonDto("不允许删除当前操作用户").toString();
+        }
+
+
+        return JsonDto.delete(id).toString();
+    }
+
+    /**
+     * 转至生成报表页面
+     */
     @RequestMapping("/toGeneratePage")
-    public String toGeneratePage(ModelMap modelMap) {
-        String data = reportService.generate();
-        modelMap.put("data", data);
+    public String toGeneratePage(Long id, ModelMap modelMap) {
+        logger.info("转至生成报表页面");
+
+        Report report = reportService.get(id);
+        modelMap.addAttribute("report", report);
+        //查询并存储查询条件
+        //所属模块时间类型字段
+        Module sourceModule = report.getModule();
+        sourceModule = ReflectionUtils.findNameValueMatched(InitApplicationConstant.MODULES, "id", sourceModule.getId());
+        Field[] fields = sourceModule.getFields();
+        List<Field> dateTypeFields = ReflectionUtils.findNameValueMatcheds(Arrays.asList(fields), "type", Date.class);
+        List<ModuleField> moduleFields = moduleService.toModuleField(dateTypeFields.toArray(new Field[]{}));
+        modelMap.addAttribute("moduleFields", moduleFields);
+
         return "/common/report/report";
+    }
+
+
+    /**
+     * 转至生成报表页面
+     */
+    @ResponseBody
+    @RequestMapping("/generate")
+    public String generate(Long id, String fieldName, Date min, Date max) {
+        logger.info("生成报表");
+        logger.debug("报表主键编号={}，列名={}，最小时间={}，最大时间={}", id, fieldName, min, max);
+
+        Report report = reportService.get(id);
+        if (min == null) min = new Date();
+        if (max == null) max = new Date();
+        String data = reportService.generate(report, fieldName, min, max);
+
+        return data;
     }
 
 

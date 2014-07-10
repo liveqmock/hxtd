@@ -1,7 +1,7 @@
 <%--
      回收站列表页
-  author: xiaoli.luo
-  Date:2014/6/4
+  author: huizijing
+  Date:2014/7/8
 --%>
 
 <%@ page contentType="text/html;charset=UTF-8" language="java"%>
@@ -21,28 +21,9 @@
 			$(function() {
 				jsUtil.datepicker(".time");//加载时间控件
 				grid = new Grid().init();
-
-				var m;
-	           
-	            $C.tab({onSelected:function(event,title,panel){
-	            	//每次选中tab页,清空查询条件
-	            	formReSet();
-	            	//每次选中tab页,将分页条页面置为1
-	            	$("[name=hibernatePageNo]").val(1);
-	            	
-	            	m = title.attr("name");
-	            	var id = title.attr("id");
-	            	//给隐藏的input复制
-	            	$("#moduleName").val(m);
-	            	//点击tab页,展示div
-	            	$("#tab-div div div").attr("name","tabs-"+id);
-	            	//点击tab页,重置删除按钮和重置按钮的uri
-	            	$("#deleteData").attr("uri","${ctx}/system/recyclebin/delete.do?entityName="+m);
-	            	$("#recoveryData").attr("uri","${ctx}/system/recyclebin/recovery.do?entityName="+m);
-	            	onLoad();
-	            }})
-	            
-	            $("#recoveryData").click(function(){
+				
+				//绑定还原按钮
+				$("#recoveryData").click(function(){
 					if($(":checkbox:checked").length == 0){
 						jsUtil.alert("请选择要恢复的数据");
 						return false;
@@ -52,7 +33,7 @@
 						$("#tbody :checkbox:checked").each(function(){
 							ckAry.push(this.value);
 						});
-			            RcmsAjax.ajax("${ctx}/system/recyclebin/recovery.do?entityName="+m,onLoad, null, $.param({id: ckAry }, true));
+			            RcmsAjax.ajax("${ctx}/system/recyclebin/recovery.do",onLoad, null, $.param({id: ckAry }, true));
 					});
 				});
 			});
@@ -63,18 +44,14 @@
 				$("#form")[0].reset();
 			}
 			function searchData(action){//搜索条件-操作人
-				jsUtil.dialogIframe("${ctx}/system/user/toQueryPage.comp", "发起者", 800, 465, function(){// 确定回调
-					var $ckObj = $(":checked", window.frames["dialogIframe"].document);
+				jsUtil.dialogIframe("${ctx}/system/user/toQueryPage.comp", "操作人", 800, 465, function(){// 确定回调
+					var $ckObj = $(".bor_e28d1f", window.frames["dialogIframe"].document);
 					if($ckObj.length > 0){
-						$("#txt_" + action).val($ckObj.parent().next().text());
-						$("#hide_" + action +"_id").val($ckObj.val());
+						$("#txt_" + action).val($ckObj.find("td:eq(0)").text());
+						$("#hide_" + action +"_id").val($ckObj.attr("id"));
 					}
 				});
 			}
-			
-			//function ckAll(obj){//全选
-				//$(":checkbox").attr("checked", obj.checked);
-			//}
 			
 		</script>
 	</head>
@@ -85,116 +62,100 @@
 	    <b class="b3"></b>
 	    <b class="b4"></b>
 			<div class="listcontainer">
-				<div class="w">
 					<!--查询条件开始-->
-					<form class="formclass" id="form" action="${ctx}/system/recyclebin/query.do" onsubmit="return false;">
-						<!-- 默认,首次加载显示市场活动的回收站 -->
-						<input type="hidden" name="type" id="moduleName" class="select2" value="MarketActivity"/>
+					<form id="form" action="${ctx}/system/recyclebin/query.do"
+						onsubmit="return false;">
 						<table class="fl mt5 w">
 							<tr>
-								<td class="f14 namewidth1" align="right">记录名称：</td>
-								<td class="f14 namewidth2" align="left">
-									<input type="text" name="recordName" class="text_input1"/>
-								</td>
-								<td class="f14 namewidth1" align="right">删除者：</td>
-								<%--<td class="f14" align="left" width="16%">
-									<input type="text" class="text_input1" id="operator" name="search_LIKE_operator.id" />
-								</td>
-								--%><td class="f14 namewidth2" align="left">
-									<input type="text" id="txt_modifier" readonly="readonly" class="text_input1"/>
-									<input type="text" id="hide_modifier_id" name="deletorId" class="text_input1 none"/>
-									<i class="s_inquiry globle_img block_inline ml5 vm cp" title="搜索操作人" onclick="searchData('modifier');"></i>
-								</td>
-								
 								<td class="f14 namewidth1" align="right">
-									删除时间：
+									操作人：
 								</td>
+								<td class="f14 namewidth2" align="left">
+									<input type="text" id="txt_creator" readonly="readonly"
+										class="text_input1" />
+									<input type="text" id="hide_creator_id"
+										name="search_EQ_creator.id" class="text_input1 none" />
+									<i class="s_inquiry globle_img block_inline ml5 vm cp"
+										title="搜索操作人" onclick="searchData('creator');"></i>
+								</td>
+								<td class="f14 namewidth1" align="right">
+									模块名称：
+								</td>
+								<td class="f14 namewidth2" align="left">
+									<div class="pr">
+										<select name="search_EQ_moduleName" class="select2">
+											<option value="">
+												全部
+											</option>
+											<c:forEach var="item" items="${moduleNames}">
+												<option value="${item.key}">
+													${item.value}
+												</option>
+											</c:forEach>
+										</select>
+									</div>
+								</td>
+								<td class="f14 namewidth1" align="right">操作时间：</td>
 								<td class="f14 namewidth2" align="left">
 									<div class="vm">
 										<input class="text_input2 input_close globle_img time"
-											name="GTE_modifiedTime" type="text" 
-											readonly />-<input 
-											class="text_input2 input_close globle_img time"
-											name="modifiedTime" type="text" readonly />
+											name="search_GTE_createdTime" type="text" readonly />
+										-
+										<input class="text_input2 input_close globle_img time"
+											name="search_LTE_createdTime" type="text" readonly />
 									</div>
 								</td>
 								<td width="namewidth3">
-									<a href="javascript:void(0);" class="c_222 block cp fr ml10   mt8 mr20 "></a>
-									<a class="a_underline block_inline fr w_blue mt5 reset" href="javascript:formReset()">清除</a>
+									<a class="c_222 block cp fr ml10  mt8 mr20 " ></a>
+									<a href="javascript:void(0)" class="a_underline block_inline fr w_blue mt5 reset">清除</a>
 									<a href="javascript:void(0)" class="block_inline c_white lh25 fr mr10 submit">
 										<b class="allbtn_l block fl"></b>
-										<b class="allbtn_r pr13 block fl w_auto f14">查&nbsp;&nbsp;询</b>
+										<b class="allbtn_r pr13 block fl w_auto f14">查&nbsp;&nbsp;询</b> 
 									</a>
 								</td>
-								
+
 							</tr>
 						</table>
 						<tags:paginationparams page="${page}" />
 					</form>
 					<!--查询条件结束-->
-					
-					<!-- tab页签开始 -->
-					<ul class="fl id_table3 w block cb mt10 tab-titles" style="border-bottom: 5px solid #626262; height: 32px;" fortabpanels id="tab-module">
-						<li class="tab-title" fortabpanel="#tabs-market" id="market" name="MarketActivity">
-							<b class="h_tabbtn_l w25 block fl"></b>
-							<b class="h_tabbtn_r pr25 w_auto f14 block fr lh32 cp id_nav pr">市场活动</b>
-						</li>
-						<li class="tab-title" fortabpanel="#tabs-lead" id="lead" name="Lead">
-							<b class="h_tabbtn_l w25 block fl"></b>
-							<b class="h_tabbtn_r pr25 w_auto f14 block fr lh32 cp id_nav pr">线索</b>
-						</li>
-						<li class="tab-title" fortabpanel="#tabs-contact" id="contact" name="Contact">
-							<b class="h_tabbtn_l w25 block fl"></b>
-							<b class="h_tabbtn_r pr25 w_auto f14 block fr lh32 cp id_nav pr">联系人</b>
-						</li>
-						<li class="tab-title" fortabpanel="#tabs-customer" id="customer" name="Customer">
-							<b class="h_tabbtn_l w25 block fl"></b>
-							<b class="h_tabbtn_r pr25 w_auto f14 block fr lh32 cp id_nav pr">客户</b>
-						</li>
-						<li class="tab-title" fortabpanel="#tabs-supplier" id="supplier" name="Supplier">
-							<b class="h_tabbtn_l w25 block fl"></b>
-							<b class="h_tabbtn_r pr25 w_auto f14 block fr lh32 cp id_nav pr">供应商</b>
-						</li>
-						<li class="tab-title" fortabpanel="#tabs-project" id="project" name="Project">
-							<b class="h_tabbtn_l w25 block fl"></b>
-							<b class="h_tabbtn_r pr25 w_auto f14 block fr lh32 cp id_nav pr">项目</b>
-						</li>
-						<li class="tab-title" fortabpanel="#tabs-product" id="product" name="Product">
-							<b class="h_tabbtn_l w25 block fl"></b>
-							<b class="h_tabbtn_r pr25 w_auto f14 block fr lh32 cp id_nav pr">产品</b>
-						</li>
-						<li class="tab-title" fortabpanel="#tabs-order" id="order" name="Order">
-							<b class="h_tabbtn_l w25 block fl"></b>
-							<b class="h_tabbtn_r pr25 w_auto f14 block fr lh32 cp id_nav pr">订单</b>
-						</li>
-						<ul class="fr id_table1  ml10">
-						<li>
-							<a class="block c_white lh25 mr10" href="javascript:;" id="recoveryData" uri="${ctx}/system/recyclebin/recovery.do?entityName=MarketActivity">
-								<b class="allbtn_l block fl"></b>
-								<b class="allbtn_r pr13 block fl w_auto f14">还&nbsp;&nbsp;原</b>
-							</a>
-						</li>
-                		<li>
-                			<a class="block c_white lh25 mr10 deletesome" id="deleteData" href="javascript:;"  uri="${ctx}/system/recyclebin/delete.do?entityName=MarketActivity">
-                				<b class="allbtn_l block fl"></b>
-                				<b class="allbtn_r pr13 block fl w_auto f14">删&nbsp;&nbsp;除</b>
-                			</a>
-                		</li>
-                		</ul>
-					</ul>
-
+					<div class="ml35 mr35 mt20 block cb cb">
+						<b class="b1"></b>
+					    <b class="b2"></b>
+					    <b class="b3"></b>
+					    <b class="b4"></b>
+						<div class="ie_head">
+							<ul class="fl id_table1 mt10 ml10">
+								<li>
+									<a class="block c_white lh25 mr10" href="javascript:;" id="recoveryData" uri="${ctx}/system/recyclebin/recovery.do?entityName=MarketActivity">
+										<b class="allbtn_l block fl"></b>
+										<b class="allbtn_r pr13 block fl w_auto f14">还&nbsp;&nbsp;原</b>
+									</a>
+								</li>
+		                		<li>
+		                			<a class="block c_white lh25 mr10 deletesome" id="deleteData" href="javascript:;"  uri="${ctx}/system/recyclebin/delete.do?entityName=MarketActivity">
+		                				<b class="allbtn_l block fl"></b>
+		                				<b class="allbtn_r pr13 block fl w_auto f14">删&nbsp;&nbsp;除</b>
+		                			</a>
+		                		</li>
+		                	</ul>
+	                	</div>
+                	</div>
 					<div class="cb"></div>
 					<!-- tab页签结束 -->
 					<!-- 浮动表头html开始 -->
+					<div class="ml35 mr35">
 					<div id="title" style="display: none; background-color: #f5f5f6;" class="mr35">
 						<table class="cb id_table2 w">
 							<tr>
-								<th width="4%"><input type="checkbox" class="checkall"/></th>
-								<th width="10%">记录名称</th>
-								<th width="9%">删除人</th>
-								<th width="11%" class="sortable orderby" orderby="operateTime">
-									<span>删除时间</span>
+								<th width="10%"><input type="checkbox" class="checkall"/></th>
+								<th width="16%">模块名称</th>
+								<th width="16%">记录名称</th>
+								<th width="16%">操作人</th>
+								<th width="16%" class="sortable orderby" orderby="createdTime">
+									<span>操作时间</span>
 								</th>
+								<th width="16%">备注</th>
 							</tr>
 						</table>
 					</div>
@@ -202,39 +163,52 @@
 					<!--列表开始-->
 					<table class="cb id_table2 w tablesorter">
 						<tr id="recordDiv">
-							<th width="4%"><input type="checkbox" class="checkall"/></th>
-							<th width="10%">记录名称</th>
-							<th width="9%">删除者</th>
-							<th width="11%" class="sortable orderby" orderby="operateTime">
-								<span>删除时间</span>
+							<th width="10%"><input type="checkbox" class="checkall"/></th>
+							<th width="16%">模块名称</th>
+							<th width="16%">记录名称</th>
+							<th width="16%">操作人</th>
+							<th width="16%" class="sortable orderby" orderby="createdTime">
+								<span>操作时间</span>
 							</th>
+							<th width="16%">备注</th>
 						</tr>
 						<tbody id="tbody" class="list"></tbody>
 					</table>
 					<div class="pagination cb ml35 mt20 h40 "></div>
-					<div class="margin0 ml35 mr35" id="tab-div">
-	        			<div class="w cb tab-panels">
-	        				<div id="tabs-market" class="tab-panel">
-				                <ul class="w">
-				                    <textarea id="template-tbody" class="template template-tbody">
-							          {#foreach $T.result as row}
-							          <tr class="{$T.row$index%2==1?'':'bg_c_blue'} row w">
-							          	  <td><input type="checkbox" class="checkitem" value="{$T.row.id}"/></td>
-							              <td>{$T.row.name}</td>
-							              <td>{$T.row.modifier.realName}</td>
-							              <td>{$T.row.modifiedTime}</td>
-							          </tr>
-							          {#/for} 
-							      	</textarea>
-				                </ul>
-				            </div>
-	        			</div>
-        			</div>
+                    <textarea id="template-tbody" class="template template-tbody">
+			          {#foreach $T.result as row}
+			          <tr class="{$T.row$index%2==1?'':'bg_c_blue'} row w">
+			          	  <td><input type="checkbox" class="checkitem" name="id" value="{$T.row.id}"/></td>
+			         	  <td>
+			         	  {#if $T.row.moduleName=='marketActivity'}市场活动{#/if}
+			         	  {#if $T.row.moduleName=='lead'}线索{#/if}
+			         	  {#if $T.row.moduleName=='contact'}联系人{#/if}
+			         	  {#if $T.row.moduleName=='customer'}客户{#/if}
+			         	  {#if $T.row.moduleName=='supplier'}供应商{#/if}
+			         	  {#if $T.row.moduleName=='project'}项目{#/if}
+			         	  {#if $T.row.moduleName=='product'}产品{#/if}
+			         	  {#if $T.row.moduleName=='order'}订单{#/if}
+			         	  {#if $T.row.moduleName=='user'}用户{#/if}
+			         	  {#if $T.row.moduleName=='role'}角色{#/if}
+			         	  {#if $T.row.moduleName=='menu'}菜单{#/if}
+			         	  {#if $T.row.moduleName=='function'}功能{#/if}
+			         	  {#if $T.row.moduleName=='component'}组件{#/if}
+			         	  {#if $T.row.moduleName=='organization'}组织机构{#/if}
+			         	  {#if $T.row.moduleName=='userMessage'}系统消息{#/if}
+			         	  {#if $T.row.moduleName=='notice'}系统公告{#/if}
+			         	  {#if $T.row.moduleName=='dictionary'}数据字典{#/if}
+			         	  </td>
+			         	  <td>{$T.row.recordName}</td>
+			              <td>{$T.row.creator.realName}</td>
+			              <td>{$T.row.createdTime}</td>
+			              <td>{$T.row.remark}</td>
+			          </tr>
+			          {#/for} 
+			      	</textarea>
 					<%@include file="/WEB-INF/template/sort.jsp"%>
 					<%@include file="/WEB-INF/template/pagination.jsp"%>
-				</div>
+					</div>
 			</div>
-			<!--列表结束-->
 		</div>
 	</body>
 </html>

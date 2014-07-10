@@ -113,6 +113,9 @@ public class AuditLogService {
         	 if(result.get(i).getModuleName().equals("dictionary")){
         		 result.get(i).setModuleName("数据字典");
         	 }
+        	 if(result.get(i).getModuleName().equals("recyclebin")){
+        		 result.get(i).setModuleName("回收站");
+        	 }
          }
 		return result;
 		 

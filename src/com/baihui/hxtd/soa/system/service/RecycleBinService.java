@@ -1,11 +1,22 @@
 package com.baihui.hxtd.soa.system.service;
 
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
+
 import javax.annotation.Resource;
 
+import org.hibernate.FetchMode;
+import org.hibernate.criterion.DetachedCriteria;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springside.modules.persistence.SearchFilter;
 
+import com.baihui.hxtd.soa.base.orm.hibernate.HibernatePage;
+import com.baihui.hxtd.soa.base.utils.Search;
+import com.baihui.hxtd.soa.common.dao.CommonDao;
 import com.baihui.hxtd.soa.system.dao.RecycleBinDao;
+import com.baihui.hxtd.soa.system.entity.AuditLog;
 import com.baihui.hxtd.soa.system.entity.RecycleBin;
 /**
  * 功能描述：审计日志模块service层
@@ -24,12 +35,34 @@ public class RecycleBinService {
 	@Resource
 	private RecycleBinDao recycleBinDao;
 	
+	@Resource
+	private CommonDao commonDao;
+	
+	/**
+	 * 分页查找数据
+	 * @param searchParams
+	 * @param page
+	 * @return HibernatePage<RecycleBin>
+	 * @throws NoSuchFieldException 
+	 */
+	public HibernatePage<RecycleBin> findPage(Map<String, Object> searchParams,
+			HibernatePage<RecycleBin> page) throws NoSuchFieldException {
+		DetachedCriteria criteria = DetachedCriteria.forClass(RecycleBin.class);
+    	criteria.setFetchMode("creator", FetchMode.JOIN);
+		Map<String, SearchFilter> filters = Search.parse(searchParams);
+		Search.buildCriteria(filters, criteria, RecycleBin.class);
+//		HibernatePage<RecycleBin> pageResult=recycleBinDao.findPage(page, criteria);
+//		List<RecycleBin> result=pageResult.getResult();
+//        pageResult.setResult(convertResult(result));
+        return recycleBinDao.findPage(page, criteria);
+	}
+	
 	/**
 	 * 保存方法
 	 * @param recycleBin
 	 */
 	public void save(RecycleBin recycleBin){
-		
+		recycleBinDao.save(recycleBin);
 	}
 	
 	/**
@@ -38,8 +71,8 @@ public class RecycleBinService {
 	  * @param id    参数类型
 	  * @return void    返回类型
 	 */
-	public void deleteReal(Long [] id){
-		
+	public void deleteReal(Long[] recordid,String entityName,AuditLog [] auditLogArr){
+		commonDao.delete(entityName, recordid);
 	}
 	
 	/**
@@ -51,79 +84,31 @@ public class RecycleBinService {
 	public void deleteRealBySetTime(int days){
 		
 	}
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-//	/**
-//	 * 注入DAO
-//	 */
-//	@Resource
-//	private AuditLogDao auditLogDao;
-//
-//	 /**
-//     * findPage(分页查询组件列表)
-//     * @param findPage
-//     * @param @return 参数类型
-//     * @return HibernatePage<AuditLog>返回类型
-//     * @throws NoSuchFieldException
-//     */
-//    @Transactional(readOnly = true)
-//    public HibernatePage<AuditLog> findPage(Map<String, Object> searchParams, 
-//    		HibernatePage<AuditLog> page) throws NoSuchFieldException {
-//    	DetachedCriteria criteria = DetachedCriteria.forClass(AuditLog.class);
-//    	criteria.setFetchMode("type", FetchMode.JOIN);
-//    	criteria.setFetchMode("operator", FetchMode.JOIN);
-//		Map<String, SearchFilter> filters = Search.parse(searchParams);// 构建参数
-//		Search.buildCriteria(filters, criteria, AuditLog.class);
-//        return auditLogDao.findPage(page, criteria);
-//    }
-//
-//    /**
-//     * get(根据ID查询组件信息)
-//     * @param page
-//     * @param @return 参数类型
-//     * @return HibernatePage<AuditLog>返回类型
-//     */
-//    public Contact get(Long id) {
-//    	String hql = "select contact from Contact contact " +
-//    			"left join fetch contact.supplier " +
-//    			"left join fetch contact.customer " +
-//    			"left join fetch contact.owner " +
-//    			"left join fetch contact.source " +
-//    			"left join fetch contact.province " +
-//    			"left join fetch contact.city " +
-//    			"left join fetch contact.county " +
-//    			"where contact.id = ?";
-//    	
-//        return auditLogDao.findUnique(hql, id);
-//    }
-//
-//    /**
-//     * 根据属性isDeleted删除
-//     * @param id
-//     */
-//	public void delete(Long... id) {
-//		auditLogDao.logicalDelete(id);
-//		
-//	}
+
+	/**
+	 * 还原数据
+	 * @param array
+	 * @param string
+	 */
+	public void recovery(Long[] id, String entityName,AuditLog [] auditLogArr) {
+		commonDao.recovery(entityName, id);
+		 
+	}
+
+	public void delete(Long[] id){
+		recycleBinDao.delete(id);
+	}
+	/**
+	 * 根据id数组得到回收站实体类List
+	 * @param id
+	 * @return
+	 */
+	public List<RecycleBin> getByIds(long[] id) {
+		List<Long> ids=new ArrayList<Long>();
+		for(int i=0;i<id.length;i++){
+			ids.add(id[i]);
+		}
+		return recycleBinDao.get(ids);
+	}
+
 }

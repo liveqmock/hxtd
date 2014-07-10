@@ -54,7 +54,7 @@
 				<fmt:formatDate value="${activity.beginDate}" pattern="yyyy-MM-dd" var="beginDate"/>${beginDate}
 			</td>
 			<td align="right">预计成本：</td>
-			<td align="left">${activity.predictCost}</td>
+			<td align="left"><fmt:formatNumber value="${activity.predictCost}" pattern="###,##0.00" var="predictCost"/>${predictCost}</td>
 		</tr>
 		<tr>
 			<td align="right">结束日期：</td>
@@ -62,7 +62,7 @@
 				<fmt:formatDate value="${activity.endDate}" pattern="yyyy-MM-dd" var="endDate"/>${endDate}
 			</td>
 			<td align="right">实际成本：</td>
-			<td align="left">${activity.realityCost}</td>
+			<td align="left"><fmt:formatNumber value="${activity.realityCost}" pattern="###,##0.00" var="realityCost"/>${realityCost}</td>
 		</tr>
 		<tr>
 			<td align="right">预期效果：</td>

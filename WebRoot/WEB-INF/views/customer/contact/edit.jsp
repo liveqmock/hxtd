@@ -13,13 +13,13 @@
 <script type="text/javascript">${applicationScope.VC_PCAS}</script>
 <script type="text/javascript">
 $(function(){
-	jsUtil.bindSave(".add", "form"); // 提交表单
-	new PCAS("province","city","county",'${contact.province.id}','${contact.city.id}','${contact.county.id}');
-	$(".empty").click(function(){ // 清除
+	jsUtil.bindSave(".add", "form"); //提交表单
+	new PCAS("province","city","county",'${contact.province.id}','${contact.city.id}','${contact.county.id}'); //绑定省市县
+	$(".empty").click(function(){ //清除
 		$(this).prevAll("input").val('');
 	});
 });
-function searchData(action){ // 搜索弹出框
+function searchData(action){ //搜索弹出框
 	var url, title;
 	if(action == "owner"){
 		url = "${ctx}/system/user/toQueryPage.comp";
@@ -32,7 +32,7 @@ function searchData(action){ // 搜索弹出框
 		title = "供应商";
 	}
 	jsUtil.dialogIframe(url, title, 800, 465, 
-		function(){ // 确定回调
+		function(){ //确定回调
 			var $userObj = $('.bor_e28d1f', window.frames["dialogIframe"].document);
 			if($userObj.length > 0){
 				$("#txt_" + action).val($userObj.find("td:eq(0)").text());
@@ -60,8 +60,8 @@ function searchData(action){ // 搜索弹出框
 		<tr>
 			<td width="15%" align="right">联系人所有者：</td>
 			<td align="left">
-				<input id="txt_owner" type="text" value="${contact.owner.realName}" class="text_input3" readonly 
-					onfocus="searchData('owner');"/>
+				<input id="txt_owner" type="text" value="${contact.owner.realName}" class="text_input3 cp" readonly 
+					onclick="searchData('owner');"/>
 				<input id="hide_owner_id" type="hidden" name="owner.id" value="${contact.owner.id}"/>
 				<i class="s_inquiry globle_img block_inline ml5 vm cp" title="搜索所有者" onclick="searchData('owner');"></i>
 				<i class="dump_btn globle_img block_inline ml5 vm cp empty" title="清除"></i>
@@ -81,40 +81,40 @@ function searchData(action){ // 搜索弹出框
 			<td align="left"><input name="name" type="text" value="${contact.name}" class="text_input3 required"/></td>
 			<td align="right">客户名：</td>
 			<td align="left">
-				<input id="txt_customer" type="text" value="${contact.customer.name}" readonly class="text_input3" 
-					onfocus="searchData('customer');"/>
+				<input id="txt_customer" type="text" value="${contact.customer.name}" readonly class="text_input3 cp" 
+					onclick="searchData('customer');"/>
 				<input id="hide_customer_id" name="customer.id" type="hidden" value="${contact.customer.id}"/>
 				<i class="s_inquiry globle_img block_inline ml5 vm cp" title="搜索客户" onclick="searchData('customer');"></i>
 				<i class="dump_btn globle_img block_inline ml5 vm cp empty" title="清除"></i>
 			</td>
 		</tr>
 		<tr>
+			<td align="right">电话：</td>
+			<td align="left"><input name="phone" type="text" value="${contact.phone}" class="text_input3 isPhone"/></td>
 			<td align="right">供应商名：</td>
 			<td align="left">
-				<input id="txt_supplier" type="text" value="${contact.supplier.name}" readonly class="text_input3" 
-					onfocus="searchData('supplier');"/>
+				<input id="txt_supplier" type="text" value="${contact.supplier.name}" readonly class="text_input3 cp" 
+					onclick="searchData('supplier');"/>
 				<input id="hide_supplier_id" name="supplier.id" type="hidden" value="${contact.supplier.id}"/>
 				<i class="s_inquiry globle_img block_inline ml5 vm cp" title="搜索供应商" onclick="searchData('supplier');"></i>
 				<i class="dump_btn globle_img block_inline ml5 vm cp empty" title="清除"></i>
 			</td>
+		</tr>
+		<tr>
+			<td align="right">手机：</td>
+			<td align="left"><input name="mobile" type="text" value="${contact.mobile}" class="text_input3 isMobile"/></td>
 			<td align="right">邮箱：</td>
 			<td align="left"><input type="text" name="email" value="${contact.email}" class="text_input3 email"/></td>
 		</tr>
 		<tr>
 			<td align="right">部门：</td>
 			<td align="left"><input name="department" type="text" value="${contact.department}" class="text_input3"/></td>
-			<td align="right">职位：</td>
-			<td align="left"><input type="text" name="position" value="${contact.position}" class="text_input3"/></td>
-		</tr>
-		<tr>
-			<td align="right">电话：</td>
-			<td align="left"><input name="phone" type="text" value="${contact.phone}" class="text_input3 isPhone"/></td>
 			<td align="right">传真：</td>
 			<td align="left"><input type="text" name="fax" value="${contact.fax}" class="text_input3 isTel"/></td>
 		</tr>
 		<tr>
-			<td align="right">手机：</td>
-			<td align="left"><input name="mobile" type="text" value="${contact.mobile}" class="text_input3 isMobile"/></td>
+			<td align="right">职位：</td>
+			<td align="left"><input type="text" name="position" value="${contact.position}" class="text_input3"/></td>
 			<td align="right">邮编：</td>
 			<td align="left"><input name="postCode" type="text" value="${contact.postCode}" class="text_input3 isZipCode"/></td>
 		</tr>

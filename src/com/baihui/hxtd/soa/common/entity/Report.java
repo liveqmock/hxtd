@@ -39,19 +39,26 @@ public class Report implements Serializable, Initialized {
     @JoinColumn(name = "X_TYPE_ID", nullable = false)
     private Dictionary xGroupType;
 
+    @Column(name = "Y_FIELD_NAME", length = 32)
+    private String yFieldName;
+
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "Y_TYPE_ID", nullable = false)
     private Dictionary yAggregateType;
 
-    @Column(name = "Y_FIELD_NAME", length = 32)
-    private String yFieldName;
-
-    @Column(name = "Z_FIELD_NAME", length = 32, nullable = false)
+    @Column(name = "Z_FIELD_NAME", length = 32)
     private String zFieldName;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "Z_TYPE_ID", nullable = false)
+    @JoinColumn(name = "Z_TYPE_ID")
     private Dictionary zGroupType;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "CHART_ID", nullable = false)
+    private Dictionary chart;
+
+    @Column(name = "REMARK", length = 512)
+    private String remark;
 
     @Column(name = "IS_DELETED", nullable = false, updatable = false)
     private Boolean isDeleted;
@@ -60,17 +67,17 @@ public class Report implements Serializable, Initialized {
     private Boolean isInitialized;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "CREATOR_ID", updatable = false)
+    @JoinColumn(name = "CREATOR_ID", nullable = false, updatable = false)
     private User creator;
 
     @Column(name = "CREATED_TIME", nullable = false, updatable = false)
     private Date createdTime;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "MODIFIER_ID")
+    @JoinColumn(name = "MODIFIER_ID", nullable = false)
     private User modifier;
 
-    @Column(name = "MODIFIED_TIME")
+    @Column(name = "MODIFIED_TIME", updatable = false)
     private Date modifiedTime;
 
 
@@ -159,6 +166,22 @@ public class Report implements Serializable, Initialized {
 
     public void setyFieldName(String yFieldName) {
         this.yFieldName = yFieldName;
+    }
+
+    public Dictionary getChart() {
+        return chart;
+    }
+
+    public void setChart(Dictionary chart) {
+        this.chart = chart;
+    }
+
+    public String getRemark() {
+        return remark;
+    }
+
+    public void setRemark(String remark) {
+        this.remark = remark;
     }
 
     public Boolean getIsDeleted() {

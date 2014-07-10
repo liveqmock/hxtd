@@ -2,16 +2,15 @@ package com.baihui.hxtd.soa.system.controller.interceptor;
 
 import com.baihui.hxtd.soa.base.Constant;
 import com.baihui.hxtd.soa.base.utils.RequestUtil;
+import com.baihui.hxtd.soa.system.DictionaryConstant;
 import com.baihui.hxtd.soa.system.entity.Dictionary;
 import com.baihui.hxtd.soa.system.entity.Function;
-import com.baihui.hxtd.soa.system.service.FunctionService;
 import com.baihui.hxtd.soa.util.JsonDto;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.handler.HandlerInterceptorAdapter;
 
-import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.util.List;
@@ -34,20 +33,13 @@ public class AuthorityFilterFunctionInterceptor extends HandlerInterceptorAdapte
 
     private Logger logger = LoggerFactory.getLogger(this.getClass());
 
-    //    @Value(value = "${system.function.privilegelevel.identity}")
-    private String privilegeLevelAuthorityValue = "01060103";
-
-    @Resource
-    private FunctionService functionService;
-
-    @SuppressWarnings("unchecked")
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws Exception {
         logger.info("功能权限认证");
         logger.debug("客户端请求“{}”", request.getRequestURI());
 
         logger.info("检查请求URL权限级别");
         Dictionary privilegeLevel = (Dictionary) request.getAttribute("privilegeLevel");
-        if (Integer.parseInt(privilegeLevel.getValue()) < Integer.parseInt(privilegeLevelAuthorityValue)) {
+        if (Integer.parseInt(privilegeLevel.getValue()) < Integer.parseInt(DictionaryConstant.FUNCTION_PRIVILEGELEVEL_AUTHORITY)) {
             logger.info("权限认证级别以上，无需进行权限认证");
             return super.preHandle(request, response, handler);
         }

@@ -14,6 +14,7 @@
 <script type="text/javascript">
 $(function(){
 	jsUtil.bindSave(".add", "form"); // 提交表单
+	jsUtil.formatMoney(".money"); //设置千分位
 	var $dates = $("#start,#end"); // 日历设置
 	$dates.datepicker({
 		closeText : '关闭',
@@ -58,7 +59,7 @@ function searchData(action){ // 搜索
 			<td width="15%" align="right"><span class="w_red">*&nbsp;</span>产品名称：</td>
 			<td align="left"><input name="name" type="text" value="${product.name}" class="text_input3 required"/></td>
 			<td width="15%" align="right"><span class="w_red">*&nbsp;</span>产品编号：</td>
-			<td align="left"><input name="code" type="text" value="${product.code}" class="text_input3" readonly/></td>
+			<td align="left"><input name="code" type="text" value="${product.code}" class="text_input3"/></td>
 		</tr>
 		<tr>
 			<td align="right">产品类型：</td>
@@ -76,7 +77,8 @@ function searchData(action){ // 搜索
 			</td>
 			<td align="right"><span class="w_red">*&nbsp;</span>所属项目：</td>
 			<td align="left">
-				<input type="text" id="txt_project" name="projectname" value="${product.project.name}" readonly class="text_input3 required"/>
+				<input type="text" id="txt_project" name="projectname" value="${product.project.name}" readonly 
+					class="text_input3 required cp" onclick="searchData('project');"/>
 				<input type="hidden"id="hide_project_id" name="project.id" value="${product.project.id}"/>
 				<i class="s_inquiry globle_img block_inline ml5 vm cp" title="搜索项目" onclick="searchData('project');"></i>
 				<i class="dump_btn globle_img block_inline ml5 vm cp empty" title="清除"></i>
@@ -84,8 +86,12 @@ function searchData(action){ // 搜索
 		</tr>
 		<tr>
 			<td align="right"><span class="w_red">*&nbsp;</span>出售金额：</td>
-			<td align="left"><input name="sellMoney" type="text" value="${product.sellMoney}" class="text_input3 right required amount"/></td>
-			<td align="right">收益率%：</td>
+			<td align="left">
+				<fmt:formatNumber value="${product.sellMoney}" pattern="###,##0.00" var="sellMoney"/>
+				<input type="text" value="${sellMoney}" class="text_input3 right required money" style="ime-mode:disabled"/>
+				<input type="hidden" name="sellMoney" value="${product.sellMoney}"/>
+			</td>
+			<td align="right">收益率(%)：</td>
 			<td align="left">
 				<input name="minRate" type="text" value="${product.minRate}" class="text_input4 right"/>
 				~&nbsp;<input name="maxRate" type="text" value="${product.maxRate}" class="text_input4 right"/>
@@ -93,7 +99,11 @@ function searchData(action){ // 搜索
 		</tr>
 		<tr>
 			<td align="right">预期收益：</td>
-			<td align="left"><input name="expectProfit" type="text" value="${product.expectProfit}" class="right text_input3"/></td>
+			<td align="left">
+				<fmt:formatNumber value="${product.expectProfit}" pattern="###,##0.00" var="expectProfit"/>
+				<input type="text" value="${expectProfit}" class="right text_input3 money" style="ime-mode:disabled"/>
+				<input type="hidden" name="expectProfit" value="${product.expectProfit}"/>
+			</td>
 			<td align="right">销售期限：</td>
 			<td align="left">
 				<input name="saleLimit" type="text" value="${product.saleLimit}" class="right text_input4"/>
@@ -116,7 +126,7 @@ function searchData(action){ // 搜索
 				<input id="start" name="saleBeginTime" type="text" value="${saleBeginTime}" 
 					class="text_input3 input_close1 required" readonly/>
 			</td>
-			<td align="right">赎回赔率%：</td>
+			<td align="right">赎回赔率(%)：</td>
 			<td align="left"><input name="redeemRate" type="text" value="${product.redeemRate}" class="right text_input3 amount"/></td>
 		</tr>
 		<tr>

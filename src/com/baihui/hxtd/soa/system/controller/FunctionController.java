@@ -4,17 +4,21 @@ import com.baihui.hxtd.soa.base.Constant;
 import com.baihui.hxtd.soa.base.orm.hibernate.HibernatePage;
 import com.baihui.hxtd.soa.base.utils.Search;
 import com.baihui.hxtd.soa.common.service.CommonService;
+import com.baihui.hxtd.soa.system.entity.AuditLog;
 import com.baihui.hxtd.soa.system.entity.Function;
 import com.baihui.hxtd.soa.system.entity.User;
 import com.baihui.hxtd.soa.system.service.DictionaryService;
 import com.baihui.hxtd.soa.system.service.FunctionService;
 import com.baihui.hxtd.soa.system.service.MenuService;
+import com.baihui.hxtd.soa.util.EnumModule;
+import com.baihui.hxtd.soa.util.EnumOperationType;
 import com.baihui.hxtd.soa.util.JsonDto;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
@@ -179,7 +183,10 @@ public class FunctionController {
         User u = (User) request.getSession().getAttribute(Constant.VS_USER);
         logger.info("获得当前操作用户{}", u.getName());
         function.setModifier(u);
-        functionService.save(function);
+        /************ 修改 *****************************/
+		AuditLog auditLog = new AuditLog(EnumModule.FUNCTION.getModuleName(), 
+				function.getId(), function.getName(), EnumOperationType.MODIFY.getOperationType(), u);
+        functionService.modify(function,auditLog);
         JsonDto json = JsonDto.modify(function.getId());
         return json.toString();
     }
@@ -205,7 +212,9 @@ public class FunctionController {
         logger.info("FunctionController.query 获得当前操作的用户{}", u.getName());
         function.setCreator(u);
         function.setModifier(u);
-        functionService.save(function);
+        AuditLog auditLog = new AuditLog(EnumModule.FUNCTION.getModuleName(), 
+				function.getId(), function.getName(), EnumOperationType.ADD.getOperationType(), u);
+        functionService.add(function,auditLog);
         JsonDto json = JsonDto.add(function.getId());
         return json.toString();
     }
@@ -220,12 +229,18 @@ public class FunctionController {
      */
     @ResponseBody
     @RequestMapping(value = "/delete.do")
-    public String delete(Long[] id) {
+    public String delete(Long[] id,ModelMap modelMap) {
         logger.info("FunctionController.delete删除组件id={}", StringUtils.join(id, ","));
         if (commonService.isInitialized(Function.class, id)) {
             return new JsonDto("系统初始化数据不允许修改！").toString();
         }
-        functionService.delete(id);
+        User user = (User)modelMap.get(Constant.VS_USER);
+        AuditLog [] auditLogArr = new AuditLog [id.length];
+		for(int i=0; i<id.length; i++){
+			auditLogArr[i] = new AuditLog(EnumModule.FUNCTION.getModuleName(), 
+					id[i], functionService.getNameById(id[i]), EnumOperationType.DELETE.getOperationType(), user,"功能删除");
+		}
+        functionService.delete(id,auditLogArr);
         JsonDto json = JsonDto.delete();
         return json.toString();
     }

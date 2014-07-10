@@ -72,6 +72,13 @@ public class AuditLog {
 	public AuditLog(){
 		
 	}
+
+    public AuditLog(String moduleName,String recordName, Integer type, User creator) {
+        this.moduleName = moduleName;
+        this.recordName = recordName;
+        this.type = type;
+        this.creator = creator;
+    }
 	
 	public AuditLog(String moduleName, Long recordId, String recordName, Integer type, User creator) {
 		super();

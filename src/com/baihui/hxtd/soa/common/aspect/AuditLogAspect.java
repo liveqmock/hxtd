@@ -2,6 +2,7 @@ package com.baihui.hxtd.soa.common.aspect;
 
 import javax.annotation.Resource;
 
+import com.baihui.hxtd.soa.common.entity.Idable;
 import org.aspectj.lang.JoinPoint;
 import org.aspectj.lang.annotation.AfterReturning;
 import org.aspectj.lang.annotation.Aspect;
@@ -39,13 +40,16 @@ public class AuditLogAspect {
 
     @Pointcut("execution(public * com.baihui.hxtd.soa.*.service..authorization*(..))")
     public void authorization(){}
-    
+
     @Pointcut("execution(public * com.baihui.hxtd.soa.*.service..resetPassword*(..))")
     public void resetPassword(){}
-    
+
+    @Pointcut("execution(public * com.baihui.hxtd.soa.*.service..modifyPwd*(..))")
+    public void modifyPwd(){}
+
     @Pointcut("execution(public * com.baihui.hxtd.soa.*.service..enable*(..))")
     public void enable(){}
-    
+
     @Pointcut("execution(public * com.baihui.hxtd.soa.*.service..disable*(..))")
     public void disable(){}
 
@@ -58,13 +62,27 @@ public class AuditLogAspect {
     @Pointcut("execution(public * com.baihui.hxtd.soa.*.service..import*(..))")
     public void importFile() {}
 
-    @Pointcut("add() || modify() ||  authorization()||resetPassword()|| delete() || exportFile() || importFile()")
+    /**回收站恢复数据*/
+    @Pointcut("execution(public * com.baihui.hxtd.soa.*.service..recovery*(..))")
+    public void recovery() {}
+
+    /**真是删除数据*/
+    @Pointcut("execution(public * com.baihui.hxtd.soa.*.service..deleteReal*(..))")
+    public void deleteReal() {}
+
+    @Pointcut("add() || modify() ||  authorization()||resetPassword()||modifyPwd()|| delete() || exportFile() || importFile()||recovery()||deleteReal()")
     public void anyOperation(){}
 
     @AfterReturning("anyOperation() && args(.., auditLog)")
     public void doAfterReturnAudit(JoinPoint jp, AuditLog auditLog) {
     	logger.debug("==========进入doAfterReturnAudit=========== \n");
-    	auditLogService.save(auditLog);
+        //自动设置记录主键编号
+        Object[] args = jp.getArgs();
+        Object arg = args[0];
+        if (arg != null && arg instanceof Idable) {
+            auditLog.setRecordId(((Idable) arg).getId());
+        }
+        auditLogService.save(auditLog);
     	logger.debug("切入点方法doAfterReturnAudit执行完了 \n");
     }
 

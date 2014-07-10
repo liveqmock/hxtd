@@ -67,11 +67,11 @@ public class MarketActivity implements Serializable {
 	
 	/**预计成本*/
 	@Column(name = "PREDICT_COST")
-	private float predictCost;
+	private double predictCost;
 	
 	/**实际成本*/
 	@Column(name = "REALITY_COST")
-	private float realityCost;
+	private double realityCost;
 	
 	/**活动次数*/
 	@Column(name = "TIMES")
@@ -178,19 +178,19 @@ public class MarketActivity implements Serializable {
 		this.endDate = endDate;
 	}
 
-	public float getPredictCost() {
+	public double getPredictCost() {
 		return predictCost;
 	}
 
-	public void setPredictCost(float predictCost) {
+	public void setPredictCost(double predictCost) {
 		this.predictCost = predictCost;
 	}
 
-	public float getRealityCost() {
+	public double getRealityCost() {
 		return realityCost;
 	}
 
-	public void setRealityCost(float realityCost) {
+	public void setRealityCost(double realityCost) {
 		this.realityCost = realityCost;
 	}
 

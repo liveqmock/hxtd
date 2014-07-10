@@ -50,13 +50,13 @@
 		</tr>
 		<tr>
 			<td align="right">出售金额：</td>
-			<td align="left">${product.sellMoney}</td>
+			<td align="left"><fmt:formatNumber value="${product.sellMoney}" pattern="###,##0.00" var="sellMoney"/>${sellMoney}</td>
 			<td align="right">收益率%：</td>
 			<td align="left">${product.minRate}%~${product.maxRate}%</td>
 		</tr>
 		<tr>
 			<td align="right">预期收益：</td>
-			<td align="left">${product.expectProfit}</td>
+			<td align="left"><fmt:formatNumber value="${product.expectProfit}" pattern="###,##0.00" var="expectProfit"/>${expectProfit}</td>
 			<td align="right">销售期限：</td>
 			<td align="left">${product.saleLimit}${product.saleUnit.key}</td>
 		</tr>

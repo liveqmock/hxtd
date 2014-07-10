@@ -91,7 +91,7 @@ $(function(){
 				</c:if>
 				<c:if test="${VS_HAS_FUNCTIONS.productAdd}">
 					<li>
-						<a href="${ctx}/project/product/toAddPage.do" class="block c_white lh25">
+						<a href="${ctx}/project/product/toAddPage.do" class="block c_white lh25 mr10">
 							<b class="allbtn_l block fl"></b>
 							<b class="allbtn_r pr13 block fl w_auto f14">新&nbsp;&nbsp;增</b>
 						</a>
@@ -160,7 +160,7 @@ $(function(){
 	            </c:choose>
 	        </td>
 	        <td>{$T.row.project.name}</td>
-	        <td align="right">{$T.row.sellMoney}</td>
+	        <td align="right">{jsUtil.formatDiff($T.row.sellMoney, 2)}</td>
 	        <td>{$T.row.minRate}%~{$T.row.maxRate}%</td>
 	        <td>{$T.row.saleLimit}{$T.row.saleUnit.key}</td>
 	        <td>{$T.row.saleBeginTime}</td>

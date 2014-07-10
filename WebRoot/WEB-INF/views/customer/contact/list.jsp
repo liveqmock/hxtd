@@ -14,9 +14,9 @@
 <script type="text/javascript">${applicationScope.VC_PCAS}</script>
 <script type="text/javascript">
 $(function(){
-	jsUtil.datepicker(".time");// 加载日历 
-	new PCAS("province","city","county");// 加载省市县 
-	new Grid().init().bindExport();// 生成Grid
+	jsUtil.datepicker(".time"); //加载日历 
+	new PCAS("province","city","county"); //加载省市县 
+	new Grid().init().bindExport(); //生成Grid
 });
 </script>
 </head>
@@ -91,7 +91,7 @@ $(function(){
 				</c:if>
 				<c:if test="${VS_HAS_FUNCTIONS.contactAdd}">
 					<li>
-						<a href="${ctx}/customer/contact/toAddPage.do" class="block c_white lh25" >
+						<a href="${ctx}/customer/contact/toAddPage.do" class="block c_white lh25 mr10">
 							<b class="allbtn_l block fl"></b>
 							<b class="allbtn_r pr13 block fl w_auto f14">新&nbsp;&nbsp;增</b>
 						</a>

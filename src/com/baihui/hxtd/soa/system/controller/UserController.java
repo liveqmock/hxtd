@@ -616,8 +616,12 @@ public class UserController extends CommonController<User> {
      */
     @ResponseBody
     @RequestMapping(value = "/modifyPassword.do")
-    public String modifyPwd(String password, Long id) {
-        userService.modifyPasswordById(id, password);
+    public String modifyPwd(String password, Long id,HttpServletRequest request) {
+
+    	User u = (User) request.getSession().getAttribute(Constant.VS_USER);
+        AuditLog auditLog = new AuditLog(EnumModule.USER.getModuleName(), 
+        		u.getId(), u.getRealName(), EnumOperationType.MODIFYPASSWORD.getOperationType(), u,"用户修改密码");
+    	userService.modifyPasswordById(id, password,auditLog);
         JsonDto jsonDto = new JsonDto("修改密码成功");
         jsonDto.setSuccessFlag(true);
         return jsonDto.toString();

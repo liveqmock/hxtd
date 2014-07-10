@@ -65,22 +65,22 @@ public class Product {
 	 * 出售金额
 	 */
 	@Column(name = "START_SELL_MONEY")
-	private float sellMoney;
+	private double sellMoney;
 	/**
 	 * 最小利率
 	 */
 	@Column(name = "MIN_ERNING_RATE")
-	private float minRate;
+	private double minRate;
 	/**
 	 * 最大利率
 	 */
 	@Column(name = "MAX_ERNING_RATE")
-	private float maxRate;
+	private double maxRate;
 	/**
 	 * 预期收益
 	 */
 	@Column(name = "EXPECT_PROFIT")
-	private float expectProfit;
+	private double expectProfit;
 	/**
 	 * 销售期限
 	 */
@@ -108,7 +108,7 @@ public class Product {
 	 * 提前赎回率
 	 */
 	@Column(name = "ADVANCE_REDEEM_RATE")
-	private float redeemRate;
+	private double redeemRate;
 	/**
 	 * 提前赎回公式
 	 */
@@ -185,28 +185,28 @@ public class Product {
 	public void setType(Dictionary type) {
 		this.type = type;
 	}
-	public float getSellMoney() {
+	public double getSellMoney() {
 		return sellMoney;
 	}
-	public void setSellMoney(float sellMoney) {
+	public void setSellMoney(double sellMoney) {
 		this.sellMoney = sellMoney;
 	}
-	public float getMinRate() {
+	public double getMinRate() {
 		return minRate;
 	}
-	public void setMinRate(float minRate) {
+	public void setMinRate(double minRate) {
 		this.minRate = minRate;
 	}
-	public float getMaxRate() {
+	public double getMaxRate() {
 		return maxRate;
 	}
-	public void setMaxRate(float maxRate) {
+	public void setMaxRate(double maxRate) {
 		this.maxRate = maxRate;
 	}
-	public float getExpectProfit() {
+	public double getExpectProfit() {
 		return expectProfit;
 	}
-	public void setExpectProfit(float expectProfit) {
+	public void setExpectProfit(double expectProfit) {
 		this.expectProfit = expectProfit;
 	}
 	public Long getSaleLimit() {
@@ -233,10 +233,10 @@ public class Product {
 	public void setSaleEndTime(Date saleEndTime) {
 		this.saleEndTime = saleEndTime;
 	}
-	public float getRedeemRate() {
+	public double getRedeemRate() {
 		return redeemRate;
 	}
-	public void setRedeemRate(float redeemRate) {
+	public void setRedeemRate(double redeemRate) {
 		this.redeemRate = redeemRate;
 	}
 	public String getRedeemFormula() {

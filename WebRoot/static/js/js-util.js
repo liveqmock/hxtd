@@ -276,6 +276,61 @@ var jsUtil = {
 				return false;	
 			}
 		}
+	},
+	formatDiff: function(s, n){ //金额千分位， 默认保留两位小数
+	    var n = n == null ? 2 : n;
+	    s = parseFloat((s + "").replace(/[^\d\.-]/g,"")).toFixed(n) + "";
+	    var l = s.split(".")[0].split("").reverse(), r = s.split(".")[1], t = "";
+	    for(i = 0;i< l.length; i++){
+	        t += l[i] + ((i + 1)%3 == 0 && (i + 1) != l.length ? "," : "");
+	    }
+	    var v = t.split("").reverse().join("") + "." + r;
+	    if(v.match("-,")){
+	        return v.replace("-,", "-");
+	    } else {
+	        return v;
+	    }
+	},
+	formatMoney: function(selector){
+		$(selector).bind({
+			keypress: function(e){
+				if(e.which == 46 || e.which == 45){
+					return true;
+				} else{
+					if((e.which >= 48 && e.which <= 57 && e.shiftKey == false) || e.which == 0 || e.which == 8){
+						return true;
+					} else{
+						if(e.ctrlKey && (e.which == 99 || e.which == 118)){
+							return true;
+						} else{
+							return false;
+						}
+					}
+				}
+			},
+			paste: function(){ //右键复制
+				if(window.clipboardData){ 
+					var s = clipboardData.getData("text");
+					if(!/\D/.test(s)){
+						return true;
+					} else { 
+						return false;
+					}
+				} else {
+					return false;
+				}
+			},
+			dragenter: function(){ //禁止拖拽
+				return false;
+			},
+			blur: function(){
+				var val = this.value;
+				if(val > 3){
+					$(this).next().val(parseFloat(val.split(',').join(""))); //千分位转换成Float
+					this.value = jsUtil.formatDiff(val, 2);
+				}
+			}
+		});
 	}
 };
 $(function(){

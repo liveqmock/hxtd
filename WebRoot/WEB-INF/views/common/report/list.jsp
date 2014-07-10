@@ -1,6 +1,6 @@
 <%--
   报表列表页
-  role: xiayouxue
+  report: xiayouxue
   Date:2014/7/8
 --%>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
@@ -44,12 +44,21 @@
                         </select>
                     </div>
                 </td>
+                <td class="f14" align="right" width="6%">图表类型：</td>
+                <td class="f14" align="left" width="16%">
+                    <div class="pr">
+                        <select name="search_EQ_chart.id" class="select2 pr">
+                            <option value="">全部</option>
+                            <c:forEach items="${charts}" var="item">
+                                <option value="${item.id}">${item.key}</option>
+                            </c:forEach>
+                        </select>
+                    </div>
+                </td>
                 <td width="12%">
                     <a href="javascript:void(0)" class="a_underline block_inline fr w_blue mt5 reset">清除</a>
                     <a href="javascript:void(0)" class="block_inline c_white lh25 fr mr10 submit"><b class="allbtn_l block fl"></b><b class="allbtn_r pr13 block fl w_auto f14">查&nbsp;&nbsp;询</b></a>
                 </td>
-                <td class="f14" align="right" width="6%"></td>
-                <td class="f14" align="left" width="16%"></td>
                 <td class="f14" align="right" width="6%"></td>
                 <td class="f14" align="left" width="16%"></td>
             </tr>
@@ -58,22 +67,45 @@
     </form>
     <div class="cb"></div>
 
+    <div class="ml35 mr35 mt20 block cb cb">
+        <b class="b1"></b>
+        <b class="b2"></b>
+        <b class="b3"></b>
+        <b class="b4"></b>
+
+        <div class="ie_head">
+            <ul class="fl id_table1 mt10 ml10">
+                <c:if test="${VS_HAS_FUNCTIONS.reportDelete}">
+                    <li><a href="javascript:void(0)" uri="${ctx}/common/report/delete.do" class="block c_white lh25 deletesome mr10"><b class="allbtn_l block fl"></b><b class="allbtn_r pr13 block fl w_auto f14">删&nbsp;除</b></a></li>
+                </c:if>
+                <c:if test="${VS_HAS_FUNCTIONS.reportAdd}">
+                    <li><a href="${ctx}/common/report/toAddPage.do" class="block c_white lh25 add mr10"><b class="allbtn_l block fl"></b><b class="allbtn_r pr13 block fl w_auto f14">新&nbsp;增</b></a></li>
+                </c:if>
+                <c:if test="${VS_HAS_FUNCTIONS.reportQuery}">
+                    <li><a href="javascript:void(0)" class="block c_white lh25 mr10 refresh"><b class="allbtn_l block fl"></b><b class="allbtn_r pr13 block fl w_auto f14">刷&nbsp;&nbsp;新</b> </a></li>
+                </c:if>
+            </ul>
+        </div>
+    </div>
+
     <div class="ml35 mr35">
         <table class="cb id_table2 w pr35">
+            <tr>
+                <th style="width:2%"><input type="checkbox" class="checkall"/></th>
+                <th style="width:10%" class="sortable orderby" orderby="name">名称</th>
+                <th style="width:10%">所属模块</th>
+                <th style="width:10%">x轴字段名</th>
+                <th style="width:10%">x轴分组类型</th>
+                <th style="width:10%">y轴字段名</th>
+                <th style="width:10%">y轴聚合类型</th>
+                <th style="width:10%">z轴字段名</th>
+                <th style="width:10%">z轴分组类型</th>
+                <th style="width:10%">图表类型</th>
+                <th style="width:15%">操作</th>
+            </tr>
+            <%@include file="/WEB-INF/template/sort.jsp" %>
             <tbody class="list"></tbody>
             <textarea id="template-tbody" class="template template-tbody">
-                <tr>
-                    <th style="width:2%"><input type="checkbox" class="checkall"/></th>
-                    <th style="width:10%" class="sortable orderby" orderby="name">名称</th>
-                    <th style="width:10%">所属模块</th>
-                    <th style="width:10%">X轴字段名</th>
-                    <th style="width:10%">X轴分组类型</th>
-                    <th style="width:10%">Z轴字段名</th>
-                    <th style="width:10%">Z轴分组类型</th>
-                    <th style="width:10%">Y轴字段名</th>
-                    <th style="width:10%">Y轴聚合类型</th>
-                    <th style="width:10%">操作</th>
-                </tr>
                 {#foreach $T.result as row}
                 <tr class="row {#cycle values=['bg_c_blue','']}">
                     <td><input type="checkbox" class="checkitem" value="{$T.row.id}"/></td>
@@ -86,12 +118,11 @@
                     <td>{$T.row.module.desc}</td>
                     <td>{$T.row.xFieldName}</td>
                     <td>{$T.row.xGroupType.key}</td>
-                    <td>{$T.row.xFieldName}</td>
-                    <td>{$T.row.xGroupType.key}</td>
+                    <td>{$T.row.yFieldName}</td>
+                    <td>{$T.row.yAggregateType.key}</td>
                     <td>{$T.row.zFieldName}</td>
                     <td>{$T.row.zGroupType.key}</td>
-                    <td>{$T.row.yFieldName}</td>
-                    <td>{$T.row.yGroupType.key}</td>
+                    <td>{$T.row.chart.key}</td>
                     <td align="center">
                         <c:if test="${VS_HAS_FUNCTIONS.reportView}">
                             <a href="${ctx}/common/report/toViewPage.do?id={$T.row.id}" class=" block_inline s_detail_btn globle_img ml10" title="详情"></a>
@@ -105,6 +136,9 @@
                             {#if !$T.row.isInitialized}
                             <a href="javascript:void(0)" uri="${ctx}/common/report/delete.do?id={$T.row.id}" class=" block_inline s_dump_btn globle_img ml10 delete" title="删除"></a>
                             {#/if}
+                        </c:if>
+                        <c:if test="${VS_HAS_FUNCTIONS.reportGenerate}">
+                            <a href="${ctx}/common/report/toGeneratePage.do?id={$T.row.id}" class="block_inline s_statistics globle_img ml10" title="报表"></a>
                         </c:if>
                     </td>
                     {#/for}

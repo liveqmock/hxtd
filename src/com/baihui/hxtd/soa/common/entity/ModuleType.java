@@ -24,9 +24,8 @@ public class ModuleType implements Serializable {
     @JoinColumn(name = "TYPE_ID")
     private Dictionary type;
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "MODULE_ID")
-    private Module module;
+    @Column(name = "MODULE_ID")
+    private Long moduleId;
 
     public ModuleType() {
     }
@@ -51,12 +50,11 @@ public class ModuleType implements Serializable {
         this.type = type;
     }
 
-    public Module getModule() {
-        return module;
+    public Long getModuleId() {
+        return moduleId;
     }
 
-    public void setModule(Module module) {
-        this.module = module;
+    public void setModuleId(Long moduleId) {
+        this.moduleId = moduleId;
     }
-
 }

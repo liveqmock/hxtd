@@ -63,9 +63,15 @@ public class NoticeService {
 	        	searchParams.put("GTE_deadTime", new Date());
 	        }
 	        else if("sended".equals(type)){
+	        	if(!searchParams.containsKey("GTE_sentTime")&&
+	        			!searchParams.containsKey("LTE_sentTime")){
+	        		searchParams.put("LTE_sentTime", new Date());
+	        	}
 	        	//默认查未过期且已发送的公告
-	        	searchParams.put("GTE_deadTime", new Date());
-	        	searchParams.put("LTE_sentTime", new Date());
+        		searchParams.put("GTE_deadTime", new Date());
+	        }
+	        else if("dead".equals(type)){
+	        	searchParams.put("LTE_deadTime", new Date());
 	        }
 	        searchParams.put("EQ_isDeleted", false);
 	        Map<String, SearchFilter> filters = Search.parse(searchParams);

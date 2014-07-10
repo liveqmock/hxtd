@@ -7,11 +7,13 @@ import com.baihui.hxtd.soa.base.utils.MD5;
 import com.baihui.hxtd.soa.base.utils.Search;
 import com.baihui.hxtd.soa.base.utils.serial.TierSerial;
 import com.baihui.hxtd.soa.base.utils.serial.TierSerials;
+import com.baihui.hxtd.soa.system.DictionaryConstant;
 import com.baihui.hxtd.soa.system.dao.DictionaryDao;
 import com.baihui.hxtd.soa.system.dao.OrganizationDao;
 import com.baihui.hxtd.soa.system.dao.UserDao;
 import com.baihui.hxtd.soa.system.entity.*;
 import com.fasterxml.jackson.core.JsonProcessingException;
+import org.apache.commons.lang3.Range;
 import org.hibernate.FetchMode;
 import org.hibernate.criterion.DetachedCriteria;
 import org.hibernate.criterion.Order;
@@ -41,10 +43,6 @@ public class UserService {
 
     //    @Value(value = "${system.organization.tier.length}")
     private Integer orgTierLength = 2;
-    //    @Value("${system.user.storestatus.newest}")
-    private String storestatusNewestValue = "01040401";
-    //    @Value("${system.user.storestatus.delayed}")
-    private String storestatusDelayedValue = "01040402";
     //    @Value("${export.counts}")
     private Integer exportCounts = 3000;
 
@@ -54,6 +52,9 @@ public class UserService {
 
     @Resource
     private OrganizationDao organizationDao;
+
+    @Resource
+    private DictionaryDao dictionaryDao;
 
     @Resource
     private MD5 md5;
@@ -107,7 +108,7 @@ public class UserService {
      * 修改用户密码通过主键编号
      */
     @Transactional
-    public int modifyPasswordById(Long id, String password) {
+    public int modifyPasswordById(Long id, String password, AuditLog auditLog) {
         logger.info("修改用户密码通过主键编号");
         return userDao.updatePasswordById(id, md5.getMD5ofStr(password));
     }
@@ -116,7 +117,7 @@ public class UserService {
      * 重置用户密码通过主键编号
      */
     @Transactional
-    public int resetPasswordByIds(Long[] id ,AuditLog [] auditLogArr) {
+    public int resetPasswordByIds(Long[] id, AuditLog[] auditLogArr) {
         logger.info("重置用户密码通过主键编号");
         return userDao.updatePasswordByIds(id, md5.getMD5ofStr("123456"));
     }
@@ -125,7 +126,7 @@ public class UserService {
      * 修改用户启用状态
      */
     @Transactional
-    public int modifyIsActiveByIds(Long[] ids, Boolean isActive,AuditLog [] auditLogArr) {
+    public int modifyIsActiveByIds(Long[] ids, Boolean isActive, AuditLog[] auditLogArr) {
         logger.info("修改用户启用状态");
         return userDao.updateIsActiveByIds(ids, isActive);
     }
@@ -144,7 +145,8 @@ public class UserService {
 
         detachedCriteria.createAlias("organization", "org");
         Long order = organizationDao.getOrderById(organizationId);
-        detachedCriteria.add(organizationDao.selfAndYounger("org", organizationId, TierSerials.getYoungerRange(order, Constant.ORG_ORDER_TIER_LENGTH)));
+        Range<Long> youngerRange = TierSerials.getYoungerRange(order, Constant.ORG_ORDER_TIER_LENGTH);
+        detachedCriteria.add(organizationDao.selfAndYounger("org", organizationId, youngerRange));
         detachedCriteria.add(Restrictions.eq("isDeleted", false));
 
         Map<String, SearchFilter> filters = Search.parse(searchParams);
@@ -203,7 +205,7 @@ public class UserService {
      * 新增
      */
     @Transactional
-    public void add(User user,AuditLog auditLog) {
+    public void add(User user, AuditLog auditLog) {
         logger.info("新增用户");
 
         logger.info("添加默认属性值");
@@ -214,7 +216,7 @@ public class UserService {
         user.setCreatedTime(new Date());
         user.setModifiedTime(user.getCreatedTime());
         user.setPassword(md5.getMD5ofStr(user.getPassword()));
-        user.setStoreStatus(new Dictionary(01040402l));
+        user.setStoreStatus(new Dictionary(dictionaryDao.getIdByValue(DictionaryConstant.USER_STORESTATUS_NEWEST)));
         logger.debug("md5加密密码“{}”", user.getPassword());
         userDao.save(user);
         auditLog.setRecordId(user.getId());
@@ -228,7 +230,7 @@ public class UserService {
     public void addList(List<User> users, AuditLog auditLog) {
         logger.info("批量新增");
         for (User user : users) {
-            add(user,auditLog);
+            add(user, auditLog);
         }
     }
 
@@ -270,7 +272,7 @@ public class UserService {
      * 修改
      */
     @Transactional
-    public void modify(User user,AuditLog auditLog) {
+    public void modify(User user, AuditLog auditLog) {
         logger.info("修改用户");
 
         logger.info("添加默认属性值");
@@ -284,7 +286,7 @@ public class UserService {
      * 批量删除
      */
     @Transactional
-    public void delete(Long[] ids,AuditLog [] auditLogArr) {
+    public void delete(Long[] ids, AuditLog[] auditLogArr) {
         logger.info("删除用户");
         userDao.logicalDelete(ids);
     }
@@ -294,7 +296,7 @@ public class UserService {
      * 授权
      */
     @Transactional
-    public void authorization(Long userId, Long[] roleIds, Long[] functionIds, Long[] componentIds,AuditLog auditLog) {
+    public void authorization(Long userId, Long[] roleIds, Long[] functionIds, Long[] componentIds, AuditLog auditLog) {
         logger.info("授权");
         User user = userDao.get(userId);
 
@@ -327,13 +329,14 @@ public class UserService {
 
     /**
      * getNameById
-     * @Title: getNameById
-     * @Description: 通过id获取名称
+     *
      * @param id
      * @return String
-    */
+     * @Title: getNameById
+     * @Description: 通过id获取名称
+     */
     @Transactional
-	public String getNameById(Long id) {
-		return userDao.get(id).getRealName();
-	}
+    public String getNameById(Long id) {
+        return userDao.get(id).getRealName();
+    }
 }

@@ -122,11 +122,11 @@ public class RoleService {
 
 
     /**
-     * 是否数据管理员
+     * 是否是系统数据管理员
      */
     @Transactional(readOnly = true)
-    public boolean isDataManager(User user) {
-        logger.info("是否数据管理员");
+    public boolean isSysDataManager(User user) {
+        logger.info("是否是系统数据管理员");
 
         if (user.getIsManager()) {
             return true;
@@ -136,8 +136,27 @@ public class RoleService {
                 " from Role role" +
                 " inner join role.owners owner" +
                 " where owner.id=? and role.code=?";
-        return (Long) roleDao.findUnique(hql, user.getId(), Constant.ROLE_MANAGER_CODE) > 0;
+        return (Long) roleDao.findUnique(hql, user.getId(), Constant.ROLE_SYSMANAGER_CODE) > 0;
     }
+    
+    /**
+     * 是否是系统数据管理员
+     */
+    @Transactional(readOnly = true)
+    public boolean isOrgDataManager(User user) {
+        logger.info("是否是组织数据管理员");
+
+        if (user.getIsManager()) {
+            return true;
+        }
+
+        String hql = "select count(role.id)" +
+                " from Role role" +
+                " inner join role.owners owner" +
+                " where owner.id=? and role.code=?";
+        return (Long) roleDao.findUnique(hql, user.getId(), Constant.ROLE_ORGMANAGER_CODE) > 0;
+    }
+    
 
     /**
      * 查找有效角色

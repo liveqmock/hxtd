@@ -45,10 +45,4 @@ public class IndexController {
         return "/system/index";
     }
 
-    @RequestMapping(value = "/workbanch/toViewPage.do")
-    public String workbanchIndex(Model model) {
-//        model.addAttribute(Constant.VS_MENUBAR_FIRST_MENUS, menuService.findByShowlocation(user.getName()));
-        return "/workbanch";
-    }
-
 }

@@ -72,6 +72,56 @@ public class DictionaryConstant {
     /**报表*/
     public final static String MODULE_TYPE_REPORT = "99010101";
 
+
+     /*报表*/
+    /**报表分组类型*/
+    public final static String REPORT_GROUP = "090001";
+
+    /**日期*/
+    public final static String REPORT_GROUP_TIME = "09000101";
+    /**年*/
+    public final static String REPORT_GROUP_TIME_YEAR = "09000101";
+    /**月*/
+    public final static String REPORT_GROUP_TIME_MONTH = "09000102";
+    /**日*/
+    public final static String REPORT_GROUP_TIME_DATE = "09000103";
+    /**时*/
+    public final static String REPORT_GROUP_TIME_HOUR = "09000104";
+    /**分*/
+    public final static String REPORT_GROUP_TIME_MINUTE = "09000105";
+    /**秒*/
+    public final static String REPORT_GROUP_TIME_SECOND = "09000106";
+
+    /**其他*/
+    public final static String REPORT_GROUP_ELSE = "09000199";
+    /**最细化*/
+    public final static String REPORT_GROUP_ELSE_MOSTDETAIL = "0900019901";
+
+
+    /**报表聚合类型*/
+    public final static String REPORT_AGGREGATE = "090002";
+    /**总计*/
+    public final static String REPORT_AGGREGATE_COUNT = "09000201";
+    /**求和*/
+    public final static String REPORT_AGGREGATE_SUM = "09000202";
+    /**平均*/
+    public final static String REPORT_AGGREGATE_AVG = "09000203";
+    /**最大*/
+    public final static String REPORT_AGGREGATE_MAX = "09000204";
+    /**最小*/
+    public final static String REPORT_AGGREGATE_MIN = "09000205";
+
+    /**报表图表类型*/
+    public final static String REPORT_CHART = "090003";
+    /**总计*/
+    public final static String REPORT_CHART_PIE = "09000301";
+    /**求和*/
+    public final static String REPORT_CHART_BAR = "09000302";
+    /**平均*/
+    public final static String REPORT_CHART_LINE = "09000303";
+
+
+
     /*菜单*/
     /**显示位置*/
     public final static String MENU_SHOWLOCATION = "010404";

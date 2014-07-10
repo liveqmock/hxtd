@@ -14,6 +14,8 @@ import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
 import org.hibernate.annotations.DynamicInsert;
+import org.hibernate.annotations.NotFound;
+import org.hibernate.annotations.NotFoundAction;
 
 import com.baihui.hxtd.soa.common.entity.PCAS;
 import com.baihui.hxtd.soa.project.entity.Supplier;
@@ -62,17 +64,20 @@ public class Contact implements Serializable {
 	@JsonIgnore
 	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "SUPPLIER_ID")
+	@NotFound(action = NotFoundAction.IGNORE)
     private Supplier supplier;
 
 	/** 联系人所有者 */
 	@JsonIgnore
 	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "OWNER")
+	@NotFound(action = NotFoundAction.IGNORE)
 	private User owner;
 		
 	/** 线索来源 */
 	@JoinColumn(name = "SOURCE")
 	@ManyToOne(fetch = FetchType.LAZY)
+	@NotFound(action = NotFoundAction.IGNORE)
 	private Dictionary source;
 
 	/** 联系人名称 */
@@ -110,16 +115,19 @@ public class Contact implements Serializable {
 	/** 联系人所在省 */
 	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "PROVINCE")
+	@NotFound(action = NotFoundAction.IGNORE)
 	private PCAS province;
 
 	/** 联系人所在市 */
 	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "CITY")
+	@NotFound(action = NotFoundAction.IGNORE)
 	private PCAS city;
 
 	/** 联系人县 */
 	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "COUNTY")
+	@NotFound(action = NotFoundAction.IGNORE)
 	private PCAS county;
 
 	/** 联系人详细地址 */
@@ -138,6 +146,7 @@ public class Contact implements Serializable {
 	@JsonIgnore
 	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "CREATOR_ID", updatable = false)
+	@NotFound(action = NotFoundAction.IGNORE)
 	private User creator;
 
 	/** 创建时间 */
@@ -148,6 +157,7 @@ public class Contact implements Serializable {
 	/** 最后修改者 */
 	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "MODIFIER_ID")
+	@NotFound(action = NotFoundAction.IGNORE)
 	private User modifier;
 
 	/** 最后修改时间 */

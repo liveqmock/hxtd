@@ -227,12 +227,11 @@ public class ProductController extends CommonController<Product> {
 			auditLogArr[i] = new AuditLog(EnumModule.PRODUCT.getModuleName(), 
 					id[i], productService.getNameById(id[i]), EnumOperationType.DELETE.getOperationType(), user);
 		}
-		productService.delete(user, id, auditLogArr);
-		
-		JsonDto json = new JsonDto("删除成功");
-		json.setSuccessFlag(true);
-		
-		return json.toString();
+		if(productService.delete(user, id, auditLogArr)){
+			return JsonDto.delete(id).toString();
+		} else {
+			return new JsonDto("被删除数据存在关联订单，删除失败!").toString();
+		}
 	}
 	
 	/**

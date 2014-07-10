@@ -18,10 +18,14 @@ import com.baihui.hxtd.soa.order.entity.Order;
  */
 @Repository
 public class OrderDao extends HibernateDAOImpl<Order, Long> {
+	
+	
 	public void delete(Long... id) {
 		for (int i = 0; i < id.length; i++) {
 			super.logicalDelete(id[i]);
 		}
 	}
+	
+	
 	
 }

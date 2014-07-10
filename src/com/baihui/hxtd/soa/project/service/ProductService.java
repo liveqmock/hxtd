@@ -156,7 +156,13 @@ public class ProductService {
      * delete(根据产品主键ID删除记录，支持批量删除)
      * @param id 产品主键IDS
     */
-   public void delete(User user, Long[] ids, AuditLog[] auditLog) {
-	   productDao.logicalDelete(ids);
+   public boolean delete(User user, Long[] ids, AuditLog[] auditLog) {
+	   if(productDao.getOrdersCount(ids) == 0){
+		   productDao.logicalDelete(ids);
+		   return true;
+	   } else {
+		 return false;  
+	   }
+	   
    }
 }

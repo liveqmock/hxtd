@@ -156,7 +156,7 @@ function searchData(action){//搜索弹出框
 				</td>
 				<td align="left">
 					<input type="text" name="phone" value="${com.phone}"
-						class="text_input3 isPhone">
+						class="text_input3 isTel">
 				</td>
 			</tr>
 			<tr>
@@ -191,7 +191,7 @@ function searchData(action){//搜索弹出框
 				</td>
 				<td align="left">
 					<input type="text" name="corporation" value="${com.corporation}"
-						class="text_input3 isTel">
+						class="text_input3">
 				</td>
 			</tr>
 			<tr>

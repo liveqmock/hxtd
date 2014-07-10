@@ -12,7 +12,12 @@ import org.apache.commons.lang3.Range;
  */
 public class DataShift {
 
-    private Boolean isDataManager = false;
+	/**系统数据管理员（可以看到所有数据）*/
+    private Boolean isSysDataManager = false;
+    
+    /**组织数据管理员（可以看到同一组织中的数据）*/
+    private Boolean isOrgDataManager = false;
+    
     private String userFieldName = "owner";
     private String userAlias = "owner";
     private String organizationFieldName = "organization";
@@ -20,21 +25,24 @@ public class DataShift {
     private Long userId;
     private Range<Long> orderRange;
 
-    public DataShift(boolean isDataManager, Long userId, Range<Long> orderRange) {
-        this.isDataManager = isDataManager;
+    public DataShift(boolean isSysDataManager, boolean isOrgDataManager,Long userId, Range<Long> orderRange) {
+        this.isSysDataManager = isSysDataManager;
+        this.isOrgDataManager = isOrgDataManager;
         this.userId = userId;
         this.orderRange = orderRange;
     }
 
-    public DataShift(boolean isDataManager, String userFieldName, Long userId, Range<Long> orderRange) {
-        this.isDataManager = isDataManager;
+    public DataShift(boolean isSysDataManager, boolean isOrgDataManager,String userFieldName, Long userId, Range<Long> orderRange) {
+        this.isSysDataManager = isSysDataManager;
+        this.isOrgDataManager = isOrgDataManager;
         this.userFieldName = userFieldName;
         this.userId = userId;
         this.orderRange = orderRange;
     }
 
-    public DataShift(boolean isDataManager, String organizationFieldName, String organizationAlias, String userFieldName, String userAlias, Long userId, Range<Long> orderRange) {
-        this.isDataManager = isDataManager;
+    public DataShift(boolean isSysDataManager,boolean isOrgDataManager, String organizationFieldName, String organizationAlias, String userFieldName, String userAlias, Long userId, Range<Long> orderRange) {
+        this.isSysDataManager = isSysDataManager;
+        this.isOrgDataManager = isOrgDataManager;
         this.organizationFieldName = organizationFieldName;
         this.organizationAlias = organizationAlias;
         this.userFieldName = userFieldName;
@@ -48,7 +56,7 @@ public class DataShift {
      * 1.根据当前对象创建出修改用户字段名称后的对象
      */
     public DataShift renameUserFieldName(String userFieldName) {
-        return new DataShift(this.getIsDataManager(), userFieldName, this.getUserId(), this.getOrderRange());
+        return new DataShift(this.getIsSysDataManager(),this.getIsOrgDataManager(), userFieldName, this.getUserId(), this.getOrderRange());
     }
 
     /**
@@ -64,8 +72,8 @@ public class DataShift {
         return hql.toString();
     }
 
-    public Boolean getIsDataManager() {
-        return isDataManager;
+    public Boolean getIsSysDataManager() {
+        return isSysDataManager;
     }
 
     public String getUserFieldName() {
@@ -91,5 +99,9 @@ public class DataShift {
     public Range<Long> getOrderRange() {
         return orderRange;
     }
+
+	public Boolean getIsOrgDataManager() {
+		return isOrgDataManager;
+	}
 
 }

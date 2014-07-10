@@ -20,9 +20,6 @@ import com.baihui.hxtd.soa.project.entity.Product;
  */
 @Repository
 public class ProductDao extends HibernateDAOImpl<Product, Long> {
-	
-	
-	
 	/**
 	  * getCount(产品是否关联项目)
 	  * @param id 供应商Id
@@ -32,6 +29,20 @@ public class ProductDao extends HibernateDAOImpl<Product, Long> {
 		String hql = "select count(pro.id) from Product pro where pro.project.id in (:id)";
 		Query query = getSession().createQuery(hql);
 		query.setParameterList("id", id);
+		long count=(Long)query.uniqueResult();
+		return count;
+	}
+	
+	/**
+	  * getOrdersCount(通过产品id获取订单数量)
+	  * @Title: getOrdersCount
+	  * @param productIds 产品id 
+	  * @return long 返回类型
+	 */
+	public long getOrdersCount(Long[] productIds){
+		String hql = "select count(o.id) from Order o where o.product.id in (:id)";
+		Query query = getSession().createQuery(hql);
+		query.setParameterList("id", productIds);
 		long count=(Long)query.uniqueResult();
 		return count;
 	}

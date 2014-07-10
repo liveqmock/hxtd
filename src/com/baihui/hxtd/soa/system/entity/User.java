@@ -1,5 +1,6 @@
 package com.baihui.hxtd.soa.system.entity;
 
+import com.baihui.hxtd.soa.base.Desc;
 import com.baihui.hxtd.soa.common.entity.Initialized;
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
@@ -24,97 +25,123 @@ public class User implements Serializable, Cloneable, Initialized {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "ID")
+    @Desc("主键编号")
     private Long id;
 
+    @Desc("编码")
     @Column(name = "CODE", length = 32, nullable = false)
     private String code;
 
+    @Desc("名称")
     @Column(name = "LOGIN_NAME", length = 32, nullable = false, unique = true, updatable = false)
     private String name;
 
+    @Desc("密码")
     @Column(name = "PASSWORD", length = 64, nullable = false, updatable = false)
     private String password;
 
+    @Desc("是否管理员")
     @Column(name = "IS_MANAGER")
     private Boolean isManager;
 
+    @Desc("是否激活")
     @Column(name = "IS_ACTIVE", nullable = false, updatable = false)
     private Boolean isActive;
 
+    @Desc("数据存储状态")
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "STORE_STATUS", updatable = false)
     private Dictionary storeStatus;
 
+    @Desc("真实姓名")
     @Column(name = "USER_NAME", length = 32, nullable = false)
     private String realName;
 
+    @Desc("性别")
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "SEX_ID")
     private Dictionary sex;
 
+    @Desc("手机")
     @Column(name = "PHONE", length = 32, nullable = false)
     private String phone;
 
+    @Desc("电话")
     @Column(name = "MOBILE", length = 32, nullable = false)
     private String mobile;
 
+    @Desc("电子邮件")
     @Column(name = "EMAIL", length = 32, nullable = false)
     private String email;
 
+    @Desc("QQ")
     @Column(name = "QQ", length = 16, nullable = false)
     private String qq;
 
+    @Desc("职位")
     @Column(name = "JOB_NAME", length = 64, nullable = false)
     private String jobName;
 
+    @Desc("工作状态")
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "JOB_SITUATION")
     private Dictionary jobSituation;
 
+    @Desc("备注")
     @Column(name = "REMARK", length = 512)
     private String remark;
 
-    //TODO 暂时无用
+    @Desc("序号")
     @Column(name = "`ORDER`")
     private Long order;
 
+    @Desc("已被删除")
     @Column(name = "IS_DELETED", nullable = false, updatable = false)
     private Boolean isDeleted;
 
+    @Desc("初始化的")
     @Column(name = "IS_INITIALIZED", nullable = false, updatable = false)
     private Boolean isInitialized;
 
+    @Desc("创建者")
     @JsonBackReference
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "CREATOR_ID", updatable = false)
     private User creator;
 
+    @Desc("创建时间")
     @Column(name = "CREATED_TIME", nullable = false, updatable = false)
     private Date createdTime;
 
+    @Desc("修改者")
     @JsonBackReference
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "MODIFIER_ID")
     private User modifier;
 
+    @Desc("修改时间")
     @Column(name = "MODIFIED_TIME")
     private Date modifiedTime;
 
+    @Desc("所属组织")
     @JsonManagedReference
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "ORGANIZATION_ID")
     private Organization organization;
 
+    @Desc("功能")
     @JsonManagedReference
     @ManyToMany
     @JoinTable(name = "SM_USER_FUNC", joinColumns = {@JoinColumn(name = "USER_ID")}, inverseJoinColumns = {@JoinColumn(name = "FUNC_ID")})
     private Set<Function> functions = new HashSet<Function>();
 
+    @Desc("组件")
     @JsonManagedReference
     @ManyToMany
     @JoinTable(name = "SM_USER_COM", joinColumns = {@JoinColumn(name = "USER_ID")}, inverseJoinColumns = {@JoinColumn(name = "COM_ID")})
     private Set<Component> components = new HashSet<Component>();
 
+    @Desc("角色")
     @JsonManagedReference
     @ManyToMany
     @JoinTable(name = "SM_USER_ROLE", joinColumns = {@JoinColumn(name = "USER_ID")}, inverseJoinColumns = {@JoinColumn(name = "ROLE_ID")})

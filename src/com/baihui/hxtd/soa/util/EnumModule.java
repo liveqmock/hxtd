@@ -67,7 +67,13 @@ public enum EnumModule {
 	NOTICE("notice"),
 	
 	/** 数据字典*/
-	DICTIONARY("dictionary")
+	DICTIONARY("dictionary"),
+	
+	/**回收站*/
+	RECYCLEBIN("recyclebin"),
+
+    /**报表*/
+    REPORT("report")
 	;
 	
 	

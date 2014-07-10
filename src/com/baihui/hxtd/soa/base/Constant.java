@@ -126,11 +126,19 @@ public class Constant {
     /**错误信息*/
     public final static String VM_ERROR = "VM_ERROR";
 
-    /**角色管理员代码*/
-    public final static String ROLE_MANAGER_CODE = "2";
+    /**角色系统数据管理员代码*/
+    public final static String ROLE_SYSMANAGER_CODE = "2";
+    
+    /**角色组织数据管理员代码*/
+    public final static String ROLE_ORGMANAGER_CODE = "5";
 
     /**组织序号层次长度*/
     public final static int ORG_ORDER_TIER_LENGTH = 2;
 
+    
+    /**导入线索的列数*/
+    public final static int EXCEL_IMPORT_lEAD_COLUMNS = 20;
+    
+   
 
 }

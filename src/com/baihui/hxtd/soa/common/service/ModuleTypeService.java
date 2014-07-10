@@ -1,8 +1,6 @@
 package com.baihui.hxtd.soa.common.service;
 
 import com.baihui.hxtd.soa.common.dao.ModuleTypeDao;
-import com.baihui.hxtd.soa.common.entity.Module;
-import com.baihui.hxtd.soa.system.dao.DictionaryDao;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
@@ -25,26 +23,14 @@ public class ModuleTypeService {
     @Resource
     private ModuleTypeDao moduleTypeDao;
 
-    @Resource
-    private DictionaryDao dictionaryDao;
-
     /**
-     * 查找模块通过类型主键编号
+     * 查找模块主键编号通过类型编号
      */
     @Transactional(readOnly = true)
-    public List<Module> findByTypeId(Long typeId) {
-        logger.info("查找模块通过类型主键编号");
-        String hql = "select moduleType.module from ModuleType moduleType inner join moduleType.type type where type.id=?";
-        return moduleTypeDao.find(hql, typeId);
-    }
-
-    /**
-     * 查找模块通过类型值
-     */
-    @Transactional(readOnly = true)
-    public List<Module> findByTypeValue(String typeValue) {
-        logger.info("查找模块通过类型值");
-        return findByTypeId(dictionaryDao.getIdByValue(typeValue));
+    public List<Long> findModuleIdByTypeId(Long typeId) {
+        logger.info("查找模块主键编号通过类型编号");
+        logger.debug("类型编号=“{}”", typeId);
+        return moduleTypeDao.findModuleIdByTypeId(typeId);
     }
 
 

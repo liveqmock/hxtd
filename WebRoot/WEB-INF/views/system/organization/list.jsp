@@ -188,11 +188,6 @@
                         <a href="${ctx}/system/user/toModifyPage.do?id={$T.row.id}" class=" block_inline s_edit_btn globle_img ml10" title="编辑"></a>
                         {#/if}
                     </c:if>
-                    <c:if test="${VS_HAS_FUNCTIONS.userDelete}">
-                        {#if !$T.row.isInitialized}
-                        <a href="javascript:void(0)" uri="${ctx}/system/user/delete.do?id={$T.row.id}" class=" block_inline s_dump_btn  globle_img ml10 delete" title="删除"></a>
-                        {#/if}
-                    </c:if>
                     <c:if test="${VS_HAS_FUNCTIONS.userEnable}">
                         {#if !$T.row.isInitialized&&!$T.row.isActive}
                         <a href="javascript:void(0)" uri="${ctx}/system/user/enable.do?id={$T.row.id}" class="globle_img h_on block_inline enable" title="启用"></a>
@@ -208,6 +203,11 @@
                     </c:if>
                     <c:if test="${VS_HAS_FUNCTIONS.userResetPassword}">
                         <a href="javascript:void(0)" uri="${ctx}/system/user/resetPassword.do?id={$T.row.id}" class=" block_inline h_xiupass globle_img ml10 resetpassword" title="重置密码"></a>
+                    </c:if>
+                    <c:if test="${VS_HAS_FUNCTIONS.userDelete}">
+                        {#if !$T.row.isInitialized}
+                        <a href="javascript:void(0)" uri="${ctx}/system/user/delete.do?id={$T.row.id}" class=" block_inline s_dump_btn  globle_img ml10 delete" title="删除"></a>
+                        {#/if}
                     </c:if>
                 </td>
             </tr>
@@ -286,13 +286,13 @@
                             <a href="${ctx}/system/organization/toModifyPage.do?id={$T.row.id}" class="block_inline s_edit_btn globle_img ml10" title="编辑"></a>
                             {#/if}
                         </c:if>
+                        <c:if test="${VS_HAS_FUNCTIONS.organizationAuthorization}">
+                            <a href="${ctx}/system/organization/toAuthorizationPage.do?id={$T.row.id}" class=" block_inline h_shouquan globle_img ml10 authorization" title="授权"></a>
+                        </c:if>
                         <c:if test="${VS_HAS_FUNCTIONS.organizationDelete}">
                             {#if !$T.row.isInitialized}
                             <a href="javascript:void(0)" uri="${ctx}/system/organization/delete.do?id={$T.row.id}" class="block_inline s_dump_btn globle_img ml10 delete" title="删除"></a>
                             {#/if}
-                        </c:if>
-                        <c:if test="${VS_HAS_FUNCTIONS.organizationAuthorization}">
-                            <a href="${ctx}/system/organization/toAuthorizationPage.do?id={$T.row.id}" class=" block_inline h_shouquan globle_img ml10 authorization" title="授权"></a>
                         </c:if>
                     </td>
                 </tr>

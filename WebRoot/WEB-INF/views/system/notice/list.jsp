@@ -24,7 +24,6 @@
         	//加载时间控件
             jsUtil.datepicker(".time");
             var grid = new Grid().init().bindExport();
-            
         });
         
     </script>
@@ -42,6 +41,9 @@
 		    <option value="all">全部</option>
 		    <option value="sended">已发公告</option>
 		    <option value="unsend">未发公告</option>
+		    <c:if test="${isManager}">
+		    <option value="dead">过期公告</option>
+		    </c:if>
 		    </select>
 		</td>
 		<td class="f14 namewidth1" align="right">发送时间：</td>

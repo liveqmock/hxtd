@@ -4,6 +4,7 @@ import com.baihui.hxtd.soa.base.orm.hibernate.HibernatePage;
 import com.baihui.hxtd.soa.base.utils.serial.TierSerial;
 import com.baihui.hxtd.soa.base.utils.serial.TierSerials;
 import com.baihui.hxtd.soa.common.dao.CommonDao;
+import com.baihui.hxtd.soa.common.entity.Idable;
 import com.baihui.hxtd.soa.common.entity.Initialized;
 import com.baihui.hxtd.soa.common.entity.Orderable;
 import com.baihui.hxtd.soa.common.entity.TreeNode;
@@ -34,6 +35,33 @@ public class CommonService {
 
     @Resource
     private CommonDao commonDao;
+
+    /**
+     * 查找实体类通过主键编号
+     */
+    public <T extends Idable> List<T> findByIds(List<T> entities, List<Long> ids) {
+        List<T> targetEntities = new ArrayList<T>();
+        for (int i = 0; i < ids.size(); i++) {
+            T entity = findById(entities, ids.get(i));
+            if (entity != null) {
+                targetEntities.add(entity);
+            }
+        }
+        return targetEntities;
+    }
+
+    /**
+     * 查找实体类通过主键编号
+     */
+    public <T extends Idable> T findById(List<T> entities, Long id) {
+        for (int i = 0; i < entities.size(); i++) {
+            T entity = entities.get(i);
+            if (entity.getId() != null && entity.getId().equals(id)) {
+                return entity;
+            }
+        }
+        return null;
+    }
 
     /**
      * 是否初始化数据

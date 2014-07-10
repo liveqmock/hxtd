@@ -245,6 +245,46 @@ public class ReflectionUtils {
     }
 
     /**
+     * 在集合中查找字段名称和字段值匹配的元素
+     */
+    public static <T> T findNameValueMatched(List<T> list, String fieldName, Object fieldValue) {
+        for (T t : list) {
+            if (fieldValue.equals(invokeGetterMethod(t, fieldName))) {
+                return t;
+            }
+        }
+        return null;
+    }
+
+    /**
+     * 在集合中查找字段名称和字段值匹配的元素
+     */
+    public static <T> List<T> findNameValueMatcheds(List<T> list, String fieldName, Object fieldValue) {
+        List<T> matched = new ArrayList<T>();
+        for (T t : list) {
+            if (fieldValue.equals(invokeGetterMethod(t, fieldName))) {
+                matched.add(t);
+            }
+        }
+        return matched;
+    }
+
+    /**
+     * 在集合中查找字段名称和字段值匹配的元素
+     */
+    public static <T> List<T> findNameValueMatched(List<T> list, String fieldName, List fieldValues) {
+        List<T> targetList = new ArrayList<T>();
+        for (int i = 0; i < fieldValues.size(); i++) {
+            T t = findNameValueMatched(list, fieldName, fieldValues.get(i));
+            if (t != null) {
+                targetList.add(t);
+            }
+        }
+        return targetList;
+    }
+
+
+    /**
      * 获取层级字段值
      */
     public static Object getTierFieldValue(Object object, String fieldName) {

@@ -21,7 +21,6 @@ import javax.annotation.Resource;
 import javax.servlet.ServletContext;
 import javax.servlet.ServletContextEvent;
 import java.io.IOException;
-import java.lang.reflect.Field;
 import java.util.*;
 
 /**
@@ -48,11 +47,6 @@ public class InitApplicationConstant implements StartupListener {
      * 系统组件
      */
     public final static List<Component> COMPONENTS = new ArrayList<Component>();
-
-    /**
-     * 系统模块
-     */
-    public final static List<Module> MODULES = new ArrayList<Module>();
 
     @Resource
     private PCASService pcasService;
@@ -81,7 +75,6 @@ public class InitApplicationConstant implements StartupListener {
         loadSystemPrivi();
         loadPCAS(servletContext);
         loadModules();
-        loadFields();
     }
 
     /**
@@ -184,33 +177,36 @@ public class InitApplicationConstant implements StartupListener {
         servletContext.setAttribute(Constant.VC_PCAS, "var pcasJson=" + json.toString());
     }
 
+
     /**
-     * 加载系统模块
+     * 系统模块
+     */
+    public final static List<Module> MODULES = new ArrayList<Module>();
+
+
+    /**
+     * 加载系统模块及模块字段
      */
     private void loadModules() {
-        logger.info("加载系统模块");
+        logger.info("加载系统模块及模块字段");
+
+        //存储模块
         MODULES.addAll(moduleService.findAll());
         logger.debug("系统模块数目“{}”", MODULES.size());
 
-    }
-
-    public final static Map<Class, Field[]> FIELDS = new HashMap<Class, Field[]>();
-
-    /**
-     * 加载系统字段
-     */
-    private void loadFields() {
-        logger.info("加载系统字段");
+        //设置模块class
         String entityClass = null;
         try {
             for (int i = 0; i < MODULES.size(); i++) {
-                entityClass = MODULES.get(i).getEntityClass();
-                Class clazz = Class.forName(entityClass);
-                FIELDS.put(clazz, clazz.getDeclaredFields());
-                logger.debug("{}字段数目“{}”", entityClass, FIELDS.get(clazz).length);
+                Module module = MODULES.get(i);
+                entityClass = module.getEntityClass();
+                module.setEntityClazz(Class.forName(entityClass));
+                module.setFields(module.getEntityClazz().getDeclaredFields());
+                module.setModuleFields(moduleService.toModuleField(module.getFields()));
             }
         } catch (ClassNotFoundException e) {
-            throw new RuntimeException(String.format("加载系统字段异常，未找到对应的类%s！", entityClass), e);
+            throw new RuntimeException(String.format("设置模块class异常，未找到对应的类%s！", entityClass), e);
         }
     }
+
 }

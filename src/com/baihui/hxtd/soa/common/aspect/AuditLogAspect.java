@@ -80,7 +80,10 @@ public class AuditLogAspect {
         Object[] args = jp.getArgs();
         Object arg = args[0];
         if (arg != null && arg instanceof Idable) {
-            auditLog.setRecordId(((Idable) arg).getId());
+            Idable idable = (Idable) arg;
+            if (idable.getId() != null) {
+                auditLog.setRecordId(idable.getId());
+            }
         }
         auditLogService.save(auditLog);
     	logger.debug("切入点方法doAfterReturnAudit执行完了 \n");

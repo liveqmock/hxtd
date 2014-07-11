@@ -43,7 +43,7 @@
                         return this;
                     }
                     var option = $this.find("option:selected");
-                    var params = {moduleId: option.parent().attr("data-id"), fieldName: option.attr("data-name")};
+                    var params = {moduleId: option.parent().attr("data-id"), fieldName: option.val()};
                     RcmsAjax.ajaxNoMsg("${ctx}/common/report/findGroupType.docomp", function (data) {
                         var items = data.result.result;
                         groupType.setTemplateElement("template-group").processTemplate(items);
@@ -89,7 +89,7 @@
                 {#foreach $T as module}
                 <optgroup label="{$T.module.desc}" data-id="{$T.module.id}">
                     {#foreach $T.module.moduleFields as field}
-                    <option value="{$T.module.name}.{$T.field.name}" label="{$T.field.desc}" data-name="{$T.field.name}">{$T.field.desc}</option>
+                    <option value="{$T.field.name}" label="{$T.field.desc}">{$T.field.desc}</option>
                     {#/for}
                 </optgroup>
                 {#/for}
@@ -127,7 +127,7 @@
                     <td align="right" width="15%">图表类型：</td>
                     <td align="left">
                         <div class="pr">
-                            <select name="search_EQ_chart.id" class="{required:true} select1 pr">
+                            <select name="chart.id" class="{required:true} select1 pr">
                                 <option value="">--无--</option>
                                 <c:forEach items="${charts}" var="item">
                                     <option value="${item.id}" ${item.id==report.chart.id?"selected":""}>${item.key}</option>
@@ -144,8 +144,7 @@
                                 <c:forEach items="${fieldModules}" var="fieldModule">
                                     <optgroup label="${fieldModule.desc}" data-id="${fieldModule.id}">
                                         <c:forEach items="${fieldModule.moduleFields}" var="field">
-                                            <c:set var="fieldName" value="${fieldModule.name}.${field.name}"/>
-                                            <option value="${fieldName}" label="${field.desc}" data-name="${field.name}" ${fieldName==report.xFieldName?"selected":""}>${field.desc}</option>
+                                            <option value="${field.name}" label="${field.desc}" ${field.name==report.xFieldName?"selected":""}>${field.desc}</option>
                                         </c:forEach>
                                     </optgroup>
                                 </c:forEach>
@@ -173,8 +172,7 @@
                                 <c:forEach items="${fieldModules}" var="fieldModule">
                                     <optgroup label="${fieldModule.desc}" data-id="${fieldModule.id}">
                                         <c:forEach items="${fieldModule.moduleFields}" var="field">
-                                            <c:set var="fieldName" value="${fieldModule.name}.${field.name}"/>
-                                            <option value="${fieldName}" label="${field.desc}" data-name="${field.name}" ${fieldName==report.yFieldName?"selected":""}>${field.desc}</option>
+                                            <option value="${field.name}" label="${field.desc}" data-name="${field.name}" ${field.name==report.yFieldName?"selected":""}>${field.desc}</option>
                                         </c:forEach>
                                     </optgroup>
                                 </c:forEach>

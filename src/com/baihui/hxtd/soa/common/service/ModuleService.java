@@ -15,6 +15,7 @@ import javax.annotation.Resource;
 import java.lang.reflect.Field;
 import java.lang.reflect.ParameterizedType;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collection;
 import java.util.List;
 
@@ -70,11 +71,7 @@ public class ModuleService {
         Field[] sourceFields = sourceModule.getFields();
         for (int i = 0; i < sourceFields.length; i++) {
             Field field = sourceFields[i];
-            Class fieldType = field.getType();
-            if (fieldType.isAssignableFrom(Collection.class)) {
-                ParameterizedType pt = (ParameterizedType) field.getGenericType();
-                fieldType = (Class) pt.getActualTypeArguments()[0];
-            }
+            Class fieldType = getFieldType(field);
             for (int j = 0; j < filterModules.size(); j++) {
                 Module module = filterModules.get(j);
                 if (fieldType.equals(module.getEntityClazz())) {
@@ -88,14 +85,42 @@ public class ModuleService {
     }
 
     /**
+     * 获取模块通过主键编号
+     */
+    public static Module findById(Long id) {
+        return ReflectionUtils.findNameValueMatched(InitApplicationConstant.MODULES, "id", id);
+    }
+
+    /**
+     * 获取字段通过字段名
+     */
+    public static Field findFieldByName(Field[] fields, String name) {
+        return ReflectionUtils.findNameValueMatched(Arrays.asList(fields), "name", name);
+    }
+
+    /**
+     * 获取字段类型
+     */
+    @SuppressWarnings("unchecked")
+    public static Class getFieldType(Field field) {
+        Class fieldType = field.getType();
+        if (fieldType.isAssignableFrom(Collection.class)) {
+            ParameterizedType pt = (ParameterizedType) field.getGenericType();
+            fieldType = (Class) pt.getActualTypeArguments()[0];
+        }
+        return fieldType;
+    }
+
+    /**
      * 查找模块及其关联模块
      */
     public List<Module> findModuleAndAssociation(Long id) {
-        Module sourceModule = ReflectionUtils.findNameValueMatched(InitApplicationConstant.MODULES, "id", id);
-        List<Module> referModules = findAssociation(sourceModule, InitApplicationConstant.MODULES);
-        List<Module> listModules = new ArrayList<Module>();
-        listModules.add(sourceModule);
-        listModules.addAll(referModules);
+//        Module sourceModule = ReflectionUtils.findNameValueMatched(InitApplicationConstant.MODULES, "id", id);
+//        List<Module> referModules = findAssociation(sourceModule, InitApplicationConstant.MODULES);
+//        List<Module> listModules = new ArrayList<Module>();
+//        listModules.add(sourceModule);
+//        listModules.addAll(referModules);
+        List<Module> listModules = ReflectionUtils.findNameValueMatcheds(InitApplicationConstant.MODULES, "id", id);
         return listModules;
     }
 

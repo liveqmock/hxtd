@@ -70,18 +70,19 @@ public class DictionaryService {
      * @param entity 参数类型
      * @return void 返回类型
      */
-    public void add(Dictionary entity,AuditLog auditLog) {
+    public void add(Dictionary entity, AuditLog auditLog) {
         entity.setIsInitialized(false);
         dictionaryDao.save(entity);
         auditLog.setRecordId(entity.getId());
     }
-    
+
     /**
      * 修改
+     *
      * @param entity
      * @param user
      */
-    public void modify(Dictionary entity,AuditLog auditLog ) {
+    public void modify(Dictionary entity, AuditLog auditLog) {
         entity.setIsInitialized(false);
         dictionaryDao.save(entity);
     }
@@ -122,7 +123,7 @@ public class DictionaryService {
      * @param id 字典主键IDS
      * @Description: 根据字典主键ID删除，支持批量删除
      */
-    public void delete(Long[] id,AuditLog [] auditLogArr) {
+    public void delete(Long[] id, AuditLog[] auditLogArr) {
         dictionaryDao.logicalDelete(id);
     }
 
@@ -162,6 +163,15 @@ public class DictionaryService {
         return dictionaryDao.findChildren(parentValue);
     }
 
+
+    /**
+     * 获取自己和兄弟节点
+     */
+    @Transactional(readOnly = true)
+    public List<Dictionary> findBrother(String value) {
+        return dictionaryDao.findBrother(value);
+    }
+
     /**
      * findChildren(获取字典集合)
      *
@@ -178,26 +188,28 @@ public class DictionaryService {
         return dictionaryDao.find(hql, dicType);
     }
 
-	/**
+    /**
      * getNameById
-     * @Title: getNameById
-     * @Description: 通过id获取字典key值
+     *
      * @param id
      * @return String
-    */
+     * @Title: getNameById
+     * @Description: 通过id获取字典key值
+     */
     @Transactional
-	public String getNameById(Long id) {
-		return dictionaryDao.get(id).getKey();
-	}
-    
+    public String getNameById(Long id) {
+        return dictionaryDao.get(id).getKey();
+    }
+
     /**
      * 根据parentId 和 指定的key获取value
+     *
      * @param key
      * @param parentId
      * @return
      */
-    public Dictionary getValue(String key,Long parentId){
-    	 return dictionaryDao.getValue(key, parentId);
+    public Dictionary getValue(String key, Long parentId) {
+        return dictionaryDao.getValue(key, parentId);
     }
 
 

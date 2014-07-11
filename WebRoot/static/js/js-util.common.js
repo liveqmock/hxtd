@@ -764,7 +764,7 @@ jsUtil.bindSave = function (submitselector, formselector) {
                 }
             }, function () {
                 setTimeout(function () {Grid.prototype.enableButton($this, Grid.defaults.enableButtonClass, Grid.defaults.disableButtonClass, "")}, 800);
-            }, $form.formSerialize());
+            }, $form.find(":input[name][value!='']").fieldSerialize());
         } else {
             return false;
         }

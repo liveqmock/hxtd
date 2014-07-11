@@ -80,17 +80,17 @@ public class DictionaryConstant {
     /**日期*/
     public final static String REPORT_GROUP_TIME = "09000101";
     /**年*/
-    public final static String REPORT_GROUP_TIME_YEAR = "09000101";
+    public final static String REPORT_GROUP_TIME_YEAR = "0900010101";
     /**月*/
-    public final static String REPORT_GROUP_TIME_MONTH = "09000102";
+    public final static String REPORT_GROUP_TIME_MONTH = "0900010102";
     /**日*/
-    public final static String REPORT_GROUP_TIME_DATE = "09000103";
+    public final static String REPORT_GROUP_TIME_DATE = "0900010103";
     /**时*/
-    public final static String REPORT_GROUP_TIME_HOUR = "09000104";
+    public final static String REPORT_GROUP_TIME_HOUR = "0900010104";
     /**分*/
-    public final static String REPORT_GROUP_TIME_MINUTE = "09000105";
+    public final static String REPORT_GROUP_TIME_MINUTE = "0900010105";
     /**秒*/
-    public final static String REPORT_GROUP_TIME_SECOND = "09000106";
+    public final static String REPORT_GROUP_TIME_SECOND = "0900010106";
 
     /**其他*/
     public final static String REPORT_GROUP_ELSE = "09000199";

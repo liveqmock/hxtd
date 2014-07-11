@@ -1,6 +1,8 @@
 package com.baihui.hxtd.soa.common.service;
 
+import com.baihui.hxtd.soa.base.InitApplicationConstant;
 import com.baihui.hxtd.soa.base.orm.hibernate.HibernatePage;
+import com.baihui.hxtd.soa.base.utils.ReflectionUtils;
 import com.baihui.hxtd.soa.base.utils.Search;
 import com.baihui.hxtd.soa.base.utils.mapper.JsonMapper;
 import com.baihui.hxtd.soa.base.utils.report.GraphReport;
@@ -13,7 +15,9 @@ import com.baihui.hxtd.soa.system.dao.DictionaryDao;
 import com.baihui.hxtd.soa.system.dao.UserDao;
 import com.baihui.hxtd.soa.system.entity.AuditLog;
 import com.baihui.hxtd.soa.system.entity.Dictionary;
+import com.baihui.hxtd.soa.system.entity.User;
 import com.baihui.hxtd.soa.system.service.DataShift;
+import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.time.DateUtils;
 import org.hibernate.FetchMode;
 import org.hibernate.criterion.DetachedCriteria;
@@ -21,11 +25,13 @@ import org.hibernate.criterion.Projection;
 import org.hibernate.criterion.Restrictions;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.asm.Opcodes;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springside.modules.persistence.SearchFilter;
 
 import javax.annotation.Resource;
+import java.lang.reflect.Field;
 import java.text.SimpleDateFormat;
 import java.util.*;
 
@@ -36,6 +42,7 @@ import java.util.*;
  * @date 2014/7/8
  */
 @Service
+@SuppressWarnings("unchecked")
 public class ReportService {
 
     private Logger logger = LoggerFactory.getLogger(this.getClass());
@@ -73,33 +80,82 @@ public class ReportService {
 //        criteria.add(Restrictions.between("createdTime", begin, end));
 //
 //        List rows = criteria.getExecutableCriteria(reportDao.getSession()).list();
-
         Module module = report.getModule();
         String entityName = module.getEntityClazz().getSimpleName();
         String entityAlias = module.getName();
-        String hql = String.format("select :select from %s %s :inner where  :where group by :group", entityName, entityAlias);
+        String hql = String.format("select :select from %s %s :association where :where group by :group", entityName, entityAlias);
         List<String> selectParts = new ArrayList<String>();
-        List<String> innerParts = new ArrayList<String>();
+        List<String> associationParts = new ArrayList<String>();
         List<String> groupParts = new ArrayList<String>();
+        String xFieldName = report.getxFieldName();
         Dictionary xGroupType = report.getxGroupType();
         if (xGroupType.getValue().startsWith(DictionaryConstant.REPORT_GROUP_TIME)) {
             String function = TIME_GROUP_FUNCTION.get(xGroupType.getValue());
-            selectParts.add(String.format("%s(%s)", function, report.getxFieldName()));
-
-
+            String xSelectItem = String.format("%s(%s.%s)", function, entityAlias, xFieldName);
+            selectParts.add(xSelectItem);
+            groupParts.add(xSelectItem);
         } else if (xGroupType.getValue().startsWith(DictionaryConstant.REPORT_GROUP_ELSE)) {
-
+            if (xGroupType.getValue().equals(DictionaryConstant.REPORT_GROUP_ELSE_MOSTDETAIL)) {
+                String xSelectItem = String.format("%s.%s", entityAlias, xFieldName);
+                selectParts.add(xSelectItem);
+                groupParts.add(xSelectItem);
+            }
         }
 
+        String zFieldName = report.getzFieldName();
+        Dictionary zGroupType = report.getzGroupType();
+        if (zFieldName != null && report.getzGroupType() != null) {
+            if (zGroupType.getValue().startsWith(DictionaryConstant.REPORT_GROUP_TIME)) {
+                String function = TIME_GROUP_FUNCTION.get(zGroupType.getValue());
+                String xSelectItem = String.format("%s(%s.%s)", function, entityAlias, zFieldName);
+                selectParts.add(xSelectItem);
+                groupParts.add(xSelectItem);
+            } else if (zGroupType.getValue().startsWith(DictionaryConstant.REPORT_GROUP_ELSE)) {
+                if (zGroupType.getValue().equals(DictionaryConstant.REPORT_GROUP_ELSE_MOSTDETAIL)) {
+                    String xSelectItem = String.format("%s.%s", entityAlias, zFieldName);
+                    selectParts.add(xSelectItem);
+                    groupParts.add(xSelectItem);
+                }
+            }
+        }
 
+        String function = AGGREGATE_FUNCTION.get(report.getyAggregateType().getValue());
+        String ySelectItem = String.format("%s(%s.%s)", function, entityAlias, report.getyFieldName());
+        selectParts.add(ySelectItem);
+
+        hql = hql.replaceFirst(":select", StringUtils.join(selectParts, ","));
+        hql = hql.replaceFirst(":association", StringUtils.join(associationParts, ","));
+        hql = hql.replaceFirst(":where", String.format("%s.%s between ? and ?", entityAlias, fieldName));
+        hql = hql.replaceFirst(":group", StringUtils.join(groupParts, ","));
+
+        logger.debug("hql={}", hql);
+        List rows = reportDao.find(hql, min, max);
         logger.debug("rows:{}", JsonMapper.nonEmptyMapper().toJson(rows));
 
         TwoDimensionReportData reportData = new TwoDimensionReportData();
-        reportData.setTitle("每个月用户的注册量");
+        reportData.setTitle(report.getName());
 
-        reportData.setxAxisTitle("5~6月");
-        reportData.setxAxises(dateValues(begin, end, Calendar.MONTH));
-        reportData.setxAxisTitles(reportData.getxAxises());
+        reportData.setxAxisTitle("x轴");
+        Field[] fields = ModuleService.findById(report.getModule().getId()).getFields();
+        if (xGroupType.getValue().startsWith(DictionaryConstant.REPORT_GROUP_TIME)) {
+            reportData.setxAxises(dateValues(min, max, TIME_GROUP_CALENDAR_UNIT.get(xGroupType.getValue())));
+            reportData.setxAxisTitles(reportData.getxAxises());
+        } else if (xGroupType.getValue().startsWith(DictionaryConstant.REPORT_GROUP_ELSE)) {
+            Class type = ModuleService.getFieldType(ModuleService.findFieldByName(fields, report.getxFieldName()));
+            if (type.equals(Dictionary.class)) {
+                List<Dictionary> xRange = dictionaryDao.findBrother(report.getxGroupType().getValue());
+                List<Long> ids = ReflectionUtils.invokeGetterMethod(xRange, "id");
+                reportData.setxAxises(ids);
+                List<String> names = ReflectionUtils.invokeGetterMethod(xRange, "name");
+                reportData.setxAxisTitles(names);
+            } else {
+                String xSelectItem = String.format("%s.%s", entityAlias, xFieldName);
+                String xAxisHql = String.format("select distinct %s from %s %s where %s.%s between ? and ? order by %s", xSelectItem, entityName, entityAlias, entityAlias, fieldName, xSelectItem);
+                List xRange = reportDao.find(xAxisHql, min, max);
+                reportData.setxAxises(xRange);
+                reportData.setxAxisTitles(xRange);
+            }
+        }
 
         reportData.setyAxisTitle("注册量");
         reportData.setyAxises(new ArrayList());
@@ -154,7 +210,14 @@ public class ReportService {
         return targetDictionaries;
     }
 
+    /**
+     * 时间分组函数映射
+     */
     private static Map<String, String> TIME_GROUP_FUNCTION = new HashMap<String, String>();
+
+    /**
+     * 聚合函数映射
+     */
     private static Map<String, String> AGGREGATE_FUNCTION = new HashMap<String, String>();
 
 
@@ -197,6 +260,7 @@ public class ReportService {
 
 
     private static Map<Integer, String> patterns = new HashMap<Integer, String>();
+    private static Map<String, Integer> TIME_GROUP_CALENDAR_UNIT = new HashMap<String, Integer>();
 
     static {
         patterns.put(Calendar.YEAR, "yyyy");
@@ -209,10 +273,16 @@ public class ReportService {
         patterns.put(Calendar.YEAR, "yyyy");
         patterns.put(Calendar.MONTH, "M");
         patterns.put(Calendar.DAY_OF_MONTH, "d");
-        patterns.put(Calendar.HOUR, "H");
+        patterns.put(Calendar.HOUR_OF_DAY, "H");
         patterns.put(Calendar.MINUTE, "m");
         patterns.put(Calendar.SECOND, "s");
 
+        TIME_GROUP_CALENDAR_UNIT.put(DictionaryConstant.REPORT_GROUP_TIME_YEAR, Calendar.YEAR);
+        TIME_GROUP_CALENDAR_UNIT.put(DictionaryConstant.REPORT_GROUP_TIME_MONTH, Calendar.MONTH);
+        TIME_GROUP_CALENDAR_UNIT.put(DictionaryConstant.REPORT_GROUP_TIME_DATE, Calendar.DAY_OF_MONTH);
+        TIME_GROUP_CALENDAR_UNIT.put(DictionaryConstant.REPORT_GROUP_TIME_HOUR, Calendar.HOUR_OF_DAY);
+        TIME_GROUP_CALENDAR_UNIT.put(DictionaryConstant.REPORT_GROUP_TIME_MINUTE, Calendar.MINUTE);
+        TIME_GROUP_CALENDAR_UNIT.put(DictionaryConstant.REPORT_GROUP_TIME_SECOND, Calendar.SECOND);
     }
 
 
@@ -221,8 +291,8 @@ public class ReportService {
      * 1.将起止值精确到相同单位，防止比较时因精度不一致导致数据缺失
      * 2.对日期进行格式化
      */
-    public static List<String> dateValues(Date min, Date max, int type) {
-        List<String> dates = new ArrayList<String>();
+    public static List<Integer> dateValues(Date min, Date max, int type) {
+        List<Integer> dates = new ArrayList<Integer>();
 
         min = DateUtils.truncate(min, type);
         max = DateUtils.truncate(max, type);
@@ -231,7 +301,7 @@ public class ReportService {
         calendar.setTime(min);
         SimpleDateFormat format = new SimpleDateFormat(patterns.get(type));
         while (!min.after(max)) {
-            dates.add(format.format(min));
+            dates.add(Integer.parseInt(format.format(min)));
             calendar.add(type, 1);
             min = calendar.getTime();
         }
@@ -285,6 +355,15 @@ public class ReportService {
         criteria.setFetchMode("modifier", FetchMode.JOIN);
         criteria.add(Restrictions.idEq(id));
         return userDao.findUnique(criteria);
+    }
+
+    /**
+     * 修改
+     */
+    @Transactional
+    public void modify(Report report, AuditLog auditLog) {
+        logger.info("修改");
+        reportDao.update(report);
     }
 
 

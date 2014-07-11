@@ -130,7 +130,6 @@ public class ReportController {
         modelMap.addAttribute("charts", charts);
         logger.debug("图表类型数目“{}”", charts.size());
 
-
         //查询并存储聚合类型
         List<Dictionary> aggregates = dictionaryService.findChildren(DictionaryConstant.REPORT_AGGREGATE);
         modelMap.addAttribute("aggregates", aggregates);
@@ -160,9 +159,9 @@ public class ReportController {
         logger.info("查找分组类型通过模块主键编号和字段名称");
         logger.debug("模块ID=“{}”，字段名称=“{}”", moduleId, fieldName);
 
-        Module module = ReflectionUtils.findNameValueMatched(InitApplicationConstant.MODULES, "id", moduleId);
-        Field field = ReflectionUtils.findNameValueMatched(Arrays.asList(module.getFields()), "name", fieldName);
-        List<Dictionary> groupTypes = reportService.findGroupType(field.getType());
+        Field[] fields = moduleService.findById(moduleId).getFields();
+        Class type = moduleService.getFieldType(moduleService.findFieldByName(fields, fieldName));
+        List<Dictionary> groupTypes = reportService.findGroupType(type);
 
         JsonDto jsonDto = new JsonDto();
         jsonDto.setResult(new BusinessResult<List<Dictionary>>(groupTypes));
@@ -220,25 +219,20 @@ public class ReportController {
         Report report = reportService.get(id);
         modelMap.addAttribute("report", report);
         modelMap.addAttribute("fieldModules", moduleService.findModuleAndAssociation(report.getModule().getId()));
+        Field[] fields = moduleService.findById(report.getModule().getId()).getFields();
         if (StringUtils.isNotBlank(report.getxFieldName())) {
-            String[] names = report.getxFieldName().split("\\.");
-            modelMap.addAttribute("xGroupTypes", reportService.findGroupType(findType(names[0], names[1])));
+            Class type = moduleService.getFieldType(moduleService.findFieldByName(fields, report.getxFieldName()));
+            modelMap.addAttribute("xGroupTypes", reportService.findGroupType(type));
         }
 
         if (StringUtils.isNotBlank(report.getzFieldName())) {
-            String[] names = report.getzFieldName().split("\\.");
-            modelMap.addAttribute("zGroupTypes", reportService.findGroupType(findType(names[0], names[1])));
+            Class type = moduleService.getFieldType(moduleService.findFieldByName(fields, report.getzFieldName()));
+            modelMap.addAttribute("zGroupTypes", reportService.findGroupType(type));
         }
 
         logger.info("存储表单默认值");
 
         return "/common/report/edit";
-    }
-
-    private Class findType(String moduleName, String fieldName) {
-        Module module = ReflectionUtils.findNameValueMatched(InitApplicationConstant.MODULES, "name", moduleName);
-        Field field = ReflectionUtils.findNameValueMatched(Arrays.asList(module.getFields()), "name", fieldName);
-        return field.getType();
     }
 
     /**
@@ -253,6 +247,10 @@ public class ReportController {
             return new JsonDto("系统初始化数据不允许修改！").toString();
         }
 
+        User user = (User) modelMap.get(Constant.VS_USER);
+        AuditLog auditLog = new AuditLog(EnumModule.REPORT.getModuleName(), report.getName(), EnumOperationType.MODIFY.getOperationType(), user);
+        report.setModifier(user);
+        reportService.modify(report, auditLog);
 
         return JsonDto.modify(report.getId()).toString();
     }
@@ -310,6 +308,7 @@ public class ReportController {
         logger.debug("报表主键编号={}，列名={}，最小时间={}，最大时间={}", id, fieldName, min, max);
 
         Report report = reportService.get(id);
+        report.setModule(ReflectionUtils.findNameValueMatched(InitApplicationConstant.MODULES, "id", report.getModule().getId()));
         if (min == null) min = new Date();
         if (max == null) max = new Date();
         String data = reportService.generate(report, fieldName, min, max);

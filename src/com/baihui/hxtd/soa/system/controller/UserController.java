@@ -338,7 +338,7 @@ public class UserController extends CommonController<User> {
         model.addAttribute("authorizationFunctions", functionService.findUserAuthorization(id));
         model.addAttribute("allAuthorizationComponents", componentService.findReferAuthorization(id));
         model.addAttribute("authorizationComponents", componentService.findUserAuthorization(id));
-
+        model.addAttribute("id", id);
         return "/system/user/authorization";
     }
 
@@ -360,7 +360,7 @@ public class UserController extends CommonController<User> {
         User u = (User) request.getSession().getAttribute(Constant.VS_USER);
         AuditLog auditLog = new AuditLog(EnumModule.USER.getModuleName(),
                 null == id ? u.getId() : id, null == id ? u.getRealName() : userService.getById(id).getRealName(), EnumOperationType.AUTHORIZATION.getOperationType(), u, "用户授权");
-        userService.authorization(id, roleIds, functionIds, componentIds, auditLog);
+        userService.authorization(null == id ? u.getId():id, roleIds, functionIds, componentIds, auditLog);
         return new JsonDto(id, "授权成功").toString();
     }
 

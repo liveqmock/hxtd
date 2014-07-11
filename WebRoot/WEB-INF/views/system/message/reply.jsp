@@ -52,18 +52,18 @@
             <tr>
                 <td align="right" width="15%"><span class="w_red">*&nbsp;</span>回复标题：</td>
                 <td align="left">
-                <input type="text" class="required" name="title" value=""/></td>
+                <input type="text" maxLength="20" class="required" name="title" value=""/></td>
             </tr>
             <tr>
             <td align="right" width="15%" valign="top"><span class="w_red">*&nbsp;</span>回复内容：</td>
                 <td align="left" width="85%" valign="top">
-                    <textarea name="content" class="remarks_input1 required"style="resize: none;"></textarea>
+                    <textarea name="content" maxLength="500" class="remarks_input1 required"style="resize: none;"></textarea>
                </td>
            </tr>
            <tr>
            <td align="right" width="15%" >回复人：</td>
-           <td align="left">${userMessage.message.creater.realName}</td>
-           <input name="userId" type="hidden" value="${userMessage.message.creater.id}"/>
+           <td align="left">${userMessage.message.creator.realName}</td>
+           <input name="userId" type="hidden" value="${userMessage.message.creator.id}"/>
            </tr>
         </table>
 		<div class=" h40"></div>

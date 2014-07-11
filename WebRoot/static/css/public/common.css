@@ -102,6 +102,7 @@ i{font-style:normal}
 .s_toup{ background-position:-393px -121px;}
 .s_print{ background-position:-372px -142px;}
 .s_statistics{ background-position:-394px -142px;}
+.s_approve{ background-position:-372px -164px;}
 .have_read{ background-position:-454px -202px; width:14px; height:12px;}
 .no_read{ background-position:-468px -202px; width:14px; height:12px;}
 .s_reply{ background-position:-396px 0px;}
@@ -137,7 +138,7 @@ i{font-style:normal}
 
 /*列表*/
 .table_headl,.table_headr,.table_headc{ height:50px;}
-.table_blueheadl,.table_blueheadr,.table_blueheadc{ height:50px;}
+.table_blueheadl,.table_blueheadr,.table_blueheadc{ height:32px;}
 .table_headl{ background-position:-2px -36px; width:6px;}
 .table_headr{ background-position:-12px -36px; width:6px;}
 .table_blueheadl{ background-position:-21px -37px; width:4px;}

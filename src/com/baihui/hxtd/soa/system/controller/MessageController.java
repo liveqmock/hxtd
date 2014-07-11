@@ -182,7 +182,7 @@ public class MessageController {
 		message.setCreatedTime(new Date());
 		message.setModifier(u);
 		message.setModifiedTime(new Date());
-		message.setCreater(u);
+		message.setCreator(u);
 		message=messageService.addMessage(message);
 		User user=userService.getById(userId);
 		/************ 回复 *****************************/
@@ -221,7 +221,7 @@ public class MessageController {
 		logger.info("ComponentController.query查询组件列表");
 		User u = (User) request.getSession().getAttribute(Constant.VS_USER);
 		logger.info("ComponentController.query 获得当前操作的用户{}",u.getName());
-		message.setCreater(u);
+		message.setCreator(u);
 		message.setModifier(u);
 		message=messageService.addMessage(message);
 		//批量发送消息

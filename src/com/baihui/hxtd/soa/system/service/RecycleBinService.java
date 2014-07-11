@@ -71,7 +71,7 @@ public class RecycleBinService {
 	  * @param id    参数类型
 	  * @return void    返回类型
 	 */
-	public void deleteReal(Long[] recordid,String entityName,AuditLog [] auditLogArr){
+	public void realDelete(Long[] recordid,String entityName,AuditLog [] auditLogArr){
 		commonDao.delete(entityName, recordid);
 	}
 	

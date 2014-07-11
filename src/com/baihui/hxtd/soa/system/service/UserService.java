@@ -209,8 +209,6 @@ public class UserService {
         logger.info("新增用户");
 
         logger.info("添加默认属性值");
-        user.setCode("");
-        user.setOrder(1l);
         user.setIsDeleted(false);
         user.setIsInitialized(false);
         user.setCreatedTime(new Date());

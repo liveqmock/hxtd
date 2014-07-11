@@ -12,6 +12,8 @@ import com.baihui.hxtd.soa.system.entity.Function;
 import com.baihui.hxtd.soa.system.entity.Menu;
 import com.baihui.hxtd.soa.system.entity.User;
 import com.baihui.hxtd.soa.system.service.*;
+import com.baihui.hxtd.soa.util.Constants;
+
 import org.apache.commons.collections.BidiMap;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -162,14 +164,14 @@ public class IdentityAuthenticationController {
         //激活的菜单
         List<Menu> activeMenus = menuService.findActive(menus);
         //菜单栏菜单
-        List<Menu> menubarMenus = menuService.findByShowlocation(activeMenus, DictionaryConstant.MENU_SHOWLOCATION_MENUBAR);
+        List<Menu> menubarMenus = menuService.findByShowlocation(activeMenus, Constants.SHOW_LOCATION_TYPE_MENUBAR);
         session.setAttribute(Constant.VS_MENUBAR_MENUS, menubarMenus);
         List<Menu> menubarFirstMenus = menuService.findByLevel(menubarMenus, 1);
         session.setAttribute(Constant.VS_MENUBAR_FIRST_MENUS, menubarFirstMenus);
         List<Menu> menubarSecoundMenus = menuService.findByLevel(menubarMenus, 2);
         session.setAttribute(Constant.VS_MENUBAR_SECOUND_MENUS, menuService.groupByParentId(menubarSecoundMenus));
         //设置页菜单
-        List<Menu> setPageMenus = menuService.findByShowlocation(activeMenus, DictionaryConstant.MENU_SHOWLOCATION_SETPAGE);
+        List<Menu> setPageMenus = menuService.findByShowlocation(activeMenus, Constants.SHOW_LOCATION_TYPE_MENUBAR);
         session.setAttribute(Constant.VS_SETPAGE_MENUS, setPageMenus);
 
         logger.info("session中存储脚本信息");

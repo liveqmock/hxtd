@@ -47,22 +47,22 @@ public class Customer implements Serializable {
 
 	/** 客户类型 */
 	@ManyToOne(fetch = FetchType.LAZY)
-	@JoinColumn(name = "TYPE")
+	@JoinColumn(name = "TYPE_DIC")
 	private Dictionary type;
 
 	/** 客户来源 */
 	@ManyToOne(fetch = FetchType.LAZY)
-	@JoinColumn(name = "SOURCE")
+	@JoinColumn(name = "SOURCE_DIC")
 	private Dictionary source;
 
 	/** 风险等级 */
 	@ManyToOne(fetch = FetchType.LAZY)
-	@JoinColumn(name = "RISK_GRADE")
+	@JoinColumn(name = "RISK_GRADE_DIC")
 	private Dictionary riskGrade;
 
 	/** 证件类型 */
 	@ManyToOne(fetch = FetchType.LAZY)
-	@JoinColumn(name = "CARD_TYPE")
+	@JoinColumn(name = "CARD_TYPE_DIC")
 	private Dictionary cardType;
 
 	/** 证件号码 */
@@ -91,7 +91,7 @@ public class Customer implements Serializable {
 
 	/** 开户行 */
 	@ManyToOne(fetch = FetchType.LAZY)
-	@JoinColumn(name = "OPEN_BANK")
+	@JoinColumn(name = "OPEN_BANK_DIC")
 	private Dictionary openBank;
 
 	/** 银行户名 */
@@ -104,12 +104,12 @@ public class Customer implements Serializable {
 
 	/** 所有权 */
 	@ManyToOne(fetch = FetchType.LAZY)
-	@JoinColumn(name = "OWNERSHIP")
+	@JoinColumn(name = "OWNERSHIP_DIC")
 	private Dictionary ownerShip;
 
 	/** 客户所在行业 */
 	@ManyToOne(fetch = FetchType.LAZY)
-	@JoinColumn(name = "INDUSTRY")
+	@JoinColumn(name = "INDUSTRY_DIC")
 	private Dictionary industry;
 
 	@ManyToOne(fetch = FetchType.LAZY)
@@ -153,7 +153,7 @@ public class Customer implements Serializable {
 
 	/** 最后修改时间 */
 	@JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss", timezone = "GMT+08:00")
-	@Column(name = "MODIFIED_TIME")
+	@Column(name = "MODIFIED_TIME",updatable=false, insertable=false)
 	private Date modifiedTime;
 
 	/**

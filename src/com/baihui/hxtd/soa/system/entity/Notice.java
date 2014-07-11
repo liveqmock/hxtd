@@ -44,8 +44,8 @@ public class Notice implements Serializable{
 	private Date sentTime;
 	
 	@ManyToOne(fetch = FetchType.LAZY)
-	@JoinColumn(name = "CREATOR_ID")
-	private User creater;
+	@JoinColumn(name = "CREATOR_ID",updatable=false)
+	private User creator;
 	
 	@JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss", timezone = "GMT+08:00")
 	@Column(name = "CREATED_TIME",updatable=false)
@@ -56,7 +56,7 @@ public class Notice implements Serializable{
 	private User modifier;
 	
 	@JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss", timezone = "GMT+08:00")
-	@Column(name = "MODIFIED_TIME")
+	@Column(name = "MODIFIED_TIME",updatable=false, insertable=false)
 	private Date modifiedTime;
    
 	/**
@@ -105,12 +105,12 @@ public class Notice implements Serializable{
 		this.sentTime = sentTime;
 	}
 
-	public User getCreater() {
-		return creater;
+	public User getCreator() {
+		return creator;
 	}
 
-	public void setCreater(User creater) {
-		this.creater = creater;
+	public void setCreator(User creator) {
+		this.creator = creator;
 	}
 
 	public Date getCreatedTime() {

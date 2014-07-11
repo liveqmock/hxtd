@@ -1,7 +1,6 @@
 package com.baihui.hxtd.soa.base.utils.report;
 
 import java.util.List;
-import java.util.Map;
 
 /**
  * @author Administrator
@@ -9,6 +8,7 @@ import java.util.Map;
  */
 public class ChartTabel {
 
+    private String title;
     private List<String> xAxisHeader;
     private List<String> yAxisHeader;
     private List rows;
@@ -27,7 +27,13 @@ public class ChartTabel {
         this.rows = rows;
     }
 
+    public String getTitle() {
+        return title;
+    }
 
+    public void setTitle(String title) {
+        this.title = title;
+    }
 
     public List<String> getxAxisHeader() {
         return xAxisHeader;

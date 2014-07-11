@@ -125,10 +125,6 @@ public class DictionaryConstant {
     /*菜单*/
     /**显示位置*/
     public final static String MENU_SHOWLOCATION = "010404";
-    /**菜单栏*/
-    public final static String MENU_SHOWLOCATION_MENUBAR = "01020202";
-    /**设置页*/
-    public final static String MENU_SHOWLOCATION_SETPAGE = "01020201";
 
 
     /*用户*/

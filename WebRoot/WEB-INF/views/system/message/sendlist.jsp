@@ -190,7 +190,7 @@
              <td>
                    <c:choose>
                 		<c:when test="${VS_HAS_FUNCTIONS.messageView}">
-                                <a class="toviewpage"  href="${ctx}/system/message/toViewPage.do?id={$T.row.id}&userName={$T.row.message.creater.realName}">{$T.row.message.title}
+                                <a class="toviewpage"  href="${ctx}/system/message/toViewPage.do?id={$T.row.id}&userName={$T.row.message.creator.realName}">{$T.row.message.title}
         <div class="none w240">
         <b class="bb1"></b>
         <b class="bb2"></b>
@@ -225,7 +225,7 @@
                 		<c:otherwise>{$T.row.message.title}</c:otherwise>
                 	</c:choose>
                </td>
-                <td>{$T.row.message.creater.realName}</td>
+                <td>{$T.row.message.creator.realName}</td>
                 <td>{$T.row.createdTime}</td>
                 <td>{$T.row.user.realName}</td>
                 <td align="center">

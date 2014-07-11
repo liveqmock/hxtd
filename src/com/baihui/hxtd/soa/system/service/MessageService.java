@@ -57,7 +57,7 @@ public class MessageService {
 		    logger.info("分页查找");
 	        DetachedCriteria criteria = DetachedCriteria.forClass(UserMessage.class);
 	        criteria.setFetchMode("message", FetchMode.JOIN);
-            criteria.setFetchMode("message.creater",FetchMode.JOIN);
+            criteria.setFetchMode("message.creator",FetchMode.JOIN);
 	        criteria.setFetchMode("user", FetchMode.JOIN);
 	        searchParams.put("EQ_type", false);
 	        searchParams.put("EQ_user", user);
@@ -74,10 +74,10 @@ public class MessageService {
 		    logger.info("分页查找");
 	        DetachedCriteria criteria = DetachedCriteria.forClass(UserMessage.class);
 	        criteria.setFetchMode("message", FetchMode.JOIN);
-            criteria.setFetchMode("message.creater",FetchMode.JOIN);
+            criteria.setFetchMode("message.creator",FetchMode.JOIN);
 	        criteria.setFetchMode("user", FetchMode.JOIN);
 	        searchParams.put("EQ_type", true);
-	        searchParams.put("EQ_message.creater", user);
+	        searchParams.put("EQ_message.creator", user);
 	        searchParams.put("EQ_isDeleted", false);
 	        Map<String, SearchFilter> filters = Search.parse(searchParams);
 	        Search.buildCriteria(filters, criteria, UserMessage.class);
@@ -170,8 +170,8 @@ public class MessageService {
 			HibernatePage<Message> page, User user) throws NoSuchFieldException {
 		    logger.info("分页查找");
 	        DetachedCriteria criteria = DetachedCriteria.forClass(Message.class);
-	        criteria.setFetchMode("creater", FetchMode.JOIN);
-	        searchParams.put("EQ_creater", user);
+	        criteria.setFetchMode("creator", FetchMode.JOIN);
+	        searchParams.put("EQ_creator", user);
 	        searchParams.put("EQ_isDeleted", false);
 	        Map<String, SearchFilter> filters = Search.parse(searchParams);
 	        Search.buildCriteria(filters, criteria, Message.class);
@@ -192,7 +192,7 @@ public class MessageService {
 		logger.info("查找");
         DetachedCriteria detachedCriteria = DetachedCriteria.forClass(UserMessage.class);
         detachedCriteria.setFetchMode("message", FetchMode.JOIN);
-        detachedCriteria.setFetchMode("message.creater",FetchMode.JOIN);
+        detachedCriteria.setFetchMode("message.creator",FetchMode.JOIN);
         detachedCriteria.setFetchMode("user", FetchMode.JOIN);
         detachedCriteria.add(Restrictions.eq("isDeleted", false));
         if("recived".equals(ty)){
@@ -201,7 +201,7 @@ public class MessageService {
         	searchParams.put("EQ_user", user);
         }else{
         	searchParams.put("EQ_type", true);
-	        searchParams.put("EQ_message.creater", user);
+	        searchParams.put("EQ_message.creator", user);
         }
         Map<String, SearchFilter> filters = Search.parse(searchParams);
         Search.buildCriteria(filters, detachedCriteria, UserMessage.class);
@@ -218,7 +218,7 @@ public class MessageService {
 	public List<UserMessage> find() {
 		logger.info("查找");
         DetachedCriteria detachedCriteria = DetachedCriteria.forClass(UserMessage.class);
-        detachedCriteria.setFetchMode("creater", FetchMode.JOIN);
+        detachedCriteria.setFetchMode("creator", FetchMode.JOIN);
         detachedCriteria.setFetchMode("modifier", FetchMode.JOIN);
         detachedCriteria.add(Restrictions.eq("isDeleted", false));
 

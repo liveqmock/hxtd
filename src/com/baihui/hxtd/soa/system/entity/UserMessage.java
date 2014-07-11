@@ -36,7 +36,7 @@ public class UserMessage {
 	 * 最终修改时间
 	 */
 	@JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss", timezone = "GMT+08:00")
-	@Column(name="MODIFIED_TIME",updatable=false)
+	@Column(name="MODIFIED_TIME",updatable=false, insertable=false)
 	private Date modifiedTime;
 	/**
 	 * 消息读取状态

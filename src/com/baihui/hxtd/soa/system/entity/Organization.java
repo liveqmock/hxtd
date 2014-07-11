@@ -26,9 +26,6 @@ public class Organization implements Serializable, Cloneable, Initialized {
     @Column(name = "ID")
     private Long id;
 
-    @Column(name = "CODE", length = 32, nullable = false)
-    private String code;
-
     @Column(name = "SHORT_NAME", length = 64)
     private String name;
 
@@ -59,11 +56,6 @@ public class Organization implements Serializable, Cloneable, Initialized {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "TYPE", nullable = false)
     private Dictionary type;
-
-    //TODO 暂未实现，等同于isActive
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "STATUS")
-    private Dictionary status;
 
     @Column(name = "`ORDER`")
     private Long order;
@@ -129,14 +121,6 @@ public class Organization implements Serializable, Cloneable, Initialized {
 
     public void setId(Long id) {
         this.id = id;
-    }
-
-    public String getCode() {
-        return code;
-    }
-
-    public void setCode(String code) {
-        this.code = code;
     }
 
     public String getName() {
@@ -217,14 +201,6 @@ public class Organization implements Serializable, Cloneable, Initialized {
 
     public void setType(Dictionary type) {
         this.type = type;
-    }
-
-    public Dictionary getStatus() {
-        return status;
-    }
-
-    public void setStatus(Dictionary status) {
-        this.status = status;
     }
 
     public Long getOrder() {

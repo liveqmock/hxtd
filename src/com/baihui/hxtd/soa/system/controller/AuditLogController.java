@@ -110,6 +110,7 @@ public class AuditLogController {
         operationTypes.put(11,"修改密码");
         operationTypes.put(12,"物理删除");
         operationTypes.put(13,"恢复数据");
+        operationTypes.put(14,"线索转客户");
         model.addAttribute("operationTypes", operationTypes);//操作类型
         Map<EnumModule,String> moduleNames=new HashMap<EnumModule,String>();
         moduleNames.put(EnumModule.MARKETACTIVITY, "市场活动");

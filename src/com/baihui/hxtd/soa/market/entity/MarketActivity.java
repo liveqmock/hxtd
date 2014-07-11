@@ -45,13 +45,13 @@ public class MarketActivity implements Serializable {
 	
 	/**活动类型*/
 	@ManyToOne(fetch = FetchType.LAZY)
-	@JoinColumn(name = "TYPE")
+	@JoinColumn(name = "TYPE_DIC")
 	@NotFound(action = NotFoundAction.IGNORE)
 	private Dictionary typeDic;
 	
 	/**活动状态*/
 	@ManyToOne(fetch = FetchType.LAZY)
-	@JoinColumn(name = "STATUS")
+	@JoinColumn(name = "STATUS_DIC")
 	@NotFound(action = NotFoundAction.IGNORE)
 	private Dictionary statusDic;
 	
@@ -107,27 +107,27 @@ public class MarketActivity implements Serializable {
 	@Column(name = "IS_DELETED")
 	private Boolean isDeleted = false;
 
-	/**创建者*/
+	/** 创建者 */
 	@JsonIgnore
 	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "CREATOR_ID", updatable = false)
 	@NotFound(action = NotFoundAction.IGNORE)
 	private User creator;
 	
-	/**创建时间*/
+	/** 创建时间 */
 	@JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss", timezone = "GMT+08:00")
 	@Column(name = "CREATED_TIME", updatable = false)
 	private Date createdTime;
 	
-	/**最后修改者*/
+	/** 最后修改者 */
 	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "MODIFIER_ID")
 	@NotFound(action = NotFoundAction.IGNORE)
 	private User modifier;
 	
-	/**最后修改时间*/
+	/** 最后修改时间 */
 	@JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss", timezone = "GMT+08:00")
-	@Column(name = "MODIFIED_TIME")
+	@Column(name = "MODIFIED_TIME", updatable = false, insertable = false)
 	private Date modifiedTime;
 
 	public Long getId() {

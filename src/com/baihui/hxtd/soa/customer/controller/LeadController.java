@@ -146,7 +146,7 @@ public class LeadController extends CommonController<Lead>{
 		}
 		
 		leadService.modifyOwner(ownerId, id,auditLogArr);
-		JsonDto json = new JsonDto("转换成功");
+		JsonDto json = new JsonDto("所有者更改成功！");
 		json.setSuccessFlag(true);
 		return json.toString();
 	}
@@ -180,7 +180,7 @@ public class LeadController extends CommonController<Lead>{
 					id[i], leadService.get(id[i]).getName(), EnumOperationType.DELETE.getOperationType(), user);
 		}
 		
-		leadService.delete(auditLogArr, id);
+		leadService.delete(id,auditLogArr);
 		JsonDto json = JsonDto.delete(id);
 		return json.toString();
 	}
@@ -261,8 +261,7 @@ public class LeadController extends CommonController<Lead>{
     }
 
     /**
-     * 导出分页数据
-     * 1.在分页列表上根据当前条件进行导出
+     * 线索转成客户
      */
     @ResponseBody
     @RequestMapping(value = "/leadConverter.do", produces = "text/text;charset=UTF-8")
@@ -270,18 +269,12 @@ public class LeadController extends CommonController<Lead>{
         logger.info("线索转换");
         User user = (User)modelMap.get(Constant.VS_USER);
         AuditLog auditLog = new AuditLog(EnumModule.LEAD.getModuleName(), 
-				id, leadService.get(id).getName(), EnumOperationType.MODIFY.getOperationType(), user,"线索转换客户，联系人");
-        leadService.modifyLeadConverter(auditLog,id);
+				id, leadService.get(id).getName(), EnumOperationType.MODIFYLEADCONVERTER.getOperationType(), user,"线索转换客户，联系人");
+        leadService.modifyLeadConverter(id,auditLog);
         JsonDto json = new JsonDto("转换成功");
         json.setSuccessFlag(true);
         return json.toString();
     }
 
-	/**
-	 * @param args
-	 */
-	public static void main(String[] args) {
-
-	}
 
 }

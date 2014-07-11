@@ -50,13 +50,13 @@ public class Message implements Serializable{
 	 */
 	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name="CREATOR_ID")
-	private User creater;
+	private User creator;
 	
 	/**
 	 * 创建时间
 	 */
 	@JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss", timezone = "GMT+08:00")
-	@Column(name="CREATED_TIME",updatable=false)
+	@Column(name="CREATED_TIME")
 	private Date createdTime;
 	
 	/**
@@ -70,7 +70,7 @@ public class Message implements Serializable{
 	 * 最终修改时间
 	 */
 	@JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss", timezone = "GMT+08:00")
-	@Column(name="MODIFIED_TIME",updatable=false)
+	@Column(name="MODIFIED_TIME",updatable=false, insertable=false)
 	private Date modifiedTime;
     
 	@Column(name = "IS_DELETED", nullable = false)
@@ -107,12 +107,12 @@ public class Message implements Serializable{
 		this.content = content;
 	}
 
-	public User getCreater() {
-		return creater;
+	public User getCreator() {
+		return creator;
 	}
 
-	public void setCreater(User creater) {
-		this.creater = creater;
+	public void setCreator(User creator) {
+		this.creator = creator;
 	}
 
 	public Date getCreatedTime() {

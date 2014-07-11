@@ -80,13 +80,13 @@
     <tr>
 	    <td align="right" width="15%"><span class="w_red">*&nbsp;</span>系统消息标题：</td>
 	    <td align="left">
-	    	<input type="text" class="text_input3 required" name="title" value="${userMessage.message.title}"/>
+	    	<input type="text" class="text_input3 required" name="title" maxLength="20" value="${userMessage.message.title}"/>
 	    </td>
     </tr>
     <tr>
 		<td align="right" width="15%" ><span class="w_red">*&nbsp;</span>系统消息内容：</td>
 		<td align="left" valign="top" width="85%">
-			<textarea name="content" class="remarks_input1 required" style="resize: none;">${userMessage.message.content}</textarea>
+			<textarea name="content" maxLength="500" class="remarks_input1 required" style="resize: none;">${userMessage.message.content}</textarea>
 		</td>
     </tr>
     <tr>

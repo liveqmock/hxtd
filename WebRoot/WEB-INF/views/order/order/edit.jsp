@@ -110,7 +110,8 @@ function clearInputVal(obj){//清除
 					订单编号：
 				</td>
 				<td align="left">
-					${order.code==null?'未生成':order.code }
+				<input type="text" name="code"
+						value="${order.code}" class="text_input3" />
 				</td>
 				<td align="right" width="15%">
 					<span class="w_red">*&nbsp;</span>所有者：
@@ -196,7 +197,7 @@ function clearInputVal(obj){//清除
 			</tr>
 			<tr>
 				<td align="right">
-					<span class="w_red">*&nbsp;</span>购买金额：
+					<span class="w_red">*&nbsp;</span>购买金额（万）：
 				</td>
 				<td align="left">
 					<input type="text" name="purchaseMoney"

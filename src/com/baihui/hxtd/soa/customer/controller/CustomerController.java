@@ -179,12 +179,16 @@ public class CustomerController extends CommonController<Customer>{
 	@RequestMapping(value = "/modify.do",
 					params={"type=modifyOwner"}, //只有type=modifyOwner的请求才调这个方法
 					produces = "text/text;charset=UTF-8")
-	public String modify(Long[] id, Long ownerId) {
-
-		
-		customerService.modifyOwner(ownerId, id);
+	public String modify(Long[] id, Long ownerId,ModelMap modelMap) {
+		User user = (User)modelMap.get(Constant.VS_USER);
+		AuditLog [] auditLogArr = new AuditLog [id.length];
+		for(int i=0; i<id.length; i++){
+			auditLogArr[i] = new AuditLog(EnumModule.CUSTOMER.getModuleName(), 
+					id[i], customerService.get(id[i]).getName(), EnumOperationType.MODIFY.getOperationType(), user,"批量更改所有者");
+		}
+		customerService.modifyOwner(ownerId, id,auditLogArr);
 		JsonDto json = new JsonDto();
-		json.setMessage("转换成功");
+		json.setMessage("所有者更改成功！");
 		return json.toString();
 	}
 	
@@ -252,7 +256,7 @@ public class CustomerController extends CommonController<Customer>{
 		if(flag){
 			return JsonDto.delete(id).toString();
 		}else{
-			return new JsonDto("被删除数据存在关联项目，无法删除!").toString(); 
+			return new JsonDto("被删除数据与联系人有关联，无法删除!").toString(); 
 		}
 	}
 	

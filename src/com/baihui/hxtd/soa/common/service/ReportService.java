@@ -1,12 +1,12 @@
 package com.baihui.hxtd.soa.common.service;
 
-import com.baihui.hxtd.soa.base.InitApplicationConstant;
 import com.baihui.hxtd.soa.base.orm.hibernate.HibernatePage;
 import com.baihui.hxtd.soa.base.utils.ReflectionUtils;
 import com.baihui.hxtd.soa.base.utils.Search;
 import com.baihui.hxtd.soa.base.utils.mapper.JsonMapper;
+import com.baihui.hxtd.soa.base.utils.report.ChartOrginal;
+import com.baihui.hxtd.soa.base.utils.report.ChartTabel;
 import com.baihui.hxtd.soa.base.utils.report.GraphReport;
-import com.baihui.hxtd.soa.base.utils.report.TwoDimensionReportData;
 import com.baihui.hxtd.soa.common.dao.ReportDao;
 import com.baihui.hxtd.soa.common.entity.Module;
 import com.baihui.hxtd.soa.common.entity.Report;
@@ -15,7 +15,6 @@ import com.baihui.hxtd.soa.system.dao.DictionaryDao;
 import com.baihui.hxtd.soa.system.dao.UserDao;
 import com.baihui.hxtd.soa.system.entity.AuditLog;
 import com.baihui.hxtd.soa.system.entity.Dictionary;
-import com.baihui.hxtd.soa.system.entity.User;
 import com.baihui.hxtd.soa.system.service.DataShift;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.time.DateUtils;
@@ -25,7 +24,6 @@ import org.hibernate.criterion.Projection;
 import org.hibernate.criterion.Restrictions;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.asm.Opcodes;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springside.modules.persistence.SearchFilter;
@@ -66,20 +64,7 @@ public class ReportService {
      */
     @Transactional(readOnly = true)
     public String generate(Report report, String fieldName, Date min, Date max) {
-//        //获取统计数据
-//        DetachedCriteria criteria = DetachedCriteria.forClass(report.getModule().getEntityClazz());
-//        ProjectionList projectionList = Projections.projectionList();
-//        projectionList.add(Projections.sqlGroupProjection("MONTH({alias}.CREATED_TIME) as createdTime", "MONTH({alias}.CREATED_TIME)", new String[]{"createdTime"}, new Type[]{StandardBasicTypes.STRING}));
-//        projectionList.add(Projections.count("id"));
-//        criteria.setProjection(projectionList);
-//
-//        Calendar calendar = Calendar.getInstance();
-//        Date end = calendar.getTime();
-//        calendar.add(Calendar.MONTH, -3);
-//        Date begin = calendar.getTime();
-//        criteria.add(Restrictions.between("createdTime", begin, end));
-//
-//        List rows = criteria.getExecutableCriteria(reportDao.getSession()).list();
+
         Module module = report.getModule();
         String entityName = module.getEntityClazz().getSimpleName();
         String entityAlias = module.getName();
@@ -132,42 +117,74 @@ public class ReportService {
         List rows = reportDao.find(hql, min, max);
         logger.debug("rows:{}", JsonMapper.nonEmptyMapper().toJson(rows));
 
-        TwoDimensionReportData reportData = new TwoDimensionReportData();
-        reportData.setTitle(report.getName());
 
-        reportData.setxAxisTitle("x轴");
-        Field[] fields = ModuleService.findById(report.getModule().getId()).getFields();
+        ChartOrginal chartOrginal = new ChartOrginal();
+        chartOrginal.setTable(rows);
+
+        ChartTabel chartTabel = new ChartTabel();
+        chartTabel.setTitle(report.getName());
+
+
+        return null;
+    }
+
+    /**
+     * 构建X轴
+     * 1.设置X轴值
+     * 2.设置X轴描述
+     * <p/>
+     * 取至分组类型
+     * 1.日期分组
+     * 1.1.根据时间范围，获取X轴值范围
+     * 2.其他分组
+     * 2.1.如果是字典，取至字典表
+     * 2.2.如果是其他，取至数据表
+     */
+    public void buildXAxis(Report report, String where, Map<String, ?> conditions, ChartOrginal chartOrginal) {
+        Dictionary xGroupType = report.getxGroupType();
+        Date min = (Date) conditions.get("min");
+        Date max = (Date) conditions.get("max");
+
         if (xGroupType.getValue().startsWith(DictionaryConstant.REPORT_GROUP_TIME)) {
-            reportData.setxAxises(dateValues(min, max, TIME_GROUP_CALENDAR_UNIT.get(xGroupType.getValue())));
-            reportData.setxAxisTitles(reportData.getxAxises());
+            chartOrginal.setxAxisValues(dateValues(min, max, TIME_GROUP_CALENDAR_UNIT.get(xGroupType.getValue())));
+            chartOrginal.setxAxisDescs(chartOrginal.getxAxisValues());
         } else if (xGroupType.getValue().startsWith(DictionaryConstant.REPORT_GROUP_ELSE)) {
+            Field[] fields = ModuleService.findById(report.getModule().getId()).getFields();
             Class type = ModuleService.getFieldType(ModuleService.findFieldByName(fields, report.getxFieldName()));
             if (type.equals(Dictionary.class)) {
                 List<Dictionary> xRange = dictionaryDao.findBrother(report.getxGroupType().getValue());
-                List<Long> ids = ReflectionUtils.invokeGetterMethod(xRange, "id");
-                reportData.setxAxises(ids);
-                List<String> names = ReflectionUtils.invokeGetterMethod(xRange, "name");
-                reportData.setxAxisTitles(names);
+                chartOrginal.setxAxisValues(ReflectionUtils.invokeGetterMethod(xRange, "id"));
+                chartOrginal.setxAxisDescs(ReflectionUtils.invokeGetterMethod(xRange, "name"));
             } else {
-                String xSelectItem = String.format("%s.%s", entityAlias, xFieldName);
-                String xAxisHql = String.format("select distinct %s from %s %s where %s.%s between ? and ? order by %s", xSelectItem, entityName, entityAlias, entityAlias, fieldName, xSelectItem);
-                List xRange = reportDao.find(xAxisHql, min, max);
-                reportData.setxAxises(xRange);
-                reportData.setxAxisTitles(xRange);
+                chartOrginal.setxAxisValues(findSingleRange(report.getModule(), report.getxFieldName(), where, conditions));
+                chartOrginal.setxAxisDescs(chartOrginal.getxAxisValues());
             }
         }
+    }
 
-        reportData.setyAxisTitle("注册量");
-        reportData.setyAxises(new ArrayList());
-        reportData.setyAxisTitles(reportData.getyAxises());
+    /**
+     * 查找单一的范围
+     */
+    public List findSingleRange(Module module, String fieldName, String where, Map<String, ?> condition) {
+        String entityName = module.getEntityClazz().getSimpleName();
+        String entityAlias = module.getName();
+        String selectItem = String.format("%s.%s", entityAlias, fieldName);
+        String axisHql = String.format("select distinct %s from %s %s where %s order by %s", selectItem, entityName, entityAlias, where, selectItem);
+        return reportDao.find(axisHql, condition);
+    }
 
-        reportData.fullEmptyData();
-        reportData.buildXAxisIndexs();
-        reportData.fullValidData(rows);
+    /**
+     * 构建Z轴
+     */
+    public void buildZAxis(Report report, Map<String, Object> conditions, ChartOrginal chartOrginal) {
 
-        String chartData = graphReport.generateTwoDimensionChart(GraphReport.TYPE_BAR, reportData);
-        logger.debug("chartData:{}", chartData);
-        return chartData;
+    }
+
+    /**
+     * 构建数据
+     */
+    public void buildData(Report report, Map<String, Object> conditions, ChartOrginal chartOrginal) {
+
     }
 
     /**

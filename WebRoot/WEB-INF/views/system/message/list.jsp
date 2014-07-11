@@ -118,7 +118,7 @@
                 <td align="left">
                     <c:choose>
                         <c:when test="${VS_HAS_FUNCTIONS.messageView}">
-                            <a href="${ctx}/system/message/toViewPage.do?id={$T.row.id}&userName={$T.row.message.creater.name}">{$T.row.message.title}
+                            <a href="${ctx}/system/message/toViewPage.do?id={$T.row.id}&userName={$T.row.message.creator.name}">{$T.row.message.title}
                                 <div class="none w240">
                                     <div class="w240 pr">
                                        <i class="block globle_img pa tan_leftjian"></i>
@@ -157,7 +157,7 @@
                         <c:otherwise>{$T.row.message.title}</c:otherwise>
                     </c:choose>
                 </td>
-                <td align="left">{$T.row.message.creater.realName}</td>
+                <td align="left">{$T.row.message.creator.realName}</td>
                 <td>{$T.row.createdTime}</td>
                 <td>{$T.row.user.realName}</td>
                 <td align="left">
@@ -211,7 +211,7 @@
                 <td>
                     <c:choose>
                     <c:when test="${VS_HAS_FUNCTIONS.messageView}">
-                    <a class="toviewpage" href="${ctx}/system/message/toViewPage.do?id={$T.row.id}&userName={$T.row.message.creater.realName}">{$T.row.message.title}
+                    <a class="toviewpage" href="${ctx}/system/message/toViewPage.do?id={$T.row.id}&userName={$T.row.message.creator.realName}">{$T.row.message.title}
                         <div class="none w240">
                             <div class="w240 pr">
                                 <i class="block globle_img pa tan_leftjian"></i>
@@ -249,7 +249,7 @@
                         <c:otherwise>{$T.row.message.title}</c:otherwise>
                         </c:choose>
                         　              </td>
-                <td>{$T.row.message.creater.realName}</td>
+                <td>{$T.row.message.creator.realName}</td>
                 <td>{$T.row.createdTime}</td>
                 <td>{$T.row.user.realName}</td>
                 <td align="center">

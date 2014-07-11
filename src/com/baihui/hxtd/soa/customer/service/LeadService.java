@@ -154,7 +154,7 @@ public class LeadService {
 	 * delete(删除线索AuditLog auditLog * 
 	 * @param id
 	 */
-	public void delete(AuditLog [] auditLogArr, Long...id) {
+	public void delete(Long[] id,AuditLog [] auditLogArr) {
 		leadDao.logicalDelete(id);
 	}
 
@@ -166,7 +166,7 @@ public class LeadService {
 	  * @return void    返回类型
 	  * @throws
 	 */
-	public void modifyLeadConverter(AuditLog auditLog, Long id){
+	public void modifyLeadConverter(Long id,AuditLog auditLog){
 		logger.info("线索转换开始，ID={}",id);
 		Lead lead = this.get(id);
 		

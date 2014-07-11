@@ -109,14 +109,14 @@ workbanch.bindRefresh = function() {
 workbanch.bindClose = function() {
 	var $this = $(this);
 	$this.parent().parent().parent().parent().find('>div:last')
-			.stop(true, true).slideUp('normal');
+			.hide();
 	$this.removeClass("g_small").addClass("go_add");
 	$this.click(workbanch.bindOpen);
 };
 workbanch.bindOpen = function() {
 	var $this = $(this);
 	$this.parent().parent().parent().parent().find('>div:last')
-			.stop(true, true).slideDown('normal');
+			.show();
 	$this.removeClass("go_add").addClass("g_small");
 	$this.click(workbanch.bindClose);
 };

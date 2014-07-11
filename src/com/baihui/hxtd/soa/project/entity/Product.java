@@ -59,7 +59,7 @@ public class Product {
 	 * 产品类型
 	 */
 	@ManyToOne(fetch = FetchType.LAZY)
-	@JoinColumn(name = "TYPE")
+	@JoinColumn(name = "TYPE_DIC")
 	private Dictionary type;
 	/**
 	 * 出售金额
@@ -69,12 +69,12 @@ public class Product {
 	/**
 	 * 最小利率
 	 */
-	@Column(name = "MIN_ERNING_RATE")
+	@Column(name = "ERNING_RATE")
 	private double minRate;
 	/**
 	 * 最大利率
 	 */
-	@Column(name = "MAX_ERNING_RATE")
+	//@Column(name = "MAX_ERNING_RATE")
 	private double maxRate;
 	/**
 	 * 预期收益
@@ -90,7 +90,7 @@ public class Product {
 	 * 销售单位
 	 */
 	@ManyToOne(fetch = FetchType.LAZY)
-	@JoinColumn(name = "SALE_UNIT")
+	@JoinColumn(name = "SALE_UNIT_DIC")
 	private Dictionary saleUnit;
 	/**
 	 * 销售开始日期

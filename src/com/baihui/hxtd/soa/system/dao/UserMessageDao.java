@@ -31,7 +31,7 @@ public class UserMessageDao extends HibernateDAOImpl<UserMessage, Long>{
 	public UserMessage getById(Long id) {
 		StringBuffer hql=new StringBuffer("from UserMessage userMessage ");
         hql.append("left join fetch userMessage.message ");
-        hql.append("left join fetch userMessage.message.creater ");
+        hql.append("left join fetch userMessage.message.creator ");
         hql.append("left join fetch userMessage.user ");
         hql.append("where userMessage.id=? ");
 		return findUnique(hql.toString(), id);

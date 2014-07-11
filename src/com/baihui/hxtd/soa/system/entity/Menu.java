@@ -48,9 +48,6 @@ public class Menu implements Serializable, Cloneable, TreeNode<Menu>, Initialize
     @Column(name = "ID")
     private Long id;
 
-    @Column(name = "CODE", length = 32)
-    private String code;
-
     @Column(name = "NAME", length = 32, nullable = false, unique = true)
     private String name;
 
@@ -63,11 +60,10 @@ public class Menu implements Serializable, Cloneable, TreeNode<Menu>, Initialize
     @Column(name = "IS_LEAF", nullable = false)
     private Boolean isLeaf;
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "SHOW_LOCATION_ID")
-    private Dictionary showLocation;
+    @Column(name = "SHOW_LOCATION_TYPE", nullable = false)
+    private Integer showLocationType;
 
-    @Column(name = "IS_INITIALIZED", nullable = false, updatable = false)
+	@Column(name = "IS_INITIALIZED", nullable = false, updatable = false)
     private Boolean isInitialized;
 
     @Column(name = "REMARK", length = 512, nullable = false)
@@ -153,14 +149,6 @@ public class Menu implements Serializable, Cloneable, TreeNode<Menu>, Initialize
         this.id = id;
     }
 
-    public String getCode() {
-        return code;
-    }
-
-    public void setCode(String code) {
-        this.code = code;
-    }
-
     public String getName() {
         return name;
     }
@@ -199,14 +187,6 @@ public class Menu implements Serializable, Cloneable, TreeNode<Menu>, Initialize
 
     public void setDefaultShow(Boolean defaultShow) {
         this.defaultShow = defaultShow;
-    }
-
-    public Dictionary getShowLocation() {
-        return showLocation;
-    }
-
-    public void setShowLocation(Dictionary showLocation) {
-        this.showLocation = showLocation;
     }
 
     public Boolean getIsInitialized() {
@@ -312,4 +292,12 @@ public class Menu implements Serializable, Cloneable, TreeNode<Menu>, Initialize
     public void setIsDeleted(Boolean isDeleted) {
         this.isDeleted = isDeleted;
     }
+    
+    public Integer getShowLocationType() {
+		return showLocationType;
+	}
+
+	public void setShowLocationType(Integer showLocationType) {
+		this.showLocationType = showLocationType;
+	}
 }

@@ -155,18 +155,16 @@ public class CommonDao extends HibernateDAOImpl<Common, Long> {
         		Character.toUpperCase(entityName.charAt(0))+entityName.substring(1));
         getSession().createQuery(hql).setParameterList("id", id).executeUpdate();
         logger.debug("delete entity {},hql is {},id is {}", entityClass.getSimpleName(), hql, id);
-//		/super.delete(hql,ids);
     }
 
     /**
      * 恢复回收站中的数据
      */
     public void recovery(String entityName, Long[] id) {
-        String hql = String.format("update %s entity set entity.isDeleted=false where id in (:id)", 
+        String hql = String.format("update %s entity set entity.isDeleted=false, entity.modifiedTime=:modifyTime where id in (:id)", 
         		Character.toUpperCase(entityName.charAt(0))+entityName.substring(1));
-        getSession().createQuery(hql).setParameterList("id", id).executeUpdate();
+        getSession().createQuery(hql).setParameter("modifyTime", new Date()).setParameterList("id", id).executeUpdate();
         logger.debug("recovery entity {},hql is {},id is {}", entityClass.getSimpleName(), hql, id);
-        //super.recovery(hql,id);
     }
 
 }

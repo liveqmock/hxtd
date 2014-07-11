@@ -179,6 +179,7 @@
 		              {#if $T.row.type==11}修改密码{#/if}
 		              {#if $T.row.type==12}物理删除{#/if}
 		              {#if $T.row.type==13}恢复数据{#/if}
+		              {#if $T.row.type==14}线索转客户{#/if}
 		              </td>
 		              <td>{$T.row.creator.realName}</td>
 		              <td>{$T.row.createdTime}</td>

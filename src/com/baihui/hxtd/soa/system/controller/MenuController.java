@@ -15,6 +15,7 @@ import com.baihui.hxtd.soa.system.entity.User;
 import com.baihui.hxtd.soa.system.service.DictionaryService;
 import com.baihui.hxtd.soa.system.service.FunctionService;
 import com.baihui.hxtd.soa.system.service.MenuService;
+import com.baihui.hxtd.soa.util.Constants;
 import com.baihui.hxtd.soa.util.EnumModule;
 import com.baihui.hxtd.soa.util.EnumOperationType;
 import com.baihui.hxtd.soa.util.JsonDto;
@@ -294,7 +295,7 @@ public class MenuController {
 
         Menu menu = menuService.get(sourceId);
         //同步菜单栏菜单
-        if (menu.getShowLocation().getValue().equals(DictionaryConstant.MENU_SHOWLOCATION_MENUBAR)) {
+        if (menu.getShowLocationType().equals(Constants.SHOW_LOCATION_TYPE_MENUBAR)) {
             //同步一级菜单
             if (menu.getLevel().equals(1)) {
                 Collections.sort((List<Menu>) modelMap.get(Constant.VS_MENUBAR_FIRST_MENUS));
@@ -306,7 +307,7 @@ public class MenuController {
             }
         }
         //同步设置页菜单
-        else if (menu.getShowLocation().getValue().equals(DictionaryConstant.MENU_SHOWLOCATION_MENUBAR)) {
+        else if (menu.getShowLocationType().equals(Constants.SHOW_LOCATION_TYPE_MENUBAR)) {
             Collections.sort((List<Menu>) modelMap.get(Constant.VS_SETPAGE_MENUS));
         }
 

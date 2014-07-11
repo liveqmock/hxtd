@@ -49,7 +49,10 @@ public enum EnumOperationType {
     DELETEREAL(12),
     
     /**恢复数据*/
-    RECOVERY(13)
+    RECOVERY(13),
+    
+    /**线索转客户*/
+    MODIFYLEADCONVERTER(14)
     ;
 
 	private int operationType;

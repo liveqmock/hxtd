@@ -75,7 +75,7 @@ public class Contact implements Serializable {
 	private User owner;
 		
 	/** 线索来源 */
-	@JoinColumn(name = "SOURCE")
+	@JoinColumn(name = "SOURCE_DIC")
 	@ManyToOne(fetch = FetchType.LAZY)
 	@NotFound(action = NotFoundAction.IGNORE)
 	private Dictionary source;

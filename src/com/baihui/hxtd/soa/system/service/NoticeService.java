@@ -52,7 +52,7 @@ public class NoticeService {
 			HibernatePage<Notice> page,String type) throws NoSuchFieldException {
 		    logger.info("分页查找");
 	        DetachedCriteria criteria = DetachedCriteria.forClass(Notice.class);
-	        criteria.setFetchMode("creater", FetchMode.JOIN);
+	        criteria.setFetchMode("creator", FetchMode.JOIN);
 	        criteria.setFetchMode("modifier", FetchMode.JOIN);
 	        if("all".equals(type)){
 	        	//查看所有信息
@@ -151,7 +151,7 @@ public class NoticeService {
 	public List<Notice> find(){
 	    logger.info("查找");
         DetachedCriteria detachedCriteria = DetachedCriteria.forClass(Notice.class);
-        detachedCriteria.setFetchMode("creater", FetchMode.JOIN);
+        detachedCriteria.setFetchMode("creator", FetchMode.JOIN);
         detachedCriteria.setFetchMode("modifier", FetchMode.JOIN);
         detachedCriteria.add(Restrictions.eq("isDeleted", false));
 
@@ -169,7 +169,7 @@ public class NoticeService {
 	public List<Notice> find(Map<String, Object> searchParams) throws NoSuchFieldException {
 		logger.info("查找");
         DetachedCriteria detachedCriteria = DetachedCriteria.forClass(Notice.class);
-        detachedCriteria.setFetchMode("creater", FetchMode.JOIN);
+        detachedCriteria.setFetchMode("creator", FetchMode.JOIN);
         detachedCriteria.setFetchMode("modifier", FetchMode.JOIN);
         detachedCriteria.add(Restrictions.eq("isDeleted", false));
 

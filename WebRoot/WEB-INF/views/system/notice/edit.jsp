@@ -67,12 +67,12 @@
             <tr>
                 <input type="hidden" name="id" value="${notice.id}" />
                 <td align="right" width="15%"><span class="w_red">*&nbsp;</span>公告标题：</td>
-                <td align="left"><input type="text" class="text_input3 required" name="title" value="${notice.title}"/></td>
+                <td align="left"><input type="text" maxLength="20" class="text_input3 required" name="title" value="${notice.title}"/></td>
             </tr>
             <tr>
                 <td align="right" width="15%" valign="top"><span class="w_red">*&nbsp;</span>公告内容：</td>
                 <td align="left" width="85%" valign="top">
-                 <textarea name="content" class="remarks_input1 required" style="resize: none;">${notice.content}</textarea>
+                 <textarea name="content" maxLength="500" class="remarks_input1 required" style="resize: none;">${notice.content}</textarea>
                 </td>
            </tr>
            <tr>

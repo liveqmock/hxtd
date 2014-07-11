@@ -128,7 +128,7 @@ public class RecycleBinController {
     			auditLogArr[j] = new AuditLog(EnumModule.RECYCLEBIN.getModuleName(), 
    					idArr[j], recycleBinList.get(i).getRecordName(), EnumOperationType.DELETEREAL.getOperationType(), user,"真实删除数据");
     		}
-    		recycleBinService.deleteReal((Long[]) recordIds.toArray(new Long[0]),entityName.get(i),auditLogArr);
+    		recycleBinService.realDelete((Long[]) recordIds.toArray(new Long[0]),entityName.get(i),auditLogArr);
 	    }
 	    recycleBinService.delete(idArr);
         JsonDto json = new JsonDto();

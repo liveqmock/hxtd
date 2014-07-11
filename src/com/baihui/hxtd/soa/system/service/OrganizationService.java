@@ -202,8 +202,6 @@ public class OrganizationService {
             tierSerial.increaseValue(1);
             order = tierSerial.getSerial();
         }
-        organization.setCode("");
-        logger.debug("编码为“{}”", organization.getCode());
         organization.setOrder(order);
         logger.debug("序号为“{}”", organization.getOrder());
         organization.setLevel(parent.getLevel() + 1);
@@ -299,21 +297,14 @@ public class OrganizationService {
             //判断新父级是否是父节点
             Long code, order;
             if (parent.getIsLeaf()) {
-                TierSerial tierSerial = TierSerials.parse(Long.parseLong(parent.getCode()), orgTierLength);
-                code = tierSerial.getMinChild().getSerial();
-                tierSerial = TierSerials.parse(parent.getOrder(), orgTierLength);
+                TierSerial tierSerial = TierSerials.parse(parent.getOrder(), orgTierLength);
                 order = tierSerial.getMinChild().getSerial();
             } else {
                 Organization maxChild = getMaxChild(parent);
-                TierSerial tierSerial = TierSerials.parse(Long.parseLong(maxChild.getCode()), orgTierLength);
-                tierSerial.increaseValue(1);
-                code = tierSerial.getSerial();
-                tierSerial = TierSerials.parse(maxChild.getOrder(), orgTierLength);
+                TierSerial tierSerial = TierSerials.parse(maxChild.getOrder(), orgTierLength);
                 tierSerial.increaseValue(1);
                 order = tierSerial.getSerial();
             }
-            organization.setCode(StringUtils.leftPad(String.valueOf(code), parent.getCode().length(), "0"));
-            logger.debug("编码为“{}”", organization.getCode());
             organization.setOrder(order);
             logger.debug("序号为“{}”", organization.getOrder());
             organization.setLevel(parent.getLevel() + 1);

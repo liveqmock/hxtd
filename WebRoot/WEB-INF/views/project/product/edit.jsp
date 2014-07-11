@@ -93,8 +93,8 @@ function searchData(action){ // 搜索
 			</td>
 			<td align="right">收益率(%)：</td>
 			<td align="left">
-				<input name="minRate" type="text" value="${product.minRate}" class="text_input4 right"/>
-				~&nbsp;<input name="maxRate" type="text" value="${product.maxRate}" class="text_input4 right"/>
+				<input name="minRate" type="text" value="${product.minRate}" class="text_input3 right"/>
+				<!--~&nbsp;<input name="maxRate" type="text" value="${product.maxRate}" class="text_input4 right"/> -->
 			</td>
 		</tr>
 		<tr>

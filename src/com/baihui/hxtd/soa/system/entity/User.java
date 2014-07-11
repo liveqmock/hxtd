@@ -28,10 +28,6 @@ public class User implements Serializable, Cloneable, Initialized {
     @Desc("主键编号")
     private Long id;
 
-    @Desc("编码")
-    @Column(name = "CODE", length = 32, nullable = false)
-    private String code;
-
     @Desc("名称")
     @Column(name = "LOGIN_NAME", length = 32, nullable = false, unique = true, updatable = false)
     private String name;
@@ -47,11 +43,6 @@ public class User implements Serializable, Cloneable, Initialized {
     @Desc("是否激活")
     @Column(name = "IS_ACTIVE", nullable = false, updatable = false)
     private Boolean isActive;
-
-    @Desc("数据存储状态")
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "STORE_STATUS", updatable = false)
-    private Dictionary storeStatus;
 
     @Desc("真实姓名")
     @Column(name = "USER_NAME", length = 32, nullable = false)
@@ -84,24 +75,13 @@ public class User implements Serializable, Cloneable, Initialized {
 
     @Desc("工作状态")
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "JOB_SITUATION")
+    @JoinColumn(name = "JOB_SITUATION_ID")
     private Dictionary jobSituation;
 
     @Desc("备注")
     @Column(name = "REMARK", length = 512)
     private String remark;
 
-    @Desc("序号")
-    @Column(name = "`ORDER`")
-    private Long order;
-
-    @Desc("已被删除")
-    @Column(name = "IS_DELETED", nullable = false, updatable = false)
-    private Boolean isDeleted;
-
-    @Desc("初始化的")
-    @Column(name = "IS_INITIALIZED", nullable = false, updatable = false)
-    private Boolean isInitialized;
 
     @Desc("创建者")
     @JsonBackReference
@@ -147,6 +127,18 @@ public class User implements Serializable, Cloneable, Initialized {
     @JoinTable(name = "SM_USER_ROLE", joinColumns = {@JoinColumn(name = "USER_ID")}, inverseJoinColumns = {@JoinColumn(name = "ROLE_ID")})
     private Set<Role> roles = new HashSet<Role>();
 
+    @Desc("数据存储状态")
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "STORE_STATUS_ID", updatable = false)
+    private Dictionary storeStatus;
+
+    @Desc("已被删除")
+    @Column(name = "IS_DELETED", nullable = false, updatable = false)
+    private Boolean isDeleted;
+
+    @Desc("初始化的")
+    @Column(name = "IS_INITIALIZED", nullable = false, updatable = false)
+    private Boolean isInitialized;
 
     public User() {
     }
@@ -166,14 +158,6 @@ public class User implements Serializable, Cloneable, Initialized {
 
     public void setId(Long id) {
         this.id = id;
-    }
-
-    public String getCode() {
-        return code;
-    }
-
-    public void setCode(String code) {
-        this.code = code;
     }
 
     public String getName() {
@@ -286,14 +270,6 @@ public class User implements Serializable, Cloneable, Initialized {
 
     public void setRemark(String remark) {
         this.remark = remark;
-    }
-
-    public Long getOrder() {
-        return order;
-    }
-
-    public void setOrder(Long order) {
-        this.order = order;
     }
 
     public Boolean getIsDeleted() {

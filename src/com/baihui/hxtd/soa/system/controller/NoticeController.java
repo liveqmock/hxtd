@@ -169,7 +169,7 @@ public class NoticeController {
 		logger.info("获得当前操作用户{}", u.getName());
 		notice.setModifieTime(new Date());
 		notice.setModifier(u);
-		notice.setCreater(u);
+		notice.setCreator(u);
 		AuditLog auditLog = new AuditLog(EnumModule.NOTICE.getModuleName(), 
 				notice.getId(), notice.getTitle(), EnumOperationType.MODIFY.getOperationType(), u);
 		noticeService.modify(notice, u, auditLog);
@@ -205,7 +205,7 @@ public class NoticeController {
 		//临时代码，时间类型应从数据库中取
 		User u = (User) request.getSession().getAttribute(Constant.VS_USER);
 		logger.info("NoticeController.query 获得当前操作的用户{}",u.getName());
-		notice.setCreater(u);
+		notice.setCreator(u);
 		notice.setModifier(u);
 		notice.setCreatedTime(new Date());
 		notice.setModifieTime(new Date());

@@ -44,8 +44,8 @@ public class AuditLogAspect {
     @Pointcut("execution(public * com.baihui.hxtd.soa.*.service..resetPassword*(..))")
     public void resetPassword(){}
 
-    @Pointcut("execution(public * com.baihui.hxtd.soa.*.service..modifyPwd*(..))")
-    public void modifyPwd(){}
+    //@Pointcut("execution(public * com.baihui.hxtd.soa.*.service..modifyPwd*(..))")
+    //public void modifyPwd(){}
 
     @Pointcut("execution(public * com.baihui.hxtd.soa.*.service..enable*(..))")
     public void enable(){}
@@ -66,11 +66,15 @@ public class AuditLogAspect {
     @Pointcut("execution(public * com.baihui.hxtd.soa.*.service..recovery*(..))")
     public void recovery() {}
 
-    /**真是删除数据*/
-    @Pointcut("execution(public * com.baihui.hxtd.soa.*.service..deleteReal*(..))")
-    public void deleteReal() {}
+    /**真实删除数据*/
+    @Pointcut("execution(public * com.baihui.hxtd.soa.*.service..realDelete*(..))")
+    public void realDelete() {}
 
-    @Pointcut("add() || modify() ||  authorization()||resetPassword()||modifyPwd()|| delete() || exportFile() || importFile()||recovery()||deleteReal()")
+    /**线索转换为客户*/
+   // @Pointcut("execution(public * com.baihui.hxtd.soa.*.service..modifyLeadConverter*(..))")
+   // public void modifyLeadConverter(){}
+    
+    @Pointcut("add() || modify() ||  authorization()||resetPassword()|| delete() ||exportFile() || importFile()||recovery()||realDelete()")
     public void anyOperation(){}
 
     @AfterReturning("anyOperation() && args(.., auditLog)")
@@ -123,6 +127,7 @@ public class AuditLogAspect {
     	}
     	logger.debug("切入点方法doAfterDeleteAuditBatch执行完了 \n");
     }
+    
 
     /**
       * convertRecyclebinByAuditLog

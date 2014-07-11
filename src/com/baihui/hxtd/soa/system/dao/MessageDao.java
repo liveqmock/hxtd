@@ -25,7 +25,7 @@ public class MessageDao extends HibernateDAOImpl<Message, Long>{
 	 */
 	public Message getById(Long id) {
 		StringBuffer hql=new StringBuffer("from Message message ");
-        hql.append("left join fetch message.creater ");
+        hql.append("left join fetch message.creator ");
         hql.append("left join fetch message.modifier ");
         hql.append("where message.id=? ");
 		return findUnique(hql.toString(), id);

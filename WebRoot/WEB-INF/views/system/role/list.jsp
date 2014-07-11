@@ -108,13 +108,13 @@
                             <a href="${ctx}/system/role/toModifyPage.do?id={$T.row.id}" class=" block_inline s_edit_btn globle_img ml10" title="编辑"></a>
                             {#/if}
                         </c:if>
+                        <c:if test="${VS_HAS_FUNCTIONS.roleAuthorization}">
+                            <a href="${ctx}/system/role/toAuthorizationPage.do?id={$T.row.id}" class=" block_inline h_shouquan globle_img ml10 authorization" title="授权"></a>
+                        </c:if>
                         <c:if test="${VS_HAS_FUNCTIONS.roleDelete}">
                             {#if !$T.row.isInitialized}
                             <a href="javascript:void(0)" uri="${ctx}/system/role/delete.do?id={$T.row.id}" class=" block_inline s_dump_btn globle_img ml10 delete" title="删除"></a>
                             {#/if}
-                        </c:if>
-                        <c:if test="${VS_HAS_FUNCTIONS.roleAuthorization}">
-                            <a href="${ctx}/system/role/toAuthorizationPage.do?id={$T.row.id}" class=" block_inline h_shouquan globle_img ml10 authorization" title="授权"></a>
                         </c:if>
                     </td>
                     {#/for}

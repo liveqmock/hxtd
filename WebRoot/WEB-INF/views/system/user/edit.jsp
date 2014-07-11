@@ -89,7 +89,16 @@
                         </tr>
                         <tr>
                             <td align="right" width="15%">用户名：</td>
-                            <td align="left"><input type="text" class="{required:true,maxlength:32,unique:['User','${user.id}']} text_input3" name="name" value="${user.name}"/></td>
+                            <td align="left">
+                            <c:choose>
+                            <c:when test="${user.id==null}">
+                            <input type="text" class="{required:true,maxlength:32,unique:['User','${user.id}']} text_input3" name="name" value="${user.name}"/>
+                            </c:when>
+                            <c:otherwise>
+                            <input type="text" class="text_input3" name="name" value="${user.name}"/>
+                            </c:otherwise>
+                            </c:choose>
+                            </td>
                             <td align="right" width="15%">密码：</td>
                             <td align="left"><input type="password" class="{required:true,maxlength:64} text_input3" name="password" value="${user.password}"/></td>
                         </tr>

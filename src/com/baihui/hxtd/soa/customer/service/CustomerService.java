@@ -126,7 +126,7 @@ public class CustomerService {
      * @param ownerId
      * @param id
      */
-    public void modifyOwner(Long ownerId, Long[] id) {
+    public void modifyOwner(Long ownerId, Long[] id,AuditLog [] auditLogArr ) {
     	customerDao.updateOwner(ownerId,id);
 		
 	}

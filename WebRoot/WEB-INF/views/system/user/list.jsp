@@ -65,7 +65,7 @@
                 <input type="hidden" name="organizationId" value="${organizationId}"/>
                 <table class="fl mt5 w">
                     <tr>
-                        <td class="f14" align="right" width="6%">用户名称：</td>
+                        <td class="f14" align="right" width="6%">用户名：</td>
                         <td class="f14" align="left" width="16%"><input type="text" name="search_LIKE_name" value="${name}" class="text_input1"/></td>
                         <td class="f14" align="right" width="6%">真实姓名：</td>
                         <td class="f14" align="left" width="16%"><input type="text" name="search_LIKE_realName" value="${realName}" class="text_input1"/></td>

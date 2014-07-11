@@ -58,7 +58,6 @@ public class MenuService {
         logger.info("查找系统初始化时的菜单");
         String hql = "select menu from Menu menu" +
                 " inner join fetch menu.trigger" +
-                " inner join fetch menu.showLocation" +
                 " left join fetch menu.parent" +
                 " where menu.isDeleted=false" +
                 " order by menu.order";
@@ -295,14 +294,14 @@ public class MenuService {
      * 查找菜单根据显示位置
      * 1.父菜单不显示，所有子菜单都不显示
      */
-    public List<Menu> findByShowlocation(List<Menu> menus, String showlocation) throws CloneNotSupportedException {
+    public List<Menu> findByShowlocation(List<Menu> menus, Integer showlocationType) throws CloneNotSupportedException {
         logger.info("查找菜单根据显示位置");
-        logger.debug("显示位置“{}”", showlocation);
+        logger.debug("显示位置“{}”", showlocationType);
 
 
         List<Menu> showMenus = new ArrayList<Menu>();
         for (Menu menu : menus) {
-            if (menu.getShowLocation() != null && showlocation.equals(menu.getShowLocation().getValue())) {
+            if (menu.getShowLocationType() != null && showlocationType.equals(menu.getShowLocationType())) {
                 showMenus.add(menu);
             }
         }
@@ -487,7 +486,6 @@ public class MenuService {
         logger.info("新增");
 
         logger.info("添加默认属性值");
-        menu.setCode(null);
         logger.debug("编号默认为空");
         menu.setIsLeaf(true);
         Menu parent = menu.getParent();
@@ -624,17 +622,17 @@ public class MenuService {
         userDao.updateAllStoreStatus();
     }
 
-	/**
+    /**
      * getNameById
      * @Title: getNameById
      * @Description: 通过id获取角色名称
      * @param id
      * @return String
-    */
+     */
     @Transactional
-	public String getNameById(Long id) {
-		return menuDao.get(id).getName();
-	}
+    public String getNameById(Long id) {
+        return menuDao.get(id).getName();
+    }
 
 
 }

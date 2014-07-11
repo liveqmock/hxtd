@@ -102,32 +102,14 @@ public class OrderService {
 	
 	
 	public void add(Order order, AuditLog auditLog){
-		order.setCode(getOrderCode());
 		orderDao.save(order);
 		auditLog.setRecordId(order.getId());
-		auditLog.setRecordName(order.getCode());
 	}
 	
 	public void modify(Order order, AuditLog auditLog){
 		orderDao.save(order);
 	}
 	
-	private String getOrderCode(){
-		StringBuffer orderCode = new StringBuffer();
-		orderCode.append(Contacts.ORDER_PREFIX);
-		String dateFomat = Tools.fomatDate("yyyyMMdd");
-		String hql = "select order.code from Order order where order.code like ? " +
-						" and isDeleted = false order by order.code desc";
-		List<String> l = orderDao.find(hql, Contacts.ORDER_PREFIX+dateFomat+"%");
-		if(l==null||l.isEmpty()){
-			orderCode.append(dateFomat);
-			orderCode.append("0001");
-		}else{
-			String code = l.get(0);
-			orderCode.append(Long.valueOf(code.substring(2))+1);
-		}
-		return orderCode.toString();
-	}
 	
 	
 	public void delete( Long[] ids,AuditLog[] auditLogArr){

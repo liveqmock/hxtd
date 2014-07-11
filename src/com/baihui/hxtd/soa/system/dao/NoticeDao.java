@@ -25,7 +25,7 @@ public class NoticeDao extends HibernateDAOImpl<Notice, Long>{
 	 */
 	public Notice getById(Long id) {
 		StringBuffer hql=new StringBuffer("from Notice notice ");
-        hql.append("left join fetch notice.creater ");
+        hql.append("left join fetch notice.creator ");
         hql.append("left join fetch notice.modifier ");
         hql.append("where notice.id=? ");
 		return findUnique(hql.toString(), id);

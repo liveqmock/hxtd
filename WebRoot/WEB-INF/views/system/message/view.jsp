@@ -56,7 +56,7 @@
         </tr>
         <tr>
             <td align="right" width="15%">发送者：</td>
-            <td align="left">${userMessage.message.creater.realName}</td>
+            <td align="left">${userMessage.message.creator.realName}</td>
         </tr>
         <tr>
         <td align="right" width="15%">发送时间：</td>

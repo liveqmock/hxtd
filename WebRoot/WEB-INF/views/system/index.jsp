@@ -43,7 +43,7 @@
                             <c:if test="${closeMenu}">
                         </dl>
                     </div>
-                    <div class="fr mr20  setting-icon${fn:substring(menu.code,0,2)} globle_img"></div>
+                    <div class="fr mr20  setting-icon${fn:substring(menu.order,0,2)} globle_img"></div>
                 </div>
             </td>
             <c:if test="${isNewline}">

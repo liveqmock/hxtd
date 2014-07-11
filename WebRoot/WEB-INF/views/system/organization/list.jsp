@@ -96,9 +96,9 @@
         <input type="hidden" name="organizationId" value="${id}"/>
         <table class="fl mt5 w">
             <tr class="header">
-                <td class="f14" align="right" width="6%">用户名称：</td>
-                <td class="f14" align="left" width="16%"><input type="text" name="search_LIKE_name" value="${name}" class="text_input1"/></td>
                 <td class="f14" align="right" width="6%">真实姓名：</td>
+                <td class="f14" align="right" width="6%">用户名：</td>
+                <td class="f14" align="left" width="16%"><input type="text" name="search_LIKE_name" value="${name}" class="text_input1"/></td>
                 <td class="f14" align="left" width="16%"><input type="text" name="search_LIKE_realName" value="${realName}" class="text_input1"/></td>
                 <td class="f14" align="right" width="6%">启用：</td>
                 <td class="f14" align="left" width="16%">
@@ -150,11 +150,11 @@
     <table class="cb id_table2 w pr35 user" forform="form" formaction="${ctx}/system/user/query.do" forpagination="#tabs-user .pagination">
         <tr class="header">
             <th style="width:4%"><input type="checkbox" class="checkall"/></th>
+            <th style="width:10%">真实姓名</th>
             <th style="width:10%" class="sortable orderby" orderby="name">用户名</th>
             <th style="width:5%">管理员</th>
             <th style="width:10%" class="sortable orderby" orderby="isActive">启用</th>
             <th style="width:10%">组织</th>
-            <th style="width:10%">真实姓名</th>
             <th style="width:5%">性别</th>
             <th style="width:10%">联系电话</th>
             <th style="width:10%">职位</th>
@@ -166,6 +166,7 @@
             {#foreach $T.result as row}
             <tr class="row {#cycle values=['bg_c_blue','']}">
                 <td><input type="checkbox" class="checkitem" value="{$T.row.id}"/></td>
+                <td>{$T.row.realName}</td>
                 <td>
                     <c:choose>
                         <c:when test="${VS_HAS_FUNCTIONS.userView}"><a href="${ctx}/system/user/toViewPage.do?id={$T.row.id}" class="toviewpage">{$T.row.name}</a></c:when>
@@ -175,7 +176,6 @@
                 <td>{$T.row.isManager?"是":"否"}</td>
                 <td class="isactive">{$T.row.isActive?"是":"否"}</td>
                 <td>{$T.row.organization.name}</td>
-                <td>{$T.row.realName}</td>
                 <td>{$T.row.sex.key}</td>
                 <td>{$T.row.phone}</td>
                 <td>{$T.row.jobName}</td>

@@ -171,7 +171,7 @@
 		<c:otherwise>{$T.row.title}</c:otherwise>
 	</c:choose>
                 </td>
-                <td>{$T.row.creater.realName}</td>
+                <td>{$T.row.creator.realName}</td>
                 <td >{$T.row.sentTime} </td>
                 <td >{$T.row.createdTime}</td>
                 <td >{$T.row.deadTime}</td>

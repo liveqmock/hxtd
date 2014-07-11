@@ -1,5 +1,6 @@
 package com.baihui.hxtd.soa.order.entity;
 
+import java.math.BigDecimal;
 import java.util.Date;
 
 import javax.persistence.Column;
@@ -73,7 +74,7 @@ public class Order {
 	
 	/** 购买金额 */
 	@Column(name = "PURCHASE_MONEY")
-	private Float purchaseMoney;
+	private BigDecimal purchaseMoney;
 	
 	/** 收益率 */
 	@Column(name = "EARNING_RATE")
@@ -170,10 +171,10 @@ public class Order {
 	public void setInvestmentWay(Dictionary investmentWay) {
 		this.investmentWay = investmentWay;
 	}
-	public Float getPurchaseMoney() {
+	public BigDecimal getPurchaseMoney() {
 		return purchaseMoney;
 	}
-	public void setPurchaseMoney(Float purchaseMoney) {
+	public void setPurchaseMoney(BigDecimal purchaseMoney) {
 		this.purchaseMoney = purchaseMoney;
 	}
 	public Float getEarningRate() {

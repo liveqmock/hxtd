@@ -1,12 +1,12 @@
 package com.baihui.hxtd.soa.common.service;
 
-public class ChineseFormat {
-    public static String[] pattern = {"零", "一", "二", "三", "四", "五", "六", "七", "八", "九"};
-    private final String[] cPattern = {"", "十", "百", "千", "万", "十", "百", "千", "亿"};
+public class MoneyFormat {
+    private final String[] pattern = {"零", "壹", "贰", "叁", "肆", "伍", "陆", "柒", "捌", "玖"};
+    private final String[] cPattern = {"", "拾", "佰", "仟", "万", "拾", "佰", "仟", "亿"};
     private final String[] cfPattern = {"", "角", "分"};
     private final String ZEOR = "零";
 
-    public ChineseFormat() {
+    public MoneyFormat() {
     }
 
     public String format(String moneyString) {
@@ -71,12 +71,13 @@ public class ChineseFormat {
                 for (int i = fraction.length(); i > 0; i--) {  //插入中文标识
                     fraction.insert(i, cfPattern[i]);
                 }
+                fraction.insert(0, "元");      //为整数部分添加标识
             } else {
-                fraction = new StringBuffer("");
+                fraction = new StringBuffer("元整");
             }
 
         } else {
-            fraction = new StringBuffer("");
+            fraction = new StringBuffer("元整");
         }
 
         ms.append(fraction);         //加入小数部分
@@ -86,6 +87,6 @@ public class ChineseFormat {
 
     public static void main(String[] ar) {
         //System.out.println(new MoneyFormat().format("10005022.123009"));
-        System.out.println(new ChineseFormat().format("12"));
+        System.out.println(new MoneyFormat().format("999"));
     }
 }     

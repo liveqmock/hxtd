@@ -179,9 +179,10 @@ public class ReportService {
         while (!min.after(max)) {
             AxisInfo axisInfo = new AxisInfo();
             format.applyPattern(patterns[0]);
-            axisInfo.setValue(Integer.parseInt(format.format(min)));
+            String value = format.format(min);
+            axisInfo.setValue(Integer.parseInt(value));
             format.applyPattern(patterns[1]);
-            axisInfo.setDesc(format.format(min));
+            axisInfo.setDesc(new ChineseFormat().format(value) + format.format(min));
             dates.add(axisInfo);
             calendar.add(type, 1);
             min = calendar.getTime();

@@ -75,6 +75,7 @@ public class OFC2ChartGenerate implements ChartGenerate {
             case bar:
                 BarChart barChart = new BarChart();
                 for (int i = 0; i < rows.size(); i++) {
+//                    barChart.addBars()
                     barChart.addValues(rows.get(i));
                     elements.add(barChart);
                 }

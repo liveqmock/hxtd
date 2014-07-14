@@ -1,11 +1,9 @@
 package com.baihui.hxtd.soa.base.utils;
 
+import com.baihui.hxtd.soa.base.orm.ExtendItemSelectHql;
 import com.baihui.hxtd.soa.base.propertyeditors.MultiPatternDateEditor;
-import com.baihui.hxtd.soa.base.utils.serial.TierSerial;
-import com.baihui.hxtd.soa.base.utils.serial.TierSerials;
 import com.google.common.collect.Maps;
 import org.apache.commons.lang3.StringUtils;
-import org.hibernate.criterion.Criterion;
 import org.hibernate.criterion.DetachedCriteria;
 import org.hibernate.criterion.MatchMode;
 import org.hibernate.criterion.Restrictions;
@@ -394,6 +392,81 @@ public class Search {
         }
         return criteria;
     }
+
+    private final static Map<SearchFilter.Operator, String> OPERATORS = new HashMap<SearchFilter.Operator, String>();
+
+    static {
+        OPERATORS.put(SearchFilter.Operator.EQ, "=");
+        OPERATORS.put(SearchFilter.Operator.GT, ">");
+        OPERATORS.put(SearchFilter.Operator.GTE, ">=");
+        OPERATORS.put(SearchFilter.Operator.LT, "<");
+        OPERATORS.put(SearchFilter.Operator.LTE, "<=");
+        OPERATORS.put(SearchFilter.Operator.LIKE, "like");
+    }
+
+    /**
+     * 构建where hql
+     * fieldName是字段的层级形式
+     * <p/>
+     * 1.转换值类型
+     * 2.创建关联
+     * 3.拼接查询项
+     */
+    public static void buildWhereHql(Map<String, SearchFilter> filters, ExtendItemSelectHql hql, Class clazz) throws NoSuchFieldException {
+        Set<String> aliasNames = new HashSet<String>();
+        for (SearchFilter filter : filters.values()) {
+
+            Class fieldBelongClass = clazz;
+            String fieldBelongClassAliasName = StringUtils.uncapitalize(clazz.getSimpleName());
+            String fieldName = filter.fieldName;
+            String fieldAliasName = fieldBelongClassAliasName + "." + fieldName;
+            if (fieldName.contains(".")) {
+                String[] fieldNames = fieldName.split("\\.");
+                for (int i = 0; i < fieldNames.length - 1; i++) {
+                    fieldBelongClass = fieldBelongClass.getDeclaredField(fieldNames[i]).getType();
+                    String classAliasName = StringUtils.uncapitalize(fieldNames[i]);
+                    if (!aliasNames.contains(classAliasName)) {
+                        aliasNames.add(classAliasName);
+                    }
+                    fieldBelongClassAliasName = classAliasName;
+                    fieldName = fieldNames[i + 1];
+                }
+                fieldAliasName = fieldBelongClassAliasName + "." + fieldName;
+            }
+
+            Field field = fieldBelongClass.getDeclaredField(fieldName);
+            Object value = filter.value;
+            if (value instanceof String && !field.getType().equals(String.class)) {
+                PropertyEditor propertyEditor = defaultEditors.get(field.getType());
+                propertyEditor.setAsText((String) filter.value);
+                value = propertyEditor.getValue();
+            }
+
+            String alias = placeHodler(filter);
+            hql.getWhereItems().add(String.format("%s %s :%s", fieldAliasName, OPERATORS.get(filter.operator), alias));
+            hql.getConditionValues().put(alias, value);
+        }
+    }
+
+    /**
+     * 生成位置参数
+     */
+    public static String placeHodler(SearchFilter filter) {
+        return placeHodler(filter.fieldName, filter.operator);
+    }
+
+    public static String placeHodler(String fieldName, SearchFilter.Operator operator) {
+        if (fieldName.contains(".")) {
+            String[] parts = fieldName.split("\\.");
+            for (int i = 1; i < parts.length; i++) {
+                parts[i] = StringUtils.capitalize(parts[i]);
+            }
+            return StringUtils.join(parts, "") + operator;
+        }
+
+        return fieldName + operator;
+    }
+
 
     /**
      * 获取类的字段

@@ -6,6 +6,7 @@ import com.baihui.hxtd.soa.base.orm.hibernate.HibernatePage;
 import com.baihui.hxtd.soa.base.utils.ReflectionUtils;
 import com.baihui.hxtd.soa.base.utils.Search;
 import com.baihui.hxtd.soa.base.utils.mapper.HibernateAwareObjectMapper;
+import com.baihui.hxtd.soa.base.utils.report.Chart;
 import com.baihui.hxtd.soa.common.entity.Module;
 import com.baihui.hxtd.soa.common.entity.ModuleField;
 import com.baihui.hxtd.soa.common.entity.Report;
@@ -31,11 +32,13 @@ import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.*;
+import org.springside.modules.persistence.SearchFilter;
 import org.springside.modules.web.Servlets;
 
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
 import java.lang.reflect.Field;
+import java.text.SimpleDateFormat;
 import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
@@ -294,6 +297,9 @@ public class ReportController {
         List<ModuleField> moduleFields = moduleService.toModuleField(dateTypeFields.toArray(new Field[]{}));
         modelMap.addAttribute("moduleFields", moduleFields);
 
+        SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
+        modelMap.addAttribute("time", format.format(new Date()));
+
         return "/common/report/report";
     }
 
@@ -303,17 +309,26 @@ public class ReportController {
      */
     @ResponseBody
     @RequestMapping("/generate")
-    public String generate(Long id, String fieldName, Date min, Date max) {
+    public String generate(Long id, HttpServletRequest request) throws NoSuchFieldException {
         logger.info("生成报表");
-        logger.debug("报表主键编号={}，列名={}，最小时间={}，最大时间={}", id, fieldName, min, max);
+
+        logger.debug("报表主键编号={}", id);
+        Map<String, Object> searchParams = Servlets.getParametersStartingWith(request, "search_");
+        Search.clearBlankValue(searchParams);
+        Map<String, SearchFilter> filters = Search.parse(searchParams);
 
         Report report = reportService.get(id);
-        report.setModule(ReflectionUtils.findNameValueMatched(InitApplicationConstant.MODULES, "id", report.getModule().getId()));
-        if (min == null) min = new Date();
-        if (max == null) max = new Date();
-        String data = reportService.generate(report, fieldName, min, max);
+        report.setModule(moduleService.findById(report.getModule().getId()));
 
-        return data;
+        Chart chart = reportService.generate(report, filters);
+        JsonDto jsonDto = new JsonDto();
+        BusinessResult<Chart> businessResult = new BusinessResult<Chart>(chart);
+        jsonDto.setResult(businessResult);
+
+        String result = jsonDto.toString();
+        logger.debug("chart={}", result);
+
+        return result;
     }
 
 

@@ -200,7 +200,7 @@
                                 <c:forEach items="${fieldModules}" var="fieldModule">
                                     <optgroup label="${fieldModule.desc}" data-id="${fieldModule.id}">
                                         <c:forEach items="${fieldModule.moduleFields}" var="field">
-                                            <c:set var="fieldName" value="${fieldModule.name}.${field.name}"/>
+                                            <c:set var="fieldName" value="${field.name}"/>
                                             <option value="${fieldName}" label="${field.desc}" data-name="${field.name}" ${fieldName==report.zFieldName?"selected":""}>${field.desc}</option>
                                         </c:forEach>
                                     </optgroup>

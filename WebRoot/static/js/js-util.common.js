@@ -49,6 +49,7 @@ Grid.defaults = {
     //内容列表
     gridName: "grid",
     gridSelector: ".grid",
+    renderList: null,//渲染列表函数
     gridForForm: "forform",//表格扩展属性，对应的表单
     gridFormAction: "formaction",//表格扩展属性，对应表单的action属性
     gridForPagination: "forpagination",//表格扩展属性，对应的分页栏
@@ -99,6 +100,7 @@ Grid.prototype = {
     /**初始化对象*/
     init: function (options) {
         this.options = $.extend({}, Grid.defaults, options);
+        (this.options.renderList) && (this.renderList = this.options.renderList);
         this.setElements();
         this.initUi();
         this.loadGrid();

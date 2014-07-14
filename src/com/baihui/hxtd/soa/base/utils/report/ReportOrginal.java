@@ -3,18 +3,40 @@ package com.baihui.hxtd.soa.base.utils.report;
 import java.util.List;
 
 /**
+ * 报表原始数据
+ *
  * @author xiayouxue
  * @date 2014/7/11
  */
-public class ChartOrginal {
+public class ReportOrginal {
 
-    private List xAxisValues;
+    /**
+     * X轴描述
+     */
     private List xAxisDescs;
-    private List zAxisValues;
+    /**
+     * X轴值
+     */
+    private List xAxisValues;
+    /**
+     * Y轴数值区间
+     */
+    private YAxisRange<Long> yAxisRange;
+    /**
+     * Z轴描述
+     */
     private List zAxisDescs;
-    private List table;
+    /**
+     * Z轴值
+     */
+    private List zAxisValues;
+    /**
+     * 数据行
+     */
+    private List rows;
 
-    public ChartOrginal() {
+    public ReportOrginal() {
+        yAxisRange = new YAxisRange<Long>();
     }
 
     public List getxAxisValues() {
@@ -33,6 +55,14 @@ public class ChartOrginal {
         this.xAxisDescs = xAxisDescs;
     }
 
+    public YAxisRange<Long> getyAxisRange() {
+        return yAxisRange;
+    }
+
+    public void setyAxisRange(YAxisRange<Long> yAxisRange) {
+        this.yAxisRange = yAxisRange;
+    }
+
     public List getzAxisValues() {
         return zAxisValues;
     }
@@ -49,11 +79,11 @@ public class ChartOrginal {
         this.zAxisDescs = zAxisDescs;
     }
 
-    public List getTable() {
-        return table;
+    public List getRows() {
+        return rows;
     }
 
-    public void setTable(List table) {
-        this.table = table;
+    public void setRows(List rows) {
+        this.rows = rows;
     }
 }

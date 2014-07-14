@@ -1,5 +1,6 @@
 package com.baihui.hxtd.soa.base.utils.report.openflashchart2;
 
+import com.baihui.hxtd.soa.base.utils.report.ChartGraph;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 import java.util.ArrayList;
@@ -11,27 +12,27 @@ import java.util.List;
  * @author xiayouxue
  * @date 2014/7/8
  */
-public class OFC2Chart {
+public class OFC2ChartGraph extends ChartGraph {
 
     private OFC2Legend title = new OFC2Legend();   //图表标题
 
     @JsonProperty("x_legend")
-    private OFC2Legend xLegend = new OFC2Legend(); //X轴标题
+    private OFC2Legend xLegend; //X轴标题
 
     @JsonProperty("y_legend")
-    private OFC2Legend yLegend = new OFC2Legend(); //Y轴标题
+    private OFC2Legend yLegend; //Y轴标题
 
     @JsonProperty("is_decimal_separator_comma")
-    private Boolean isDecimalSeparatorComma = false;    //(0/1)，是否用逗号替换小数点
+    private Boolean isDecimalSeparatorComma;    //(0/1)，是否用逗号替换小数点
 
     @JsonProperty("is_fixed_num_decimals_forced")
-    private Boolean isFixedNumDecimalsForced = true;    //(0/1)，是否用逗号替换小数点
+    private Boolean isFixedNumDecimalsForced;    //(0/1)，是否用逗号替换小数点
 
     @JsonProperty("num_decimals")
-    private Integer numDecimals = 3;    //精度，即小数点后面的位数，需要配合上面参数一起使用
+    private Integer numDecimals;    //精度，即小数点后面的位数，需要配合上面参数一起使用
 
     @JsonProperty("is_thousand_separator_disabled")
-    private Boolean isThousandSeparatorDisabled = true;    //(0/1)，是否使用千位分隔符
+    private Boolean isThousandSeparatorDisabled;    //(0/1)，是否使用千位分隔符
 
     @JsonProperty("x_axis")
     private OFC2Axis xAxis = new OFC2Axis();
@@ -44,23 +45,23 @@ public class OFC2Chart {
     private OFC2Tooltip tooltip = new OFC2Tooltip();
 
 
-    public OFC2Chart() {
+    public OFC2ChartGraph() {
         this.title.setStyle("{font-size: 20px; color:#0000ff; font-family: Verdana; text-align: center;}");
-        this.xLegend.setStyle("{font-size: 12px; color:#736AFF;}");
-        this.yLegend.setStyle("{color: #736AFF; font-size: 12px;}");
+//        this.xLegend.setStyle("{font-size: 12px; color:#736AFF;}");
+//        this.yLegend.setStyle("{color: #736AFF; font-size: 12px;}");
 
-        this.xAxis.setStroke(1);
-        this.xAxis.setTickHeight(10);
-        this.xAxis.setColour("#d000d0");
-        this.xAxis.setGridColour("#00ff00");
-        this.xAxis.setOffset(true);
-        this.xAxis.setThreeDimensional(false);
+//        this.xAxis.setStroke(1);
+//        this.xAxis.setTickHeight(10);
+//        this.xAxis.setColour("#d000d0");
+//        this.xAxis.setGridColour("#00ff00");
+//        this.xAxis.setOffset(true);
+//        this.xAxis.setThreeDimensional(false);
 
-        this.yAxis.setStroke(4);
-        this.yAxis.setTickLength(3);
-        this.yAxis.setColour("#d000d0");
-        this.yAxis.setGridColour("#00ff00");
-        this.yAxis.setOffset(false);
+//        this.yAxis.setStroke(4);
+//        this.yAxis.setTickLength(3);
+//        this.yAxis.setColour("#d000d0");
+//        this.yAxis.setGridColour("#00ff00");
+//        this.yAxis.setOffset(false);
 
         this.tooltip.setShadow(false);
         this.tooltip.setStroke(2);

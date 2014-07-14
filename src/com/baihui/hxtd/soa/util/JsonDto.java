@@ -1,13 +1,18 @@
 package com.baihui.hxtd.soa.util;
 
 import com.baihui.hxtd.soa.base.utils.mapper.HibernateAwareObjectMapper;
+import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.databind.SerializationFeature;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 
 /**
  * JSON数据对象
  */
 public class JsonDto {
+
+    private Logger logger = LoggerFactory.getLogger(this.getClass());
 
     /**
      * 消息
@@ -121,6 +126,7 @@ public class JsonDto {
         try {
             HibernateAwareObjectMapper mapper = new HibernateAwareObjectMapper();
             //ObjectMapper mapper = new ObjectMapper();
+            mapper.setSerializationInclusion(JsonInclude.Include.NON_EMPTY);
             mapper.disable(SerializationFeature.FAIL_ON_EMPTY_BEANS);
             result = mapper.writeValueAsString(this);
         } catch (Exception e) {
@@ -128,6 +134,7 @@ public class JsonDto {
             this.setMessage("json 转换失败.");
             this.setResult(null);
             result = this.convert();
+            logger.error(this.getMessage(), e);
         }
         return result;
     }

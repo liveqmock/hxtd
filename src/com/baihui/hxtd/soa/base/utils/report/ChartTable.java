@@ -3,25 +3,30 @@ package com.baihui.hxtd.soa.base.utils.report;
 import java.util.List;
 
 /**
- * @author Administrator
+ * 报表表格
+ * @author xiayx
  * @date 14-7-11
  */
-public class ChartTabel {
+public class ChartTable {
 
+    /**标题*/
     private String title;
-    private List<String> xAxisHeader;
-    private List<String> yAxisHeader;
+    /**X轴表头*/
+    private List xAxisHeader;
+    /**Z轴表头*/
+    private List yAxisHeader;
+    /**数据行*/
     private List rows;
 
-    public ChartTabel() {
+    public ChartTable() {
     }
 
-    public ChartTabel(List<String> xAxisHeader, List rows) {
+    public ChartTable(List xAxisHeader, List rows) {
         this.xAxisHeader = xAxisHeader;
         this.rows = rows;
     }
 
-    public ChartTabel(List<String> xAxisHeader, List<String> yAxisHeader, List rows) {
+    public ChartTable(List xAxisHeader, List yAxisHeader, List rows) {
         this.xAxisHeader = xAxisHeader;
         this.yAxisHeader = yAxisHeader;
         this.rows = rows;
@@ -35,19 +40,19 @@ public class ChartTabel {
         this.title = title;
     }
 
-    public List<String> getxAxisHeader() {
+    public List getxAxisHeader() {
         return xAxisHeader;
     }
 
-    public void setxAxisHeader(List<String> xAxisHeader) {
+    public void setxAxisHeader(List xAxisHeader) {
         this.xAxisHeader = xAxisHeader;
     }
 
-    public List<String> getyAxisHeader() {
+    public List getyAxisHeader() {
         return yAxisHeader;
     }
 
-    public void setyAxisHeader(List<String> yAxisHeader) {
+    public void setyAxisHeader(List yAxisHeader) {
         this.yAxisHeader = yAxisHeader;
     }
 

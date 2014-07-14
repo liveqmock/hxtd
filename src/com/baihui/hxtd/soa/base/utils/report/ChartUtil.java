@@ -34,7 +34,7 @@ public class ChartUtil {
             Object[] row = (Object[]) sourceTable.get(i);
             Integer xIndex = xAxisIndexs.get(row[sourceXIndex]);
             if (xIndex == null) {
-                logger.warn("({},{})={},不在xAxises范围内，略过", i, sourceXIndex, row[sourceXIndex]);
+                logger.warn("({},{})={},不在xAxises{}范围内，略过", i, sourceXIndex, row[sourceXIndex], xAxises);
                 continue;
             }
             targetTable.set(xIndex, numberType.cast(row[sourceYIndex]));
@@ -43,13 +43,23 @@ public class ChartUtil {
         return targetTable;
     }
 
+    private final static Map<Class<? extends Number>, Number> zeros = new HashMap<Class<? extends Number>, Number>();
+
+    static {
+        zeros.put(Integer.class, 0);
+        zeros.put(Long.class, 0l);
+        zeros.put(Float.class, 0f);
+        zeros.put(Double.class, 0d);
+    }
+
     /**
      * 创建空的二维表格
      */
     public static <T extends Number> List<T> buildEmptyTable(List xAxises, Class<T> numberType) {
         List<T> emptyTable = new ArrayList<T>(xAxises.size());
+        T zero = numberType.cast(zeros.get(numberType));
         for (int i = 0; i < xAxises.size(); i++) {
-            emptyTable.add(numberType.cast(0));
+            emptyTable.add(zero);
         }
         return emptyTable;
     }
@@ -79,12 +89,12 @@ public class ChartUtil {
             Object[] row = (Object[]) sourceTable.get(i);
             Integer xIndex = xAxisIndexs.get(row[sourceXIndex]);
             if (xIndex == null) {
-                logger.warn("({},{})={},不在xAxises范围内，略过", i, sourceXIndex, row[sourceXIndex]);
+                logger.warn("({},{})={},不在xAxises{}范围内，略过", i, sourceXIndex, row[sourceXIndex], xAxises);
                 continue;
             }
             Integer zIndex = zAxisIndexs.get(row[sourceZIndex]);
             if (zIndex == null) {
-                logger.warn("({},{})={},不在zAxises范围内，略过", i, sourceZIndex, row[sourceZIndex]);
+                logger.warn("({},{})={},不在zAxises{}范围内，略过", i, sourceZIndex, row[sourceZIndex], zAxises);
                 continue;
             }
             targetTable.get(zIndex).set(xIndex, numberType.cast(row[sourceYIndex]));

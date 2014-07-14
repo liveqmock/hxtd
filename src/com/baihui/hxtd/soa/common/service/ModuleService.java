@@ -1,6 +1,6 @@
 package com.baihui.hxtd.soa.common.service;
 
-import com.baihui.hxtd.soa.base.Desc;
+import com.baihui.hxtd.soa.base.FieldInfo;
 import com.baihui.hxtd.soa.base.InitApplicationConstant;
 import com.baihui.hxtd.soa.base.utils.ReflectionUtils;
 import com.baihui.hxtd.soa.common.dao.ModuleDao;
@@ -85,6 +85,33 @@ public class ModuleService {
     }
 
     /**
+     * 获取字段类型
+     */
+    @SuppressWarnings("unchecked")
+    public static Class getFieldType(Field field) {
+        Class fieldType = field.getType();
+        if (fieldType.isAssignableFrom(Collection.class)) {
+            ParameterizedType pt = (ParameterizedType) field.getGenericType();
+            fieldType = (Class) pt.getActualTypeArguments()[0];
+        }
+        return fieldType;
+    }
+
+    /**
+     * 是否关联模块
+     */
+    public static boolean isAssociation(Field field, List<Module> allModules) {
+        Class fieldType = getFieldType(field);
+        for (int i = 0; i < allModules.size(); i++) {
+            Module module = allModules.get(i);
+            if (fieldType.equals(module.getEntityClazz())) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    /**
      * 获取模块通过主键编号
      */
     public static Module findById(Long id) {
@@ -96,19 +123,6 @@ public class ModuleService {
      */
     public static Field findFieldByName(Field[] fields, String name) {
         return ReflectionUtils.findNameValueMatched(Arrays.asList(fields), "name", name);
-    }
-
-    /**
-     * 获取字段类型
-     */
-    @SuppressWarnings("unchecked")
-    public static Class getFieldType(Field field) {
-        Class fieldType = field.getType();
-        if (fieldType.isAssignableFrom(Collection.class)) {
-            ParameterizedType pt = (ParameterizedType) field.getGenericType();
-            fieldType = (Class) pt.getActualTypeArguments()[0];
-        }
-        return fieldType;
     }
 
     /**
@@ -140,9 +154,9 @@ public class ModuleService {
      */
     public ModuleField toModuleField(Field field) {
         String value = "";
-        Desc annotation = field.getAnnotation(Desc.class);
+        FieldInfo annotation = field.getAnnotation(FieldInfo.class);
         if (annotation != null) {
-            value = annotation.value();
+            value = annotation.desc();
         }
         return new ModuleField(field.getName(), value);
     }

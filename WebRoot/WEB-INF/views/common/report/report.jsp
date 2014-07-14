@@ -17,6 +17,7 @@
     <link rel="stylesheet" href="${ctx}/static/css/recommend/detail.css" type="text/css"/>
     <script type="text/javascript" src="${ctx}/static/js/jquery-jtemplates.js"></script>
     <script type="text/javascript" src="${ctx}/static/js/scrollTitle.js?v=1"></script>
+    <script type="text/javascript" src="${ctx}/static/js/jquery-json.2.4.js"></script>
     <script type="text/javascript" src="${ctx}/static/js/js-util.common.js"></script>
 
     <script type="text/javascript" src="${ctx}/static/component/open-flash-chart-2/js/json/json2.js"></script>
@@ -25,20 +26,90 @@
 
     <script type="text/javascript">
 
-        swfobject.embedSWF("${ctx}/static/component/open-flash-chart-2/open-flash-chart.swf", "my_chart", "350", "200", "9.0.0");
 
         //当拿到数据后程序调用的方法
         function ofc_ready() {}
 
         //程序自动调用，方法名不能改变，获取图表数据
         function open_flash_chart_data() {
-            return JSON.stringify(${data});
+            window.chartGraph1 = {
+                "title": {
+                    "text": "Many data lines",
+                    "style": "{font-size: 20px; color:#0000ff; font-family: Verdana; text-align: center;}"
+                },
+                "elements": [
+                    {
+                        "type": "bar",
+                        "alpha": 0.5,
+                        "colour": "#9933CC",
+                        "text": "Page views",
+                        "font-size": 10,
+                        "values": [9, 6, 7, 9, 5, 7, 6, 9, 7]
+                    },
+                    {
+                        "type": "bar",
+                        "alpha": 0.5,
+                        "colour": "#CC9933",
+                        "text": "Page views 2",
+                        "font-size": 10,
+                        "values": [6, 7, 9, 5, 7, 6, 9, 7, 3]
+                    }
+                ],
+                "x_axis": {
+                    "stroke": 1,
+                    "tick_height": 10,
+                    "colour": "#d000d0",
+                    "grid_colour": "#00ff00",
+                    "labels": ["January", "February", "March", "April", "May", "June", "July", "August", "Spetember"]
+                },
+                "y_axis": {
+                    "stroke": 4,
+                    "tick_length": 3,
+                    "colour": "#d000d0",
+                    "grid_colour": "#00ff00",
+                    "offset": 0,
+                    "max": 20,
+                    "steps": 5
+                }
+            };
+            window.chartGraph2 = {
+                "title": {"text": "每月不同性别用户注册量", "style": "{font-size: 20px; color:#0000ff; font-family: Verdana; text-align: center;}"},
+                "elements": [
+                    {"type": "bar", "alpha": 0.5, "colour": "#d000d0", "text": "男", "values": [1, 0, 4], "font-size": 10},
+                    {"type": "bar", "alpha": 0.5, "colour": "#CC9933", "text": "女", "values": [0, 0, 1], "font-size": 10}
+                ],
+               /* "tooltip": {"shadow": false, "stroke": 2, "rounded": 1, "colour": "#00d000", "backgournd": null,
+                    "title": "{font-size: 18px; color: #000000; font-weight:bold;}", "body": "{font-size: 10px; color: #000000;}"},
+                "x_legend": {"text": "创建时间", "style": "{font-size: 12px; color:#736AFF;}"},
+                "y_legend": {"text": null, "style": "{color: #736AFF; font-size: 12px;}"},
+                "is_decimal_separator_comma": false, "is_fixed_num_decimals_forced": true, "num_decimals": 3, "is_thousand_separator_disabled": true,*/
+                "x_axis": {"stroke": 1, "colour": "#d000d0", "offset": 0, "labels":  [5, 6, 7], "tick_height": 10, "tick_length": null, "grid_colour": "#00ff00", "3d": false},
+                "y_axis": {"stroke": 4, "colour": "#d000d0", "offset": false, "steps": 10.0, "min": 1, "max": 100, "tick_height": null, "tick_length": 3, "grid_colour": "#00ff00", "3d": null}};
+            return JSON.stringify(window.chartGraph);
         }
 
 
         $(function () {
             jsUtil.twoOrMoreRestrictDate('.time', 'max', 0); //创建、修改时间
-            var grid = new Grid().init();
+            var chartTable = $(".list");
+            var grid = new Grid().init({renderList: function (data) {
+                data = data.result;
+                chartTable.setTemplateElement("template-charttable").processTemplate(data.chartTable);
+
+                if (data.chartGraphs) {
+                    window.chartGraph = data.chartGraphs[0];
+                    swfobject.embedSWF("${ctx}/static/component/open-flash-chart-2/open-flash-chart.swf", "chart", "350", "200", "9.0.0");
+                }
+
+            }});
+            var form = $("form");
+            var fieldName = form.find("[name=fieldName]");
+            var min = form.find("[data-name=search_GTE_]");
+            var max = form.find("[data-name=search_LTE_]");
+            fieldName.change(function () {
+                min.attr("name", min.attr("data-name") + this.value);
+                max.attr("name", max.attr("data-name") + this.value)
+            }).change();
         });
     </script>
 </head>
@@ -70,9 +141,9 @@
                 <td class="f14" align="right" width="6%">起止时间：</td>
                 <td class="f14" align="left" width="16%">
                     <div class="vm">
-                        <input class="text_input2 input_close globle_img untime time" name="min" type="text" readonly/>
+                        <input type="text" data-name="search_GTE_" value="${time}" class="text_input2 input_close globle_img untime time" readonly/>
                         -
-                        <input class="text_input2 input_close globle_img untime time" name="max" type="text" readonly/>
+                        <input type="text" data-name="search_LTE_" value="${time}" class="text_input2 input_close globle_img untime time" readonly/>
                     </div>
                 </td>
                 <td width="12%">
@@ -90,52 +161,39 @@
     <div class="ml35 mr35">
         <table class="cb id_table2 w pr35">
             <tbody class="list"></tbody>
-            <textarea id="template-tbody" class="template template-tbody">
+            <textarea id="template-charttable" class="template template-charttable">
+                {#if Boolean($T.yAxisHeader)==false}
                 <tr>
-                    <th style="width:2%"><input type="checkbox" class="checkall"/></th>
-                    <th style="width:10%" class="sortable orderby" orderby="name">报表名称</th>
-                    <th style="width:10%">备注</th>
-                    <th style="width:10%">创建者</th>
-                    <th style="width:10%">创建时间</th>
-                    <th style="width:10%">修改者</th>
-                    <th style="width:10%">最后修改时间</th>
-                    <th style="width:10%">操作</th>
-                </tr>
-                {#foreach $T.result as row}
-                <tr class="row {#cycle values=['bg_c_blue','']}">
-                    <td><input type="checkbox" class="checkitem" value="{$T.row.id}"/></td>
-                    <td>
-                        <c:choose>
-                            <c:when test="${VS_HAS_FUNCTIONS.roleView}"><a href="${ctx}/common/report/toViewPage.do?id={$T.row.id}" class="toviewpage">{$T.row.name}</a></c:when>
-                            <c:otherwise>{$T.row.name}</c:otherwise>
-                        </c:choose>
-                    </td>
-                    <td>{$T.row.remark}</td>
-                    <td>{$T.row.creator.realName}</td>
-                    <td>{$T.row.createdTime}</td>
-                    <td>{$T.row.modifier.realName}</td>
-                    <td>{$T.row.modifiedTime}</td>
-                    <td align="center">
-                        <c:if test="${VS_HAS_FUNCTIONS.roleView}">
-                            <a href="${ctx}/common/report/toViewPage.do?id={$T.row.id}" class=" block_inline s_detail_btn globle_img ml10" title="详情"></a>
-                        </c:if>
-                        <c:if test="${VS_HAS_FUNCTIONS.roleModify}">
-                            {#if !$T.row.isInitialized}
-                            <a href="${ctx}/common/report/toModifyPage.do?id={$T.row.id}" class=" block_inline s_edit_btn globle_img ml10" title="编辑"></a>
-                            {#/if}
-                        </c:if>
-                        <c:if test="${VS_HAS_FUNCTIONS.roleDelete}">
-                            {#if !$T.row.isInitialized}
-                            <a href="javascript:void(0)" uri="${ctx}/common/report/delete.do?id={$T.row.id}" class=" block_inline s_dump_btn globle_img ml10 delete" title="删除"></a>
-                            {#/if}
-                        </c:if>
-                        <c:if test="${VS_HAS_FUNCTIONS.roleAuthorization}">
-                            <a href="${ctx}/common/report/toAuthorizationPage.do?id={$T.row.id}" class=" block_inline h_shouquan globle_img ml10 authorization" title="授权"></a>
-                        </c:if>
-                    </td>
+                    {#foreach $T.xAxisHeader as row}
+                    <th>{$T.row}</th>
                     {#/for}
+                </tr>
+                <tr class="row {#cycle values=['bg_c_blue','']}">
+                    {#foreach $T.rows as cell}
+                    <td>{$T.cell}</td>
+                    {#/for}
+                </tr>
+                {#else}
+                <tr>
+                    <th></th>
+                    {#foreach $T.xAxisHeader as row}
+                    <th>{$T.row}</th>
+                    {#/for}
+                </tr>
+                {#foreach $T.rows as row}
+                <tr class="row {#cycle values=['bg_c_blue','']}">
+                    <td>{$T.yAxisHeader[$T.row$index]}</td>
+                    {#foreach $T.row as cell}
+                    <td>{$T.cell}</td>
+                    {#/for}
+                </tr>
+                {#/for}
+                {#/if}
             </textarea>
         </table>
+        <div id="chart">
+
+        </div>
     </div>
 </div>
 

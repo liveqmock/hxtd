@@ -2,6 +2,8 @@ package com.baihui.hxtd.soa.base.utils.report.openflashchart2;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 
+import java.util.List;
+
 /**
  * OFC2Axis
  *
@@ -22,12 +24,11 @@ public class OFC2Axis {
     @JsonProperty("3d")
     private Boolean threeDimensional;
     private Float steps;
-    private Integer min;
-    private Integer max;
-    private OFC2Labels labels;
+    private Long min;
+    private Long max;
+    private List labels;
 
     public OFC2Axis() {
-        labels = new OFC2Labels();
     }
 
     public Integer getStroke() {
@@ -94,27 +95,27 @@ public class OFC2Axis {
         this.steps = steps;
     }
 
-    public Integer getMin() {
+    public Long getMin() {
         return min;
     }
 
-    public void setMin(Integer min) {
+    public void setMin(Long min) {
         this.min = min;
     }
 
-    public Integer getMax() {
+    public Long getMax() {
         return max;
     }
 
-    public void setMax(Integer max) {
+    public void setMax(Long max) {
         this.max = max;
     }
 
-    public OFC2Labels getLabels() {
+    public List getLabels() {
         return labels;
     }
 
-    public void setLabels(OFC2Labels labels) {
+    public void setLabels(List labels) {
         this.labels = labels;
     }
 }

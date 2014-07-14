@@ -1,14 +1,24 @@
 package com.baihui.hxtd.soa.system.entity;
 
+import java.io.Serializable;
+import java.util.Date;
+import java.util.HashSet;
+import java.util.Set;
+
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.FetchType;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToMany;
+import javax.persistence.ManyToOne;
+import javax.persistence.Table;
+
 import com.baihui.hxtd.soa.common.entity.Initialized;
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonFormat;
-
-import javax.persistence.*;
-import java.io.Serializable;
-import java.sql.Date;
-import java.util.HashSet;
-import java.util.Set;
 
 /**
  * 功能描述：组件表实体类

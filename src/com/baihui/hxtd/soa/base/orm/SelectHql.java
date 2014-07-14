@@ -5,7 +5,7 @@ import org.apache.commons.lang3.Validate;
 
 
 /**
- * @author xiayx
+ * @author xiayouxue
  * @date 14-7-13
  */
 public class SelectHql {

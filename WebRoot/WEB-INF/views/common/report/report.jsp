@@ -32,76 +32,13 @@
 
         //程序自动调用，方法名不能改变，获取图表数据
         function open_flash_chart_data() {
-            window.chartGraph1 = {
-                "title": {
-                    "text": "Many data lines",
-                    "style": "{font-size: 20px; color:#0000ff; font-family: Verdana; text-align: center;}"
-                },
-                "elements": [
-                    {
-                        "type": "bar",
-                        "alpha": 0.5,
-                        "colour": "#9933CC",
-                        "text": "Page views",
-                        "font-size": 10,
-                        "values": [9, 6, 7, 9, 5, 7, 6, 9, 7]
-                    },
-                    {
-                        "type": "bar",
-                        "alpha": 0.5,
-                        "colour": "#CC9933",
-                        "text": "Page views 2",
-                        "font-size": 10,
-                        "values": [6, 7, 9, 5, 7, 6, 9, 7, 3]
-                    }
-                ],
-                "x_axis": {
-                    "stroke": 1,
-                    "tick_height": 10,
-                    "colour": "#d000d0",
-                    "grid_colour": "#00ff00",
-                    "labels": ["January", "February", "March", "April", "May", "June", "July", "August", "Spetember"]
-                },
-                "y_axis": {
-                    "stroke": 4,
-                    "tick_length": 3,
-                    "colour": "#d000d0",
-                    "grid_colour": "#00ff00",
-                    "offset": 0,
-                    "max": 20,
-                    "steps": 5
-                }
-            };
-            window.chartGraph2 = {
-                "title": {"text": "每月不同性别用户注册量", "style": "{font-size: 20px; color:#0000ff; font-family: Verdana; text-align: center;}"},
-                "elements": [
-                    {"type": "bar", "alpha": 0.5, "colour": "#d000d0", "text": "男", "values": [1, 0, 4], "font-size": 10},
-                    {"type": "bar", "alpha": 0.5, "colour": "#CC9933", "text": "女", "values": [0, 0, 1], "font-size": 10}
-                ],
-               /* "tooltip": {"shadow": false, "stroke": 2, "rounded": 1, "colour": "#00d000", "backgournd": null,
-                    "title": "{font-size: 18px; color: #000000; font-weight:bold;}", "body": "{font-size: 10px; color: #000000;}"},
-                "x_legend": {"text": "创建时间", "style": "{font-size: 12px; color:#736AFF;}"},
-                "y_legend": {"text": null, "style": "{color: #736AFF; font-size: 12px;}"},
-                "is_decimal_separator_comma": false, "is_fixed_num_decimals_forced": true, "num_decimals": 3, "is_thousand_separator_disabled": true,*/
-                "x_axis": {"stroke": 1, "colour": "#d000d0", "offset": 0, "labels":  [5, 6, 7], "tick_height": 10, "tick_length": null, "grid_colour": "#00ff00", "3d": false},
-                "y_axis": {"stroke": 4, "colour": "#d000d0", "offset": false, "steps": 10.0, "min": 1, "max": 100, "tick_height": null, "tick_length": 3, "grid_colour": "#00ff00", "3d": null}};
             return JSON.stringify(window.chartGraph);
         }
 
 
         $(function () {
             jsUtil.twoOrMoreRestrictDate('.time', 'max', 0); //创建、修改时间
-            var chartTable = $(".list");
-            var grid = new Grid().init({renderList: function (data) {
-                data = data.result;
-                chartTable.setTemplateElement("template-charttable").processTemplate(data.chartTable);
 
-                if (data.chartGraphs) {
-                    window.chartGraph = data.chartGraphs[0];
-                    swfobject.embedSWF("${ctx}/static/component/open-flash-chart-2/open-flash-chart.swf", "chart", "350", "200", "9.0.0");
-                }
-
-            }});
             var form = $("form");
             var fieldName = form.find("[name=fieldName]");
             var min = form.find("[data-name=search_GTE_]");
@@ -110,6 +47,17 @@
                 min.attr("name", min.attr("data-name") + this.value);
                 max.attr("name", max.attr("data-name") + this.value)
             }).change();
+
+            var chartTable = $(".list");
+            new Grid().init({renderList: function (data) {
+                data = data.result;
+                chartTable.setTemplateElement("template-charttable").processTemplate(data.chartTable);
+
+                if (data.stringCharts) {
+                    window.chartGraph = $.parseJSON(data.stringCharts[0]);
+                    swfobject.embedSWF("${ctx}/static/component/open-flash-chart-2/open-flash-chart.swf", "chart", "350", "200", "9.0.0");
+                }
+            }});
         });
     </script>
 </head>
@@ -158,43 +106,66 @@
     </form>
     <div class="cb"></div>
 
-    <div class="ml35 mr35">
-        <table class="cb id_table2 w pr35">
-            <tbody class="list"></tbody>
-            <textarea id="template-charttable" class="template template-charttable">
-                {#if Boolean($T.yAxisHeader)==false}
-                <tr>
-                    {#foreach $T.xAxisHeader as row}
-                    <th>{$T.row}</th>
-                    {#/for}
-                </tr>
-                <tr class="row {#cycle values=['bg_c_blue','']}">
-                    {#foreach $T.rows as cell}
-                    <td>{$T.cell}</td>
-                    {#/for}
-                </tr>
-                {#else}
-                <tr>
-                    <th></th>
-                    {#foreach $T.xAxisHeader as row}
-                    <th>{$T.row}</th>
-                    {#/for}
-                </tr>
-                {#foreach $T.rows as row}
-                <tr class="row {#cycle values=['bg_c_blue','']}">
-                    <td>{$T.yAxisHeader[$T.row$index]}</td>
-                    {#foreach $T.row as cell}
-                    <td>{$T.cell}</td>
-                    {#/for}
-                </tr>
-                {#/for}
-                {#/if}
-            </textarea>
-        </table>
-        <div id="chart">
+    <div class="ml35 mr35 mt10 block cb cb">
+        <b class="b1"></b>
+        <b class="b2"></b>
+        <b class="b3"></b>
+        <b class="b4"></b>
 
+        <div class="ie_head">
+            <h1 class="f14 fbnone mt10 ml10 fl">${report.name}</h1>
+            <%--
+            <ul class="fr id_table1 mt10 ml10">
+                <li><a href="javascript:;" class="block c_white lh25 mr10"><b class="allbtn_l block fl"></b><b class="allbtn_r pr13 block fl w_auto f14">保&nbsp;&nbsp;存</b></a></li>
+                <li><a href="javascript:;" class="block c_white lh25 mr10"><b class="allbtn_l block fl"></b><b class="allbtn_r pr13 block fl w_auto f14">保存并新增</b></a></li>
+                <li><a href="javascript:;" class="block c_white lh25 mr10"><b class="allbtn_l block fl"></b><b class="allbtn_r pr13 block fl w_auto f14">取&nbsp;&nbsp;消</b></a></li>
+            </ul>
+            --%>
         </div>
     </div>
+
+    <div class="ml35 mr35 bg_c_blue cb">
+        <h1 class="f14 fbnone tc pt10">表格数据</h1>
+        <table class="cb id_tantable2 w70b bg_c_white margin0 mt10 mb10">
+            <tbody class="list"></tbody>
+        </table>
+        <textarea id="template-charttable" class="template template-charttable">
+            <tr>
+                <td class="bg_c_d3d3d3 fb">
+                    <div class="fl mt20">{$T.yAxisTitle}</div>
+                    <div class="fr">{$T.xAxisTitle}</div>
+                </td>
+                {#foreach $T.xAxisHeader as row}
+                <td class="fb">{$T.row}</td>
+                {#/for}
+            </tr>
+            {#foreach $T.rows as row}
+            <tr class="row {#cycle values=['bg_c_f3f3f3','']}">
+                <td class="fb">{$T.yAxisHeader[$T.row$index]}</td>
+                {#foreach $T.row as cell}
+                <td>{$T.cell}</td>
+                {#/for}
+            </tr>
+            {#/for}
+        </textarea>
+
+        <h1 class="f14 fbnone tc">图表信息</h1>
+
+        <div class="cb id_table4 w50b margin0 p10 mt10 mb10" style="text-align: center">
+            <div id="chart"></div>
+        </div>
+
+        <div class="h40"></div>
+    </div>
+
+    <div class="cb block h40 margin0 mt10" style="width:257px;">
+        <ul class="id_table1 cb">
+            <li><a href="javascript:;" class="block c_white lh25 mr10"><b class="allbtn_l block fl"></b><b class="allbtn_r pr13 block fl w_auto f14">保&nbsp;&nbsp;存</b></a></li>
+            <li><a href="javascript:;" class="block c_white lh25 mr10"><b class="allbtn_l block fl"></b><b class="allbtn_r pr13 block fl w_auto f14">保存并新增</b></a></li>
+            <li><a href="javascript:;" class="block c_white lh25 mr10"><b class="allbtn_l block fl"></b><b class="allbtn_r pr13 block fl w_auto f14">取&nbsp;&nbsp;消</b></a></li>
+        </ul>
+    </div>
+
 </div>
 
 </body>

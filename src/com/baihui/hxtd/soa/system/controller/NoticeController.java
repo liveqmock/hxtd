@@ -167,7 +167,6 @@ public class NoticeController {
 		logger.info("NoticeController.modify修改公告信息");
 		User u = (User) request.getSession().getAttribute(Constant.VS_USER);
 		logger.info("获得当前操作用户{}", u.getName());
-		notice.setModifieTime(new Date());
 		notice.setModifier(u);
 		notice.setCreator(u);
 		AuditLog auditLog = new AuditLog(EnumModule.NOTICE.getModuleName(), 
@@ -207,8 +206,6 @@ public class NoticeController {
 		logger.info("NoticeController.query 获得当前操作的用户{}",u.getName());
 		notice.setCreator(u);
 		notice.setModifier(u);
-		notice.setCreatedTime(new Date());
-		notice.setModifieTime(new Date());
 		notice.setIsDeleted(false);
 		/************ 新增 *****************************/
 		AuditLog auditLog = new AuditLog(EnumModule.NOTICE.getModuleName(), 

@@ -85,7 +85,7 @@ public class ProjectController extends CommonController<Project> {
 	@ResponseBody
 	public String query(HibernatePage<Project> page,
 								HttpServletRequest request) throws NoSuchFieldException{
-		logger.info("SupplierController.query查询组件列表");
+		logger.info("SupplierController.query查询项目列表");
 		Map<String, Object> searchParams = Servlets.getParametersStartingWith(
 				request, "search_");
 		Search.clearBlankValue(searchParams);
@@ -146,9 +146,7 @@ public class ProjectController extends CommonController<Project> {
 	@ResponseBody
 	@RequestMapping(value="/modify.do", produces = "text/text;charset=UTF-8")
 	public String modify(Project project,String type,HttpServletRequest request){
-		logger.info("SupplierController.modify修改组件信息");
-		project.setCreatedTime(new Date());
-		project.setModifiedTime(new Date());
+		logger.info("SupplierController.modify修改项目信息");
 		User u = (User) request.getSession().getAttribute(Constant.VS_USER);
 		logger.info("获得当前操作用户{}",u.getName());
 		project.setModifier(u);
@@ -190,9 +188,7 @@ public class ProjectController extends CommonController<Project> {
 	@ResponseBody
 	@RequestMapping(value="/add.do", produces = "text/text;charset=UTF-8")
 	public String add(Project project,String type,HttpServletRequest request){
-		logger.info("projectController.modify修改组件信息");
-		project.setCreatedTime(new Date());
-		project.setModifiedTime(new Date());
+		logger.info("projectController.modify修改项目信息");
 		User u = (User) request.getSession().getAttribute(Constant.VS_USER);
 		logger.info("获得当前操作用户{}",u.getName());
 		project.setModifier(u);
@@ -208,7 +204,7 @@ public class ProjectController extends CommonController<Project> {
 	 * 
 	  * delete()
 	  * @Title: delete
-	  * @param  Supplier组件实体类对象
+	  * @param  Supplier项目实体类对象
 	  * @return  view  
 	  * @return String    返回类型
 	  * @throws
@@ -216,7 +212,7 @@ public class ProjectController extends CommonController<Project> {
 	@ResponseBody
 	@RequestMapping(value = "/delete.do",produces = "text/text;charset=UTF-8")
 	public String delete(ModelMap modelMap, Long[] id){
-		logger.info("projectController.delete删除组件");
+		logger.info("projectController.delete删除项目");
 		User user = (User)modelMap.get(Constant.VS_USER);
 		AuditLog [] auditLogArr = new AuditLog [id.length];
 		for(int i=0; i<id.length; i++){
@@ -232,11 +228,11 @@ public class ProjectController extends CommonController<Project> {
 	}
 	
 	/**
-	  * toProjectLstCompPage(跳转至项目列表组件页)
+	  * toProjectLstCompPage(跳转至项目列表项目页)
 	  * @Author: lihua
-	  * @Description: 请求跳转至项目列表组件页
+	  * @Description: 请求跳转至项目列表项目页
 	  * @param model ModelMap
-	  * @return String 项目列表组件视图页
+	  * @return String 项目列表项目视图页
 	 */
 	@RequestMapping(value = "/toQueryPage.comp")
 	public String toProjectLstCompPage(ModelMap model){

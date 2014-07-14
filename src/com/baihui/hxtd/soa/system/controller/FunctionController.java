@@ -177,9 +177,6 @@ public class FunctionController {
         if (commonService.isInitialized(Function.class, function.getId())) {
             return new JsonDto("系统初始化数据不允许修改！").toString();
         }
-
-        function.setCreatedTime(new Date(new java.util.Date().getTime()));
-        function.setModifiedTime(new Date(new java.util.Date().getTime()));
         User u = (User) request.getSession().getAttribute(Constant.VS_USER);
         logger.info("获得当前操作用户{}", u.getName());
         function.setModifier(u);
@@ -206,8 +203,6 @@ public class FunctionController {
                       HttpServletRequest request) {
         logger.info("FunctionController.query查询组件列表");
         //临时代码，时间类型应从数据库中取
-        function.setCreatedTime(new Date(new java.util.Date().getTime()));
-        function.setModifiedTime(new Date(new java.util.Date().getTime()));
         User u = (User) request.getSession().getAttribute(Constant.VS_USER);
         logger.info("FunctionController.query 获得当前操作的用户{}", u.getName());
         function.setCreator(u);

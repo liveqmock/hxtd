@@ -12,7 +12,7 @@ import java.util.Map;
 /**
  * HqlSelectFrom
  *
- * @author xiayx
+ * @author xiayouxue
  * @date 14-7-12
  */
 public class ExtendItemSelectHql extends ItemSelectHql implements Cloneable {

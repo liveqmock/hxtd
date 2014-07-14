@@ -1,22 +1,35 @@
 package com.baihui.hxtd.soa.system.service;
 
-import com.baihui.hxtd.soa.base.orm.hibernate.HibernatePage;
-import com.baihui.hxtd.soa.base.utils.Search;
-import com.baihui.hxtd.soa.system.dao.ComponentDao;
-import com.baihui.hxtd.soa.system.entity.*;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.List;
+import java.util.Map;
+
+import javax.annotation.Resource;
 
 import org.hibernate.FetchMode;
-import org.hibernate.criterion.*;
+import org.hibernate.criterion.CriteriaSpecification;
+import org.hibernate.criterion.Criterion;
+import org.hibernate.criterion.DetachedCriteria;
+import org.hibernate.criterion.Order;
+import org.hibernate.criterion.Projections;
+import org.hibernate.criterion.Restrictions;
+import org.hibernate.criterion.Subqueries;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springside.modules.persistence.SearchFilter;
 
-import javax.annotation.Resource;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
+import com.baihui.hxtd.soa.base.orm.hibernate.HibernatePage;
+import com.baihui.hxtd.soa.base.utils.Search;
+import com.baihui.hxtd.soa.system.dao.ComponentDao;
+import com.baihui.hxtd.soa.system.entity.AuditLog;
+import com.baihui.hxtd.soa.system.entity.Component;
+import com.baihui.hxtd.soa.system.entity.Function;
+import com.baihui.hxtd.soa.system.entity.Organization;
+import com.baihui.hxtd.soa.system.entity.Role;
+import com.baihui.hxtd.soa.system.entity.User;
 
 /**
  * 组件描述：组件表service层实现
@@ -306,6 +319,9 @@ public class ComponentService {
     public void add(Component entity,AuditLog auditLog) {
         logger.info("保存组件信息{}", entity);
         entity.setIsInitialized(false);
+        Date now = componentDao.getDBNow();
+        entity.setCreatedTime(now);
+        entity.setModifiedTime(now);
         componentDao.save(entity);
         auditLog.setRecordId(entity.getId());
     }
@@ -313,7 +329,9 @@ public class ComponentService {
     @Transactional
     public void modify(Component entity,AuditLog auditLog) {
         logger.info("保存组件信息{}", entity);
-        entity.setIsInitialized(false);
+        Date now = componentDao.getDBNow();
+        entity.setCreatedTime(now);
+        entity.setModifiedTime(now);
         componentDao.save(entity);
     }
 

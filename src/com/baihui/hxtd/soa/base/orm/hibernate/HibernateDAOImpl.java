@@ -145,8 +145,30 @@ public class HibernateDAOImpl<T, PK extends Serializable> implements
         }
         logger.debug("delete entity {" + entityClass.getSimpleName() + "},id is {" + ids + "}");
     }
-
-
+    /**
+     * 
+      * getDBNow(获得数据库当前时间)
+      * @Title: getDBNow
+      * @param @return    参数类型
+      * @return Date    返回类型
+      * @throws
+     */
+    public Date getDBNow(){
+    	String sql = "select current_timestamp";
+    	return findSQLUnique(sql);
+    }
+    /**
+     * 
+      * getDBNowDate(获得数据库当前日期)
+      * @Title: getDBNowDate
+      * @param @return    参数类型
+      * @return Date    返回类型
+      * @throws
+     */
+    public Date getDBNowDate(){
+    	String sql = "select current_date";
+    	return findSQLUnique(sql);
+    }
     /**
      * 按id获取对象.
      */

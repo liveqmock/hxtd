@@ -19,14 +19,17 @@
 <script type="text/javascript" src="${ctx}/static/js/commonAjax.js"></script>
 <script type="text/javascript" src="${ctx}/static/js/jquery-jtemplates.js"></script>
 <script type="text/javascript" src="${ctx}/static/js/js-util.common.js"></script>
+<style>
+.module1{height: 80px;background:url(${ctx}/static/images/System_bg.png) repeat-x; border: 1px solid #c2c2c2;margin: 5px 5px 0 0; padding:5px; width:90%;}
+</style>
 <script type="text/javascript">
 $(function(){
 	new Grid().init({ paginationSizeShow:false, paginationCountLimit:13 });
-	$(".list .module").live({
+	$(".list .module1").live({
 		click: function(){
-			$(".module").removeAttr("style");
+			$(".module1").removeAttr("style");
 			$(this).css({"border":"1px solid #e28d1f"});
-			$(".module").removeClass("bor_e28d1f");
+			$(".module1").removeClass("bor_e28d1f");
 			$(this).addClass("bor_e28d1f");
 		},
 		dblclick: function(){
@@ -67,13 +70,19 @@ $(function(){
 			<textarea id="template-tbody" class="template template-tbody">
 			    {#foreach $T.result as row}
 				<li>
-					<div class="module" id="{$T.row.id}">
+					<div class="module1" id="{$T.row.id}">
 						<table class="w">
 							<tr>
 								<td>{$T.row.code}</td>
 							</tr>
 							<tr>
 								<td>{$T.row.name}</td>
+							</tr>
+							<tr>
+								<td>{$T.row.rate}%</td>
+							</tr>
+							<tr>
+								<td>{$T.row.redeemFormula}</td>
 							</tr>
 						</table>
 					</div>

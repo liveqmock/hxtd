@@ -36,12 +36,6 @@
 
         <h1 class="f14 fbnone ml40 pt10">基本信息</h1>
         <table class="cb id_table3 w95b bg_c_white margin0 mt10">
-            <tr style="display: none">
-                <td align="right" width="15%">编号：</td>
-                <td align="left">${organization.code}</td>
-                <td align="right" width="15%">序号：</td>
-                <td align="left">${organization.order}</td>
-            </tr>
             <tr>
                 <td align="right" width="15%">名称：</td>
                 <td align="left">${organization.name}</td>

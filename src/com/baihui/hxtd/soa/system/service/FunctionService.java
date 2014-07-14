@@ -402,6 +402,9 @@ public class FunctionService {
     public void add(Function entity,AuditLog auditLog) {
         logger.info("保存功能信息{}", entity);
         entity.setIsInitialized(false);
+        Date now = functionDao.getDBNow();
+        entity.setCreatedTime(now);
+        entity.setModifiedTime(now);
         functionDao.save(entity);
         auditLog.setRecordId(entity.getId());
     }
@@ -417,7 +420,9 @@ public class FunctionService {
     @Transactional
     public void modify(Function entity,AuditLog auditLog) {
         logger.info("保存功能信息{}", entity);
-        entity.setIsInitialized(false);
+        Date now = functionDao.getDBNow();
+        entity.setCreatedTime(now);
+        entity.setModifiedTime(now);
         functionDao.save(entity);
     }
 

@@ -118,9 +118,9 @@ $(function(){
 			<tr>
 				<th width="2%"><input type="checkbox" class="checkall"/></th>
 			    <th width="14%">产品编号</th>
-			    <th width="8%">产品名称</th>
+			    <th width="11%">产品名称</th>
 			    <th width="10%">所属项目</th>
-			    <th width="10%">出售金额</th>
+			    <th width="7%">出售金额</th>
 			    <th width="8%">收益率%</th>
 			    <th width="8%">销售期限</th>
 			    <th width="12%" class="sortable orderby" orderby="saleBeginTime">销售开始日期</th>
@@ -134,9 +134,9 @@ $(function(){
 		<tr id="recordDiv">
 			<th width="2%"><input type="checkbox" class="checkall"/></th>
 		    <th width="14%">产品编号</th>
-		    <th width="8%">产品名称</th>
+		    <th width="11%">产品名称</th>
 		    <th width="10%">所属项目</th>
-		    <th width="10%">出售金额</th>
+		    <th width="7%">出售金额</th>
 		    <th width="8%">收益率%</th>
 		    <th width="8%">销售期限</th>
 		    <th width="12%" class="sortable orderby" orderby="saleBeginTime">销售开始日期</th>
@@ -161,7 +161,7 @@ $(function(){
 	        </td>
 	        <td>{$T.row.project.name}</td>
 	        <td align="right">{jsUtil.formatDiff($T.row.sellMoney, 2)}</td>
-	        <td>{$T.row.minRate}%~{$T.row.maxRate}%</td>
+	        <td>{$T.row.rate}%</td>
 	        <td>{$T.row.saleLimit}{$T.row.saleUnit.key}</td>
 	        <td>{$T.row.saleBeginTime}</td>
 	        <td>{$T.row.saleEndTime}</td>

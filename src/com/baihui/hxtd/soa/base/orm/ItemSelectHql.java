@@ -11,7 +11,7 @@ import java.util.List;
  * hql select
  * 用于构建 select hql 语句的对象
  *
- * @author xiayx
+ * @author xiayouxue
  * @date 14-7-12
  */
 public class ItemSelectHql extends SelectHql {

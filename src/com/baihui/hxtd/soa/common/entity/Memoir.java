@@ -49,25 +49,25 @@ public class Memoir implements Serializable {
 	/**
 	 * 关联模块ID
 	 */
-	@Column(name = "MODULE_ID")
+	@Column(name = "RECORD_ID")
 	private Long moduleId;
 	/**
 	 * 模块类型
 	 */
 	@ManyToOne(fetch = FetchType.LAZY)
-	@JoinColumn(name = "TYPE")
+	@JoinColumn(name = "MODULE_ID")
 	private Dictionary type;
 	/**
-	 * 所处部门
+	 * 所处机构
 	 */
 	@ManyToOne(fetch = FetchType.LAZY)
-	@JoinColumn(name = "DEPARTMENT_ID")
+	@JoinColumn(name = "ORG_ID")
 	private Organization org;
 	/**
 	 * 沟通者
 	 */
 	@ManyToOne(fetch = FetchType.LAZY)
-	@JoinColumn(name = "EMPLOYEE_ID")
+	@JoinColumn(name = "USER_ID")
 	private User employee;
 	/**
 	 * 沟通纪要

@@ -133,7 +133,7 @@
 									</a>
 								</li>
 		                		<li>
-		                			<a class="block c_white lh25 mr10 deletesome" id="deleteData" href="javascript:;"  uri="${ctx}/system/recyclebin/delete.do?entityName=MarketActivity">
+		                			<a class="block c_white lh25 mr10 deletesome" id="deleteData" href="javascript:;"  uri="${ctx}/system/recyclebin/delete.do">
 		                				<b class="allbtn_l block fl"></b>
 		                				<b class="allbtn_r pr13 block fl w_auto f14">删&nbsp;&nbsp;除</b>
 		                			</a>

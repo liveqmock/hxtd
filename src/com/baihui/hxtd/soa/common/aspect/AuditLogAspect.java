@@ -16,6 +16,8 @@ import com.baihui.hxtd.soa.system.entity.RecycleBin;
 import com.baihui.hxtd.soa.system.service.AuditLogService;
 import com.baihui.hxtd.soa.system.service.RecycleBinService;
 
+import java.util.Date;
+
 /**
  * 审计日志切面
  */
@@ -74,7 +76,7 @@ public class AuditLogAspect {
    // @Pointcut("execution(public * com.baihui.hxtd.soa.*.service..modifyLeadConverter*(..))")
    // public void modifyLeadConverter(){}
     
-    @Pointcut("add() || modify() ||  authorization()||resetPassword()|| delete() ||exportFile() || importFile()||recovery()||realDelete()")
+    @Pointcut("add() || modify() ||  authorization() || resetPassword() || delete() ||exportFile() || importFile() || recovery() || realDelete()")
     public void anyOperation(){}
 
     @AfterReturning("anyOperation() && args(.., auditLog)")
@@ -87,6 +89,7 @@ public class AuditLogAspect {
             Idable idable = (Idable) arg;
             if (idable.getId() != null) {
                 auditLog.setRecordId(idable.getId());
+                auditLog.setCreatedTime(new Date());
             }
         }
         auditLogService.save(auditLog);

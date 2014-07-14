@@ -162,12 +162,11 @@ function clearInputVal(obj){//清除
 						value="${project.financeCycle }" class="text_input3 number">
 				</td>
 				<td align="right">
-					收益率：
+					收益率（%）：
 				</td>
 				<td align="left">
 					<input type="text" name="er" value="${project.er }"
 						class="text_input3 number">
-					%
 				</td>
 			</tr>
 
@@ -186,12 +185,11 @@ function clearInputVal(obj){//清除
 					</select>
 				</td>
 				<td align="right">
-					提前赎回率：
+					提前赎回率（%）：
 				</td>
 				<td align="left">
 					<input type="text" name="aer" value="${project.aer }"
 						class="text_input3 number">
-					%
 				</td>
 			</tr>
 

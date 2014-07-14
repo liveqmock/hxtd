@@ -41,20 +41,6 @@ public class ModuleService {
         return moduleDao.getAll();
     }
 
-   /* *//**
-     * 获取字段描述
-     *//*
-    public String getDesc(Class clazz, String fieldName) {
-        Field[] fields = InitApplicationConstant.FIELDS.get(clazz);
-        for (int i = 0; i < fields.length; i++) {
-            if (fields[i].getName().equals(fieldName)) {
-                Desc annotation = fields[i].getAnnotation(Desc.class);
-                return annotation.value();
-            }
-        }
-        return null;
-    }*/
-
     /**
      * 查找模块的关联模块
      * 1.通过主键编号获取模块
@@ -141,7 +127,7 @@ public class ModuleService {
     /**
      * 转换为ModuleField
      */
-    public List<ModuleField> toModuleField(Field[] fields) {
+    public static List<ModuleField> toModuleField(Field[] fields) {
         List<ModuleField> moduleFields = new ArrayList<ModuleField>();
         for (int i = 0; i < fields.length; i++) {
             moduleFields.add(toModuleField(fields[i]));
@@ -152,7 +138,7 @@ public class ModuleService {
     /**
      * 转换为ModuleField
      */
-    public ModuleField toModuleField(Field field) {
+    public static ModuleField toModuleField(Field field) {
         String value = "";
         FieldInfo annotation = field.getAnnotation(FieldInfo.class);
         if (annotation != null) {

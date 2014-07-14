@@ -1,0 +1,939 @@
+SET FOREIGN_KEY_CHECKS=0;
+-- ----------------------------
+-- Table structure for `attachment`
+-- ----------------------------
+DROP TABLE IF EXISTS `attachment`;
+CREATE TABLE `attachment` (
+  `ID` int(4) NOT NULL AUTO_INCREMENT COMMENT '主键ID',
+  `MODULE_ID` int(4) NOT NULL DEFAULT '0' COMMENT '关联模块ID',
+  `RECORD_ID` int(4) NOT NULL DEFAULT '0' COMMENT '关联模块内记录的ID',
+  `TYPE_DICT` int(4) NOT NULL DEFAULT '0' COMMENT '附件类型',
+  `NAME` varchar(64) NOT NULL DEFAULT '',
+  `ADDRESS` varchar(512) NOT NULL DEFAULT '' COMMENT '存储地址',
+  `IS_DELETED` smallint(6) NOT NULL DEFAULT '0',
+  `CREATOR_ID` int(4) NOT NULL DEFAULT '0' COMMENT '创建人ID',
+  `CREATED_TIME` datetime NOT NULL COMMENT '创建时间',
+  `MODIFIER_ID` int(4) NOT NULL DEFAULT '0' COMMENT '修改人ID',
+  `MODIFIED_TIME` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '最后修改时间',
+  PRIMARY KEY (`ID`),
+  KEY `INDEX_MODIFIED_TIME` (`MODIFIED_TIME`),
+  KEY `INDEX_DICTIONARY_ID` (`RECORD_ID`),
+  KEY `INDEX_TYPE` (`TYPE_DICT`),
+  KEY `INDEX_CREATE_ID` (`CREATOR_ID`),
+  KEY `INDEX_MODIFIER_ID` (`MODIFIER_ID`),
+  KEY `INDEX_MODULE` (`MODULE_ID`) USING BTREE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='附件表';
+
+-- ----------------------------
+-- Table structure for `contact`
+-- ----------------------------
+DROP TABLE IF EXISTS `contact`;
+CREATE TABLE `contact` (
+  `ID` int(11) NOT NULL AUTO_INCREMENT COMMENT '客户ID',
+  `NAME` varchar(64) NOT NULL DEFAULT '' COMMENT '联系人姓名',
+  `OWNER` int(11) DEFAULT NULL COMMENT '联系人所有者',
+  `ACCOUNT_ID` int(11) DEFAULT NULL COMMENT '联系人类型',
+  `SUPPLIER_ID` int(11) DEFAULT NULL COMMENT '供应商ID/客户ID',
+  `SOURCE_DIC` int(11) DEFAULT NULL COMMENT '线索来源',
+  `DEPARTMENT` varchar(32) DEFAULT '' COMMENT '部门',
+  `POSITION` varchar(32) DEFAULT '' COMMENT '职位',
+  `PHONE` varchar(32) DEFAULT '' COMMENT '电话',
+  `MOBILE` varchar(23) DEFAULT '' COMMENT '手机',
+  `EMAIL` varchar(32) DEFAULT '' COMMENT '邮箱',
+  `FAX` varchar(32) DEFAULT '' COMMENT '传真',
+  `POST_CODE` varchar(32) DEFAULT '' COMMENT '邮编',
+  `PROVINCE` int(11) DEFAULT NULL COMMENT '所在地（省）',
+  `CITY` int(11) DEFAULT NULL COMMENT '所在地（市）',
+  `COUNTY` int(11) DEFAULT NULL COMMENT '所在地（县）',
+  `ADDRESS` varchar(512) DEFAULT '' COMMENT '详细地址',
+  `IS_DELETED` int(11) DEFAULT '0' COMMENT '删除标记',
+  `REMARK` text COMMENT '备注',
+  `CREATOR_ID` int(11) NOT NULL DEFAULT '0' COMMENT '创建者ID',
+  `CREATED_TIME` datetime NOT NULL COMMENT '创建时间',
+  `MODIFIER_ID` int(11) NOT NULL DEFAULT '0' COMMENT '修改者ID',
+  `MODIFIED_TIME` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '修改时间',
+  PRIMARY KEY (`ID`),
+  KEY `INDEX_TYPE` (`ACCOUNT_ID`) USING BTREE,
+  KEY `INDEX_OWNER` (`OWNER`),
+  KEY `INDEX_NAME` (`NAME`),
+  KEY `INDEX_MOBILE` (`MOBILE`),
+  KEY `INDEX_PHONE` (`PHONE`),
+  KEY `INDEX_SUPPLIER_ID` (`SUPPLIER_ID`) USING BTREE,
+  KEY `INDEX_CREATOR_ID` (`CREATOR_ID`) USING BTREE,
+  KEY `INDEX_MODIFIER_ID` (`MODIFIER_ID`) USING BTREE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='联系人';
+
+-- ----------------------------
+-- Records of contact
+-- ----------------------------
+
+-- ----------------------------
+-- Table structure for `contract`
+-- ----------------------------
+DROP TABLE IF EXISTS `contract`;
+CREATE TABLE `contract` (
+  `ID` int(11) NOT NULL AUTO_INCREMENT COMMENT '合同ID',
+  `NAME` varchar(128) NOT NULL DEFAULT '' COMMENT '合同名称',
+  `CODE` varchar(32) NOT NULL DEFAULT '' COMMENT '合同编号',
+  `TYPE_DIC` int(11) NOT NULL DEFAULT '0' COMMENT '合同类型',
+  `CONTENT` text NOT NULL COMMENT '合同内容',
+  `ORDER_ID` int(11) NOT NULL DEFAULT '0' COMMENT '订单ID',
+  `ACCOUNT_ID` int(11) NOT NULL DEFAULT '0' COMMENT '客户ID',
+  `REDEEM_TYPE_DIC` int(11) NOT NULL DEFAULT '0' COMMENT '赎回方式',
+  `SIGN_TIME` datetime NOT NULL COMMENT '签订时间',
+  `EFFECT_TIME` datetime NOT NULL COMMENT '生效时间',
+  `BEREFT_TIME` datetime NOT NULL COMMENT '失效时间',
+  `REMARK` varchar(512) DEFAULT '' COMMENT '备注',
+  `IS_DELETED` int(11) DEFAULT '0' COMMENT '标记删除',
+  `CREATOR_ID` int(11) NOT NULL DEFAULT '0' COMMENT '创建者ID',
+  `CREATED_TIME` datetime NOT NULL COMMENT '创建时间',
+  `MODIFIER_ID` int(11) NOT NULL DEFAULT '0' COMMENT '修改者ID',
+  `MODIFIED_TIME` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '修改时间',
+  PRIMARY KEY (`ID`),
+  KEY `INDEX_ORDER_ID` (`ORDER_ID`),
+  KEY `INDEX_ACCOUNT_ID` (`ACCOUNT_ID`),
+  KEY `INDEX_TYPE` (`TYPE_DIC`),
+  KEY `INDEX_CREATOR_ID` (`CREATOR_ID`),
+  KEY `INDEX_MODIFIER_ID` (`MODIFIER_ID`),
+  KEY `INDEX_MODIFIED_TIME` (`MODIFIED_TIME`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='合同表';
+
+-- ----------------------------
+-- Table structure for `customer`
+-- ----------------------------
+DROP TABLE IF EXISTS `customer`;
+CREATE TABLE `customer` (
+  `ID` int(11) NOT NULL AUTO_INCREMENT COMMENT '客户ID',
+  `OWNER` int(11) NOT NULL DEFAULT '0' COMMENT '客户所有者',
+  `NAME` varchar(64) NOT NULL DEFAULT '' COMMENT '客户姓名',
+  `TYPE_DIC` int(11) DEFAULT NULL COMMENT '客户类型',
+  `SOURCE_DIC` int(11) NOT NULL DEFAULT '0' COMMENT '客户来源',
+  `RISK_GRADE_DIC` int(11) DEFAULT NULL COMMENT '风险等级',
+  `CARD_TYPE_DIC` int(11) DEFAULT NULL COMMENT '证件类型',
+  `CARD_NUM` varchar(64) DEFAULT '' COMMENT '证件号码',
+  `PHONE` varchar(32) NOT NULL DEFAULT '' COMMENT '电话',
+  `MOBILE` varchar(32) NOT NULL DEFAULT '' COMMENT '手机',
+  `DEPT` varchar(255) DEFAULT NULL COMMENT '所在部门',
+  `JOB` varchar(255) DEFAULT NULL COMMENT '职务名称',
+  `EMAIL` varchar(255) NOT NULL DEFAULT '' COMMENT '邮箱',
+  `FAX` varchar(16) DEFAULT '' COMMENT '传真',
+  `POST_CODE` varchar(16) DEFAULT '' COMMENT '邮编',
+  `COMPANY` varchar(64) NOT NULL DEFAULT '' COMMENT '公司',
+  `INDUSTRY_DIC` int(64) NOT NULL DEFAULT '0' COMMENT '行业',
+  `OWNERSHIP_DIC` int(64) DEFAULT NULL COMMENT '所有权',
+  `OPEN_BANK_DIC` int(11) DEFAULT NULL COMMENT '开户行',
+  `BANK_NAME` varchar(64) DEFAULT '' COMMENT '银行户名',
+  `BANK_ACCOUNT` varchar(64) DEFAULT '' COMMENT '账号',
+  `PROVINCE` int(64) DEFAULT '0' COMMENT '所在地（省）',
+  `CITY` int(64) DEFAULT '0' COMMENT '所在地（市）',
+  `COUNTY` int(64) DEFAULT '0' COMMENT '所在地（县）',
+  `FAMILY_ADDR` varchar(255) DEFAULT NULL COMMENT '家庭地址',
+  `ADDRESS` varchar(255) DEFAULT '' COMMENT '详细地址',
+  `CONTRIBUTION_TYPE` varchar(255) DEFAULT NULL COMMENT '出资方式',
+  `CONTRIBUTION_SCALE` varchar(255) DEFAULT NULL COMMENT '出资规模',
+  `APPOINTMENT` varchar(255) DEFAULT NULL COMMENT '邀约人',
+  `FINANCIAL_ADVISOR` varchar(255) DEFAULT NULL COMMENT '理财顾问',
+  `FINANCIAL_MANAGER` varchar(255) DEFAULT NULL COMMENT '理财经理',
+  `FINANCIAL_DIRECTOR` varchar(255) DEFAULT NULL COMMENT '理财总监',
+  `REMARK` varchar(512) DEFAULT '' COMMENT '备注',
+  `IS_DELETED` tinyint(6) NOT NULL DEFAULT '0' COMMENT '是否被删除',
+  `CREATOR_ID` int(11) NOT NULL DEFAULT '0' COMMENT '创建者ID',
+  `CREATED_TIME` datetime NOT NULL COMMENT '创建时间',
+  `MODIFIER_ID` int(11) NOT NULL DEFAULT '0' COMMENT '修改者ID',
+  `MODIFIED_TIME` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '最后修改时间',
+  PRIMARY KEY (`ID`),
+  KEY `INDEX_ACCOUNT_OWNER` (`OWNER`) USING BTREE,
+  KEY `INDEX_PHONE` (`PHONE`),
+  KEY `INDEX_MOBILE` (`MOBILE`),
+  KEY `INDEX_MODIFIED_TIME` (`MODIFIED_TIME`),
+  KEY `INDEX_CREATOR_ID` (`CREATOR_ID`),
+  KEY `INDEX_MODIFIER_ID` (`MODIFIER_ID`),
+  KEY `INDEX_TYPE` (`TYPE_DIC`),
+  KEY `INDEX_PROVINCE` (`PROVINCE`),
+  KEY `INDEX_CITY` (`CITY`),
+  KEY `INDEX_COUNTY` (`COUNTY`)
+) ENGINE=InnoDB AUTO_INCREMENT=11 DEFAULT CHARSET=utf8 COMMENT='客户表';
+
+-- ----------------------------
+-- Table structure for `import_log`
+-- ----------------------------
+DROP TABLE IF EXISTS `import_log`;
+CREATE TABLE `import_log` (
+  `ID` int(11) NOT NULL AUTO_INCREMENT COMMENT '导入日志表ID',
+  `START_TIME` datetime NOT NULL COMMENT '导入数据开始时间',
+  `END_TIME` datetime NOT NULL COMMENT '导入数据结束时间',
+  `STATUS` int(2) NOT NULL DEFAULT '0' COMMENT '导入状态：0 正在导入 1 导入结束 默认为0',
+  `DESCRIPTION` varchar(512) DEFAULT NULL COMMENT '描述',
+  `CREATED_TIME` datetime NOT NULL COMMENT '创建时间',
+  `MODIFIED_TIME` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '修改时间',
+  PRIMARY KEY (`ID`),
+  KEY `INDEX_IMPORT_LOG_ID` (`ID`),
+  KEY `INDEX_STATUS` (`STATUS`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='导入日志';
+
+-- ----------------------------
+-- Table structure for `lead`
+-- ----------------------------
+DROP TABLE IF EXISTS `lead`;
+CREATE TABLE `lead` (
+  `ID` int(11) NOT NULL AUTO_INCREMENT COMMENT '线索ID ',
+  `OWNER` int(11) NOT NULL DEFAULT '0' COMMENT '线索所有者',
+  `COMPANY` varchar(64) NOT NULL DEFAULT '' COMMENT '公司名称',
+  `NAME` varchar(64) NOT NULL DEFAULT '' COMMENT '线索名称',
+  `DEPARTMENT` varchar(64) NOT NULL DEFAULT '' COMMENT '部门',
+  `POSITION` varchar(64) NOT NULL DEFAULT '' COMMENT '职位',
+  `EMAIL` varchar(64) NOT NULL DEFAULT '' COMMENT '邮箱',
+  `PHONE` varchar(32) NOT NULL DEFAULT '' COMMENT '电话',
+  `FAX` varchar(32) NOT NULL DEFAULT '' COMMENT '传真',
+  `MOBILE` varchar(32) NOT NULL DEFAULT '' COMMENT '手机',
+  `SOURCE` int(11) NOT NULL DEFAULT '0' COMMENT '线索来源',
+  `STATUS` int(11) NOT NULL DEFAULT '0' COMMENT '线索状态',
+  `CARD_TYPE` int(11) NOT NULL DEFAULT '0' COMMENT '证件类型',
+  `CARD_NUM` varchar(64) NOT NULL DEFAULT '' COMMENT '证件号码',
+  `INDUSTRY` int(11) NOT NULL DEFAULT '0' COMMENT '行业',
+  `POST_CODE` varchar(16) NOT NULL DEFAULT '' COMMENT '邮编',
+  `PROVINCE` int(11) DEFAULT '0' COMMENT '省份',
+  `CITY` int(11) DEFAULT '0' COMMENT '城市',
+  `COUNTY` int(11) DEFAULT '0' COMMENT '区/县',
+  `ADDRESS` varchar(256) NOT NULL DEFAULT '' COMMENT '详细地址',
+  `REMARK` varchar(512) NOT NULL DEFAULT '' COMMENT '备注',
+  `IS_DELETED` int(11) DEFAULT '0',
+  `CREATOR_ID` int(11) NOT NULL DEFAULT '0' COMMENT '创建者ID',
+  `CREATED_TIME` datetime NOT NULL COMMENT '创建时间',
+  `MODIFIER_ID` int(11) NOT NULL DEFAULT '0' COMMENT '修改者ID',
+  `MODIFIED_TIME` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '修改时间',
+  PRIMARY KEY (`ID`),
+  KEY `INDEX_OWNER` (`OWNER`),
+  KEY `INDEX_NAME` (`NAME`),
+  KEY `INDEX_PHONE` (`PHONE`),
+  KEY `INDEX_MOBILE` (`MOBILE`),
+  KEY `INDEX_STATUS` (`STATUS`),
+  KEY `INDEX_CREATER_ID` (`CREATOR_ID`),
+  KEY `INDEX_MODIFIER_ID` (`MODIFIER_ID`)
+) ENGINE=InnoDB AUTO_INCREMENT=6 DEFAULT CHARSET=utf8 COMMENT='线索';
+
+-- ----------------------------
+-- Table structure for `market_activity`
+-- ----------------------------
+DROP TABLE IF EXISTS `market_activity`;
+CREATE TABLE `market_activity` (
+  `ID` int(4) NOT NULL AUTO_INCREMENT COMMENT '主键ID',
+  `NAME` varchar(128) NOT NULL DEFAULT '' COMMENT '活动名称',
+  `TYPE_DIC` int(4) DEFAULT NULL COMMENT '活动类型',
+  `STATUS_DIC` int(4) DEFAULT NULL COMMENT '活动状态',
+  `BEGIN_DATE` datetime NOT NULL COMMENT '开始日期',
+  `END_DATE` datetime NOT NULL COMMENT '结束日期',
+  `PREDICT_COST` decimal(10,4) NOT NULL DEFAULT '0.0000' COMMENT '预计成本',
+  `REALITY_COST` decimal(10,4) NOT NULL DEFAULT '0.0000' COMMENT '实际成本',
+  `TIMES` int(4) NOT NULL DEFAULT '0' COMMENT '活动次数',
+  `EXPECT_EFFECT` varchar(256) DEFAULT '' COMMENT '预期效果',
+  `EXPECT_SUCCESS_RATE` float(6,2) DEFAULT '0.00' COMMENT '期望成功率',
+  `SPONSOR` int(11) NOT NULL DEFAULT '0' COMMENT '发起者',
+  `BOSSHEAD` int(11) NOT NULL DEFAULT '0' COMMENT '负责人',
+  `REMARK` varchar(512) DEFAULT '' COMMENT '备注',
+  `IS_DELETED` int(11) DEFAULT '0' COMMENT '删除标记',
+  `CREATOR_ID` int(11) NOT NULL DEFAULT '0' COMMENT '创建者ID',
+  `CREATED_TIME` datetime NOT NULL COMMENT '创建时间',
+  `MODIFIER_ID` int(11) NOT NULL DEFAULT '0' COMMENT '修改者ID',
+  `MODIFIED_TIME` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '修改时间',
+  PRIMARY KEY (`ID`),
+  KEY `INDEX_ACTIVITY_STATUS` (`STATUS_DIC`),
+  KEY `INDEX-CREATOR_ID` (`CREATOR_ID`),
+  KEY `INDEX_MODIFIED_TIME` (`MODIFIED_TIME`),
+  KEY `INDEX-MODIFIER_ID` (`MODIFIER_ID`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='市场活动';
+
+-- ----------------------------
+-- Table structure for `memoir`
+-- ----------------------------
+DROP TABLE IF EXISTS `memoir`;
+CREATE TABLE `memoir` (
+  `ID` int(11) NOT NULL AUTO_INCREMENT COMMENT '纪要ID',
+  `MODULE_ID` int(11) NOT NULL DEFAULT '0' COMMENT '关联模块ID',
+  `RECORD_ID` int(11) NOT NULL DEFAULT '0' COMMENT '关联模块内记录的ID',
+  `ORG_ID` int(11) NOT NULL DEFAULT '0' COMMENT '组织ID',
+  `USER_ID` int(11) NOT NULL DEFAULT '0' COMMENT '用户ID',
+  `SUMMARY` varchar(1024) DEFAULT '' COMMENT '纪要内容',
+  `NEXTCONTACTTIME` datetime DEFAULT NULL COMMENT '下次联系时间',
+  `NEXTCONTACTPOINTS` varchar(1024) DEFAULT NULL COMMENT '下次联系要点',
+  `REMARK` varchar(512) DEFAULT '' COMMENT '备注',
+  `IS_DELETED` int(11) DEFAULT '0' COMMENT '标记删除',
+  `CREATOR_ID` int(11) NOT NULL DEFAULT '0' COMMENT '创建者ID',
+  `CREATED_TIME` datetime NOT NULL COMMENT '创建时间',
+  `MODIFIER_ID` int(11) NOT NULL DEFAULT '0' COMMENT '修改者ID',
+  `MODIFIED_TIME` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '修改时间',
+  PRIMARY KEY (`ID`),
+  KEY `INDEX_ID` (`ID`),
+  KEY `INDEX_TYPE` (`MODULE_ID`),
+  KEY `INDEX_MODULE_ID` (`RECORD_ID`),
+  KEY `INDEX_EMPLOYEE_ID` (`USER_ID`),
+  KEY `INDEX_CREATOR_ID` (`CREATOR_ID`),
+  KEY `INDEX_MODIFIER_ID` (`MODIFIER_ID`),
+  KEY `INDEX_MODIFIED_TIME` (`MODIFIED_TIME`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='沟通纪要';
+
+-- ----------------------------
+-- Table structure for `notice`
+-- ----------------------------
+DROP TABLE IF EXISTS `notice`;
+CREATE TABLE `notice` (
+  `ID` int(4) unsigned zerofill NOT NULL AUTO_INCREMENT COMMENT '主键ID',
+  `TITLE` varchar(255) NOT NULL DEFAULT '' COMMENT '标题',
+  `CONTENT` text NOT NULL COMMENT '内容',
+  `SENT_TIME` datetime NOT NULL COMMENT '发送时间',
+  `DEAD_TIME` datetime NOT NULL COMMENT '过期时间',
+  `IS_DELETED` tinyint(6) NOT NULL DEFAULT '0' COMMENT '是否被删除',
+  `CREATOR_ID` int(4) NOT NULL DEFAULT '0' COMMENT '创建者ID',
+  `CREATED_TIME` datetime NOT NULL COMMENT '创建时间',
+  `MODIFIER_ID` int(4) NOT NULL DEFAULT '0' COMMENT '修改者ID',
+  `MODIFIED_TIME` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '最后修改时间',
+  PRIMARY KEY (`ID`),
+  KEY `INDEX_MODIFIED_TIME` (`MODIFIED_TIME`),
+  KEY `INDEX_CREATOR_ID` (`CREATOR_ID`),
+  KEY `INDEX_MODIFIER_ID` (`MODIFIER_ID`)
+) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8 COMMENT='系统公告表';
+
+-- ----------------------------
+-- Table structure for `order`
+-- ----------------------------
+DROP TABLE IF EXISTS `order`;
+CREATE TABLE `order` (
+  `ID` int(4) NOT NULL AUTO_INCREMENT COMMENT '主键ID',
+  `PRODUCT_ID` int(4) NOT NULL DEFAULT '0' COMMENT '产品ID',
+  `CUSTOMER_ID` int(4) NOT NULL DEFAULT '0' COMMENT '客户ID',
+  `CODE` varchar(32) NOT NULL COMMENT '订单编号',
+  `STATUS` int(4) NOT NULL DEFAULT '0' COMMENT '订单状态',
+  `INVESTMENT_WAY` int(4) NOT NULL DEFAULT '0' COMMENT '投资方式',
+  `PURCHASE_MONEY` decimal(10,4) NOT NULL COMMENT '购买金额',
+  `EARNING_RATE` float(10,0) NOT NULL COMMENT '收益率',
+  `ADVANCE_REDEEM_RATE` float(10,0) NOT NULL COMMENT '提前赎回率',
+  `REDEEM_FORMULA` varchar(128) NOT NULL COMMENT '赎回公式',
+  `OWNER` int(4) NOT NULL DEFAULT '0' COMMENT '销售人员',
+  `SALES_MANAGER_ID` int(4) NOT NULL DEFAULT '0' COMMENT '销售经理',
+  `SALES_MAJORDOMO_ID` int(4) NOT NULL DEFAULT '0' COMMENT '销售总监',
+  `ORDER_END_TIME` datetime NOT NULL COMMENT '订单结束时间',
+  `REMARK` varchar(512) NOT NULL DEFAULT '' COMMENT '备注',
+  `IS_DELETED` int(4) DEFAULT '0' COMMENT '删除标识',
+  `CREATOR_ID` int(4) NOT NULL DEFAULT '0' COMMENT '创建者ID',
+  `CREATED_TIME` datetime NOT NULL COMMENT '创建时间',
+  `MODIFIER_ID` int(4) NOT NULL DEFAULT '0' COMMENT '修改者ID',
+  `MODIFIED_TIME` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '最后修改时间',
+  PRIMARY KEY (`ID`),
+  UNIQUE KEY `INDEX_CODE` (`CODE`),
+  KEY `INDEX_PRODUCT_ID` (`PRODUCT_ID`),
+  KEY `INDEX_ACCOUNT_ID` (`CUSTOMER_ID`),
+  KEY `INDEX_SALES_PERSON_ID` (`OWNER`),
+  KEY `INDEX_SALES_MANAGER_ID` (`SALES_MANAGER_ID`),
+  KEY `INDEX_SALES_MAJORDOMO_ID` (`SALES_MAJORDOMO_ID`),
+  KEY `INDEX_CREATOR_ID` (`CREATOR_ID`),
+  KEY `INDEX_MODIFIER_ID` (`MODIFIER_ID`),
+  KEY `INDEX_MODIFIED_TIME` (`MODIFIED_TIME`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='订单表';
+
+-- ----------------------------
+-- Table structure for `product`
+-- ----------------------------
+DROP TABLE IF EXISTS `product`;
+CREATE TABLE `product` (
+  `ID` int(4) NOT NULL AUTO_INCREMENT COMMENT '主键ID',
+  `NAME` varchar(128) NOT NULL DEFAULT '' COMMENT '产品名称',
+  `CODE` varchar(32) NOT NULL DEFAULT '' COMMENT '产品编号',
+  `PROJECT_ID` int(4) NOT NULL DEFAULT '0' COMMENT '项目ID',
+  `TYPE_DIC` int(4) DEFAULT '0' COMMENT '类型',
+  `START_SELL_MONEY` decimal(10,4) DEFAULT '0.0000' COMMENT '出售金额',
+  `ERNING_RATE` decimal(10,4) DEFAULT '0.0000' COMMENT '最小利率',
+  `EXPECT_PROFIT` decimal(10,4) DEFAULT '0.0000' COMMENT '预期收益',
+  `SALE_LIMIT` int(4) DEFAULT '0' COMMENT '销售期限',
+  `SALE_UNIT_DIC` int(4) DEFAULT '0' COMMENT '销售单位',
+  `SALE_BEGIN_TIME` datetime DEFAULT NULL COMMENT '销售开始日期',
+  `SALE_END_TIME` datetime DEFAULT NULL COMMENT '销售结束日期',
+  `ADVANCE_REDEEM_RATE` decimal(10,4) DEFAULT NULL COMMENT '提前赎回率',
+  `ADVANCE_REDEEM_FORMULA` varchar(216) DEFAULT '' COMMENT '提前赎回公式',
+  `IS_EFFECT` char(1) DEFAULT '1' COMMENT '是否有效',
+  `IS_DELETED` int(11) DEFAULT '0' COMMENT '标记删除',
+  `REMARK` varchar(512) NOT NULL DEFAULT '' COMMENT '备注',
+  `CREATOR_ID` int(4) NOT NULL DEFAULT '0' COMMENT '创建者ID',
+  `CREATED_TIME` datetime NOT NULL COMMENT '创建时间',
+  `MODIFIER_ID` int(4) NOT NULL DEFAULT '0' COMMENT '修改者ID',
+  `MODIFIED_TIME` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '最后修改时间',
+  PRIMARY KEY (`ID`),
+  UNIQUE KEY `INDEX_CODE` (`CODE`),
+  KEY `INDEX_PROJECT_ID` (`PROJECT_ID`),
+  KEY `INDEX_NAME` (`NAME`),
+  KEY `INDEX_CREATOR_ID` (`CREATOR_ID`),
+  KEY `INDEX_MODIFIER_ID` (`MODIFIER_ID`),
+  KEY `INDEX_MODIFIED_TIME` (`MODIFIED_TIME`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='产品表';
+
+-- ----------------------------
+-- Table structure for `project`
+-- ----------------------------
+DROP TABLE IF EXISTS `project`;
+CREATE TABLE `project` (
+  `ID` int(4) NOT NULL AUTO_INCREMENT COMMENT '主键ID',
+  `SUPPLIER_ID` int(4) NOT NULL DEFAULT '0' COMMENT '供应商ID',
+  `CODE` varchar(64) NOT NULL DEFAULT '' COMMENT '项目编号',
+  `NAME` varchar(128) NOT NULL DEFAULT '' COMMENT '项目名称',
+  `FINANCE_LIMIT` float(10,0) NOT NULL DEFAULT '0' COMMENT '融资额度',
+  `BEGIN_TIME` datetime NOT NULL COMMENT '开始时间',
+  `BEFORE_FINANCE_CYCLE` int(4) NOT NULL DEFAULT '0' COMMENT '融资前周期(天)',
+  `FINANCE_CYCLE` int(4) NOT NULL DEFAULT '0' COMMENT '融资周期',
+  `OPEN_TIME` datetime NOT NULL COMMENT '开放期',
+  `DENDLINE_TIME` datetime NOT NULL COMMENT '截止时间',
+  `EARNING_RATE` float(10,0) NOT NULL DEFAULT '0' COMMENT '收益率',
+  `ADVANCE_REDEEM_RATE` float(10,0) NOT NULL DEFAULT '0' COMMENT '提前赎回率',
+  `PAY_TYPE` int(11) NOT NULL DEFAULT '0' COMMENT '支付方式',
+  `REMARK` varchar(512) NOT NULL DEFAULT '' COMMENT '备注',
+  `IS_DELETED` int(11) DEFAULT '0',
+  `CREATOR_ID` int(11) NOT NULL DEFAULT '0' COMMENT '创建者ID',
+  `CREATED_TIME` datetime NOT NULL COMMENT '创建时间',
+  `MODIFIER_ID` int(11) NOT NULL DEFAULT '0' COMMENT '修改者ID',
+  `MODIFIED_TIME` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '最终修改时间',
+  PRIMARY KEY (`ID`),
+  UNIQUE KEY `INDEX_CODE` (`CODE`) USING BTREE,
+  KEY `INDEX_SUPPLIER_ID` (`SUPPLIER_ID`),
+  KEY `INDEX_NAME` (`NAME`),
+  KEY `INDEX_CREATOR_ID` (`CREATOR_ID`),
+  KEY `INDEX_MODIFIER_ID` (`MODIFIER_ID`),
+  KEY `INDEX_MODIFIED_TIME` (`MODIFIED_TIME`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='项目表';
+
+-- ----------------------------
+-- Table structure for `pro_city_area`
+-- ----------------------------
+DROP TABLE IF EXISTS `pro_city_area`;
+CREATE TABLE `pro_city_area` (
+  `ID` int(4) NOT NULL COMMENT '主键ID',
+  `NAME` varchar(32) NOT NULL COMMENT '名称',
+  `PID` int(4) DEFAULT NULL COMMENT '父级ID',
+  PRIMARY KEY (`ID`),
+  KEY `INDEX_PID` (`PID`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='省市县三级联动表';
+
+-- ----------------------------
+-- Table structure for `report`
+-- ----------------------------
+DROP TABLE IF EXISTS `report`;
+CREATE TABLE `report` (
+  `ID` int(11) NOT NULL AUTO_INCREMENT COMMENT '主键ID',
+  `CODE` varchar(32) NOT NULL COMMENT '代码值',
+  `NAME` varchar(62) NOT NULL COMMENT '报表名',
+  `MODULE_ID` int(11) NOT NULL COMMENT '所属模块主键编号',
+  `X_FIELD_NAME` varchar(32) NOT NULL COMMENT 'X轴字段名',
+  `X_TYPE_ID` int(11) NOT NULL COMMENT 'X轴分组类型',
+  `Y_FIELD_NAME` varchar(32) NOT NULL COMMENT 'Y轴字段名',
+  `Y_TYPE_ID` int(11) NOT NULL COMMENT 'Y轴分组类型',
+  `Z_FIELD_NAME` varchar(32) DEFAULT NULL COMMENT 'Z轴字段名',
+  `Z_TYPE_ID` int(11) DEFAULT NULL COMMENT 'Z轴分组类型',
+  `CHART_ID` int(11) NOT NULL COMMENT '图表类型',
+  `REMARK` varchar(512) DEFAULT NULL COMMENT '备注',
+  `CREATOR_ID` int(11) NOT NULL COMMENT '创建者主键编号',
+  `CREATED_TIME` datetime NOT NULL COMMENT '创建时间',
+  `MODIFIER_ID` int(11) NOT NULL COMMENT '修改者主键编号',
+  `MODIFIED_TIME` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '修改时间',
+  `IS_DELETED` tinyint(1) NOT NULL DEFAULT '0' COMMENT '否是被删除',
+  `IS_INITIALIZED` tinyint(1) NOT NULL DEFAULT '0' COMMENT '否是初始化数据',
+  PRIMARY KEY (`ID`)
+) ENGINE=InnoDB AUTO_INCREMENT=8 DEFAULT CHARSET=utf8 COMMENT='报表表';
+
+-- ----------------------------
+-- Table structure for `sales_target`
+-- ----------------------------
+DROP TABLE IF EXISTS `sales_target`;
+CREATE TABLE `sales_target` (
+  `ID` int(4) NOT NULL AUTO_INCREMENT COMMENT '主键ID',
+  `ORG_ID` int(4) NOT NULL DEFAULT '0' COMMENT '机构id',
+  `BARGAIN_MONEY` decimal(10,4) DEFAULT NULL COMMENT '目标成交金额',
+  `UNIT_DIC` int(4) DEFAULT '0' COMMENT '1年份 2月份 3季度',
+  `REMARK` varchar(512) DEFAULT NULL COMMENT '备注',
+  `CREATOR_ID` int(4) NOT NULL DEFAULT '0' COMMENT '创建者ID',
+  `CREATED_TIME` datetime NOT NULL COMMENT '创建时间',
+  `MODIFIER_ID` int(4) NOT NULL DEFAULT '0' COMMENT '修改者ID',
+  `MODIFIED_TIME` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '修改时间',
+  PRIMARY KEY (`ID`),
+  KEY `INDEX_ORG_ID` (`ORG_ID`),
+  KEY `INDEX_CREATOR_ID` (`CREATOR_ID`),
+  KEY `INDEX_MODIFIER_ID` (`MODIFIER_ID`),
+  KEY `INDEX_MODIFIED_TIME` (`MODIFIED_TIME`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='销售目标表';
+
+-- ----------------------------
+-- Table structure for `sm_audit_log`
+-- ----------------------------
+DROP TABLE IF EXISTS `sm_audit_log`;
+CREATE TABLE `sm_audit_log` (
+  `ID` int(11) NOT NULL AUTO_INCREMENT COMMENT '主键ID',
+  `MODULE_NAME` varchar(64) NOT NULL DEFAULT '' COMMENT '模块名称',
+  `RECORD_ID` int(11) DEFAULT '0' COMMENT '记录ID',
+  `RECORD_NAME` varchar(64) NOT NULL DEFAULT '' COMMENT '记录名称',
+  `TYPE` int(11) NOT NULL DEFAULT '0' COMMENT '操作类型',
+  `REMARK` varchar(64) DEFAULT NULL COMMENT '备注',
+  `CREATOR_ID` int(11) NOT NULL DEFAULT '0' COMMENT '操作者ID',
+  `CREATED_TIME` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '操作时间',
+  PRIMARY KEY (`ID`),
+  KEY `INDEX_USER_ID` (`CREATOR_ID`),
+  KEY `INDEX_MODULE_NAME` (`MODULE_NAME`) USING BTREE,
+  KEY `INDEX_TYPE` (`TYPE`),
+  KEY `INDEX_CREATED_TIME` (`CREATED_TIME`)
+) ENGINE=InnoDB AUTO_INCREMENT=16 DEFAULT CHARSET=utf8 COMMENT='审计日志表';
+
+-- ----------------------------
+-- Table structure for `sm_component`
+-- ----------------------------
+DROP TABLE IF EXISTS `sm_component`;
+CREATE TABLE `sm_component` (
+  `ID` int(4) NOT NULL AUTO_INCREMENT COMMENT '主键ID',
+  `CODE` varchar(32) NOT NULL DEFAULT '' COMMENT '组件编号',
+  `NAME` varchar(64) NOT NULL DEFAULT '' COMMENT '组件名称',
+  `URL` varchar(64) NOT NULL DEFAULT '' COMMENT '组件调用入口',
+  `REMARK` varchar(512) NOT NULL DEFAULT '' COMMENT '备注',
+  `PRIVILEGE_LEVEL_ID` int(11) NOT NULL COMMENT '权限级别',
+  `IS_DELETED` int(11) DEFAULT '0' COMMENT '删除标志',
+  `IS_INITIALIZED` tinyint(1) NOT NULL DEFAULT '1' COMMENT '是否初始化数据',
+  `CREATOR_ID` int(4) NOT NULL DEFAULT '0' COMMENT '创建者ID',
+  `CREATED_TIME` datetime NOT NULL COMMENT '创建时间',
+  `MODIFIER_ID` int(4) NOT NULL DEFAULT '0' COMMENT '修改者ID',
+  `MODIFIED_TIME` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '最后修改时间',
+  PRIMARY KEY (`ID`),
+  UNIQUE KEY `INDEX_CODE` (`CODE`) USING BTREE,
+  KEY `INDEX_NAME` (`NAME`) USING BTREE,
+  KEY `INDEX_URL` (`URL`) USING BTREE,
+  KEY `INDEX_MODIFIED_TIME` (`MODIFIED_TIME`),
+  KEY `INDEX_MODIFIER_ID` (`MODIFIER_ID`),
+  KEY `INDEX_CREATOR_ID` (`CREATOR_ID`)
+) ENGINE=InnoDB AUTO_INCREMENT=990111 DEFAULT CHARSET=utf8 COMMENT='组件表';
+
+-- ----------------------------
+-- Table structure for `sm_dictionary`
+-- ----------------------------
+DROP TABLE IF EXISTS `sm_dictionary`;
+CREATE TABLE `sm_dictionary` (
+  `ID` bigint(20) NOT NULL DEFAULT '0',
+  `KEY` varchar(64) NOT NULL DEFAULT '',
+  `VALUE` varchar(64) NOT NULL DEFAULT '',
+  `PARENT_ID` int(11) DEFAULT '0',
+  `LEVEL` int(11) DEFAULT NULL,
+  `ORDER` int(11) DEFAULT NULL,
+  `TYPE` varchar(64) DEFAULT NULL,
+  `IS_ACTIVE` int(11) DEFAULT '1',
+  `REMARK` varchar(512) NOT NULL DEFAULT '',
+  `IS_DELETED` int(11) DEFAULT '0' COMMENT '标记删除',
+  `IS_INITIALIZED` tinyint(1) NOT NULL DEFAULT '1',
+  `CREATOR_ID` int(10) unsigned DEFAULT '0',
+  `CREATED_TIME` datetime NOT NULL,
+  `MODIFIER_ID` int(11) DEFAULT '0',
+  `MODIFIED_TIME` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  PRIMARY KEY (`ID`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='数据字典表';
+
+-- ----------------------------
+-- Table structure for `sm_function`
+-- ----------------------------
+DROP TABLE IF EXISTS `sm_function`;
+CREATE TABLE `sm_function` (
+  `ID` int(11) NOT NULL AUTO_INCREMENT COMMENT '主键ID',
+  `MENU_ID` int(11) DEFAULT NULL COMMENT '关联菜单',
+  `CODE` varchar(32) DEFAULT NULL COMMENT '功能编号',
+  `NAME` varchar(64) NOT NULL DEFAULT '' COMMENT '功能名称',
+  `URL` varchar(64) DEFAULT NULL COMMENT '调用入口',
+  `REMARK` varchar(512) NOT NULL DEFAULT '' COMMENT '备注',
+  `IS_DELETED` int(11) DEFAULT '0' COMMENT '删除标志',
+  `PRIVILEGE_LEVEL_ID` int(11) DEFAULT '0' COMMENT ' 权限级别',
+  `PARENT_ID` int(11) DEFAULT NULL COMMENT '父功能',
+  `IS_INITIALIZED` tinyint(1) NOT NULL DEFAULT '1' COMMENT '是否初始化数据',
+  `CREATOR_ID` int(11) NOT NULL DEFAULT '0' COMMENT '创建者ID',
+  `CREATED_TIME` datetime NOT NULL COMMENT '创建时间',
+  `MODIFIER_ID` int(11) NOT NULL DEFAULT '0' COMMENT '修改者ID',
+  `MODIFIED_TIME` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '修改时间',
+  PRIMARY KEY (`ID`),
+  UNIQUE KEY `INDEX_URL` (`URL`),
+  KEY `INDEX_MENU_ID` (`MENU_ID`),
+  KEY `INDEX_MODIFIED_TIME` (`MODIFIED_TIME`),
+  KEY `INDEX_CODE` (`CODE`) USING BTREE,
+  KEY `INDEX_NAME` (`NAME`) USING BTREE,
+  KEY `INDEX_CREATOR_ID` (`CREATOR_ID`),
+  KEY `INDEX_MODIFIER_ID` (`MODIFIER_ID`)
+) ENGINE=InnoDB AUTO_INCREMENT=140111 DEFAULT CHARSET=utf8 COMMENT='功能表';
+
+-- ----------------------------
+-- Table structure for `sm_menu`
+-- ----------------------------
+DROP TABLE IF EXISTS `sm_menu`;
+CREATE TABLE `sm_menu` (
+  `ID` int(11) NOT NULL AUTO_INCREMENT COMMENT '主键号编',
+  `NAME` varchar(32) NOT NULL COMMENT '菜单名称',
+  `URL` varchar(64) DEFAULT NULL COMMENT '链接地址',
+  `SHOW_LOCATION_TYPE` int(11) DEFAULT NULL COMMENT '显示位置',
+  `DEFAULT_SHOW` tinyint(1) NOT NULL DEFAULT '0' COMMENT '默认显示',
+  `TRIGGER_ID` int(11) DEFAULT NULL COMMENT '触发功能',
+  `IS_ACTIVE` tinyint(1) NOT NULL COMMENT '是否激活的',
+  `LEVEL` int(11) NOT NULL COMMENT '级别',
+  `IS_LEAF` tinyint(1) NOT NULL COMMENT '叶子节点',
+  `PARENT_MENU_ID` int(11) DEFAULT NULL COMMENT '上级菜单',
+  `ORDER` int(11) NOT NULL COMMENT '序号',
+  `REMARK` varchar(512) DEFAULT NULL COMMENT '备注',
+  `IS_DELETED` tinyint(1) NOT NULL DEFAULT '0' COMMENT '否是被删除',
+  `IS_INITIALIZED` tinyint(1) NOT NULL DEFAULT '0' COMMENT '是否初始化数据',
+  `CREATOR_ID` int(11) NOT NULL COMMENT '建创者ID',
+  `CREATED_TIME` datetime NOT NULL COMMENT '创建时间',
+  `MODIFIER_ID` int(11) NOT NULL COMMENT '修改者ID',
+  `MODIFIED_TIME` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '最后修改时间',
+  PRIMARY KEY (`ID`),
+  UNIQUE KEY `INDEX_NAME` (`NAME`),
+  KEY `INDEX_CREAOR_ID` (`CREATOR_ID`),
+  KEY `INDEX_MODIFIER_ID` (`MODIFIER_ID`),
+  KEY `INDEX_ORDER` (`ORDER`)
+) ENGINE=InnoDB AUTO_INCREMENT=46 DEFAULT CHARSET=utf8 COMMENT='菜单表';
+
+-- ----------------------------
+-- Table structure for `sm_module`
+-- ----------------------------
+DROP TABLE IF EXISTS `sm_module`;
+CREATE TABLE `sm_module` (
+  `ID` int(11) NOT NULL AUTO_INCREMENT COMMENT '主键ID',
+  `NAME` varchar(32) NOT NULL COMMENT '名称',
+  `DESC` varchar(32) NOT NULL COMMENT '述描',
+  `ENTITY_CLASS` varchar(256) NOT NULL COMMENT '关联实体类',
+  PRIMARY KEY (`ID`)
+) ENGINE=InnoDB AUTO_INCREMENT=22 DEFAULT CHARSET=utf8 COMMENT='模块表';
+
+
+-- ----------------------------
+-- Table structure for `sm_module_type`
+-- ----------------------------
+DROP TABLE IF EXISTS `sm_module_type`;
+CREATE TABLE `sm_module_type` (
+  `ID` int(11) NOT NULL AUTO_INCREMENT COMMENT '主键编号',
+  `TYPE_ID` int(11) NOT NULL COMMENT '类型编号',
+  `MODULE_ID` int(11) NOT NULL COMMENT '模块编号',
+  PRIMARY KEY (`ID`),
+  UNIQUE KEY `INDEX_TYPE_ID_MODULE_ID` (`TYPE_ID`,`MODULE_ID`)
+) ENGINE=InnoDB AUTO_INCREMENT=23 DEFAULT CHARSET=utf8 COMMENT='模块类型表\r\n注意：类型编号和模块编号为联合的唯一列\r\n';
+
+-- ----------------------------
+-- Table structure for `sm_org`
+-- ----------------------------
+DROP TABLE IF EXISTS `sm_org`;
+CREATE TABLE `sm_org` (
+  `ID` int(11) NOT NULL AUTO_INCREMENT COMMENT '键主编号',
+  `SHORT_NAME` varchar(64) NOT NULL COMMENT '机构简称',
+  `FULL_NAME` varchar(128) NOT NULL COMMENT '构机全称',
+  `TYPE` int(11) NOT NULL COMMENT '类型 1公司 2部门 3组',
+  `PHONE` varchar(32) DEFAULT NULL COMMENT '手机号码',
+  `EMAIL` varchar(32) DEFAULT NULL COMMENT '邮箱',
+  `ADDRESS` varchar(512) DEFAULT NULL COMMENT '地址',
+  `ZIP_CODE` varchar(32) DEFAULT NULL COMMENT '邮政编码',
+  `WEB_SITE` varchar(64) DEFAULT NULL COMMENT '站点',
+  `REMARK` varchar(512) DEFAULT NULL COMMENT '备注',
+  `LEVEL` int(11) NOT NULL COMMENT '别级',
+  `IS_LEAF` tinyint(1) NOT NULL COMMENT '叶子节点',
+  `PARENT_ORG_ID` int(11) DEFAULT NULL COMMENT '上级组织主键编号',
+  `ORDER` int(11) NOT NULL COMMENT '序号',
+  `IS_DELETED` tinyint(1) NOT NULL DEFAULT '0' COMMENT '是否被删除',
+  `IS_INITIALIZED` tinyint(1) NOT NULL DEFAULT '0' COMMENT '否是初始化数据',
+  `CREATOR_ID` int(11) NOT NULL DEFAULT '0' COMMENT '创建者ID',
+  `CREATED_TIME` datetime NOT NULL COMMENT '创建时间',
+  `MODIFIER_ID` int(11) NOT NULL COMMENT '修改者ID',
+  `MODIFIED_TIME` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '最后修改时间',
+  PRIMARY KEY (`ID`),
+  UNIQUE KEY `INDEX_FULL_NAME` (`FULL_NAME`),
+  KEY `INDEX_CREATOR_ID` (`CREATOR_ID`),
+  KEY `INDEX_MODIFIER_ID` (`MODIFIER_ID`),
+  KEY `INDEX_SHORT_NAME` (`SHORT_NAME`)
+) ENGINE=InnoDB AUTO_INCREMENT=35 DEFAULT CHARSET=utf8 COMMENT='机构表';
+
+-- ----------------------------
+-- Table structure for `sm_org_role`
+-- ----------------------------
+DROP TABLE IF EXISTS `sm_org_role`;
+CREATE TABLE `sm_org_role` (
+  `ORG_ID` int(11) NOT NULL DEFAULT '0' COMMENT '组织ID',
+  `ROLE_ID` int(11) NOT NULL DEFAULT '0' COMMENT '角色ID',
+  PRIMARY KEY (`ORG_ID`,`ROLE_ID`),
+  KEY `INDEX_ORG_ID` (`ORG_ID`),
+  KEY `INDEX_ROLE_ID` (`ROLE_ID`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='织组角色关联表';
+
+
+-- ----------------------------
+-- Table structure for `sm_position`
+-- ----------------------------
+DROP TABLE IF EXISTS `sm_position`;
+CREATE TABLE `sm_position` (
+  `ID` int(11) NOT NULL AUTO_INCREMENT COMMENT '主键ID',
+  `CODE` varchar(32) NOT NULL DEFAULT '' COMMENT '岗位编号',
+  `NAME` varchar(64) NOT NULL DEFAULT '' COMMENT '岗位名称',
+  `PARENT_POS_ID` int(11) NOT NULL DEFAULT '0' COMMENT '上级岗位ID',
+  `PARTY_ID` int(11) NOT NULL DEFAULT '0' COMMENT '隶属组织ID',
+  `SORT_NO` int(11) NOT NULL DEFAULT '0' COMMENT '排列顺序',
+  `STATUS` int(11) NOT NULL DEFAULT '0' COMMENT '岗位状态',
+  `REMARK` varchar(215) NOT NULL DEFAULT '' COMMENT '备注',
+  `CREATEOR_ID` int(11) NOT NULL DEFAULT '0' COMMENT '创建者ID',
+  `CREATED_TIME` datetime NOT NULL COMMENT '修改时间',
+  `MODIFIER_ID` int(11) NOT NULL DEFAULT '0' COMMENT '最后修改者ID',
+  `MODIFIED_TIME` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '最后修改时间',
+  PRIMARY KEY (`ID`),
+  KEY `INDEX_NO` (`CODE`),
+  KEY `INDEX_NAME` (`NAME`),
+  KEY `INDEX_CREATEOR_ID` (`CREATEOR_ID`),
+  KEY `INDEX_MODIFIER_ID` (`MODIFIER_ID`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='岗位表';
+
+-- ----------------------------
+-- Table structure for `sm_recyclebin`
+-- ----------------------------
+DROP TABLE IF EXISTS `sm_recyclebin`;
+CREATE TABLE `sm_recyclebin` (
+  `ID` int(11) NOT NULL AUTO_INCREMENT COMMENT '主键ID',
+  `MODULE_NAME` varchar(64) NOT NULL DEFAULT '' COMMENT '模块名称',
+  `RECORD_ID` int(11) NOT NULL DEFAULT '0' COMMENT '记录ID',
+  `RECORD_NAME` varchar(64) NOT NULL DEFAULT '' COMMENT '记录名',
+  `REMARK` varchar(64) DEFAULT NULL COMMENT '备注',
+  `CREATOR_ID` int(11) NOT NULL DEFAULT '0' COMMENT '操作者',
+  `CREATED_TIME` datetime NOT NULL COMMENT '操作时间',
+  PRIMARY KEY (`ID`),
+  KEY `INDEX_USER_ID` (`CREATOR_ID`),
+  KEY `INDEX_MODULE_NAME` (`MODULE_NAME`) USING BTREE,
+  KEY `INDEX_CREATED_TIME` (`CREATED_TIME`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='回收站表';
+
+-- ----------------------------
+-- Table structure for `sm_role`
+-- ----------------------------
+DROP TABLE IF EXISTS `sm_role`;
+CREATE TABLE `sm_role` (
+  `ID` int(11) NOT NULL AUTO_INCREMENT COMMENT '主键ID',
+  `CODE` varchar(32) DEFAULT NULL COMMENT '角色代码',
+  `NAME` varchar(16) DEFAULT NULL COMMENT '角色名',
+  `TYPE` int(11) NOT NULL DEFAULT '0' COMMENT '角色类型',
+  `REMARK` varchar(255) NOT NULL DEFAULT '' COMMENT '备注',
+  `IS_DELETED` tinyint(1) NOT NULL DEFAULT '0' COMMENT '是否被删除',
+  `IS_INITIALIZED` int(11) NOT NULL DEFAULT '0' COMMENT '是否是初始化数据',
+  `CREATOR_ID` int(11) NOT NULL DEFAULT '0' COMMENT '创建者ID',
+  `CREATED_TIME` datetime NOT NULL COMMENT '创建时间',
+  `MODIFIER_ID` int(11) NOT NULL COMMENT '修改者',
+  `MODIFIED_TIME` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '最后修改时间',
+  PRIMARY KEY (`ID`),
+  UNIQUE KEY `INDEX_NAME` (`NAME`),
+  UNIQUE KEY `INDEX_CODE` (`CODE`),
+  KEY `INDEX_CREATOR_ID` (`CREATOR_ID`),
+  KEY `INDEX_MODIFIER_ID` (`MODIFIER_ID`)
+) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8 COMMENT='角色表';
+
+-- ----------------------------
+-- Table structure for `sm_role_com`
+-- ----------------------------
+DROP TABLE IF EXISTS `sm_role_com`;
+CREATE TABLE `sm_role_com` (
+  `ROLE_ID` int(11) NOT NULL DEFAULT '0' COMMENT '角色ID',
+  `COM_ID` int(11) NOT NULL DEFAULT '0' COMMENT '组件ID',
+  PRIMARY KEY (`ROLE_ID`,`COM_ID`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='角色组件表';
+
+-- ----------------------------
+-- Table structure for `sm_role_func`
+-- ----------------------------
+DROP TABLE IF EXISTS `sm_role_func`;
+CREATE TABLE `sm_role_func` (
+  `ROLE_ID` int(11) NOT NULL DEFAULT '0' COMMENT '角色ID',
+  `FUNC_ID` int(11) NOT NULL DEFAULT '0' COMMENT '功能ID',
+  PRIMARY KEY (`ROLE_ID`,`FUNC_ID`),
+  KEY `INDEX_ROLE_ID` (`ROLE_ID`),
+  KEY `INDEX_FUNC_ID` (`FUNC_ID`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='角色功能表';
+
+-- ----------------------------
+-- Table structure for `sm_user`
+-- ----------------------------
+DROP TABLE IF EXISTS `sm_user`;
+CREATE TABLE `sm_user` (
+  `ID` int(11) NOT NULL AUTO_INCREMENT COMMENT '主键编号',
+  `LOGIN_NAME` varchar(32) NOT NULL COMMENT '登录名',
+  `PASSWORD` varchar(64) NOT NULL COMMENT '密码',
+  `USER_NAME` varchar(32) NOT NULL COMMENT '真实姓名',
+  `SEX_ID` int(11) NOT NULL COMMENT '性别',
+  `PHONE` varchar(32) DEFAULT NULL COMMENT '电话号码',
+  `MOBILE` varchar(32) DEFAULT NULL COMMENT '手机号码',
+  `EMAIL` varchar(32) DEFAULT NULL COMMENT '邮箱',
+  `QQ` varchar(16) DEFAULT NULL COMMENT 'QQ',
+  `JOB_NAME` varchar(64) DEFAULT NULL COMMENT '职位',
+  `JOB_SITUATION_ID` int(11) NOT NULL COMMENT '职位状态',
+  `IS_MANAGER` int(11) NOT NULL COMMENT '否是管理员',
+  `IS_ACTIVE` char(1) NOT NULL DEFAULT '1' COMMENT '是否启用 1启用 0禁用',
+  `ORGANIZATION_ID` int(11) NOT NULL COMMENT '属所组织',
+  `REMARK` varchar(512) DEFAULT NULL COMMENT '备注',
+  `STORE_STATUS_ID` int(11) NOT NULL COMMENT '数据存储状态',
+  `IS_DELETED` tinyint(1) NOT NULL DEFAULT '0' COMMENT '否是被删除',
+  `IS_INITIALIZED` tinyint(1) NOT NULL DEFAULT '0' COMMENT '是否初始化数据',
+  `CREATOR_ID` int(11) NOT NULL COMMENT '创建者ID',
+  `CREATED_TIME` datetime NOT NULL COMMENT '创建时间',
+  `MODIFIER_ID` int(11) NOT NULL COMMENT '修改者ID',
+  `MODIFIED_TIME` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '最后修改时间',
+  PRIMARY KEY (`ID`),
+  UNIQUE KEY `INDEX_LOGIN_NAME` (`LOGIN_NAME`),
+  KEY `INDEX_CREATOR_ID` (`CREATOR_ID`),
+  KEY `INDEX_MODIFIER_ID` (`MODIFIER_ID`)
+) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8 COMMENT='用户表';
+
+-- ----------------------------
+-- Table structure for `sm_user_com`
+-- ----------------------------
+DROP TABLE IF EXISTS `sm_user_com`;
+CREATE TABLE `sm_user_com` (
+  `USER_ID` int(11) NOT NULL DEFAULT '0' COMMENT '用户ID',
+  `COM_ID` int(11) NOT NULL DEFAULT '0' COMMENT '组件ID',
+  PRIMARY KEY (`USER_ID`,`COM_ID`),
+  KEY `INDEX_USER_ID` (`USER_ID`),
+  KEY `INDEX_COM_ID` (`COM_ID`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='用户组件表';
+
+-- ----------------------------
+-- Table structure for `sm_user_func`
+-- ----------------------------
+DROP TABLE IF EXISTS `sm_user_func`;
+CREATE TABLE `sm_user_func` (
+  `USER_ID` int(11) NOT NULL DEFAULT '0' COMMENT '用户ID',
+  `FUNC_ID` int(11) NOT NULL DEFAULT '0' COMMENT '功能ID',
+  PRIMARY KEY (`USER_ID`,`FUNC_ID`),
+  KEY `INDEX_USER_ID` (`USER_ID`),
+  KEY `INDEX_FUNC_ID` (`FUNC_ID`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='用户，功能 对应关系表';
+
+-- ----------------------------
+-- Table structure for `sm_user_org`
+-- ----------------------------
+DROP TABLE IF EXISTS `sm_user_org`;
+CREATE TABLE `sm_user_org` (
+  `USER_ID` int(11) NOT NULL DEFAULT '0' COMMENT '用户ID',
+  `ORG_ID` int(11) NOT NULL DEFAULT '0' COMMENT '机构ID',
+  PRIMARY KEY (`USER_ID`,`ORG_ID`),
+  KEY `INDEX_USER_ID` (`USER_ID`),
+  KEY `INDEX_ORG_ID` (`ORG_ID`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='用户机构表';
+
+-- ----------------------------
+-- Table structure for `sm_user_position`
+-- ----------------------------
+DROP TABLE IF EXISTS `sm_user_position`;
+CREATE TABLE `sm_user_position` (
+  `ID` int(11) NOT NULL AUTO_INCREMENT COMMENT '主键ID',
+  `USER_ID` int(11) NOT NULL DEFAULT '0' COMMENT '用户ID',
+  `POS_ID` int(11) NOT NULL DEFAULT '0' COMMENT '岗位ID',
+  `CREATOR_ID` int(11) NOT NULL DEFAULT '0' COMMENT '创建者ID',
+  `CREATED_TIME` datetime NOT NULL COMMENT '创建时间',
+  `MODIFIER_ID` int(11) NOT NULL DEFAULT '0' COMMENT '修改者ID',
+  `MODIFIED_TIME` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '最后修改时间',
+  PRIMARY KEY (`ID`),
+  KEY `INDEX-USER_ID` (`USER_ID`),
+  KEY `INDEX_POS_ID` (`POS_ID`),
+  KEY `INDEX_CREATOR_ID` (`CREATOR_ID`),
+  KEY `INDEX_MODIFIER_ID` (`MODIFIER_ID`),
+  KEY `INDEX_MODIFIED_TIME` (`MODIFIED_TIME`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='用户岗位关联表';
+
+-- ----------------------------
+-- Table structure for `sm_user_role`
+-- ----------------------------
+DROP TABLE IF EXISTS `sm_user_role`;
+CREATE TABLE `sm_user_role` (
+  `USER_ID` int(4) NOT NULL DEFAULT '0' COMMENT '用户ID',
+  `ROLE_ID` int(4) NOT NULL DEFAULT '0' COMMENT '角色ID',
+  PRIMARY KEY (`USER_ID`,`ROLE_ID`),
+  KEY `INDEX_ROLE_ID` (`ROLE_ID`) USING BTREE,
+  KEY `INDEX_USER_ID` (`USER_ID`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='用户角色关联表';
+
+-- ----------------------------
+-- Table structure for `sm_workbanch`
+-- ----------------------------
+DROP TABLE IF EXISTS `sm_workbanch`;
+CREATE TABLE `sm_workbanch` (
+  `ID` int(4) NOT NULL AUTO_INCREMENT COMMENT '主键ID',
+  `URL` varchar(64) NOT NULL,
+  `TITLE` varchar(64) NOT NULL DEFAULT '' COMMENT '标题',
+  `MODULE` varchar(64) NOT NULL DEFAULT '' COMMENT '模块',
+  `TYPE` varchar(64) NOT NULL DEFAULT '' COMMENT '类型',
+  `WIDTH` varchar(64) NOT NULL DEFAULT '' COMMENT '宽度',
+  `PARAMS` varchar(64) NOT NULL DEFAULT '' COMMENT '参数',
+  `OWNER_ID` int(4) NOT NULL DEFAULT '0' COMMENT '所有者',
+  `ORDER_INDEX` int(4) NOT NULL DEFAULT '0' COMMENT '排序标识',
+  `IS_DELETED` int(4) NOT NULL DEFAULT '0' COMMENT '删除标识',
+  `CREATED_TIME` datetime NOT NULL COMMENT '创建时间',
+  `MODIFIED_TIME` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '修改时间',
+  PRIMARY KEY (`ID`)
+) ENGINE=InnoDB AUTO_INCREMENT=5 DEFAULT CHARSET=utf8 COMMENT='工作台';
+
+-- ----------------------------
+-- Table structure for `supplier`
+-- ----------------------------
+DROP TABLE IF EXISTS `supplier`;
+CREATE TABLE `supplier` (
+  `ID` int(4) NOT NULL AUTO_INCREMENT COMMENT '主键ID',
+  `NAME` varchar(64) NOT NULL DEFAULT '' COMMENT '供应商名',
+  `TYPE` int(4) NOT NULL DEFAULT '0' COMMENT '供应商分类',
+  `CORPORATION` varchar(64) NOT NULL DEFAULT '' COMMENT '法人代表',
+  `OWNER` int(11) NOT NULL DEFAULT '0' COMMENT '所有者',
+  `PHONE` varchar(32) NOT NULL DEFAULT '' COMMENT '电话',
+  `MOBILE` varchar(32) NOT NULL DEFAULT '' COMMENT '手机',
+  `CARD_NUM` varchar(64) NOT NULL DEFAULT '' COMMENT '证件号码',
+  `CARD_TYPE` int(11) DEFAULT NULL COMMENT '证件类型',
+  `FAX` varchar(32) NOT NULL DEFAULT '' COMMENT '传真',
+  `PROVINCE` varchar(32) DEFAULT NULL COMMENT '省份',
+  `CITY` varchar(32) DEFAULT NULL COMMENT '城市',
+  `COUNTY` varchar(32) DEFAULT NULL COMMENT '区/县',
+  `EMAIL` varchar(32) NOT NULL DEFAULT '' COMMENT '邮箱',
+  `ADDRESS` varchar(512) NOT NULL DEFAULT '' COMMENT '详细地址',
+  `REMARK` varchar(512) NOT NULL DEFAULT '' COMMENT '备注',
+  `IS_DELETED` int(11) DEFAULT '0',
+  `CREATOR_ID` int(4) NOT NULL DEFAULT '0' COMMENT '创建者ID',
+  `CREATED_TIME` datetime NOT NULL COMMENT '创建时间',
+  `MODIFIER_ID` int(4) NOT NULL DEFAULT '0' COMMENT '修改者ID',
+  `MODIFIED_TIME` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '修改时间',
+  PRIMARY KEY (`ID`),
+  KEY `INDEX_MODIFIED_TIME` (`MODIFIED_TIME`),
+  KEY `INDEX_NAME` (`NAME`),
+  KEY `INDEX_TYPE` (`TYPE`),
+  KEY `INDEX_CREATOR_ID` (`CREATOR_ID`),
+  KEY `INDEX_MODIFIER_ID` (`MODIFIER_ID`)
+) ENGINE=InnoDB AUTO_INCREMENT=6 DEFAULT CHARSET=utf8 COMMENT='供应商';
+
+-- ----------------------------
+-- Table structure for `sysmessage`
+-- ----------------------------
+DROP TABLE IF EXISTS `sysmessage`;
+CREATE TABLE `sysmessage` (
+  `ID` int(4) NOT NULL AUTO_INCREMENT COMMENT '主键ID',
+  `TITLE` varchar(64) NOT NULL DEFAULT '' COMMENT '标题',
+  `CONTENT` text NOT NULL COMMENT '内容',
+  `CREATOR_ID` int(4) NOT NULL DEFAULT '0' COMMENT '创建者ID',
+  `CREATED_TIME` datetime NOT NULL COMMENT '创建时间',
+  `IS_DELETED` tinyint(6) NOT NULL DEFAULT '0' COMMENT '是否被删除',
+  `MODIFIER_ID` int(4) NOT NULL DEFAULT '0' COMMENT '修改者ID',
+  `MODIFIED_TIME` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '修改时间',
+  PRIMARY KEY (`ID`),
+  KEY `INDEX_MODIFIED_TIME` (`MODIFIED_TIME`),
+  KEY `INDEX_CREATOR_ID` (`CREATOR_ID`),
+  KEY `INDEX_MODIFIER_ID` (`MODIFIER_ID`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='系统消息';
+
+-- ----------------------------
+-- Table structure for `user_message`
+-- ----------------------------
+DROP TABLE IF EXISTS `user_message`;
+CREATE TABLE `user_message` (
+  `ID` int(11) NOT NULL AUTO_INCREMENT COMMENT '主键ID',
+  `MESSAGE_ID` int(11) NOT NULL COMMENT '所发消息',
+  `USER_ID` int(11) NOT NULL COMMENT '所发用户',
+  `STATUS` int(11) NOT NULL COMMENT '读取状态',
+  `TYPE` smallint(6) NOT NULL COMMENT '消息类型，发消息true或接收消息false',
+  `IS_DELETED` tinyint(6) NOT NULL DEFAULT '0' COMMENT '是否被删除',
+  `CREATED_TIME` datetime NOT NULL COMMENT '发送时间',
+  `MODIFIED_TIME` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '最后修改时间',
+  PRIMARY KEY (`ID`),
+  KEY `INDEX_ID` (`ID`),
+  KEY `INDEX_MESSAGE_ID` (`MESSAGE_ID`),
+  KEY `INDEX_USER_ID` (`USER_ID`),
+  KEY `INDEX_STATUS` (`STATUS`),
+  KEY `INDEX_TYPE` (`TYPE`),
+  KEY `INDEX_CREATED_TIME` (`CREATED_TIME`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='系统消息与用户关联表';

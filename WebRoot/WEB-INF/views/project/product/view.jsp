@@ -52,7 +52,7 @@
 			<td align="right">出售金额：</td>
 			<td align="left"><fmt:formatNumber value="${product.sellMoney}" pattern="###,##0.00" var="sellMoney"/>${sellMoney}</td>
 			<td align="right">收益率%：</td>
-			<td align="left">${product.minRate}%~${product.maxRate}%</td>
+			<td align="left">${product.rate}%</td>
 		</tr>
 		<tr>
 			<td align="right">预期收益：</td>

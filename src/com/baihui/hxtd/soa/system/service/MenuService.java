@@ -301,7 +301,7 @@ public class MenuService {
 
         List<Menu> showMenus = new ArrayList<Menu>();
         for (Menu menu : menus) {
-            if (menu.getShowLocationType() != null && showlocationType.equals(menu.getShowLocationType())) {
+            if (showlocationType.equals(menu.getShowLocationType())) {
                 showMenus.add(menu);
             }
         }
@@ -516,7 +516,7 @@ public class MenuService {
         logger.debug("序号根据父节点设置为“{}”", menu.getOrder());
 
         //创建时间为当前时间
-        menu.setCreatedTime(new Date());
+        menu.setCreatedTime(menuDao.getDBNow());
         //修改时间为当前时间
         menu.setModifiedTime(menu.getCreatedTime());
         //是否删除的为false
@@ -598,7 +598,7 @@ public class MenuService {
         logger.info("修改");
 
         logger.info("添加默认属性值");
-        menu.setModifiedTime(new Date());
+        menu.setModifiedTime(menuDao.getDBNow());
         logger.debug("修改时间为当前时间“{}”", menu.getModifiedTime());
 
         //修改当前菜单为默认显示时，更新其他默认显示的菜单为不默认显示

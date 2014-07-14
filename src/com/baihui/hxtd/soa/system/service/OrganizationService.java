@@ -208,7 +208,7 @@ public class OrganizationService {
         logger.debug("级别为“{}”（上级节点级别+1）", organization.getLevel());
         organization.setIsLeaf(true);
         logger.debug("叶子节点为“{}”（新增节点默认为叶子节点）", organization.getIsLeaf());
-        organization.setCreatedTime(new Date());
+        organization.setCreatedTime(organizationDao.getDBNow());
         logger.debug("创建时间为当前时间“{}”", organization.getCreatedTime());
         organization.setModifiedTime(organization.getCreatedTime());
         logger.debug("修改时间为当前时间“{}”", organization.getCreatedTime());
@@ -309,7 +309,7 @@ public class OrganizationService {
             logger.debug("序号为“{}”", organization.getOrder());
             organization.setLevel(parent.getLevel() + 1);
             logger.debug("叶子节点为“{}”（新增节点默认为叶子节点）", organization.getIsLeaf());
-            organization.setCreatedTime(new Date());
+            organization.setCreatedTime(organizationDao.getDBNow());
             logger.debug("创建时间为当前时间“{}”", organization.getCreatedTime());
             organization.setModifiedTime(organization.getCreatedTime());
             logger.debug("修改时间为当前时间“{}”", organization.getCreatedTime());

@@ -2,7 +2,6 @@
 package com.baihui.hxtd.soa.order.controller;
 
 import java.io.IOException;
-import java.util.Date;
 import java.util.List;
 import java.util.Map;
 
@@ -125,8 +124,6 @@ public class OrderController extends CommonController<Order> {
 		logger.info("OrderController.modify修改线索信息");
 		User u = (User) request.getSession().getAttribute(Constant.VS_USER);
 		logger.info("获得当前操作用户{}", u.getName());
-		order.setCreatedTime(new Date(new java.util.Date().getTime()));
-		order.setModifiedTime(new Date(new java.util.Date().getTime()));
 		order.setModifier(u);
 		order.setCreator(u);
 		AuditLog auditLog = new AuditLog(EnumModule.ORDER.getModuleName(), 
@@ -207,8 +204,6 @@ public class OrderController extends CommonController<Order> {
 		logger.info("ComponentController.query 获得当前操作的用户{}",u.getName());
 		order.setCreator(u);
 		order.setModifier(u);
-		order.setCreatedTime(new Date());
-		order.setModifiedTime(new Date());
 		AuditLog auditLog = new AuditLog(EnumModule.ORDER.getModuleName(), 
 				order.getId(), order.getCode(), EnumOperationType.ADD.getOperationType(), u);
 		orderService.add(order, auditLog);

@@ -332,6 +332,13 @@
             <artifactId>springside-core</artifactId>
             <version>4.3.0-SNAPSHOT</version>
         </dependency>
+
+        <dependency>
+            <groupId>ro.nextreports</groupId>
+            <artifactId>jofc2</artifactId>
+            <version>1.0.2-SNAPSHOT</version>
+        </dependency>
+
     </dependencies>
 
     <build>
@@ -373,19 +380,20 @@
                     <!--<warSourceExcludes>**/lib</warSourceExcludes>-->
                 </configuration>
             </plugin>
-                                      1
-            <!-- tomcat7 插件 -->
-            <plugin>
-                <groupId>org.apache.tomcat.maven</groupId>
-                <artifactId>tomcat7-maven-plugin</artifactId>
-                <configuration>
-                    <systemProperties>
-                        <spring.profiles.active>development</spring.profiles.active>
-                    </systemProperties>
-                    <useTestClasspath>true</useTestClasspath>
-                </configuration>
-            </plugin>
 
+            <!-- tomcat7 插件 -->
+            <!--
+            <plugin>
+                  <groupId>org.apache.tomcat.maven</groupId>
+                  <artifactId>tomcat7-maven-plugin</artifactId>
+                  <configuration>
+                      <systemProperties>
+                          <spring.profiles.active>development</spring.profiles.active>
+                      </systemProperties>
+                      <useTestClasspath>true</useTestClasspath>
+                  </configuration>
+              </plugin>
+             -->
             <!-- jetty插件, 设定context path与spring profile -->
             <!--<plugin>
                 <groupId>org.mortbay.jetty</groupId>

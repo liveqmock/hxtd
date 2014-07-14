@@ -90,11 +90,54 @@
 # VALUES (900020105, '最小', '0900020105', 9000201, 2, 0, 'report_aggregate', 1, '', 1, '2014-06-06 13:32:39.0', 1, '2014-06-25 10:31:51.0', 0);
 
 
-INSERT INTO hxtd.sm_dictionary (ID, `KEY`, VALUE, PARENT_ID, LEVEL, `ORDER`, TYPE, IS_ACTIVE, REMARK, CREATOR_ID, CREATED_TIME, MODIFIER_ID, MODIFIED_TIME, IS_DELETED)
-VALUES (90003, '报表图表类型', '090003', NULL, 1, 0, 'report_chart', 1, '', 1, '2014-06-06 13:32:39.0', 1, '2014-06-25 10:31:51.0', 0);
-INSERT INTO hxtd.sm_dictionary (ID, `KEY`, VALUE, PARENT_ID, LEVEL, `ORDER`, TYPE, IS_ACTIVE, REMARK, CREATOR_ID, CREATED_TIME, MODIFIER_ID, MODIFIED_TIME, IS_DELETED)
-VALUES (9000301, '饼状图', '09000301', 90003, 2, 0, 'report_chart', 1, '', 1, '2014-06-06 13:32:39.0', 1, '2014-06-25 10:31:51.0', 0);
-INSERT INTO hxtd.sm_dictionary (ID, `KEY`, VALUE, PARENT_ID, LEVEL, `ORDER`, TYPE, IS_ACTIVE, REMARK, CREATOR_ID, CREATED_TIME, MODIFIER_ID, MODIFIED_TIME, IS_DELETED)
-VALUES (9000302, '柱状图', '09000302', 90003, 2, 0, 'report_chart', 1, '', 1, '2014-06-06 13:32:39.0', 1, '2014-06-25 10:31:51.0', 0);
-INSERT INTO hxtd.sm_dictionary (ID, `KEY`, VALUE, PARENT_ID, LEVEL, `ORDER`, TYPE, IS_ACTIVE, REMARK, CREATOR_ID, CREATED_TIME, MODIFIER_ID, MODIFIED_TIME, IS_DELETED)
-VALUES (9000303, '折线图', '09000303', 90003, 2, 0, 'report_chart', 1, '', 1, '2014-06-06 13:32:39.0', 1, '2014-06-25 10:31:51.0', 0);
+# INSERT INTO hxtd.sm_dictionary (ID, `KEY`, VALUE, PARENT_ID, LEVEL, `ORDER`, TYPE, IS_ACTIVE, REMARK, CREATOR_ID, CREATED_TIME, MODIFIER_ID, MODIFIED_TIME, IS_DELETED)
+# VALUES (90003, '报表图表类型', '090003', NULL, 1, 0, 'report_chart', 1, '', 1, '2014-06-06 13:32:39.0', 1, '2014-06-25 10:31:51.0', 0);
+# INSERT INTO hxtd.sm_dictionary (ID, `KEY`, VALUE, PARENT_ID, LEVEL, `ORDER`, TYPE, IS_ACTIVE, REMARK, CREATOR_ID, CREATED_TIME, MODIFIER_ID, MODIFIED_TIME, IS_DELETED)
+# VALUES (9000301, '饼状图', '09000301', 90003, 2, 0, 'report_chart', 1, '', 1, '2014-06-06 13:32:39.0', 1, '2014-06-25 10:31:51.0', 0);
+# INSERT INTO hxtd.sm_dictionary (ID, `KEY`, VALUE, PARENT_ID, LEVEL, `ORDER`, TYPE, IS_ACTIVE, REMARK, CREATOR_ID, CREATED_TIME, MODIFIER_ID, MODIFIED_TIME, IS_DELETED)
+# VALUES (9000302, '柱状图', '09000302', 90003, 2, 0, 'report_chart', 1, '', 1, '2014-06-06 13:32:39.0', 1, '2014-06-25 10:31:51.0', 0);
+# INSERT INTO hxtd.sm_dictionary (ID, `KEY`, VALUE, PARENT_ID, LEVEL, `ORDER`, TYPE, IS_ACTIVE, REMARK, CREATOR_ID, CREATED_TIME, MODIFIER_ID, MODIFIED_TIME, IS_DELETED)
+# VALUES (9000303, '折线图', '09000303', 90003, 2, 0, 'report_chart', 1, '', 1, '2014-06-06 13:32:39.0', 1, '2014-06-25 10:31:51.0', 0);
+
+INSERT INTO `sm_module` VALUES ('1', 'marketActivity', '市场活动', 'com.baihui.hxtd.soa.market.entity.MarketActivity');
+INSERT INTO `sm_module` VALUES ('2', 'lead', '线索', 'com.baihui.hxtd.soa.customer.entity.Lead');
+INSERT INTO `sm_module` VALUES ('3', 'contact', '联系人', 'com.baihui.hxtd.soa.customer.entity.Contact');
+INSERT INTO `sm_module` VALUES ('4', 'customer', '客户', 'com.baihui.hxtd.soa.customer.entity.Customer');
+INSERT INTO `sm_module` VALUES ('5', 'supplier', '供应商', 'com.baihui.hxtd.soa.project.entity.Supplier');
+INSERT INTO `sm_module` VALUES ('6', 'project', '项目', 'com.baihui.hxtd.soa.project.entity.Project');
+INSERT INTO `sm_module` VALUES ('7', 'product', '产品', 'com.baihui.hxtd.soa.project.entity.Product');
+INSERT INTO `sm_module` VALUES ('8', 'order', '订单', 'com.baihui.hxtd.soa.order.entity.Order');
+INSERT INTO `sm_module` VALUES ('9', 'user', '用户', 'com.baihui.hxtd.soa.system.entity.User');
+INSERT INTO `sm_module` VALUES ('10', 'role', '角色', 'com.baihui.hxtd.soa.system.entity.Role');
+INSERT INTO `sm_module` VALUES ('11', 'menu', '菜单', 'com.baihui.hxtd.soa.system.entity.Menu');
+INSERT INTO `sm_module` VALUES ('12', 'function', '功能', 'com.baihui.hxtd.soa.system.entity.Function');
+INSERT INTO `sm_module` VALUES ('13', 'component', '组件', 'com.baihui.hxtd.soa.system.entity.Component');
+INSERT INTO `sm_module` VALUES ('14', 'organization', '组织', 'com.baihui.hxtd.soa.system.entity.Organization');
+INSERT INTO `sm_module` VALUES ('15', 'userMessage', '系统消息', 'com.baihui.hxtd.soa.system.entity.UserMessage');
+INSERT INTO `sm_module` VALUES ('16', 'notice', '系统公告', 'com.baihui.hxtd.soa.system.entity.Notice');
+INSERT INTO `sm_module` VALUES ('17', 'dictionary', '字典', 'com.baihui.hxtd.soa.system.entity.Dictionary');
+INSERT INTO `sm_module` VALUES ('18', 'auditLog', '审计日志', 'com.baihui.hxtd.soa.system.entity.AuditLog');
+INSERT INTO `sm_module` VALUES ('19', 'recycleBin', '回收站', 'com.baihui.hxtd.soa.system.entity.RecycleBin');
+INSERT INTO `sm_module` VALUES ('20', 'attachment', '附件', 'com.baihui.hxtd.soa.common.entity.Attachment');
+INSERT INTO `sm_module` VALUES ('21', 'memoir', '联系人纪要', 'com.baihui.hxtd.soa.common.entity.Memoir');
+INSERT INTO `sm_module_type` VALUES ('2', '99010101', '1');
+INSERT INTO `sm_module_type` VALUES ('3', '99010101', '2');
+INSERT INTO `sm_module_type` VALUES ('4', '99010101', '3');
+INSERT INTO `sm_module_type` VALUES ('5', '99010101', '4');
+INSERT INTO `sm_module_type` VALUES ('6', '99010101', '5');
+INSERT INTO `sm_module_type` VALUES ('7', '99010101', '6');
+INSERT INTO `sm_module_type` VALUES ('8', '99010101', '7');
+INSERT INTO `sm_module_type` VALUES ('9', '99010101', '8');
+INSERT INTO `sm_module_type` VALUES ('10', '99010101', '9');
+INSERT INTO `sm_module_type` VALUES ('11', '99010101', '10');
+INSERT INTO `sm_module_type` VALUES ('12', '99010101', '11');
+INSERT INTO `sm_module_type` VALUES ('13', '99010101', '12');
+INSERT INTO `sm_module_type` VALUES ('14', '99010101', '13');
+INSERT INTO `sm_module_type` VALUES ('15', '99010101', '14');
+INSERT INTO `sm_module_type` VALUES ('16', '99010101', '15');
+INSERT INTO `sm_module_type` VALUES ('17', '99010101', '16');
+INSERT INTO `sm_module_type` VALUES ('18', '99010101', '17');
+INSERT INTO `sm_module_type` VALUES ('19', '99010101', '18');
+INSERT INTO `sm_module_type` VALUES ('20', '99010101', '19');
+INSERT INTO `sm_module_type` VALUES ('21', '99010101', '20');
+INSERT INTO `sm_module_type` VALUES ('22', '99010101', '21');

@@ -29,7 +29,7 @@ $(function(){
     		<td class="f14 namewidth2" align="left" width="16%">
     			<select name="search_EQ_dic.id" class="select2">
 					<option value="">全部</option>
-					<c:forEach items="${dicType}" var="dic">
+					<c:forEach items="${typeDic}" var="dic">
 						<option value="${dic.id}" >${dic.key}</option>
 					</c:forEach>
 				</select>
@@ -38,7 +38,7 @@ $(function(){
     		<td class="namewidth2" align="left" width="16%">
     			<select name="search_EQ_status.id" class="select2">
 					<option value="">全部</option>
-					<c:forEach items="${dicStatus}" var="dic">
+					<c:forEach items="${statusDic}" var="dic">
 						<option value="${dic.id}">${dic.key}</option>
 					</c:forEach>
 				</select>

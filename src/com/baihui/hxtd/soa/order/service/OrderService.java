@@ -1,6 +1,7 @@
 
 package com.baihui.hxtd.soa.order.service;
 
+import java.util.Date;
 import java.util.List;
 import java.util.Map;
 
@@ -18,11 +19,9 @@ import com.baihui.hxtd.soa.base.orm.hibernate.HibernatePage;
 import com.baihui.hxtd.soa.base.utils.Search;
 import com.baihui.hxtd.soa.order.dao.OrderDao;
 import com.baihui.hxtd.soa.order.entity.Order;
-import com.baihui.hxtd.soa.order.util.Contacts;
 import com.baihui.hxtd.soa.system.dao.UserDao;
 import com.baihui.hxtd.soa.system.entity.AuditLog;
 import com.baihui.hxtd.soa.system.service.DataShift;
-import com.baihui.hxtd.soa.util.Tools;
 
 /**
  * 
@@ -102,11 +101,17 @@ public class OrderService {
 	
 	
 	public void add(Order order, AuditLog auditLog){
+		Date now = orderDao.getDBNow();
+		order.setCreatedTime(now);
+		order.setModifiedTime(now);
 		orderDao.save(order);
 		auditLog.setRecordId(order.getId());
 	}
 	
 	public void modify(Order order, AuditLog auditLog){
+		Date now = orderDao.getDBNow();
+		order.setCreatedTime(now);
+		order.setModifiedTime(now);
 		orderDao.save(order);
 	}
 	

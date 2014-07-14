@@ -1,5 +1,6 @@
 package com.baihui.hxtd.soa.project.service;
 
+import java.util.Date;
 import java.util.List;
 import java.util.Map;
 
@@ -16,6 +17,7 @@ import org.springside.modules.persistence.SearchFilter;
 
 import com.baihui.hxtd.soa.base.orm.hibernate.HibernatePage;
 import com.baihui.hxtd.soa.base.utils.Search;
+import com.baihui.hxtd.soa.customer.dao.ContactDao;
 import com.baihui.hxtd.soa.project.dao.ProjectDao;
 import com.baihui.hxtd.soa.project.dao.SupplierDao;
 import com.baihui.hxtd.soa.project.entity.Supplier;
@@ -50,8 +52,11 @@ public class SupplierService {
 
 	@Resource
 	private UserDao userDao;
+	
+	@Resource
+	private ContactDao contactDao;
 	 /**
-     * findPage(分页查询组件列表)
+     * findPage(分页查询供应商列表)
      *
      * @param @param  findPage
      * @param @return 参数类型
@@ -76,7 +81,7 @@ public class SupplierService {
     
     
     /**
-     * getl(根据ID查询组件信息)
+     * getl(根据ID查询供应商信息)
      *
      * @param @param  page
      * @param @return 参数类型
@@ -84,7 +89,7 @@ public class SupplierService {
      * @throws
      */
     public Supplier get(Long id) {
-        logger.info("查询单个组件信息{}", id);
+        logger.info("查询单个供应商信息{}", id);
         String hql = "select supplier from Supplier supplier  " +
         				"left join fetch supplier.type " +
         				"left join fetch supplier.owner " +
@@ -104,26 +109,34 @@ public class SupplierService {
      * @Title: save
      */
     public void add(Supplier entity,AuditLog auditLog) {
-        logger.info("保存组件信息{}", entity);
+        logger.info("保存供应商信息{}", entity);
+        Date now = supplierDao.getDBNow();
+        entity.setCreatedTime(now);
+        entity.setModifiedTime(now);
         supplierDao.save(entity);
     }
     
     public void modify(Supplier entity,AuditLog auditLog) {
-        logger.info("保存组件信息{}", entity);
+        logger.info("保存供应商信息{}", entity);
+        Date now = supplierDao.getDBNow();
+        entity.setCreatedTime(now);
+        entity.setModifiedTime(now);
         supplierDao.save(entity);
     }
 
     /**
-     * delete(删除组件信息)
+     * delete(删除供应商信息)
      *
      * @param @param id    参数类型
      * @return void    返回类型
      * @throws
      * @Title: delete
      */
-    public boolean delete(AuditLog[] auditLogArr, Long[] id) {
+    public boolean delete(Long[] id,AuditLog[] auditLogArr) {
     	if(projectDao.getCount(id)==0){
     		supplierDao.logicalDelete(id);
+    		return true;
+    	}else if(contactDao.getCount(id, "supplier")==0){
     		return true;
     	}
     	return false;

@@ -18,16 +18,17 @@ import com.baihui.hxtd.soa.system.dao.UserDao;
 import com.baihui.hxtd.soa.system.entity.AuditLog;
 import com.baihui.hxtd.soa.system.entity.Dictionary;
 import com.baihui.hxtd.soa.system.service.DataShift;
+import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang3.time.DateUtils;
 import org.hibernate.FetchMode;
 import org.hibernate.criterion.DetachedCriteria;
-import org.hibernate.criterion.Projection;
 import org.hibernate.criterion.Restrictions;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springside.modules.persistence.SearchFilter;
+import ro.nextreports.jofc2.model.Chart;
 
 import javax.annotation.Resource;
 import java.lang.reflect.Field;
@@ -56,7 +57,7 @@ public class ReportService {
     private DictionaryDao dictionaryDao;
 
     @Resource
-    private ChartGraphGenerate chartGraphGenerate;
+    private ChartGenerate chartGraphGenerate;
 
 
     /**
@@ -64,62 +65,156 @@ public class ReportService {
      * 1.每个月用户的注册量
      */
     @Transactional(readOnly = true)
-    public Chart generate(Report report, Map<String, SearchFilter> filters) throws NoSuchFieldException {
+    public ChartModel generate(Report report, Map<String, SearchFilter> filters) throws NoSuchFieldException {
 
         Module module = report.getModule();
         Field[] fields = module.getFields();
 
         //创建Chart
-        Chart chart = new Chart(report.getName());
+        ChartModel chartModel = new ChartModel(report.getName());
 
         //创建hql
         ExtendItemSelectHql hql = new ExtendItemSelectHql(module.getEntityClazz().getSimpleName(), module.getName());
         Search.buildWhereHql(filters, hql, module.getEntityClazz());
 
         //创建ChartOrginal
-        ReportOrginal reportOrginal = new ReportOrginal();
-        buildXAxis(report, hql, reportOrginal);
-        if (report.getzFieldName() != null)
-            buildZAxis(report, hql, reportOrginal);
-        buildData(report, hql, reportOrginal);
+        ReportData reportData = new ReportData();
+        buildXAxis(report, hql, reportData);
+        if (report.getzFieldName() != null) {
+            buildZAxis(report, hql, reportData);
+        }
+        buildData(report, hql, reportData);
 
         //创建ChartTable
         ChartTable chartTable = new ChartTable();
         chartTable.setTitle(report.getName());
-        chartTable.setxAxisHeader(reportOrginal.getxAxisDescs());
-        if (reportOrginal.getzAxisValues() == null) {
-            chartTable.setRows(ChartUtil.toTable(reportOrginal.getRows(), reportOrginal.getxAxisValues(), Long.class));
+        chartTable.setxAxisTitle(ModuleService.toModuleField(ModuleService.findFieldByName(fields, report.getxFieldName())).getDesc());
+        List<String> xAxisDescs = ReflectionUtils.invokeGetterMethod(reportData.getxAxis(), "desc");
+        chartTable.setxAxisHeader(xAxisDescs);
+        if (report.getzFieldName() == null) {
+            chartTable.setyAxisTitle("总数");
+            chartTable.setyAxisHeader(new ArrayList());
+            chartTable.getyAxisHeader().add("数值");
+            chartTable.setRows(new ArrayList());
+            chartTable.getRows().add(ChartUtil.toTable(reportData.getRows(), reportData.getxAxis()));
         } else {
-            chartTable.setyAxisHeader(reportOrginal.getzAxisDescs());
-            chartTable.setRows(ChartUtil.toTable(reportOrginal.getRows(), reportOrginal.getxAxisValues(), reportOrginal.getzAxisValues(), Long.class));
+            chartTable.setyAxisTitle(ModuleService.toModuleField(ModuleService.findFieldByName(fields, report.getzFieldName())).getDesc());
+            List<String> zAxisDescs = ReflectionUtils.invokeGetterMethod(reportData.getzAxis(), "desc");
+            chartTable.setyAxisHeader(zAxisDescs);
+            chartTable.setRows(ChartUtil.toTable(reportData.getRows(), reportData.getxAxis(), reportData.getzAxis()));
         }
-        chart.setChartTable(chartTable);
+        chartModel.setChartTable(chartTable);
 
         //创建ChartGraph
-        ReportGraph reportGraph = new ReportGraph();
-        reportGraph.setTitle(chartTable.getTitle());
-        reportGraph.setGraphType(GraphType.findByValue(report.getChart().getValue()));
-        Field xAxisField = ModuleService.findFieldByName(fields, report.getxFieldName());
-        reportGraph.setxAxisTitle(xAxisField.getAnnotation(FieldInfo.class).desc());
-        reportGraph.setxAxisLabels(chartTable.getxAxisHeader());
-        reportGraph.setyAxisRange(reportOrginal.getyAxisRange());
+        ReportChart reportChart = new ReportChart();
+        reportChart.setTitle(chartTable.getTitle());
+        reportChart.setGraphType(GraphType.findByValue(report.getChart().getValue()));
+        reportChart.setxAxisTitle(chartTable.getxAxisTitle());
+        reportChart.setxAxisLabels(chartTable.getxAxisHeader());
+        reportChart.setyAxisRange(reportData.getyAxisRange());
         if (report.getzFieldName() != null) {
-            Field zAxisField = ModuleService.findFieldByName(fields, report.getzFieldName());
-            reportGraph.setzAxisTitle(zAxisField.getAnnotation(FieldInfo.class).desc());
-            reportGraph.setzAxisLabels(chartTable.getyAxisHeader());
-        }
-        reportGraph.setData(chartTable.getRows());
-        chart.setChartGraphs(new ArrayList<ChartGraph>());
-        if (report.getzFieldName() != null) {
-            chart.getChartGraphs().add(chartGraphGenerate.generateThreeDimensionChart(reportGraph));
+            reportChart.setzAxisTitle(chartTable.getyAxisTitle());
+            reportChart.setzAxisLabels(chartTable.getyAxisHeader());
+            reportChart.setData(chartTable.getRows());
         } else {
-            chart.getChartGraphs().add(chartGraphGenerate.generateTwoDimensionChart(reportGraph));
+            reportChart.setData(chartTable.getRows());
+        }
+        chartModel.setCharts(new ArrayList<Chart>());
+        if (report.getzFieldName() != null) {
+            chartModel.getCharts().add(chartGraphGenerate.generateThreeDimensionChart(reportChart));
+        } else {
+            chartModel.getCharts().add(chartGraphGenerate.generateTwoDimensionChart(reportChart));
         }
 
+        logger.info("chartModule={}", chartModel);
 
-        return chart;
+        return chartModel;
     }
 
+    /** 时间分组日历单位 */
+    private static Map<String, Integer> TIME_GROUP_CALENDAR_UNIT = new HashMap<String, Integer>();
+
+    static {
+        TIME_GROUP_CALENDAR_UNIT.put(DictionaryConstant.REPORT_GROUP_TIME_YEAR, Calendar.YEAR);
+        TIME_GROUP_CALENDAR_UNIT.put(DictionaryConstant.REPORT_GROUP_TIME_MONTH, Calendar.MONTH);
+        TIME_GROUP_CALENDAR_UNIT.put(DictionaryConstant.REPORT_GROUP_TIME_DATE, Calendar.DAY_OF_MONTH);
+        TIME_GROUP_CALENDAR_UNIT.put(DictionaryConstant.REPORT_GROUP_TIME_HOUR, Calendar.HOUR_OF_DAY);
+        TIME_GROUP_CALENDAR_UNIT.put(DictionaryConstant.REPORT_GROUP_TIME_MINUTE, Calendar.MINUTE);
+        TIME_GROUP_CALENDAR_UNIT.put(DictionaryConstant.REPORT_GROUP_TIME_SECOND, Calendar.SECOND);
+    }
+
+    /** 构建时间轴 */
+    private List<AxisInfo> buildTimeAxis(Module module, String fieldName, Dictionary groupType, ExtendItemSelectHql hql) {
+        Date min = (Date) hql.getConditionValues().get(Search.placeHodler(fieldName, SearchFilter.Operator.GTE));
+        Date max = (Date) hql.getConditionValues().get(Search.placeHodler(fieldName, SearchFilter.Operator.LTE));
+        return dateValues(min, max, TIME_GROUP_CALENDAR_UNIT.get(groupType.getValue()));
+    }
+
+    private static Map<Integer, String[]> PATTERNS = new HashMap<Integer, String[]>();
+
+    static {
+        PATTERNS.put(Calendar.YEAR, new String[]{"yyyy", "年"});
+        PATTERNS.put(Calendar.MONTH, new String[]{"M", "月"});
+        PATTERNS.put(Calendar.DAY_OF_MONTH, new String[]{"d", "日"});
+        PATTERNS.put(Calendar.HOUR_OF_DAY, new String[]{"H", "时"});
+        PATTERNS.put(Calendar.MINUTE, new String[]{"m", "分"});
+        PATTERNS.put(Calendar.SECOND, new String[]{"s", "秒"});
+    }
+
+    /**
+     * 取出日期区间内指定单位的日期值
+     * 1.将起止值精确到相同单位，防止比较时因精度不一致导致数据缺失
+     * 2.对日期进行格式化
+     */
+    public static List<AxisInfo> dateValues(Date min, Date max, int type) {
+        List<AxisInfo> dates = new ArrayList<AxisInfo>();
+
+        min = DateUtils.truncate(min, type);
+        max = DateUtils.truncate(max, type);
+
+        Calendar calendar = Calendar.getInstance();
+        calendar.setTime(min);
+        SimpleDateFormat format = new SimpleDateFormat();
+        String[] patterns = PATTERNS.get(type);
+        while (!min.after(max)) {
+            AxisInfo axisInfo = new AxisInfo();
+            format.applyPattern(patterns[0]);
+            axisInfo.setValue(Integer.parseInt(format.format(min)));
+            format.applyPattern(patterns[1]);
+            axisInfo.setDesc(format.format(min));
+            dates.add(axisInfo);
+            calendar.add(type, 1);
+            min = calendar.getTime();
+        }
+        return dates;
+    }
+
+    private List<AxisInfo> buildDictionaryAxis(Module module, String fieldName, Dictionary groupType, ExtendItemSelectHql hql) {
+        List<AxisInfo> axisInfos = new ArrayList<AxisInfo>();
+        Field field = ModuleService.findFieldByName(module.getFields(), fieldName);
+        List<Dictionary> axisValues = dictionaryDao.findChildren(field.getAnnotation(FieldInfo.class).dictionary());
+        for (int i = 0; i < axisValues.size(); i++) {
+            Dictionary dictionary = axisValues.get(i);
+            axisInfos.add(new AxisInfo(dictionary.getKey(), dictionary.getId()));
+        }
+        return axisInfos;
+    }
+
+    private List buildDataAxis(Module module, String fieldName, Dictionary groupType, ExtendItemSelectHql hql) {
+        List<AxisInfo> axisInfos = new ArrayList<AxisInfo>();
+
+        String select = String.format("%s.%s", hql.getEntityAlias(), fieldName);
+        String from = String.format("distinct %s %s", hql.getEntityName(), hql.getEntityAlias());
+        SelectHql selectHql = new SelectHql(select, from);
+        selectHql.setWhere(hql.toWhere().getWhere());
+        selectHql.setOrderBy(select);
+        List rows = reportDao.find(selectHql.toString(), hql.getConditionValues());
+        for (int i = 0; i < rows.size(); i++) {
+            Object row = rows.get(i);
+            axisInfos.add(new AxisInfo(String.valueOf(row), row));
+        }
+        return axisInfos;
+    }
 
     /**
      * 构建X轴
@@ -133,49 +228,41 @@ public class ReportService {
      * 2.1.如果是字典，取至字典表
      * 2.2.如果是其他，取至数据表
      */
-    public void buildXAxis(Report report, ExtendItemSelectHql hql, ReportOrginal reportOrginal) {
+    public void buildXAxis(Report report, ExtendItemSelectHql hql, ReportData reportData) {
+        Module module = report.getModule();
         String fieldName = report.getxFieldName();
         Dictionary groupType = report.getxGroupType();
         if (groupType.getValue().startsWith(DictionaryConstant.REPORT_GROUP_TIME)) {
-            reportOrginal.setxAxisValues(buildTimeAxis(fieldName, groupType, hql));
-            reportOrginal.setxAxisDescs(reportOrginal.getxAxisValues());
+            reportData.setxAxis(buildTimeAxis(module, fieldName, groupType, hql));
         } else if (groupType.getValue().startsWith(DictionaryConstant.REPORT_GROUP_ELSE)) {
-            Field[] fields = ModuleService.findById(report.getModule().getId()).getFields();
+            Field[] fields = ModuleService.findById(module.getId()).getFields();
             Field field = ModuleService.findFieldByName(fields, fieldName);
             Class type = ModuleService.getFieldType(field);
             if (type.equals(Dictionary.class)) {
-                List<Dictionary> axisValues = dictionaryDao.findChildren(field.getAnnotation(FieldInfo.class).dictionary());
-                reportOrginal.setxAxisValues(ReflectionUtils.invokeGetterMethod(axisValues, "id"));
-                reportOrginal.setxAxisDescs(ReflectionUtils.invokeGetterMethod(axisValues, "key"));
+                reportData.setxAxis(buildDictionaryAxis(module, fieldName, groupType, hql));
             } else {
-                List xAxisValues = buildDataAxis(fieldName, hql);
-                reportOrginal.setxAxisValues(xAxisValues);
-                reportOrginal.setxAxisDescs(reportOrginal.getxAxisValues());
+                reportData.setxAxis(buildDataAxis(module, fieldName, groupType, hql));
             }
         }
     }
 
     /**
-     * 构建Z轴
+     * 构建z轴
      */
-    public void buildZAxis(Report report, ExtendItemSelectHql hql, ReportOrginal reportOrginal) {
+    public void buildZAxis(Report report, ExtendItemSelectHql hql, ReportData reportData) {
+        Module module = report.getModule();
         String fieldName = report.getzFieldName();
         Dictionary groupType = report.getzGroupType();
         if (groupType.getValue().startsWith(DictionaryConstant.REPORT_GROUP_TIME)) {
-            reportOrginal.setzAxisValues(buildTimeAxis(fieldName, groupType, hql));
-            reportOrginal.setzAxisDescs(reportOrginal.getzAxisValues());
+            reportData.setzAxis(buildTimeAxis(module, fieldName, groupType, hql));
         } else if (groupType.getValue().startsWith(DictionaryConstant.REPORT_GROUP_ELSE)) {
-            Field[] fields = ModuleService.findById(report.getModule().getId()).getFields();
+            Field[] fields = ModuleService.findById(module.getId()).getFields();
             Field field = ModuleService.findFieldByName(fields, fieldName);
             Class type = ModuleService.getFieldType(field);
             if (type.equals(Dictionary.class)) {
-                List<Dictionary> axisValues = dictionaryDao.findChildren(field.getAnnotation(FieldInfo.class).dictionary());
-                reportOrginal.setzAxisValues(ReflectionUtils.invokeGetterMethod(axisValues, "id"));
-                reportOrginal.setzAxisDescs(ReflectionUtils.invokeGetterMethod(axisValues, "key"));
+                reportData.setzAxis(buildDictionaryAxis(module, fieldName, groupType, hql));
             } else {
-                List axisValues = buildDataAxis(fieldName, hql);
-                reportOrginal.setzAxisValues(axisValues);
-                reportOrginal.setzAxisDescs(reportOrginal.getzAxisValues());
+                reportData.setzAxis(buildDataAxis(module, fieldName, groupType, hql));
             }
         }
     }
@@ -183,44 +270,40 @@ public class ReportService {
     /**
      * 构建数据
      */
-    public void buildData(Report report, ExtendItemSelectHql hql, ReportOrginal reportOrginal) {
+    public void buildData(Report report, ExtendItemSelectHql hql, ReportData reportOrginal) {
         buildXAxisHql(report, hql);
-        if (report.getzFieldName() != null)
+        if (report.getzFieldName() != null) {
             buildZAxisHql(report, hql);
+        }
         buildYAxisHql(report, hql);
+
         List rows = reportDao.find(hql.toString(), hql.getConditionValues());
         logger.debug("rows={}", JsonMapper.nonEmptyMapper().toJson(rows));
         reportOrginal.setRows(rows);
 
-        List<Long> numbers = new ArrayList<Long>();
-        int index = report.getzFieldName() == null ? 1 : 2;
-        for (int i = 0; i < rows.size(); i++) {
-            Object[] row = (Object[]) rows.get(i);
-            numbers.add((Long) row[index]);
+        if (CollectionUtils.isNotEmpty(rows)) {
+            List<Long> numbers = new ArrayList<Long>();
+            int index = report.getzFieldName() == null ? 1 : 2;
+            for (int i = 0; i < rows.size(); i++) {
+                Object[] row = (Object[]) rows.get(i);
+                numbers.add((Long) row[index]);
+            }
+            Collections.sort(numbers);
+            reportOrginal.getyAxisRange().setMin(numbers.get(0));
+            reportOrginal.getyAxisRange().setMax(numbers.get(numbers.size() - 1));
         }
-        Collections.sort(numbers);
-        reportOrginal.getyAxisRange().setMin(numbers.get(0));
-        reportOrginal.getyAxisRange().setMax(numbers.get(numbers.size() - 1));
     }
 
+    /** 时间分组函数映射 */
+    private static Map<String, String> TIME_GROUP_FUNCTION = new HashMap<String, String>();
 
-    private List buildTimeAxis(String fieldName, Dictionary groupType, ExtendItemSelectHql hql) {
-        Date min = (Date) hql.getConditionValues().get(Search.placeHodler(fieldName, SearchFilter.Operator.GTE));
-        Date max = (Date) hql.getConditionValues().get(Search.placeHodler(fieldName, SearchFilter.Operator.LTE));
-        return dateValues(min, max, TIME_GROUP_CALENDAR_UNIT.get(groupType.getValue()));
-    }
-
-    private List buildDictionaryAxis(Dictionary groupType) {
-        return dictionaryDao.findBrother(groupType.getValue());
-    }
-
-    private List buildDataAxis(String fieldName, ExtendItemSelectHql hql) {
-        String select = String.format("%s.%s", hql.getEntityAlias(), fieldName);
-        String from = String.format("distinct %s %s", hql.getEntityName(), hql.getEntityAlias());
-        SelectHql selectHql = new SelectHql(select, from);
-        selectHql.setWhere(hql.toWhere().getWhere());
-        selectHql.setOrderBy(select);
-        return reportDao.find(selectHql.toString(), hql.getConditionValues());
+    static {
+        TIME_GROUP_FUNCTION.put(DictionaryConstant.REPORT_GROUP_TIME_YEAR, "YEAR");
+        TIME_GROUP_FUNCTION.put(DictionaryConstant.REPORT_GROUP_TIME_MONTH, "MONTH");
+        TIME_GROUP_FUNCTION.put(DictionaryConstant.REPORT_GROUP_TIME_DATE, "DAY");
+        TIME_GROUP_FUNCTION.put(DictionaryConstant.REPORT_GROUP_TIME_HOUR, "HOUR");
+        TIME_GROUP_FUNCTION.put(DictionaryConstant.REPORT_GROUP_TIME_MINUTE, "MINUTE");
+        TIME_GROUP_FUNCTION.put(DictionaryConstant.REPORT_GROUP_TIME_SECOND, "SECOND");
     }
 
     private void buildAxisHql(Field field, Dictionary groupType, ExtendItemSelectHql hql) {
@@ -245,6 +328,17 @@ public class ReportService {
         buildAxisHql(ModuleService.findFieldByName(report.getModule().getFields(), report.getxFieldName()), report.getxGroupType(), hql);
     }
 
+    /** 聚合函数映射 */
+    private static Map<String, String> AGGREGATE_FUNCTION = new HashMap<String, String>();
+
+    static {
+        AGGREGATE_FUNCTION.put(DictionaryConstant.REPORT_AGGREGATE_COUNT, "COUNT");
+        AGGREGATE_FUNCTION.put(DictionaryConstant.REPORT_AGGREGATE_SUM, "SUM");
+        AGGREGATE_FUNCTION.put(DictionaryConstant.REPORT_AGGREGATE_AVG, "AVG");
+        AGGREGATE_FUNCTION.put(DictionaryConstant.REPORT_AGGREGATE_MAX, "MAX");
+        AGGREGATE_FUNCTION.put(DictionaryConstant.REPORT_AGGREGATE_MIN, "MIN");
+    }
+
     public void buildYAxisHql(Report report, ExtendItemSelectHql hql) {
         String function = AGGREGATE_FUNCTION.get(report.getyAggregateType().getValue());
         String ySelectItem = String.format("%s(%s.%s)", function, hql.getEntityAlias(), report.getyFieldName());
@@ -255,11 +349,9 @@ public class ReportService {
         buildAxisHql(ModuleService.findFieldByName(report.getModule().getFields(), report.getzFieldName()), report.getzGroupType(), hql);
     }
 
-    /**
-     * 分组类型
-     */
-    private static Map<Class, String> CLASS_GROUP_TYPE = new HashMap<Class, String>();
 
+    /** 分组类型 */
+    private static Map<Class, String> CLASS_GROUP_TYPE = new HashMap<Class, String>();
 
     static {
         CLASS_GROUP_TYPE.put(Date.class, DictionaryConstant.REPORT_GROUP_TIME);
@@ -295,103 +387,6 @@ public class ReportService {
         return targetDictionaries;
     }
 
-    /**
-     * 时间分组函数映射
-     */
-    private static Map<String, String> TIME_GROUP_FUNCTION = new HashMap<String, String>();
-
-    /**
-     * 聚合函数映射
-     */
-    private static Map<String, String> AGGREGATE_FUNCTION = new HashMap<String, String>();
-
-
-    static {
-        TIME_GROUP_FUNCTION.put(DictionaryConstant.REPORT_GROUP_TIME_YEAR, "YEAR");
-        TIME_GROUP_FUNCTION.put(DictionaryConstant.REPORT_GROUP_TIME_MONTH, "MONTH");
-        TIME_GROUP_FUNCTION.put(DictionaryConstant.REPORT_GROUP_TIME_DATE, "DAYOFMONTH");
-        TIME_GROUP_FUNCTION.put(DictionaryConstant.REPORT_GROUP_TIME_HOUR, "HOUR");
-        TIME_GROUP_FUNCTION.put(DictionaryConstant.REPORT_GROUP_TIME_MINUTE, "MINUTE");
-        TIME_GROUP_FUNCTION.put(DictionaryConstant.REPORT_GROUP_TIME_SECOND, "SECOND");
-
-        TIME_GROUP_FUNCTION.put(DictionaryConstant.REPORT_GROUP_TIME_YEAR, "YEAR");
-        TIME_GROUP_FUNCTION.put(DictionaryConstant.REPORT_GROUP_TIME_MONTH, "MONTH");
-        TIME_GROUP_FUNCTION.put(DictionaryConstant.REPORT_GROUP_TIME_DATE, "DAY");
-        TIME_GROUP_FUNCTION.put(DictionaryConstant.REPORT_GROUP_TIME_HOUR, "HOUR");
-        TIME_GROUP_FUNCTION.put(DictionaryConstant.REPORT_GROUP_TIME_MINUTE, "MINUTE");
-        TIME_GROUP_FUNCTION.put(DictionaryConstant.REPORT_GROUP_TIME_SECOND, "SECOND");
-
-        AGGREGATE_FUNCTION.put(DictionaryConstant.REPORT_AGGREGATE_COUNT, "COUNT");
-        AGGREGATE_FUNCTION.put(DictionaryConstant.REPORT_AGGREGATE_SUM, "SUM");
-        AGGREGATE_FUNCTION.put(DictionaryConstant.REPORT_AGGREGATE_AVG, "AVG");
-        AGGREGATE_FUNCTION.put(DictionaryConstant.REPORT_AGGREGATE_MAX, "MAX");
-        AGGREGATE_FUNCTION.put(DictionaryConstant.REPORT_AGGREGATE_MIN, "MIN");
-
-    }
-
-    public Projection find(String fieldName, Dictionary groupType) {
-//        String[] parts = fieldName.split("\\.");
-//        String moduleName = parts[0];
-//        fieldName = parts[1];
-        if (groupType.getValue().startsWith(DictionaryConstant.REPORT_GROUP_TIME)) {
-            String function = TIME_GROUP_FUNCTION.get(groupType.getValue());
-            String sql = String.format("%s(%s)", function, fieldName);
-
-        } else if (groupType.getValue().startsWith(DictionaryConstant.REPORT_GROUP_ELSE)) {
-
-        }
-        return null;
-    }
-
-
-    private static Map<Integer, String> patterns = new HashMap<Integer, String>();
-    private static Map<String, Integer> TIME_GROUP_CALENDAR_UNIT = new HashMap<String, Integer>();
-
-    static {
-        patterns.put(Calendar.YEAR, "yyyy");
-        patterns.put(Calendar.MONTH, "yyyy-MM");
-        patterns.put(Calendar.DAY_OF_MONTH, "yyyy-MM-dd");
-        patterns.put(Calendar.HOUR, "yyyy-MM-dd HH");
-        patterns.put(Calendar.MINUTE, "yyyy-MM-dd HH:mi");
-        patterns.put(Calendar.SECOND, "yyyy-MM-dd HH:mm:ss");
-
-        patterns.put(Calendar.YEAR, "yyyy");
-        patterns.put(Calendar.MONTH, "M");
-        patterns.put(Calendar.DAY_OF_MONTH, "d");
-        patterns.put(Calendar.HOUR_OF_DAY, "H");
-        patterns.put(Calendar.MINUTE, "m");
-        patterns.put(Calendar.SECOND, "s");
-
-        TIME_GROUP_CALENDAR_UNIT.put(DictionaryConstant.REPORT_GROUP_TIME_YEAR, Calendar.YEAR);
-        TIME_GROUP_CALENDAR_UNIT.put(DictionaryConstant.REPORT_GROUP_TIME_MONTH, Calendar.MONTH);
-        TIME_GROUP_CALENDAR_UNIT.put(DictionaryConstant.REPORT_GROUP_TIME_DATE, Calendar.DAY_OF_MONTH);
-        TIME_GROUP_CALENDAR_UNIT.put(DictionaryConstant.REPORT_GROUP_TIME_HOUR, Calendar.HOUR_OF_DAY);
-        TIME_GROUP_CALENDAR_UNIT.put(DictionaryConstant.REPORT_GROUP_TIME_MINUTE, Calendar.MINUTE);
-        TIME_GROUP_CALENDAR_UNIT.put(DictionaryConstant.REPORT_GROUP_TIME_SECOND, Calendar.SECOND);
-    }
-
-
-    /**
-     * 取出日期区间内指定单位的日期值
-     * 1.将起止值精确到相同单位，防止比较时因精度不一致导致数据缺失
-     * 2.对日期进行格式化
-     */
-    public static List<Integer> dateValues(Date min, Date max, int type) {
-        List<Integer> dates = new ArrayList<Integer>();
-
-        min = DateUtils.truncate(min, type);
-        max = DateUtils.truncate(max, type);
-
-        Calendar calendar = Calendar.getInstance();
-        calendar.setTime(min);
-        SimpleDateFormat format = new SimpleDateFormat(patterns.get(type));
-        while (!min.after(max)) {
-            dates.add(Integer.parseInt(format.format(min)));
-            calendar.add(type, 1);
-            min = calendar.getTime();
-        }
-        return dates;
-    }
 
     /**
      * 分页查找

@@ -26,7 +26,7 @@ public class ProductDao extends HibernateDAOImpl<Product, Long> {
 	  * @return 条数 
 	 */
 	public long getCount(Long[] id){
-		String hql = "select count(pro.id) from Product pro where pro.project.id in (:id)";
+		String hql = "select count(pro.id) from Product pro where pro.isDeleted=false and  pro.project.id in (:id)";
 		Query query = getSession().createQuery(hql);
 		query.setParameterList("id", id);
 		long count=(Long)query.uniqueResult();
@@ -40,7 +40,7 @@ public class ProductDao extends HibernateDAOImpl<Product, Long> {
 	  * @return long 返回类型
 	 */
 	public long getOrdersCount(Long[] productIds){
-		String hql = "select count(o.id) from Order o where o.product.id in (:id)";
+		String hql = "select count(o.id) from Order o where o.isDeleted=false and o.product.id in (:id)";
 		Query query = getSession().createQuery(hql);
 		query.setParameterList("id", productIds);
 		long count=(Long)query.uniqueResult();

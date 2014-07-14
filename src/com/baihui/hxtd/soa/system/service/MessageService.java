@@ -142,7 +142,7 @@ public class MessageService {
 		UserMessage userMessage=new UserMessage();
 		userMessage.setMessage(message);
 		userMessage.setStatus(false);
-		userMessage.setCreatedTime(new Date());
+		userMessage.setCreatedTime(userMessageDao.getDBNow());
 		userMessage.setUser(user);
 		userMessage.setType(true);
 		userMessage.setIsDeleted(false);
@@ -150,7 +150,7 @@ public class MessageService {
 		UserMessage um=new UserMessage();
 		um.setMessage(message);
 		um.setStatus(false);
-		um.setCreatedTime(new Date());
+		um.setCreatedTime(userMessageDao.getDBNow());
 		um.setUser(user);
 		um.setType(false);
 		um.setIsDeleted(false);

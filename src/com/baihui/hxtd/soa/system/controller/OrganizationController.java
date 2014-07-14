@@ -1,5 +1,25 @@
 package com.baihui.hxtd.soa.system.controller;
 
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.List;
+import java.util.Map;
+
+import javax.annotation.Resource;
+import javax.servlet.http.HttpServletRequest;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.stereotype.Controller;
+import org.springframework.ui.ModelMap;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.SessionAttributes;
+import org.springside.modules.web.Servlets;
+
 import com.baihui.hxtd.soa.base.Constant;
 import com.baihui.hxtd.soa.base.orm.hibernate.HibernatePage;
 import com.baihui.hxtd.soa.base.utils.Search;
@@ -20,20 +40,6 @@ import com.baihui.hxtd.soa.util.EnumModule;
 import com.baihui.hxtd.soa.util.EnumOperationType;
 import com.baihui.hxtd.soa.util.JsonDto;
 import com.fasterxml.jackson.core.JsonProcessingException;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import org.springframework.stereotype.Controller;
-import org.springframework.ui.ModelMap;
-import org.springframework.web.bind.annotation.*;
-import org.springside.modules.web.Servlets;
-
-import javax.annotation.Resource;
-import javax.servlet.http.HttpServletRequest;
-import java.io.IOException;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
-import java.util.Map;
 
 /**
  * 组织控制器
@@ -46,7 +52,6 @@ import java.util.Map;
 @SessionAttributes(value = {Constant.VS_USER_ID, Constant.VS_USER_NAME, Constant.VS_USER,
         Constant.VS_ORG_ID, Constant.VS_DATASHIFT, Constant.VS_ORG,
         Constant.VS_MENUS, Constant.VS_FUNCTIONS, Constant.VS_COMPONENTS})
-@SuppressWarnings("unchecked")
 public class OrganizationController {
 
     private Logger logger = LoggerFactory.getLogger(this.getClass());
@@ -88,8 +93,13 @@ public class OrganizationController {
 
         logger.info("存储分页数据");
         page.setHibernateOrderBy("order");
-        page.setHibernateOrder("asc");
-        model.addAttribute("page", page);
+        page.setHibernateOrder(HibernatePage.ASC);
+        model.addAttribute("orgPage", page);
+        
+        HibernatePage<User> userPage = new HibernatePage<User>();
+        userPage.setHibernateOrderBy("modifiedTime");
+        userPage.setHibernateOrder(HibernatePage.DESC);
+        model.addAttribute("userPage", userPage);
 
         return "/system/organization/list";
     }

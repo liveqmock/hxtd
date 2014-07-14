@@ -1,18 +1,13 @@
 package com.baihui.hxtd.soa.system.controller;
 
-import com.baihui.hxtd.soa.base.Constant;
-import com.baihui.hxtd.soa.base.InitApplicationConstant;
-import com.baihui.hxtd.soa.base.ServiceException;
-import com.baihui.hxtd.soa.base.utils.ReflectionUtils;
-import com.baihui.hxtd.soa.base.utils.mapper.HibernateAwareObjectMapper;
-import com.baihui.hxtd.soa.base.utils.serial.TierSerials;
-import com.baihui.hxtd.soa.system.DictionaryConstant;
-import com.baihui.hxtd.soa.system.entity.Component;
-import com.baihui.hxtd.soa.system.entity.Function;
-import com.baihui.hxtd.soa.system.entity.Menu;
-import com.baihui.hxtd.soa.system.entity.User;
-import com.baihui.hxtd.soa.system.service.*;
-import com.baihui.hxtd.soa.util.Constants;
+import java.io.IOException;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
+import javax.annotation.Resource;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpSession;
 
 import org.apache.commons.collections.BidiMap;
 import org.slf4j.Logger;
@@ -26,14 +21,23 @@ import org.springframework.web.bind.annotation.SessionAttributes;
 import org.springframework.web.bind.support.SessionStatus;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
-import javax.annotation.Resource;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpSession;
-import java.io.IOException;
-import java.util.Collections;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import com.baihui.hxtd.soa.base.Constant;
+import com.baihui.hxtd.soa.base.InitApplicationConstant;
+import com.baihui.hxtd.soa.base.ServiceException;
+import com.baihui.hxtd.soa.base.utils.ReflectionUtils;
+import com.baihui.hxtd.soa.base.utils.mapper.HibernateAwareObjectMapper;
+import com.baihui.hxtd.soa.base.utils.serial.TierSerials;
+import com.baihui.hxtd.soa.system.entity.Component;
+import com.baihui.hxtd.soa.system.entity.Function;
+import com.baihui.hxtd.soa.system.entity.Menu;
+import com.baihui.hxtd.soa.system.entity.User;
+import com.baihui.hxtd.soa.system.service.ComponentService;
+import com.baihui.hxtd.soa.system.service.DataShift;
+import com.baihui.hxtd.soa.system.service.FunctionService;
+import com.baihui.hxtd.soa.system.service.MenuService;
+import com.baihui.hxtd.soa.system.service.RoleService;
+import com.baihui.hxtd.soa.system.service.UserService;
+import com.baihui.hxtd.soa.util.Constants;
 
 /**
  * 身份认证控制器
@@ -171,7 +175,7 @@ public class IdentityAuthenticationController {
         List<Menu> menubarSecoundMenus = menuService.findByLevel(menubarMenus, 2);
         session.setAttribute(Constant.VS_MENUBAR_SECOUND_MENUS, menuService.groupByParentId(menubarSecoundMenus));
         //设置页菜单
-        List<Menu> setPageMenus = menuService.findByShowlocation(activeMenus, Constants.SHOW_LOCATION_TYPE_MENUBAR);
+        List<Menu> setPageMenus = menuService.findByShowlocation(activeMenus, Constants.SHOW_LOCATION_TYPE_SETPAGE);
         session.setAttribute(Constant.VS_SETPAGE_MENUS, setPageMenus);
 
         logger.info("session中存储脚本信息");

@@ -67,8 +67,12 @@ function searchData(action){//搜索弹出框
 	jsUtil.dialogIframe(url, title, 800, 465, function(){//确定回调
 		var $userObj = $(".bor_e28d1f", window.frames["dialogIframe"].document);
 			if($userObj.length > 0){
-				$("#txt_" + action).val($userObj.find("td:eq(0)").text());
+				$("#txt_" + action).val($userObj.find("td:eq(1)").text());
 				$("#hide_" + action +"_id").val($userObj.attr("id"));
+				if(action="product"){
+					$("#earningRate").val($userObj.find("td:eq(2)").text().replace("%",""));
+					$("#redeemFormula").val($userObj.find("td:eq(3)").text())
+				}
 			}
 	});
 }
@@ -207,7 +211,7 @@ function clearInputVal(obj){//清除
 					<span class="w_red">*&nbsp;</span>收益率（%）：
 				</td>
 				<td align="left">
-					<input type="text" name="earningRate"
+					<input type="text" name="earningRate" id="earningRate" readonly
 						value="${order.earningRate}" class="text_input3 number" />
 				</td>
 
@@ -224,7 +228,7 @@ function clearInputVal(obj){//清除
 					<span class="w_red">*&nbsp;</span>赎回公式：
 				</td>
 				<td align="left">
-					<input type="text" name="redeemFormula"
+					<input type="text" name="redeemFormula" id="redeemFormula" readonly
 						value="${order.redeemFormula }" class="text_input3" />
 				</td>
 			</tr>

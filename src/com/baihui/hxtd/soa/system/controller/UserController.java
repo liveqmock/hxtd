@@ -1,5 +1,34 @@
 package com.baihui.hxtd.soa.system.controller;
 
+import java.io.IOException;
+import java.util.List;
+import java.util.Map;
+
+import javax.annotation.Resource;
+import javax.servlet.ServletContext;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
+
+import org.apache.commons.collections.BidiMap;
+import org.apache.commons.io.FilenameUtils;
+import org.apache.commons.lang3.ArrayUtils;
+import org.apache.poi.openxml4j.exceptions.InvalidFormatException;
+import org.apache.poi.ss.usermodel.Workbook;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.stereotype.Controller;
+import org.springframework.ui.ModelMap;
+import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.SessionAttributes;
+import org.springframework.web.multipart.MultipartFile;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
+import org.springside.modules.web.Servlets;
+
 import com.baihui.hxtd.soa.base.Constant;
 import com.baihui.hxtd.soa.base.orm.hibernate.HibernatePage;
 import com.baihui.hxtd.soa.base.utils.ImportExport;
@@ -11,34 +40,21 @@ import com.baihui.hxtd.soa.base.utils.ztree.TreeNodeConverter;
 import com.baihui.hxtd.soa.common.controller.CommonController;
 import com.baihui.hxtd.soa.common.service.CommonService;
 import com.baihui.hxtd.soa.system.DictionaryConstant;
-import com.baihui.hxtd.soa.system.entity.*;
-import com.baihui.hxtd.soa.system.service.*;
+import com.baihui.hxtd.soa.system.entity.AuditLog;
+import com.baihui.hxtd.soa.system.entity.Dictionary;
+import com.baihui.hxtd.soa.system.entity.Function;
+import com.baihui.hxtd.soa.system.entity.Organization;
+import com.baihui.hxtd.soa.system.entity.User;
+import com.baihui.hxtd.soa.system.service.ComponentService;
+import com.baihui.hxtd.soa.system.service.DictionaryService;
+import com.baihui.hxtd.soa.system.service.FunctionService;
+import com.baihui.hxtd.soa.system.service.OrganizationService;
+import com.baihui.hxtd.soa.system.service.RoleService;
+import com.baihui.hxtd.soa.system.service.UserService;
 import com.baihui.hxtd.soa.util.EnumModule;
 import com.baihui.hxtd.soa.util.EnumOperationType;
 import com.baihui.hxtd.soa.util.JsonDto;
 import com.fasterxml.jackson.core.JsonProcessingException;
-import org.apache.commons.collections.BidiMap;
-import org.apache.commons.io.FilenameUtils;
-import org.apache.commons.lang3.ArrayUtils;
-import org.apache.poi.openxml4j.exceptions.InvalidFormatException;
-import org.apache.poi.ss.usermodel.Workbook;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import org.springframework.stereotype.Controller;
-import org.springframework.ui.ModelMap;
-import org.springframework.web.bind.annotation.*;
-import org.springframework.web.multipart.MultipartFile;
-import org.springframework.web.servlet.mvc.support.RedirectAttributes;
-import org.springside.modules.web.Servlets;
-
-import javax.annotation.Resource;
-import javax.servlet.ServletContext;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-import javax.servlet.http.HttpSession;
-import java.io.IOException;
-import java.util.List;
-import java.util.Map;
 
 /**
  * 用户控制器
@@ -51,7 +67,6 @@ import java.util.Map;
 @SessionAttributes(value = {Constant.VS_USER_ID, Constant.VS_USER_NAME, Constant.VS_USER,
         Constant.VS_ORG_ID, Constant.VS_ORG, Constant.VS_DATASHIFT,
         Constant.VS_MENUS, Constant.VS_ROLES, Constant.VS_FUNCTIONS, Constant.VS_COMPONENTS})
-@SuppressWarnings("unchecked")
 public class UserController extends CommonController<User> {
 
     private Logger logger = LoggerFactory.getLogger(this.getClass());
@@ -59,9 +74,9 @@ public class UserController extends CommonController<User> {
     //    @Value("${system.user.type}")
     private String typeValue = "010401";
     //    @Value("${system.user.type.manager}")
-    private String typeManagerValue = "01040101";
+//    private String typeManagerValue = "01040101";
     //    @Value("${system.user.type.normal}")
-    private String typeNormalValue = "01040102";
+//    private String typeNormalValue = "01040102";
     //    @Value("${system.user.jobsituation}")
     private String jobsituationValue = "010403";
     //    @Value("${system.user.jobsituation.on}")
@@ -110,9 +125,9 @@ public class UserController extends CommonController<User> {
         model.addAttribute("organizationOrder", organization.getOrder());
         logger.debug("组织主键编号“{}”", organization.getId());
 
-        page.setHibernateOrderBy("order");
-        page.setHibernateOrder("asc");
-        model.addAttribute("page", page);
+        page.setHibernateOrderBy("createdTime");
+        page.setHibernateOrder("desc");
+        model.addAttribute("userPage", page);
 
         return "/system/user/list";
     }
@@ -126,7 +141,7 @@ public class UserController extends CommonController<User> {
         Map<String, Object> searchParams = Servlets.getParametersStartingWith(request, "search_");
         Search.clearBlankValue(searchParams);
         Search.trimValue(searchParams);
-        Search.toRangeDate(searchParams, "createdTime");
+        Search.toRangeDate(searchParams, "modifiedTime");
         logger.debug("查询条件数目“{}”", searchParams.size());
 
         logger.info("查询分页列表信息");
@@ -319,7 +334,8 @@ public class UserController extends CommonController<User> {
      * 3.1.已授权
      * 3.2.未授权
      */
-    @RequestMapping(value = "/toAuthorizationPage.do", method = RequestMethod.GET)
+    @SuppressWarnings("unchecked")
+	@RequestMapping(value = "/toAuthorizationPage.do", method = RequestMethod.GET)
     public String toAuthorizationPage(Long id, ModelMap model) {
         logger.info("转至授权页面");
 
@@ -434,7 +450,8 @@ public class UserController extends CommonController<User> {
         return "/system/user/import";
     }
 
-    @RequestMapping(value = "/import.do")
+    @SuppressWarnings("unchecked")
+	@RequestMapping(value = "/import.do")
     public String imports(MultipartFile file, HttpSession session,
                           @RequestParam(defaultValue = "/system/user/toQueryPage.do") String redirectUri,
                           @ModelAttribute(Constant.VS_USER) User sessionUser,
@@ -558,8 +575,8 @@ public class UserController extends CommonController<User> {
      */
     @RequestMapping(value = "/toQueryUser.comp")
     public String toOwnerOrgTree(ModelMap model, HttpServletRequest request) throws NoSuchFieldException {
-        User u = (User) request.getSession().getAttribute(Constant.VS_USER);
         List<Organization> orgList = organizationService.getOrgAndUsers();
+        User u = (User) request.getSession().getAttribute(Constant.VS_USER);
         StringBuffer sb = new StringBuffer("[");
         Long oldOrgId = 0l;
         for (int i = 0; i < orgList.size(); i++) {
@@ -569,7 +586,7 @@ public class UserController extends CommonController<User> {
             }
 
             sb.append(String.format("{id:-%s, name:\"%s\", pId:-%s, type:\"%s\"},", new Object[]{
-                    org.getId(),
+            		org.getId(),
                     org.getName(),
                     org.getParent() == null ? "0" : org.getParent().getId(),
                     "org"

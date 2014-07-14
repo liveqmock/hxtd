@@ -92,6 +92,8 @@ public class CustomerService {
      */
 	public void add(Customer entity,User user,AuditLog auditLog) {
 		logger.info("保存客户信息{}", entity);
+		entity.setCreatedTime(customerDao.getDBNow());
+		entity.setModifiedTime(customerDao.getDBNow());
 		entity.setIsDeleted(false);
 		customerDao.save(entity);
 		auditLog.setRecordId(entity.getId());
@@ -103,6 +105,7 @@ public class CustomerService {
      */
 	public void modify(Customer customer,User user, AuditLog auditLog) {
 		logger.info("保存客户信息{}", customer);
+		customer.setModifiedTime(customerDao.getDBNow());
 		customer.setIsDeleted(false);
 		customerDao.save(customer);
 	}

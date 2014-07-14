@@ -1,7 +1,9 @@
 package com.baihui.hxtd.soa.base.utils.report;
 
 /**
- * @author xiayx
+ * y轴数值区间数据
+ *
+ * @author xiayouxue
  * @date 14-7-13
  */
 public class YAxisRange<T> {

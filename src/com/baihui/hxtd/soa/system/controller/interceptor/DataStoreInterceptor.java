@@ -4,13 +4,11 @@ import com.baihui.hxtd.soa.base.Constant;
 import com.baihui.hxtd.soa.base.utils.RequestUtil;
 import com.baihui.hxtd.soa.base.utils.UrlUtil;
 import com.baihui.hxtd.soa.base.utils.mapper.HibernateAwareObjectMapper;
-import com.baihui.hxtd.soa.system.DictionaryConstant;
 import com.baihui.hxtd.soa.system.entity.Function;
 import com.baihui.hxtd.soa.system.entity.Menu;
 import com.baihui.hxtd.soa.system.service.FunctionService;
 import com.baihui.hxtd.soa.system.service.MenuService;
 import com.baihui.hxtd.soa.util.Constants;
-
 import org.apache.commons.collections.BidiMap;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -66,7 +64,7 @@ public class DataStoreInterceptor extends HandlerInterceptorAdapter {
         }
         menus.add(lastMenu);
         menuService.toTriggerUrl(menus);
-        request.setAttribute("isMenuFunction", lastMenu.getTrigger().equals(function));
+        request.setAttribute("isMenuFunction", function.equals(lastMenu.getTrigger()));
 
         if (Constants.SHOW_LOCATION_TYPE_SETPAGE.equals(lastMenu.getShowLocationType())) {
             menus.add(0, Menu.SETTING);

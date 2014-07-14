@@ -81,12 +81,7 @@
 
                     <h1 class="f14 fbnone ml40 pt10">基本信息</h1>
                     <table class="cb id_table3 w95b bg_c_white margin0 mt10">
-                        <tr style="display: none">
-                            <td align="right" width="15%">编号：</td>
-                            <td align="left"><input type="text" name="code" value="${user.code}" class="text_input3"/></td>
-                            <td align="right" width="15%"></td>
-                            <td align="left"></td>
-                        </tr>
+                        
                         <tr>
                             <td align="right" width="15%">用户名：</td>
                             <td align="left">
@@ -128,7 +123,7 @@
                             <td align="right" width="15%">手机：</td>
                             <td align="left"><input type="text" name="phone" value="${user.phone}" class="{isMobile:true} text_input3"/></td>
                             <td align="right" width="15%">电话：</td>
-                            <td align="left"><input type="text" name="mobile" value="${user.mobile}" class="{isMobile:true} text_input3"/></td>
+                            <td align="left"><input type="text" name="mobile" value="${user.mobile}" class="{isPhone:true} text_input3"/></td>
                         </tr>
                         <tr>
                             <td align="right" width="15%">邮箱：</td>
@@ -143,8 +138,7 @@
                                 <input type="hidden" name="organization.id" value="${user.organization.id}">
                             </td>
                             <%--//TODO 序号暂不处理--%>
-                            <td align="right" width="15%"><%--序号：--%></td>
-                            <td align="left"><input type="hidden" name="order" value="${user.order}"/></td>
+                           
                         </tr>
                         <tr>
                             <td align="right" width="15%">职位：</td>

@@ -60,7 +60,7 @@ public class Menu implements Serializable, Cloneable, TreeNode<Menu>, Initialize
     @Column(name = "IS_LEAF", nullable = false)
     private Boolean isLeaf;
 
-    @Column(name = "SHOW_LOCATION_ID", nullable = false)
+    @Column(name = "SHOW_LOCATION_TYPE", nullable = false)
     private Integer showLocationType;
 
 	@Column(name = "IS_INITIALIZED", nullable = false, updatable = false)

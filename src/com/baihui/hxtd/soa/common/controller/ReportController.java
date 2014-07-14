@@ -6,7 +6,7 @@ import com.baihui.hxtd.soa.base.orm.hibernate.HibernatePage;
 import com.baihui.hxtd.soa.base.utils.ReflectionUtils;
 import com.baihui.hxtd.soa.base.utils.Search;
 import com.baihui.hxtd.soa.base.utils.mapper.HibernateAwareObjectMapper;
-import com.baihui.hxtd.soa.base.utils.report.Chart;
+import com.baihui.hxtd.soa.base.utils.report.ChartModel;
 import com.baihui.hxtd.soa.common.entity.Module;
 import com.baihui.hxtd.soa.common.entity.ModuleField;
 import com.baihui.hxtd.soa.common.entity.Report;
@@ -39,10 +39,7 @@ import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
 import java.lang.reflect.Field;
 import java.text.SimpleDateFormat;
-import java.util.Arrays;
-import java.util.Date;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 /**
  * 报表控制类
@@ -288,19 +285,45 @@ public class ReportController {
 
         Report report = reportService.get(id);
         modelMap.addAttribute("report", report);
+
         //查询并存储查询条件
         //所属模块时间类型字段
-        Module sourceModule = report.getModule();
-        sourceModule = ReflectionUtils.findNameValueMatched(InitApplicationConstant.MODULES, "id", sourceModule.getId());
-        Field[] fields = sourceModule.getFields();
-        List<Field> dateTypeFields = ReflectionUtils.findNameValueMatcheds(Arrays.asList(fields), "type", Date.class);
-        List<ModuleField> moduleFields = moduleService.toModuleField(dateTypeFields.toArray(new Field[]{}));
-        modelMap.addAttribute("moduleFields", moduleFields);
+        modelMap.addAttribute("moduleFields", findModuleFields(report));
 
         SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
         modelMap.addAttribute("time", format.format(new Date()));
 
         return "/common/report/report";
+    }
+
+    public List<ModuleField> findModuleFields(Report report) {
+        List<ModuleField> moduleFields = new ArrayList<ModuleField>();
+
+        Module sourceModule = report.getModule();
+        sourceModule = ReflectionUtils.findNameValueMatched(InitApplicationConstant.MODULES, "id", sourceModule.getId());
+        Field[] fields = sourceModule.getFields();
+
+        //x轴字段
+        Field xAxisField = ModuleService.findFieldByName(fields, report.getxFieldName());
+        if (ModuleService.getFieldType(xAxisField).equals(Date.class)) {
+            moduleFields.add(moduleService.toModuleField(xAxisField));
+            return moduleFields;
+        }
+
+        //z轴字段
+        if (report.getzFieldName() != null) {
+            Field zAxisField = ModuleService.findFieldByName(fields, report.getxFieldName());
+            if (ModuleService.getFieldType(zAxisField).equals(Date.class)) {
+                moduleFields.add(moduleService.toModuleField(zAxisField));
+                return moduleFields;
+            }
+        }
+
+        //所有时间类型字段
+        List<Field> dateTypeFields = ReflectionUtils.findNameValueMatcheds(Arrays.asList(fields), "type", Date.class);
+        moduleFields.addAll(moduleService.toModuleField(dateTypeFields.toArray(new Field[]{})));
+
+        return moduleFields;
     }
 
 
@@ -311,20 +334,30 @@ public class ReportController {
     @RequestMapping("/generate")
     public String generate(Long id, HttpServletRequest request) throws NoSuchFieldException {
         logger.info("生成报表");
-
         logger.debug("报表主键编号={}", id);
+
+        //获取report
+        Report report = reportService.get(id);
+        Module module = moduleService.findById(report.getModule().getId());
+        report.setModule(module);
+
+        //获取查询条件
         Map<String, Object> searchParams = Servlets.getParametersStartingWith(request, "search_");
         Search.clearBlankValue(searchParams);
+        List<Field> dateTypeFields = ReflectionUtils.findNameValueMatcheds(Arrays.asList(module.getFields()), "type", Date.class);
+        Search.toRangeDate(searchParams, ReflectionUtils.invokeGetterMethod(dateTypeFields, "name").toArray(new String[]{}));
         Map<String, SearchFilter> filters = Search.parse(searchParams);
 
-        Report report = reportService.get(id);
-        report.setModule(moduleService.findById(report.getModule().getId()));
+        //生成报表
+        ChartModel chart = reportService.generate(report, filters);
+        for (int i = 0; i < chart.getCharts().size(); i++) {
+            chart.getStringCharts().add(chart.getCharts().get(i).toString());
+        }
+        chart.setCharts(null);
 
-        Chart chart = reportService.generate(report, filters);
         JsonDto jsonDto = new JsonDto();
-        BusinessResult<Chart> businessResult = new BusinessResult<Chart>(chart);
+        BusinessResult<ChartModel> businessResult = new BusinessResult<ChartModel>(chart);
         jsonDto.setResult(businessResult);
-
         String result = jsonDto.toString();
         logger.debug("chart={}", result);
 

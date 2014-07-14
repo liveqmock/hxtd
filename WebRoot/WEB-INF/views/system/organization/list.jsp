@@ -116,7 +116,7 @@
                 </td>
             </tr>
         </table>
-        <tags:paginationparams page="${page}"/>
+        <tags:paginationparams page="${userPage}"/>
     </form>
     <div class="cb"></div>
     <div class="mt20 block cb cb">
@@ -221,7 +221,7 @@
 <div id="tabs-org" class="tab-panel">
     <form action="${ctx}/system/organization/query.do" onsubmit="return false;">
         <input type="hidden" name="id" value="${id}"/>
-        <tags:paginationparams page="${page}"/>
+        <tags:paginationparams page="${orgPage}"/>
     </form>
     <div class="cb"></div>
     <div class="mt20 block cb cb">

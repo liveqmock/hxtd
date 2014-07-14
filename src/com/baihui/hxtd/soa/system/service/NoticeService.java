@@ -96,12 +96,15 @@ public class NoticeService {
 	public void add(Notice notice, User user,AuditLog auditLog) {
 		logger.info("保存公告信息{}", notice);
 		notice.setIsDeleted(false);
+		notice.setCreatedTime(noticeDao.getDBNow());
+		notice.setModifieTime(noticeDao.getDBNow());
 		noticeDao.save(notice);
 		auditLog.setRecordId(notice.getId());
 	}
 	
 	public void modify(Notice notice, User user,AuditLog auditLog) {
 		logger.info("修改公告信息{}", notice);
+		notice.setModifieTime(noticeDao.getDBNow());
 		notice.setIsDeleted(false);
 		noticeDao.save(notice);
 		

@@ -75,7 +75,7 @@ public class RoleService {
     public void add(Role role,AuditLog auditLog) {
         logger.info("新增");
 
-        role.setCreatedTime(new Date());
+        role.setCreatedTime(roleDao.getDBNow());
         role.setModifiedTime(role.getCreatedTime());
         role.setIsDeleted(false);
         role.setIsInitialized(false);
@@ -107,7 +107,7 @@ public class RoleService {
     @Transactional
     public void modify(Role role,AuditLog auditLog) {
         logger.info("修改");
-        role.setModifiedTime(new Date());
+        role.setModifiedTime(roleDao.getDBNow());
         roleDao.update(role);
     }
 

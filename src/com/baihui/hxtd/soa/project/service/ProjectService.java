@@ -1,6 +1,7 @@
 
 package com.baihui.hxtd.soa.project.service;
 
+import java.util.Date;
 import java.util.List;
 import java.util.Map;
 
@@ -94,10 +95,17 @@ public class ProjectService {
       * @throws
      */
 	public void add(Project project,AuditLog auditLog){
+		Date now = projectDao.getDBNow();
+		project.setCreatedTime(now);
+		project.setModifiedTime(now);
     	projectDao.save(project);
+    	auditLog.setRecordId(project.getId());
     }
 	
 	public void modify(Project project,AuditLog auditLog){
+		Date now = projectDao.getDBNow();
+		project.setCreatedTime(now);
+		project.setModifiedTime(now);
     	projectDao.save(project);
     }
 	

@@ -4,6 +4,8 @@ import org.junit.Test;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.util.Stack;
+
 public class LoggerTest {
     @Test
     public void testLoginForm() throws Exception {
@@ -14,5 +16,6 @@ public class LoggerTest {
         logger.info("信息");
         logger.warn("警告");
         logger.error("错误");
+
     }
 }

@@ -1,7 +1,6 @@
 package com.baihui.hxtd.soa.customer.controller;
 
 import java.io.IOException;
-import java.util.Date;
 import java.util.List;
 import java.util.Map;
 
@@ -10,7 +9,6 @@ import javax.servlet.ServletContext;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import com.baihui.hxtd.soa.common.controller.CommonController;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Controller;
@@ -26,6 +24,7 @@ import com.baihui.hxtd.soa.base.Constant;
 import com.baihui.hxtd.soa.base.orm.hibernate.HibernatePage;
 import com.baihui.hxtd.soa.base.utils.ImportExport;
 import com.baihui.hxtd.soa.base.utils.Search;
+import com.baihui.hxtd.soa.common.controller.CommonController;
 import com.baihui.hxtd.soa.customer.entity.Lead;
 import com.baihui.hxtd.soa.customer.service.LeadService;
 import com.baihui.hxtd.soa.system.entity.AuditLog;
@@ -91,7 +90,7 @@ public class LeadController extends CommonController<Lead>{
 	@RequestMapping(value = "/toQueryPage.do")
 	public String toQueryPage(Model model) {
 		logger.info("LeadController.toQueryPage跳转线索列表页");
-		model.addAttribute("page",new HibernatePage<Lead>().order("desc").orderBy("modifiedTime"));
+		model.addAttribute("page",new HibernatePage<Lead>().order(HibernatePage.DESC).orderBy("modifiedTime"));
 		setDefaultDict(model);
 		return "/customer/lead/list";
 	}
@@ -107,7 +106,7 @@ public class LeadController extends CommonController<Lead>{
 	@RequestMapping(value = "/toViewPage.do")
 	public String view(@RequestParam(required = false) String type,
 			@RequestParam(required = false) Long id, Model model) {
-		logger.info("LeadController.view查询组件");
+		logger.info("LeadController.view查询线索");
 		String returnStr="/customer/lead/view";
 		Lead lead = leadService.get(id);
 		model.addAttribute("lead",lead);
@@ -123,8 +122,6 @@ public class LeadController extends CommonController<Lead>{
 		logger.info("LeadController.modify修改线索信息");
 		User u = (User) request.getSession().getAttribute(Constant.VS_USER);
 		logger.info("获得当前操作用户{}", u.getName());
-		lead.setCreatedTime(new Date());
-		lead.setModifiedTime(new Date());
 		lead.setModifier(u);
 		lead.setCreator(u);
 		AuditLog auditLog = new AuditLog(EnumModule.LEAD.getModuleName(), 
@@ -171,7 +168,7 @@ public class LeadController extends CommonController<Lead>{
 	@ResponseBody
 	@RequestMapping(value = "/delete.do",produces = "text/text;charset=UTF-8")
 	public String delete(ModelMap modelMap, Long[] id){
-		//logger.info("LeadController.delete删除线索id={}",id);
+		logger.info("LeadController.delete删除线索id={}",id[0]);
 		User user = (User)modelMap.get(Constant.VS_USER);
 		
 		AuditLog [] auditLogArr = new AuditLog [id.length];
@@ -218,14 +215,12 @@ public class LeadController extends CommonController<Lead>{
 	@ResponseBody
 	@RequestMapping(value = "/add.do", produces = "text/text;charset=UTF-8")
 	public String add(Lead lead,HttpServletRequest request){
-		logger.info("ComponentController.query查询组件列表");
+		logger.info("leadController.add添加线索");
 		//临时代码，时间类型应从数据库中取
 		User u = (User) request.getSession().getAttribute(Constant.VS_USER);
-		logger.info("ComponentController.query 获得当前操作的用户{}",u.getName());
+		logger.info("leadController.query 获得当前操作的用户{}",u.getName());
 		lead.setCreator(u);
 		lead.setModifier(u);
-		lead.setCreatedTime(new Date());
-		lead.setModifiedTime(new Date());
 		AuditLog auditLog = new AuditLog(EnumModule.LEAD.getModuleName(), 
 				lead.getId(), lead.getName(), EnumOperationType.ADD.getOperationType(), u);
 		leadService.add(lead, auditLog);

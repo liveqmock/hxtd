@@ -211,8 +211,8 @@ public class UserService {
         logger.info("添加默认属性值");
         user.setIsDeleted(false);
         user.setIsInitialized(false);
-        user.setCreatedTime(new Date());
-        user.setModifiedTime(user.getCreatedTime());
+        user.setCreatedTime(userDao.getDBNow());
+        user.setModifiedTime(userDao.getDBNow());
         user.setPassword(md5.getMD5ofStr(user.getPassword()));
         user.setStoreStatus(new Dictionary(dictionaryDao.getIdByValue(DictionaryConstant.USER_STORESTATUS_NEWEST)));
         logger.debug("md5加密密码“{}”", user.getPassword());
@@ -274,7 +274,7 @@ public class UserService {
         logger.info("修改用户");
 
         logger.info("添加默认属性值");
-        user.setModifiedTime(new Date());
+        user.setModifiedTime(userDao.getDBNow());
         logger.debug("修改时间为当前时间“{}”", user.getModifiedTime());
 
         userDao.update(user);

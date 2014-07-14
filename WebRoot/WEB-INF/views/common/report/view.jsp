@@ -80,7 +80,7 @@
             <tr>
                 <td align="right" width="15%" valign="top">备注：</td>
                 <td align="left" width="85%" valign="top">
-                    <div class="w85b">${reoort.remark}</div>
+                    <div class="w85b">${report.remark}</div>
                 </td>
             </tr>
         </table>

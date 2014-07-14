@@ -1,5 +1,6 @@
 package com.baihui.hxtd.soa.project.entity;
 
+import java.math.BigDecimal;
 import java.util.Date;
 
 import javax.persistence.Column;
@@ -65,22 +66,22 @@ public class Product {
 	 * 出售金额
 	 */
 	@Column(name = "START_SELL_MONEY")
-	private double sellMoney;
+	private BigDecimal sellMoney;
 	/**
-	 * 最小利率
+	 * 利率
 	 */
 	@Column(name = "ERNING_RATE")
-	private double minRate;
+	private BigDecimal rate;
 	/**
 	 * 最大利率
 	 */
 	//@Column(name = "MAX_ERNING_RATE")
-	private double maxRate;
+	//private double maxRate;
 	/**
 	 * 预期收益
 	 */
 	@Column(name = "EXPECT_PROFIT")
-	private double expectProfit;
+	private BigDecimal expectProfit;
 	/**
 	 * 销售期限
 	 */
@@ -108,7 +109,7 @@ public class Product {
 	 * 提前赎回率
 	 */
 	@Column(name = "ADVANCE_REDEEM_RATE")
-	private double redeemRate;
+	private BigDecimal redeemRate;
 	/**
 	 * 提前赎回公式
 	 */
@@ -185,28 +186,28 @@ public class Product {
 	public void setType(Dictionary type) {
 		this.type = type;
 	}
-	public double getSellMoney() {
+	public BigDecimal getSellMoney() {
 		return sellMoney;
 	}
-	public void setSellMoney(double sellMoney) {
+	public void setSellMoney(BigDecimal sellMoney) {
 		this.sellMoney = sellMoney;
 	}
-	public double getMinRate() {
-		return minRate;
+	public BigDecimal getRate() {
+		return rate;
 	}
-	public void setMinRate(double minRate) {
-		this.minRate = minRate;
+	public void setRate(BigDecimal rate) {
+		this.rate = rate;
 	}
-	public double getMaxRate() {
+	/*public BigDecimal getMaxRate() {
 		return maxRate;
 	}
-	public void setMaxRate(double maxRate) {
+	public void setMaxRate(BigDecimal maxRate) {
 		this.maxRate = maxRate;
-	}
-	public double getExpectProfit() {
+	}*/
+	public BigDecimal getExpectProfit() {
 		return expectProfit;
 	}
-	public void setExpectProfit(double expectProfit) {
+	public void setExpectProfit(BigDecimal expectProfit) {
 		this.expectProfit = expectProfit;
 	}
 	public Long getSaleLimit() {
@@ -233,10 +234,10 @@ public class Product {
 	public void setSaleEndTime(Date saleEndTime) {
 		this.saleEndTime = saleEndTime;
 	}
-	public double getRedeemRate() {
+	public BigDecimal getRedeemRate() {
 		return redeemRate;
 	}
-	public void setRedeemRate(double redeemRate) {
+	public void setRedeemRate(BigDecimal redeemRate) {
 		this.redeemRate = redeemRate;
 	}
 	public String getRedeemFormula() {

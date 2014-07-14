@@ -753,6 +753,7 @@ jsUtil.bindSave = function (submitselector, formselector) {
     formselector = formselector || "form";
     var $form = $(formselector);
     var action = $form.attr("action");
+
     var click = function () {
         var $this = $(this);
         var submitAction = action;
@@ -765,13 +766,13 @@ jsUtil.bindSave = function (submitselector, formselector) {
                     setTimeout(function () {window.open(window.ctx + redirectUri.format(result.result.result), "_self");}, 500);
                 }
             }, function () {
-                setTimeout(function () {Grid.prototype.enableButton($this, Grid.defaults.enableButtonClass, Grid.defaults.disableButtonClass, "")}, 800);
+                setTimeout(function () {Grid.prototype.enableButton($this, Grid.defaults.enableButtonClass, Grid.defaults.disableButtonClass, "submit")}, 800);
             }, $form.find(":input[name][value!='']").fieldSerialize());
         } else {
             return false;
         }
     };
-    $(submitselector).click(click).data("click", click);
+    $(submitselector).click(click).data("submitclick", click);
     return this;
 }
 

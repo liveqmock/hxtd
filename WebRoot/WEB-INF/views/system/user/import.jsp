@@ -36,7 +36,7 @@
     <form action="${ctx}${VR_FUNCTION.url}" method="post" enctype="multipart/form-data">
         <div class="ml35 mr35 bg_c_blue cb h590">
             <div style="width:50%;" class="margin0">
-                <p class="pt20">请选择导入文件：<input type="file"/></p>
+                <p class="pt20">请选择导入文件：<input type="file" name="file"/></p>
 
                 <p style="color:red;">
                     1.只能支持.xls文件格式.<br>
@@ -44,7 +44,7 @@
                     3.请确认您的文件大小不超过5MB。
                 </p>
 
-                <p class=" mt45">
+               <%-- <p class=" mt45">
                     重复数据时：
                     <label><input type="radio" name="repeatOption" value="overwrite"/>覆盖</label>
                     <label><input type="radio" name="repeatOption" value="update"/>更新</label>
@@ -67,12 +67,12 @@
                         <option value="HH:mm">HH:mm</option>
                     </select>
                 </p>
-                <%--
+                &lt;%&ndash;
                 <p style="color:red;">
                      1.除指定格式“yyyy-MM-dd HH:mm:ss”以外的任何其它时间日期格式，在导入时都会因无法识别而被忽略。
                  </p>
-                 --%>
-
+                 &ndash;%&gt;
+--%>
                 <p class="mt40">模板：<a href="${ctx}/static/template/import/${templateName}">${templateName}</a></p>
 
                 <p style="color:red;">

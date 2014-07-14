@@ -5,11 +5,7 @@ import com.baihui.hxtd.soa.base.orm.hibernate.HibernatePage;
 import com.baihui.hxtd.soa.base.utils.Search;
 import com.baihui.hxtd.soa.base.utils.mapper.HibernateAwareObjectMapper;
 import com.baihui.hxtd.soa.common.service.CommonService;
-import com.baihui.hxtd.soa.system.entity.AuditLog;
-import com.baihui.hxtd.soa.system.entity.Dictionary;
-import com.baihui.hxtd.soa.system.entity.Function;
-import com.baihui.hxtd.soa.system.entity.Role;
-import com.baihui.hxtd.soa.system.entity.User;
+import com.baihui.hxtd.soa.system.entity.*;
 import com.baihui.hxtd.soa.system.service.*;
 import com.baihui.hxtd.soa.util.EnumModule;
 import com.baihui.hxtd.soa.util.EnumOperationType;
@@ -154,9 +150,8 @@ public class RoleController {
         role.setModifier(role.getCreator());
         logger.debug("修改用户为当前用户“{}”", user.getName());
 
-        AuditLog auditLog = new AuditLog(EnumModule.ROLE.getModuleName(), 
-        		role.getId(), role.getName(), EnumOperationType.ADD.getOperationType(), user,"角色增加");
-        roleService.add(role,auditLog);
+        AuditLog auditLog = new AuditLog(EnumModule.ROLE.getModuleName(), role.getId(), role.getName(), EnumOperationType.ADD.getOperationType(), user, "角色增加");
+        roleService.add(role, auditLog);
 
         return JsonDto.add(role.getId()).toString();
     }
@@ -211,9 +206,9 @@ public class RoleController {
         //修改用户为当前用户
         role.setModifier(user);
 
-        AuditLog auditLog = new AuditLog(EnumModule.ROLE.getModuleName(), 
-        		role.getId(), role.getName(), EnumOperationType.MODIFY.getOperationType(), user,"角色修改");
-        roleService.modify(role,auditLog);
+        AuditLog auditLog = new AuditLog(EnumModule.ROLE.getModuleName(),
+                role.getId(), role.getName(), EnumOperationType.MODIFY.getOperationType(), user, "角色修改");
+        roleService.modify(role, auditLog);
 
         return JsonDto.modify(role.getId()).toString();
     }
@@ -225,20 +220,20 @@ public class RoleController {
      */
     @ResponseBody
     @RequestMapping(value = "/delete.do")
-    public String delete(Long[] id,ModelMap modelMap) {
+    public String delete(Long[] id, ModelMap modelMap) {
         logger.info("删除");
 
         if (commonService.isInitialized(Role.class, id)) {
             return new JsonDto("系统初始化数据不允许删除！").toString();
         }
 
-        User user = (User)modelMap.get(Constant.VS_USER);
-        AuditLog [] auditLogArr = new AuditLog [id.length];
-		for(int i=0; i<id.length; i++){
-			auditLogArr[i] = new AuditLog(EnumModule.ROLE.getModuleName(), 
-					id[i], roleService.getNameById(id[i]), EnumOperationType.DELETE.getOperationType(), user,"角色删除");
-		}
-        roleService.delete(id,auditLogArr);
+        User user = (User) modelMap.get(Constant.VS_USER);
+        AuditLog[] auditLogArr = new AuditLog[id.length];
+        for (int i = 0; i < id.length; i++) {
+            auditLogArr[i] = new AuditLog(EnumModule.ROLE.getModuleName(),
+                    id[i], roleService.getNameById(id[i]), EnumOperationType.DELETE.getOperationType(), user, "角色删除");
+        }
+        roleService.delete(id, auditLogArr);
         return JsonDto.delete(id).toString();
     }
 
@@ -283,9 +278,9 @@ public class RoleController {
                                 HttpServletRequest request) {
         logger.info("授权");
         User u = (User) request.getSession().getAttribute(Constant.VS_USER);
-        AuditLog auditLog = new AuditLog(EnumModule.ROLE.getModuleName(), 
-        		id, roleService.getById(id).getName(), EnumOperationType.AUTHORIZATION.getOperationType(), u,"角色授权");
-        roleService.authorization(id, functionIds, componentIds,auditLog);
+        AuditLog auditLog = new AuditLog(EnumModule.ROLE.getModuleName(),
+                id, roleService.getById(id).getName(), EnumOperationType.AUTHORIZATION.getOperationType(), u, "角色授权");
+        roleService.authorization(id, functionIds, componentIds, auditLog);
         return new JsonDto(id, "授权成功").toString();
     }
 

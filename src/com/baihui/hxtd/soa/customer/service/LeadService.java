@@ -99,12 +99,18 @@ public class LeadService {
 
 	public void add(Lead lead,AuditLog auditLog) {
 		logger.info("保存线索信息{}", lead);
+		Date now = leadDao.getDBNow();
+		lead.setCreatedTime(now);
+		lead.setModifiedTime(now);
 		leadDao.save(lead);
 		auditLog.setRecordId(lead.getId());
 	}
 	
 	public void modify(Lead lead, AuditLog auditLog) {
 		logger.info("保存线索信息{}", lead);
+		Date now = leadDao.getDBNow();
+		lead.setCreatedTime(now);
+		lead.setModifiedTime(now);
 		leadDao.save(lead);
 	}
 
@@ -211,7 +217,18 @@ public class LeadService {
 		return leadDao.modifyOwner(ownerId, ids);
 
 	}
-
+	/**
+	 * 
+	  * getDBNow(查询数据库当前时间)
+	  * @Title: getDBNow
+	  * @param @return    参数类型
+	  * @return Date    返回类型
+	  * @throws
+	 */
+	public Date getDBNow(){
+		return leadDao.getDBNow();
+	}
+	
 	public LeadDao getLeadDao() {
 		return leadDao;
 	}

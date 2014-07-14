@@ -2,7 +2,6 @@
 package com.baihui.hxtd.soa.project.controller;
 
 import java.io.IOException;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
@@ -187,8 +186,6 @@ public class SupplierController extends CommonController<Supplier> {
 	@RequestMapping(value = "/modify.do", produces = "text/text;charset=UTF-8")
 	public String modify(Supplier supplier,String type,HttpServletRequest request){
 		logger.info("SupplierController.modify修改组件信息");
-		supplier.setCreatedTime(new java.util.Date());
-		supplier.setModifiedTime(new java.util.Date());
 		User u = (User) request.getSession().getAttribute(Constant.VS_USER);
 		logger.info("获得当前操作用户{}",u.getName());
 		supplier.setModifier(u);
@@ -212,8 +209,6 @@ public class SupplierController extends CommonController<Supplier> {
 	public String add(Supplier supplier,String type,HttpServletRequest request){
 		logger.info("SupplierController.query查询组件列表");
 		//临时代码，时间类型应从数据库中取
-		supplier.setCreatedTime(new java.util.Date());
-		supplier.setModifiedTime(new java.util.Date());
 		User u = (User) request.getSession().getAttribute(Constant.VS_USER);
 		logger.info("SupplierController.query 获得当前操作的用户{}",u.getName());
 		supplier.setCreator(u);
@@ -243,11 +238,11 @@ public class SupplierController extends CommonController<Supplier> {
 			auditLogArr[i] = new AuditLog(EnumModule.LEAD.getModuleName(), 
 					id[i], supplierService.get(id[i]).getName(), EnumOperationType.DELETE.getOperationType(), user);
 		}
-		boolean flag = supplierService.delete(auditLogArr,id);
+		boolean flag = supplierService.delete(id,auditLogArr);
 		if(flag){
 			return JsonDto.delete(id).toString();
 		}else{
-			return new JsonDto("被删除数据存在关联项目，无法删除!").toString(); 
+			return new JsonDto("被删除数据存在关联项目或联系人，无法删除!").toString(); 
 		}
 	}
 	

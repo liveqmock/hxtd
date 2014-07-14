@@ -218,9 +218,11 @@ public class Search {
      * 1.使用日期起始时间和结束时间
      * 2.根据日期字段名称，转换为带条件的区间表示
      */
-    public static void toRangeDate(Map<String, Object> params, String key) {
-        String[] keys = toRangeKeys(key);
-        toRangeDate(params, keys[0], keys[1]);
+    public static void toRangeDate(Map<String, Object> params, String... names) {
+        for (int i = 0; i < names.length; i++) {
+            String[] keys = toRangeKeys(names[i]);
+            toRangeDate(params, keys[0], keys[1]);
+        }
     }
 
     /**
@@ -328,6 +330,17 @@ public class Search {
         defaultEditors.put(BigInteger.class, new CustomNumberEditor(BigInteger.class, true));
 
         defaultEditors.put(Date.class, new MultiPatternDateEditor("yyyy-MM-dd HH:mm:ss", "yyyy-MM-dd"));
+    }
+
+    /** 转换为字符串集合 */
+    public static List<String> convert(List list, Class clazz) {
+        List<String> listString = new ArrayList<String>();
+        PropertyEditor propertyEditor = defaultEditors.get(clazz);
+        for (int i = 0; i < list.size(); i++) {
+            propertyEditor.setValue(list.get(i));
+            listString.add(propertyEditor.getAsText());
+        }
+        return listString;
     }
 
 

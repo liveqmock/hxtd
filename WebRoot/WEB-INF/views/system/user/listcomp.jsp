@@ -45,7 +45,7 @@ $(function(){
 			<table class="w pr10 pl10">
 				<tr>
 				  <td class="f14" align="right" width="10%">用户名称：</td>
-				  <td class="f14" align="left" width="30%"><input type="text" class="text_input1" name="search_LIKE_realName" /></td>
+				  <td class="f14" align="left" width="16%"><input type="text" class="text_input1" name="search_LIKE_realName" /></td>
 				  <td>
 				  	<a href="javascript:;" class="reset block dump_btn globle_img fr mr10"></a>
 				  	<a href="javascript:;" class="block c_white lh25 fr mr10 submit">

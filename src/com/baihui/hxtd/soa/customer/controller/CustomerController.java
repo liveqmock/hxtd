@@ -115,7 +115,10 @@ public class CustomerController extends CommonController<Customer>{
 		}
 		sb.deleteCharAt(sb.length()-1); 
 		sb.append("]");
-		model.addAttribute("page",new HibernatePage<Customer>().order("desc").orderBy("modifiedTime"));
+		HibernatePage<Customer> page=new HibernatePage<Customer>();
+		page.setHibernateOrder(HibernatePage.DESC);
+		page.setHibernateOrderBy("modifiedTime");
+		model.addAttribute("page",page);
 		model.addAttribute("dict",sb.toString());
 		getDictionary(model);
 		return "/customer/customer/list";
@@ -161,7 +164,7 @@ public class CustomerController extends CommonController<Customer>{
 		logger.info("CustomerController.modify修改客户信息");
 		User u = (User) request.getSession().getAttribute(Constant.VS_USER);
 		logger.info("获得当前操作用户{}", u.getName());
-		customer.setModifiedTime(new Date(new java.util.Date().getTime()));
+		//customer.setModifiedTime(new Date(new java.util.Date().getTime()));
 		customer.setModifier(u);
 		customer.setIsDeleted(false);
 		
@@ -223,9 +226,6 @@ public class CustomerController extends CommonController<Customer>{
 		logger.info("ComponentController.query 获得当前操作的用户{}",u.getName());
 		customer.setCreator(u);
 		customer.setModifier(u);
-		customer.setCreatedTime(new Date(new java.util.Date().getTime()));
-		customer.setModifiedTime(new Date(new java.util.Date().getTime()));
-		
 		//如果所传属性的id为空就设置属性为空
 		setPropertyNull(customer);
 		/************ 新增 *****************************/

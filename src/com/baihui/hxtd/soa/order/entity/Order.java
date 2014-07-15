@@ -38,6 +38,7 @@ public class Order {
 	/**
 	 * 序列化
 	 */
+	@SuppressWarnings("unused")
 	private static final long serialVersionUID = 1L;
 
 	/** 线索ID */

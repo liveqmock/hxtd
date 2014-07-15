@@ -5,7 +5,10 @@ package com.baihui.hxtd.soa.base.utils.serial;
  */
 public class OverSerialTierContentException extends RuntimeException {
 
-    public OverSerialTierContentException() {
+    
+	private static final long serialVersionUID = 3323949769333652516L;
+
+	public OverSerialTierContentException() {
         super("超过当前层次所能容纳的值");
     }
 

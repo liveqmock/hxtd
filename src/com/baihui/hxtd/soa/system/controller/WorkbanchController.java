@@ -29,6 +29,11 @@ public class WorkbanchController {
     	model.addAttribute("list",workbanchService.getMyWorkbanchs(ownerId));
     	return "/system/workbanch/index";
     }
+    @RequestMapping(value = "/add.comp")
+    public String toAddPage(ModelMap model) {
+    	
+    	return "/system/workbanch/edit";
+    }
     
     @RequestMapping(value = "/toQueryPage.do")
     public String toCustomPage() {

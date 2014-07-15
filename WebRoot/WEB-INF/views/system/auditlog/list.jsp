@@ -69,8 +69,8 @@
 								<select name="search_EQ_type" class="select2">
 									<option value="">全部</option>
 									<c:forEach var="item" items="${operationTypes}">
-										<option value="${item.key}">
-										${item.value}
+										<option value="${item.operationType}">
+										${item.operationChineseName}
 										</option>
 									</c:forEach>
 								</select>
@@ -84,8 +84,8 @@
 										全部
 									</option>
 									<c:forEach var="item" items="${moduleNames}">
-										<option value="${item.key}">
-											${item.value}
+										<option value="${item.moduleName}">
+											${item.moduleChineseName}
 										</option>
 									</c:forEach>
 								</select>

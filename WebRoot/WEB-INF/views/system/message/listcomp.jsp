@@ -37,6 +37,10 @@ $(document).ready(function(){
 				
 			}
 		},
+		async: { 
+			enable: true, 
+			url:"${ctx}/system/user/toQueryUser.comp", 
+			autoParam:["id", "name"]},
 		callback: {
 			onCheck: onCheck
 		}

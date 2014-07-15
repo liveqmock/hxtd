@@ -114,20 +114,6 @@
 				<td align="right">理财总监：</td>
 				<td align="left">${customer.financialDirector}</td>
 		    </tr>
-			<!--
-			<tr>
-			    <td align="right">创建时间：</td>
-				<td align="left">${customer.createdTime}</td>
-				<td align="right">创建者：</td>
-				<td align="left">${customer.creator.name}</td>
-			</tr>
-			<tr>
-				<td align="right">修改时间：</td>
-				<td align="left">${customer.modifiedTime}</td>
-				<td align="right">修改者：</td>
-				<td align="left">${customer.modifier.name}</td>
-			</tr>
-			-->
 		</table>
 		<h1 class="f14 fbnone ml40 pt10">地址信息</h1>
 		<table class="cb id_table3 w95b bg_c_white margin0 mt10">
@@ -161,7 +147,7 @@
 		</table> 
 		<tag:attachment view="${VS_HAS_FUNCTIONS.customerAttView}" upload="${VS_HAS_FUNCTIONS.customerUpload}" 
 			module="customer" query="${VS_HAS_FUNCTIONS.customerAttQuery}" down="${VS_HAS_FUNCTIONS.customerDown}" 
-			deleteFlag="true" id="${costomer.id}"></tag:attachment>
+			deleteFlag="true" id="${customer.id}"></tag:attachment>
 		<tag:memoir view="true" edit="true" query="true" delete="true" moduleType="customer" moduleId="${customer.id}"></tag:memoir>
 		<div class="h40"></div>
     </div>

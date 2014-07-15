@@ -22,6 +22,7 @@
 <script type="text/javascript">
 $(function() {
 	jsUtil.datepicker(".time");//加载时间控件
+	jsUtil.datepickerNotNow(".time1");
 	/**
 	 * table中的复选框全选/全不选
 	 * @memberOf {TypeName} 
@@ -72,13 +73,26 @@ function reset() {
 				<table class="fl mt5 w">
 					<tr>
 						<td class="f14 namewidth1" align="right" >
-							线索名称：
+							订单编号：
 						</td>
 						<td class="f14 namewidth2" align="left" >
-							<input type="text" class="text_input1" name="search_LIKE_name"
+							<input type="text" class="text_input1" name="search_LIKE_code"
 								id="name" value="" />
 						</td>
-						
+						<td class="f14 namewidth1" align="right" >
+							产品名：
+						</td>
+						<td class="f14 namewidth2" align="left" >
+							<input type="text" class="text_input1" name="search_LIKE_product.name"
+								id="name" value="" />
+						</td>
+						<td class="f14 namewidth1" align="right" >
+							客户名：
+						</td>
+						<td class="f14 namewidth2" align="left" >
+							<input type="text" class="text_input1" name="search_LIKE_customer.name"
+								id="name" value="" />
+						</td>
 						<td class="namewidth3">
 							<a class="c_222 block cp fr ml10 globle_img mt8 mr20 more"
 								title="展开"></a>
@@ -91,13 +105,83 @@ function reset() {
 						</td>
 					</tr>
 					<tr class="more-content">
-						
+						<td class="f14 namewidth1" align="right" >
+							购买金额（万）：
+						</td>
+						<td class="f14 namewidth2" align="left" >
+							<input type="text" class="text_input2" name="search_GTE_purchaseMoney"
+								id="name" value="" />-<input
+								 type="text" class="text_input2" name="search_LTE_purchaseMoney"
+							id="name" value="" />
+						</td>
+						<td class="f14 namewidth1" align="right" >
+							收益率（%）：
+						</td>
+						<td class="f14 namewidth2" align="left" >
+							<div class="pr vm">
+								<input class="text_input2"
+									name="search_GTE_earningRate" type="text" 
+									readonly />-<input 
+									class="text_input2"
+									name="search_LTE_earningRate" type="text" readonly />
+							</div>
+						</td>
+						<td class="f14 namewidth1" align="right" >
+							赎回率（%）：
+						</td>
+						<td class="f14 namewidth2" align="left" >
+							<div class="pr vm">
+								<input class="text_input2"
+									name="search_GTE_arr" type="text" 
+									readonly />-<input 
+									class="text_input2"
+									name="search_LTE_arr" type="text" readonly />
+							</div>
+						</td>
 					</tr>
 					<tr class="more-content">
-						
-					</tr>
-					<tr class="more-content">
-						
+						<td class="f14 namewidth1" align="right" >
+							结束时间：
+						</td>
+						<td class="f14 namewidth2" align="left" >
+							<div class="pr vm">
+								<a href="javascript:;" class="pa time_closenone1"></a>
+								<a href="javascript:;" class="pa time_closenone2"></a>
+								<input class="text_input2 input_close globle_img time1"
+									name="search_GTE_endTime" type="text" 
+									readonly />-<input 
+									class="text_input2 input_close globle_img time1"
+									name="search_LTE_endTime" type="text" readonly />
+							</div>
+						</td>
+						<td class="f14 namewidth1" align="right" >
+							创建时间：
+						</td>
+						<td class="f14 namewidth2" align="left" >
+							<div class="pr vm">
+								<a href="javascript:;" class="pa time_closenone1"></a>
+								<a href="javascript:;" class="pa time_closenone2"></a>
+								<input class="text_input2 input_close globle_img time"
+									name="search_GTE_createdTime" type="text" 
+									readonly />-<input 
+									class="text_input2 input_close globle_img time"
+									name="search_LTE_createdTime" type="text" readonly />
+							</div>
+						</td>
+						<td class="f14 namewidth1" align="right" >
+							修改时间：
+						</td>
+						<td class="f14 namewidth2" align="left" >
+							<div class="pr vm">
+								<a href="javascript:;" class="pa time_closenone1"></a>
+								<a href="javascript:;" class="pa time_closenone2"></a>
+								<input class="text_input2 input_close globle_img time"
+									name="search_GTE_modifiedTime" type="text" 
+									readonly />-<input 
+									class="text_input2 input_close globle_img time"
+									name="search_LTE_modifiedTime" type="text" readonly />
+							</div>
+						</td>
 					</tr>
 				</table>
 				<tags:paginationparams page="${page}"></tags:paginationparams>

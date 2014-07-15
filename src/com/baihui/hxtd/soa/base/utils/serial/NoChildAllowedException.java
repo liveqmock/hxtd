@@ -5,7 +5,9 @@ package com.baihui.hxtd.soa.base.utils.serial;
  */
 public class NoChildAllowedException extends RuntimeException {
 
-    public NoChildAllowedException() {
+	private static final long serialVersionUID = -3217821688820939280L;
+
+	public NoChildAllowedException() {
         super("在当前节点下不允许再有子节点");
     }
 

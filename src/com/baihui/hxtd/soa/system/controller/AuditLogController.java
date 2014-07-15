@@ -22,6 +22,7 @@ import com.baihui.hxtd.soa.base.utils.mapper.HibernateAwareObjectMapper;
 import com.baihui.hxtd.soa.system.entity.AuditLog;
 import com.baihui.hxtd.soa.system.service.AuditLogService;
 import com.baihui.hxtd.soa.util.EnumModule;
+import com.baihui.hxtd.soa.util.EnumOperationType;
 import com.baihui.hxtd.soa.util.JsonDto;
 
 /**
@@ -57,7 +58,8 @@ public class AuditLogController {
         HibernatePage<AuditLog> page = new HibernatePage<AuditLog>(pageNumber, pageSize);
         page.setHibernateOrderBy(orderBy);
         page.setHibernateOrder(order);
-        convertResult(model);
+        model.addAttribute("operationTypes", EnumOperationType.values());//操作类型
+        model.addAttribute("moduleNames", EnumModule.values());//模块名称
         model.addAttribute("page", page);
         return "/system/auditlog/list";
     }
@@ -91,47 +93,5 @@ public class AuditLogController {
 		HibernateAwareObjectMapper.DEFAULT.writeValue(out, json);
 	}
 	
-	/**
-	 * 操作类型和模块名称转换成对应中文
-	 * @param model
-	 */
-	private void convertResult(Model model){
-		Map<Integer,String> operationTypes=new HashMap<Integer,String>();
-        operationTypes.put(1,"增加");
-        operationTypes.put(2,"修改");
-        //operationTypes.put(3,"逻辑删除");
-        operationTypes.put(4,"删除");
-        operationTypes.put(5,"导入");
-        operationTypes.put(6,"导出");
-        operationTypes.put(7,"授权");
-        operationTypes.put(8,"重置密码");
-        operationTypes.put(9,"启用用户");
-        operationTypes.put(10,"禁用用户");
-        operationTypes.put(11,"修改密码");
-        operationTypes.put(12,"物理删除");
-        operationTypes.put(13,"恢复数据");
-        operationTypes.put(14,"线索转客户");
-        model.addAttribute("operationTypes", operationTypes);//操作类型
-        Map<EnumModule,String> moduleNames=new HashMap<EnumModule,String>();
-        moduleNames.put(EnumModule.MARKETACTIVITY, "市场活动");
-        moduleNames.put(EnumModule.LEAD, "线索");
-        moduleNames.put(EnumModule.CONTACT, "联系人");
-        moduleNames.put(EnumModule.CUSTOMER, "客户");
-        moduleNames.put(EnumModule.SUPPILER, "供应商");
-        moduleNames.put(EnumModule.PROJECT, "项目");
-        moduleNames.put(EnumModule.PRODUCT, "产品");
-        moduleNames.put(EnumModule.ORDER, "订单");
-        moduleNames.put(EnumModule.USER, "用户");
-        moduleNames.put(EnumModule.ROLE, "角色");
-        moduleNames.put(EnumModule.MENU, "菜单");
-        moduleNames.put(EnumModule.FUNCTION, "功能");
-        moduleNames.put(EnumModule.COMPONENT, "组件");
-        moduleNames.put(EnumModule.ORGANIZATION, "组织机构");
-        moduleNames.put(EnumModule.USERMESSAGE, "系统消息");
-        moduleNames.put(EnumModule.NOTICE, "系统公告");
-        moduleNames.put(EnumModule.DICTIONARY, "数据字典");
-        moduleNames.put(EnumModule.RECYCLEBIN, "回收站");
-        model.addAttribute("moduleNames", moduleNames);//模块名称
-	}
 	
 }

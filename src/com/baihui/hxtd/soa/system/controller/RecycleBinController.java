@@ -67,7 +67,7 @@ public class RecycleBinController {
         page.setHibernateOrderBy(orderBy);
         page.setHibernateOrder(order);
         model.addAttribute("page", page);
-        convertResult(model);
+        model.addAttribute("moduleNames", EnumModule.values());//模块名称
         return "/system/recyclebin/list";
     }
 	
@@ -112,8 +112,8 @@ public class RecycleBinController {
 		logger.info("RecycleBinController.delete删除回收站数据id={}", StringUtils.join(id,","));
 		List<Long> recordIds = new ArrayList<Long>();
 		List<Long> ids = new ArrayList<Long>();
-		List<String> entityName=new ArrayList<String>();
-	    List<RecycleBin> recycleBinList=recycleBinService.getByIds(id);
+		List<String> entityName = new ArrayList<String>();
+	    List<RecycleBin> recycleBinList = recycleBinService.getByIds(id);
 	    for(int i=0;i<recycleBinList.size();i++){
 	    	recordIds.add(recycleBinList.get(i).getRecordId());
 	    	ids.add(recycleBinList.get(i).getId());
@@ -128,7 +128,7 @@ public class RecycleBinController {
     			auditLogArr[j] = new AuditLog(EnumModule.RECYCLEBIN.getModuleName(), 
    					idArr[j], recycleBinList.get(i).getRecordName(), EnumOperationType.DELETEREAL.getOperationType(), user,"真实删除数据");
     		}
-    		recycleBinService.realDelete((Long[]) recordIds.toArray(new Long[0]),entityName.get(i),auditLogArr);
+    		recycleBinService.realDelete(entityName.get(i), (Long[]) recordIds.toArray(new Long[0]), auditLogArr);
 	    }
 	    recycleBinService.delete(idArr);
         JsonDto json = new JsonDto();
@@ -170,29 +170,4 @@ public class RecycleBinController {
     }
 	
 	
-	/**
-	 * 操作类型和模块名称转换成对应中文
-	 * @param model
-	 */
-	private void convertResult(Model model){
-        Map<EnumModule,String> moduleNames=new HashMap<EnumModule,String>();
-        moduleNames.put(EnumModule.MARKETACTIVITY, "市场活动");
-        moduleNames.put(EnumModule.LEAD, "线索");
-        moduleNames.put(EnumModule.CONTACT, "联系人");
-        moduleNames.put(EnumModule.CUSTOMER, "客户");
-        moduleNames.put(EnumModule.SUPPILER, "供应商");
-        moduleNames.put(EnumModule.PROJECT, "项目");
-        moduleNames.put(EnumModule.PRODUCT, "产品");
-        moduleNames.put(EnumModule.ORDER, "订单");
-        moduleNames.put(EnumModule.USER, "用户");
-        moduleNames.put(EnumModule.ROLE, "角色");
-        moduleNames.put(EnumModule.MENU, "菜单");
-        moduleNames.put(EnumModule.FUNCTION, "功能");
-        moduleNames.put(EnumModule.COMPONENT, "组件");
-        moduleNames.put(EnumModule.ORGANIZATION, "组织机构");
-        moduleNames.put(EnumModule.USERMESSAGE, "系统消息");
-        moduleNames.put(EnumModule.NOTICE, "系统公告");
-        moduleNames.put(EnumModule.DICTIONARY, "数据字典");
-        model.addAttribute("moduleNames", moduleNames);//模块名称
-	}
 }

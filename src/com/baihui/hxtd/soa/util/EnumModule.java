@@ -18,72 +18,86 @@ package com.baihui.hxtd.soa.util;
 public enum EnumModule {
 	
 	/** 市场活动 */
-	MARKETACTIVITY("marketActivity"),
+	MARKETACTIVITY("marketActivity","市场活动"),
 
 	/** 线索 */
-	LEAD("lead"),
+	LEAD("lead","线索"),
 	
 	/** 联系人 */
-	CONTACT("contact"),
+	CONTACT("contact","联系人"),
 	
 	/** 客户 */
-	CUSTOMER("customer"),
+	CUSTOMER("customer","客户"),
 	
 	/** 供应商 */
-	SUPPILER("supplier"),
+	SUPPILER("supplier","供应商"),
 	
 	/** 项目 */
-	PROJECT("project"),
+	PROJECT("project","项目"),
 	
 	
 	/** 产品 */
-	PRODUCT("product"),
+	PRODUCT("product","产品"),
 	
 	/** 订单 */
-	ORDER("order"),
+	ORDER("order","订单"),
+	
+	/** 合同 */
+	CONTRACT("contract","合同"),
 	
 	/** 用户 */
-	USER("user"),
+	USER("user","用户"),
 	
 	/** 角色 */
-	ROLE("role"),
+	ROLE("role","角色"),
 	
 	/** 菜单 */
-	MENU("menu"),
+	MENU("menu","菜单"),
 	
 	/** 功能 */
-	FUNCTION("function"),
+	FUNCTION("function","功能"),
 	
 	/** 组件 */
-	COMPONENT("component"),
+	COMPONENT("component","组件"),
 	
 	/** 组织机构 */
-	ORGANIZATION("organization"),
+	ORGANIZATION("organization","组织机构"),
 	
 	/** 系统消息 */
-	USERMESSAGE("userMessage"),
+	USERMESSAGE("userMessage","系统消息"),
 	
 	/** 系统公告*/
-	NOTICE("notice"),
+	NOTICE("notice","系统公告"),
 	
 	/** 数据字典*/
-	DICTIONARY("dictionary"),
+	DICTIONARY("dictionary","数据字典"),
 	
 	/**回收站*/
-	RECYCLEBIN("recyclebin"),
+	RECYCLEBIN("recyclebin","回收站"),
 
     /**报表*/
-    REPORT("report")
+    REPORT("report","报表"),
 	;
 	
 	
 	private String moduleName;
+	private String moduleChineseName;
 	
 	private EnumModule(String moduleName){
 		this.moduleName = moduleName;
 	}
 	
+	private EnumModule(String moduleName,String moduleChineseName){
+		this.moduleName = moduleName;
+		this.moduleChineseName = moduleChineseName;
+	}
+	
 	public String getModuleName(){
 		return moduleName;
 	}
+
+	public String getModuleChineseName() {
+		return moduleChineseName;
+	}
+	
 }

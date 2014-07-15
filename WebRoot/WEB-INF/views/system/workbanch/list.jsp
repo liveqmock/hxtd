@@ -16,6 +16,7 @@
 <script type="text/javascript" src="${ctx}/static/js/jquery-jtemplates.js"></script>
 <script type="text/javascript" src="${ctx}/static/js/js-util.common.js"></script>
 <script type="text/javascript" src="${ctx}/static/js/scrollTitle.js?v=1"></script>
+<script type="text/javascript" src="${ctx}/static/js/jquery.form.js"></script>
 <script type="text/javascript">
 $(function() {
 	$("#id").click(function() {
@@ -34,6 +35,14 @@ $(function() {
 			});
 	grid = new Grid().init({paginationActive:false});
 });
+function searchData(){//搜索弹出框
+	jsUtil.dialogIframe("${ctx}/workbanch/add.comp", "自定义工作台", 650, 180, function(){//确定回调
+		var $userObj = $("#form", window.frames["dialogIframe"].document);
+			if($userObj.length > 0){
+				var formData = $userObj.formSerialize();
+			}
+	});
+}
 </script>
 </head>
 <body>
@@ -59,7 +68,7 @@ $(function() {
 						</a>
 					</li>
 					<li>
-						<a href="javascript:;"
+						<a href="javascript:searchData();"
 							class="block c_white lh25 ml10"><b
 							class="allbtn_l block fl"></b><b
 							class="allbtn_r pr13 block fl w_auto f14">新&nbsp;&nbsp;增</b>

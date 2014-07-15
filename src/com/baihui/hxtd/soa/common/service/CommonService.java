@@ -16,9 +16,9 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.annotation.Resource;
-import java.sql.Date;
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -35,6 +35,10 @@ public class CommonService {
 
     @Resource
     private CommonDao commonDao;
+    
+    public Date getNow(){
+    	return commonDao.getDBNow();
+    }
 
     /**
      * 查找实体类通过主键编号

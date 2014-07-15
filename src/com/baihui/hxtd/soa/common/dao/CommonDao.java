@@ -156,6 +156,8 @@ public class CommonDao extends HibernateDAOImpl<Common, Long> {
         getSession().createQuery(hql).setParameterList("id", id).executeUpdate();
         logger.debug("delete entity {},hql is {},id is {}", entityClass.getSimpleName(), hql, id);
     }
+    
+    
 
     /**
      * 恢复回收站中的数据

@@ -33,7 +33,8 @@ public class AuthorityFilterFunctionInterceptor extends HandlerInterceptorAdapte
 
     private Logger logger = LoggerFactory.getLogger(this.getClass());
 
-    public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws Exception {
+    @SuppressWarnings("unchecked")
+	public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws Exception {
         logger.info("功能权限认证");
         logger.debug("客户端请求“{}”", request.getRequestURI());
 

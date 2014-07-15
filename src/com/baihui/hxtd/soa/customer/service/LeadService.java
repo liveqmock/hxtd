@@ -141,7 +141,7 @@ public class LeadService {
 	}
 
 	
-	@SuppressWarnings("unchecked")
+	@SuppressWarnings("rawtypes")
 	private DetachedCriteria biuldQuery(Map<String, Object> searchParams,DataShift dataShift,Class entityClass) throws NoSuchFieldException{
 		DetachedCriteria criteria = DetachedCriteria.forClass(entityClass);
 		criteria.setFetchMode("source", FetchMode.JOIN);

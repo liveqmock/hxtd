@@ -88,8 +88,8 @@
 												全部
 											</option>
 											<c:forEach var="item" items="${moduleNames}">
-												<option value="${item.key}">
-													${item.value}
+												<option value="${item.moduleName}">
+													${item.moduleChineseName}
 												</option>
 											</c:forEach>
 										</select>
@@ -179,25 +179,7 @@
 			          {#foreach $T.result as row}
 			          <tr class="{$T.row$index%2==1?'':'bg_c_blue'} row w">
 			          	  <td><input type="checkbox" class="checkitem" name="id" value="{$T.row.id}"/></td>
-			         	  <td>
-			         	  {#if $T.row.moduleName=='marketActivity'}市场活动{#/if}
-			         	  {#if $T.row.moduleName=='lead'}线索{#/if}
-			         	  {#if $T.row.moduleName=='contact'}联系人{#/if}
-			         	  {#if $T.row.moduleName=='customer'}客户{#/if}
-			         	  {#if $T.row.moduleName=='supplier'}供应商{#/if}
-			         	  {#if $T.row.moduleName=='project'}项目{#/if}
-			         	  {#if $T.row.moduleName=='product'}产品{#/if}
-			         	  {#if $T.row.moduleName=='order'}订单{#/if}
-			         	  {#if $T.row.moduleName=='user'}用户{#/if}
-			         	  {#if $T.row.moduleName=='role'}角色{#/if}
-			         	  {#if $T.row.moduleName=='menu'}菜单{#/if}
-			         	  {#if $T.row.moduleName=='function'}功能{#/if}
-			         	  {#if $T.row.moduleName=='component'}组件{#/if}
-			         	  {#if $T.row.moduleName=='organization'}组织机构{#/if}
-			         	  {#if $T.row.moduleName=='userMessage'}系统消息{#/if}
-			         	  {#if $T.row.moduleName=='notice'}系统公告{#/if}
-			         	  {#if $T.row.moduleName=='dictionary'}数据字典{#/if}
-			         	  </td>
+			         	  <td>{$T.row.moduleName}</td>
 			         	  <td>{$T.row.recordName}</td>
 			              <td>{$T.row.creator.realName}</td>
 			              <td>{$T.row.createdTime}</td>

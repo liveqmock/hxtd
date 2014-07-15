@@ -4,7 +4,7 @@ Source Host: 192.168.111.141
 Source Database: hxtd
 Target Host: 192.168.111.141
 Target Database: hxtd
-Date: 2014/7/14 22:27:22
+Date: 2014/7/15 18:26:52
 */
 
 SET FOREIGN_KEY_CHECKS=0;
@@ -96,10 +96,10 @@ CREATE TABLE `contract` (
   KEY `INDEX_ORDER_ID` (`ORDER_ID`),
   KEY `INDEX_ACCOUNT_ID` (`ACCOUNT_ID`),
   KEY `INDEX_TYPE` (`TYPE_DIC`),
-  KEY `INDEX_CREATOR_ID` (`CREATOR_ID`),
-  KEY `INDEX_MODIFIER_ID` (`MODIFIER_ID`),
-  KEY `INDEX_MODIFIED_TIME` (`MODIFIED_TIME`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='合同表';
+  KEY `INDEX_EFFECT_TIME` (`EFFECT_TIME`) USING BTREE,
+  KEY `INDEX_SIGN_TIME` (`SIGN_TIME`) USING BTREE,
+  KEY `INDEX_BEREFT_TIME` (`BEREFT_TIME`) USING BTREE
+) ENGINE=InnoDB AUTO_INCREMENT=12 DEFAULT CHARSET=utf8 COMMENT='合同表';
 
 -- ----------------------------
 -- Table structure for customer
@@ -324,7 +324,7 @@ CREATE TABLE `order` (
   KEY `INDEX_CREATOR_ID` (`CREATOR_ID`),
   KEY `INDEX_MODIFIER_ID` (`MODIFIER_ID`),
   KEY `INDEX_MODIFIED_TIME` (`MODIFIED_TIME`)
-) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8 COMMENT='订单表';
+) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8 COMMENT='订单表';
 
 -- ----------------------------
 -- Table structure for pro_city_area
@@ -579,17 +579,19 @@ CREATE TABLE `report` (
   `IS_DELETED` tinyint(1) NOT NULL DEFAULT '0' COMMENT '否是被删除',
   `IS_INITIALIZED` tinyint(1) NOT NULL DEFAULT '0' COMMENT '否是初始化数据',
   PRIMARY KEY (`ID`)
-) ENGINE=InnoDB AUTO_INCREMENT=8 DEFAULT CHARSET=utf8 COMMENT='报表表';
+) ENGINE=InnoDB AUTO_INCREMENT=9 DEFAULT CHARSET=utf8 COMMENT='报表表';
 
 -- ----------------------------
 -- Table structure for sales_target
 -- ----------------------------
 CREATE TABLE `sales_target` (
   `ID` int(4) NOT NULL AUTO_INCREMENT COMMENT '主键ID',
+  `TITLE` varchar(64) NOT NULL,
   `ORG_ID` int(4) NOT NULL DEFAULT '0' COMMENT '机构id',
   `BARGAIN_MONEY` decimal(10,4) DEFAULT NULL COMMENT '目标成交金额',
   `UNIT_DIC` int(4) DEFAULT '0' COMMENT '1年份 2月份 3季度',
   `REMARK` varchar(512) DEFAULT NULL COMMENT '备注',
+  `IS_DELETED` int(4) NOT NULL DEFAULT '0' COMMENT '删除标志',
   `CREATOR_ID` int(4) NOT NULL DEFAULT '0' COMMENT '创建者ID',
   `CREATED_TIME` datetime NOT NULL COMMENT '创建时间',
   `MODIFIER_ID` int(4) NOT NULL DEFAULT '0' COMMENT '修改者ID',
@@ -618,7 +620,7 @@ CREATE TABLE `sm_audit_log` (
   KEY `INDEX_MODULE_NAME` (`MODULE_NAME`) USING BTREE,
   KEY `INDEX_TYPE` (`TYPE`),
   KEY `INDEX_CREATED_TIME` (`CREATED_TIME`)
-) ENGINE=InnoDB AUTO_INCREMENT=105 DEFAULT CHARSET=utf8 COMMENT='审计日志表';
+) ENGINE=InnoDB AUTO_INCREMENT=127 DEFAULT CHARSET=utf8 COMMENT='审计日志表';
 
 -- ----------------------------
 -- Table structure for sm_component
@@ -826,7 +828,7 @@ CREATE TABLE `sm_recyclebin` (
   KEY `INDEX_USER_ID` (`CREATOR_ID`),
   KEY `INDEX_MODULE_NAME` (`MODULE_NAME`) USING BTREE,
   KEY `INDEX_CREATED_TIME` (`CREATED_TIME`)
-) ENGINE=InnoDB AUTO_INCREMENT=9 DEFAULT CHARSET=utf8 COMMENT='回收站表';
+) ENGINE=InnoDB AUTO_INCREMENT=11 DEFAULT CHARSET=utf8 COMMENT='回收站表';
 
 -- ----------------------------
 -- Table structure for sm_role
@@ -1059,6 +1061,10 @@ CREATE TABLE `user_message` (
 -- ----------------------------
 -- Records 
 -- ----------------------------
+INSERT INTO `contract` VALUES ('5', '张小飞', '1335', null, '佛挡杀佛', '1', '1', '7010101', '87', '2014-07-31 00:00:00', '2014-07-24 00:00:00', '2014-07-31 00:00:00', ',', '1', '1', '2014-07-15 10:01:58', '1', '2014-07-15 13:45:51');
+INSERT INTO `contract` VALUES ('9', '管理员', '1235456', null, '', '2', '8', '7010101', '12', '2014-07-08 00:00:00', '2014-07-24 00:00:00', '2014-07-15 00:00:00', '', '0', '1', '2014-07-15 11:44:40', '1', '2014-07-15 11:44:40');
+INSERT INTO `contract` VALUES ('10', '32313213', '123131', null, '', '1', '8', '7010101', '12', '2014-07-16 00:00:00', '2014-07-24 00:00:00', '2014-07-16 00:00:00', '', '1', '1', '2014-07-15 11:47:47', '1', '2014-07-15 13:45:58');
+INSERT INTO `contract` VALUES ('11', '43245345', '4324242343242', null, '', '1', '1', '7010101', '1254', '2014-07-16 00:00:00', '2014-07-19 00:00:00', '2014-07-16 00:00:00', '', '0', '1', '2014-07-15 11:59:46', '1', '2014-07-15 17:25:03');
 INSERT INTO `customer` VALUES ('1', '3', 'admin', null, '4030201', null, null, '', '03166123701', '13909878908', '', '', '', '', '', '百会科技', '4030501', null, null, '', '', null, null, null, '', '', '', '', '', '', '', '', '', '0', '3', '2014-07-14 15:34:30', '3', '2014-07-14 15:34:06');
 INSERT INTO `customer` VALUES ('2', '3', 'a额问问', '4030101', '4030201', null, null, '', '03166123701', '13909878908', '', '', '', '', '', '百会科技', '4030501', null, null, '', '', null, null, null, '', '', '', '', '', '', '', '', '', '0', '3', '2014-07-14 15:37:52', '1', '2014-07-14 15:40:21');
 INSERT INTO `customer` VALUES ('3', '5', 'ad撒', '4030101', '4030201', null, null, '', '03166123701', '13909878908', '', '', '', '', '', '百会科技', '4030501', null, null, '', '', null, null, null, '', '', '', '', '', '', '', '', '', '0', '3', '2014-07-14 16:02:27', '1', '2014-07-14 16:17:34');
@@ -1070,6 +1076,7 @@ INSERT INTO `memoir` VALUES ('2', '11010102', '2', '1', '1', '联系纪要', '20
 INSERT INTO `notice` VALUES ('0001', '222', '222\n2\n2\n2\n2\ndd', '2014-07-01 11:26:00', '2014-07-31 00:17:00', '0', '1', '2014-07-14 15:58:39', '1', '2014-07-14 15:59:08');
 INSERT INTO `notice` VALUES ('0002', '让我', '热污染', '2014-07-14 00:00:00', '2014-07-29 05:00:00', '0', '1', '2014-07-14 16:32:51', '1', '2014-07-14 16:32:51');
 INSERT INTO `order` VALUES ('1', '2', '7', '140714DQYT001', '6010201', '6010102', '10000.0000', '10', '10', 'A+A*(b-A*b1-b2-b3)', '1', '1', '1', '2014-07-15 00:00:00', '', '0', '1', '2014-07-14 19:36:44', '1', '2014-07-14 19:36:44');
+INSERT INTO `order` VALUES ('2', '1', '2', '123456', '6010202', '6010101', '10.0000', '10', '10', '1*7', '3', '1', '1', '2014-07-09 00:00:00', '', '0', '1', '2014-07-15 09:58:55', '1', '2014-07-15 09:58:55');
 INSERT INTO `pro_city_area` VALUES ('0', ' 未知', null);
 INSERT INTO `pro_city_area` VALUES ('110000', '北京市', '0');
 INSERT INTO `pro_city_area` VALUES ('110100', '北京市', '110000');
@@ -4600,8 +4607,9 @@ INSERT INTO `qrtz_locks` VALUES ('JOB_ACCESS');
 INSERT INTO `qrtz_locks` VALUES ('MISFIRE_ACCESS');
 INSERT INTO `qrtz_locks` VALUES ('STATE_ACCESS');
 INSERT INTO `qrtz_locks` VALUES ('TRIGGER_ACCESS');
-INSERT INTO `report` VALUES ('6', '1', '不同性别用户每月注册量', '9', 'createdTime', '900010102', 'createdTime', '9000201', 'sex', '900019901', '9000302', '测试时间字典的三维报表', '1', '2014-07-14 11:05:57', '1', '2014-07-14 11:05:45', '0', '0');
-INSERT INTO `report` VALUES ('7', '2', '不同性别用户注册量', '9', 'sex', '900019901', 'id', '9000201', null, null, '9000301', '测试非日期类型统计', '1', '2014-07-14 14:15:44', '1', '2014-07-14 21:52:14', '0', '0');
+INSERT INTO `report` VALUES ('6', '1', '不同性别用户每月注册量', '9', 'createdTime', '900010102', 'createdTime', '9000201', 'sex', '900019901', '9000302', '测试时间字典的三维报表', '1', '2014-07-14 11:05:57', '1', '2014-07-15 17:19:17', '0', '0');
+INSERT INTO `report` VALUES ('7', '2', '不同性别用户注册量', '9', 'sex', '900019901', 'id', '9000205', null, null, '9000302', '测试非日期类型统计', '1', '2014-07-14 14:15:44', '1', '2014-07-15 17:21:44', '0', '0');
+INSERT INTO `report` VALUES ('8', '3', '统计名称', '10', 'name', '900019901', 'id', '9000201', null, null, '9000302', null, '1', '2014-07-15 17:10:53', '1', '2014-07-15 17:11:03', '0', '0');
 INSERT INTO `sm_audit_log` VALUES ('1', 'report', null, '不同性别用户每月注册量', '1', null, '1', '2014-07-14 00:00:00');
 INSERT INTO `sm_audit_log` VALUES ('2', 'lead', '3', 'admin', '1', null, '1', '2014-07-14 00:00:00');
 INSERT INTO `sm_audit_log` VALUES ('3', 'user', '3', 'manager', '1', null, '1', '2014-07-14 00:00:00');
@@ -4700,6 +4708,28 @@ INSERT INTO `sm_audit_log` VALUES ('101', 'user', '1', '管理员', '8', '重置
 INSERT INTO `sm_audit_log` VALUES ('102', 'user', '3', 'manager', '8', '重置密码', '1', '2014-07-14 20:16:27');
 INSERT INTO `sm_audit_log` VALUES ('103', 'user', '3', 'manager', '8', '重置密码', '1', '2014-07-14 20:16:33');
 INSERT INTO `sm_audit_log` VALUES ('104', 'report', '7', '不同性别用户注册量', '2', null, '1', '2014-07-14 21:52:14');
+INSERT INTO `sm_audit_log` VALUES ('105', 'order', '2', '123456', '1', null, '1', '2014-07-15 09:59:30');
+INSERT INTO `sm_audit_log` VALUES ('106', 'contract', '5', '1335', '4', null, '1', '2014-07-15 13:45:50');
+INSERT INTO `sm_audit_log` VALUES ('107', 'contract', '10', '123131', '4', null, '1', '2014-07-15 13:45:57');
+INSERT INTO `sm_audit_log` VALUES ('108', 'report', '7', '不同性别用户注册量', '2', null, '1', '2014-07-15 14:33:00');
+INSERT INTO `sm_audit_log` VALUES ('109', 'customer', null, '导出列表选中的数据', '6', '共导出0条数据', '1', '2014-07-15 15:15:13');
+INSERT INTO `sm_audit_log` VALUES ('110', 'contract', null, '导出列表选中的数据', '6', '共导出2条数据', '1', '2014-07-15 15:16:53');
+INSERT INTO `sm_audit_log` VALUES ('111', 'report', '6', '不同性别用户每月注册量', '2', null, '1', '2014-07-15 15:33:00');
+INSERT INTO `sm_audit_log` VALUES ('112', 'report', '7', '不同性别用户注册量', '2', null, '1', '2014-07-15 15:37:26');
+INSERT INTO `sm_audit_log` VALUES ('113', 'report', '7', '不同性别用户注册量', '2', null, '1', '2014-07-15 16:27:28');
+INSERT INTO `sm_audit_log` VALUES ('114', 'report', '7', '不同性别用户注册量', '2', null, '1', '2014-07-15 16:27:45');
+INSERT INTO `sm_audit_log` VALUES ('115', 'report', '7', '不同性别用户注册量', '2', null, '1', '2014-07-15 16:30:10');
+INSERT INTO `sm_audit_log` VALUES ('116', 'report', '7', '不同性别用户注册量', '2', null, '1', '2014-07-15 16:30:28');
+INSERT INTO `sm_audit_log` VALUES ('117', 'report', '7', '不同性别用户注册量', '2', null, '1', '2014-07-15 16:32:59');
+INSERT INTO `sm_audit_log` VALUES ('118', 'report', '7', '不同性别用户注册量', '2', null, '1', '2014-07-15 16:33:10');
+INSERT INTO `sm_audit_log` VALUES ('119', 'report', '8', '统计名称', '1', null, '1', '2014-07-15 17:11:03');
+INSERT INTO `sm_audit_log` VALUES ('120', 'report', '6', '不同性别用户每月注册量', '2', null, '1', '2014-07-15 17:19:17');
+INSERT INTO `sm_audit_log` VALUES ('121', 'contract', '11', '4324242343242', '2', null, '1', '2014-07-15 17:20:23');
+INSERT INTO `sm_audit_log` VALUES ('122', 'contract', '11', '4324242343242', '2', null, '1', '2014-07-15 17:21:10');
+INSERT INTO `sm_audit_log` VALUES ('123', 'report', '7', '不同性别用户注册量', '2', null, '1', '2014-07-15 17:21:44');
+INSERT INTO `sm_audit_log` VALUES ('124', 'contract', '11', '4324242343242', '2', null, '1', '2014-07-15 17:22:44');
+INSERT INTO `sm_audit_log` VALUES ('125', 'contract', '11', '4324242343242', '2', null, '1', '2014-07-15 17:22:55');
+INSERT INTO `sm_audit_log` VALUES ('126', 'contract', '11', '4324242343242', '2', null, '1', '2014-07-15 17:25:03');
 INSERT INTO `sm_component` VALUES ('1', '001', '省市区三级联动', '/common/pcas/getChildren.docomp', '请问士大夫', '1060101', '1', '1', '1', '2014-06-17 00:00:00', '1', '2014-06-19 14:57:12');
 INSERT INTO `sm_component` VALUES ('2', '003', '查询组件联系纪要', '/common/memoir/query.do', '查询组件联系纪要', '1060103', '0', '1', '1', '2014-06-19 00:00:00', '1', '2014-06-19 00:00:00');
 INSERT INTO `sm_component` VALUES ('3', '002', '新增联系纪要', '/common/memoir/add.docomp', '新增联系纪要', '1060103', '0', '1', '1', '2014-06-19 00:00:00', '1', '2014-06-19 00:00:00');
@@ -4751,6 +4781,7 @@ INSERT INTO `sm_dictionary` VALUES ('60101', '投资方式', '060101', null, '0'
 INSERT INTO `sm_dictionary` VALUES ('60102', '订单状态', '060102', null, '0', '0', null, '1', '订单状态', '0', '1', '1', '2014-07-01 10:55:02', '1', '2014-07-01 10:55:01');
 INSERT INTO `sm_dictionary` VALUES ('60103', '财务审核状态', '060103', null, '0', '0', null, '1', '财务审核状态', '0', '1', '1', '2014-06-23 18:38:02', '1', '2014-06-23 18:38:16');
 INSERT INTO `sm_dictionary` VALUES ('70101', '赎回方式', '070101', null, '0', '0', null, '1', '赎回方式', '0', '1', '1', '2014-07-14 19:20:02', '1', '2014-07-14 19:20:08');
+INSERT INTO `sm_dictionary` VALUES ('80101', '时间单位', '080101', null, '0', '0', '', '1', '时间单位', '0', '1', '1', '2014-07-15 15:14:10', '1', '2014-07-15 15:14:07');
 INSERT INTO `sm_dictionary` VALUES ('90001', '报表分组类型', '090001', null, '1', '0', 'report_group', '1', '', '0', '1', '1', '2014-06-06 13:32:39', '1', '2014-06-25 10:31:51');
 INSERT INTO `sm_dictionary` VALUES ('90002', '报表聚合类型', '090002', null, '1', '0', 'report_aggregate', '1', '', '0', '1', '1', '2014-06-06 13:32:39', '1', '2014-06-25 10:31:51');
 INSERT INTO `sm_dictionary` VALUES ('90003', '报表图表类型', '090003', null, '1', '0', 'report_chart', '1', '', '0', '1', '1', '2014-06-06 13:32:39', '1', '2014-06-25 10:31:51');
@@ -4821,6 +4852,9 @@ INSERT INTO `sm_dictionary` VALUES ('6010204', '审核通过', '06010204', '6010
 INSERT INTO `sm_dictionary` VALUES ('6010301', '未收款', '06010301', '60103', '0', '0', '订单状态', '1', '订单状态', '0', '1', '1', '2014-06-23 18:38:02', '1', '2014-06-23 18:38:16');
 INSERT INTO `sm_dictionary` VALUES ('6010302', '已收款', '06010302', '60103', '0', '0', '订单状态', '1', '订单状态', '0', '1', '1', '2014-06-23 18:38:02', '1', '2014-06-23 18:38:16');
 INSERT INTO `sm_dictionary` VALUES ('7010101', '到期赎回', '07010101', '70101', '0', '0', '到期赎回', '1', '到期赎回', '0', '1', '1', '2014-07-14 19:21:23', '1', '2014-07-14 19:21:28');
+INSERT INTO `sm_dictionary` VALUES ('8010101', '年度', '08010101', '80101', '1', '0', '时间单位', '1', '时间单位', '0', '1', '1', '2014-07-15 15:15:08', '1', '2014-07-15 15:15:04');
+INSERT INTO `sm_dictionary` VALUES ('8010102', '季度', '08010102', '80101', '1', '0', '时间单位', '1', '时间单位', '0', '1', '1', '2014-07-15 15:15:48', '1', '2014-07-15 15:15:44');
+INSERT INTO `sm_dictionary` VALUES ('8010103', '月', '08010103', '80101', '1', '0', '时间单位', '1', '时间单位', '0', '1', '1', '2014-07-15 15:16:27', '1', '2014-07-15 15:16:23');
 INSERT INTO `sm_dictionary` VALUES ('9000101', '日期', '09000101', '90001', '2', '0', 'report_group_time', '1', '', '0', '1', '1', '2014-06-06 13:32:39', '1', '2014-06-25 10:31:51');
 INSERT INTO `sm_dictionary` VALUES ('9000199', '其他', '09000199', '90001', '2', '0', 'report_group_else', '1', '', '0', '1', '1', '2014-06-06 13:32:39', '1', '2014-06-25 10:31:51');
 INSERT INTO `sm_dictionary` VALUES ('9000201', '总计', '09000201', '90002', '2', '0', 'report_aggregate', '1', '', '0', '1', '1', '2014-06-06 13:32:39', '1', '2014-06-25 10:31:51');
@@ -4840,8 +4874,10 @@ INSERT INTO `sm_dictionary` VALUES ('11010101', '供应商', '11010101', '110101
 INSERT INTO `sm_dictionary` VALUES ('11010102', '客户', '11010102', '110101', '0', '0', '模块类型', '1', '客户模块', '0', '1', '1', '2014-05-28 13:21:01', '1', '2014-05-28 13:20:54');
 INSERT INTO `sm_dictionary` VALUES ('11010103', '线索', '11010103', '110101', '0', '0', '模块类型', '1', '线索模块', '0', '1', '1', '2014-05-28 13:21:37', '1', '2014-05-28 13:21:30');
 INSERT INTO `sm_dictionary` VALUES ('11010104', '联系人', '11010104', '110101', '0', '0', '模块类型', '1', '联系人模块', '0', '1', '1', '2014-05-28 13:22:06', '1', '2014-05-28 13:21:59');
+INSERT INTO `sm_dictionary` VALUES ('11010105', '合同', '11010105', '110101', '0', '0', '模块类型', '1', '合同模块', '0', '1', '1', '2014-07-15 09:30:15', '1', '2014-07-15 09:30:25');
 INSERT INTO `sm_dictionary` VALUES ('11010201', '身份证', '11010201', '110102', '0', '0', '附件类型', '1', '身份证', '0', '1', '1', '2014-05-27 10:31:38', '1', '2014-05-27 10:32:31');
 INSERT INTO `sm_dictionary` VALUES ('11010202', '营业执照', '11010202', '110102', '0', '0', '附件类型', '1', '营业执照', '0', '1', '1', '2014-05-27 10:32:26', '1', '2014-05-27 10:32:24');
+INSERT INTO `sm_dictionary` VALUES ('11010203', '合同', '11010203', '110102', '0', '0', '附件类型', '1', '合同', '0', '1', '1', '2014-07-15 09:33:21', '1', '2014-07-15 09:33:29');
 INSERT INTO `sm_dictionary` VALUES ('11010206', '用户类型', '04', null, null, null, null, '1', '', '0', '1', '1', '2014-06-06 13:36:46', '1', '2014-06-06 13:37:12');
 INSERT INTO `sm_dictionary` VALUES ('11010207', '在岗状态', '05', null, null, null, null, '1', '', '0', '1', '1', '2014-06-06 13:37:12', '1', '2014-06-06 13:37:39');
 INSERT INTO `sm_dictionary` VALUES ('11010208', '产品类型', '06', null, null, null, null, '1', '', '0', '1', '1', '2014-06-09 16:24:46', '1', '2014-06-09 17:17:31');
@@ -4915,7 +4951,7 @@ INSERT INTO `sm_function` VALUES ('62', '18', '040303', '详情', '/customer/cus
 INSERT INTO `sm_function` VALUES ('63', '18', '040304', '编辑', '/customer/customer/modify.do', '', '0', '1060103', null, '1', '1', '2014-05-26 00:00:00', '1', '2014-07-11 17:39:15');
 INSERT INTO `sm_function` VALUES ('64', '18', '040305', '删除', '/customer/customer/delete.do', '', '0', '1060103', null, '1', '1', '2014-05-26 00:00:00', '1', '2014-07-11 17:39:17');
 INSERT INTO `sm_function` VALUES ('65', '18', '040306', '客户导出', '/customer/customer/export.do', '', '0', '1060103', '6', '1', '1', '2014-06-18 20:54:48', '1', '2014-07-11 17:39:19');
-INSERT INTO `sm_function` VALUES ('67', '18', '040307', '附件上传', '/customer/attachment/query.do', '', '0', '1060103', null, '1', '1', '2014-06-22 16:34:33', '1', '2014-07-11 17:39:21');
+INSERT INTO `sm_function` VALUES ('67', '18', '040307', '附件查询', '/customer/attachment/query.do', '', '0', '1060103', null, '1', '1', '2014-06-22 16:34:33', '1', '2014-07-15 15:23:06');
 INSERT INTO `sm_function` VALUES ('68', '18', '040308', '附件上传', '/customer/attachment/upload.do', '', '0', '1060103', null, '1', '1', '2014-06-22 16:35:39', '1', '2014-07-11 17:39:23');
 INSERT INTO `sm_function` VALUES ('69', '18', '040309', '附件预览', '/customer/attachment/view.comp', '', '0', '1060103', null, '1', '1', '2014-06-22 16:37:16', '1', '2014-07-11 17:39:28');
 INSERT INTO `sm_function` VALUES ('70', '18', '040310', '附件下载', '/customer/attachment/download.do', '', '0', '1060103', null, '1', '1', '2014-06-22 16:38:30', '1', '2014-07-11 17:39:52');
@@ -4959,11 +4995,11 @@ INSERT INTO `sm_function` VALUES ('117', '25', '070202', '新增', null, '', '0'
 INSERT INTO `sm_function` VALUES ('118', '25', '070203', '详情', null, '', '0', '1060103', null, '1', '1', '2014-05-26 00:00:00', '1', '2014-07-11 17:41:21');
 INSERT INTO `sm_function` VALUES ('119', '25', '070204', '编辑', null, '', '0', '1060103', null, '1', '1', '2014-05-26 00:00:00', '1', '2014-07-11 17:41:23');
 INSERT INTO `sm_function` VALUES ('120', '25', '070205', '删除', null, '', '0', '1060103', null, '1', '1', '2014-05-26 00:00:00', '1', '2014-07-11 17:41:25');
-INSERT INTO `sm_function` VALUES ('121', '26', '070101', '查询', null, '', '0', '1060103', null, '1', '1', '2014-05-26 00:00:00', '1', '2014-07-11 17:41:27');
-INSERT INTO `sm_function` VALUES ('122', '26', '070102', '新增', null, '', '0', '1060103', null, '1', '1', '2014-05-26 00:00:00', '1', '2014-07-11 17:41:29');
-INSERT INTO `sm_function` VALUES ('123', '26', '070103', '详情', null, '', '1', '1060103', null, '1', '1', '2014-05-26 00:00:00', '1', '2014-07-11 17:41:30');
-INSERT INTO `sm_function` VALUES ('124', '26', '070104', '编辑', null, '', '1', '1060103', null, '1', '1', '2014-05-26 00:00:00', '1', '2014-07-11 17:41:34');
-INSERT INTO `sm_function` VALUES ('125', '26', '070105', '删除', null, '', '1', '1060103', null, '1', '1', '2014-05-26 00:00:00', '1', '2014-07-11 17:41:37');
+INSERT INTO `sm_function` VALUES ('121', '26', '080101', '查询', '/sales/salesTarget/query.do', '', '0', '1060103', null, '1', '1', '2014-05-26 00:00:00', '1', '2014-07-15 13:35:10');
+INSERT INTO `sm_function` VALUES ('122', '26', '080102', '新增', '/sales/salesTarget/add.do', '', '0', '1060103', null, '1', '1', '2014-05-26 00:00:00', '1', '2014-07-15 13:35:17');
+INSERT INTO `sm_function` VALUES ('123', '26', '080103', '详情', '/sales/salesTarget/view.do', '', '1', '1060103', null, '1', '1', '2014-05-26 00:00:00', '1', '2014-07-15 13:35:23');
+INSERT INTO `sm_function` VALUES ('124', '26', '080104', '编辑', '/sales/salesTarget/modify.do', '', '1', '1060103', null, '1', '1', '2014-05-26 00:00:00', '1', '2014-07-15 13:35:29');
+INSERT INTO `sm_function` VALUES ('125', '26', '080105', '删除', '/sales/salesTarget/delete.do', '', '1', '1060103', null, '1', '1', '2014-05-26 00:00:00', '1', '2014-07-15 13:35:34');
 INSERT INTO `sm_function` VALUES ('126', '8', '090001', '查询', '/common/report/query.do', '', '0', '1060103', null, '1', '1', '2014-05-26 00:00:00', '1', '2014-07-14 10:07:16');
 INSERT INTO `sm_function` VALUES ('127', '8', '090002', '新增', '/common/report/add.do', '', '0', '1060103', null, '1', '1', '2014-05-26 00:00:00', '1', '2014-07-14 10:07:17');
 INSERT INTO `sm_function` VALUES ('128', '8', '090003', '查看', '/common/report/view.do', '', '0', '1060103', null, '1', '1', '2014-05-26 00:00:00', '1', '2014-07-14 10:07:17');
@@ -5048,6 +5084,12 @@ INSERT INTO `sm_function` VALUES ('206', '43', '140101', '详情', '/system/deve
 INSERT INTO `sm_function` VALUES ('207', '40', '024568', 'ceshi 1', '/service/doPost', '', '0', '1060101', null, '0', '1', '2014-07-02 13:18:41', '1', '2014-07-11 17:45:13');
 INSERT INTO `sm_function` VALUES ('208', '45', '1335', '详情', '/test/test/view.do', '', '0', '1060103', null, '0', '1', '2014-07-04 11:55:10', '1', '2014-07-11 17:45:15');
 INSERT INTO `sm_function` VALUES ('209', '16', '040114', '线索导入', '/common/imports/import.do', '', '0', '1060103', null, '1', '1', '2014-07-14 10:05:18', '1', '2014-07-14 10:48:19');
+INSERT INTO `sm_function` VALUES ('210', '24', '070106', '合同导出', '/order/contract/export.do', '', '0', '1060103', null, '1', '1', '2014-07-15 14:47:05', '1', '2014-07-15 14:47:11');
+INSERT INTO `sm_function` VALUES ('211', '24', '070107', '附件查询', '/contract/attachment/query.do', '', '0', '1060103', null, '1', '1', '2014-06-22 16:34:33', '1', '2014-07-15 15:35:29');
+INSERT INTO `sm_function` VALUES ('212', '24', '070108', '附件上传', '/contract/attachment/upload.do', '', '0', '1060103', null, '1', '1', '2014-06-22 16:35:39', '1', '2014-07-15 15:35:32');
+INSERT INTO `sm_function` VALUES ('213', '24', '070109', '附件预览', '/contract/attachment/view.comp', '', '0', '1060103', null, '1', '1', '2014-06-22 16:37:16', '1', '2014-07-15 15:35:36');
+INSERT INTO `sm_function` VALUES ('214', '24', '070110', '附件下载', '/contract/attachment/download.do', '', '0', '1060103', null, '1', '1', '2014-06-22 16:38:30', '1', '2014-07-15 15:35:39');
+INSERT INTO `sm_function` VALUES ('215', '24', '070111', '附件删除', '/contract/attachment/delete.do', '', '0', '1060103', null, '1', '1', '2014-06-27 09:39:53', '1', '2014-07-15 15:35:59');
 INSERT INTO `sm_menu` VALUES ('1', '工作台', '/workbanch/toViewPage.do', '1', '1', '33', '1', '1', '1', null, '20000', '', '0', '1', '1', '2014-05-26 00:00:00', '1', '2014-07-11 17:59:49');
 INSERT INTO `sm_menu` VALUES ('2', '市场营销', null, '1', '0', null, '1', '1', '0', null, '30000', '', '0', '1', '1', '2014-05-26 00:00:00', '1', '2014-07-14 09:16:02');
 INSERT INTO `sm_menu` VALUES ('3', '客户管理', null, '1', '0', null, '1', '1', '0', null, '40000', '', '0', '1', '1', '2014-05-26 00:00:00', '1', '2014-07-14 09:16:04');
@@ -5073,7 +5115,7 @@ INSERT INTO `sm_menu` VALUES ('22', '订单', '/order/order/toQueryPage.do', '1'
 INSERT INTO `sm_menu` VALUES ('23', '合同', '/order/contract/toQueryPage.do', '1', '0', '110', '1', '2', '1', '5', '60200', '', '0', '1', '1', '2014-05-26 00:00:00', '1', '2014-07-14 17:24:17');
 INSERT INTO `sm_menu` VALUES ('24', '财务审批', null, '1', '0', '110', '1', '2', '1', '6', '70100', '', '0', '1', '1', '2014-05-26 00:00:00', '1', '2014-07-14 09:22:21');
 INSERT INTO `sm_menu` VALUES ('25', '财务款项', null, '1', '0', '116', '1', '2', '1', '6', '70200', '', '0', '1', '1', '2014-05-26 00:00:00', '1', '2014-07-14 09:22:40');
-INSERT INTO `sm_menu` VALUES ('26', '销售目标', null, '1', '0', null, '1', '2', '1', '7', '80100', '', '0', '1', '1', '2014-05-26 00:00:00', '1', '2014-07-14 09:31:55');
+INSERT INTO `sm_menu` VALUES ('26', '销售目标', '/sales/salesTarget/toQueryPage.do', '1', '0', '121', '1', '2', '1', '7', '80100', '', '0', '1', '1', '2014-05-26 00:00:00', '1', '2014-07-15 13:35:46');
 INSERT INTO `sm_menu` VALUES ('27', '账号信息', '/system/user/toViewPage.do', '2', '0', '132', '1', '2', '1', '9', '100100', '', '0', '1', '1', '2014-05-26 00:00:00', '1', '2014-07-14 09:28:22');
 INSERT INTO `sm_menu` VALUES ('28', '更改密码', '/system/user/toModifyPasswordPage.do', '2', '0', '133', '1', '2', '1', '9', '100200', '', '0', '1', '1', '2014-05-26 00:00:00', '1', '2014-07-14 15:27:12');
 INSERT INTO `sm_menu` VALUES ('29', '自定义工作台', '/workbanch/toQueryPage.do', '2', '0', '134', '1', '2', '1', '9', '100300', '', '0', '1', '1', '2014-05-26 00:00:00', '1', '2014-07-14 09:31:05');
@@ -5168,6 +5210,8 @@ INSERT INTO `sm_org` VALUES ('31', '财务部', '财务部', '1030102', '1862062
 INSERT INTO `sm_org` VALUES ('32', '华兴泰达', '华兴泰达出资基金管理有限公司', '1030101', '12345678977', '', '', '', '', null, '2', '1', '1', '1250000', '0', '1', '1', '2014-07-10 16:01:18', '1', '2014-07-14 14:19:54');
 INSERT INTO `sm_org` VALUES ('33', '华兴泰瑞（北京）', '华兴泰瑞（北京）资产管理有限公司', '1030101', '12345678988', '', '', '', '', null, '2', '1', '1', '1260000', '0', '1', '1', '2014-07-10 16:03:48', '1', '2014-07-14 14:19:55');
 INSERT INTO `sm_recyclebin` VALUES ('8', 'user', '4', '12322', null, '1', '2014-07-14 18:35:06');
+INSERT INTO `sm_recyclebin` VALUES ('9', 'contract', '5', '1335', null, '1', '2014-07-15 13:45:50');
+INSERT INTO `sm_recyclebin` VALUES ('10', 'contract', '10', '123131', null, '1', '2014-07-15 13:45:57');
 INSERT INTO `sm_role` VALUES ('1', '1', '系统管理员', '1050101', '可进行系统所有操作', '0', '1', '1', '2014-06-19 13:49:31', '1', '2014-06-19 13:49:31');
 INSERT INTO `sm_role` VALUES ('2', '2', '系统数据管理员', '1050101', '可查看系统所有数据', '0', '1', '1', '2014-06-19 13:49:31', '1', '2014-06-19 13:49:31');
 INSERT INTO `sm_role` VALUES ('3', '3', '主管数据管理员', '1050101', '可查看所属组织及下级内数据', '0', '1', '1', '2014-06-19 13:49:31', '1', '2014-06-19 13:49:31');
@@ -5355,7 +5399,7 @@ INSERT INTO `sm_user_role` VALUES ('1', '1');
 INSERT INTO `sm_user_role` VALUES ('1', '3');
 INSERT INTO `sm_workbanch` VALUES ('1', '/customer/lead/query.do', '线索', 'lead', 'list', '49%', '', '1', '3', '1', '2014-07-09 11:12:13', '2014-07-14 18:28:01');
 INSERT INTO `sm_workbanch` VALUES ('2', '/project/supplier/query.do', '供应商', 'supplier', 'list', '49%', '', '1', '0', '0', '2014-07-09 11:12:21', '2014-07-14 18:27:53');
-INSERT INTO `sm_workbanch` VALUES ('3', '/customer/customer/query.do', '客户', 'customer', 'list', '99%', '', '1', '2', '0', '2014-07-09 15:40:13', '2014-07-14 18:27:53');
+INSERT INTO `sm_workbanch` VALUES ('3', '/customer/customer/query.do', '客户', 'customer', 'list', '99%', '', '1', '3', '0', '2014-07-09 15:40:13', '2014-07-15 10:35:39');
 INSERT INTO `sm_workbanch` VALUES ('4', '/customer/contact/query.do', '联系人', 'contact', 'list', '49%', '', '1', '1', '0', '2014-07-09 15:44:00', '2014-07-14 18:27:53');
 INSERT INTO `supplier` VALUES ('3', 'admin', '5010101', '', '1', '', '', '', '4030301', '', '140000', '140400', '140411', '', '', '', '1', '1', '2014-07-14 14:11:00', '1', '2014-07-14 14:12:57');
 INSERT INTO `supplier` VALUES ('4', 'admin', '5010101', '', '3', '', '', '', '4030302', '', '130000', '130300', '130302', '', '', '', '1', '1', '2014-07-14 14:17:17', '1', '2014-07-14 14:18:38');

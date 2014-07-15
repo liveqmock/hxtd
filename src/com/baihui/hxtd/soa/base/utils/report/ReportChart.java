@@ -4,18 +4,26 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * 报表图表转换数据
+ * 报表数据和报表图形转换数据
  *
  * @author xiayouxue
  * @date 2014/7/9
  */
 public class ReportChart {
 
+    /** 报表维度 */
+    public enum Dimensionality {
+        two, three
+    }
+
     /** 标题 */
     protected String title;
 
     /** 图表类型 */
-    protected GraphType graphType;
+    protected ChartType chartType;
+
+    /** 报表维度 */
+    protected Dimensionality dimensionality;
 
     /** x轴标题 */
     protected String xAxisTitle;
@@ -51,12 +59,20 @@ public class ReportChart {
         this.title = title;
     }
 
-    public GraphType getGraphType() {
-        return graphType;
+    public ChartType getChartType() {
+        return chartType;
     }
 
-    public void setGraphType(GraphType graphType) {
-        this.graphType = graphType;
+    public void setChartType(ChartType chartType) {
+        this.chartType = chartType;
+    }
+
+    public Dimensionality getDimensionality() {
+        return dimensionality;
+    }
+
+    public void setDimensionality(Dimensionality dimensionality) {
+        this.dimensionality = dimensionality;
     }
 
     public String getxAxisTitle() {

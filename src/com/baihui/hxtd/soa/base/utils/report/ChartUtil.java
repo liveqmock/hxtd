@@ -34,7 +34,7 @@ public class ChartUtil {
             Object[] row = (Object[]) sourceTable.get(i);
             Integer xIndex = xAxisIndexs.get(row[sourceXIndex]);
             if (xIndex == null) {
-                logger.warn("({},{})={},不在xAxises{}范围内，略过", i, sourceXIndex, row[sourceXIndex], xAxises);
+                logger.warn("({},{})={},不在xAxises{}范围内，略过", i, sourceXIndex, row[sourceXIndex], xAxisIndexs.keySet());
                 continue;
             }
             targetTable.set(xIndex, (Number) row[sourceYIndex]);
@@ -65,9 +65,9 @@ public class ChartUtil {
         }
 
         //存储z轴索引
-        Map<Object, Integer> zAxisIndexs = new HashMap<Object, Integer>();
+        Map<Object, Integer> yAxisIndexs = new HashMap<Object, Integer>();
         for (int i = 0; i < zAxises.size(); i++) {
-            zAxisIndexs.put(zAxises.get(i).getValue(), i);
+            yAxisIndexs.put(zAxises.get(i).getValue(), i);
         }
 
         //转换数据
@@ -76,15 +76,15 @@ public class ChartUtil {
             Object[] row = (Object[]) sourceTable.get(i);
             Integer xIndex = xAxisIndexs.get(row[sourceXIndex]);
             if (xIndex == null) {
-                logger.warn("({},{})={},不在xAxises{}范围内，略过", i, sourceXIndex, row[sourceXIndex], xAxises);
+                logger.warn("({},{})={},不在xAxises{}范围内，略过", i, sourceXIndex, row[sourceXIndex], xAxisIndexs.keySet());
                 continue;
             }
-            Integer zIndex = zAxisIndexs.get(row[sourceZIndex]);
-            if (zIndex == null) {
-                logger.warn("({},{})={},不在zAxises{}范围内，略过", i, sourceZIndex, row[sourceZIndex], zAxises);
+            Integer yIndex = yAxisIndexs.get(row[sourceZIndex]);
+            if (yIndex == null) {
+                logger.warn("({},{})={},不在zAxises{}范围内，略过", i, sourceZIndex, row[sourceZIndex], yAxisIndexs.keySet());
                 continue;
             }
-            targetTable.get(zIndex).set(xIndex, (Number) row[sourceYIndex]);
+            targetTable.get(yIndex).set(xIndex, (Number) row[sourceYIndex]);
         }
 
         return targetTable;

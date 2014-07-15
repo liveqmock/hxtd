@@ -35,7 +35,6 @@
             return JSON.stringify(window.chartGraph);
         }
 
-
         $(function () {
             jsUtil.twoOrMoreRestrictDate('.time', 'max', 0); //创建、修改时间
 
@@ -53,8 +52,8 @@
                 data = data.result;
                 chartTable.setTemplateElement("template-charttable").processTemplate(data.chartTable);
 
-                if (data.stringCharts) {
-                    window.chartGraph = $.parseJSON(data.stringCharts[0]);
+                if (data.chart) {
+                    window.chartGraph = $.parseJSON(data.chart);
                     swfobject.embedSWF("${ctx}/static/component/open-flash-chart-2/open-flash-chart.swf", "chart", "350", "200", "9.0.0");
                 }
             }});
@@ -62,7 +61,6 @@
     </script>
 </head>
 <body>
-<%--<div id="my_chart"></div>--%>
 <div class="listcontainer">
     <form action="${ctx}/common/report/generate.do" onsubmit="return false;">
         <input type="hidden" name="id" value="${report.id}">

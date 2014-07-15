@@ -2,14 +2,16 @@ package com.baihui.hxtd.soa.base.utils.report;
 
 /**
  * 轴信息
- * 包括描述和值
  *
  * @author xiayouxue
  * @date 2014/7/14
  */
 public class AxisInfo {
 
+    /** 描述 */
     private String desc;
+
+    /** 值 */
     private Object value;
 
     public AxisInfo() {

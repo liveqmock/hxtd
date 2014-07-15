@@ -28,7 +28,6 @@ import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springside.modules.persistence.SearchFilter;
-import ro.nextreports.jofc2.model.Chart;
 
 import javax.annotation.Resource;
 import java.lang.reflect.Field;
@@ -57,27 +56,24 @@ public class ReportService {
     private DictionaryDao dictionaryDao;
 
     @Resource
-    private ChartGenerate chartGraphGenerate;
+    private ChartGenerate chartGenerate;
 
 
-    /**
-     * 生成报表数据
-     * 1.每个月用户的注册量
-     */
+    /** 生成报表数据 */
     @Transactional(readOnly = true)
-    public ChartModel generate(Report report, Map<String, SearchFilter> filters) throws NoSuchFieldException {
+    public ChartModel generate(Report report, Collection<SearchFilter> filters) throws NoSuchFieldException {
 
         Module module = report.getModule();
         Field[] fields = module.getFields();
 
-        //创建Chart
+        //创建 Chart
         ChartModel chartModel = new ChartModel(report.getName());
 
-        //创建hql
+        //创建 hql
         ExtendItemSelectHql hql = new ExtendItemSelectHql(module.getEntityClazz().getSimpleName(), module.getName());
         Search.buildWhereHql(filters, hql, module.getEntityClazz());
 
-        //创建ChartOrginal
+        //创建 ReportData
         ReportData reportData = new ReportData();
         buildXAxis(report, hql, reportData);
         if (report.getzFieldName() != null) {
@@ -85,7 +81,7 @@ public class ReportService {
         }
         buildData(report, hql, reportData);
 
-        //创建ChartTable
+        //创建 ChartTable
         ChartTable chartTable = new ChartTable();
         chartTable.setTitle(report.getName());
         chartTable.setxAxisTitle(ModuleService.toModuleField(ModuleService.findFieldByName(fields, report.getxFieldName())).getDesc());
@@ -105,30 +101,32 @@ public class ReportService {
         }
         chartModel.setChartTable(chartTable);
 
-        //创建ChartGraph
+        //创建 ReportChart
         ReportChart reportChart = new ReportChart();
         reportChart.setTitle(chartTable.getTitle());
-        reportChart.setGraphType(GraphType.findByValue(report.getChart().getValue()));
+        reportChart.setChartType(ChartType.findByValue(report.getChart().getValue()));
+        reportChart.setDimensionality(report.getzFieldName() == null ? ReportChart.Dimensionality.two : ReportChart.Dimensionality.three);
         reportChart.setxAxisTitle(chartTable.getxAxisTitle());
         reportChart.setxAxisLabels(chartTable.getxAxisHeader());
         reportChart.setyAxisRange(reportData.getyAxisRange());
-        if (report.getzFieldName() != null) {
-            reportChart.setzAxisTitle(chartTable.getyAxisTitle());
-            reportChart.setzAxisLabels(chartTable.getyAxisHeader());
-            reportChart.setData(chartTable.getRows());
-        } else {
-            reportChart.setData(chartTable.getRows());
-        }
-        chartModel.setCharts(new ArrayList<Chart>());
-        if (report.getzFieldName() != null) {
-            chartModel.getCharts().add(chartGraphGenerate.generateThreeDimensionChart(reportChart));
-        } else {
-            chartModel.getCharts().add(chartGraphGenerate.generateTwoDimensionChart(reportChart));
-        }
+        reportChart.setzAxisTitle(chartTable.getyAxisTitle());
+        reportChart.setzAxisLabels(chartTable.getyAxisHeader());
+        reportChart.setData(chartTable.getRows());
+
+        chartModel.setChart(chartGenerate.generateChart(reportChart));
 
         logger.info("chartModule={}", chartModel);
 
         return chartModel;
+    }
+
+
+    /** 生成报表根据编码和查询条件 */
+    @Transactional(readOnly = true)
+    public ChartModel generate(String code, Collection<SearchFilter> filters) throws NoSuchFieldException {
+        Report report = getByCode(code);
+        report.setModule(ModuleService.findById(report.getModule().getId()));
+        return generate(report, filters);
     }
 
     /** 时间分组日历单位 */
@@ -150,6 +148,7 @@ public class ReportService {
         return dateValues(min, max, TIME_GROUP_CALENDAR_UNIT.get(groupType.getValue()));
     }
 
+    /** 时间格式 */
     private static Map<Integer, String[]> PATTERNS = new HashMap<Integer, String[]>();
 
     static {
@@ -190,6 +189,7 @@ public class ReportService {
         return dates;
     }
 
+    /** 构建字典轴 */
     private List<AxisInfo> buildDictionaryAxis(Module module, String fieldName, Dictionary groupType, ExtendItemSelectHql hql) {
         List<AxisInfo> axisInfos = new ArrayList<AxisInfo>();
         Field field = ModuleService.findFieldByName(module.getFields(), fieldName);
@@ -201,12 +201,13 @@ public class ReportService {
         return axisInfos;
     }
 
+    /** 构建数据轴 */
     private List buildDataAxis(Module module, String fieldName, Dictionary groupType, ExtendItemSelectHql hql) {
         List<AxisInfo> axisInfos = new ArrayList<AxisInfo>();
 
         String select = String.format("%s.%s", hql.getEntityAlias(), fieldName);
-        String from = String.format("distinct %s %s", hql.getEntityName(), hql.getEntityAlias());
-        SelectHql selectHql = new SelectHql(select, from);
+        String from = String.format("%s %s", hql.getEntityName(), hql.getEntityAlias());
+        SelectHql selectHql = new SelectHql("distinct " + select, from);
         selectHql.setWhere(hql.toWhere().getWhere());
         selectHql.setOrderBy(select);
         List rows = reportDao.find(selectHql.toString(), hql.getConditionValues());
@@ -271,7 +272,7 @@ public class ReportService {
     /**
      * 构建数据
      */
-    public void buildData(Report report, ExtendItemSelectHql hql, ReportData reportOrginal) {
+    public void buildData(Report report, ExtendItemSelectHql hql, ReportData reportData) {
         buildXAxisHql(report, hql);
         if (report.getzFieldName() != null) {
             buildZAxisHql(report, hql);
@@ -280,18 +281,19 @@ public class ReportService {
 
         List rows = reportDao.find(hql.toString(), hql.getConditionValues());
         logger.debug("rows={}", JsonMapper.nonEmptyMapper().toJson(rows));
-        reportOrginal.setRows(rows);
+        reportData.setRows(rows);
 
+        reportData.getyAxisRange().setMax(10);
         if (CollectionUtils.isNotEmpty(rows)) {
-            List<Long> numbers = new ArrayList<Long>();
+            List numbers = new ArrayList();
             int index = report.getzFieldName() == null ? 1 : 2;
             for (int i = 0; i < rows.size(); i++) {
                 Object[] row = (Object[]) rows.get(i);
-                numbers.add((Long) row[index]);
+                numbers.add(row[index]);
             }
             Collections.sort(numbers);
-            reportOrginal.getyAxisRange().setMin(numbers.get(0));
-            reportOrginal.getyAxisRange().setMax(numbers.get(numbers.size() - 1));
+            reportData.getyAxisRange().setMin((Number) numbers.get(0));
+            reportData.getyAxisRange().setMax((Number) numbers.get(numbers.size() - 1));
         }
     }
 
@@ -307,6 +309,7 @@ public class ReportService {
         TIME_GROUP_FUNCTION.put(DictionaryConstant.REPORT_GROUP_TIME_SECOND, "SECOND");
     }
 
+    /** 构建轴hql语句 */
     private void buildAxisHql(Field field, Dictionary groupType, ExtendItemSelectHql hql) {
         String fieldName = field.getName();
         if (groupType.getValue().startsWith(DictionaryConstant.REPORT_GROUP_TIME)) {
@@ -325,6 +328,7 @@ public class ReportService {
         }
     }
 
+    /** 构建x轴hql语句 */
     public void buildXAxisHql(Report report, ExtendItemSelectHql hql) {
         buildAxisHql(ModuleService.findFieldByName(report.getModule().getFields(), report.getxFieldName()), report.getxGroupType(), hql);
     }
@@ -340,12 +344,14 @@ public class ReportService {
         AGGREGATE_FUNCTION.put(DictionaryConstant.REPORT_AGGREGATE_MIN, "MIN");
     }
 
+    /** 构建y轴hql语句 */
     public void buildYAxisHql(Report report, ExtendItemSelectHql hql) {
         String function = AGGREGATE_FUNCTION.get(report.getyAggregateType().getValue());
         String ySelectItem = String.format("%s(%s.%s)", function, hql.getEntityAlias(), report.getyFieldName());
         hql.getSelectItems().add(ySelectItem);
     }
 
+    /** 构建z轴hql语句 */
     public void buildZAxisHql(Report report, ExtendItemSelectHql hql) {
         buildAxisHql(ModuleService.findFieldByName(report.getModule().getFields(), report.getzFieldName()), report.getzGroupType(), hql);
     }
@@ -421,9 +427,7 @@ public class ReportService {
         reportDao.save(report);
     }
 
-    /**
-     * 获取通过编号
-     */
+    /** 获取通过编号 */
     @Transactional(readOnly = true)
     public Report get(Long id) {
         DetachedCriteria criteria = DetachedCriteria.forClass(Report.class);
@@ -438,9 +442,21 @@ public class ReportService {
         return userDao.findUnique(criteria);
     }
 
-    /**
-     * 修改
-     */
+    /** 获取报表根据编号 */
+    @Transactional(readOnly = true)
+    public Report getByCode(String code) {
+        DetachedCriteria criteria = DetachedCriteria.forClass(Report.class);
+        criteria.setFetchMode("module", FetchMode.JOIN);
+        criteria.setFetchMode("chart", FetchMode.JOIN);
+        criteria.setFetchMode("xGroupType", FetchMode.JOIN);
+        criteria.setFetchMode("yAggregateType", FetchMode.JOIN);
+        criteria.setFetchMode("zGroupType", FetchMode.SELECT);
+        criteria.add(Restrictions.eq("code", code));
+        return userDao.findUnique(criteria);
+    }
+
+
+    /** 修改 */
     @Transactional
     public void modify(Report report, AuditLog auditLog) {
         logger.info("修改");

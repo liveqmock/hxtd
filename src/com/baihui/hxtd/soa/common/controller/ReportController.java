@@ -349,11 +349,7 @@ public class ReportController {
         Map<String, SearchFilter> filters = Search.parse(searchParams);
 
         //生成报表
-        ChartModel chart = reportService.generate(report, filters);
-        for (int i = 0; i < chart.getCharts().size(); i++) {
-            chart.getStringCharts().add(chart.getCharts().get(i).toString());
-        }
-        chart.setCharts(null);
+        ChartModel chart = reportService.generate(report, filters.values());
 
         JsonDto jsonDto = new JsonDto();
         BusinessResult<ChartModel> businessResult = new BusinessResult<ChartModel>(chart);

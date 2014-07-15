@@ -1,10 +1,5 @@
 package com.baihui.hxtd.soa.base.utils.report;
 
-import ro.nextreports.jofc2.model.Chart;
-
-import java.util.ArrayList;
-import java.util.List;
-
 /**
  * 报表模型数据
  * 显示在报表生成页面
@@ -14,10 +9,14 @@ import java.util.List;
  */
 public class ChartModel {
 
+    /** 标题 */
     private String title;
+
+    /** 表格 */
     private ChartTable chartTable;
-    private List<Chart> charts;
-    private List<String> stringCharts = new ArrayList<String>();
+
+    /** 报表 */
+    private String chart;
 
     public ChartModel() {
     }
@@ -47,19 +46,11 @@ public class ChartModel {
         this.chartTable = chartTable;
     }
 
-    public List<Chart> getCharts() {
-        return charts;
+    public String getChart() {
+        return chart;
     }
 
-    public void setCharts(List<Chart> charts) {
-        this.charts = charts;
-    }
-
-    public List<String> getStringCharts() {
-        return stringCharts;
-    }
-
-    public void setStringCharts(List<String> stringCharts) {
-        this.stringCharts = stringCharts;
+    public void setChart(String chart) {
+        this.chart = chart;
     }
 }

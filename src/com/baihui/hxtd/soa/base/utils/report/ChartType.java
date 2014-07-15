@@ -5,7 +5,7 @@ import com.baihui.hxtd.soa.system.DictionaryConstant;
 /**
  * 图表类型
  */
-public enum GraphType {
+public enum ChartType {
 
     pie(DictionaryConstant.REPORT_CHART_PIE),
     bar(DictionaryConstant.REPORT_CHART_BAR),
@@ -13,19 +13,19 @@ public enum GraphType {
 
     private String dictionary;
 
-    GraphType(String dictionary) {
+    ChartType(String dictionary) {
         this.dictionary = dictionary;
     }
 
     /**
      * 获取图表类型
      */
-    public static GraphType findByValue(String value) {
-        GraphType[] values = GraphType.values();
+    public static ChartType findByValue(String value) {
+        ChartType[] values = ChartType.values();
         for (int i = 0; i < values.length; i++) {
-            GraphType graphType = values[i];
-            if (graphType.getDictionary().equals(value)) {
-                return graphType;
+            ChartType chartType = values[i];
+            if (chartType.getDictionary().equals(value)) {
+                return chartType;
             }
         }
         return null;

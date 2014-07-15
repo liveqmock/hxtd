@@ -426,8 +426,13 @@ public class Search {
      * 3.拼接查询项
      */
     public static void buildWhereHql(Map<String, SearchFilter> filters, ExtendItemSelectHql hql, Class clazz) throws NoSuchFieldException {
+        buildWhereHql(filters.values(), hql, clazz);
+    }
+
+    /** 构建动态查询hql */
+    public static void buildWhereHql(Collection<SearchFilter> filters, ExtendItemSelectHql hql, Class clazz) throws NoSuchFieldException {
         Set<String> aliasNames = new HashSet<String>();
-        for (SearchFilter filter : filters.values()) {
+        for (SearchFilter filter : filters) {
 
             Class fieldBelongClass = clazz;
             String fieldBelongClassAliasName = StringUtils.uncapitalize(clazz.getSimpleName());

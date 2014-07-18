@@ -74,7 +74,7 @@ public class AttachmentController {
 	@RequestMapping(value="/{module}/attachment/query.do",produces = "text/text;charset=UTF-8")
 	public String query(@PathVariable String module,Long id){
 		Dictionary dict = dictionaryService.getByValue(moduleMap.get(module));
-		List<Attachment> list = attachmentService.query(id, dict.getId());
+		List<Attachment> list = attachmentService.query(dict.getId(),id);
 		ListModel<Attachment> model = new ListModel<Attachment>();
 		model.setList(list);
 		JsonDto json = new JsonDto();
@@ -103,7 +103,7 @@ public class AttachmentController {
 	@RequestMapping(value="/{module}/attachment/upload.do",produces = "text/text;charset=UTF-8")
 	public String upload(@PathVariable String module,@ModelAttribute(Constant.VS_USER_ID) Long userId,
 								String data,MultipartHttpServletRequest request) throws IOException{
-		Dictionary type = dictionaryService.getByValue(moduleMap.get(module));
+		Dictionary moduleD = dictionaryService.getByValue(moduleMap.get(module));
 		String[] datas = data.split(",");
 		Dictionary dict = null;
 		if(datas.length==2){
@@ -122,9 +122,9 @@ public class AttachmentController {
             	continue;
             }
             att = new Attachment();
-    		att.setType(type);
-    		att.setModuleId(Long.valueOf(datas[0]));
-    		att.setDict(dict);
+    		att.setModule(moduleD);
+    		att.setRecordId(Long.valueOf(datas[0]));
+    		att.setType(dict);
     		att.setName(file.getOriginalFilename());
             names = file.getOriginalFilename().split("\\.");
             fName = uploadpath+randomFilename()+"."+names[names.length-1];

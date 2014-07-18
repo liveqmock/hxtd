@@ -31,6 +31,7 @@ import com.baihui.hxtd.soa.base.Constant;
 import com.baihui.hxtd.soa.base.orm.hibernate.HibernatePage;
 import com.baihui.hxtd.soa.base.utils.ImportExport;
 import com.baihui.hxtd.soa.base.utils.Search;
+import com.baihui.hxtd.soa.base.utils.mapper.HibernateAwareObjectMapper;
 import com.baihui.hxtd.soa.common.controller.CommonController;
 import com.baihui.hxtd.soa.customer.entity.Customer;
 import com.baihui.hxtd.soa.customer.service.CustomerService;
@@ -42,6 +43,8 @@ import com.baihui.hxtd.soa.system.service.DictionaryService;
 import com.baihui.hxtd.soa.util.EnumModule;
 import com.baihui.hxtd.soa.util.EnumOperationType;
 import com.baihui.hxtd.soa.util.JsonDto;
+import com.fasterxml.jackson.core.JsonGenerationException;
+import com.fasterxml.jackson.databind.JsonMappingException;
 
 /**
  * 客户控制器
@@ -76,10 +79,13 @@ public class CustomerController extends CommonController<Customer>{
 	 * @param request
 	 * @return
 	 * @throws NoSuchFieldException
+	 * @throws IOException 
+	 * @throws JsonMappingException 
+	 * @throws JsonGenerationException 
 	 */
 	@ResponseBody
 	@RequestMapping(value = "/query.do", produces = "text/text;charset=UTF-8")
-	public String query(HttpServletRequest request, HibernatePage<Customer> page, ModelMap model, PrintWriter out) throws NoSuchFieldException {
+	public void query(HttpServletRequest request, HibernatePage<Customer> page, ModelMap model, PrintWriter out) throws NoSuchFieldException, JsonGenerationException, JsonMappingException, IOException {
 		logger.info("CustomerController.query查询客户列表");
 		Map<String, Object> searchParams = Servlets.getParametersStartingWith(
 				request, "search_");
@@ -91,7 +97,7 @@ public class CustomerController extends CommonController<Customer>{
 		page = customerService.findPage(searchParams, page,dataShift);
 		JsonDto json = new JsonDto();
 		json.setResult(page);
-		return json.toString();
+		HibernateAwareObjectMapper.DEFAULT.writeValue(out, json);
 	}
 
 	/**
@@ -103,12 +109,10 @@ public class CustomerController extends CommonController<Customer>{
 	public String toQueryPage(Model  model) {
 		logger.info("CustomerController.toQueryPage跳转客户列表页");
 		List<Dictionary> dict = dictionaryService.findChildren("040301");
-		//HibernatePage<Customer> page = new HibernatePage<Customer>(pageNumber, pageSize);
 		StringBuffer sb = new StringBuffer("[");
 		for(Dictionary d:dict){
 			sb.append("{");
 			sb.append("id:"+d.getId()+",");
-			//sb.append("pid:"+d.getParent().getId()+",");
 			sb.append("name:'"+d.getKey()+"',");
 			sb.append("open:false");
 			sb.append("},");
@@ -252,11 +256,11 @@ public class CustomerController extends CommonController<Customer>{
 			auditLogArr[i] = new AuditLog(EnumModule.CUSTOMER.getModuleName(), 
 					id[i], customerService.getNameById(id[i]), EnumOperationType.DELETE.getOperationType(), user);
 		}
-		boolean flag=customerService.delete(user, id, auditLogArr);
-		if(flag){
+		String flag=customerService.delete(user, id, auditLogArr);
+		if("".equals(flag)){
 			return JsonDto.delete(id).toString();
 		}else{
-			return new JsonDto("被删除数据与联系人有关联，无法删除!").toString(); 
+			return new JsonDto("被删除数据与"+flag+"有关联，无法删除!").toString(); 
 		}
 	}
 	

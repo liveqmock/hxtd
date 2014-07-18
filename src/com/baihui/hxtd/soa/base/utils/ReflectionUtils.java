@@ -309,4 +309,14 @@ public class ReflectionUtils {
             throw new RuntimeException(String.format("获取层级字段%s异常", fieldName), e);
         }
     }
+
+    /** 获取实体类字段类型 */
+    public static Class getEntityFieldType(Field field) {
+        Class<?> fieldType = field.getType();
+        if (fieldType.isAssignableFrom(Collection.class)) {
+            ParameterizedType pt = (ParameterizedType) field.getGenericType();
+            fieldType = (Class) pt.getActualTypeArguments()[0];
+        }
+        return fieldType;
+    }
 }

@@ -1,6 +1,7 @@
 package com.baihui.hxtd.soa.common.controller;
 
 import com.baihui.hxtd.soa.base.Constant;
+import com.baihui.hxtd.soa.base.FieldInfoParser;
 import com.baihui.hxtd.soa.base.InitApplicationConstant;
 import com.baihui.hxtd.soa.base.orm.hibernate.HibernatePage;
 import com.baihui.hxtd.soa.base.utils.ReflectionUtils;
@@ -10,20 +11,14 @@ import com.baihui.hxtd.soa.base.utils.report.ChartModel;
 import com.baihui.hxtd.soa.common.entity.Module;
 import com.baihui.hxtd.soa.common.entity.ModuleField;
 import com.baihui.hxtd.soa.common.entity.Report;
-import com.baihui.hxtd.soa.common.service.CommonService;
-import com.baihui.hxtd.soa.common.service.ModuleService;
-import com.baihui.hxtd.soa.common.service.ModuleTypeService;
-import com.baihui.hxtd.soa.common.service.ReportService;
+import com.baihui.hxtd.soa.common.service.*;
 import com.baihui.hxtd.soa.system.DictionaryConstant;
 import com.baihui.hxtd.soa.system.entity.AuditLog;
 import com.baihui.hxtd.soa.system.entity.Dictionary;
 import com.baihui.hxtd.soa.system.entity.User;
 import com.baihui.hxtd.soa.system.service.DataShift;
 import com.baihui.hxtd.soa.system.service.DictionaryService;
-import com.baihui.hxtd.soa.util.BusinessResult;
-import com.baihui.hxtd.soa.util.EnumModule;
-import com.baihui.hxtd.soa.util.EnumOperationType;
-import com.baihui.hxtd.soa.util.JsonDto;
+import com.baihui.hxtd.soa.util.*;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import org.apache.commons.lang3.ArrayUtils;
 import org.apache.commons.lang3.StringUtils;
@@ -82,7 +77,7 @@ public class ReportController {
         List<Long> moduleIds = moduleTypeService.findModuleIdByTypeId(moduleTypeId);
         List<Module> modules = ReflectionUtils.findNameValueMatched(InitApplicationConstant.MODULES, "id", moduleIds);
         modelMap.addAttribute("modules", modules);
-        modelMap.addAttribute("charts", dictionaryService.findChildren(DictionaryConstant.REPORT_CHART));
+        modelMap.addAttribute("types", dictionaryService.findChildren(DictionaryConstant.REPORT_CHART));
 
         return "/common/report/list";
     }
@@ -101,7 +96,8 @@ public class ReportController {
         logger.info("查询分页列表信息");
         DataShift dataShift = (DataShift) modelMap.get(Constant.VS_DATASHIFT);
         page = reportService.findPage(searchParams, page, dataShift.renameUserFieldName("creator"));
-        logger.debug("列表信息数目“{}”", page.getResult().size());
+        List<Report> result = reportService.nameToDesc(page.getResult());
+        logger.debug("列表信息数目“{}”", result.size());
 
         logger.info("转换为TDO格式");
         JsonDto jsonDto = new JsonDto();
@@ -159,8 +155,8 @@ public class ReportController {
         logger.info("查找分组类型通过模块主键编号和字段名称");
         logger.debug("模块ID=“{}”，字段名称=“{}”", moduleId, fieldName);
 
-        Field[] fields = moduleService.findById(moduleId).getFields();
-        Class type = moduleService.getFieldType(moduleService.findFieldByName(fields, fieldName));
+        Field[] fields = InitApplicationConstant.findModuleById(moduleId).getFields();
+        Class type = ReflectionUtils.getEntityFieldType(ModuleUtil.findFieldByName(fields, fieldName));
         List<Dictionary> groupTypes = reportService.findGroupType(type);
 
         JsonDto jsonDto = new JsonDto();
@@ -199,6 +195,7 @@ public class ReportController {
         logger.info("转至查看页面");
 
         Report report = reportService.get(id);
+        report = reportService.nameToDesc(report);
         modelMap.addAttribute("report", report);
 
         logger.info("存储表单初默认值");
@@ -219,14 +216,14 @@ public class ReportController {
         Report report = reportService.get(id);
         modelMap.addAttribute("report", report);
         modelMap.addAttribute("fieldModules", moduleService.findModuleAndAssociation(report.getModule().getId()));
-        Field[] fields = moduleService.findById(report.getModule().getId()).getFields();
+        Field[] fields = InitApplicationConstant.findModuleById(report.getModule().getId()).getFields();
         if (StringUtils.isNotBlank(report.getxFieldName())) {
-            Class type = moduleService.getFieldType(moduleService.findFieldByName(fields, report.getxFieldName()));
+            Class type = ReflectionUtils.getEntityFieldType(ModuleUtil.findFieldByName(fields, report.getxFieldName()));
             modelMap.addAttribute("xGroupTypes", reportService.findGroupType(type));
         }
 
         if (StringUtils.isNotBlank(report.getzFieldName())) {
-            Class type = moduleService.getFieldType(moduleService.findFieldByName(fields, report.getzFieldName()));
+            Class type = ReflectionUtils.getEntityFieldType(ModuleUtil.findFieldByName(fields, report.getzFieldName()));
             modelMap.addAttribute("zGroupTypes", reportService.findGroupType(type));
         }
 
@@ -289,9 +286,7 @@ public class ReportController {
         //查询并存储查询条件
         //所属模块时间类型字段
         modelMap.addAttribute("moduleFields", findModuleFields(report));
-
-        SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
-        modelMap.addAttribute("time", format.format(new Date()));
+        modelMap.addAttribute("timeTypes", CommonCalendar.generateDateRange());
 
         return "/common/report/report";
     }
@@ -304,24 +299,24 @@ public class ReportController {
         Field[] fields = sourceModule.getFields();
 
         //x轴字段
-        Field xAxisField = ModuleService.findFieldByName(fields, report.getxFieldName());
-        if (ModuleService.getFieldType(xAxisField).equals(Date.class)) {
-            moduleFields.add(moduleService.toModuleField(xAxisField));
+        Field xAxisField = ModuleUtil.findFieldByName(fields, report.getxFieldName());
+        if (ReflectionUtils.getEntityFieldType(xAxisField).equals(Date.class)) {
+            moduleFields.add(FieldInfoParser.toModuleField(xAxisField));
             return moduleFields;
         }
 
         //z轴字段
         if (report.getzFieldName() != null) {
-            Field zAxisField = ModuleService.findFieldByName(fields, report.getxFieldName());
-            if (ModuleService.getFieldType(zAxisField).equals(Date.class)) {
-                moduleFields.add(moduleService.toModuleField(zAxisField));
+            Field zAxisField = ModuleUtil.findFieldByName(fields, report.getxFieldName());
+            if (ReflectionUtils.getEntityFieldType(zAxisField).equals(Date.class)) {
+                moduleFields.add(FieldInfoParser.toModuleField(zAxisField));
                 return moduleFields;
             }
         }
 
         //所有时间类型字段
         List<Field> dateTypeFields = ReflectionUtils.findNameValueMatcheds(Arrays.asList(fields), "type", Date.class);
-        moduleFields.addAll(moduleService.toModuleField(dateTypeFields.toArray(new Field[]{})));
+        moduleFields.addAll(FieldInfoParser.toModuleField(dateTypeFields.toArray(new Field[]{})));
 
         return moduleFields;
     }
@@ -338,7 +333,7 @@ public class ReportController {
 
         //获取report
         Report report = reportService.get(id);
-        Module module = moduleService.findById(report.getModule().getId());
+        Module module = InitApplicationConstant.findModuleById(report.getModule().getId());
         report.setModule(module);
 
         //获取查询条件
@@ -361,4 +356,30 @@ public class ReportController {
     }
 
 
+    
+    /**
+     * 转至生成报表页面
+     */
+    @ResponseBody
+    @RequestMapping(value="/reportWorkbanch.comp" )
+    public String generateWorkbanch(Long id, HttpServletRequest request) throws NoSuchFieldException {
+        logger.info("生成报表");
+        logger.debug("报表主键编号={}", id);
+        //获取report
+      //获取report
+        Report report = reportService.get(id);
+        Module module = InitApplicationConstant.findModuleById(report.getModule().getId());
+        report.setModule(module);
+
+        //获取查询条件
+        Map<String, Object> searchParams = Servlets.getParametersStartingWith(request, "search_");
+        Search.clearBlankValue(searchParams);
+        List<Field> dateTypeFields = ReflectionUtils.findNameValueMatcheds(Arrays.asList(module.getFields()), "type", Date.class);
+        Search.toRangeDate(searchParams, ReflectionUtils.invokeGetterMethod(dateTypeFields, "name").toArray(new String[]{}));
+        Map<String, SearchFilter> filters = Search.parse(searchParams);
+
+        //生成报表
+        ChartModel chart = reportService.generate(report, filters.values());
+        return chart.getChart();
+    }
 }

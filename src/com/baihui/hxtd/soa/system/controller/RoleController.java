@@ -206,8 +206,7 @@ public class RoleController {
         //修改用户为当前用户
         role.setModifier(user);
 
-        AuditLog auditLog = new AuditLog(EnumModule.ROLE.getModuleName(),
-                role.getId(), role.getName(), EnumOperationType.MODIFY.getOperationType(), user, "角色修改");
+        AuditLog auditLog = new AuditLog(EnumModule.ROLE.getModuleName(), role.getId(), role.getName(), EnumOperationType.MODIFY.getOperationType(), user, "角色修改");
         roleService.modify(role, auditLog);
 
         return JsonDto.modify(role.getId()).toString();

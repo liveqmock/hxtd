@@ -129,7 +129,7 @@
                     </li>
                     <li>
                         <c:if test="${VS_HAS_FUNCTIONS.contractAdd}">
-                            <a href="javascript:;">新增合同</a>
+                            <a href="${ctx}/order/contract/toAddPage.do">新增合同</a>
                         </c:if>
                     </li>
                 </ul>

@@ -50,6 +50,10 @@
                 $("[name=hibernatePageNo]").val(1);
             }
             });
+            $("#orgdetail").click(function(){
+            	var remark=$("#remark").val();
+            	$(".remar").html(remark);
+            })
         });
     </script>
 </head>
@@ -97,8 +101,8 @@
         <table class="fl mt5 w">
             <tr class="header">
                 <td class="f14" align="right" width="6%">真实姓名：</td>
-                <td class="f14" align="right" width="6%">用户名：</td>
                 <td class="f14" align="left" width="16%"><input type="text" name="search_LIKE_name" value="${name}" class="text_input1"/></td>
+                <td class="f14" align="right" width="6%">用户名：</td>
                 <td class="f14" align="left" width="16%"><input type="text" name="search_LIKE_realName" value="${realName}" class="text_input1"/></td>
                 <td class="f14" align="right" width="6%">启用：</td>
                 <td class="f14" align="left" width="16%">
@@ -236,7 +240,7 @@
                     <li><a href="javascript:void(0)" uri="${ctx}/system/organization/delete.do" class="block c_white lh25 deletesome mr10"><b class="allbtn_l block fl"></b><b class="allbtn_r pr13 block fl w_auto f14">删&nbsp;&nbsp;除</b></a></li>
                 </c:if>
                 <c:if test="${VS_HAS_FUNCTIONS.organizationAdd}">
-                    <li><a href="${ctx}/system/organization/toAddPage.do" class="block c_white lh25 add mr10"><b class="allbtn_l block fl"></b><b class="allbtn_r pr13 block fl w_auto f14">新&nbsp;&nbsp;增</b></a></li>
+                    <li><a href="${ctx}/system/organization/toAddPage.do" class="block c_white lh25 addorg mr10"><b class="allbtn_l block fl"></b><b class="allbtn_r pr13 block fl w_auto f14">新&nbsp;&nbsp;增</b></a></li>
                 </c:if>
                 <c:if test="${VS_HAS_FUNCTIONS.organizationQuery}">
                     <li><a href="javascript:void(0)" class="block c_white lh25 mr10 refresh"><b class="allbtn_l block fl"></b><b class="allbtn_r pr13 block fl w_auto f14">刷&nbsp;&nbsp;新</b> </a></li>
@@ -355,17 +359,17 @@
                     <td align="right" width="15%">网址：</td>
                     <td align="left">{$T.row.webSite}</td>
                     <td align="right" width="15%"></td>
-                    <td align="left"></td>
+                    <td align="left"><input type="hidden" id="remark" value="{$T.row.remark}"></td>
                 </tr>
                 {#/for}
             </textarea>
         </table>
         <h1 class="f14 fbnone ml40 pt10">详细信息</h1>
-        <table class="cb id_table3 w95b bg_c_white margin0 mt10 orgdetail" forform="form" formaction="${ctx}/system/organization/query.do" forpagination="#tabs-orgdetail .pagination">
+        <table class="cb id_table3 w95b bg_c_white margin0 mt10">
                 <tr>
                     <td align="right" width="15%" valign="top">备注：</td>
                     <td align="left" width="85%" valign="top">
-                        <div class="w85b"></div>
+                        <div class="w85b remar"></div>
                     </td>
                 </tr>
         </table>

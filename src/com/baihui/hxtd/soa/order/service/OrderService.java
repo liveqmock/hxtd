@@ -17,6 +17,7 @@ import org.springside.modules.persistence.SearchFilter;
 
 import com.baihui.hxtd.soa.base.orm.hibernate.HibernatePage;
 import com.baihui.hxtd.soa.base.utils.Search;
+import com.baihui.hxtd.soa.order.dao.ContractDao;
 import com.baihui.hxtd.soa.order.dao.OrderDao;
 import com.baihui.hxtd.soa.order.entity.Order;
 import com.baihui.hxtd.soa.system.dao.UserDao;
@@ -45,7 +46,15 @@ public class OrderService {
 	@Resource
 	private UserDao userDao;
 	
-	@SuppressWarnings("rawtypes")
+	@Resource
+	private ContractDao contractDao;
+	/*@Resource
+	private WFNodeService wfNodeService;
+	
+	@Resource
+	private WFTaskService wfTaskService;*/
+	
+	@SuppressWarnings("unchecked")
 	private DetachedCriteria biuldQuery(Map<String, Object> searchParams,DataShift dataShift,Class entityClass) throws NoSuchFieldException{
 		DetachedCriteria criteria = DetachedCriteria.forClass(entityClass);
 		criteria.setFetchMode("product", FetchMode.JOIN);
@@ -62,7 +71,6 @@ public class OrderService {
 		Search.buildCriteria(filters, criteria, entityClass);
 		return criteria;
 	}
-	
 	
 	/**
 	 * 分页查找
@@ -84,7 +92,6 @@ public class OrderService {
 		return orderDao.find(criteria, 3000);
 	}
 	
-	
 	public Order get(Long id) {
 		String hql = " select ord from Order ord "
 					+ " left join fetch ord.status "
@@ -98,13 +105,22 @@ public class OrderService {
 		return orderDao.findUnique(hql, id);
 	}
 	
-	
-	
 	public void add(Order order, AuditLog auditLog){
 		Date now = orderDao.getDBNow();
 		order.setCreatedTime(now);
 		order.setModifiedTime(now);
 		orderDao.save(order);
+		
+		/************新增订单审批任务***************/
+		/*List<WFNode> nodeLst = wfNodeService.findByModuleId("a00");
+		List<WFTask> taskLst;
+		for(WFNode node : nodeLst){
+			WFTask task = new WFTask();
+			
+		}*/
+		//todo: lihua
+		
+		
 		auditLog.setRecordId(order.getId());
 	}
 	
@@ -115,9 +131,32 @@ public class OrderService {
 		orderDao.save(order);
 	}
 	
-	
-	
 	public void delete( Long[] ids,AuditLog[] auditLogArr){
 		orderDao.delete(ids);
+	}
+
+	/**
+	 * 查询没有被合同关联的订单
+	 * @author huizijing
+	 * @param searchParams
+	 * @param dataShift
+	 * @param page
+	 * @return
+	 * @throws NoSuchFieldException
+	 */
+	public HibernatePage<Order> findListPage(Map<String, Object> searchParams,
+			DataShift dataShift, HibernatePage<Order> page) throws NoSuchFieldException {
+		searchParams.put("EQ_isDeleted", false);
+		DetachedCriteria criteria = biuldQuery(searchParams,dataShift,Order.class);
+		page=orderDao.findPage(page, criteria);
+		List<Order> orders=page.getResult();
+		for(int i=0;i<orders.size();i++){
+			Long[] id={orders.get(i).getId()};
+			if(contractDao.getCount(id,"order")>0){
+				orders.remove(i);
+			}
+		}
+		page.setResult(orders);
+		return page;
 	}
 }

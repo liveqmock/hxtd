@@ -11,7 +11,10 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.SessionAttributes;
 
 import com.baihui.hxtd.soa.base.Constant;
+import com.baihui.hxtd.soa.common.entity.Report;
+import com.baihui.hxtd.soa.common.service.ReportService;
 import com.baihui.hxtd.soa.system.entity.Workbanch;
+import com.baihui.hxtd.soa.system.service.DataShift;
 import com.baihui.hxtd.soa.system.service.WorkbanchService;
 import com.baihui.hxtd.soa.util.BusinessResult;
 import com.baihui.hxtd.soa.util.JsonDto;
@@ -22,6 +25,8 @@ import com.baihui.hxtd.soa.util.JsonDto;
 public class WorkbanchController {
 	@Resource
 	private WorkbanchService workbanchService;
+	@Resource
+	private ReportService reportService;
 
     @RequestMapping(value = "/toViewPage.do")
     public String workbanchIndex(ModelMap model) {
@@ -30,8 +35,9 @@ public class WorkbanchController {
     	return "/system/workbanch/index";
     }
     @RequestMapping(value = "/add.comp")
-    public String toAddPage(ModelMap model) {
-    	
+    public String toAddPage(ModelMap model) throws NoSuchFieldException {
+    	List<Report> list = reportService.findAllReport((DataShift)model.get(Constant.VS_DATASHIFT));
+    	model.addAttribute("reports",list);
     	return "/system/workbanch/edit";
     }
     
@@ -62,9 +68,18 @@ public class WorkbanchController {
 
     @ResponseBody
     @RequestMapping(value = "/delete.do",produces = "text/text;charset=UTF-8")
-    public String delete(Long[] ids) {
-    	workbanchService.delete(ids);
-    	JsonDto json = JsonDto.delete(ids);
+    public String delete(Long[] id) {
+    	workbanchService.delete(id);
+    	JsonDto json = JsonDto.delete(id);
+    	return json.toString();
+    }
+    
+    @ResponseBody
+    @RequestMapping(value = "/add.do",produces = "text/text;charset=UTF-8")
+    public String add(Workbanch work,ModelMap model) {
+    	Long ownerId = (Long)model.get(Constant.VS_USER_ID);
+    	workbanchService.add(work,ownerId);
+    	JsonDto json = JsonDto.add(work.getId());
     	return json.toString();
     }
 	

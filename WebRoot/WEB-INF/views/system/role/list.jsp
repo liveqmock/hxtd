@@ -74,6 +74,7 @@
         <table class="cb id_table2 w pr35">
             <tr>
                 <th style="width:2%"><input type="checkbox" class="checkall"/></th>
+                <th style="width:10%" class="sortable orderby" orderby="code">编码</th>
                 <th style="width:10%" class="sortable orderby" orderby="name">角色名称</th>
                 <th style="width:10%">备注</th>
                 <th style="width:10%">创建者</th>
@@ -88,6 +89,7 @@
                 {#foreach $T.result as row}
                 <tr class="row {#cycle values=['bg_c_blue','']}">
                     <td><input type="checkbox" class="checkitem" value="{$T.row.id}"/></td>
+                    <td>{$T.row.code}</td>
                     <td>
                         <c:choose>
                             <c:when test="${VS_HAS_FUNCTIONS.roleView}"><a href="${ctx}/system/role/toViewPage.do?id={$T.row.id}" class="toviewpage">{$T.row.name}</a></c:when>

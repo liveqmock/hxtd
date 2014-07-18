@@ -13,6 +13,7 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
+import com.baihui.hxtd.soa.common.entity.WFNode;
 import com.baihui.hxtd.soa.customer.entity.Customer;
 import com.baihui.hxtd.soa.project.entity.Product;
 import com.baihui.hxtd.soa.system.entity.Dictionary;
@@ -38,7 +39,6 @@ public class Order {
 	/**
 	 * 序列化
 	 */
-	@SuppressWarnings("unused")
 	private static final long serialVersionUID = 1L;
 
 	/** 线索ID */
@@ -66,7 +66,7 @@ public class Order {
 	/** 状态 */
 	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "STATUS")
-	private Dictionary status;
+	private WFNode status;
 
 	/** 投资方式 */
 	@ManyToOne(fetch = FetchType.LAZY)
@@ -160,10 +160,10 @@ public class Order {
 	public void setCustomer(Customer customer) {
 		this.customer = customer;
 	}
-	public Dictionary getStatus() {
+	public WFNode getStatus() {
 		return status;
 	}
-	public void setStatus(Dictionary status) {
+	public void setStatus(WFNode status) {
 		this.status = status;
 	}
 	public Dictionary getInvestmentWay() {

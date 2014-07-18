@@ -223,35 +223,35 @@ function formReset() {
 	<div id="title" style="display: none;z-index: 1; background-color: #f5f5f6;"
 		class=" ml35 mr35">
 		<table class="cb id_table2 w">
-			<tr>
+			<tr >
 				<td width="2%">
 					<input type="checkbox" id="id" class="checkall" />
 				</td>
-				<th width="10%">
+				<th width="15%">
 					项目名
 				</th>
-				<th width="5%">
+				<th width="15%">
 					项目编号
 				</th>
 				<th>
 					供应商
 				</th>
 				<th>
-					融资额度
+					融资额度（万）
 				</th>
-				<th width="10%">
+				<th>
 					创建者
 				</th>
-				<th class="sortable orderby" orderby="createdTime">
+				<th width="10%" class="sortable orderby" orderby="createdTime">
 					创建时间
 				</th>
 				<th>
 					修改者
 				</th>
-				<th class="sortable orderby" orderby="modifiedTime">
+				<th width="10%" class="sortable orderby" orderby="modifiedTime">
 					修改时间
 				</th>
-				<th width="15%">
+				<th width="8%">
 					操作
 				</th>
 			</tr>
@@ -265,31 +265,31 @@ function formReset() {
 				<td width="2%">
 					<input type="checkbox" id="id" class="checkall" />
 				</td>
-				<th width="10%">
+				<th width="15%">
 					项目名
 				</th>
-				<th width="5%">
+				<th width="15%">
 					项目编号
 				</th>
 				<th>
 					供应商
 				</th>
 				<th>
-					融资额度
+					融资额度（万）
 				</th>
-				<th width="10%">
+				<th>
 					创建者
 				</th>
-				<th class="sortable orderby" orderby="createdTime">
+				<th width="10%" class="sortable orderby" orderby="createdTime">
 					创建时间
 				</th>
 				<th>
 					修改者
 				</th>
-				<th class="sortable orderby" orderby="modifiedTime">
+				<th width="10%" class="sortable orderby" orderby="modifiedTime">
 					修改时间
 				</th>
-				<th width="15%">
+				<th width="8%">
 					操作
 				</th>
 			</tr>
@@ -315,10 +315,10 @@ function formReset() {
               <td>{$T.row.code}</td>
               <td>{$T.row.supplier.name}</td>
               <td>{$T.row.financeLimit}</td>
-              <td>{$T.row.createdTime}</td>
               <td>{$T.row.creator.realName}</td>
-              <td>{$T.row.modifiedTime}</td>
+              <td>{$T.row.createdTime}</td>
               <td>{$T.row.modifier.realName}</td>
+              <td>{$T.row.modifiedTime}</td>
               <td>
                       <c:if test="${VS_HAS_FUNCTIONS.projectView}">
                         <a

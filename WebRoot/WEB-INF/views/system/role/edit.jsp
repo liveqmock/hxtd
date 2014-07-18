@@ -44,14 +44,6 @@
             <h1 class="f14 fbnone ml40 pt10">基本信息</h1>
             <table class="cb id_table3 w95b bg_c_white margin0 mt10">
                 <tr style="display: none">
-                    <td align="right" width="15%">编号：</td>
-                    <td align="left"><input type="text" name="code" value="${role.code}" class="text_input3"/></td>
-                    <td align="right" width="15%"></td>
-                    <td align="left"></td>
-                </tr>
-                <tr>
-                    <td align="right" width="15%">角色名：</td>
-                    <td align="left"><input type="text" class="{required:true,maxlength:16,unique:['Role','${role.name}']} text_input3" name="name" value="${role.name}"/></td>
                     <td align="right" width="15%"><%--类型：--%></td>
                     <td align="left">
                         <div class="pr none">
@@ -63,6 +55,14 @@
                             </select>
                         </div>
                     </td>
+                    <td align="right" width="15%"></td>
+                    <td align="left"></td>
+                </tr>
+                <tr>
+                    <td align="right" width="15%">编号：</td>
+                    <td align="left"><input type="text" name="code" value="${role.code}" class="{unique:['Role','${role.code}']} text_input3"/></td>
+                    <td align="right" width="15%">角色名：</td>
+                    <td align="left"><input type="text" class="{required:true,maxlength:16,unique:['Role','${role.name}']} text_input3" name="name" value="${role.name}"/></td>
                 </tr>
             </table>
             <h1 class="f14 fbnone ml40 pt10">描述信息</h1>

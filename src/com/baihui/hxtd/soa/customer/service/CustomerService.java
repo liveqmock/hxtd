@@ -20,6 +20,8 @@ import com.baihui.hxtd.soa.base.utils.Search;
 import com.baihui.hxtd.soa.customer.dao.ContactDao;
 import com.baihui.hxtd.soa.customer.dao.CustomerDao;
 import com.baihui.hxtd.soa.customer.entity.Customer;
+import com.baihui.hxtd.soa.order.dao.ContractDao;
+import com.baihui.hxtd.soa.order.dao.OrderDao;
 import com.baihui.hxtd.soa.system.dao.UserDao;
 import com.baihui.hxtd.soa.system.entity.AuditLog;
 import com.baihui.hxtd.soa.system.entity.Notice;
@@ -52,6 +54,13 @@ public class CustomerService {
 	
 	@Resource
 	private ContactDao contactDao;
+	
+	@Resource
+	private ContractDao contractDao;
+	
+	@Resource
+	private OrderDao orderDao;
+	
 	/**
      * 分页查找
      */
@@ -116,12 +125,18 @@ public class CustomerService {
      * delete(删除客户信息)
      * @param id
      */
-    public boolean delete(User user, Long[] id,AuditLog [] auditLog) {
-    	if(contactDao.getCount(id,"customer")==0){
-    		customerDao.logicalDelete(id);
-    		return true;
+    public String delete(User user, Long[] id,AuditLog [] auditLog) {
+    	if(contactDao.getCount(id,"customer")>0){
+    		return "联系人";
     	}
-    	return false;
+    	if(contractDao.getCount(id,"customer")>0){
+    		return "合同";
+    	}
+    	if(orderDao.getCount(id,"customer")>0){
+    		return "订单";
+    	}
+    	customerDao.logicalDelete(id);
+    	return "";
     }
     
     /**

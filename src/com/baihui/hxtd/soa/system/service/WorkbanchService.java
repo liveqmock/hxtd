@@ -1,5 +1,6 @@
 package com.baihui.hxtd.soa.system.service;
 
+import java.util.Date;
 import java.util.List;
 
 import javax.annotation.Resource;
@@ -47,8 +48,25 @@ public class WorkbanchService {
 	 * 添加工作台
 	 * @param workbanch
 	 */
-	public void add(Workbanch workbanch){
+	public void add(Workbanch workbanch,Long ownerId){
+		setDBTime(workbanch);
+		workbanch.setWidth(workbanch.getWidth()+"%");
+		workbanch.setOwner(ownerId);
+		Long order = getOrderIndex(ownerId);
+		workbanch.setOrderIndex(order==null?0:order);
 		workbanchDao.save(workbanch);
 	}
 	
+	private Long getOrderIndex(Long ownerId){
+		String hql = "select max(work.orderIndex) from Workbanch work where " +
+				 "work.owner=? and work.isDeleted=false ";
+		return workbanchDao.findUnique(hql, ownerId);
+	}
+	
+	
+	private void setDBTime(Workbanch work){
+		Date now = workbanchDao.getDBNow();
+		work.setCreatedTime(now);
+		work.setModifiedTime(now);
+	}
 }

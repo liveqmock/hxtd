@@ -34,15 +34,15 @@
        <tr>   
 			<td class="f14 namewidth1" align="right">合同编号：</td>
 			<td class="f14 namewidth2" align="left">
-			<input type="text" class="text_input1" name="search_LIKE_code" value="${code}"/>
+			<input type="text" class="text_input1" name="search_LIKE_code" />
 			</td>
 			<td class="f14 namewidth1" align="right">订单编号：</td>
 			<td class="f14 namewidth2" align="left">
-			<input type="text" class="text_input1" name="search_LIKE_order.code" value="${order.code}"/>
+			<input type="text" class="text_input1" name="search_LIKE_order.code"/>
 			</td>
 			<td class="f14 namewidth1" align="right">合同名称：</td>
 			<td class="f14 namewidth2" align="left">
-			<input type="text" class="text_input1" name="search_LIKE_name" value="${name}"/>
+			<input type="text" class="text_input1" name="search_LIKE_name"/>
 			</td>
 			<td width="namewidth3">
     			<a href="javascript:;" class="c_222 block cp fr ml10 packup globle_img mt8 mr20 more" title="展开"></a>
@@ -52,6 +52,7 @@
     				<b class="allbtn_r pr13 block fl w_auto f14">查&nbsp;&nbsp;询</b>
     			</a>
     		</td>
+    	</tr>
 		<tr class="more-content">
 			<td class="f14 namewidth1" align="right">签订时间：</td>
 			<td class="f14 namewidth2" align="left">
@@ -122,16 +123,17 @@
 	<table class="cb id_table2 w">
 		<tr>
            <th align="center" width="5%" ><input type="checkbox" class="checkall"/></th>
-                <th width="10%" class="sortable orderby" orderby="title">合同编号</th>
-                <th width="9%">合同名称</th>
-                <th align="right" width="9%">合同金额</th>
-                <th width="9%">客户名称</th>
-                <th width="9%">赎回方式</th>
+                <th align="center" width="4%" ><input type="checkbox" class="checkall"/></th>
+                <th width="11%" class="sortable orderby" orderby="title">合同编号</th>
+                <th width="11%">合同名称</th>
+                <th width="8%">合同金额(万)</th>
+                <th width="8%">客户</th>
+                <th width="8%">赎回方式</th>
                 <th width="6%">创建者</th>
-                <th width="11%" class="sortable orderby" orderby="signTime">签订时间</th>
-                <th width="11%"class="sortable orderby" orderby="effectTime">生效时间</th>
-                <th width="11%"class="sortable orderby" orderby="bereftTime">失效时间</th>
-                <th align="center" width="11%">操作</th>
+                <th width="10%" class="sortable orderby" orderby="signTime">签订时间</th>
+                <th width="10%" class="sortable orderby" orderby="effectTime">生效时间</th>
+                <th width="10%" class="sortable orderby" orderby="bereftTime">失效时间</th>
+                <th align="center" width="13%">操作</th>
         </tr>
     </table>
 </div>
@@ -142,14 +144,14 @@
                 <th align="center" width="4%" ><input type="checkbox" class="checkall"/></th>
                 <th width="11%" class="sortable orderby" orderby="title">合同编号</th>
                 <th width="11%">合同名称</th>
-                <th width="9%">合同金额(万)</th>
-                <th width="9%">客户</th>
-                <th width="9%">赎回方式</th>
+                <th width="8%">合同金额(万)</th>
+                <th width="8%">客户</th>
+                <th width="8%">赎回方式</th>
                 <th width="6%">创建者</th>
                 <th width="10%" class="sortable orderby" orderby="signTime">签订时间</th>
                 <th width="10%" class="sortable orderby" orderby="effectTime">生效时间</th>
                 <th width="10%" class="sortable orderby" orderby="bereftTime">失效时间</th>
-                <th align="center" width="11%">操作</th>
+                <th align="center" width="13%">操作</th>
             </tr>
             <tbody id="tbody" class="list"></tbody>
         </table>
@@ -180,6 +182,9 @@
                         </c:if>
                         <c:if test="${VS_HAS_FUNCTIONS.contractModify}">
                          <a href="${ctx}/order/contract/toModifyPage.do?id={$T.row.id}" title="编辑" class=" block_inline s_edit_btn globle_img ml10"></a>
+                        </c:if>
+                        <c:if test="${VS_HAS_FUNCTIONS.orderView}">
+                        <a href="${ctx}/order/order/toViewPage.do?id={$T.row.order.id}" title="订单详情" class=" block_inline s_contract globle_img ml10"></a>
                         </c:if>
                         <c:if test="${VS_HAS_FUNCTIONS.contractDelete}">
                          <a href="javascript:void(0)"  uri="${ctx}/order/contract/delete.do?id={$T.row.id}" title="删除"class=" block_inline s_dump_btn globle_img ml10 delete"></a>

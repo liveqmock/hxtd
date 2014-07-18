@@ -18,6 +18,7 @@ import com.baihui.hxtd.soa.base.orm.hibernate.HibernatePage;
 import com.baihui.hxtd.soa.base.utils.Search;
 import com.baihui.hxtd.soa.common.dao.CommonDao;
 import com.baihui.hxtd.soa.system.dao.RecycleBinDao;
+import com.baihui.hxtd.soa.system.dao.UserDao;
 import com.baihui.hxtd.soa.system.entity.AuditLog;
 import com.baihui.hxtd.soa.system.entity.RecycleBin;
 import com.baihui.hxtd.soa.util.CommonCalendar;
@@ -42,6 +43,8 @@ public class RecycleBinService {
 	@Resource
 	private CommonDao commonDao;
 	
+	@Resource
+	private UserDao userDao;
 	/**
 	 * 分页查找数据
 	 * @param searchParams
@@ -50,9 +53,10 @@ public class RecycleBinService {
 	 * @throws NoSuchFieldException 
 	 */
 	public HibernatePage<RecycleBin> findPage(Map<String, Object> searchParams,
-			HibernatePage<RecycleBin> page) throws NoSuchFieldException {
+			HibernatePage<RecycleBin> page,DataShift dataShift) throws NoSuchFieldException {
 		DetachedCriteria criteria = DetachedCriteria.forClass(RecycleBin.class);
     	criteria.setFetchMode("creator", FetchMode.JOIN);
+    	//userDao.visibleData(criteria, dataShift);
 		Map<String, SearchFilter> filters = Search.parse(searchParams);
 		Search.buildCriteria(filters, criteria, RecycleBin.class);
 		HibernatePage<RecycleBin> pageResult=recycleBinDao.findPage(page, criteria);

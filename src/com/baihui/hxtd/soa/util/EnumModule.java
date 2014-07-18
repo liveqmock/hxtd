@@ -30,11 +30,10 @@ public enum EnumModule {
 	CUSTOMER("customer","客户"),
 	
 	/** 供应商 */
-	SUPPILER("supplier","供应商"),
+	SUPPLIER("supplier","供应商"),
 	
 	/** 项目 */
 	PROJECT("project","项目"),
-	
 	
 	/** 产品 */
 	PRODUCT("product","产品"),
@@ -77,6 +76,10 @@ public enum EnumModule {
 
     /**报表*/
     REPORT("report","报表"),
+    
+    /**销售目标*/
+    SALESTARGET("salesTarget","销售目标")
+    
 	;
 	
 	

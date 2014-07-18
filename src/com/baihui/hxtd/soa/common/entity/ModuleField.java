@@ -25,6 +25,9 @@ public class ModuleField implements Serializable, Idable {
     @Column(name = "DESC", length = 32, nullable = false)
     private String desc;
 
+    @Column(name = "DICTIONARY", length = 32, nullable = false)
+    private String dictionary;
+
     public ModuleField() {
     }
 
@@ -35,6 +38,12 @@ public class ModuleField implements Serializable, Idable {
     public ModuleField(String name, String desc) {
         this.name = name;
         this.desc = desc;
+    }
+
+    public ModuleField(String name, String desc, String dictionary) {
+        this.name = name;
+        this.desc = desc;
+        this.dictionary = dictionary;
     }
 
     public Long getId() {
@@ -59,5 +68,13 @@ public class ModuleField implements Serializable, Idable {
 
     public void setDesc(String desc) {
         this.desc = desc;
+    }
+
+    public String getDictionary() {
+        return dictionary;
+    }
+
+    public void setDictionary(String dictionary) {
+        this.dictionary = dictionary;
     }
 }

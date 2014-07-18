@@ -428,4 +428,17 @@ public class OrganizationService {
 		return organizationDao.get(id).getName();
 	}
 
+    /**
+     * 
+      * getAllOrg(查询所有的组织机构)
+      * @Title: getAllOrg
+      * @param @return    参数类型
+      * @return List<Organization>    返回类型
+      * @throws
+     */
+    @Transactional
+    public List<Organization> getAllOrg() {
+        String hql = "select org from Organization org left join fetch org.parent";
+        return organizationDao.find(hql);
+    }
 }

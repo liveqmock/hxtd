@@ -15,22 +15,38 @@
 <link rel="stylesheet" href="${ctx}/static/css/recommend/detail.css" type="text/css" />
 <link rel="stylesheet" href="${ctx}/static/css/recommend/empower.css" type="text/css" />
 <script src="${ctx}/static/js/workbanch.js" type="text/javascript"></script>
+<link rel="stylesheet" href="${ctx}/static/css/application.css" type="text/css"/>
+<link rel="stylesheet" href="${ctx}/static/css/recommend/detail.css" type="text/css"/>
+<script type="text/javascript" src="${ctx}/static/js/jquery-jtemplates.js"></script>
+<script type="text/javascript" src="${ctx}/static/js/jquery-json.2.4.js"></script>
+<script type="text/javascript" src="${ctx}/static/js/js-util.common.js"></script>
+<script type="text/javascript" src="${ctx}/static/js/jquery.form.js"></script>
+<script type="text/javascript" src="${ctx}/static/component/open-flash-chart-2/js/json/json2.js"></script>
+<script type="text/javascript" src="${ctx}/static/component/open-flash-chart-2/js/swfobject.js"></script>
 <script>
 $(function(){
-	$('.gbin1-list').sortable().bind('sortupdate', function() {
-		//$('#msg').html('position changed').fadeIn(200).delay(1000).fadeOut(200);
-		//alert(1);
-		workbanch.modifyOrder();
+	$('.gbin1-list').sortable({
+		opacity: 0.5,//拖动的透明度
+		revert: true, //缓冲效果
+		cursor: 'move', //拖动的时候鼠标样式
+		connectWith: ".column",
+		scroll: false,
+		update:function() {
+			workbanch.modifyOrder();
+		}
 	});
    	workbanch.initList();
+   	workbanch.initReport();
 });
 </script>
 </head>
 <body>
-<div style="margin:20px;">
+<div style="margin:20px;overflow:hidden">
 	<ul class="gbin1-list">
-		<c:forEach items="${list }" var="work">
-			<li id="${work.id }" style="width: ${work.width}" uri="${ctx}${work.url}" module="${work.module}" type="${work.type}">
+		<c:forEach items="${list }" var="work" varStatus="s">
+			<li id="${work.id }" style="width: ${work.width}"
+			uri="${ctx}${work.url}" module="${work.module}"
+			type="${work.type}" params="${work.params}">
 				<div class="block cb">
 					<b class="ba"></b>
 					<b class="bb"></b>
@@ -41,7 +57,7 @@ $(function(){
 							 ${work.title}
 						</h1>
 						<img width="80" height="25" class="fl ml80" src="${ctx }/static/images/snowflake.png"/>
-						
+
 						<div class="fr mr10 mt5">
 							<a href="javascript:;" class=" block_inline g_small globle_img ml10 close"></a>
 							<a href="javascript:;" class=" block_inline g_new globle_img ml10 refresh"></a>
@@ -49,10 +65,14 @@ $(function(){
 						</div>
 					</div>
 				</div>
-				<div class="cb mb20 bor_636363 content bg_c_white" style="max-height:260px;min-height:104px;:auto;">
-					
+				<div class="cb mb20 bor_636363 content bg_c_white" style="max-height:260px;min-height:104px;overflow-y:auto;">
+						<c:if test="${work.type=='report'}">
+							<div id="chart${s.index}">
+
+							</div>
+						</c:if>
 				</div>
-		</li>
+			</li>
 		</c:forEach>
 	</ul>
 </div>

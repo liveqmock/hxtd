@@ -161,7 +161,7 @@ function _previousValue(element) {
 
 /**qq号验证*/
 jQuery.validator.addMethod("qq", function (value, element) {
-    return this.optional(element) || value.search(/^[1-9]\d{4,8}$/) != -1;
+    return this.optional(element) || value.search(/^[1-9]\d{4,15}$/) != -1;
 }, "QQ号格式错误");
 
 /**密码规则验证*/

@@ -24,14 +24,18 @@
 
     <script type="text/javascript">
         $(function () {
+            /*${VS_USER.id} ${user.id}*/
             jsUtil.renderRequired();
             jsUtil.bindSave();
             jsUtil.organizationTree({
                 data:${organizationTree==null?"[]":organizationTree},
                 selectedId: "${user.organization.id}",
                 click: function (event, treeId, treeNode) {
+                    //当前用户不允许修改所属组织
+                    <c:if test="${VS_USER.id!=user.id}">
                     $(".organization").val(treeNode.name);
                     $("[name=organization\\.id]").val(treeNode.id);
+                    </c:if>
                 }
             });
         });
@@ -81,18 +85,18 @@
 
                     <h1 class="f14 fbnone ml40 pt10">基本信息</h1>
                     <table class="cb id_table3 w95b bg_c_white margin0 mt10">
-                        
+
                         <tr>
                             <td align="right" width="15%">用户名：</td>
                             <td align="left">
-                            <c:choose>
-                            <c:when test="${user.id==null}">
-                            <input type="text" class="{required:true,maxlength:32,unique:['User','${user.id}']} text_input3" name="name" value="${user.name}"/>
-                            </c:when>
-                            <c:otherwise>
-                            <input type="text" class="text_input3" name="name" value="${user.name}"/>
-                            </c:otherwise>
-                            </c:choose>
+                                <c:choose>
+                                    <c:when test="${user.id==null}">
+                                        <input type="text" class="{required:true,maxlength:32,unique:['User','${user.id}']} text_input3" name="name" value="${user.name}"/>
+                                    </c:when>
+                                    <c:otherwise>
+                                        <input type="text" class="text_input3" name="name" value="${user.name}"/>
+                                    </c:otherwise>
+                                </c:choose>
                             </td>
                             <td align="right" width="15%">密码：</td>
                             <td align="left"><input type="password" class="{required:true,maxlength:64} text_input3" name="password" value="${user.password}"/></td>
@@ -138,7 +142,7 @@
                                 <input type="hidden" name="organization.id" value="${user.organization.id}">
                             </td>
                             <%--//TODO 序号暂不处理--%>
-                           
+
                         </tr>
                         <tr>
                             <td align="right" width="15%">职位：</td>

@@ -11,77 +11,76 @@
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
 <html>
 <head>
-<title>合同编辑</title>
-<meta http-equiv="pragma" content="no-cache">
-<meta http-equiv="cache-control" content="no-cache">
-<meta http-equiv="expires" content="0">    
-<meta http-equiv="keywords" content="keyword1,keyword2,keyword3">
-<meta http-equiv="description" content="This is my page">
-<!--
-<link rel="stylesheet" type="text/css" href="styles.css">
--->
-<link rel="stylesheet" href="${ctx}/static/css/recommend/detail.css" type="text/css"/>
-<link rel="stylesheet" href="${ctx}/static/css/recommend/detail_a.css" type="text/css"/>
-<script type="text/javascript" src="${ctx}/static/js/jquery.validate.js"></script>
-<script type="text/javascript" src="${ctx}/static/js/jquery.metadata.js"></script>
-<script type="text/javascript" src="${ctx}/static/js/validator.js"></script>
-<script type="text/javascript">
-$(function(){
-	$("#saveAndAdd").click(function(){
-		var $form = $("#form");
-		if($form.valid()){
-			RcmsAjax.ajax($form.attr("action"),function(result){
-				setTimeout(function(){
-					window.location.replace("${ctx}/order/contract/toAddPage.do")
-				},500);
-			},null,$form.formSerialize());
-		}
-		return false;
-	});
-	$("#save").click(function(){
-		var $form = $("#form");
-		if($form.valid()){
-			RcmsAjax.ajax($form.attr("action"),function(result){
-				//redirect
-				var id = result.result.result;
-				setTimeout(function(){
-					window.location.replace("${ctx}/order/contract/toViewPage.do?id="+id)
-				},500);
-			},null,$form.formSerialize());
-		}
-		return false;
-	});
-	jsUtil.datepickerNotNow(".time");
-});
-function searchData(action){//搜索弹出框
-	var url, title;
-	if(action == "owner"||action == "salesManager"||action == "salesMajordomo"){
-		url = "${ctx}/system/user/toQueryPage.comp";
-		title = "所有者";
-	}else if(action == "customer"){
-		url = "${ctx}/customer/customer/toQueryPage.comp";
-		title = "客户";
-	}else if(action == "order"){
-		url = "${ctx}/order/order/toQueryPage.comp";
-		title = "订单";
-	}
-	jsUtil.dialogIframe(url, title, 800, 465, function(){//确定回调
-		var $userObj = $(".bor_e28d1f", window.frames["dialogIframe"].document);
-			if($userObj.length > 0){
-				$("#txt_" + action).val($userObj.find("td:eq(0)").text());
-				$("#hide_" + action +"_id").val($userObj.attr("id"));
+	<title>合同编辑</title>
+	<meta http-equiv="pragma" content="no-cache">
+	<meta http-equiv="cache-control" content="no-cache">
+	<meta http-equiv="expires" content="0">    
+	<meta http-equiv="keywords" content="keyword1,keyword2,keyword3">
+	<meta http-equiv="description" content="This is my page">
+	<link rel="stylesheet" href="${ctx}/static/css/recommend/detail.css" type="text/css"/>
+	<link rel="stylesheet" href="${ctx}/static/css/recommend/detail_a.css" type="text/css"/>
+	<script type="text/javascript" src="${ctx}/static/js/jquery.validate.js"></script>
+	<script type="text/javascript" src="${ctx}/static/js/jquery.metadata.js"></script>
+	<script type="text/javascript" src="${ctx}/static/js/validator.js"></script>
+	<script type="text/javascript" src="${ctx}/static/js/htmlbox/htmlbox.colors.js"></script>
+	<script type="text/javascript" src="${ctx}/static/js/htmlbox/htmlbox.styles.js"></script>
+	<script type="text/javascript" src="${ctx}/static/js/htmlbox/htmlbox.syntax.js"></script>
+	<script type="text/javascript" src="${ctx}/static/js/htmlbox/xhtml.js"></script>
+	<script type="text/javascript" src="${ctx}/static/js/htmlbox/htmlbox.min.js"></script>
+	<script type="text/javascript">
+		$(function(){
+			$("#saveAndAdd").click(function(){
+				var $form = $("#form");
+				if($form.valid()){
+					RcmsAjax.ajax($form.attr("action"),function(result){
+						setTimeout(function(){
+							window.location.replace("${ctx}/order/contract/toAddPage.do")
+						},500);
+					},null,$form.formSerialize());
+				}
+				return false;
+			});
+			$("#save").click(function(){
+				var $form = $("#form");
+				if($form.valid()){
+					RcmsAjax.ajax($form.attr("action"),function(result){
+						//redirect
+						var id = result.result.result;
+						setTimeout(function(){
+							window.location.replace("${ctx}/order/contract/toViewPage.do?id="+id)
+						},500);
+					},null,$form.formSerialize());
+				}
+				return false;
+			});
+			jsUtil.datepickerNotNow(".time");
+		});
+		function searchData(action){//搜索弹出框
+			var url, title;
+			if(action == "customer"){
+				url = "${ctx}/customer/customer/toQueryPage.comp";
+				title = "客户";
+			}else if(action == "order"){
+				url = "${ctx}/order/order/toQueryPage.comp";
+				title = "订单";
 			}
-	});
-}
-function clearInputVal(obj){//清除
-	$(obj).prevAll("input").val('');
-}
-</script>
+			jsUtil.dialogIframe(url, title, 800, 465, function(){//确定回调
+				var $userObj = $(".bor_e28d1f", window.frames["dialogIframe"].document);
+					if($userObj.length > 0){
+						$("#txt_" + action).val($userObj.find("td:eq(0)").text());
+						$("#hide_" + action +"_id").val($userObj.attr("id"));
+					}
+				$("#txt_contract").val($("#txt_order").val());//合同编号默认为订单编号
+			});
+		}
+		function clearInputVal(obj){//清除
+			$(obj).prevAll("input").val('');
+		}
+	</script>
 </head>
 <body>
 <form id="form" action="${ctx }${funcUrl}" method="post">
 	<input type="hidden" name="id" value="${contract.id}"/>
-<div>
 	<div class="cb"></div>
 	<!--列表开始-->
 	<div class="ml35 mr35 mt20 block cb cb">
@@ -104,22 +103,30 @@ function clearInputVal(obj){//清除
 		<table class="cb id_table3 w95b bg_c_white margin0 mt10">
 			<tr>
 				<td align="right" width="15%">
+					<span class="w_red">*&nbsp;</span>订单编号：
+				</td>
+				<td align="left">
+				<input type="text" id="txt_order"
+					value="${contract.order.code }" 
+					class="text_input3 cp required" readonly
+					 onclick="searchData('order');"/>
+				<input type="hidden" value="${contract.order.id}"
+					id="hide_order_id" name="order.id" />
+				<i class="s_inquiry globle_img block_inline ml5 vm cp"
+					title="搜索订单" onclick="searchData('order');"></i>
+				<i class="dump_btn globle_img block_inline ml5 vm cp empty"
+					title="清除"></i>
+				</td>
+				<td align="right" width="15%">
 					<span class="w_red">*&nbsp;</span>合同编号：
 				</td>
 				<td align="left">
-				<input type="text" name="code"
+				<input type="text" name="code" id="txt_contract"
 						value="${contract.code}" class="text_input3 required" />
-				</td>
-				<td align="right" width="15%">
-					<span class="w_red">*&nbsp;</span>合同名称：
-				</td>
-				<td align="left">
-				<input type="text" name="name"
-						value="${contract.name}" class="text_input3 required" />
 				</td>
 			</tr>
 			<tr>
-				<td align="right" width="15%">
+				<!-- <td align="right" width="15%">
 					合同类型：
 				</td>
 				<td align="left">
@@ -134,6 +141,13 @@ function clearInputVal(obj){//清除
 							</option>
 						</c:forEach>
 					</select>
+				</td> -->
+				<td align="right" width="15%">
+					<span class="w_red">*&nbsp;</span>合同名称：
+				</td>
+				<td align="left">
+				<input type="text" name="name"
+						value="${contract.name}" class="text_input3 required" />
 				</td>
 				<td align="right">
 					<span class="w_red">*&nbsp;</span>合同金额（万）：
@@ -159,23 +173,6 @@ function clearInputVal(obj){//清除
 						title="清除"></i>
 				</td>
 				<td align="right">
-					<span class="w_red">*&nbsp;</span>订单：
-				</td>
-				<td align="left">
-				<input type="text" id="txt_order"
-					value="${contract.order.code }" 
-					class="text_input3 cp required" readonly
-					 onclick="searchData('order');"/>
-				<input type="hidden" value="${contract.order.id}"
-					id="hide_order_id" name="order.id" />
-				<i class="s_inquiry globle_img block_inline ml5 vm cp"
-					title="搜索订单" onclick="searchData('order');"></i>
-				<i class="dump_btn globle_img block_inline ml5 vm cp empty"
-					title="清除"></i>
-				</td>
-			</tr>
-			<tr>
-				<td align="right">
 					<span class="w_red">*&nbsp;</span>赎回方式：
 				</td>
 				<td align="left">
@@ -192,6 +189,8 @@ function clearInputVal(obj){//清除
 						</c:forEach>
 					</select>
 				</td>
+			</tr>
+			<tr>
 				<td align="right">
 					<span class="w_red">*&nbsp;</span>签订时间：
 				</td>
@@ -200,9 +199,6 @@ function clearInputVal(obj){//清除
 					<a href="javascript:;" class="pa time_closenone1"></a>
 					<input type="text" name="signTime" value="${signTime }" class="text_input3 input_close1 time required" readonly />
 				</td>
-
-			</tr>
-			<tr>
 				<td align="right">
 					<span class="w_red">*&nbsp;</span>生效时间：
 				</td>
@@ -211,6 +207,8 @@ function clearInputVal(obj){//清除
 					<a href="javascript:;" class="pa time_closenone1"></a>
 					<input type="text" name="effectTime" value="${effectTime}" class="text_input3 input_close1 time required" readonly />
 				</td>
+			</tr>
+			<tr>
 				<td align="right">
 					<span class="w_red">*&nbsp;</span>失效时间：
 				</td>
@@ -224,17 +222,37 @@ function clearInputVal(obj){//清除
 		<h1 class="f14 fbnone ml40 pt10">
 			合同内容
 		</h1>
-		<table class="cb id_table4 w95b bg_c_white margin0 mt10">
-			<tr>
-				<td align="right" width="15%" valign="top">
-					
-				</td>
-				<td align="left" width="85%">
-					<textarea name="content" class="remarks_input1">${contract.content}</textarea>
-				</td>
-			</tr>
-
-		</table>
+		<div class="cb  w95b bg_c_white margin0 mt10">
+					<div class="margin0 w70b pt10">
+						<textarea id="ha" name="content" class="remarks_input1">${contract.content}</textarea>
+						<script  type="text/javascript">
+							$("#ha").css("width","100%").htmlbox({
+							    toolbars:[
+								    [
+									"separator","cut","copy","paste",
+									"separator","undo","redo",
+									"separator","bold","italic","underline","strike","sup","sub",
+									"separator","justify","left","center","right",
+									"separator","ol","ul","indent","outdent",
+									"separator","link","unlink","image"
+									
+									],
+									[
+									"separator","code",
+							        "separator","formats","fontsize","fontfamily",
+									"separator","fontcolor","highlight",
+									],
+									[
+									"separator","removeformat","striptags","hr","paragraph",
+									"separator","quote","styles","syntax"
+									]
+								],
+								skin:"blue"
+							});
+						</script>
+					</div>
+					<div style="width:100px; height:10px;"></div>
+		</div> 
 		<h1 class="f14 fbnone ml40 pt10">
 			描述信息
 		</h1>
@@ -270,7 +288,6 @@ function clearInputVal(obj){//清除
 			</li>
 		</ul>
 	</div>
-</div>
 </form>
 </body>
 </html>

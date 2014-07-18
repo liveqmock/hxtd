@@ -11,12 +11,12 @@
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
 <html>
 <head>
-<title>合同详情</title>
-<link rel="stylesheet" href="${ctx}/static/css/recommend/detail.css" type="text/css"/>
-<link rel="stylesheet" href="${ctx}/static/css/recommend/detail_a.css" type="text/css"/>
-<link rel="stylesheet" href="${ctx}/static/css/application.css" type="text/css"/>
-<script type="text/javascript" src="${ctx}/static/js/jquery-jtemplates.js"></script>
-<script type="text/javascript" src="${ctx}/static/js/js-util.common.js"></script>
+	<title>合同详情</title>
+	<link rel="stylesheet" href="${ctx}/static/css/recommend/detail.css" type="text/css"/>
+	<link rel="stylesheet" href="${ctx}/static/css/recommend/detail_a.css" type="text/css"/>
+	<link rel="stylesheet" href="${ctx}/static/css/application.css" type="text/css"/>
+	<script type="text/javascript" src="${ctx}/static/js/jquery-jtemplates.js"></script>
+	<script type="text/javascript" src="${ctx}/static/js/js-util.common.js"></script>
 </head>
 <body>
 <div>
@@ -59,32 +59,32 @@
 				<td align="left">${contract.name }</td>
 			</tr>
 			<tr>
-				<td align="right">合同类型：</td>
-				<td align="left">${contract.type.key}</td>
+				<!-- <td align="right">合同类型：</td> 
+				<td align="left">${contract.type.key}</td>-->
 				<td align="right">合同金额（万）：</td>
 				<td align="left">${contract.purchaseMoney }</td>
-			</tr>
-			<tr>
 				<td align="right">客户：</td>
 				<td align="left">${contract.customer.name }</td>
-				<td align="right">订单：</td>
-				<td align="left">${contract.order.code}</td>
 			</tr>
 			<tr>
+				<td align="right">订单编号：</td>
+				<td align="left">${contract.order.code}</td>
 				<td align="right">赎回方式：</td>
 				<td align="left">${contract.redeemType.key}</td>
+			</tr>
+			<tr>
 				<td align="right">签订时间：</td>
 				<td align="left">
 				<fmt:formatDate value="${contract.signTime}" pattern="yyyy-MM-dd" var="signTime" />
 				${signTime }
 				</td>
-			</tr>
-			<tr>
 				<td align="right" width="15%">生效时间：</td>
 				<td align="left">
 					<fmt:formatDate value="${contract.effectTime}" pattern="yyyy-MM-dd" var="effectTime" />
 					${effectTime}
 				</td>
+			</tr>
+			<tr>
 				<td align="right" width="15%">失效时间：</td>
 				<td align="left">
 					<fmt:formatDate value="${contract.bereftTime}" pattern="yyyy-MM-dd" var="bereftTime" />
@@ -92,15 +92,16 @@
 				</td>
 			</tr>
 		</table>
-		<h1 class="f14 fbnone ml40 pt10">合同内容</h1>
+		  <h1 class="f14 fbnone ml40 pt10">合同内容</h1>
 		<table class="cb id_table4 w95b bg_c_white margin0 mt10">
 			<tr>
 				<td align="right" width="15%" valign="top"></td>
 				<td align="left" width="85%" valign="top">
-					<div class="w85b">${contract.content}</div>
+					<div style="overflow-y:auto; white-space:nowrap; height:200px;" class="w85b">${contract.content}</div>
 				</td>
 			</tr>
 		</table>
+		
 		<tag:attachment view="${VS_HAS_FUNCTIONS.contractAttView}" upload="${VS_HAS_FUNCTIONS.contractUpload}" 
 			module="contract" query="${VS_HAS_FUNCTIONS.contractAttQuery}" down="${VS_HAS_FUNCTIONS.contractDown}" 
 			deleteFlag="true" id="${contract.id}"></tag:attachment>

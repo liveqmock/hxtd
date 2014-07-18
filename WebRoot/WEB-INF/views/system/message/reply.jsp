@@ -18,15 +18,28 @@
 	<script type="text/javascript"> 
 	$(function(){//初始化 
 		$("#save").click(function(){
-			if($("#form").valid()){
-				$("#form").submit();
-			}
+			var $form = $("#form");
+				if($form.valid()){
+					RcmsAjax.ajax($form.attr("action"),function(result){
+						//redirect
+						var id = result.result.result;
+						setTimeout(function(){
+							window.location.replace("${ctx}/system/message/toQueryPage.do?type=reviced")
+						},500);
+					},null,$form.formSerialize());
+				}
+				return false;
 		});
 		$("#saveAndAdd").click(function(){
-			$("#form").attr("action",$("#form").attr("action")+"?type=add");
-			if($("#form").valid()){
-				$("#form").submit();
-			}
+			var $form = $("#form");
+				if($form.valid()){
+					RcmsAjax.ajax($form.attr("action"),function(result){
+						setTimeout(function(){
+							window.location.replace("${ctx}/system/message/toAddPage.do")
+						},500);
+					},null,$form.formSerialize());
+				}
+				return false;
 		});
 	});
 	
@@ -71,7 +84,7 @@
         <div class="cb block h40 margin0 mt10" style="width:350px;">
 		<ul class="id_table1 cb">
         <li><a id="save" href="javascript:;"class="block c_white lh25 mr10"><b class="allbtn_l block fl"></b><b class="allbtn_r pr13 block fl w_auto f14 deletesome">回&nbsp;&nbsp;复</b></a></li>
-		<li><a href="${ctx }/system/message/toQueryPage.do" class="block c_white lh25 mr10"><b class="allbtn_l block fl"></b><b class="allbtn_r pr13 block fl w_auto f14 deletesome">取&nbsp;&nbsp;消</b></a></li>
+		<li><a href="${ctx }/system/message/toQueryPage.do?type=reviced" class="block c_white lh25 mr10"><b class="allbtn_l block fl"></b><b class="allbtn_r pr13 block fl w_auto f14 deletesome">取&nbsp;&nbsp;消</b></a></li>
 		</ul>
 	    </div>
     </div>

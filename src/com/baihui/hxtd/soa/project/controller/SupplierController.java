@@ -189,7 +189,7 @@ public class SupplierController extends CommonController<Supplier> {
 		User u = (User) request.getSession().getAttribute(Constant.VS_USER);
 		logger.info("获得当前操作用户{}",u.getName());
 		supplier.setModifier(u);
-		AuditLog auditLog = new AuditLog(EnumModule.SUPPILER.getModuleName(), 
+		AuditLog auditLog = new AuditLog(EnumModule.SUPPLIER.getModuleName(), 
 				supplier.getId(), supplier.getName(), EnumOperationType.MODIFY.getOperationType(), u);
 		supplierService.modify(supplier,auditLog);
 		JsonDto json = new JsonDto(supplier.getId(),"保存成功!");
@@ -213,7 +213,7 @@ public class SupplierController extends CommonController<Supplier> {
 		logger.info("SupplierController.query 获得当前操作的用户{}",u.getName());
 		supplier.setCreator(u);
 		supplier.setModifier(u);
-		AuditLog auditLog = new AuditLog(EnumModule.SUPPILER.getModuleName(), 
+		AuditLog auditLog = new AuditLog(EnumModule.SUPPLIER.getModuleName(), 
 				supplier.getId(), supplier.getName(), EnumOperationType.ADD.getOperationType(), u);
 		supplierService.add(supplier, auditLog);
 		JsonDto json = JsonDto.add(supplier.getId());

@@ -1,5 +1,6 @@
 package com.baihui.hxtd.soa.base;
 
+import com.baihui.hxtd.soa.base.utils.ReflectionUtils;
 import com.baihui.hxtd.soa.common.controller.model.ListModel;
 import com.baihui.hxtd.soa.common.entity.Module;
 import com.baihui.hxtd.soa.common.entity.PCAS;
@@ -202,11 +203,27 @@ public class InitApplicationConstant implements StartupListener {
                 entityClass = module.getEntityClass();
                 module.setEntityClazz(Class.forName(entityClass));
                 module.setFields(module.getEntityClazz().getDeclaredFields());
-                module.setModuleFields(moduleService.toModuleField(module.getFields()));
+                module.setModuleFields(FieldInfoParser.toModuleField(module.getFields()));
             }
         } catch (ClassNotFoundException e) {
             throw new RuntimeException(String.format("设置模块class异常，未找到对应的类%s！", entityClass), e);
         }
     }
+
+    /** 获取模块通过主键编号 */
+    public static Module findModuleById(Long id) {
+        return ReflectionUtils.findNameValueMatched(MODULES, "id", id);
+    }
+
+    /** 获取模块通过主键编号 */
+    public static List<Module> findModuleById(List<Long> ids) {
+        return ReflectionUtils.findNameValueMatched(MODULES, "id", ids);
+    }
+
+    /** 获取模块通过模块名称 */
+    public static Module findModuleByName(String name) {
+        return ReflectionUtils.findNameValueMatched(MODULES, "name", name);
+    }
+
 
 }

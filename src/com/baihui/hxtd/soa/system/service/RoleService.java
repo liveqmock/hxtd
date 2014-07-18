@@ -5,11 +5,7 @@ import com.baihui.hxtd.soa.base.orm.hibernate.HibernatePage;
 import com.baihui.hxtd.soa.base.utils.Search;
 import com.baihui.hxtd.soa.system.dao.RoleDao;
 import com.baihui.hxtd.soa.system.dao.UserDao;
-import com.baihui.hxtd.soa.system.entity.AuditLog;
-import com.baihui.hxtd.soa.system.entity.Component;
-import com.baihui.hxtd.soa.system.entity.Function;
-import com.baihui.hxtd.soa.system.entity.Role;
-import com.baihui.hxtd.soa.system.entity.User;
+import com.baihui.hxtd.soa.system.entity.*;
 import org.hibernate.FetchMode;
 import org.hibernate.criterion.DetachedCriteria;
 import org.slf4j.Logger;
@@ -19,7 +15,6 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springside.modules.persistence.SearchFilter;
 
 import javax.annotation.Resource;
-import java.util.Date;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
@@ -72,19 +67,16 @@ public class RoleService {
      * 新增
      */
     @Transactional
-    public void add(Role role,AuditLog auditLog) {
+    public void add(Role role, AuditLog auditLog) {
         logger.info("新增");
 
         role.setCreatedTime(roleDao.getDBNow());
         role.setModifiedTime(role.getCreatedTime());
         role.setIsDeleted(false);
         role.setIsInitialized(false);
-        role.setCode(null);
 
         roleDao.save(role);
         auditLog.setRecordId(role.getId());
-
-//        userDao.updateManagerStoreStatus();
     }
 
 
@@ -105,7 +97,7 @@ public class RoleService {
      * 修改
      */
     @Transactional
-    public void modify(Role role,AuditLog auditLog) {
+    public void modify(Role role, AuditLog auditLog) {
         logger.info("修改");
         role.setModifiedTime(roleDao.getDBNow());
         roleDao.update(role);
@@ -115,7 +107,7 @@ public class RoleService {
      * 批量删除
      */
     @Transactional
-    public void delete(Long[] ids,AuditLog [] auditLogArr) {
+    public void delete(Long[] ids, AuditLog[] auditLogArr) {
         logger.info("删除");
         roleDao.logicalDelete(ids);
     }
@@ -136,9 +128,9 @@ public class RoleService {
                 " from Role role" +
                 " inner join role.owners owner" +
                 " where owner.id=? and role.code=?";
-        return (Long) roleDao.findUnique(hql, user.getId(), Constant.ROLE_SYSMANAGER_CODE) > 0;
+        return (Long) roleDao.findUnique(hql, user.getId(), Constant.ROLE_SYSMANAGER) > 0;
     }
-    
+
     /**
      * 是否是系统数据管理员
      */
@@ -154,9 +146,9 @@ public class RoleService {
                 " from Role role" +
                 " inner join role.owners owner" +
                 " where owner.id=? and role.code=?";
-        return (Long) roleDao.findUnique(hql, user.getId(), Constant.ROLE_ORGMANAGER_CODE) > 0;
+        return (Long) roleDao.findUnique(hql, user.getId(), Constant.ROLE_ORGMANAGER) > 0;
     }
-    
+
 
     /**
      * 查找有效角色
@@ -227,7 +219,7 @@ public class RoleService {
      * 授权
      */
     @Transactional
-    public void authorization(Long id, Long[] functionIds, Long[] componentIds,AuditLog auditLog) {
+    public void authorization(Long id, Long[] functionIds, Long[] componentIds, AuditLog auditLog) {
         logger.info("授权");
         Role role = roleDao.get(id);
 
@@ -250,16 +242,17 @@ public class RoleService {
         roleDao.update(role);
     }
 
-	/**
+    /**
      * getNameById
-     * @Title: getNameById
-     * @Description: 通过id获取角色名称
+     *
      * @param id
      * @return String
-    */
+     * @Title: getNameById
+     * @Description: 通过id获取角色名称
+     */
     @Transactional
-	public String getNameById(Long id) {
-		return roleDao.get(id).getName();
-	}
+    public String getNameById(Long id) {
+        return roleDao.get(id).getName();
+    }
 
 }

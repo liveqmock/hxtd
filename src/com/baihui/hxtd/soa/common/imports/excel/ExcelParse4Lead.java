@@ -1,4 +1,4 @@
-package com.baihui.hxtd.soa.common.excel;
+package com.baihui.hxtd.soa.common.imports.excel;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -9,17 +9,20 @@ import javax.annotation.Resource;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.stereotype.Component;
+import org.springframework.stereotype.Service;
 
 import com.baihui.hxtd.soa.base.Constant;
+import com.baihui.hxtd.soa.base.ContextLoaderListenerAware;
 import com.baihui.hxtd.soa.common.entity.PCAS;
+import com.baihui.hxtd.soa.common.imports.ImportMessage;
 import com.baihui.hxtd.soa.common.service.PCASService;
 import com.baihui.hxtd.soa.customer.entity.LeadDB;
 import com.baihui.hxtd.soa.system.entity.Dictionary;
 import com.baihui.hxtd.soa.system.entity.User;
 import com.baihui.hxtd.soa.system.service.DictionaryService;
 import com.baihui.hxtd.soa.system.service.UserService;
-import com.baihui.hxtd.soa.util.ExcelParse;
-import com.baihui.hxtd.soa.util.ImportMessage;
+import com.baihui.hxtd.soa.util.Tools;
 /**
  * 功能描述：导入信息类
  * @see: 与该类相关的类，写出具体的路径：包括完整的包名和类名.java
@@ -32,18 +35,19 @@ import com.baihui.hxtd.soa.util.ImportMessage;
  * @date 2014-7-6 上午11:00:53
  *
  */
+//@Component
 public class ExcelParse4Lead extends ExcelParse<LeadDB> {
 
 	private Logger logger = LoggerFactory.getLogger(ExcelParse.class);
 
 	@Resource
-	private DictionaryService dictionaryService;
+	private DictionaryService dictionaryService = (DictionaryService)ContextLoaderListenerAware.ctx.getBean("dictionaryService");
+	
+	//@Resource
+	private UserService userService = (UserService)ContextLoaderListenerAware.ctx.getBean("userService");
 	
 	@Resource
-	private UserService userService;
-	
-	@Resource
-	private PCASService pCASService;
+	private PCASService pCASService = (PCASService)ContextLoaderListenerAware.ctx.getBean("PCASService");
 	/**
 	 * 校验第rowNumOfSheet行的数据格式是否正确,并将List<String>类型的数据转换成对象格式
 	 */
@@ -72,7 +76,7 @@ public class ExcelParse4Lead extends ExcelParse<LeadDB> {
 		
 		//线索所有者,查找客户所有者的id,如果id存在则返回,如果不存在设置为0
 		String leadOwner = sheetList.get(0);
-		User owner = null;
+		User owner = new User();
 		if ( leadOwner != null && !"".equals(leadOwner.trim()) ) {
 			//根据id查询客户所有者
 			owner = userService.getByName(leadOwner);
@@ -89,7 +93,7 @@ public class ExcelParse4Lead extends ExcelParse<LeadDB> {
 		
 		//线索来源
 		String leadSource = sheetList.get(9);
-		Dictionary source = null;
+		Dictionary source = new Dictionary();
 		if ( leadSource != null && !"".equals(leadSource.trim()) ) {
 			//根据id查询线索来源(40101)
 			source = dictionaryService.getValue(leadSource, 40101L);
@@ -106,7 +110,7 @@ public class ExcelParse4Lead extends ExcelParse<LeadDB> {
 		
 		//线索状态
 		String leadStatus = sheetList.get(10);
-		Dictionary status = null;
+		Dictionary status = new Dictionary();
 		if ( leadStatus != null && !"".equals(leadStatus.trim()) ) {
 			//根据id查询线索状态(40102)
 			status = dictionaryService.getValue(leadStatus, 40102L);
@@ -124,7 +128,7 @@ public class ExcelParse4Lead extends ExcelParse<LeadDB> {
 		
 		//行业
 		String leadIndustry = sheetList.get(13);
-		Dictionary industry = null;
+		Dictionary industry = new Dictionary();
 		if ( leadIndustry != null && !"".equals(leadIndustry.trim()) ) {
 			//根据id查询线索状态(40305)
 			industry = dictionaryService.getValue(leadIndustry, 40305L);
@@ -141,7 +145,7 @@ public class ExcelParse4Lead extends ExcelParse<LeadDB> {
 		
 		//卡类型
 		String leadCardType = sheetList.get(11);
-		Dictionary cardType = null;
+		Dictionary cardType = new Dictionary();
 		if ( leadCardType != null && !"".equals(leadCardType.trim()) ) {
 			//根据id查询线索状态(40103)
 			cardType = dictionaryService.getValue(leadCardType, 40103L);
@@ -158,7 +162,7 @@ public class ExcelParse4Lead extends ExcelParse<LeadDB> {
 		
 		//省
 		String leadProvince = sheetList.get(14);
-		PCAS province = null;
+		PCAS province = new PCAS();
 		if ( leadProvince != null && !"".equals(leadProvince.trim()) ) {
 			//根据id查询线索状态(40103)
 			province = pCASService.getByName(leadProvince);
@@ -176,7 +180,7 @@ public class ExcelParse4Lead extends ExcelParse<LeadDB> {
 		
 		//市
 		String leadCity = sheetList.get(15);
-		PCAS city = null;
+		PCAS city = new PCAS();;
 		if ( leadCity != null && !"".equals(leadCity.trim()) ) {
 			//根据id查询线索状态(40103)
 			city = pCASService.getByName(leadCity);
@@ -193,7 +197,7 @@ public class ExcelParse4Lead extends ExcelParse<LeadDB> {
 		
 		//县
 		String leadCounty = sheetList.get(16);
-		PCAS county = null;
+		PCAS county = new PCAS();;
 		if ( leadCounty != null && !"".equals(leadCounty.trim()) ) {
 			//根据id查询线索状态(40103)
 			county = pCASService.getByName(leadCounty);
@@ -209,7 +213,11 @@ public class ExcelParse4Lead extends ExcelParse<LeadDB> {
 		list.remove(16);
 		list.add(16, county==null?new PCAS():county);
 		
-		
+		//修改最后一列的类型为Integer类型
+		String rowNumString = sheetList.get(sheetList.size()-1);
+		int rowNum = Integer.valueOf(rowNumString);
+		list.remove(20);
+		list.add(20,rowNum);
 		//将其保存为对象
 		return new LeadDB().createEntity(list);
 	}
@@ -224,8 +232,8 @@ public class ExcelParse4Lead extends ExcelParse<LeadDB> {
 
 	/**
 	 * 查找Excel中的重复数据,并把这些重复数据添加的重复记录集合中
-	 * @param entityMap
-	 * @param uniqueNum 唯一键个数(name+mobile+email就是三个)
+	 * @param entityMap 要查找的实体类Map集合
+	 * @param paramList 查找的方式(例如:按手机,邮箱等)
 	 */
 	@Override
 	public void getDuplicateDate(Map<Integer, LeadDB> entityMap,List<String> paramList) {
@@ -258,19 +266,23 @@ public class ExcelParse4Lead extends ExcelParse<LeadDB> {
 				 */
 				String uniqueString = "";
 				
-				//按手机排重
-				if((params.contains("mobile")) && (lead1.getMobile().trim().equals(lead2.getMobile().trim()))){
-					//第一参数相同
+				
+				/*
+				 * 按手机排重
+				 * 条件：查重的主键包含mobile，并且(lead1和lead2的)主键内容不为null，""和"null"。最后判断两个mobile是否相等
+				 */
+				if((params.contains("mobile")) && !Tools.isEmpty(lead1.getMobile().trim()) && !Tools.isEmpty(lead2.getMobile().trim()) && (lead1.getMobile().trim().equals(lead2.getMobile().trim()))){
+					//第一参数相同 b  
 					flag1 = true;
 					//拼接唯一键
 					uniqueString += lead1.getMobile()+"_";
 					//如果不需要根据email这个参数排重,就将其状态置为true
 					if(!params.contains("email")){
-						flag1=true;
+						flag2=true;
 					}
 				}
 				//按邮箱排重
-				if((params.contains("email")) && (lead1.getEmail().equals(lead2.getEmail()))){
+				if((params.contains("email")) && !Tools.isEmpty(lead1.getEmail().trim()) && !Tools.isEmpty(lead2.getEmail().trim()) && (lead1.getEmail().equals(lead2.getEmail()))){
 					//第二参数相同
 					flag2 = true;
 					//拼接唯一键
@@ -280,6 +292,10 @@ public class ExcelParse4Lead extends ExcelParse<LeadDB> {
 						flag1=true;
 					}
 				}
+				if(!Tools.isEmpty(uniqueString) && (uniqueString.lastIndexOf("_")==(uniqueString.length()-1))){
+					uniqueString = uniqueString.substring(0, uniqueString.length()-1);
+				}
+				
 				/*
 				 * 判断是重复数据的依据:
 				 * 1.如果两个字段的标记都是true,
@@ -296,85 +312,16 @@ public class ExcelParse4Lead extends ExcelParse<LeadDB> {
 	}
 
 	
-	/**
-	 * 操作excel转换成的对象集合,对其进行去重处理
-	 * @param args
-	 */
 	
 	
 	public static void main(String[] args){
-		/*boolean flag=true;
-		boolean flag2= false;
-		System.out.println(flag&&flag2);*/
-		/*String[] aaaStrings={"email","mobile"};
+		
+		
 		List<String> list = new ArrayList<String>();
-		list.add("email");
 		list.add("mobile");
-		String str1 = list.toString();
-		String str = aaaStrings.toString();
-		System.out.println(str1.contains("email"));*/
-		/*String key = "b";
-		Map<String,Integer> map = new HashMap<String, Integer>();
-		map.put("a", 1);
-		map.put("b", 6);
-		map.put("c", 7);
-		
-		Collection<Integer> list = (Collection<Integer>)map.values();
-		for(Integer i:list){
-			System.out.println(i);
-		}*/
-		/*Set<Integer> set2 = new TreeSet<Integer>();
-		Set<Integer> set = new HashSet<Integer>();
-		set.add(2);
-		set.add(5);
-		set.add(10);
-		set.add(3);
-		set.add(8);
-		set.add(7);
-		set.add(111);
-		Iterator<Integer> ite = set.iterator();
-		while(ite.hasNext()){
-			Integer  temp= ite.next();
-			System.out.println(temp);
-			set2.add(temp);
-		}
-		Iterator<Integer> ite2 = set2.iterator();
-		System.out.println("-------");
-		while(ite2.hasNext()){
-			System.out.println(ite2.next());
-		}*/
-		/*Set<Integer> set1 = new TreeSet<Integer>();
-		set1.add(5);
-		set1.add(333);
-		set1.add(789);
-		set1.add(34);
-		set1.add(89);
-		ImportMessage.workbookRepeats.put("1", set1);
-		
-		
-		Set<Integer> set2 = new TreeSet<Integer>();
-		set2.add(55);
-		set2.add(33);
-		set2.add(789);
-		set2.add(384);
-		set2.add(91);
-		set2.add(1);
-		ImportMessage.workbookRepeats.put("2", set2);
-		*/
-		
-		Map<String, Set<Integer>> workbookRepeats = ImportMessage.workbookRepeats;
-		if(workbookRepeats.isEmpty()){
-			
-		}
-		Set<String> keySet = workbookRepeats.keySet();
-		for(String str:keySet){
-			Set<Integer> set = workbookRepeats.get(str);
-			for(Integer i:set){
-				System.out.println(i);
-			}
-			System.out.println("--------");
-		}
-		
+		String paramsString = list.toString();
+		System.out.println(paramsString);
+		System.out.println(paramsString.contains("mobile"));
 		
 	}
 

@@ -70,7 +70,7 @@ public class User implements Serializable, Cloneable, Initialized {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "JOB_SITUATION_ID")
     private Dictionary jobSituation;
-    
+
     @FieldInfo(desc = "是否管理员")
     @Column(name = "IS_MANAGER")
     private Boolean isManager;

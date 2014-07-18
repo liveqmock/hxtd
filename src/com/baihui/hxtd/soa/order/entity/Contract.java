@@ -47,19 +47,19 @@ public class Contract {
 	/**
 	 * 合同名称
 	 */
-	@Column(name = "NAME", updatable = false)
+	@Column(name = "NAME")
 	private String name;
 	
 	/**
 	 * 合同编号
 	 */
-	@Column(name = "CODE", updatable = false)
+	@Column(name = "CODE")
 	private String code;
 	
 	/**
 	 * 合同金额
 	 */
-	@Column(name = "PURCHASE_MONEY", updatable = false)
+	@Column(name = "PURCHASE_MONEY")
 	private BigDecimal purchaseMoney;
 	
 	/** 合同类型 */

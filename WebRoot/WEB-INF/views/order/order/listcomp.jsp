@@ -39,7 +39,7 @@ $(function(){
 <body>
 <div class="listcontainer">
 	<div class="margin0">
-		<form action="${ctx}/order/order/query.do" onsubmit="return false;">
+		<form action="${ctx}/order/order/queryList.do" onsubmit="return false;">
 		<div>
 			<table class="w pr10 pl10">
 				<tr>

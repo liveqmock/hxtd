@@ -41,19 +41,19 @@ public class Attachment {
 	 * 字典类型
 	 */
 	@ManyToOne(fetch = FetchType.LAZY)
-	@JoinColumn(name = "DICTIONARY_ID")
-	private Dictionary dict;
+	@JoinColumn(name = "TYPE_DICT")
+	private Dictionary type;
 	/**
 	 * 关联模块ID
 	 */
-	@Column(name = "MODULE_ID")
-	private Long moduleId;
+	@Column(name = "RECORD_ID")
+	private Long recordId;
 	/**
 	 * 模块类型
 	 */
 	@ManyToOne(fetch = FetchType.LAZY)
-	@JoinColumn(name = "TYPE")
-	private Dictionary type;
+	@JoinColumn(name = "MODULE_ID")
+	private Dictionary module;
 	/**
 	 * 文件原名
 	 */
@@ -101,17 +101,17 @@ public class Attachment {
 	public void setId(Long id) {
 		this.id = id;
 	}
-	public Dictionary getDict() {
-		return dict;
+	public Long getRecordId() {
+		return recordId;
 	}
-	public void setDict(Dictionary dict) {
-		this.dict = dict;
+	public void setRecordId(Long recordId) {
+		this.recordId = recordId;
 	}
-	public Long getModuleId() {
-		return moduleId;
+	public Dictionary getModule() {
+		return module;
 	}
-	public void setModuleId(Long moduleId) {
-		this.moduleId = moduleId;
+	public void setModule(Dictionary module) {
+		this.module = module;
 	}
 	public Dictionary getType() {
 		return type;

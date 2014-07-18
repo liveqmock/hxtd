@@ -2,6 +2,7 @@
 package com.baihui.hxtd.soa.order.controller;
 
 import java.io.IOException;
+import java.io.PrintWriter;
 import java.text.ParseException;
 import java.util.List;
 import java.util.Map;
@@ -26,6 +27,7 @@ import com.baihui.hxtd.soa.base.Constant;
 import com.baihui.hxtd.soa.base.orm.hibernate.HibernatePage;
 import com.baihui.hxtd.soa.base.utils.ImportExport;
 import com.baihui.hxtd.soa.base.utils.Search;
+import com.baihui.hxtd.soa.base.utils.mapper.HibernateAwareObjectMapper;
 import com.baihui.hxtd.soa.common.controller.CommonController;
 import com.baihui.hxtd.soa.order.entity.Contract;
 import com.baihui.hxtd.soa.order.service.ContractService;
@@ -36,6 +38,8 @@ import com.baihui.hxtd.soa.system.service.DictionaryService;
 import com.baihui.hxtd.soa.util.EnumModule;
 import com.baihui.hxtd.soa.util.EnumOperationType;
 import com.baihui.hxtd.soa.util.JsonDto;
+import com.fasterxml.jackson.core.JsonGenerationException;
+import com.fasterxml.jackson.databind.JsonMappingException;
 /**
  * 
  * 功能描述：合同模块controller
@@ -67,11 +71,14 @@ public class ContractController extends CommonController<Contract> {
 	 * @param request
 	 * @return
 	 * @throws NoSuchFieldException
+	 * @throws IOException 
+	 * @throws JsonMappingException 
+	 * @throws JsonGenerationException 
 	 */
 	@ResponseBody
 	@RequestMapping(value = "/query.do", produces = "text/text;charset=UTF-8")
-	public String query(HibernatePage<Contract> page,// 
-			HttpServletRequest request,ModelMap model) throws NoSuchFieldException {
+	public void query(HibernatePage<Contract> page,
+			HttpServletRequest request,ModelMap model,PrintWriter out) throws NoSuchFieldException, JsonGenerationException, JsonMappingException, IOException {
 		
 		logger.info("ContractController.query查询合同列表");
 		Map<String, Object> searchParams = Servlets.getParametersStartingWith(
@@ -87,7 +94,7 @@ public class ContractController extends CommonController<Contract> {
 		page = contractService.findPage(searchParams,dataShift, page);
 		JsonDto json = new JsonDto();
 		json.setResult(page);
-		return json.toString();
+		HibernateAwareObjectMapper.DEFAULT.writeValue(out, json);
 	}
 
 	/**
@@ -138,9 +145,9 @@ public class ContractController extends CommonController<Contract> {
 		User user = (User) request.getSession().getAttribute(Constant.VS_USER);
 		logger.info("获得当前操作用户{}", user.getName());
 		contract.setModifier(user);
-		if(null==contract.getType().getId()){
-			contract.setType(null);
-		}
+//		if(null==contract.getType().getId()){
+//			contract.setType(null);
+//		}
 		AuditLog auditLog = new AuditLog(EnumModule.CONTRACT.getModuleName(), 
 				contract.getId(), contract.getCode(), EnumOperationType.MODIFY.getOperationType(), user);
 		contractService.modify(contract,auditLog);
@@ -219,9 +226,9 @@ public class ContractController extends CommonController<Contract> {
 		contract.setModifier(user);
 		AuditLog auditLog = new AuditLog(EnumModule.CONTRACT.getModuleName(), 
 				contract.getId(), contract.getCode(), EnumOperationType.ADD.getOperationType(), user);
-		if(null==contract.getType().getId()){
-			contract.setType(null);
-		}
+//		if(null==contract.getType().getId()){
+//			contract.setType(null);
+//		}
 		contractService.add(contract,auditLog);
 		JsonDto json = JsonDto.add(contract.getId());
 		return json.toString();

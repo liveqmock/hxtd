@@ -14,6 +14,7 @@ import org.springside.modules.persistence.SearchFilter;
 import com.baihui.hxtd.soa.base.orm.hibernate.HibernatePage;
 import com.baihui.hxtd.soa.base.utils.Search;
 import com.baihui.hxtd.soa.system.dao.AuditLogDao;
+import com.baihui.hxtd.soa.system.dao.UserDao;
 import com.baihui.hxtd.soa.system.entity.AuditLog;
 import com.baihui.hxtd.soa.util.EnumModule;
 /**
@@ -34,6 +35,9 @@ public class AuditLogService {
 	 */
 	@Resource
 	private AuditLogDao auditLogDao;
+	
+	@Resource
+	private UserDao userDao;
 
 	 /**
      * findPage(分页查询组件列表)
@@ -44,10 +48,11 @@ public class AuditLogService {
      */
     @Transactional(readOnly = true)
     public HibernatePage<AuditLog> findPage(Map<String, Object> searchParams, 
-    		HibernatePage<AuditLog> page) throws NoSuchFieldException {
+    		HibernatePage<AuditLog> page,DataShift dataShift) throws NoSuchFieldException {
     	DetachedCriteria criteria = DetachedCriteria.forClass(AuditLog.class);
     	criteria.setFetchMode("type", FetchMode.JOIN);
     	criteria.setFetchMode("creator", FetchMode.JOIN);
+    	//userDao.visibleData(criteria, dataShift);
 		Map<String, SearchFilter> filters = Search.parse(searchParams);// 构建参数
 		Search.buildCriteria(filters, criteria, AuditLog.class);
         HibernatePage<AuditLog> pageResult=auditLogDao.findPage(page, criteria);

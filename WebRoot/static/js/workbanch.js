@@ -5,8 +5,8 @@ workbanch.modules = {
 		fields : [ 'name', 'company', 'phone', 'mobile', 'fax' ]
 	},
 	customer : {
-		titles : [ '客户', '公司', '电话', '手机', '传真' ],
-		fields : [ 'name', 'company', 'phone', 'mobile', 'fax' ]
+		titles : [ '客户', '公司', '电话', '手机', '公司' ],
+		fields : [ 'name', 'company', 'phone', 'mobile', 'company' ]
 	},
 	contact : {
 		titles : [ '联系人', '公司', '电话', '手机', '传真' ],
@@ -25,6 +25,40 @@ workbanch.initList = function() {
 		workbanch.loadData(this);
 	});
 };
+workbanch.getParams=function(ele){
+	var $this;
+	if (ele) {
+		$this = $(ele);
+	} else {
+		$this = $(this);
+	}
+	var flag = $this.attr("params");
+	var time;
+	if(flag){
+		time = {};
+		var date = new Date();
+		var today = date.getFullYear()+"-"+(date.getMonth()+1)+"-"+date.getDate();
+		switch(flag){
+			case "today":
+				time.search_GTE_createdTime=today;
+				time.search_LTE_createdTime=today;
+				break;
+			case "week":
+				var week = new Date(date.getTime()-(1000*60*60*24*7));
+				week = week.getFullYear()+"-"+(week.getMonth()+1)+"-"+week.getDate();
+				time.search_GTE_createdTime=week;
+				time.search_LTE_createdTime=today;
+				break;
+			case "month":
+				var month = new Date(date.getTime()-(1000*60*60*24*30));
+				month = month.getFullYear()+"-"+(month.getMonth()+1)+"-"+month.getDate();
+				time.search_GTE_createdTime=month;
+				time.search_LTE_createdTime=today;
+				break;
+		}
+	}
+	return $.param(time);
+};
 workbanch.loadData = function(ele) {
 	var $this;
 	if (ele) {
@@ -39,7 +73,7 @@ workbanch.loadData = function(ele) {
 	if (url) {
 		RcmsAjax.ajaxNoMsg(url, function(result) {
 			$div.append(workbanch.result2Html(result, module));
-		},null,null);
+		},null,workbanch.getParams(ele));
 	}
 };
 workbanch.result2Html = function(result, module) {
@@ -62,7 +96,7 @@ workbanch.result2Html = function(result, module) {
 			if (i % 2 == 0) {
 				table.push(" class='bg_c_blue'");
 			}
-			table.push(">");
+			table.push(" onclick='workbanch.href(this,",list[i].id,")'>");
 			for ( var j = 0; j < fields.length; j++) {
 				var value = list[i][fields[j]];
 				table.push("<td>");
@@ -75,6 +109,24 @@ workbanch.result2Html = function(result, module) {
 	table.push("</table>");
 	
 	return table.join("");
+};
+workbanch.reportLoad=function (ele){
+	var $this;
+	if (ele) {
+		$this = $(ele);
+	} else {
+		$this = $(this);
+	}
+	var div = $this.find('>div:last div');
+    var url = $this.attr("uri")
+    swfobject.embedSWF(jsUtil.getRootPath()+"/static/component/open-flash-chart-2/open-flash-chart.swf", 
+    	div.attr("id"), "100%", "100%", "9.0.0","expressInstall.swf",  
+  			{"data-file":url,"loading":"正在加载数据,请稍候..."});
+};
+workbanch.initReport=function(){
+	$(".gbin1-list li[type=report]").each(function() {
+		workbanch.reportLoad(this);
+	});
 };
 workbanch.modifyOrder = function() {
 	var ids = new Array();
@@ -94,7 +146,7 @@ workbanch.bindDelete = function() {
 				var id = $this.attr("id");
 				jsUtil.confirm("是否删除工作台组件", function() {
 					RcmsAjax.ajaxNoMsg(jsUtil.getRootPath()
-							+ "/workbanch/delete.do?ids=" + id, function() {
+							+ "/workbanch/delete.do?id=" + id, function() {
 						$this.remove();
 					});
 				}, "警告");
@@ -103,7 +155,12 @@ workbanch.bindDelete = function() {
 workbanch.bindRefresh = function() {
 	$(".refresh").click(function() {
 		var eleLi = $(this).parent().parent().parent().parent();
-		workbanch.loadData(eleLi);
+		var type = eleLi.attr('type');
+		if(type=='list'){
+			workbanch.loadData(eleLi);
+		}else{
+			workbanch.reportLoad(eleLi);
+		}
 	});
 };
 workbanch.bindClose = function() {
@@ -124,6 +181,12 @@ workbanch.bindFunction = function() {
 	workbanch.bindDelete();
 	workbanch.bindRefresh();
 	$(".close").click(workbanch.bindClose);
+};
+workbanch.href=function(ele,id){
+	//var $this = $(this).parent().parent().parent().parent();
+	var $ele = $(ele).parent().parent().parent().parent();
+	var url= $ele.attr("uri").replace("query.do","toViewPage.do?id="+id);
+	window.location.href=url;
 };
 $(function() {
 	workbanch.bindFunction();

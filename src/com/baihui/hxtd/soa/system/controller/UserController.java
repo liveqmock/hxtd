@@ -1,34 +1,5 @@
 package com.baihui.hxtd.soa.system.controller;
 
-import java.io.IOException;
-import java.util.List;
-import java.util.Map;
-
-import javax.annotation.Resource;
-import javax.servlet.ServletContext;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-import javax.servlet.http.HttpSession;
-
-import org.apache.commons.collections.BidiMap;
-import org.apache.commons.io.FilenameUtils;
-import org.apache.commons.lang3.ArrayUtils;
-import org.apache.poi.openxml4j.exceptions.InvalidFormatException;
-import org.apache.poi.ss.usermodel.Workbook;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import org.springframework.stereotype.Controller;
-import org.springframework.ui.ModelMap;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.ResponseBody;
-import org.springframework.web.bind.annotation.SessionAttributes;
-import org.springframework.web.multipart.MultipartFile;
-import org.springframework.web.servlet.mvc.support.RedirectAttributes;
-import org.springside.modules.web.Servlets;
-
 import com.baihui.hxtd.soa.base.Constant;
 import com.baihui.hxtd.soa.base.orm.hibernate.HibernatePage;
 import com.baihui.hxtd.soa.base.utils.ImportExport;
@@ -40,21 +11,34 @@ import com.baihui.hxtd.soa.base.utils.ztree.TreeNodeConverter;
 import com.baihui.hxtd.soa.common.controller.CommonController;
 import com.baihui.hxtd.soa.common.service.CommonService;
 import com.baihui.hxtd.soa.system.DictionaryConstant;
-import com.baihui.hxtd.soa.system.entity.AuditLog;
-import com.baihui.hxtd.soa.system.entity.Dictionary;
-import com.baihui.hxtd.soa.system.entity.Function;
-import com.baihui.hxtd.soa.system.entity.Organization;
-import com.baihui.hxtd.soa.system.entity.User;
-import com.baihui.hxtd.soa.system.service.ComponentService;
-import com.baihui.hxtd.soa.system.service.DictionaryService;
-import com.baihui.hxtd.soa.system.service.FunctionService;
-import com.baihui.hxtd.soa.system.service.OrganizationService;
-import com.baihui.hxtd.soa.system.service.RoleService;
-import com.baihui.hxtd.soa.system.service.UserService;
+import com.baihui.hxtd.soa.system.entity.*;
+import com.baihui.hxtd.soa.system.service.*;
 import com.baihui.hxtd.soa.util.EnumModule;
 import com.baihui.hxtd.soa.util.EnumOperationType;
 import com.baihui.hxtd.soa.util.JsonDto;
 import com.fasterxml.jackson.core.JsonProcessingException;
+import org.apache.commons.collections.BidiMap;
+import org.apache.commons.io.FilenameUtils;
+import org.apache.commons.lang3.ArrayUtils;
+import org.apache.poi.openxml4j.exceptions.InvalidFormatException;
+import org.apache.poi.ss.usermodel.Workbook;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.stereotype.Controller;
+import org.springframework.ui.ModelMap;
+import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
+import org.springside.modules.web.Servlets;
+
+import javax.annotation.Resource;
+import javax.servlet.ServletContext;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
+import java.io.IOException;
+import java.util.List;
+import java.util.Map;
 
 /**
  * 用户控制器
@@ -125,8 +109,8 @@ public class UserController extends CommonController<User> {
         model.addAttribute("organizationOrder", organization.getOrder());
         logger.debug("组织主键编号“{}”", organization.getId());
 
-        page.setHibernateOrderBy("createdTime");
-        page.setHibernateOrder("desc");
+        page.setHibernateOrderBy("modifiedTime");
+        page.setHibernateOrder(HibernatePage.DESC);
         model.addAttribute("userPage", page);
 
         return "/system/user/list";
@@ -223,6 +207,15 @@ public class UserController extends CommonController<User> {
         userService.add(user, auditLog);
 
         return JsonDto.add(user.getId()).toString();
+    }
+
+    /**
+     * 转至查看用户页面
+     * 1.从个人设置->账号信息点击进入，此时id=session.user.id
+     */
+    @RequestMapping("/toViewSelfPage.do")
+    public String toViewSelfPage(ModelMap model) {
+        return toViewPage(((User) model.get(Constant.VS_USER)).getId(), model);
     }
 
     /**
@@ -335,7 +328,7 @@ public class UserController extends CommonController<User> {
      * 3.2.未授权
      */
     @SuppressWarnings("unchecked")
-	@RequestMapping(value = "/toAuthorizationPage.do", method = RequestMethod.GET)
+    @RequestMapping(value = "/toAuthorizationPage.do", method = RequestMethod.GET)
     public String toAuthorizationPage(Long id, ModelMap model) {
         logger.info("转至授权页面");
 
@@ -371,12 +364,12 @@ public class UserController extends CommonController<User> {
                                 @RequestParam(value = "roleId", required = false) Long[] roleIds,
                                 @RequestParam(value = "functionId", required = false) Long[] functionIds,
                                 @RequestParam(value = "componentId", required = false) Long[] componentIds,
-                                HttpServletRequest request) {
+                                ModelMap model) {
         logger.info("授权");
-        User u = (User) request.getSession().getAttribute(Constant.VS_USER);
+        User user = (User) model.get(Constant.VS_USER);
         AuditLog auditLog = new AuditLog(EnumModule.USER.getModuleName(),
-                null == id ? u.getId() : id, null == id ? u.getRealName() : userService.getById(id).getRealName(), EnumOperationType.AUTHORIZATION.getOperationType(), u, "用户授权");
-        userService.authorization(null == id ? u.getId():id, roleIds, functionIds, componentIds, auditLog);
+                null == id ? user.getId() : id, null == id ? user.getRealName() : userService.getById(id).getRealName(), EnumOperationType.AUTHORIZATION.getOperationType(), user, "用户授权");
+        userService.authorization(null == id ? user.getId() : id, roleIds, functionIds, componentIds, auditLog);
         return new JsonDto(id, "授权成功").toString();
     }
 
@@ -385,10 +378,10 @@ public class UserController extends CommonController<User> {
      */
     @ResponseBody
     @RequestMapping(value = "/resetPassword.do")
-    public String resetPassword(Long[] id, HttpServletRequest request) {
+    public String resetPassword(Long[] id, ModelMap model) {
         logger.info("重置密码");
 
-        User user = (User) request.getSession().getAttribute(Constant.VS_USER);
+        User user = (User) model.get(Constant.VS_USER);
         AuditLog[] auditLogArr = new AuditLog[id.length];
         for (int i = 0; i < id.length; i++) {
             auditLogArr[i] = new AuditLog(EnumModule.USER.getModuleName(),
@@ -406,10 +399,10 @@ public class UserController extends CommonController<User> {
      */
     @ResponseBody
     @RequestMapping(value = "/enable.do")
-    public String enable(Long[] id, HttpServletRequest request) {
+    public String enable(Long[] id, ModelMap model) {
         logger.info("启用用户");
 
-        User user = (User) request.getSession().getAttribute(Constant.VS_USER);
+        User user = (User) model.get(Constant.VS_USER);
         AuditLog[] auditLogArr = new AuditLog[id.length];
         for (int i = 0; i < id.length; i++) {
             auditLogArr[i] = new AuditLog(EnumModule.USER.getModuleName(),
@@ -427,10 +420,10 @@ public class UserController extends CommonController<User> {
      */
     @ResponseBody
     @RequestMapping(value = "/disable.do")
-    public String disable(Long[] id, HttpServletRequest request) {
+    public String disable(Long[] id, ModelMap model) {
         logger.info("禁用用户");
 
-        User user = (User) request.getSession().getAttribute(Constant.VS_USER);
+        User user = (User) model.get(Constant.VS_USER);
         AuditLog[] auditLogArr = new AuditLog[id.length];
         for (int i = 0; i < id.length; i++) {
             auditLogArr[i] = new AuditLog(EnumModule.USER.getModuleName(),
@@ -451,7 +444,7 @@ public class UserController extends CommonController<User> {
     }
 
     @SuppressWarnings("unchecked")
-	@RequestMapping(value = "/import.do")
+    @RequestMapping(value = "/import.do")
     public String imports(MultipartFile file, HttpSession session,
                           @RequestParam(defaultValue = "/system/user/toQueryPage.do") String redirectUri,
                           @ModelAttribute(Constant.VS_USER) User sessionUser,
@@ -586,7 +579,7 @@ public class UserController extends CommonController<User> {
             }
 
             sb.append(String.format("{id:-%s, name:\"%s\", pId:-%s, type:\"%s\"},", new Object[]{
-            		org.getId(),
+                    org.getId(),
                     org.getName(),
                     org.getParent() == null ? "0" : org.getParent().getId(),
                     "org"
@@ -615,9 +608,9 @@ public class UserController extends CommonController<User> {
      * @since 2014-6-30
      */
     @RequestMapping(value = "/toModifyPasswordPage.do")
-    public String toModifyPwd(User user, ModelMap model, HttpServletRequest request) {
+    public String toModifyPwd(ModelMap model) {
         logger.info("转至修改密码页面");
-        user = (User) request.getSession().getAttribute(Constant.VS_USER);
+        User user = (User) model.get(Constant.VS_USER);
         String funcUrl = "/system/user/modifyPassword.do";
         model.addAttribute("user", user);
         model.addAttribute("funcUrl", funcUrl);
@@ -633,12 +626,12 @@ public class UserController extends CommonController<User> {
      */
     @ResponseBody
     @RequestMapping(value = "/modifyPassword.do")
-    public String modifyPwd(String password, Long id,HttpServletRequest request) {
+    public String modifyPwd(String password, Long id, ModelMap model) {
 
-    	User u = (User) request.getSession().getAttribute(Constant.VS_USER);
-        AuditLog auditLog = new AuditLog(EnumModule.USER.getModuleName(), 
-        		u.getId(), u.getRealName(), EnumOperationType.MODIFYPASSWORD.getOperationType(), u,"用户修改密码");
-    	userService.modifyPasswordById(id, password,auditLog);
+        User user = (User) model.get(Constant.VS_USER);
+        AuditLog auditLog = new AuditLog(EnumModule.USER.getModuleName(),
+                user.getId(), user.getRealName(), EnumOperationType.MODIFYPASSWORD.getOperationType(), user, "用户修改密码");
+        userService.modifyPasswordById(id, password, auditLog);
         JsonDto jsonDto = new JsonDto("修改密码成功");
         jsonDto.setSuccessFlag(true);
         return jsonDto.toString();
@@ -646,8 +639,8 @@ public class UserController extends CommonController<User> {
 
     @ResponseBody
     @RequestMapping(value = "/checkPwd")
-    public String checkPwd(String oldpwd, HttpServletRequest request) {
-        User user = (User) request.getSession().getAttribute(Constant.VS_USER);
+    public String checkPwd(String oldpwd, ModelMap model) {
+        User user = (User) model.get(Constant.VS_USER);
         JsonDto jsonDto = new JsonDto();
         if (md5.getMD5ofStr(oldpwd).equals(user.getPassword())) {
             jsonDto.setMessage("");

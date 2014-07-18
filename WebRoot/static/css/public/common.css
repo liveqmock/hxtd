@@ -2,6 +2,7 @@
 /* CSS Document */
 *{font-family:'微软雅黑'; font-size:12px;}
 html, body, div, span, iframe, h1, h2, h3, h4, h5, h6, p, blockquote, pre, a, address, big, cite, code, del, em, font, img, ins, small, strong, var, b, u, i, center, dl, dt, dd, ul , li, ol, fieldset, form, label, legend,a,table {margin: 0;padding: 0;text-decoration:none; list-style:none;  }
+select, input{padding:0;}
 table{table-layout:fixed;word-wrap:break-word; border:none;}
 i{font-style:normal}
 .globle_img{ background:url(../../images/public.png) no-repeat;}
@@ -52,22 +53,23 @@ i{font-style:normal}
 /*当前页及功能条公共样式结束*/
 
 /*文本框类型*/
-.text_input1{ border:1px solid #999; width:190px; height:20px;}
-.text_input2{ border:1px solid #999; width:91px; height:20px;}
-.text_input3{ border:1px solid #999; width:270px; height:20px;}
-.text_input4{ border:1px solid #999; width:125px; height:20px;}
+.text_input1{ border:1px solid #999; width:190px; height:25px;}
+.text_input2{ border:1px solid #999; width:91px; height:25px;}
+.text_input3{ border:1px solid #999; width:270px; height:25px;}
+.text_input4{ border:1px solid #999; width:125px; height:25px;}
 .down_input1{ background-position:-72px 0px; width:215px; height:20px;}
 .remarks_input1{ border:1px solid #999; width:85%; height:180px;resize:none}
 .remarks_input2{ border:1px solid #999; width:85%; height:40px;resize:none}
 .remarks_input3{ border:1px solid #999; width:70%; height:60px;resize:none}
 .user_bg{ background-position:0px -310px; width:267px; height:40px;}
 .password_bg{ background-position:0px -262px; width:267px; height:40px;}
-.select1{width:273px;height:25px; line-height:18px; padding:2px 0; border:1px solid #999999;}
-.select2{width:194px;height:25px; line-height:18px; padding:2px 0; border:1px solid #999999;}
+.select1{width:270px;height:25px; line-height:18px; padding:2px 0; border:1px solid #999999;}
+.select2{width:190px;height:25px; line-height:18px; padding:2px 0; border:1px solid #999999;}
 .select3{width:125px;height:25px; line-height:18px; padding:2px 0; border:1px solid #999999;}
 
 /*小元素*/
 .input_close{ background:url(../../images/input_close.png) no-repeat; width:91px;  height:20px; cursor:pointer; background-position:top right;}
+.input_close3{ background:url(../../images/input_close.png) no-repeat; width:125px;  height:20px; cursor:pointer; background-position:top right;}
 .input_close2 {background: url(../../images/input_close.png) no-repeat;cursor: pointer;height: 25px; width: 230px;background-position:top right;}
 .input_close1{ background:url(../../images/input_close.png) no-repeat; width:270px;  height:20px; cursor:pointer; background-position:top right;}
 .time_closenone1{width:20px; height:22px; display:block;left:75px;top:0px}
@@ -91,7 +93,8 @@ i{font-style:normal}
 .break_btn{ background-position:-413px -84px; width:78px; height:27px;}
 .back_btn{ background-position:-413px -114px; width:78px; height:27px;}
 .edit_btn{ background-position:-413px -143px; width:78px; height:27px;}
-.s_detail_btn,.s_edit_btn,.s_dump_btn,.s_download,.s_preview,.s_inquiry,.s_reply,.s_change,.s_todown,.s_toup,.s_print,.s_statistics,.s_approve{ width:17px; height:17px;}
+.s_detail_btn,.s_edit_btn,.s_dump_btn,.s_download,
+.s_preview,.s_inquiry,.s_reply,.s_change,.s_todown,.s_toup,.s_print,.s_statistics,.s_approve,.s_contract,.s_onapprove,.s_goapprove{ width:17px; height:17px;}
 .s_detail_btn{ background-position:-482px -30px;}
 .s_dump_btn{ background-position:-439px -30px;}
 .s_edit_btn{ background-position:-461px -31px;}
@@ -103,6 +106,9 @@ i{font-style:normal}
 .s_print{ background-position:-372px -142px;}
 .s_statistics{ background-position:-394px -142px;}
 .s_approve{ background-position:-372px -164px;}
+.s_onapprove{ background-position:-372px -183px;}
+.s_goapprove{ background-position:-395px -183px;}
+.s_contract{ background-position:-395px -165px;}
 .have_read{ background-position:-454px -202px; width:14px; height:12px;}
 .no_read{ background-position:-468px -202px; width:14px; height:12px;}
 .s_reply{ background-position:-396px 0px;}

@@ -17,9 +17,29 @@
 <link rel="stylesheet" href="${ctx}/static/css/application.css" type="text/css"/>
 <script type="text/javascript" src="${ctx}/static/js/jquery-jtemplates.js"></script>
 <script type="text/javascript" src="${ctx}/static/js/js-util.common.js"></script>
+<script type="text/javascript">
+$(function(){
+	$(".sendApprove").click(function(){
+		jsUtil.dialogIframe('${ctx}/common/approve/toSendPage.doself', '发送', 500, 300);
+		DIALOG.dialog('option', 'buttons', {
+			"确定" : function() {
+				//if(act == "view") {
+				//	DIALOG.dialog("close");
+				//} else {
+				//	$("#dialogIframe")[0].contentWindow.submitForm();
+				//}
+			},
+			"关闭" : function() {
+				DIALOG.dialog("close");
+			}
+		});
+	});
+});
+</script>
 </head>
 <body>
 <div>
+	<input name="RecordsId" type="hidden" value="${order.id}"/>
 	<div class="cb"></div>
 	<div class="ml35 mr35 mt20 block cb cb">
 		<b class="b1"></b>
@@ -30,21 +50,27 @@
 			<h1 class="f14 fbnone mt10 ml10 fl">订单详情信息</h1>
 			<ul class="fr id_table1 mt10 ml10">
 				<li>
-					<a class=" pl35 c_white f14 lh25 cp block fr" href="javascript:;" onclick="window.print()">
+					<a class="pl10 c_white f14 lh25 cp block fr sendApprove" href="javascript:;">
+						<b class="allbtn_l block fl"></b>
+						<b class="allbtn_r pr13 block fl w_auto f14">发送</b>
+					</a>
+				</li>
+				<li>
+					<a class="pl10 c_white f14 lh25 cp block fr" href="javascript:;" onclick="window.print()">
 						<b class="allbtn_l block fl"></b>
 						<b class="allbtn_r pr13 block fl w_auto f14">打&nbsp;&nbsp;印</b>
 					</a>
 				</li>
 				<c:if test="${VS_HAS_FUNCTIONS.orderModify}">
 					<li>
-						<a class=" pl10 c_white f14 lh25 cp block fr" href="${ctx }/order/order/toModifyPage.do?id=${order.id}">
+						<a class="pl10 c_white f14 lh25 cp block fr" href="${ctx }/order/order/toModifyPage.do?id=${order.id}">
 							<b class="allbtn_l block fl"></b>
 							<b class="allbtn_r pr13 block fl w_auto f14">编&nbsp;&nbsp;辑</b>
 						</a>
 					</li>
 				</c:if>
 				<li>
-					<a class=" pl10 c_white f14 lh25 cp block fr mr10"
+					<a class="pl10 c_white f14 lh25 cp block fr mr10"
 						href="${ctx }/order/order/toQueryPage.do"><b
 						class="allbtn_l block fl"></b><b
 						class="allbtn_r pr13 block fl w_auto f14">返&nbsp;&nbsp;回</b>
@@ -54,9 +80,7 @@
 		</div>
 	</div>
 	<div class="ml35 mr35 bg_c_blue cb">
-		<h1 class="f14 fbnone ml40 pt10">
-			基本信息
-		</h1>
+		<h1 class="f14 fbnone ml40 pt10">基本信息</h1>
 		<table class="cb id_table3 w95b bg_c_white margin0 mt10">
 			<tr>
 				<td align="right" width="15%">订单编号：</td>
@@ -108,91 +132,7 @@
 				</td>
 			</tr>
 		</table>
-		<h1 class="f14 fbnone ml40 mt10">订单审批</h1>
-		<div class="w95b  bg_c_white margin0 mt10">
-			<h1 class="w90b margin0 fbnone f12 pt20 block">&nbsp;
-				<a href="javascript:;" class="block c_white lh25 fr mt-15">
-					<b class="allbtn_l block fl"></b>
-					<b class="allbtn_r pr13 block fl w_auto f14">审&nbsp;&nbsp;批</b>
-				</a>
-				<a href="javascript:;" class="block c_white lh25 fr mt-15 mr10">
-					<b class="allbtn_l block fl"></b>
-					<b class="allbtn_r pr13 block fl w_auto f14">添加审批</b>
-				</a>
-			</h1>
-			<b class="w90b f_line2 block margin0"></b>
-			<table class="cb id_table2 w90b margin0 mt10 mb10">
-				<tr>
-					<th>审批名称</th>
-					<th>审批级别</th>
-					<th>审批人</th>
-					<th>状态</th>
-					<th>操作</th>
-				</tr>
-				<tbody class="list">
-					<tr class="bg_c_blue">
-						<td>理财经理</td>
-						<td>1</td>
-						<td>慧子敬</td>
-						<td>待审批</td>
-						<td>
-							<a href="javascript:;" class="block_inline s_edit_btn globle_img ml10" title="修改"></a>
-							<a href="javascript:;" class="block_inline s_dump_btn globle_img ml10" title="删除"></a>
-						</td>
-					</tr>
-					<tr>
-						<td>投资经理</td>
-						<td>2</td>
-						<td>栾瑞松</td>
-						<td>待审批</td>
-						<td>
-							<a href="javascript:;" class="block_inline s_edit_btn globle_img ml10" title="修改"></a>
-							<a href="javascript:;" class="block_inline s_dump_btn globle_img ml10" title="删除"></a>
-						</td>
-					</tr>
-					<tr class="bg_c_blue">
-						<td>投资总监</td>
-						<td>3</td>
-						<td>夏幼学</td>
-						<td>待审批</td>
-						<td>
-							<a href="javascript:;" class="block_inline s_edit_btn globle_img ml10" title="修改"></a>
-							<a href="javascript:;" class="block_inline s_dump_btn globle_img ml10" title="删除"></a>
-						</td>
-					</tr>
-					<tr>
-						<td>副总经理</td>
-						<td>4</td>
-						<td>马敬亮</td>
-						<td>待审批</td>
-						<td>
-							<a href="javascript:;" class="block_inline s_edit_btn globle_img ml10" title="修改"></a>
-							<a href="javascript:;" class="block_inline s_dump_btn globle_img ml10" title="删除"></a>
-						</td>
-					</tr>
-					<tr class="bg_c_blue">
-						<td>总裁</td>
-						<td>5</td>
-						<td>李静含</td>
-						<td>待审批</td>
-						<td>
-							<a href="javascript:;" class="block_inline s_edit_btn globle_img ml10" title="修改"></a>
-							<a href="javascript:;" class="block_inline s_dump_btn globle_img ml10" title="删除"></a>
-						</td>
-					</tr>
-					<tr>
-						<td>财务</td>
-						<td>6</td>
-						<td>张思雨</td>
-						<td>待审批</td>
-						<td>
-							<a href="javascript:;" class="block_inline s_edit_btn globle_img ml10" title="修改"></a>
-							<a href="javascript:;" class="block_inline s_dump_btn globle_img ml10" title="删除"></a>
-						</td>
-					</tr>
-				</tbody>
-			</table>
-		</div>
+		<tag:approve wftype="a00"></tag:approve>
 		<div class="h40"></div>
 	</div>
 </div>

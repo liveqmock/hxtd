@@ -48,11 +48,11 @@ public class AttachmentService {
 	  * @return List<Attachment>    返回类型
 	  * @throws
 	 */
-	public List<Attachment> query(Long moduleId,Long type){
-		logger.info("附件模块列表查询moduleId={},type={}",moduleId,type);
+	public List<Attachment> query(Long moduleId,Long recordId){
+		logger.info("附件模块列表查询moduleId={},type={}",moduleId,recordId);
 		DetachedCriteria criteria = DetachedCriteria.forClass(Attachment.class);
-		criteria.add(Restrictions.eq("moduleId", moduleId));
-		criteria.add(Restrictions.eq("type.id", type));
+		criteria.add(Restrictions.eq("module.id", moduleId));
+		criteria.add(Restrictions.eq("recordId", recordId));
 		criteria.add(Restrictions.eq("isDeleted", false));
         criteria.setFetchMode("creator", FetchMode.JOIN);
         criteria.setFetchMode("modifier", FetchMode.JOIN);

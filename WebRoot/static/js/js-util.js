@@ -71,8 +71,10 @@ var jsUtil = {
 		if(yesFun){
 			config.buttons = {
 				"确定": function() {
-					yesFun();
-					DIALOG.dialog("close");
+					var flag =yesFun();
+					if (flag!=false) {
+						DIALOG.dialog("close");
+					}
 				},
 				"关闭": function() {
 					DIALOG.dialog("close");

@@ -1,4 +1,4 @@
-package com.baihui.hxtd.soa.util;
+package com.baihui.hxtd.soa.common.imports;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -6,6 +6,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import java.util.TreeSet;
+
+import com.sun.org.apache.bcel.internal.generic.NEW;
 
 /**
  * 功能描述：导入信息类
@@ -40,14 +42,14 @@ public class ImportMessage {
 	public static Map<String, Set<Integer>> workbookRepeats = new HashMap<String,Set<Integer>>();
 	
 	/**格式错误记录的excel序号集合*/
-	public static List<Integer> invalidFormatRowNums;
-	public static Map<Integer, String> invalidFormatRowNumMap;
+	public static List<Integer> invalidFormatRowNums = new ArrayList<Integer>();
+	public static Map<Integer, String> invalidFormatRowNumMap = new HashMap<Integer, String>();
 	
 	/** 在数据库中已经存在的记录的excel序号集合 */
-	private Set<Integer> databaseRepeatRowNums;
+	public static Set<Integer> databaseRepeatRowNums = new TreeSet<Integer>();
 	
 	/** 新增到数据库中记录的excel序号集合 */
-	private List<Integer> databaseNewRowNums;
+	public static List<Integer> databaseNewRowNums = new ArrayList<Integer>();
 
 	/**导入的其他消息提示*/
 	public static String message;
@@ -69,28 +71,32 @@ public class ImportMessage {
 	 * List<Integer>> : 该唯一标志下重复的记录的序号集合
 	 * @return
 	 */
-	public String workbookRepeatMessage(Map<String, List<Integer>> workbookRepeats){
-		if(workbookRepeats == null){
-			workbookRepeats = new HashMap<String, List<Integer>>();
-		}
-		StringBuffer msg = new StringBuffer("因导入的文件内部自身数据重复导致忽略的记录有" + workbookRepeats.size() + "组,这几组分别是:{");
-		//循环遍历获取每一组重复记录的序号
-		for(String key:workbookRepeats.keySet()){
-			List<Integer> repeatRowNums = workbookRepeats.get(key);
-			msg.append("[");
-			for(int i = 0; i<repeatRowNums.size(); i++){
-				Integer rowNum = repeatRowNums.get(i);
-				if(i == repeatRowNums.size()-1){
-					msg.append(rowNum + "");
-				}else{
-					msg.append(rowNum + ", ");
+	public static String workbookRepeatMessage(){
+		StringBuffer msg = new StringBuffer("excel数据内部重复" + workbookRepeats.size() + "组");
+		if(workbookRepeats.size()>0){
+			msg.append(",这"+workbookRepeats.size()+"组分别是：{");
+		
+			//循环遍历获取每一组重复记录的序号
+			for(String key:workbookRepeats.keySet()){
+				Set<Integer> repeatRowNums = workbookRepeats.get(key);
+				msg.append("[");
+				List<Integer> list = new ArrayList<Integer>();
+				list.addAll(repeatRowNums);
+				for(int i = 0; i<list.size(); i++){
+					
+					Integer rowNum = list.get(i);
+					if(i == list.size()-1){
+						msg.append(rowNum + "");
+					}else{
+						msg.append(rowNum + ", ");
+					}
 				}
+				msg.append("], ");
 			}
-			msg.append("], ");
+			//删除最后一个逗号
+			msg.deleteCharAt(msg.lastIndexOf(","));
+			msg.append("}.导入文件内数据重复的，取最后一条记录");
 		}
-		//删除最后一个逗号
-		msg.deleteCharAt(msg.lastIndexOf(","));
-		msg.append("}.导入文件内数据重复的，使用最后一条记录");
 		
 		return msg.toString();
 	}
@@ -100,17 +106,17 @@ public class ImportMessage {
 	 * @param InvalidFormatRowNums
 	 * @return
 	 */
-	public String invalidFormatMessage(List<Integer> InvalidFormatRowNums){
-		StringBuffer msg = new StringBuffer("因数据格式不正确忽略" + InvalidFormatRowNums.size() + "条,他们分别是第[");
-		if(InvalidFormatRowNums == null){
-			InvalidFormatRowNums = new ArrayList<Integer>();
+	public static String invalidFormatMessage(){
+		StringBuffer msg = new StringBuffer("数据格式错误 : [" + invalidFormatRowNums.size() + " ]条");
+		if (invalidFormatRowNums.size() > 0) {
+			msg.append(",他们分别是第[");
+			for (int i = 0; i < invalidFormatRowNums.size(); i++) {
+				msg.append(invalidFormatRowNums.get(i) + ", ");
+			}
+			msg.deleteCharAt(msg.lastIndexOf(","));
+			msg.append("]");
 		}
-		for(int i=0; i<InvalidFormatRowNums.size(); i++){
-			msg.append(InvalidFormatRowNums.get(i)+", ");
-		}
-		msg.deleteCharAt(msg.lastIndexOf(","));
-		msg.append("]");
-		
+
 		return msg.toString();
 	}
 	
@@ -120,16 +126,16 @@ public class ImportMessage {
 	 * @param type
 	 * @return
 	 */
-	public String databaseRepeatMessage(List<Integer> databaseRepeatRowNums,String type){
-		StringBuffer msg = new StringBuffer("有" + databaseRepeatRowNums.size() + "条数据在数据库中已存在,他们分别是第[");
-		if(databaseRepeatRowNums == null){
-			databaseRepeatRowNums = new ArrayList<Integer>();
+	public static String databaseRepeatMessage(String type){
+		StringBuffer msg = new StringBuffer("修改数据： [ " + databaseRepeatRowNums.size() + " ]条");
+		if (databaseRepeatRowNums.size() > 0) {
+			msg.append(",他们的Excel行号分别是：[ ");
+			for (Integer databaseRepeatRowNum : databaseRepeatRowNums) {
+				msg.append(databaseRepeatRowNum + ", ");
+			}
+			msg.deleteCharAt(msg.lastIndexOf(","));
+			msg.append("],这些数据的处理方式:" + type);
 		}
-		for(int i=0; i<databaseRepeatRowNums.size(); i++){
-			msg.append(databaseRepeatRowNums.get(i)+", ");
-		}
-		msg.deleteCharAt(msg.lastIndexOf(","));
-		msg.append("],按照您选择的方式,这些数据的处理方式是:" + type);
 		
 		return msg.toString();
 	}
@@ -140,8 +146,8 @@ public class ImportMessage {
 	 * @param databaseNewRowNums
 	 * @return
 	 */
-	public String databaseNewMessage(List<Integer> databaseNewRowNums){
-		String msg = "新增记录" + databaseNewRowNums.size() + "条";
+	public static String databaseNewMessage(){
+		String msg = "新增记录：[ " + databaseNewRowNums.size() + " ]条";
 		return msg;
 	}
 	
@@ -151,8 +157,8 @@ public class ImportMessage {
 	 * 失败导入:唯一键重复的记录+格式无效的记录
 	 * @return
 	 */
-	public String importResult(){
-		String msg = "成功导入" + (databaseNewRowNums.size() + databaseRepeatRowNums.size() )+ "条,失败导入" + (workbookRepeatRowNums.size()-workbookRepeats .size()+invalidFormatRowNums.size()) + "条";
+	public static String importResult(){
+		String msg = "成功导入 [ " + (databaseNewRowNums.size() + databaseRepeatRowNums.size() )+ " ]条,失败导入[ " + (workbookRepeatRowNums.size()-workbookRepeats .size()+invalidFormatRowNums.size()) + " ]条";
 		return msg;
 	}
 	

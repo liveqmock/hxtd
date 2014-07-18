@@ -17,6 +17,9 @@
 <script type="text/javascript" src="${ctx}/static/js/js-util.common.js"></script>
 <script type="text/javascript" src="${ctx}/static/js/scrollTitle.js?v=1"></script>
 <script type="text/javascript" src="${ctx}/static/js/jquery.form.js"></script>
+<script type="text/javascript" src="${ctx}/static/js/jquery.validate.js"></script>
+<script type="text/javascript" src="${ctx}/static/js/jquery.metadata.js"></script>
+<script type="text/javascript" src="${ctx}/static/js/validator.js"></script>
 <script type="text/javascript">
 $(function() {
 	$("#id").click(function() {
@@ -36,11 +39,24 @@ $(function() {
 	grid = new Grid().init({paginationActive:false});
 });
 function searchData(){//搜索弹出框
-	jsUtil.dialogIframe("${ctx}/workbanch/add.comp", "自定义工作台", 650, 180, function(){//确定回调
-		var $userObj = $("#form", window.frames["dialogIframe"].document);
-			if($userObj.length > 0){
-				var formData = $userObj.formSerialize();
-			}
+	jsUtil.dialogIframe("${ctx}/workbanch/add.comp", "自定义工作台", 800, 300, function(){//确定回调
+		var $form = $("#listForm", window.frames["dialogIframe"].document);
+		var type = $("#type", window.frames["dialogIframe"].document).val();
+		if(type=='list'){
+			$("#report",window.frames["dialogIframe"].document).removeClass("required");
+			$("#module",window.frames["dialogIframe"].document).addClass("required");
+		}else{
+			$("#module",window.frames["dialogIframe"].document).removeClass("required");
+			$("#report",window.frames["dialogIframe"].document).addClass("required");
+		}
+		if($form.valid()){
+			var formData = $form.formSerialize();
+			RcmsAjax.ajax("${ctx}/workbanch/add.do",function(){
+				grid.loadGrid();
+			},null,formData);
+		}else{
+			return false;
+		}
 	});
 }
 </script>
@@ -168,7 +184,7 @@ function searchData(){//搜索弹出框
               <td>{$T.row.modifiedTime}</td>
               <td width="68">
                          <a href="javascript:void(0)"
-							uri="${ctx}/workbanch/delete.do?ids={$T.row.id}"
+							uri="${ctx}/workbanch/delete.do?id={$T.row.id}"
 							title="删除"
 							class="delete block_inline s_dump_btn globle_img ml10"></a>
               </td>

@@ -49,7 +49,7 @@
                     <div class="pr">
                         <select name="search_EQ_chart.id" class="select2 pr">
                             <option value="">全部</option>
-                            <c:forEach items="${charts}" var="item">
+                            <c:forEach items="${types}" var="item">
                                 <option value="${item.id}">${item.key}</option>
                             </c:forEach>
                         </select>
@@ -92,7 +92,8 @@
         <table class="cb id_table2 w pr35">
             <tr>
                 <th style="width:2%"><input type="checkbox" class="checkall"/></th>
-                <th style="width:10%" class="sortable orderby" orderby="name">名称</th>
+                <th style="width:10%" class="sortable orderby" orderby="code">编码</th>
+                <th style="width:10%">名称</th>
                 <th style="width:10%">所属模块</th>
                 <th style="width:10%">x轴字段名</th>
                 <th style="width:10%">x轴分组类型</th>
@@ -109,6 +110,7 @@
                 {#foreach $T.result as row}
                 <tr class="row {#cycle values=['bg_c_blue','']}">
                     <td><input type="checkbox" class="checkitem" value="{$T.row.id}"/></td>
+                    <td>{$T.row.code}</td>
                     <td>
                         <c:choose>
                             <c:when test="${VS_HAS_FUNCTIONS.reportView}"><a href="${ctx}/common/report/toViewPage.do?id={$T.row.id}" class="toviewpage">{$T.row.name}</a></c:when>

@@ -54,7 +54,7 @@ public class Role implements Serializable, Comparable<Role>, Initialized {
     @JoinColumn(name = "CREATOR_ID", nullable = false, updatable = false)
     private User creator;
 
-    @FieldInfo(desc = "创建时候")
+    @FieldInfo(desc = "创建时间")
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss", timezone = "GMT+08:00")
     @Column(name = "CREATED_TIME", nullable = false, updatable = false)
     private Date createdTime;

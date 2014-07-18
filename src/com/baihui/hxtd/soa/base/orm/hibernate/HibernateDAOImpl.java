@@ -85,6 +85,7 @@ public class HibernateDAOImpl<T, PK extends Serializable> implements
         return entity;
     }
 
+    
     /**
      * 合并对象
      */
@@ -95,6 +96,18 @@ public class HibernateDAOImpl<T, PK extends Serializable> implements
         return entity;
     }
 
+    /**
+     * 批量合并对象
+     */
+    public List<T> merge(final List<T>  entities) {
+    	Assert.notNull(entities, "entities不能为空");
+    	for (T t : entities){
+    		merge(t);
+    	}
+    	logger.debug("save entities: {}", entities);
+    	return entities;
+    }
+    
     /**
      * 删除对象.
      *

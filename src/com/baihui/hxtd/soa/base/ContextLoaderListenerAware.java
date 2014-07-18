@@ -1,6 +1,9 @@
 package com.baihui.hxtd.soa.base;
 
+import org.springframework.web.context.ContextLoader;
 import org.springframework.web.context.ContextLoaderListener;
+import org.springframework.web.context.WebApplicationContext;
+
 
 import javax.servlet.ServletContextEvent;
 
@@ -12,9 +15,11 @@ import javax.servlet.ServletContextEvent;
  */
 public class ContextLoaderListenerAware extends ContextLoaderListener {
 
+	public static WebApplicationContext ctx;
     public void contextInitialized(ServletContextEvent event) {
         super.contextInitialized(event);
         String[] beanNames = getCurrentWebApplicationContext().getBeanNamesForType(StartupListener.class);
+        ctx = ContextLoader.getCurrentWebApplicationContext();//获得web应用的上下文对象			
         if (beanNames == null || beanNames.length == 0)
             return;
         for (String startupBeanName : beanNames) {

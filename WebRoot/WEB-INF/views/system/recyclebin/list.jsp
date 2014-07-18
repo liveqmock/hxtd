@@ -127,16 +127,20 @@
 						<div class="ie_head">
 							<ul class="fl id_table1 mt10 ml10">
 								<li>
+								<c:if test="${VS_HAS_FUNCTIONS.recycleRecovery}">
 									<a class="block c_white lh25 mr10" href="javascript:;" id="recoveryData" uri="${ctx}/system/recyclebin/recovery.do?entityName=MarketActivity">
 										<b class="allbtn_l block fl"></b>
 										<b class="allbtn_r pr13 block fl w_auto f14">还&nbsp;&nbsp;原</b>
 									</a>
+								</c:if>
 								</li>
 		                		<li>
+		                		<c:if test="${VS_HAS_FUNCTIONS.recycleDelete}">
 		                			<a class="block c_white lh25 mr10 deletesome" id="deleteData" href="javascript:;"  uri="${ctx}/system/recyclebin/delete.do">
 		                				<b class="allbtn_l block fl"></b>
 		                				<b class="allbtn_r pr13 block fl w_auto f14">删&nbsp;&nbsp;除</b>
 		                			</a>
+		                		</c:if>
 		                		</li>
 		                	</ul>
 	                	</div>

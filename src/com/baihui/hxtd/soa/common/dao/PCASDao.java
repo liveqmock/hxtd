@@ -38,7 +38,8 @@ public class PCASDao extends HibernateDAOImpl<PCAS, Long> {
 
 	public PCAS getByName(String name) {
 		String hql = "select pcas from PCAS pcas where pcas.name = ?";
-		return findUnique(hql,name);
+		List<PCAS> list = find(hql,name);
+		return list.get(0);
 	}
 	
 }

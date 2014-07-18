@@ -91,7 +91,7 @@ function searchData(action){ // 搜索
 				<input type="text" value="${sellMoney}" class="text_input3 right required money" style="ime-mode:disabled"/>
 				<input type="hidden" name="sellMoney" value="${product.sellMoney}"/>
 			</td>
-			<td align="right">收益率(%)：</td>
+			<td align="right">收益率（%）：</td>
 			<td align="left">
 				<input name="rate" type="text" value="${product.rate}" class="text_input3 right"/>
 			</td>
@@ -125,7 +125,7 @@ function searchData(action){ // 搜索
 				<input id="start" name="saleBeginTime" type="text" value="${saleBeginTime}" 
 					class="text_input3 input_close1 required" readonly/>
 			</td>
-			<td align="right">赎回赔率(%)：</td>
+			<td align="right">赎回赔率（%）：</td>
 			<td align="left"><input name="redeemRate" type="text" value="${product.redeemRate}" class="right text_input3 amount"/></td>
 		</tr>
 		<tr>

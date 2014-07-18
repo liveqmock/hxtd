@@ -52,9 +52,9 @@
             <table class="cb id_table3 w95b bg_c_white margin0 mt10">
                 <tr>
                     <td align="right" width="15%">名称：</td>
-                    <td align="left"><input type="text" name="name" class="{required:true,maxlength:64,unique:['Organization','${organization.name}']} text_input3" value="${organization.name}"/></td>
+                    <td align="left"><input type="text" name="name" class="{required:true,maxlength:64} text_input3" value="${organization.name}"/></td>
                     <td align="right" width="15%">全名：</td>
-                    <td align="left"><input type="text" name="fullName" class="{required:true,maxlength:128,unique:['Organization','${organization.fullName}']} text_input3" value="${organization.fullName}"/></td>
+                    <td align="left"><input type="text" name="fullName" class="{required:true,maxlength:128} text_input3" value="${organization.fullName}"/></td>
                 </tr>
                 <tr>
                     <td align="right" width="15%">类型：</td>

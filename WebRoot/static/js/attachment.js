@@ -38,7 +38,7 @@ attachment.array2Html=function(result){
 	for(var i=0;i<list.length;i++){
 		var att = list[i];
 		table.push('<tr><td  align="center">'+att.name+'</td>');
-		table.push('<td align="center">'+att.dict.key+'</td>');
+		table.push('<td align="center">'+att.type.key+'</td>');
 		table.push('<td align="center">'+att.createdTime+'</td>');
 		table.push('<td align="center">' );
 		if(attachment.setting.down){

@@ -48,6 +48,7 @@ public class ContractService {
 	public HibernatePage<Contract> findPage(Map<String, Object> searchParams,
 		DataShift dataShift, HibernatePage<Contract> page) throws NoSuchFieldException {
 		logger.info("分页查找");
+		searchParams.put("EQ_isDeleted", false);
 		DetachedCriteria criteria = biuldQuery(searchParams,dataShift,Contract.class);
 		return contractDao.findPage(page, criteria);
 	}
@@ -61,7 +62,7 @@ public class ContractService {
 		criteria.setFetchMode("creator", FetchMode.JOIN);
 		criteria.setFetchMode("modifier", FetchMode.JOIN);
 		Map<String, SearchFilter> filters = Search.parse(searchParams);
-		userDao.visibleData(criteria, dataShift);
+		//userDao.visibleData(criteria, dataShift);
 		Search.buildCriteria(filters, criteria, entityClass);
 		return criteria;
 	}

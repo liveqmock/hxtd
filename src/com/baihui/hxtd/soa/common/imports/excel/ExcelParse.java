@@ -1,25 +1,33 @@
-package com.baihui.hxtd.soa.util;
+package com.baihui.hxtd.soa.common.imports.excel;
 
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
 import java.math.BigDecimal;
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import java.util.TreeSet;
 
-import org.apache.commons.fileupload.FileItem;
 import org.apache.poi.hssf.usermodel.HSSFCell;
 import org.apache.poi.hssf.usermodel.HSSFDateUtil;
 import org.apache.poi.hssf.usermodel.HSSFRow;
 import org.apache.poi.hssf.usermodel.HSSFSheet;
 import org.apache.poi.hssf.usermodel.HSSFWorkbook;
+import org.apache.poi.ss.usermodel.Cell;
+import org.apache.poi.ss.usermodel.Row;
+import org.apache.poi.ss.usermodel.Sheet;
+import org.apache.poi.ss.usermodel.Workbook;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.web.multipart.MultipartFile;
+
+import com.baihui.hxtd.soa.base.utils.ImportExport;
+import com.baihui.hxtd.soa.common.imports.ImportMessage;
+import com.baihui.hxtd.soa.util.Tools;
 
 
 
@@ -33,9 +41,8 @@ public abstract class ExcelParse<T> {
 	 * @param fileItem
 	 * @return
 	 */
-	public Collection<T> parse(FileItem fileItem, List<String> typeList){
-		//第一步校验文件格式
-		if(!checkFileItem(fileItem)){
+	public List<T> parse(MultipartFile fileItem, List<String> typeList){
+		if(fileItem == null){
 			return null;
 		}
 		//第二步:解析excel,将excel中的row解析为Entity对象,保存到Map集合中,其中key是行号
@@ -47,93 +54,14 @@ public abstract class ExcelParse<T> {
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
+		if(entityMap==null || entityMap.size()==0){
+			return null;
+		}
 		//第三步:获取集合中的重复记录,保存到重复记录集合中
 		getDuplicateDate(entityMap, typeList);
 		
 		//第四步:将重复记录从entityMap中删除掉,保留重复记录中的最后一条
 		return removalDuplicateData(entityMap);
-	}
-	
-	/**
-	 * 校验excel文件是否符合规则
-	 * @param fileItem
-	 * @return
-	 */
-	public boolean checkFileItem(FileItem fileItem){
-		String msg = null;
-		if ( fileItem == null ){
-			msg = "文件内容为空!";
-			logger.error("上传文件失败",msg);
-			ImportMessage.message = msg;
-			return false;
-		}
-		/*
-		 * fileItem.isFormField():判断fileItem是否是普通的表单类型.
-		 * 返回true:是普通 表单输入域
-		 * 返回false:文件上传域
-		 */
-		if ( fileItem.isFormField() ){
-			return false;
-		}
-		//文件名
-		String fileName = fileItem.getName();
-		
-		//校验文件名
-		if(fileName == null || "".equals(fileName.trim()) ){
-			msg = "文件名为空!";
-			logger.error("上传文件失败",msg);
-			ImportMessage.message = msg;
-			return false;
-		}
-		// 获取文件类型
-		String fileType = fileName.substring(fileName.lastIndexOf("."));
-		
-		//允许上传的文件类型
-		String excelExtension = PropertyManager.getProperty("FILENAME_EXTENSION");
-		String [] excelExtensionArr = excelExtension.split(",");
-		
-		//允许上传文件的最大容量
-		long fileMaxSize = Long.valueOf(PropertyManager.getProperty("FILE_MAX_SIZE"));
-		
-		if(fileItem.getSize() >  fileMaxSize){
-			msg="文件大小不能超过"+(fileMaxSize/1024/1024)+"MB";
-			logger.error("上传文件失败",msg);
-			ImportMessage.message = msg;
-			return false;
-		}
-		
-		//判断文件类型是否为可上传的文件类型
-		boolean fileNameIsAllow = false;
-		for(String fileExtension : excelExtensionArr){
-			if( fileExtension.equals(fileType) ){
-				fileNameIsAllow = true;
-				break;
-			}
-		}
-		if (!fileNameIsAllow) {
-			msg="该文件类型不允许上传,只能上传"+excelExtension+"的格式文件";
-			logger.error("上传文件失败",msg);
-			ImportMessage.message = msg;
-			return false;
-		}
-		//读取文件流
-		InputStream fStream = null;
-		try {
-			fStream = fileItem.getInputStream();
-		} catch (IOException e) {
-			logger.error("fileItem.getInputStream() error", e);
-			ImportMessage.message= "文件流读取异常";
-			return false;
-		}
-		
-		//判断文件是否为空
-		if (fStream == null) {
-			msg = "导入文件不能为空";
-			logger.error("上传文件失败",msg);
-			ImportMessage.message = msg;
-			return false;
-		}
-		return true;
 	}
 	
 	/**
@@ -145,7 +73,7 @@ public abstract class ExcelParse<T> {
 	 * @throws FileNotFoundException
 	 * @throws IOException
 	 */
-	public Map<Integer, T> readExcel(FileItem fileItem) throws FileNotFoundException, IOException {
+	public Map<Integer, T> readExcel(MultipartFile fileItem) throws FileNotFoundException, IOException {
 		logger.info("开始解析excel文件");
 		String msg = null;
 		if(fileItem == null){
@@ -156,27 +84,26 @@ public abstract class ExcelParse<T> {
 		//读取文件流
 		InputStream in = fileItem.getInputStream();
 		//读取Excel文件 到 HSSFWorkbook中
-		HSSFWorkbook wb = new HSSFWorkbook(in);
+		Workbook wb = ImportExport.create(in);
 		//记录sheet页中所有记录的行数,每一行有都是一个数据,里面记录了单元格的信息
 		Map<Integer, T> resultMap = new HashMap<Integer, T>();
 		int wbLength = wb.getNumberOfSheets();
 		logger.info("一共有几个sheet页:["+wbLength+"]");
 		//读取sheet页
 		for (int numSheets = 0; numSheets < wbLength; numSheets++) {
-			HSSFSheet sheet = wb.getSheetAt(numSheets);
+			Sheet sheet = wb.getSheetAt(numSheets);
 			if ( sheet == null ){
 				continue;
 			}
 			//获取sheet的行数,sheet页的row从0开始,sheet.getLastRowNum()=1时,表示已经有两条记录了
 			int sheetRowNum = sheet.getLastRowNum();
-			logger.info("sheet页中有"+sheetRowNum+"行记录");
+			logger.info("第"+(numSheets+1)+"个sheet页中有"+sheetRowNum+"行记录");
 			if (sheetRowNum < 1) {
 				msg = "您上传的第"+numSheets+"个sheet页文件内容为空";
 				logger.error(msg);
-				ImportMessage.message = msg;
 				continue;
 			}
-			//超过允许导入的最大行数,截取前10001条数据
+			//超过允许导入的最大行数10001,截取前10001条数据
 			if(sheetRowNum>ImportMessage.LIMIT_COUNT){
 				sheetRowNum = ImportMessage.LIMIT_COUNT;
 				msg = ImportMessage.limitMessage(sheetRowNum);
@@ -184,8 +111,9 @@ public abstract class ExcelParse<T> {
 			ImportMessage.message = msg;
 			//遍历sheet页中的记录,rowNumOfSheet = 1,从第二行开始读,不读取第一行,因为第一行是title.
 			for (int rowNumOfSheet = 1; rowNumOfSheet <= sheetRowNum; rowNumOfSheet++) {
+				//获取第rowNumOfSheet行数据
+				Row row = sheet.getRow(rowNumOfSheet);//rowNumOfSheet=1就是excel中的第二条数据
 				//遍历的sheet页中的某一条记录不为空
-				HSSFRow row = sheet.getRow(rowNumOfSheet);//rowNumOfSheet=1就是excel中的第二条数据
 				if(row == null){
 					continue;
 				}
@@ -208,7 +136,7 @@ public abstract class ExcelParse<T> {
 	 * @param rowNumOfSheet
 	 * @return
 	 */
-	public List<String> HSSFRow2ListString(HSSFRow row,int rowNumOfSheet){
+	public List<String> HSSFRow2ListString(Row row,int rowNumOfSheet){
 		// 获取总列数
 		int cellNum = row.getLastCellNum();
 		cellNum = cellNum <= getColumnNum() ? cellNum : getColumnNum();
@@ -217,7 +145,7 @@ public abstract class ExcelParse<T> {
 		 for (int cellNumOfRow = 0; cellNumOfRow < cellNum; cellNumOfRow++){
 			 String strCell = "";
 				//某一行中的某一列---->单元格
-			 HSSFCell aCell = row.getCell(cellNumOfRow);
+			 Cell aCell = row.getCell(cellNumOfRow);
 			if (aCell == null) {
 				sheetList.add(strCell);
 				continue;
@@ -251,11 +179,11 @@ public abstract class ExcelParse<T> {
 			}
 			sheetList.add(Tools.trim(strCell));
 		 }
-		 while ( sheetList.size() < getColumnNum() ) {
+		/* while ( sheetList.size() < getColumnNum() ) {
 			sheetList.add(null);
-		 }
+		 }*/
 		//记录在excel中的行号(当期那行号+1,因为是从第0行开始读取的)
-		 sheetList.add((getColumnNum()+1), rowNumOfSheet + "");
+		 sheetList.add((getColumnNum()), rowNumOfSheet + "");
 		 return sheetList;
 		 
 	 }
@@ -296,7 +224,6 @@ public abstract class ExcelParse<T> {
 		for(String str:set){
 			//表示主键key已经在集合中存在了
 			if(str.equals(key)){
-				System.out.println(key);
 				//将该记录的行号添加到Set集合中
 				rowNumSet = map.get(key);
 				rowNumSet.add(rowNum);
@@ -322,18 +249,24 @@ public abstract class ExcelParse<T> {
 	 * @param entityMap
 	 * @param params
 	 */
-	public Collection<T> removalDuplicateData(Map<Integer, T> entityMap){
+	public List<T> removalDuplicateData(Map<Integer, T> entityMap){
+		//获取集合entityMap的所有的values值,并保存到list集合中
+		Set<Integer> keySets = entityMap.keySet();
+		List<T> valueList = new ArrayList<T>();
+		for(Integer integer:keySets){
+			valueList.add(entityMap.get(integer));
+		}
 		//获取重复数据的Map集合
 		Map<String,Set<Integer>> map = ImportMessage.workbookRepeats;
 		//重复集合如果为null,或没有重复记录,则直接返回读取的excel的实体类集合
 		if(map==null || map.isEmpty()){
-			return (Collection<T>)entityMap.values();
+			return valueList;
 		}
 		//获取主键集合--也就是唯一键集合
 		Set<String> keySet = map.keySet();
 		//重复集合如果为null,或没有重复记录,则直接返回读取的excel的实体类集合
 		if(keySet==null || keySet.isEmpty()){
-			return (Collection<T>)entityMap.values();
+			return valueList;
 		}
 		//记录excel行号的重复记录的Set集合
 		Set<Integer> rowNumSet = null;
@@ -358,7 +291,7 @@ public abstract class ExcelParse<T> {
 			}
 		}
 		//最后将entityMap的value取出,传回
-		return (Collection<T>)entityMap.values();
+		return valueList;
 	}
 	
 	/**
@@ -378,7 +311,7 @@ public abstract class ExcelParse<T> {
 	/**
 	 * 查找Excel中的重复数据,并把这些重复数据添加的重复记录集合中
 	 * @param entityMap 要查找的实体类Map集合
-	 * @param params 查找的方式(例如:按手机,邮箱等)
+	 * @param typeList 查找的方式(例如:按手机,邮箱等)
 	 */
 	public abstract void getDuplicateDate(Map<Integer, T> entityMap,List<String> typeList);
 		

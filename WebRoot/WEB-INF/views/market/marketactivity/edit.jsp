@@ -118,7 +118,7 @@ function searchData(action){ //搜索
 			<td align="left"><input name="times" type="text" value="${activity.times}" class="text_input3 digits"/></td>
 		</tr>
 		<tr>
-			<td align="right">期望成功率(%)：</td>
+			<td align="right">期望成功率（%）：</td>
 			<td align="left"><input type="text" name="expectSuccessRate" value="${activity.expectSuccessRate}" 
 				class="text_input3 amount" maxlength="3" style="ime-mode:disabled"/></td>
 			<td align="right"><span class="w_red">*&nbsp;</span>负责人：</td>

@@ -111,17 +111,17 @@ function clearInputVal(obj){//清除
 		<table class="cb id_table3 w95b bg_c_white margin0 mt10">
 			<tr>
 				<td align="right" width="15%">
-					订单编号：
+					<span class="w_red">*&nbsp;</span>订单编号：
 				</td>
 				<td align="left">
 				<input type="text" name="code"
-						value="${order.code}" class="text_input3" />
+						value="${order.code}" class="text_input3 required" />
 				</td>
 				<td align="right" width="15%">
 					<span class="w_red">*&nbsp;</span>所有者：
 				</td>
 				<td align="left">
-					<input type="text" id="txt_owner" value="${order.owner.name }"
+					<input type="text" id="txt_owner" value="${order.owner.realName }"
 						class="text_input3 cp required" readonly 
 						onclick="searchData('owner');" />
 					<input type="hidden" id="hide_owner_id" name="owner.id"

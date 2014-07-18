@@ -12,15 +12,18 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springside.modules.web.Servlets;
 
+import com.baihui.hxtd.soa.base.Constant;
 import com.baihui.hxtd.soa.base.orm.hibernate.HibernatePage;
 import com.baihui.hxtd.soa.base.utils.Search;
 import com.baihui.hxtd.soa.base.utils.mapper.HibernateAwareObjectMapper;
 import com.baihui.hxtd.soa.system.entity.AuditLog;
 import com.baihui.hxtd.soa.system.service.AuditLogService;
+import com.baihui.hxtd.soa.system.service.DataShift;
 import com.baihui.hxtd.soa.util.EnumModule;
 import com.baihui.hxtd.soa.util.EnumOperationType;
 import com.baihui.hxtd.soa.util.JsonDto;
@@ -73,7 +76,7 @@ public class AuditLogController {
 	 */
 	@RequestMapping(value = "/query.do")
 	public void query(HttpServletRequest request,
-			HibernatePage<AuditLog> page,
+			HibernatePage<AuditLog> page, ModelMap model,
            PrintWriter out) throws NoSuchFieldException, IOException {
 		logger.info("获取查询条件");
 
@@ -83,7 +86,8 @@ public class AuditLogController {
 		logger.debug("查询条件数目“{}”", searchParams.size());
 		logger.info("添加默认的查询条件");
 		logger.info("获取分页数据");
-		page = auditLogService.findPage(searchParams, page);
+		DataShift dataShift = (DataShift) model.get(Constant.VS_DATASHIFT);
+		page = auditLogService.findPage(searchParams, page,dataShift);
 		logger.info("以DTO格式返回");
 		JsonDto json = new JsonDto();
 		json.setSuccessFlag(true);

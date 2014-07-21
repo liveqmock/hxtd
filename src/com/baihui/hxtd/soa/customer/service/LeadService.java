@@ -76,7 +76,9 @@ public class LeadService {
 				+ " left join fetch lead.province "
 				+ " left join fetch lead.city " 
 				+ " left join fetch lead.county " 
-				+ " left join fetch lead.owner " + " where lead.id=?";
+				+ " left join fetch lead.owner "
+				+ " left join fetch lead.marketActivity "
+				+ " where lead.id=?";
 		return leadDao.findUnique(hql, id);
 	}
 
@@ -102,6 +104,9 @@ public class LeadService {
 		Date now = leadDao.getDBNow();
 		lead.setCreatedTime(now);
 		lead.setModifiedTime(now);
+		if(lead.getMarketActivity()!=null&&lead.getMarketActivity().getId()==null){
+			lead.setMarketActivity(null);
+		}
 		leadDao.save(lead);
 		auditLog.setRecordId(lead.getId());
 	}
@@ -111,6 +116,9 @@ public class LeadService {
 		Date now = leadDao.getDBNow();
 		lead.setCreatedTime(now);
 		lead.setModifiedTime(now);
+		if(lead.getMarketActivity()!=null&&lead.getMarketActivity().getId()==null){
+			lead.setMarketActivity(null);
+		}
 		leadDao.save(lead);
 	}
 

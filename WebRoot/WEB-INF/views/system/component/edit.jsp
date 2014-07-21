@@ -86,7 +86,7 @@ $(function(){
             <tr>
                 <td align="right">调用入口：</td>
                 <td align="left"><input type="text" class="text_input3 required" name="url" value="${com.url }"/></td>
-                <td align="right">权限级别：</td>
+                <td align="right"><span class="w_red">*&nbsp;</span>权限级别：</td>
                 <td align="left">
 					<select name="privilegeLevel.id" class="select1 requiredSelect">
 					<option value="-1">--无--</option>

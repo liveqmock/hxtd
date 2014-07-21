@@ -8,7 +8,6 @@
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
 <%@taglib prefix="tag" tagdir="/WEB-INF/tags" %>
 <c:set var="ctx" value="${pageContext.request.contextPath}"/>
-<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
 <html>
 <head>
 	<title>合同编辑</title>
@@ -57,10 +56,7 @@
 		});
 		function searchData(action){//搜索弹出框
 			var url, title;
-			if(action == "customer"){
-				url = "${ctx}/customer/customer/toQueryPage.comp";
-				title = "客户";
-			}else if(action == "order"){
+			if(action == "order"){
 				url = "${ctx}/order/order/toQueryPage.comp";
 				title = "订单";
 			}
@@ -69,6 +65,7 @@
 					if($userObj.length > 0){
 						$("#txt_" + action).val($userObj.find("td:eq(0)").text());
 						$("#hide_" + action +"_id").val($userObj.attr("id"));
+						$("#txt_customer").val($userObj.find("td:eq(1)").text());//客户名称默认是订单的客户名称
 					}
 				$("#txt_contract").val($("#txt_order").val());//合同编号默认为订单编号
 			});
@@ -142,12 +139,14 @@
 						</c:forEach>
 					</select>
 				</td> -->
-				<td align="right" width="15%">
-					<span class="w_red">*&nbsp;</span>合同名称：
+				<td align="right">
+					<span class="w_red">*&nbsp;</span>客户：
 				</td>
 				<td align="left">
-				<input type="text" name="name"
-						value="${contract.name}" class="text_input3 required" />
+					<input type="text" id="txt_customer"
+						value="${contract.customer.name }" 
+						class="text_input3 cp required" readonly/>
+					
 				</td>
 				<td align="right">
 					<span class="w_red">*&nbsp;</span>合同金额（万）：
@@ -157,20 +156,12 @@
 				</td>
 			</tr>
 			<tr>
-				<td align="right">
-					<span class="w_red">*&nbsp;</span>客户：
+				<td align="right" width="15%">
+					<span class="w_red">*&nbsp;</span>合同名称：
 				</td>
 				<td align="left">
-					<input type="text" id="txt_customer"
-						value="${contract.customer.name }" 
-						class="text_input3 cp required" readonly
-						 onclick="searchData('customer');"/>
-					<input type="hidden" value="${contract.customer.id}"
-						id="hide_customer_id" name="customer.id" />
-					<i class="s_inquiry globle_img block_inline ml5 vm cp"
-						title="搜索客户" onclick="searchData('customer');"></i>
-					<i class="dump_btn globle_img block_inline ml5 vm cp empty"
-						title="清除"></i>
+				<input type="text" name="name"
+						value="${contract.name}" class="text_input3 required" />
 				</td>
 				<td align="right">
 					<span class="w_red">*&nbsp;</span>赎回方式：

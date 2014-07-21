@@ -1,0 +1,4 @@
+#Mon Jul 14 13:46:33 CST 2014
+eclipse.preferences.version=1
+validator.Checked=src/com/baihui/hxtd/conf/system.properties,WebRoot/WEB-INF/views/common/imports/import.jsp,WebRoot/WEB-INF/views/customer/lead/list.jsp,WebRoot/WEB-INF/views/index.jsp
+validator.Unchecked=

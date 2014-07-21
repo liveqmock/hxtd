@@ -276,24 +276,24 @@ function reset() {
 				</li>
 				</c:if>
 			</ul>
-			
-			<ul class="fr id_table1 mt10 ml10">
+
+					<ul class="fr id_table1 mt10 ml10">
 						<c:if test="${VS_HAS_FUNCTIONS.leadImport}">
 							<li>
-								<a href="${ctx}/common/imports/toImportPage.do"
+								<a href="${ctx}/common/imports/toImportPage.do?module=lead"
 									class="leading_in globle_img block_inline mr10" title="导入"></a>
 							</li>
 						</c:if>
 						<c:if test="${VS_HAS_FUNCTIONS.leadExport}">
-						<li>
-							<a href="javascript:void(0)"
-								uri="${ctx}/customer/lead/export.do?TYPE=selected"
-								class="leading_out globle_img block_inline mr10 export"
-								title="导出"></a>
-						</li>
-			</c:if>
-			</ul>
-		</div>
+							<li>
+								<a href="javascript:void(0)"
+									uri="${ctx}/customer/lead/export.do?TYPE=selected"
+									class="leading_out globle_img block_inline mr10 export"
+									title="导出"></a>
+							</li>
+						</c:if>
+					</ul>
+				</div>
 	</div>
 	<div id="title" style="display: none;z-index: 1; background-color: #f5f5f6;"
 		class=" ml35 mr35">

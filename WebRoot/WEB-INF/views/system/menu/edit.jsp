@@ -140,7 +140,7 @@
                     <table class="cb id_table3 w95b bg_c_white margin0 mt10">
                         <tr style="display: none">
                             <td align="right" width="15%">编号：</td>
-                            <td align="left"><input type="text" name="code" value="${menu.code}" class="text_input3"/></td>
+                            <td align="left"><input type="text"  class="text_input3"/></td>
                             <td align="right" width="15%">序号：</td>
                             <td align="left"><input type="text" name="order" value="${menu.order}" class="text_input3"/></td>
                         </tr>
@@ -165,14 +165,17 @@
                         <tr>
                             <td align="right" width="15%">显示位置：</td>
                             <td align="left">
-                                <div class="pr">
-                                    <select name="showLocation.id" class="{required:true} select1 pr">
-                                        <option value="">--无--</option>
-                                        <c:forEach items="${showLocations}" var="item">
-                                            <option value="${item.id}" ${item.id==menu.showLocation.id?"selected":""}>${item.key}</option>
-                                        </c:forEach>
-                                    </select>
-                                </div>
+                                <select name="showLocationType" class="select1 pr">
+								<option value="">
+									--无--
+								</option>
+								<option value="1">
+									菜单栏
+								</option>
+								<option value="2">
+									设置栏
+								</option>
+								
                             </td>
                         </tr>
                         <%--//TODO 关于复选框的必填验证--%>

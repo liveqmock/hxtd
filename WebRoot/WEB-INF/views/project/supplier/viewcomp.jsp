@@ -1,19 +1,23 @@
 <%--
-  功能描述：项目详情
+  功能描述：供应商详情
   User: ruisong.luan
   Date:2014/5/6
 --%>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
-<%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
+<%@taglib prefix="tag" tagdir="/WEB-INF/tags" %>
 <c:set var="ctx" value="${pageContext.request.contextPath}"/>
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
 <html>
 <head>
-<title>项目详情</title>
+<title>供应商详情</title>
 <meta http-equiv="pragma" content="no-cache">
 <meta http-equiv="cache-control" content="no-cache">
-<meta http-equiv="expires" content="0">   
+<meta http-equiv="expires" content="0">    
+<meta http-equiv="keywords" content="keyword1,keyword2,keyword3">
+<meta http-equiv="description" content="This is my page">
+<link rel="stylesheet" href="${ctx}/static/css/public/common.css?v=${now}" type="text/css"/>
+<link rel="stylesheet" href="${ctx}/static/css/public/reset.css?v=${now}" type="text/css"/>
 <link rel="stylesheet" href="${ctx}/static/css/recommend/detail.css" type="text/css"/> 
 </head>
 <body>
@@ -26,23 +30,9 @@
 		<b class="b4"></b>
 		<div class="ie_head">
 			<h1 class="f14 fbnone mt10 ml10 fl">
-				产品详情信息
+				供应商详情信息
 			</h1>
 			<ul class="fr id_table1 mt10 ml10">
-				<li>
-					<a class=" pl35 c_white f14 lh25 cp block fr"
-						href="${ctx }/project/project/toModifyPage.do?id=${com.id}"><b
-						class="allbtn_l block fl"></b><b
-						class="allbtn_r pr13 block fl w_auto f14">编&nbsp;&nbsp;辑</b>
-					</a>
-				</li>
-				<li>
-					<a class=" pl10 c_white f14 lh25 cp block fr mr10"
-						href="${ctx }/project/project/toQueryPage.do"><b
-						class="allbtn_l block fl"></b><b
-						class="allbtn_r pr13 block fl w_auto f14">返&nbsp;&nbsp;回</b>
-					</a>
-				</li>
 			</ul>
 		</div>
 	</div>
@@ -53,97 +43,92 @@
 		<table class="cb id_table3 w95b bg_c_white margin0 mt10">
 			<tr>
 				<td align="right" width="15%">
-					项目名：
+					供应商名：
 				</td>
 				<td align="left">
-					${project.name }
+					${com.name }
 				</td>
 				<td align="right" width="15%">
-					项目编号：
+					所有者：
 				</td>
 				<td align="left">
-					${project.code }
+					${com.owner.realName }
 				</td>
 			</tr>
-
+			<tr>
+				<td align="right" width="15%">
+					供应商类型：
+				</td>
+				<td align="left">
+					${com.type.key}
+				</td>
+				<td align="right">
+					电话：
+				</td>
+				<td align="left">
+					${com.phone}
+				</td>
+				
+			</tr>
 			<tr>
 				<td align="right">
-					融资额度：
+					手机：
 				</td>
 				<td align="left">
-					${project.financeLimit }
+					${com.mobile}
 				</td>
 				<td align="right">
-					开始时间：
+					邮箱：
 				</td>
 				<td align="left">
-					<fmt:formatDate value="${project.beginTime }"
-						pattern="yyyy-MM-dd" var="beginTime" />
-					${beginTime }
+					${com.email}
 				</td>
 			</tr>
-
 			<tr>
 				<td align="right">
-					融资前周期(天)：
+					传真：
 				</td>
 				<td align="left">
-					${project.beforeFinanceCycle }
+					${com.fax }
 				</td>
 				<td align="right">
-					截止时间：
+					法人：
 				</td>
 				<td align="left">
-					<fmt:formatDate value="${project.dendlineTime}"
-						pattern="yyyy-MM-dd" var="dendlineTime" />
-					${dendlineTime}
+					${com.corporation }
 				</td>
 			</tr>
-
 			<tr>
 				<td align="right">
-					融资周期：
+					证件类型：
 				</td>
 				<td align="left">
-					${project.financeCycle }
+					${com.cardType.key }
 				</td>
 				<td align="right">
-					收益率：
+					证件号码：
 				</td>
 				<td align="left">
-					${project.er }%
+					${com.cardNum }
 				</td>
 			</tr>
-
+		</table>
+		<h1 class="f14 fbnone ml40 pt10">
+			地址信息
+		</h1>
+		<table class="cb id_table3 w95b bg_c_white margin0 mt10">
 			<tr>
-				<td align="right">
-					支付方式：
+				<td align="right" width="15%">
+					地区：
 				</td>
 				<td align="left">
-					${project.payType.key }
+					${com.province.name}&nbsp;${com.city.name}&nbsp;${com.county.name}&nbsp;
 				</td>
-				<td align="right">
-					提前赎回率：
-				</td>
-				<td align="left">
-					${project.aer }%
-				</td>
-			</tr>
-
-			<tr>
-				<td align="right">
-					供应商：
+				<td align="right" width="15%">
+					详细地址：
 				</td>
 				<td align="left">
-					${project.supplier.name }
-				</td>
-				<td align="right">
-					开放时间：
-				</td>
-				<td align="left">
-					<fmt:formatDate value="${project.openTime}" pattern="yyyy-MM-dd"
-						var="openTime" />
-					${openTime}
+					${com.address }
 				</td>
 			</tr>
 
@@ -158,7 +143,7 @@
 				</td>
 				<td align="left" width="85%" valign="top">
 					<div class="w85b">
-						${project.remark }
+						${com.remark }
 					</div>
 				</td>
 			</tr>

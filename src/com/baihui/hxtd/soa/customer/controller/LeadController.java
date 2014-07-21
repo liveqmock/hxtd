@@ -201,6 +201,7 @@ public class LeadController extends CommonController<Lead>{
 		model.addAttribute("status",dictionaryService.findChildren("040102"));
 		model.addAttribute("cardType",dictionaryService.findChildren("040103"));
 		model.addAttribute("industry",dictionaryService.findChildren("040305"));
+		model.addAttribute("isMarketActivity",Constant.SOURCE_MARKET_ACTIVITY);
 	}
 
 

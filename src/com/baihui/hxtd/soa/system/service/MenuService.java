@@ -146,7 +146,7 @@ public class MenuService {
         criteria.setResultTransformer(CriteriaSpecification.DISTINCT_ROOT_ENTITY);
         criteria.setFetchMode("parent", FetchMode.JOIN);
         criteria.setFetchMode("trigger", FetchMode.JOIN);
-        criteria.setFetchMode("showLocation", FetchMode.JOIN);
+        //criteria.setFetchMode("showLocationType", FetchMode.JOIN);
 
         logger.info("根据类型查找菜单");
         if (!user.getIsManager()) {
@@ -459,9 +459,8 @@ public class MenuService {
      */
     @Transactional(readOnly = true)
     public Menu get(Long id) {
-        String hql = "select menu" +
+        String hql =
                 " from Menu menu" +
-                " inner join fetch menu.showLocation" +
                 " left join fetch menu.parent" +
                 " left join fetch menu.functions" +
                 " left join fetch menu.trigger" +

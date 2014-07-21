@@ -130,7 +130,7 @@ function formReset() {
 				<th>
 					<input type="checkbox" name="" id="id" class="checkall" />
 				</th>
-				<th>
+				<th width="12%">
 					组件名
 				</th>
 				<th>
@@ -142,17 +142,17 @@ function formReset() {
 				<th>
 					权限级别
 				</th>
-				<th class="sortable orderby" orderby="createdTime">
-					创建时间
-				</th>
 				<th>
 					创建者
 				</th>
-				<th class="sortable orderby" orderby="modifiedTime">
-					修改时间
+				<th width="10%" class="sortable orderby" orderby="createdTime">
+					创建时间
 				</th>
 				<th>
 					修改者
+				</th>
+				<th width="10%" class="sortable orderby" orderby="modifiedTime">
+					修改时间
 				</th>
 				<th>
 					操作
@@ -169,7 +169,7 @@ function formReset() {
 					<th>
 						<input type="checkbox" name="" id="id" class="checkall" />
 					</th>
-					<th>
+					<th width="12%">
 						组件名
 					</th>
 					<th>
@@ -181,17 +181,17 @@ function formReset() {
 					<th>
 						权限级别
 					</th>
-					<th class="sortable orderby" orderby="createdTime">
-						创建时间
-					</th>
 					<th>
 						创建者
 					</th>
-					<th class="sortable orderby" orderby="modifiedTime">
-						修改时间
+					<th width="10%" class="sortable orderby" orderby="createdTime">
+						创建时间
 					</th>
 					<th>
 						修改者
+					</th>
+					<th width="10%" class="sortable orderby" orderby="modifiedTime">
+						修改时间
 					</th>
 					<th>
 						操作
@@ -220,10 +220,10 @@ function formReset() {
               <td>{$T.row.code}</td>
               <td>{$T.row.url}</td>
               <td>{$T.row.privilegeLevel.key}</td>
-              <td>{$T.row.createdTime}</td>
               <td>{$T.row.creator.realName}</td>
-              <td>{$T.row.modifiedTime}</td>
+              <td>{$T.row.createdTime}</td>
               <td>{$T.row.modifier.realName}</td>
+              <td>{$T.row.modifiedTime}</td>
               <td width="68">
                       <c:if test="${VS_HAS_FUNCTIONS.componentView}">
                          <a

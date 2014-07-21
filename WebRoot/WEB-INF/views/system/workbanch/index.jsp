@@ -14,13 +14,12 @@
 </style>
 <link rel="stylesheet" href="${ctx}/static/css/recommend/detail.css" type="text/css" />
 <link rel="stylesheet" href="${ctx}/static/css/recommend/empower.css" type="text/css" />
-<script src="${ctx}/static/js/workbanch.js" type="text/javascript"></script>
-<link rel="stylesheet" href="${ctx}/static/css/application.css" type="text/css"/>
 <link rel="stylesheet" href="${ctx}/static/css/recommend/detail.css" type="text/css"/>
-<script type="text/javascript" src="${ctx}/static/js/jquery-jtemplates.js"></script>
-<script type="text/javascript" src="${ctx}/static/js/jquery-json.2.4.js"></script>
-<script type="text/javascript" src="${ctx}/static/js/js-util.common.js"></script>
+<script src="${ctx}/static/js/workbanch.js" type="text/javascript"></script>
 <script type="text/javascript" src="${ctx}/static/js/jquery.form.js"></script>
+<script type="text/javascript" src="${ctx}/static/js/jquery.validate.js"></script>
+<script type="text/javascript" src="${ctx}/static/js/jquery.metadata.js"></script>
+<script type="text/javascript" src="${ctx}/static/js/validator.js"></script>
 <script type="text/javascript" src="${ctx}/static/component/open-flash-chart-2/js/json/json2.js"></script>
 <script type="text/javascript" src="${ctx}/static/component/open-flash-chart-2/js/swfobject.js"></script>
 <script>
@@ -31,13 +30,20 @@ $(function(){
 		cursor: 'move', //拖动的时候鼠标样式
 		connectWith: ".column",
 		scroll: false,
+		cancel:"#add",
 		update:function() {
 			workbanch.modifyOrder();
 		}
 	});
+	$("#add").click(function(){
+		workbanch.addWorkbanch(reload);
+	});
    	workbanch.initList();
    	workbanch.initReport();
 });
+function reload(){
+	window.location.reload();
+}
 </script>
 </head>
 <body>
@@ -74,6 +80,9 @@ $(function(){
 				</div>
 			</li>
 		</c:forEach>
+		<li style="width: 49%;float:left;" id="add">
+			<a class="tc vm w h_add_workbanch block cp">+</a>
+		</li>
 	</ul>
 </div>
 </body>

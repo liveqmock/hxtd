@@ -43,6 +43,8 @@ public class ImportMessage {
 	
 	/**格式错误记录的excel序号集合*/
 	public static List<Integer> invalidFormatRowNums = new ArrayList<Integer>();
+	
+	
 	public static Map<Integer, String> invalidFormatRowNumMap = new HashMap<Integer, String>();
 	
 	/** 在数据库中已经存在的记录的excel序号集合 */
@@ -72,13 +74,13 @@ public class ImportMessage {
 	 * @return
 	 */
 	public static String workbookRepeatMessage(){
-		StringBuffer msg = new StringBuffer("excel数据内部重复" + workbookRepeats.size() + "组");
-		if(workbookRepeats.size()>0){
-			msg.append(",这"+workbookRepeats.size()+"组分别是：{");
+		StringBuffer msg = new StringBuffer("excel数据内部重复" + ImportMessage.workbookRepeats.size() + "组");
+		if(ImportMessage.workbookRepeats.size()>0){
+			msg.append(",这"+ImportMessage.workbookRepeats.size()+"组分别是：{");
 		
 			//循环遍历获取每一组重复记录的序号
-			for(String key:workbookRepeats.keySet()){
-				Set<Integer> repeatRowNums = workbookRepeats.get(key);
+			for(String key:ImportMessage.workbookRepeats.keySet()){
+				Set<Integer> repeatRowNums = ImportMessage.workbookRepeats.get(key);
 				msg.append("[");
 				List<Integer> list = new ArrayList<Integer>();
 				list.addAll(repeatRowNums);
@@ -107,12 +109,19 @@ public class ImportMessage {
 	 * @return
 	 */
 	public static String invalidFormatMessage(){
-		StringBuffer msg = new StringBuffer("数据格式错误 : [" + invalidFormatRowNums.size() + " ]条");
-		if (invalidFormatRowNums.size() > 0) {
-			msg.append(",他们分别是第[");
-			for (int i = 0; i < invalidFormatRowNums.size(); i++) {
-				msg.append(invalidFormatRowNums.get(i) + ", ");
+		StringBuffer msg = new StringBuffer("数据格式["+ ImportMessage.invalidFormatRowNumMap.size() + " ]条"+"错误 。" );
+		if (ImportMessage.invalidFormatRowNumMap.size() > 0) {
+			Set<Integer> keySet = ImportMessage.invalidFormatRowNumMap.keySet();
+			msg.append(",他们分别是[" );
+			for(Integer key:keySet){
+				msg.append( ImportMessage.invalidFormatRowNumMap.get(key) + ", ");
+				
 			}
+			/*msg.append(b)
+			for (int i = 0; i < ImportMessage.invalidFormatRowNums.size(); i++) {
+				msg.append(ImportMessage.invalidFormatRowNumMap.get(ImportMessage.invalidFormatRowNums.get(i)) + ", ");
+			}*/
+			
 			msg.deleteCharAt(msg.lastIndexOf(","));
 			msg.append("]");
 		}
@@ -127,10 +136,10 @@ public class ImportMessage {
 	 * @return
 	 */
 	public static String databaseRepeatMessage(String type){
-		StringBuffer msg = new StringBuffer("修改数据： [ " + databaseRepeatRowNums.size() + " ]条");
-		if (databaseRepeatRowNums.size() > 0) {
+		StringBuffer msg = new StringBuffer("修改数据： [ " + ImportMessage.databaseRepeatRowNums.size() + " ]条");
+		if (ImportMessage.databaseRepeatRowNums.size() > 0) {
 			msg.append(",他们的Excel行号分别是：[ ");
-			for (Integer databaseRepeatRowNum : databaseRepeatRowNums) {
+			for (Integer databaseRepeatRowNum : ImportMessage.databaseRepeatRowNums) {
 				msg.append(databaseRepeatRowNum + ", ");
 			}
 			msg.deleteCharAt(msg.lastIndexOf(","));
@@ -147,7 +156,7 @@ public class ImportMessage {
 	 * @return
 	 */
 	public static String databaseNewMessage(){
-		String msg = "新增记录：[ " + databaseNewRowNums.size() + " ]条";
+		String msg = "新增记录：[ " + ImportMessage.databaseNewRowNums.size() + " ]条";
 		return msg;
 	}
 	
@@ -158,7 +167,7 @@ public class ImportMessage {
 	 * @return
 	 */
 	public static String importResult(){
-		String msg = "成功导入 [ " + (databaseNewRowNums.size() + databaseRepeatRowNums.size() )+ " ]条,失败导入[ " + (workbookRepeatRowNums.size()-workbookRepeats .size()+invalidFormatRowNums.size()) + " ]条";
+		String msg = "成功导入 [ " + (ImportMessage.databaseNewRowNums.size() + ImportMessage.databaseRepeatRowNums.size() )+ " ]条,失败导入[ " + (ImportMessage.workbookRepeatRowNums.size()-ImportMessage.workbookRepeats .size()+ImportMessage.invalidFormatRowNums.size()) + " ]条";
 		return msg;
 	}
 	

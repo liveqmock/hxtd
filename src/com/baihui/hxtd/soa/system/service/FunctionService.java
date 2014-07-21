@@ -405,6 +405,9 @@ public class FunctionService {
         Date now = functionDao.getDBNow();
         entity.setCreatedTime(now);
         entity.setModifiedTime(now);
+        if(null==entity.getMenu() || null==entity.getMenu().getId()){
+        	entity.setMenu(null);
+        }
         functionDao.save(entity);
         auditLog.setRecordId(entity.getId());
     }

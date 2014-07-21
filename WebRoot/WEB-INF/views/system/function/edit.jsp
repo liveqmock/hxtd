@@ -51,15 +51,20 @@ $(function(){
 		}
 		return false;
 	});
-	jsUtil.easyTree.init(zNode,childFun);
-	$("#menuText").click(function(){
-		jsUtil.easyTree.show("#menuText");
-	});
 	jsUtil.renderRequiredFromInput();
 });
-function childFun(treeNode){
-	$("#menuText").val(treeNode.name);
-	$("#menuId").val(treeNode.id);
+function searchData(){
+	var	url = "${ctx}/system/menu/toQueryPage.comp";
+	var title = "菜单";
+	jsUtil.dialogIframe(url, title, 400, 500, function(){//确定回调
+		var userNames = $("#hide_name", window.frames["dialogIframe"].document).val();
+		$("#menuText").val(userNames);
+		var ids = $("#hide_id", window.frames["dialogIframe"].document).val();
+		$("#menuId").val(ids);
+	});
+};
+function clearInputVal(obj){ //清除
+	$(obj).prevAll("input").val('');
 }
 </script>
 </head>
@@ -98,8 +103,10 @@ function childFun(treeNode){
                 <td align="left"><input type="text" name="url" value="${func.url }" class="text_input3 required"/></td>
                 <td align="right">归属菜单：</td>
                 <td align="left">
-                <input type="text" id="menuText"  value="${func.menu.name }" class="text_input3" readonly/>
+                <input type="text" id="menuText"  value="${func.menu.name }" class="text_input3" onclick="searchData();" readonly/>
                 <input name="menu.id" id="menuId" value="${func.menu.id }" type="hidden"/>
+                <i class="s_inquiry globle_img block_inline ml5 vm cp" title="查找菜单" onclick="searchData();"></i>
+				<i class="dump_btn globle_img block_inline ml5 vm cp empty" onclick="clearInputVal(this)" title="清除"></i>
                 </td>
             </tr>
             <tr>
@@ -113,8 +120,9 @@ function childFun(treeNode){
 							<option value="${d.id}"
 								<c:if test="${d.id==func.privilegeLevel.id}">
              						selected
-             				</c:if>
-             				>${d.key}</option>
+             					</c:if>
+             					>${d.key}
+             				</option>
 						</c:forEach>
 					</select>
 				</td>

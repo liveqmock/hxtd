@@ -13,6 +13,7 @@ import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
 import com.baihui.hxtd.soa.common.entity.PCAS;
+import com.baihui.hxtd.soa.market.entity.MarketActivity;
 import com.baihui.hxtd.soa.system.entity.Dictionary;
 import com.baihui.hxtd.soa.system.entity.User;
 import com.fasterxml.jackson.annotation.JsonFormat;
@@ -141,6 +142,14 @@ public class Lead {
 	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "COUNTY",nullable = true)
 	private PCAS county;
+	
+	/**
+	 * 关联市场活动
+	 */
+	@ManyToOne(fetch = FetchType.LAZY)
+	@JoinColumn(name = "MARKET_ACTIVITY_ID",nullable = true)
+	private MarketActivity marketActivity;
+	
 	/** 详细地址 */
 	@Column(name = "ADDRESS", length = 256)
 	private String address;
@@ -379,5 +388,11 @@ public class Lead {
 
 	public void setCounty(PCAS county) {
 		this.county = county;
+	}
+	public MarketActivity getMarketActivity() {
+		return marketActivity;
+	}
+	public void setMarketActivity(MarketActivity marketActivity) {
+		this.marketActivity = marketActivity;
 	}
 }

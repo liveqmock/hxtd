@@ -2,6 +2,7 @@ package com.baihui.hxtd.soa.customer.entity;
 
 import java.io.Serializable;
 import java.util.Date;
+import java.util.List;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -25,10 +26,67 @@ import com.fasterxml.jackson.annotation.JsonFormat;
 @Entity
 @Table(name = "CUSTOMER")
 @SuppressWarnings("serial")
-public class Customer implements Serializable {
+public class CustomerDTO implements Serializable {
 
 	/** 构造函数 */
-	public Customer() {}
+	public CustomerDTO() {}
+	
+	public CustomerDTO(User owner,String name, String company, String phone, String mobile, 
+			String email, String fax, Dictionary source, Dictionary industry, Dictionary type,
+			Dictionary riskGrade, Dictionary cardType, String cardNum, String dept,String job,
+			String postCode, Dictionary ownerShip, Dictionary openBank, String bankName, String bankAccount,
+			PCAS province, PCAS city, PCAS county, String address, String contributionType, 
+			String contributionScale, String appointment, String financialAdvisor, String financialManager,
+			String financialDirector, String remark,int excelRowNum){
+		this.owner = owner;//0
+		this.name = name;//1
+		this.company = company;//2
+		this.phone = phone;//3
+		this.mobile = mobile;//4
+		this.email = email;//5
+		this.fax = fax;//6
+		this.source = source;//7
+		this.industry = industry;//8
+		this.type = type;//9
+		this.riskGrade = riskGrade;//10
+		this.cardType = cardType;//11
+		this.cardNum = cardNum;//12
+		this.dept = dept;//13
+		this.job = job;//14
+		this.postCode = postCode;//15
+		this.ownerShip = ownerShip;//16
+		this.openBank = openBank;//17
+		this.bankName = bankName;//18
+		this.bankAccount = bankAccount;//19
+		this.province = province;//20
+		this.city = city;//21
+		this.county = county;//22
+		this.address = address;//23
+		this.contributionType = contributionType;//24
+		this.contributionScale = contributionScale;//25
+		this.appointment = appointment;//26
+		this.financialAdvisor = financialAdvisor;//27
+		this.financialManager = financialManager;//28
+		this.financialDirector = financialDirector;//29
+		this.remark = remark;//30
+		this.excelRowNum = excelRowNum;//31
+		
+	} 
+	
+	public static CustomerDTO createEntity(List<Object> list){
+		return new CustomerDTO((User)list.get(0), (String)list.get(1), (String)list.get(2), 
+				(String)list.get(3), (String)list.get(4), (String)list.get(5), (String)list.get(6), 
+				(Dictionary)list.get(7), (Dictionary)list.get(8),(Dictionary) list.get(9), 
+				(Dictionary)list.get(10), (Dictionary)list.get(11), 
+				(String)list.get(12), (String)list.get(13), (String)list.get(14),(String)list.get(15),
+				(Dictionary)list.get(16), (Dictionary)list.get(17), 
+				(String)list.get(18),(String)list.get(19),
+				
+				(PCAS)list.get(20), (PCAS)list.get(21), (PCAS)list.get(22),
+				(String)list.get(23), (String)list.get(24), (String)list.get(25),
+				(String)list.get(26), (String)list.get(27), (String)list.get(28),(String)list.get(29),
+				(String)list.get(30), (Integer)list.get(31));
+	}
 
 	/** 客户ID */
 	@Id
@@ -218,9 +276,19 @@ public class Customer implements Serializable {
 	@Column(name = "JOB")
 	private String job;
 	
-	@Column(name = "IS_DELETED", nullable = false, updatable=false)
-	private Boolean isDeleted = false;
+	@Column(name = "IS_DELETED",updatable=false)
+	private Boolean isDeleted;
 
+	/*** 记录在excel中行数 */
+    private int excelRowNum;
+	
+	
+	
+	
+	
+	
+	
+	
 	public Long getId() {
 		return id;
 	}
@@ -524,6 +592,14 @@ public class Customer implements Serializable {
 
 	public void setIsDeleted(Boolean isDeleted) {
 		this.isDeleted = isDeleted;
+	}
+
+	public int getExcelRowNum() {
+		return excelRowNum;
+	}
+
+	public void setExcelRowNum(int excelRowNum) {
+		this.excelRowNum = excelRowNum;
 	}
 	
 	

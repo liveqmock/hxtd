@@ -29,7 +29,7 @@
 				$.ajaxSetup({ async: false });
 				RcmsAjax.ajaxNoMsg("${ctx}/system/user/checkPwd?oldpwd=" + oldpwd, function(data){
 					$.ajaxSetup({ async: true });
-					flag = (data.message == "");
+					flag = (data.message == ""||data.message == null);
 				});
 				return flag;
 			},"旧密码输入不正确");
@@ -68,8 +68,10 @@
        <form id="form" action="${ctx}${funcUrl}" method="post">
 	       <table class=" margin0 pt20">
 	        <tr class=" lh40">
+	        
 		        <td width="40%" align="right">请输入旧密码：</td>
 		        <td>
+		        <input type="hidden" name="id" value="${user.id}"/>
 		        <input type="password" id="oldpwd" name="oldPwd" class="text_input1 same required"/>
 		        </td>
 	        </tr>

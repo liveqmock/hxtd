@@ -16,6 +16,9 @@ $(function(){
 	jsUtil.twoOrMoreRestrictDate('.saletime', 'max', null); //绑定销售日历 
 	new Grid().init().bindExport(); // 生成Grid
 });
+function getProject(id){
+	jsUtil.dialogIframe("${ctx}/project/project/toViewPage.comp?id="+id, "供应商信息", 800, 800);
+}
 </script>
 </head>
 <body>
@@ -159,7 +162,7 @@ $(function(){
 	                <c:otherwise>{$T.row.name}</c:otherwise>
 	            </c:choose>
 	        </td>
-	        <td>{$T.row.project.name}</td>
+	        <td><a href="javascript:getProject({$T.row.project.id})">{$T.row.project.name}</a></td>
 	        <td align="right">{jsUtil.formatDiff($T.row.sellMoney, 2)}</td>
 	        <td>{$T.row.rate}%</td>
 	        <td>{$T.row.saleLimit}{$T.row.saleUnit.key}</td>

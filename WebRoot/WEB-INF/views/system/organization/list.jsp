@@ -100,9 +100,9 @@
         <input type="hidden" name="organizationId" value="${id}"/>
         <table class="fl mt5 w">
             <tr class="header">
-                <td class="f14" align="right" width="6%">真实姓名：</td>
-                <td class="f14" align="left" width="16%"><input type="text" name="search_LIKE_name" value="${name}" class="text_input1"/></td>
                 <td class="f14" align="right" width="6%">用户名：</td>
+                <td class="f14" align="left" width="16%"><input type="text" name="search_LIKE_name" value="${name}" class="text_input1"/></td>
+                <td class="f14" align="right" width="6%">真实姓名：</td>
                 <td class="f14" align="left" width="16%"><input type="text" name="search_LIKE_realName" value="${realName}" class="text_input1"/></td>
                 <td class="f14" align="right" width="6%">启用：</td>
                 <td class="f14" align="left" width="16%">
@@ -142,9 +142,7 @@
                 </c:if>
             </ul>
             <ul class="fr id_table1 mt10 ml10">
-                <c:if test="${VS_HAS_FUNCTIONS.userImport}">
-                    <li><a href="${ctx}/system/user/toImportPage.do" class="leading_in globle_img block_inline mr10" title="导入"></a></li>
-                </c:if>
+                
                 <c:if test="${VS_HAS_FUNCTIONS.userExport}">
                     <li><a href="javascript:void(0)" uri="${ctx}/system/user/export.do?TYPE=selected" class="leading_out globle_img block_inline mr10 export" title="导出"></a></li>
                 </c:if>

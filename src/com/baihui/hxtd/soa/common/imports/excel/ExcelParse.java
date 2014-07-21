@@ -99,7 +99,7 @@ public abstract class ExcelParse<T> {
 			int sheetRowNum = sheet.getLastRowNum();
 			logger.info("第"+(numSheets+1)+"个sheet页中有"+sheetRowNum+"行记录");
 			if (sheetRowNum < 1) {
-				msg = "您上传的第"+numSheets+"个sheet页文件内容为空";
+				msg = "您上传的第"+(numSheets+1)+"个sheet页文件内容为空";
 				logger.error(msg);
 				continue;
 			}
@@ -121,6 +121,10 @@ public abstract class ExcelParse<T> {
 				List<String> sheetList = HSSFRow2ListString(row, (rowNumOfSheet+1));
 				//将List<String>对象转换成Map<Integer,Entity>集合
 				T t = checkDataBySheetList((rowNumOfSheet+1), sheetList);
+				//如果这条记录
+				if(t == null){
+					continue;
+				}
 				if(t != null){
 					//resultList.add(t);
 					resultMap.put((rowNumOfSheet+1), t);
@@ -179,10 +183,10 @@ public abstract class ExcelParse<T> {
 			}
 			sheetList.add(Tools.trim(strCell));
 		 }
-		/* while ( sheetList.size() < getColumnNum() ) {
+		 while ( sheetList.size() < getColumnNum() ) {
 			sheetList.add(null);
-		 }*/
-		//记录在excel中的行号(当期那行号+1,因为是从第0行开始读取的)
+		 }
+		//记录在excel中的行号
 		 sheetList.add((getColumnNum()), rowNumOfSheet + "");
 		 return sheetList;
 		 
@@ -287,7 +291,8 @@ public abstract class ExcelParse<T> {
 				//有重复记录的行号
 				Integer deleteRowNumber = rowNumList.get(i);
 				//根据行号删除Map集合中key=deleteRowNumber的数据
-				entityMap.remove(deleteRowNumber);
+				//entityMap.remove(deleteRowNumber);
+				valueList.remove(entityMap.get(deleteRowNumber));
 			}
 		}
 		//最后将entityMap的value取出,传回

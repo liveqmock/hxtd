@@ -60,13 +60,13 @@ public class Menu implements Serializable, Cloneable, TreeNode<Menu>, Initialize
     @Column(name = "IS_LEAF", nullable = false)
     private Boolean isLeaf;
 
-    @Column(name = "SHOW_LOCATION_TYPE", nullable = false)
+    @Column(name = "SHOW_LOCATION_TYPE")
     private Integer showLocationType;
 
 	@Column(name = "IS_INITIALIZED", nullable = false, updatable = false)
     private Boolean isInitialized;
 
-    @Column(name = "REMARK", length = 512, nullable = false)
+    @Column(name = "REMARK", length = 512)
     private String remark;
 
     @Column(name = "`ORDER`", nullable = false, unique = true)
@@ -120,13 +120,11 @@ public class Menu implements Serializable, Cloneable, TreeNode<Menu>, Initialize
         this.id = id;
     }
 
-
     @Override
     public int compareTo(Orderable orderable) {
         return (int) (getOrder() - orderable.getOrder());
     }
-
-    @Override
+ 	@Override
     public boolean equals(Object obj) {
         return obj == null ? false : (getId().equals(((Menu) obj).getId()));
     }

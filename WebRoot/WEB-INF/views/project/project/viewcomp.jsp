@@ -6,6 +6,7 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
+<%@taglib prefix="tag" tagdir="/WEB-INF/tags" %>
 <c:set var="ctx" value="${pageContext.request.contextPath}"/>
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
 <html>
@@ -13,7 +14,11 @@
 <title>项目详情</title>
 <meta http-equiv="pragma" content="no-cache">
 <meta http-equiv="cache-control" content="no-cache">
-<meta http-equiv="expires" content="0">   
+<meta http-equiv="expires" content="0">    
+<meta http-equiv="keywords" content="keyword1,keyword2,keyword3">
+<meta http-equiv="description" content="This is my page">
+<link rel="stylesheet" href="${ctx}/static/css/public/common.css?v=${now}" type="text/css"/>
+<link rel="stylesheet" href="${ctx}/static/css/public/reset.css?v=${now}" type="text/css"/>
 <link rel="stylesheet" href="${ctx}/static/css/recommend/detail.css" type="text/css"/> 
 </head>
 <body>
@@ -26,23 +31,9 @@
 		<b class="b4"></b>
 		<div class="ie_head">
 			<h1 class="f14 fbnone mt10 ml10 fl">
-				产品详情信息
+				项目详情信息
 			</h1>
 			<ul class="fr id_table1 mt10 ml10">
-				<li>
-					<a class=" pl35 c_white f14 lh25 cp block fr"
-						href="${ctx }/project/project/toModifyPage.do?id=${com.id}"><b
-						class="allbtn_l block fl"></b><b
-						class="allbtn_r pr13 block fl w_auto f14">编&nbsp;&nbsp;辑</b>
-					</a>
-				</li>
-				<li>
-					<a class=" pl10 c_white f14 lh25 cp block fr mr10"
-						href="${ctx }/project/project/toQueryPage.do"><b
-						class="allbtn_l block fl"></b><b
-						class="allbtn_r pr13 block fl w_auto f14">返&nbsp;&nbsp;回</b>
-					</a>
-				</li>
 			</ul>
 		</div>
 	</div>

@@ -110,21 +110,30 @@ public class SupplierController extends CommonController<Supplier> {
 	  * @throws
 	 */
 	@RequestMapping(value = "/toViewPage.do")
-	public String view( @RequestParam(required=false)String type,
-							  @RequestParam(required=false)Long id,
+	public String view(@RequestParam(required=false)Long id,
 							  Model model){
 		logger.info("SupplierController.view查询组件");
-		String funcUrl="";
-		String returnStr="/project/supplier/view";
-		Supplier com = null;
-		if("edit".equals(type)){
-			funcUrl="/project/supplier/modify.do";
-			returnStr= "/project/supplier/edit";
-		}
-		com = supplierService.get(id);
+		Supplier com = supplierService.get(id);
 		model.addAttribute("com",com);
-		model.addAttribute("funcUrl", funcUrl);
-		return returnStr;
+		return "/project/supplier/view";
+	}
+	/**
+	 * 
+	  * viewCom(查询简单的供应商信息)
+	  * @Title: viewCom
+	  * @param @param id
+	  * @param @param model
+	  * @param @return    参数类型
+	  * @return String    返回类型
+	  * @throws
+	 */
+	@RequestMapping(value = "/toViewPage.comp")
+	public String viewCom(@RequestParam(required=false)Long id,
+							  Model model){
+		logger.info("SupplierController.view查询组件");
+		Supplier com = supplierService.get(id);
+		model.addAttribute("com",com);
+		return "/project/supplier/viewcomp";
 	}
 	
 	/**

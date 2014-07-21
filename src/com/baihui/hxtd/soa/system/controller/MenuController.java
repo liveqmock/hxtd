@@ -89,6 +89,24 @@ public class MenuController {
         return "/system/menu/list";
     }
 
+    @RequestMapping(value = "/toQueryPage.comp")
+    public String toQueryPageComp(HibernatePage<Menu> page, Long defaultSelected, ModelMap modelMap) {
+        logger.info("转至查询页面");
+
+        logger.info("存储查询条件表单初始化数据");
+        List<Menu> menus = (List<Menu>) modelMap.get(Constant.VS_MENUS);
+        menus = new ArrayList<Menu>(menus);
+        menus.add(0, Menu.ROOT);
+        String menuTree = JsonMapper.nonEmptyMapper().toJson(TreeNodeConverter.convert(menus));
+        modelMap.addAttribute("menuTree", menuTree);
+        if (defaultSelected == null) {
+            defaultSelected = Menu.ROOT.getId();
+        }
+        modelMap.addAttribute("parentId", defaultSelected);
+
+        return "/system/menu/list_tree";
+    }
+    
     /**
      * 查询分页数据
      */

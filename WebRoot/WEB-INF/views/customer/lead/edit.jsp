@@ -26,6 +26,7 @@
 <script type="text/javascript" src="${ctx}/static/js/pacs.js"></script>
 <script type="text/javascript">${applicationScope.VC_PCAS}</script>
 <script type="text/javascript">
+var sourceMarketActivity = ${isMarketActivity};
 $(function(){
 	$("#saveAndAdd").click(function(){
 		var $form = $("#form");
@@ -57,18 +58,39 @@ $(function(){
 	var county = '${lead.county.id}';
 	//修改为根据ID选择组件，之前用name选择组件当name中出现“.”时有问题
 	new PCAS("province","city","county",province,city,county);
+	
+	showMarketActivity(${lead.source.id});
+	
+	$("#source").change(function(){
+		showMarketActivity($(this).val())
+	});
 });
+function showMarketActivity(value){
+	if(value==sourceMarketActivity){
+		$(".marketActivity").show();
+	}else{
+		$(".marketActivity").hide();
+	}
+}
 function searchData(action){ //搜索弹出框
 	var url, title;
-	if(action == "owner"){
-		url = "${ctx}/system/user/toQueryPage.comp";
-		title = "所有者";
-	}else if(action == "customer"){
-		url = "${ctx}/customer/customer/toQueryPage.comp";
-		title = "客户";
-	}else if(action == "supplier"){
-		url = "${ctx}/project/supplier/toQueryPage.comp";
-		title = "供应商";
+	switch(action){
+		case "owner":
+			url = "${ctx}/system/user/toQueryPage.comp";
+			title = "所有者";
+			break;
+		case "customer":
+			url = "${ctx}/customer/customer/toQueryPage.comp";
+			title = "客户";
+			break;
+		case "supplier":
+			url = "${ctx}/project/supplier/toQueryPage.comp";
+			title = "供应商";
+			break;
+		case "marketActivity":
+			url = "${ctx}/market/marketactivity/toQueryPage.comp";
+			title = "市场活动";
+			break;
 	}
 	jsUtil.dialogIframe(url, title, 800, 465, 
 		function(){ // 确定回调
@@ -242,7 +264,7 @@ function clearInputVal(obj){ //清除
 					<span class="w_red">*&nbsp;</span>线索来源：
 				</td>
 				<td align="left">
-					<select name="source.id" class="select1 pr requiredSelect">
+					<select name="source.id" id="source" class="select1 pr requiredSelect">
 						<option value="-1">
 							--无--
 						</option>
@@ -271,6 +293,17 @@ function clearInputVal(obj){ //清除
 							</option>
 						</c:forEach>
 					</select>
+				</td>
+				<td align="right" class="marketActivity">
+					市场活动：
+				</td>
+				<td align="left" class="marketActivity">
+					<input type="text" id="txt_marketActivity" value="${lead.marketActivity.name }"
+						 class="text_input3 cp required" onclick="searchData('marketActivity');" readonly />
+					<input type="hidden" id="hide_marketActivity_id" name="marketActivity.id"
+						value="${lead.marketActivity.id }" />
+					<i class="s_inquiry globle_img block_inline ml5 vm cp" title="搜索所有者" onclick="searchData('owner');"></i>
+					<i class="dump_btn globle_img block_inline ml5 vm cp empty" title="清除" onclick="clearInputVal(this)"></i>
 				</td>
 			</tr>
 		</table>

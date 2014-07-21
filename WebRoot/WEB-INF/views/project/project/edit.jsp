@@ -203,6 +203,8 @@ function clearInputVal(obj){//清除
 						value="${project.supplier.name }" class="text_input3 required">
 					<input type="hidden" name="supplier.id" id="hide_supplier_id"
 						value="${project.supplier.id}" />
+					<i class="s_inquiry globle_img block_inline ml5 vm cp" title="搜索所有者" onclick="searchData('supplier');"></i>
+					<i class="dump_btn globle_img block_inline ml5 vm cp empty" title="清除" onclick="clearInputVal(this)"></i>
 				</td>
 				<td align="right">
 					开放时间：

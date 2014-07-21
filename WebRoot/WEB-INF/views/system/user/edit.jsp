@@ -15,13 +15,10 @@
     <link rel="stylesheet" href="${ctx}/static/component/zTree_v3/css/zTreeStyle.css" type="text/css"/>
     <script type="text/javascript" src="${ctx}/static/component/zTree_v3/js/jquery.ztree.core-3.5.js"></script>
     <script type="text/javascript" src="${ctx}/static/component/zTree_v3/js/jquery.ztree.exedit-3.5.js"></script>
-
     <script type="text/javascript" src="${ctx}/static/js/js-util.common.js"></script>
     <script type="text/javascript" src="${ctx}/static/js/jquery.metadata.js"></script>
     <script type="text/javascript" src="${ctx}/static/js/jquery.validate.js"></script>
     <script type="text/javascript" src="${ctx}/static/js/validator.js"></script>
-
-
     <script type="text/javascript">
         $(function () {
             /*${VS_USER.id} ${user.id}*/
@@ -39,9 +36,7 @@
                 }
             });
         });
-
     </script>
-
 </head>
 <body>
 <div>
@@ -64,14 +59,12 @@
                 <ul id="organizationTree" class="ztree"></ul>
             </div>
         </div>
-
         <div class="fr" style="width:80%">
             <div class=" mt20 block cb cb">
                 <b class="b1"></b>
                 <b class="b2"></b>
                 <b class="b3"></b>
                 <b class="b4"></b>
-
                 <div class="ie_head">
                     <h1 class="f14 fbnone mt10 ml10 fl">用户详情信息</h1>
                     <c:if test="${VM_BUSINESS!=null}">
@@ -85,21 +78,29 @@
 
                     <h1 class="f14 fbnone ml40 pt10">基本信息</h1>
                     <table class="cb id_table3 w95b bg_c_white margin0 mt10">
-
                         <tr>
-                            <td align="right" width="15%">用户名：</td>
+                            <td align="right" width="15%"><span class="w_red">*&nbsp;</span>用户名：</td>
                             <td align="left">
                                 <c:choose>
                                     <c:when test="${user.id==null}">
-                                        <input type="text" class="{required:true,maxlength:32,unique:['User','${user.id}']} text_input3" name="name" value="${user.name}"/>
+                                        <input type="text" maxlength="20" class="{required:true,userName:true,maxlength:32,unique:['User','${user.id}']} text_input3 " name="name" value="${user.name}"/>
                                     </c:when>
                                     <c:otherwise>
-                                        <input type="text" class="text_input3" name="name" value="${user.name}"/>
+                                        <input readonly maxlength="20" type="text" class="text_input3" name="name" value="${user.name}"/>
                                     </c:otherwise>
                                 </c:choose>
                             </td>
                             <td align="right" width="15%">密码：</td>
-                            <td align="left"><input type="password" class="{required:true,maxlength:64} text_input3" name="password" value="${user.password}"/></td>
+                            <td align="left">
+                            	<c:choose>
+                                  <c:when test="${user.id==null}">
+                                  <input type="password" class="{required:true,maxlength:64} text_input3" name="password" value="${user.password}"/>
+                                  </c:when>
+                                  <c:otherwise>
+                                  <input type="password" readonly class="{required:true,maxlength:64} text_input3" name="password" value="${user.password}"/>
+                                  </c:otherwise>
+                                </c:choose>
+                             </td>
                         </tr>
                         <tr>
                             <td align="right" width="15%" class="required">管理员：</td>
@@ -141,8 +142,6 @@
                                 <input type="text" class="organization {required:true} text_input3" value="${user.organization.name}" forselector="[name=organization\.id]" readonly>
                                 <input type="hidden" name="organization.id" value="${user.organization.id}">
                             </td>
-                            <%--//TODO 序号暂不处理--%>
-
                         </tr>
                         <tr>
                             <td align="right" width="15%">职位：</td>
@@ -198,6 +197,5 @@
         </div>
     </div>
 </div>
-
 </body>
 </html>

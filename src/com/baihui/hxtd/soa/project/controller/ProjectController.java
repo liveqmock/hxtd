@@ -113,6 +113,22 @@ public class ProjectController extends CommonController<Project> {
 		model.addAttribute("project",project);
 		return "/project/project/view";
 	}
+	/**
+	 * 
+	  * viewCom(查询简单的项目信息)
+	  * @Title: viewCom
+	  * @param @param id
+	  * @param @param model
+	  * @param @return    参数类型
+	  * @return String    返回类型
+	  * @throws
+	 */
+	@RequestMapping(value="/toViewPage.comp")
+	public String viewComp(Long id,Model model){
+		Project project = projectService.get(id);
+		model.addAttribute("project",project);
+		return "/project/project/viewcomp";
+	}
 	
 	/**
 	 * 

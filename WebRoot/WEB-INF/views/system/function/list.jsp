@@ -62,18 +62,7 @@ $(function(){
 	$("#reload").click(load);
 	grid = new Grid().init();
 	//folatHead()
-	
-	
-	
 });
-
-function folatHead(){
-	var head = $("thead");
-	var floatHead = $("#floatHead");
-	floatHead.width(head.width());
-	var left = head.offset().left;
-	floatHead.css({background:'white',position:'fixed', float:'none', top:'0px',left:left});
-}
 
 function load(){
 	grid.loadGrid();
@@ -185,28 +174,28 @@ function formReset(){
 					class="mr35">
 					<table class="cb id_table2 w">
 						<tr>
-							<th>
-								<input type="checkbox" name="" id="id" class="checkall" />
-							</th>
-							<th width="7%">
-								功能名
+							<th width="4%">
+							<input type="checkbox" name="" id="id" class="checkall" />
 							</th>
 							<th width="10%">
+								功能名
+							</th>
+							<th width="7%">
 								功能编号
 							</th>
 							<th width="10%">
 								归属菜单
 							</th>
-							<th width="15%">
+							<th width="16%">
 								功能调用入口
 							</th>
-							<th width="15%" class="sortable orderby" orderby="createdTime">
+							<th width="13%" class="sortable orderby" orderby="createdTime">
 								创建时间
 							</th>
 							<th width="7%">
 								创建者
 							</th>
-							<th width="15%" class="sortable orderby" orderby="modifiedTime">
+							<th width="13%" class="sortable orderby" orderby="modifiedTime">
 								修改时间
 							</th>
 							<th width="7%">
@@ -221,28 +210,28 @@ function formReset(){
 				<!-- 浮动表头html结束 -->
 				<table class="cb id_table2 w tablesorter">
 					<tr id="recordDiv">
-						<th>
+						<th width="4%">
 							<input type="checkbox" name="" id="id" class="checkall" />
 						</th>
-						<th width="7%">
+						<th width="10%">
 							功能名
 						</th>
-						<th width="10%">
+						<th width="7%">
 							功能编号
 						</th>
 						<th width="10%">
 							归属菜单
 						</th>
-						<th width="15%">
+						<th width="16%">
 							功能调用入口
 						</th>
-						<th width="15%" class="sortable orderby" orderby="createdTime">
+						<th width="13%" class="sortable orderby" orderby="createdTime">
 							创建时间
 						</th>
 						<th width="7%">
 							创建者
 						</th>
-						<th width="15%" class="sortable orderby" orderby="modifiedTime">
+						<th width="13%" class="sortable orderby" orderby="modifiedTime">
 							修改时间
 						</th>
 						<th width="7%">

@@ -1,5 +1,7 @@
 package com.baihui.hxtd.soa.common.service.imports;
 
+import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.Iterator;
@@ -29,8 +31,13 @@ public abstract class ImportServiceAbstract<T,E>  {
      * @param entityList
      * @param typeList 主键类型
      * @param duplicateType 重复数据的合并方式(覆盖,忽略,合并)
+     * @throws NoSuchMethodException 
+     * @throws InvocationTargetException 
+     * @throws IllegalAccessException 
+     * @throws SecurityException 
+     * @throws IllegalArgumentException 
      */
-    public void importData2DB(List<T> entityList, List<String> typeList,String duplicateType,User user){
+    public void importData2DB(List<T> entityList, List<String> typeList,String duplicateType,User user) throws IllegalArgumentException, SecurityException, IllegalAccessException, InvocationTargetException, NoSuchMethodException{
     	//如果导入的内容为空,则返回null
     	if(entityList==null || entityList.size()==0){
     		return ;
@@ -72,19 +79,26 @@ public abstract class ImportServiceAbstract<T,E>  {
      * @param insertList
      * @param updateList
      * @return
+     * @throws NoSuchMethodException 
+     * @throws InvocationTargetException 
+     * @throws IllegalAccessException 
+     * @throws SecurityException 
+     * @throws IllegalArgumentException 
      */
-   public void batchHandleData(List<E> insertList, List<E> updateList,User user){
+   public void batchHandleData(List<E> insertList, List<E> updateList,User user) throws IllegalArgumentException, SecurityException, IllegalAccessException, InvocationTargetException, NoSuchMethodException{
 	   //新增数据
 	   if(insertList!=null && insertList.size()>0){
 		   //为数据添加创建人,创建时间,修改人,修改时间
 		   addCreateAndModifyInfo(insertList, user);
-		   addOrModify(insertList);
+		   List<T> list = addOrModify(insertList);
+		   System.out.println("新增："+list.size());
 	   }
 		// 修改数据
 		if (updateList != null && updateList.size() > 0) {
 			// 为数据添加创建人,创建时间,修改人,修改时间
 			addCreateAndModifyInfo(updateList, user);
-			addOrModify(updateList);
+			List<T> list = addOrModify(updateList);
+			System.out.println("修改："+list.size());
 		}
    }
    
@@ -92,7 +106,37 @@ public abstract class ImportServiceAbstract<T,E>  {
     * 为对象添加创建人,创建时间,修改人,修改时间
     * @return
     */
-   public abstract List<E> addCreateAndModifyInfo(List<E> List, User user);
+   public List<E> addCreateAndModifyInfo(List<E> list, User user) throws IllegalArgumentException, IllegalAccessException, InvocationTargetException, SecurityException, NoSuchMethodException{
+	   if(list==null || list.size()==0){
+			return null;
+		}
+		for(E e:list){
+			//添加创建时间
+			Method getCreatorMethod = e.getClass().getMethod("getCreator");
+			Method setCreatorMethod = e.getClass().getMethod("setCreator",User.class);
+			User creator = (User)getCreatorMethod.invoke(e);
+			if(creator == null){
+				setCreatorMethod.invoke(e, user);
+			}
+			
+			//添加创建人
+			Method getCreatedTimeMethod = e.getClass().getMethod("getCreatedTime");
+			Method setCreatedTimeMethod = e.getClass().getMethod("setCreatedTime",Date.class);
+			Date createdTime = (Date) getCreatedTimeMethod.invoke(e);
+			if(createdTime == null){
+				setCreatedTimeMethod.invoke(e, getDBNow());
+			}
+			
+			//添加修改时间
+			Method setModifiedTimeMethod = e.getClass().getMethod("setModifiedTime",Date.class);
+			setModifiedTimeMethod.invoke(e, getDBNow());
+			
+			//添加修改人
+			Method setModifierMethod = e.getClass().getMethod("setModifier",User.class);
+			setModifierMethod.invoke(e, user);
+		}
+		return list;
+   }
 
    /**
     * 新增或修改数据

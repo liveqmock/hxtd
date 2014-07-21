@@ -5,26 +5,27 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-
+import org.springframework.beans.BeanUtils;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.baihui.hxtd.soa.common.imports.ImportMessage;
-import com.baihui.hxtd.soa.customer.entity.Lead;
-import com.baihui.hxtd.soa.customer.entity.LeadDTO;
+import com.baihui.hxtd.soa.customer.entity.Contact;
+import com.baihui.hxtd.soa.customer.entity.ContactDTO;
+import com.baihui.hxtd.soa.system.entity.User;
 @Service
 @Transactional
-public class ImportLeadService extends ImportServiceAbstract<LeadDTO,Lead> {
+public class ImportContactService extends ImportServiceAbstract<ContactDTO,Contact> {
 
 	
 	
 	/**
 	 * 根据"实体类,主键列表"判断是否在数据库中有重复数据,在根据"重复类型"处理重复数据
-	 * Map<Integer,Lead>
+	 * Map<Integer,Contact>
 	 * 其中Integer有两个值1:新增,2:修改
 	 */
 	@Override
-	public Map<Integer, Lead> isAddOrUpdate(LeadDTO leadDB, List<String> uniqueString, String duplicateType) {
+	public Map<Integer, Contact> isAddOrUpdate(ContactDTO con, List<String> uniqueString, String duplicateType) {
 		if(uniqueString==null || uniqueString.size()==0){
 			uniqueString = new ArrayList<String>();
 			//默认手机作为唯一标识
@@ -37,108 +38,38 @@ public class ImportLeadService extends ImportServiceAbstract<LeadDTO,Lead> {
 		 * 1:新增
 		 * 2:修改
 		 */
-		Map<Integer, Lead> entityMap = new HashMap<Integer, Lead>();
+		Map<Integer, Contact> entityMap = new HashMap<Integer, Contact>();
 		for(int i = 0; i<uniqueString.size(); i++){
 			//获取唯一标记
 			String unique = uniqueString.get(i);
 			if("email".equals(unique)){
-				hqlParam += " and entity.email=? ";
-				value += leadDB.getEmail()+",";
+				hqlParam += " and entity.name=? ";
+				value += con.getName()+",";
 			}
 			if("mobile".equals(unique)){
 				hqlParam += " and entity.mobile=? ";
-				value += leadDB.getMobile()+",";
+				value += con.getMobile()+",";
 			}
 		}
 		value = value.substring(0,value.lastIndexOf(","));
 		String[] values = value.split(","); 
-		//将LeadDB对象转换成Lead类型的对象
-		Lead leadFromExcel = convertT2E(leadDB);
+		//将ContactDB对象转换成Contact类型的对象
+		Contact leadFromExcel = convertT2E(con);
 		//根据一个或多个主键查询数据库
-		Lead leadFromDB = (Lead)importDao.getByUnique("Lead",hqlParam,values);
+		Contact leadFromDB = (Contact)importDao.getByUnique("Contact",hqlParam,values);
 		
 		if (leadFromDB != null) {
 			//如果leadByDB不为空,则查询到重复数据,应该修改,根据记录合并方式进行修改
 			entityMap.put(2, super.mergeDataByDuplicateType(leadFromExcel, leadFromDB, duplicateType));
 			//添加消息提示,保存这条记录的行号到ImportMessage中databaseRepeatRowNums
-			ImportMessage.databaseRepeatRowNums.add(leadDB.getExcelRowNum());
+			ImportMessage.databaseRepeatRowNums.add(con.getExcelRowNum());
 		}else{
 		    //如果leadByDB为空,则说明该记录应该是新增
 			entityMap.put(1, leadFromExcel);
 			//添加消息提示,保存这条记录的行号到ImportMessage中databaseNewRowNums
-			ImportMessage.databaseNewRowNums.add(leadDB.getExcelRowNum());
+			ImportMessage.databaseNewRowNums.add(con.getExcelRowNum());
 		}
 		return entityMap;
-	}
-	
-	/**
-	 * 将LeadDB对象转换成Lead类型的对象
-	 * convertLeadDBTlLead
-	 */
-	public Lead convertT2E(LeadDTO leadDB) {
-		Lead lead = new Lead();
-		lead.setOwner(leadDB.getOwner());
-
-		// 公司名称
-		lead.setCompany(leadDB.getCompany());
-
-		// 姓名
-		lead.setName(leadDB.getName());
-
-		// 部门
-		lead.setDepartment(leadDB.getDepartment());
-
-		// 职位
-		lead.setPosition(leadDB.getPosition());
-
-		// 邮箱
-		lead.setEmail(leadDB.getEmail());
-
-		// 电话
-		lead.setPhone(leadDB.getPhone());
-
-		// 传真
-		lead.setFax(leadDB.getFax());
-
-		// 手机
-		lead.setMobile(leadDB.getMobile());
-
-		// 线索来源
-		lead.setSource(leadDB.getSource());
-		// 线索状态
-		lead.setStatus(leadDB.getStatus());
-
-		// 证件类型
-		lead.setCardType(leadDB.getCardType());
-
-		// 证件号码
-		lead.setCardNum(leadDB.getCardNum());
-
-		// 行业
-		lead.setIndustry(leadDB.getIndustry());
-
-		// 邮编
-		lead.setPostCode(leadDB.getPostCode());
-
-		// 省
-		lead.setProvince(leadDB.getProvince());
-
-		// 市
-		lead.setCity(leadDB.getCity());
-
-		// 区/县
-		lead.setCounty(leadDB.getCounty());
-
-		// 详细地址
-		lead.setAddress(leadDB.getAddress());
-
-		// 备注
-		lead.setRemark(leadDB.getRemark());
-		
-		
-
-		return lead;
-
 	}
 	
 	/**
@@ -147,18 +78,13 @@ public class ImportLeadService extends ImportServiceAbstract<LeadDTO,Lead> {
 	 * @param leadByDB
 	 * @return
 	 */
-	public Lead mergeData(Lead lead, Lead leadByDB){
+	public Contact mergeData(Contact lead, Contact leadByDB){
 		//Id
 		lead.setId(leadByDB.getId());
 		
 		//所有者
 		if (lead.getOwner() == null) {
 			lead.setOwner(leadByDB.getOwner());
-		}
-		
-		//公司名称
-		if(lead.getCompany() == null || "".equals(lead.getCompany())){
-			lead.setCompany(leadByDB.getCompany());
 		}
 		
 		//姓名
@@ -200,25 +126,6 @@ public class ImportLeadService extends ImportServiceAbstract<LeadDTO,Lead> {
 		if(lead.getSource() == null){
 			lead.setSource(leadByDB.getSource());
 		}
-		//线索状态
-		if(lead.getStatus() == null){
-			lead.setStatus(leadByDB.getStatus());
-		}
-		
-		//证件类型 
-		if(lead.getCardType() == null){
-			lead.setCardType(leadByDB.getCardType());
-		}
-		
-		//证件号码
-		if(lead.getCardNum() == null || "".equals(lead.getCardNum())){
-			lead.setCardNum(leadByDB.getCardNum());
-		}
-		
-		//行业 
-		if(lead.getIndustry() == null){
-			lead.setIndustry(leadByDB.getIndustry());
-		}
 		
 		//邮编
 		if(lead.getPostCode() == null || "".equals(lead.getPostCode())){
@@ -250,43 +157,24 @@ public class ImportLeadService extends ImportServiceAbstract<LeadDTO,Lead> {
 			lead.setRemark(leadByDB.getRemark());
 		}
 		
-		
-		
 		return lead;
 	}
 
 	
 	
-	public static void main(String[] args){
-		//集合的主键
-		List<String> type=new ArrayList<String>();
-		type.add("mobile");
-		type.add("email");
-		ImportServiceAbstract<LeadDTO, Lead> import2db = new ImportLeadService();
-		LeadDTO leadDB = new LeadDTO();
-		leadDB.setAddress("北京市");
-		leadDB.setCardNum("123456789");
-		leadDB.setName("lxl");
-		leadDB.setMobile("13636409512");
-		leadDB.setEmail("362356441@qq.com");
-		List<LeadDTO> list = new ArrayList<LeadDTO>();
-		list.add(leadDB);
-		String duplicateType = "忽略";
-		//import2db.importData2DB(list, type, duplicateType,user);
-	}
 
 	/**
 	 * 为对象添加创建人,创建时间,修改人,修改时间
 	 * 
 	 * @return
 	 */
-	/*@Override
-	public List<Lead> addCreateAndModifyInfo(List<Lead> lists,User user) {
+	@Override
+	public List<Contact> addCreateAndModifyInfo(List<Contact> lists,User user) {
 		
 		if(lists==null || lists.size()==0){
 			return null;
 		}
-		for(Lead lead:lists){
+		for(Contact lead:lists){
 			//添加创建时间
 			if(lead.getCreator() == null){
 				lead.setCreator(user);
@@ -301,7 +189,7 @@ public class ImportLeadService extends ImportServiceAbstract<LeadDTO,Lead> {
 			lead.setModifier(user);
 		}
 		return lists;
-	}*/
+	}
 
 	/**
 	 * lead1:来自excel,所以没有id
@@ -309,9 +197,16 @@ public class ImportLeadService extends ImportServiceAbstract<LeadDTO,Lead> {
 	 * 如果修改数据,需要把id带上
 	 */
 	@Override
-	public Lead setId(Lead lead1,Lead lead2) {
+	public Contact setId(Contact lead1,Contact lead2) {
 		lead1.setId(lead2.getId());
 		return lead1;
+	}
+
+	@Override
+	public Contact convertT2E(ContactDTO t) {
+		Contact c = new Contact();
+		BeanUtils.copyProperties(t, c);
+		return c;
 	}
 
 

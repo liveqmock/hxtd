@@ -58,6 +58,9 @@ function formReset() {
 	$("#form")[0].reset();
 	$("#typeId").removeAttr("value");
 }
+function getSupplier(id){
+	jsUtil.dialogIframe("${ctx}/project/supplier/toViewPage.comp?id="+id, "供应商信息", 800, 800);
+}
 </script>
 </head>
 <body>
@@ -313,7 +316,7 @@ function formReset() {
                   </c:choose>
               </td>
               <td>{$T.row.code}</td>
-              <td>{$T.row.supplier.name}</td>
+              <td><a href="javascript:getSupplier({$T.row.supplier.id});">{$T.row.supplier.name}</a></td>
               <td>{$T.row.financeLimit}</td>
               <td>{$T.row.creator.realName}</td>
               <td>{$T.row.createdTime}</td>

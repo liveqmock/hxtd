@@ -83,7 +83,7 @@
                 <table class="cb id_table3 w95b bg_c_white margin0 mt10">
                     <tr style="display: none">
                         <td align="right" width="15%">编号：</td>
-                        <td align="left"><input type="text" name="code" value="${menu.code}" class="text_input3"/></td>
+                        <td align="left"><input type="text" name="code" value="" class="text_input3"/></td>
                         <td align="right" width="15%">序号：</td>
                         <td align="left"><input type="text" name="order" value="${menu.order}" class="text_input3"/></td>
                     </tr>
@@ -101,7 +101,12 @@
                     </tr>
                     <tr>
                         <td align="right" width="15%">显示位置：</td>
-                        <td align="left">${menu.showLocation.key}</td>
+                        <td align="left">
+                        <c:choose>
+                        <c:when test="${menu.showLocationType==1}">菜单栏</c:when>
+                        <c:otherwise>设置栏</c:otherwise>
+                        </c:choose>
+                        </td>
                     </tr>
                     <tr>
                         <td align="right" width="15%">包含功能：</td>

@@ -2,7 +2,12 @@ package com.baihui.hxtd.soa.common.controller;
 
 import java.io.IOException;
 import java.io.InputStream;
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
+import java.util.Set;
+import java.util.TreeSet;
 
 import javax.annotation.Resource;
 import javax.servlet.http.HttpSession;
@@ -26,7 +31,6 @@ import com.baihui.hxtd.soa.util.EnumModule;
 import com.baihui.hxtd.soa.base.Constant;
 import com.baihui.hxtd.soa.common.imports.ImportMessage;
 import com.baihui.hxtd.soa.common.imports.excel.ExcelParse;
-import com.baihui.hxtd.soa.common.imports.excel.ExcelParse4Lead;
 import com.baihui.hxtd.soa.common.service.ImportService;
 import com.baihui.hxtd.soa.system.entity.Organization;
 import com.baihui.hxtd.soa.system.entity.User;
@@ -63,13 +67,17 @@ public class ImportController {
 	 * @throws NoSuchFieldException
 	 */
 	@RequestMapping(value = "/toImportPage.do")
-	public String toImportPage(Model model) throws NoSuchFieldException{
+	public String toImportPage(Model model,@RequestParam(required=false) String module) throws NoSuchFieldException{
 		model.addAttribute("userTemplement", "user.xls");
 		//枚举获取导入文件的类型
 		EnumModule[] enumModule = EnumModule.values();
+		model.addAttribute("moduleName",module);
 		model.addAttribute("enumModules",enumModule);
 		//导入的模板
-		model.addAttribute("templateName", "lead.xlsx");
+		model.addAttribute("templateLead", "lead.xlsx");
+		model.addAttribute("templateContact", "contact.xlsx");
+		model.addAttribute("templateCustomer", "customer.xlsx");
+		model.addAttribute("templateSupplier", "supplier.xlsx");
 		return "/common/imports/import";
 	}
 	
@@ -83,8 +91,25 @@ public class ImportController {
             @ModelAttribute(Constant.VS_USER) User sessionUser,
             @ModelAttribute(Constant.VS_ORG) Organization organization,
             ModelMap modelMap,
-            RedirectAttributes model) throws IOException, InvalidFormatException {
+            RedirectAttributes model) throws IOException, InvalidFormatException, InstantiationException, IllegalAccessException, ClassNotFoundException {
 		logger.info("导入excel文件");
+		//初始化静态变量
+		ImportMessage.workbookRepeatRowNums = new TreeSet<Integer>();
+		
+		/**将上面这组数据保存到Map集合中.key=唯一键,value=重复记录的excel序号集合*/
+		ImportMessage.workbookRepeats = new HashMap<String,Set<Integer>>();
+		
+		/**格式错误记录的excel序号集合*/
+		ImportMessage.invalidFormatRowNums = new ArrayList<Integer>();
+		
+		
+		ImportMessage.invalidFormatRowNumMap = new HashMap<Integer, String>();
+		
+		/** 在数据库中已经存在的记录的excel序号集合 */
+		ImportMessage.databaseRepeatRowNums = new TreeSet<Integer>();
+		
+		/** 新增到数据库中记录的excel序号集合 */
+		ImportMessage.databaseNewRowNums = new ArrayList<Integer>();
 
 		
 		logger.info("检查文件是否为空");
@@ -102,11 +127,23 @@ public class ImportController {
         }
 
         logger.info("根据excel文件解析出对象集合");
-        ExcelParse excelParse = new ExcelParse4Lead();
+        //获取模块的首字母大写
+        StringBuffer moduleValue = new StringBuffer(moduleName.substring(0, 1).toUpperCase()+moduleName.substring(1));
+        moduleValue.insert(0, "ExcelParse4");
+        moduleValue.insert(0, "com.baihui.hxtd.soa.common.imports.excel.");
+        ExcelParse excelParse = (ExcelParse) Class.forName(moduleValue.toString()).newInstance();
         List entityList = excelParse.parse(file, checkWay);
+        
+        //显示导入结果
+        String importResult = "导入结果：";
         if(entityList == null || entityList.size()==0){
-        	ImportMessage.message="导入失败：解析文件内容为空!";
-        	json = new JsonDto(ImportMessage.message);
+        	if(ImportMessage.invalidFormatMessage() != null && !"".equals(ImportMessage.invalidFormatMessage())){
+        		importResult += ImportMessage.importResult() +";";
+        		importResult +=ImportMessage.invalidFormatMessage();
+        	}else{
+        		importResult +="导入失败：解析文件内容为空!";
+        	}
+        	json = new JsonDto(importResult);
      		json.setSuccessFlag(false);
         	return json.toString();
         }
@@ -124,7 +161,6 @@ public class ImportController {
 
         logger.info("导入完成");
         //model.addFlashAttribute(ImportMessage.message, "导入成功");
-        String importResult = "导入完成：";
         //获取导入的整体结果
         importResult += ImportMessage.importResult() +";";
         //获取excel内部数据重复的列表
@@ -206,6 +242,12 @@ public class ImportController {
 	
 	
 	public static void main(String[] args) {
+		String moduleName = "marketActiviey";
+		StringBuffer  moduleValue = new StringBuffer( moduleName.substring(0, 1).toUpperCase()+moduleName.substring(1));
+		moduleValue.insert(0, "ExcelParse4");
+		 moduleValue.insert(0, "com.baihui.hxtd.soa.common.imports.excel.");
+		System.out.println(moduleValue.toString());
+		
 	}
 
 }

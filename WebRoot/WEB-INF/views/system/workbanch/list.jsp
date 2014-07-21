@@ -20,6 +20,7 @@
 <script type="text/javascript" src="${ctx}/static/js/jquery.validate.js"></script>
 <script type="text/javascript" src="${ctx}/static/js/jquery.metadata.js"></script>
 <script type="text/javascript" src="${ctx}/static/js/validator.js"></script>
+<script type="text/javascript" src="${ctx}/static/js/workbanch.js"></script>
 <script type="text/javascript">
 $(function() {
 	$("#id").click(function() {
@@ -38,27 +39,6 @@ $(function() {
 			});
 	grid = new Grid().init({paginationActive:false});
 });
-function searchData(){//搜索弹出框
-	jsUtil.dialogIframe("${ctx}/workbanch/add.comp", "自定义工作台", 800, 300, function(){//确定回调
-		var $form = $("#listForm", window.frames["dialogIframe"].document);
-		var type = $("#type", window.frames["dialogIframe"].document).val();
-		if(type=='list'){
-			$("#report",window.frames["dialogIframe"].document).removeClass("required");
-			$("#module",window.frames["dialogIframe"].document).addClass("required");
-		}else{
-			$("#module",window.frames["dialogIframe"].document).removeClass("required");
-			$("#report",window.frames["dialogIframe"].document).addClass("required");
-		}
-		if($form.valid()){
-			var formData = $form.formSerialize();
-			RcmsAjax.ajax("${ctx}/workbanch/add.do",function(){
-				grid.loadGrid();
-			},null,formData);
-		}else{
-			return false;
-		}
-	});
-}
 </script>
 </head>
 <body>
@@ -84,7 +64,7 @@ function searchData(){//搜索弹出框
 						</a>
 					</li>
 					<li>
-						<a href="javascript:searchData();"
+						<a href="javascript:workbanch.addWorkbanch(grid.loadGrid);"
 							class="block c_white lh25 ml10"><b
 							class="allbtn_l block fl"></b><b
 							class="allbtn_r pr13 block fl w_auto f14">新&nbsp;&nbsp;增</b>

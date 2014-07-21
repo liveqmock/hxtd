@@ -24,13 +24,10 @@ import com.baihui.hxtd.soa.system.entity.User;
  *  
  * 
  */
-public class LeadDB {
+public class LeadDTO {
 
-	public LeadDB(){}
-	public LeadDB(User owner,String name){
-		
-	}
-	public LeadDB(User owner,String name, String company,String department, String position, String mobile, 
+	public LeadDTO(){}
+	public LeadDTO(User owner,String name, String company,String department, String position, String mobile, 
 			String phone, String email, String fax, Dictionary source, Dictionary status, Dictionary cardType,
 			 String cardNum, Dictionary industry, PCAS province, PCAS city, PCAS county, String postCode,
 			 String address, String remark,int excelRowNum, Date createdTime){
@@ -59,8 +56,8 @@ public class LeadDB {
 		
 	} 
 	
-	public LeadDB createEntity(List<Object> list){
-		return new LeadDB((User)list.get(0), (String)list.get(1), (String)list.get(2), 
+	public static LeadDTO createEntity(List<Object> list){
+		return new LeadDTO((User)list.get(0), (String)list.get(1), (String)list.get(2), 
 				(String)list.get(3), (String)list.get(4), (String)list.get(5), (String)list.get(6), 
 				(String)list.get(7),(String)list.get(8), (Dictionary)list.get(9),(Dictionary) list.get(10), 
 				(Dictionary)list.get(11), (String)list.get(12), (Dictionary)list.get(13), (PCAS)list.get(14), (PCAS)list.get(15),

@@ -170,4 +170,9 @@ jQuery.validator.addMethod("password", function (val, element) {
     return this.optional(element) || (reg.test(val));
 }, "密码不符合规范");
 
+/**用户名规则验证*/
+jQuery.validator.addMethod("userName", function (val, element) {
+    var reg = /^([A-Za-z0-9_\.]+)$/;
+    return this.optional(element) || (reg.test(val));
+}, "使用字母、数字、下划线、小数点");
 

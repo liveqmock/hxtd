@@ -11,9 +11,11 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.SessionAttributes;
 import org.springside.modules.web.Servlets;
 
 import com.baihui.hxtd.soa.base.Constant;
@@ -43,6 +45,7 @@ import com.baihui.hxtd.soa.util.JsonDto;
  */
 @Controller
 @RequestMapping(value = "/system/component")
+@SessionAttributes(value = {Constant.VS_USER})
 public class ComponentController {
 
     private Logger logger = LoggerFactory.getLogger(this.getClass());
@@ -231,17 +234,17 @@ public class ComponentController {
      */
     @ResponseBody
     @RequestMapping(value = "/delete.do", produces = "text/text;charset=UTF-8")
-    public String delete(User user, Long[] id) {
+    public String delete(ModelMap model, Long[] id) {
         logger.info("ComponentController.delete删除组件id={}", StringUtils.join(id, ","));
 
         if (commonService.isInitialized(Component.class, id)) {
             return new JsonDto("系统初始化数据不允许删除！").toString();
         }
-
+        User u = (User)model.get(Constant.VS_USER);
         AuditLog [] auditLogArr = new AuditLog [id.length];
 		for(int i=0; i<id.length; i++){
 			auditLogArr[i] = new AuditLog(EnumModule.COMPONENT.getModuleName(), 
-					id[i], componentService.getNameById(id[i]), EnumOperationType.DELETE.getOperationType(), user);
+					id[i], componentService.getNameById(id[i]), EnumOperationType.DELETE.getOperationType(), u);
 		}
         componentService.delete(id,auditLogArr);
         JsonDto json = new JsonDto();

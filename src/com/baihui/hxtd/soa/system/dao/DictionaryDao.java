@@ -51,8 +51,14 @@ public class DictionaryDao extends HibernateDAOImpl<Dictionary, Long> {
     }
 
     public Dictionary getValue(String key, Long parentId) {
-        String hql = "from Dictionary dic where dic.parent.id=? and dic.key=?";
+        String hql = "from Dictionary dic where dic.parent.id=? and dic.key=? and dic.isDeleted=false";
         return findUnique(hql, parentId, key);
+    }
+    
+    
+    public Dictionary getValueByType(String key, String type) {
+        String hql = "from Dictionary dic where dic.type=? and dic.key=? and dic.isDeleted=false";
+        return findUnique(hql, type, key);
     }
 
 }

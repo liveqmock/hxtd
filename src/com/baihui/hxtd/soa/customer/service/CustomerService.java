@@ -205,6 +205,12 @@ public class CustomerService {
     	return customerDao.get(id).getName();
     }
 	
+    public Customer getByName(String name){
+    	String hql ="select customer from Customer customer where customer.name=?";
+    	return contactDao.findUnique(hql,name);
+    }
+    
+    
 }
 
 

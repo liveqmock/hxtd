@@ -82,21 +82,21 @@ workbanch.result2Html = function(result, module) {
 	var fields = module.fields;
 	var table = new Array();
 	table.push("<table cellspacing='1' style='width:100%; line-height:25px;border-collapse: collapse;border-spacing: 0;'>");
-	table.push("<tr>");
-	for ( var i = 0; i < title.length; i++) {
-		table.push("<th>", title[i], "</th>");
-	}
-	table.push("</tr>");
 	var list = result.result.result;
 	if(!list||list.length==0){
-		table.push('<tr><td colspan="'+title.length+'" align="center"><div class="allnone m10"></div></td></tr>');
+		table.push('<tr><td colspan="'+title.length+'" align="center"><div class="allnone mt10"></div></td></tr>');
 	}else{
+		table.push("<tr>");
+		for ( var i = 0; i < title.length; i++) {
+			table.push("<th>", title[i], "</th>");
+		}
+		table.push("</tr>");
 		for ( var i = 0; i < list.length; i++) {
-			table.push("<tr");
+			table.push("<tr  class='cp ");
 			if (i % 2 == 0) {
-				table.push(" class='bg_c_blue'");
+				table.push(" bg_c_blue");
 			}
-			table.push(" onclick='workbanch.href(this,",list[i].id,")'>");
+			table.push("' onclick='workbanch.href(this,",list[i].id,")'>");
 			for ( var j = 0; j < fields.length; j++) {
 				var value = list[i][fields[j]];
 				table.push("<td>");
@@ -187,6 +187,26 @@ workbanch.href=function(ele,id){
 	var $ele = $(ele).parent().parent().parent().parent();
 	var url= $ele.attr("uri").replace("query.do","toViewPage.do?id="+id);
 	window.location.href=url;
+};
+workbanch.addWorkbanch=function(funcParam){//搜索弹出框
+	var path = jsUtil.getRootPath();
+	jsUtil.dialogIframe(path+"/workbanch/add.comp", "自定义工作台", 800, 300, function(){//确定回调
+		var $form = $("#listForm", window.frames["dialogIframe"].document);
+		var type = $("#type", window.frames["dialogIframe"].document).val();
+		if(type=='list'){
+			$("#report",window.frames["dialogIframe"].document).removeClass("required");
+			$("#module",window.frames["dialogIframe"].document).addClass("required");
+		}else{
+			$("#module",window.frames["dialogIframe"].document).removeClass("required");
+			$("#report",window.frames["dialogIframe"].document).addClass("required");
+		}
+		if($form.valid()){
+			var formData = $form.formSerialize();
+			RcmsAjax.ajax(path+"/workbanch/add.do",funcParam,null,formData);
+		}else{
+			return false;
+		}
+	});
 };
 $(function() {
 	workbanch.bindFunction();

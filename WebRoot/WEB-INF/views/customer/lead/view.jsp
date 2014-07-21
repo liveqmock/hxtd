@@ -117,6 +117,9 @@
 				</td>
 				<td align="left">
 					${lead.source.key }
+					<c:if test="${lead.marketActivity!=null}">
+						【活动： ${lead.marketActivity.name }】
+					</c:if>
 				</td>
 				<td align="right">
 					邮箱：

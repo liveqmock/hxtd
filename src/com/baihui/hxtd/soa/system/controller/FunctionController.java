@@ -3,6 +3,7 @@ package com.baihui.hxtd.soa.system.controller;
 import com.baihui.hxtd.soa.base.Constant;
 import com.baihui.hxtd.soa.base.orm.hibernate.HibernatePage;
 import com.baihui.hxtd.soa.base.utils.Search;
+import com.baihui.hxtd.soa.base.utils.mapper.HibernateAwareObjectMapper;
 import com.baihui.hxtd.soa.common.service.CommonService;
 import com.baihui.hxtd.soa.system.entity.AuditLog;
 import com.baihui.hxtd.soa.system.entity.Function;
@@ -13,6 +14,9 @@ import com.baihui.hxtd.soa.system.service.MenuService;
 import com.baihui.hxtd.soa.util.EnumModule;
 import com.baihui.hxtd.soa.util.EnumOperationType;
 import com.baihui.hxtd.soa.util.JsonDto;
+import com.fasterxml.jackson.core.JsonGenerationException;
+import com.fasterxml.jackson.databind.JsonMappingException;
+
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -22,15 +26,20 @@ import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.SessionAttributes;
 import org.springside.modules.web.Servlets;
 
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
+
+import java.io.IOException;
+import java.io.PrintWriter;
 import java.sql.Date;
 import java.util.Map;
 
 @Controller
 @RequestMapping(value = "/system/function")
+@SessionAttributes(value = {Constant.VS_USER})
 public class FunctionController {
 
     private Logger logger = LoggerFactory.getLogger(this.getClass());
@@ -142,13 +151,16 @@ public class FunctionController {
      * @param @return 参数类型
      * @return ModelAndView    返回类型
      * @throws NoSuchFieldException
+     * @throws IOException 
+     * @throws JsonMappingException 
+     * @throws JsonGenerationException 
      * @throws
      * @Title: query
      */
     @RequestMapping(value = "/query.do", produces = "text/text;charset=UTF-8")
     @ResponseBody
-    public String query(HibernatePage<Function> page,//
-                        HttpServletRequest request) throws NoSuchFieldException {
+    public void query(HibernatePage<Function> page,//
+                        HttpServletRequest request,PrintWriter out) throws NoSuchFieldException, JsonGenerationException, JsonMappingException, IOException {
         logger.info("ComponentController.query查询组件列表");
         Map<String, Object> searchParams = Servlets.getParametersStartingWith(
                 request, "search_");
@@ -158,7 +170,7 @@ public class FunctionController {
         page = functionService.findPage(searchParams, page);
         JsonDto json = new JsonDto();
         json.setResult(page);
-        return json.toString();
+        HibernateAwareObjectMapper.DEFAULT.writeValue(out, json);
     }
 
 
@@ -225,7 +237,7 @@ public class FunctionController {
     @ResponseBody
     @RequestMapping(value = "/delete.do")
     public String delete(Long[] id,ModelMap modelMap) {
-        logger.info("FunctionController.delete删除组件id={}", StringUtils.join(id, ","));
+//        logger.info("FunctionController.delete删除组件id={}", StringUtils.join(id, ","));
         if (commonService.isInitialized(Function.class, id)) {
             return new JsonDto("系统初始化数据不允许修改！").toString();
         }

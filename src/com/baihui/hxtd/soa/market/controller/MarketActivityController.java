@@ -88,6 +88,16 @@ public class MarketActivityController {
 		return "/market/marketactivity/list";
 	}
 	
+	@RequestMapping(value = "/toQueryPage.comp")
+	public String toQueryPageComp(HibernatePage<MarketActivity> page, ModelMap model) {
+		page.setHibernateOrderBy("modifiedTime");// 默认按照修改时间倒序排序
+		page.setHibernateOrder(HibernatePage.DESC);
+		page.setHibernatePageSize(12);
+		model.addAttribute("page", page);
+		initPageDic(model);
+		return "/market/marketactivity/listcomp";
+	}
+	
 	/**
 	  * anscyQuery(异步加载数据列表)
 	  * @Description: 分页异步加载数据

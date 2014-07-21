@@ -195,10 +195,18 @@ $(function () {
 					</li>
 				</ul>
 				<ul class="fr id_table1 mt10 ml10">
-					<li>
-						<a href="javascript:;" uri="${ctx}/customer/customer/export.do?TYPE=selected" 
-							class="leading_out globle_img block_inline mr10 export" title="导出"></a>
-					</li>
+						<c:if test="${VS_HAS_FUNCTIONS.leadImport}">
+							<li>
+								<a href="${ctx}/common/imports/toImportPage.do?module=customer"
+									class="leading_in globle_img block_inline mr10" title="导入"></a>
+							</li>
+						</c:if>
+						<c:if test="${VS_HAS_FUNCTIONS.leadExport}">
+							<li>
+								<a href="javascript:;" uri="${ctx}/customer/customer/export.do?TYPE=selected" 
+									class="leading_out globle_img block_inline mr10 export" title="导出"></a>
+							</li>
+						</c:if>
 				</ul>
 			</div>
 		</div>

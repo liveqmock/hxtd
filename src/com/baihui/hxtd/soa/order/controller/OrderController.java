@@ -304,7 +304,7 @@ public class OrderController extends CommonController<Order> {
 
     /** 启动审批 */
     @ResponseBody
-    @RequestMapping("/toStartApprovePage.do")
+    @RequestMapping("/startApprove.do")
     public String startApprove(Long id, ModelMap modelMap) {
 
         return "/order/order/view";

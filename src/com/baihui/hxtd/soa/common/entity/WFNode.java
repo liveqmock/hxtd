@@ -24,9 +24,6 @@ import java.util.List;
 @SuppressWarnings("serial")
 public class WFNode implements Serializable {
 
-    public WFNode() {
-    }
-
     /**
      * 主键ID
      */
@@ -52,7 +49,6 @@ public class WFNode implements Serializable {
      */
     @ManyToOne
     @JoinColumn(name = "MODULE_ID")
-    @Column(name = "MODULE_ID")
     private Module module;
 
     /** 执行流程的角色 */

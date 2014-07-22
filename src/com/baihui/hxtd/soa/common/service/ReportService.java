@@ -19,6 +19,7 @@ import com.baihui.hxtd.soa.system.dao.UserDao;
 import com.baihui.hxtd.soa.system.entity.AuditLog;
 import com.baihui.hxtd.soa.system.entity.Dictionary;
 import com.baihui.hxtd.soa.system.service.DataShift;
+import com.baihui.hxtd.soa.util.CommonCalendar;
 import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang3.time.DateUtils;
 import org.hibernate.FetchMode;
@@ -135,6 +136,7 @@ public class ReportService {
 
     static {
         TIME_GROUP_CALENDAR_UNIT.put(DictionaryConstant.REPORT_GROUP_TIME_YEAR, Calendar.YEAR);
+        TIME_GROUP_CALENDAR_UNIT.put(DictionaryConstant.REPORT_GROUP_TIME_QUARTER, Calendar.MONTH);
         TIME_GROUP_CALENDAR_UNIT.put(DictionaryConstant.REPORT_GROUP_TIME_MONTH, Calendar.MONTH);
         TIME_GROUP_CALENDAR_UNIT.put(DictionaryConstant.REPORT_GROUP_TIME_DATE, Calendar.DAY_OF_MONTH);
         TIME_GROUP_CALENDAR_UNIT.put(DictionaryConstant.REPORT_GROUP_TIME_HOUR, Calendar.HOUR_OF_DAY);
@@ -154,7 +156,9 @@ public class ReportService {
 
     static {
         PATTERNS.put(Calendar.YEAR, new String[]{"yyyy", "年"});
+        PATTERNS.put(CommonCalendar.QUARTER, new String[]{null, "季"});
         PATTERNS.put(Calendar.MONTH, new String[]{"M", "月"});
+        PATTERNS.put(Calendar.WEEK_OF_MONTH, new String[]{"w", "周"});
         PATTERNS.put(Calendar.DAY_OF_MONTH, new String[]{"d", "日"});
         PATTERNS.put(Calendar.HOUR_OF_DAY, new String[]{"H", "时"});
         PATTERNS.put(Calendar.MINUTE, new String[]{"m", "分"});
@@ -169,8 +173,14 @@ public class ReportService {
     public static List<AxisInfo> dateValues(Date min, Date max, int type) {
         List<AxisInfo> dates = new ArrayList<AxisInfo>();
 
-        min = DateUtils.truncate(min, type);
-        max = DateUtils.truncate(max, type);
+        if (type == CommonCalendar.QUARTER) {
+
+        } else if (type == Calendar.WEEK_OF_MONTH) {
+
+        } else {
+            min = DateUtils.truncate(min, type);
+            max = DateUtils.truncate(max, type);
+        }
 
         Calendar calendar = Calendar.getInstance();
         calendar.setTime(min);
@@ -301,24 +311,13 @@ public class ReportService {
 
     static {
         TIME_GROUP_FUNCTION.put(DictionaryConstant.REPORT_GROUP_TIME_YEAR, "YEAR(%s)");
+        TIME_GROUP_FUNCTION.put(DictionaryConstant.REPORT_GROUP_TIME_QUARTER, "QUARTER(%s)");
         TIME_GROUP_FUNCTION.put(DictionaryConstant.REPORT_GROUP_TIME_MONTH, "MONTH(%s)");
+        TIME_GROUP_FUNCTION.put(DictionaryConstant.REPORT_GROUP_TIME_WEEK, "CAST(DATE_FORMAT(%s,'%%c'),Integer)");
         TIME_GROUP_FUNCTION.put(DictionaryConstant.REPORT_GROUP_TIME_DATE, "DAY(%s)");
         TIME_GROUP_FUNCTION.put(DictionaryConstant.REPORT_GROUP_TIME_HOUR, "HOUR(%s)");
         TIME_GROUP_FUNCTION.put(DictionaryConstant.REPORT_GROUP_TIME_MINUTE, "MINUTE(%s)");
         TIME_GROUP_FUNCTION.put(DictionaryConstant.REPORT_GROUP_TIME_SECOND, "SECOND(%s)");
-        /*
-        年：%Y（4位）、%y（2位）
-        月：%M（英文全名）、%b（英文缩写）、%m（数值2位）、%c（数值1位）
-        日-月：%d（数值2位）、%e（数值1位）
-        日-周：%w（0=星期日, 6=星期六）
-        日-年：%j（3位）
-        时：%H（24-2位），%k（24-1位），%I %h（12-2位）、%l（12-1位）
-        分：%i（2位）
-        秒：%S %s（2位）
-        */
-
-//        TIME_GROUP_FUNCTION.put(DictionaryConstant.REPORT_GROUP_TIME_YEAR, "DATE_FORMAT(%s,'%%Y')");
-//        TIME_GROUP_FUNCTION.put(DictionaryConstant.REPORT_GROUP_TIME_MONTH, "DATE_FORMAT(%s,'%%m')");
     }
 
     /** 构建轴hql语句 */

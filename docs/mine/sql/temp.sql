@@ -31,3 +31,14 @@ INSERT INTO `sm_menu` VALUES ('701', '0701', '财务审批', '7', null, '1', '70
 INSERT INTO `sm_menu` VALUES ('702', '0702', '财务款项', '7', null, '1', '70200', '0', '2', '1020101', '', '1', '2014-05-26 00:00:00', '1', '2014-05-26 19:29:05', '1020202', null, '1', '0', '0');
 INSERT INTO `sm_menu` VALUES ('801', '0801', '销售目标', '8', null, '1', '80100', '0', '2', '1020101', '', '1', '2014-05-26 00:00:00', '1', '2014-05-26 19:29:05', '1020202', null, '1', '0', '0');
 INSERT INTO `sm_menu` VALUES ('1004', '1004', '审计日志', '1', '/setting/auditlog/toQueryPage.do', '1', '110100', '0', '2', '1020101', '', '1', '2014-06-22 16:41:41', '1', '2014-06-22 16:41:05', '1020202', '100401', '1', '0', '0');
+
+
+CREATE TABLE `wf_node` (
+  `ID` int(11) NOT NULL AUTO_INCREMENT COMMENT '主键ID',
+  `CODE` varchar(8) NOT NULL,
+  `NAME` varchar(32) NOT NULL,
+  `MODULE_ID` varchar(255) DEFAULT NULL,
+  `ROLE_ID` int(11) NOT NULL,
+  PRIMARY KEY (`ID`),
+  UNIQUE KEY `INDEX_CODE` (`CODE`)
+) ENGINE=InnoDB AUTO_INCREMENT=7 DEFAULT CHARSET=utf8 COMMENT='流程节点表'

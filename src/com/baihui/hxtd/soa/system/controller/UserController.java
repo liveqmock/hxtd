@@ -557,7 +557,54 @@ public class UserController extends CommonController<User> {
 
 
     /**
-     * 弹出组织结构树
+     * 弹出组织结构树，只显示下级组织
+     *
+     * @param model
+     * @param request
+     * @return json
+     * @throws NoSuchFieldException
+     * @author huizijing
+     * @since 2014-7-22
+     */
+    @RequestMapping(value = "/toQueryUser.comp", params = "TYPE=business")
+    public String toOwnerOrgTree(ModelMap model) throws NoSuchFieldException {
+    	//获取当前组织
+    	Organization organization = (Organization) model.get(Constant.VS_ORG);
+    	//得到当前组织下的子组织
+    	List<Organization> orgList = organizationService.findChildren(organization.getId());
+    	User u = (User) model.get(Constant.VS_USER);
+        StringBuffer sb = new StringBuffer("[");
+        Long oldOrgId = 0l;
+        for (int i = 0; i < orgList.size(); i++) {
+            Organization org = orgList.get(i);
+            if (org.getId() == oldOrgId) {
+                continue;
+            }
+            sb.append(String.format("{id:-%s, name:\"%s\", pId:-%s, type:\"%s\"},", new Object[]{
+                    org.getId(),
+                    org.getName(),
+                    org.getParent() == null ? "0" : org.getParent().getId(),
+                    "org"
+            }));
+            for (User user : org.getOwners()) {//用户
+                sb.append(String.format("{id:%s, name:\"%s\", pId:-%s, type:\"%s\",chkDisabled:%s},", new Object[]{
+                        user.getId(),
+                        user.getRealName(),
+                        org.getId(),
+                        "user",
+                        user.getId() == u.getId() ? true : false
+                }));
+            }
+            oldOrgId = org.getId();
+        }
+        sb.toString().substring(0, sb.toString().length() - 2);
+        sb.append("]");
+        model.addAttribute("json", sb.toString());
+        return "/system/message/listcomp";
+    }
+    
+    /**
+     * 弹出组织结构树,所有的用户
      *
      * @param model
      * @param request
@@ -567,9 +614,9 @@ public class UserController extends CommonController<User> {
      * @since 2014-6-17
      */
     @RequestMapping(value = "/toQueryUser.comp")
-    public String toOwnerOrgTree(ModelMap model, HttpServletRequest request) throws NoSuchFieldException {
-        List<Organization> orgList = organizationService.getOrgAndUsers();
-        User u = (User) request.getSession().getAttribute(Constant.VS_USER);
+    public String toAllOwnerOrgTree(ModelMap model) throws NoSuchFieldException {
+    	User u = (User) model.get(Constant.VS_USER);
+        List<Organization> orgList = organizationService.getAllOrgAndUsers();
         StringBuffer sb = new StringBuffer("[");
         Long oldOrgId = 0l;
         for (int i = 0; i < orgList.size(); i++) {
@@ -577,7 +624,6 @@ public class UserController extends CommonController<User> {
             if (org.getId() == oldOrgId) {
                 continue;
             }
-
             sb.append(String.format("{id:-%s, name:\"%s\", pId:-%s, type:\"%s\"},", new Object[]{
                     org.getId(),
                     org.getName(),

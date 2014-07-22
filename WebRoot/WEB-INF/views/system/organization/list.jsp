@@ -38,7 +38,7 @@
                     gridOrg.paginationData.hibernatePageNo = 1;
                     gridOrg.loadGrid();
                     gridOrgdetail.loadGrid();
-                    var url = "<a href='${ctx }/system/organization/toModifyPage.do?id=" + treeNode.id + "' class=\"block c_white lh25 mr10\"><b class=\"allbtn_l block fl\"></b><b class=\"allbtn_r pr13 block fl w_auto f14\">编&nbsp;&nbsp;辑</b></a>";
+                    var url = "<a href='${ctx }/system/organization/toModifyPage.do?index=_2&id=" + treeNode.id + "' class=\"block c_white lh25 mr10\"><b class=\"allbtn_l block fl\"></b><b class=\"allbtn_r pr13 block fl w_auto f14\">编&nbsp;&nbsp;辑</b></a>";
                     $("#modify").html(url);
                 }
             });
@@ -53,12 +53,12 @@
             $("#orgdetail").click(function(){
             	var remark=$("#remark").val();
             	$(".remar").html(remark);
-            })
+            });
+            $C.tab({defaultSelected: window.location.href.indexOf("index=")>-1?(window.location.href.indexOf("index=_2") > -1 ? 2 : 1):0})
         });
     </script>
 </head>
 <body>
-<div class="listcontainer">
 <div class="margin0 ml35 mr35">
 <div class="fl" style="width:20%">
     <div class="mt10 block cb cb mr20">
@@ -238,7 +238,7 @@
                     <li><a href="javascript:void(0)" uri="${ctx}/system/organization/delete.do" class="block c_white lh25 deletesome mr10"><b class="allbtn_l block fl"></b><b class="allbtn_r pr13 block fl w_auto f14">删&nbsp;&nbsp;除</b></a></li>
                 </c:if>
                 <c:if test="${VS_HAS_FUNCTIONS.organizationAdd}">
-                    <li><a href="${ctx}/system/organization/toAddPage.do" class="block c_white lh25 addorg mr10"><b class="allbtn_l block fl"></b><b class="allbtn_r pr13 block fl w_auto f14">新&nbsp;&nbsp;增</b></a></li>
+                    <li><a href="${ctx}/system/organization/toAddPage.do?index=_1" class="block c_white lh25 addorg mr10"><b class="allbtn_l block fl"></b><b class="allbtn_r pr13 block fl w_auto f14">新&nbsp;&nbsp;增</b></a></li>
                 </c:if>
                 <c:if test="${VS_HAS_FUNCTIONS.organizationQuery}">
                     <li><a href="javascript:void(0)" class="block c_white lh25 mr10 refresh"><b class="allbtn_l block fl"></b><b class="allbtn_r pr13 block fl w_auto f14">刷&nbsp;&nbsp;新</b> </a></li>
@@ -268,7 +268,7 @@
                     <td><input type="checkbox" class="checkitem" value="{$T.row.id}"/></td>
                     <td>
                         <c:choose>
-                            <c:when test="${VS_HAS_FUNCTIONS.organizationView}"><a href="${ctx}/system/organization/toViewPage.do?id={$T.row.id}" class="toviewpage">{$T.row.name}</a></c:when>
+                            <c:when test="${VS_HAS_FUNCTIONS.organizationView}"><a href="${ctx}/system/organization/toViewPage.do?id={$T.row.id}&index=_1" class="toviewpage">{$T.row.name}</a></c:when>
                             <c:otherwise>{$T.row.name}</c:otherwise>
                         </c:choose>
                     </td>
@@ -281,15 +281,15 @@
                     <td>{$T.row.order}</td>
                     <td style="text-align: left">
                         <c:if test="${VS_HAS_FUNCTIONS.organizationView}">
-                            <a href="${ctx}/system/organization/toViewPage.do?id={$T.row.id}" class="block_inline s_detail_btn globle_img ml10" title="详情"></a>
+                            <a href="${ctx}/system/organization/toViewPage.do?id={$T.row.id}&index=_1" class="block_inline s_detail_btn globle_img ml10" title="详情"></a>
                         </c:if>
                         <c:if test="${VS_HAS_FUNCTIONS.organizationModify}">
                             {#if !$T.row.isInitialized}
-                            <a href="${ctx}/system/organization/toModifyPage.do?id={$T.row.id}" class="block_inline s_edit_btn globle_img ml10" title="编辑"></a>
+                            <a href="${ctx}/system/organization/toModifyPage.do?id={$T.row.id}&index=_1" class="block_inline s_edit_btn globle_img ml10" title="编辑"></a>
                             {#/if}
                         </c:if>
                         <c:if test="${VS_HAS_FUNCTIONS.organizationAuthorization}">
-                            <a href="${ctx}/system/organization/toAuthorizationPage.do?id={$T.row.id}" class=" block_inline h_shouquan globle_img ml10 authorization" title="授权"></a>
+                            <a href="${ctx}/system/organization/toAuthorizationPage.do?id={$T.row.id}&index=_1" class=" block_inline h_shouquan globle_img ml10 authorization" title="授权"></a>
                         </c:if>
                         <c:if test="${VS_HAS_FUNCTIONS.organizationDelete}">
                             {#if !$T.row.isInitialized}
@@ -317,7 +317,7 @@
             <h1 class="f14 fbnone mt10 ml10 fl">组织详细信息</h1>
             <ul class="fr id_table1 mt10 ml10">
                 <c:if test="${VS_HAS_FUNCTIONS.organizationModify}">
-                    <li id="modify"><a href="${ctx }/system/organization/toModifyPage.do?id=${id}" class="block c_white lh25 mr10"><b class="allbtn_l block fl"></b><b class="allbtn_r pr13 block fl w_auto f14">编&nbsp;&nbsp;辑</b></a></li>
+                    <li id="modify"><a href="${ctx }/system/organization/toModifyPage.do?id=${id}&index=_2" class="block c_white lh25 mr10"><b class="allbtn_l block fl"></b><b class="allbtn_r pr13 block fl w_auto f14">编&nbsp;&nbsp;辑</b></a></li>
                 </c:if>
                 
             </ul>

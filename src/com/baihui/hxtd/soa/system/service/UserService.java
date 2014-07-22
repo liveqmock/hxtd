@@ -25,7 +25,6 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springside.modules.persistence.SearchFilter;
 
 import javax.annotation.Resource;
-import java.util.Date;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
@@ -41,8 +40,6 @@ public class UserService {
 
     private Logger logger = LoggerFactory.getLogger(UserService.class);
 
-    //    @Value(value = "${system.organization.tier.length}")
-    private Integer orgTierLength = 2;
     //    @Value("${export.counts}")
     private Integer exportCounts = 3000;
 
@@ -168,7 +165,7 @@ public class UserService {
 
         detachedCriteria.createAlias("organization", "org");
         Long organizationOrder = organizationDao.getOrderById(organizationId);
-        TierSerial tierSerial = TierSerials.parse(organizationOrder, orgTierLength);
+        TierSerial tierSerial = TierSerials.parse(organizationOrder, Constant.ORG_ORDER_TIER_LENGTH);
         detachedCriteria.add(Restrictions.between("org.order", organizationOrder, organizationOrder + tierSerial.getIncrease() - 1));
         detachedCriteria.add(Restrictions.eq("isDeleted", false));
 
@@ -193,7 +190,7 @@ public class UserService {
 
         detachedCriteria.createAlias("organization", "org");
         Long organizationOrder = organizationDao.getOrderById(organizationId);
-        TierSerial tierSerial = TierSerials.parse(organizationOrder, orgTierLength);
+        TierSerial tierSerial = TierSerials.parse(organizationOrder, Constant.ORG_ORDER_TIER_LENGTH);
         detachedCriteria.add(Restrictions.between("org.order", organizationOrder, organizationOrder + tierSerial.getIncrease() - 1));
         detachedCriteria.add(Restrictions.eq("isDeleted", false));
 

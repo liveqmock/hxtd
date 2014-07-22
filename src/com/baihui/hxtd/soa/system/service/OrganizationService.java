@@ -1,17 +1,16 @@
 package com.baihui.hxtd.soa.system.service;
 
+import com.baihui.hxtd.soa.base.Constant;
 import com.baihui.hxtd.soa.base.orm.hibernate.HibernatePage;
 import com.baihui.hxtd.soa.base.utils.Search;
 import com.baihui.hxtd.soa.base.utils.serial.TierSerial;
 import com.baihui.hxtd.soa.base.utils.serial.TierSerials;
 import com.baihui.hxtd.soa.system.dao.OrganizationDao;
 import com.baihui.hxtd.soa.system.dao.RoleDao;
+import com.baihui.hxtd.soa.system.dao.UserDao;
 import com.baihui.hxtd.soa.system.entity.AuditLog;
 import com.baihui.hxtd.soa.system.entity.Organization;
 import com.baihui.hxtd.soa.system.entity.Role;
-import com.baihui.hxtd.soa.system.entity.User;
-
-import org.apache.commons.lang3.StringUtils;
 import org.hibernate.FetchMode;
 import org.hibernate.criterion.*;
 import org.slf4j.Logger;
@@ -21,7 +20,10 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springside.modules.persistence.SearchFilter;
 
 import javax.annotation.Resource;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Map;
 
 /**
  * 组织服务类
@@ -34,14 +36,14 @@ public class OrganizationService {
 
     private Logger logger = LoggerFactory.getLogger(this.getClass());
 
-    //    @Value(value = "${system.organization.tier.length}")
-    private Integer orgTierLength = 2;
-
     @Resource
     private OrganizationDao organizationDao;
 
     @Resource
     private RoleDao roleDao;
+
+    @Resource
+    private UserDao userDao;
 
     /**
      * 查找扇化组织列表
@@ -50,9 +52,9 @@ public class OrganizationService {
     public List<Organization> findSector(Long rootOrder, Long targetOrder) {
         DetachedCriteria criteria = DetachedCriteria.forClass(Organization.class);
         criteria.setFetchMode("parent", FetchMode.JOIN);
-        List<Long> orders = TierSerials.getParentsUntil(targetOrder, rootOrder, orgTierLength);
+        List<Long> orders = TierSerials.getParentsUntil(targetOrder, rootOrder, Constant.ORG_ORDER_TIER_LENGTH);
 
-        TierSerial tierSerial = TierSerials.parse(rootOrder, orgTierLength);
+        TierSerial tierSerial = TierSerials.parse(rootOrder, Constant.ORG_ORDER_TIER_LENGTH);
         int level = tierSerial.getLevel();
         List<Criterion> criterions = new ArrayList<Criterion>();
         criterions.add(Restrictions.eq("order", targetOrder));
@@ -61,8 +63,8 @@ public class OrganizationService {
         }
         for (int i = 0; i < orders.size(); i++) {
             Long order = orders.get(i);
-            Long minChild = TierSerials.getMinChild(order, orgTierLength);
-            Long maxChild = TierSerials.getMaxChild(order, orgTierLength);
+            Long minChild = TierSerials.getMinChild(order, Constant.ORG_ORDER_TIER_LENGTH);
+            Long maxChild = TierSerials.getMaxChild(order, Constant.ORG_ORDER_TIER_LENGTH);
             criterions.add(Restrictions.and(Restrictions.between("order", minChild, maxChild), Restrictions.eq("level", ++level)));
         }
         criteria.add(Restrictions.or(criterions.toArray(new Criterion[]{})));
@@ -182,7 +184,7 @@ public class OrganizationService {
      * //TODO 不支持直接新增根节点
      */
     @Transactional
-    public void add(Organization organization,AuditLog auditLog) {
+    public void add(Organization organization, AuditLog auditLog) {
         logger.info("新增");
         Organization parent = organizationDao.get(organization.getParent().getId());
 
@@ -190,15 +192,15 @@ public class OrganizationService {
         organization.setId(null);
         Long order;
         if (parent.getIsLeaf()) {
-            TierSerial tierSerial = TierSerials.parse(parent.getOrder(), orgTierLength);
+            TierSerial tierSerial = TierSerials.parse(parent.getOrder(), Constant.ORG_ORDER_TIER_LENGTH);
             if (tierSerial.isLeaf()) {
                 upgrade();
-                tierSerial = TierSerials.parse(parent.getOrder() * TierSerials.getTierIncrease(orgTierLength), orgTierLength);
+                tierSerial = TierSerials.parse(parent.getOrder() * TierSerials.getTierIncrease(Constant.ORG_ORDER_TIER_LENGTH), Constant.ORG_ORDER_TIER_LENGTH);
             }
             order = tierSerial.getMinChild().getSerial();
         } else {
             Organization maxChild = getMaxChild(parent);
-            TierSerial tierSerial = TierSerials.parse(maxChild.getOrder(), orgTierLength);
+            TierSerial tierSerial = TierSerials.parse(maxChild.getOrder(), Constant.ORG_ORDER_TIER_LENGTH);
             tierSerial.increaseValue(1);
             order = tierSerial.getSerial();
         }
@@ -229,7 +231,7 @@ public class OrganizationService {
     @Transactional
     public int upgrade() {
         logger.info("提升序号级别");
-        String hql = "update Organization org set org.order=org.order*" + TierSerials.getTierIncrease(orgTierLength);
+        String hql = "update Organization org set org.order=org.order*" + TierSerials.getTierIncrease(Constant.ORG_ORDER_TIER_LENGTH);
         return organizationDao.batchExecute(hql);
     }
 
@@ -257,16 +259,13 @@ public class OrganizationService {
         DetachedCriteria maxOrderCriteria = DetachedCriteria.forClass(Organization.class);
         maxOrderCriteria.setProjection(Projections.max("order"));
         Long orderMin = organization.getOrder() + 1;
-        TierSerial tierSerial = TierSerials.parse(orderMin, orgTierLength);
+        TierSerial tierSerial = TierSerials.parse(orderMin, Constant.ORG_ORDER_TIER_LENGTH);
         Long orderMax = organization.getOrder() + tierSerial.getIncrease() - 1;
         maxOrderCriteria.add(Restrictions.between("order", orderMin, orderMax));
         maxOrderCriteria.add(Restrictions.eq("level", organization.getLevel() + 1));
-
         Long order = organizationDao.findUnique(maxOrderCriteria);
         logger.debug("order“{}”", order);
-
         criteria.add(Restrictions.eq("order", order));
-
         return organizationDao.findUnique(criteria);
     }
 
@@ -275,7 +274,7 @@ public class OrganizationService {
      * 修改
      */
     @Transactional
-    public void modify(Organization organization,AuditLog auditLog) {
+    public void modify(Organization organization, AuditLog auditLog) {
         logger.info("修改");
 
         Long parentId = organization.getParent() == null ? null : organization.getParent().getId();
@@ -297,11 +296,11 @@ public class OrganizationService {
             //判断新父级是否是父节点
             Long code, order;
             if (parent.getIsLeaf()) {
-                TierSerial tierSerial = TierSerials.parse(parent.getOrder(), orgTierLength);
+                TierSerial tierSerial = TierSerials.parse(parent.getOrder(), Constant.ORG_ORDER_TIER_LENGTH);
                 order = tierSerial.getMinChild().getSerial();
             } else {
                 Organization maxChild = getMaxChild(parent);
-                TierSerial tierSerial = TierSerials.parse(maxChild.getOrder(), orgTierLength);
+                TierSerial tierSerial = TierSerials.parse(maxChild.getOrder(), Constant.ORG_ORDER_TIER_LENGTH);
                 tierSerial.increaseValue(1);
                 order = tierSerial.getSerial();
             }
@@ -337,7 +336,7 @@ public class OrganizationService {
             logger.info("兄弟节点间移动");
             logger.info("以不同移动方向进行移动");
             organizationDao.updateOrderById(sourceId, 0l);
-            TierSerial tierSerial = TierSerials.parse(source.getOrder(), orgTierLength);
+            TierSerial tierSerial = TierSerials.parse(source.getOrder(), Constant.ORG_ORDER_TIER_LENGTH);
             if (sourceId > targetId) {
                 logger.info("上移");
                 organizationDao.increaseOrderByOrderRange(target.getOrder(), source.getOrder() - tierSerial.getTierIncrease(), tierSerial.getTierIncrease());
@@ -357,7 +356,7 @@ public class OrganizationService {
      * 1.级联删除子节点
      */
     @Transactional
-    public void delete(Long[] ids,AuditLog [] auditLogArr) {
+    public void delete(Long[] ids, AuditLog[] auditLogArr) {
         logger.info("删除");
         organizationDao.logicalDelete(ids);
     }
@@ -384,7 +383,7 @@ public class OrganizationService {
      * 1.分配角色
      */
     @Transactional
-    public void authorization(Long id, Long[] roleIds,AuditLog auditLog) {
+    public void authorization(Long id, Long[] roleIds, AuditLog auditLog) {
         logger.info("授权");
         Organization organization = organizationDao.get(id);
 
@@ -410,35 +409,56 @@ public class OrganizationService {
      * @author huizijing
      */
     @Transactional
-    public List<Organization> getOrgAndUsers() {
-        String hql = "select org from Organization org left join fetch org.owners";
-        return organizationDao.find(hql);
+    public List<Organization> getAllOrgAndUsers() {
+        DetachedCriteria criteria = DetachedCriteria.forClass(Organization.class);
+        criteria.setFetchMode("owners", FetchMode.JOIN);
+        criteria.add(Restrictions.eq("isDeleted", false));
+        return organizationDao.find(criteria);
     }
 
-    
-	/**
-     * getNameById
-     * @Title: getNameById
-     * @Description: 通过id获取组织名称
-     * @param id
-     * @return String
-    */
-    @Transactional
-	public String getNameById(Long id) {
-		return organizationDao.get(id).getName();
-	}
 
     /**
-     * 
-      * getAllOrg(查询所有的组织机构)
-      * @Title: getAllOrg
-      * @param @return    参数类型
-      * @return List<Organization>    返回类型
-      * @throws
+     * getNameById
+     *
+     * @param id
+     * @return String
+     * @Title: getNameById
+     * @Description: 通过id获取组织名称
+     */
+    @Transactional
+    public String getNameById(Long id) {
+        return organizationDao.get(id).getName();
+    }
+
+    /**
+     * getAllOrg(查询所有的组织机构)
+     *
+     * @param @return 参数类型
+     * @return List<Organization>    返回类型
+     * @throws
+     * @Title: getAllOrg
      */
     @Transactional
     public List<Organization> getAllOrg() {
         String hql = "select org from Organization org left join fetch org.parent";
         return organizationDao.find(hql);
+    }
+
+    /**
+     * 得到当前组织下的子组织
+     *
+     * @param id
+     * @return List<Organization>
+     * @author huizijing
+     * @since 2014-7-22
+     */
+    @Transactional(readOnly = true)
+    public List<Organization> findChildren(Long id) {
+        DetachedCriteria criteria = DetachedCriteria.forClass(Organization.class);
+        criteria.setFetchMode("owners", FetchMode.JOIN);
+        criteria.setFetchMode("parent", FetchMode.JOIN);
+        criteria.add(Restrictions.eq("parent.id", id));
+        criteria.add(Restrictions.eq("isDeleted", false));
+        return organizationDao.find(criteria);
     }
 }

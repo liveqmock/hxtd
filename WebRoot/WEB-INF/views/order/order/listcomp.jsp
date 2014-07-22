@@ -69,6 +69,7 @@ $(function(){
 						<table class="w mt10">
 							<tr><td>{$T.row.code}</td></tr>
 							<tr><td>{$T.row.customer.name}</td></tr>
+							<tr style="display:none"><td>{$T.row.customer.id}</td></tr>
 						</table>
 					</div>
 				</li>

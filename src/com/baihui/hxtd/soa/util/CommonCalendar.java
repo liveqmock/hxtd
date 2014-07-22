@@ -314,8 +314,9 @@ public class CommonCalendar {
     /** 精确季度 */
     public static Range<Date> truncateQuarter(Calendar calendar) {
         int month = calendar.get(Calendar.MONTH) + 1;
-        Range<Integer> range = QUARTER_MONTH_RANGES.get(month);
-        return truncate(calendar, QUARTER, findQuarter(month), range);
+        int quarter = findQuarter(month);
+        Range<Integer> range = QUARTER_MONTH_RANGES.get(quarter);
+        return truncate(calendar, Calendar.MONTH, quarter, range);
     }
 
     /** 精确季度 */
@@ -372,8 +373,9 @@ public class CommonCalendar {
         }
 
 //        Date min = DateUtils.truncate(date, unit);
-        calendar.setTime(min);
-        return Range.between(min, ceiling(calendar, unit));
+//        calendar.setTime(min);
+//        return Range.between(min, ceiling(calendar, unit));
+        return null;
     }
 
     /** 查找季度值 */

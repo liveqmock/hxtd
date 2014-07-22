@@ -1,25 +1,5 @@
 package com.baihui.hxtd.soa.system.controller;
 
-import java.io.IOException;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
-import java.util.Map;
-
-import javax.annotation.Resource;
-import javax.servlet.http.HttpServletRequest;
-
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import org.springframework.stereotype.Controller;
-import org.springframework.ui.ModelMap;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.ResponseBody;
-import org.springframework.web.bind.annotation.SessionAttributes;
-import org.springside.modules.web.Servlets;
-
 import com.baihui.hxtd.soa.base.Constant;
 import com.baihui.hxtd.soa.base.orm.hibernate.HibernatePage;
 import com.baihui.hxtd.soa.base.utils.Search;
@@ -40,6 +20,20 @@ import com.baihui.hxtd.soa.util.EnumModule;
 import com.baihui.hxtd.soa.util.EnumOperationType;
 import com.baihui.hxtd.soa.util.JsonDto;
 import com.fasterxml.jackson.core.JsonProcessingException;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.stereotype.Controller;
+import org.springframework.ui.ModelMap;
+import org.springframework.web.bind.annotation.*;
+import org.springside.modules.web.Servlets;
+
+import javax.annotation.Resource;
+import javax.servlet.http.HttpServletRequest;
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.List;
+import java.util.Map;
 
 /**
  * 组织控制器
@@ -56,8 +50,7 @@ public class OrganizationController {
 
     private Logger logger = LoggerFactory.getLogger(this.getClass());
 
-    //    @Value(value = "${system.organization.tier.length}")
-    private Integer orgTierLength = 2;
+
     //        @Value(value = "${system.organization.type}")
     private String typeValue = "010301";
 
@@ -96,11 +89,11 @@ public class OrganizationController {
         userPage.setHibernateOrderBy("createdTime");
         userPage.setHibernateOrder(HibernatePage.ASC);
         model.addAttribute("userPage", userPage);
-        
+
         page.setHibernateOrderBy("order");
         page.setHibernateOrder(HibernatePage.ASC);
         model.addAttribute("orgPage", page);
-        
+
 
         return "/system/organization/list";
     }
@@ -120,7 +113,7 @@ public class OrganizationController {
 
         logger.info("添加默认的查询条件");
         Long order = organizationService.getOrderById(id);
-        TierSerial tierSerial = TierSerials.parse(order, orgTierLength);
+        TierSerial tierSerial = TierSerials.parse(order, Constant.ORG_ORDER_TIER_LENGTH);
         Long orderMin = order;
         Long orderMax = order + tierSerial.getIncrease() - 1;
         Search.addRange(searchParams, "order", orderMin, orderMax);
@@ -177,7 +170,7 @@ public class OrganizationController {
      * 转至新增页面
      */
     @RequestMapping(value = "/toAddPage.do", method = RequestMethod.GET)
-    public String toAddPage(ModelMap model) {
+    public String toAddPage(ModelMap model, String index) {
         logger.info("转至新增页面");
 
         detail(model);
@@ -187,7 +180,7 @@ public class OrganizationController {
         organization.setIsLeaf(true);
         organization.setParent(organization);
         model.addAttribute("organization", organization);
-
+        model.addAttribute("index", index);
         return "/system/organization/edit";
     }
 
@@ -210,9 +203,9 @@ public class OrganizationController {
         organization.setModifier(organization.getCreator());
         logger.debug("修改用户为当前用户“{}”", user.getName());
 
-        AuditLog auditLog = new AuditLog(EnumModule.ORGANIZATION.getModuleName(), 
-        		organization.getId(), organization.getName(), EnumOperationType.ADD.getOperationType(), user,"组织增加");
-        organizationService.add(organization,auditLog);
+        AuditLog auditLog = new AuditLog(EnumModule.ORGANIZATION.getModuleName(),
+                organization.getId(), organization.getName(), EnumOperationType.ADD.getOperationType(), user, "组织增加");
+        organizationService.add(organization, auditLog);
 
         return JsonDto.add(organization.getId()).toString();
     }
@@ -221,12 +214,13 @@ public class OrganizationController {
      * 转至查看页面
      */
     @RequestMapping(value = "/toViewPage.do", method = RequestMethod.GET)
-    public String toViewPage(Long id, ModelMap model) {
+    public String toViewPage(Long id, ModelMap model, String index) {
         logger.info("转至查看页面");
 
         logger.info("存储表单默认值");
         Organization organization = organizationService.getById(id);
         model.addAttribute("organization", organization);
+        model.addAttribute("index", index);
         logger.debug("名称“{}”", organization.getName());
 
         return "/system/organization/view";
@@ -236,7 +230,7 @@ public class OrganizationController {
      * 转至修改页面
      */
     @RequestMapping(value = "/toModifyPage.do", method = RequestMethod.GET)
-    public String toModifyPage(Long id, ModelMap model) {
+    public String toModifyPage(Long id, ModelMap model, String index) {
         logger.info("转至修改页面");
         logger.debug("主键编号“{}”", id);
 
@@ -246,7 +240,7 @@ public class OrganizationController {
         Organization organization = organizationService.getById(id);
         model.addAttribute("organization", organization);
         logger.debug("名称“{}”", organization.getName());
-
+        model.addAttribute("index", index);
         return "/system/organization/edit";
     }
 
@@ -271,9 +265,9 @@ public class OrganizationController {
         organization.setModifier(user);
         logger.debug("修改用户为当前用户“{}”", user.getName());
 
-        AuditLog auditLog = new AuditLog(EnumModule.ORGANIZATION.getModuleName(), 
-        		organization.getId(), organization.getName(), EnumOperationType.MODIFY.getOperationType(), user,"组织修改");
-        organizationService.modify(organization,auditLog);
+        AuditLog auditLog = new AuditLog(EnumModule.ORGANIZATION.getModuleName(),
+                organization.getId(), organization.getName(), EnumOperationType.MODIFY.getOperationType(), user, "组织修改");
+        organizationService.modify(organization, auditLog);
 
         return JsonDto.modify(organization.getId()).toString();
     }
@@ -288,13 +282,13 @@ public class OrganizationController {
         if (commonService.isInitialized(Organization.class, id)) {
             return new JsonDto("系统初始化数据不允许修改！").toString();
         }
-        User user = (User)modelMap.get(Constant.VS_USER);
-        AuditLog [] auditLogArr = new AuditLog [id.length];
-		for(int i=0; i<id.length; i++){
-			auditLogArr[i] = new AuditLog(EnumModule.ORGANIZATION.getModuleName(), 
-					id[i], organizationService.getNameById(id[i]), EnumOperationType.DELETE.getOperationType(), user,"组织删除");
-		}
-        organizationService.delete(id,auditLogArr);
+        User user = (User) modelMap.get(Constant.VS_USER);
+        AuditLog[] auditLogArr = new AuditLog[id.length];
+        for (int i = 0; i < id.length; i++) {
+            auditLogArr[i] = new AuditLog(EnumModule.ORGANIZATION.getModuleName(),
+                    id[i], organizationService.getNameById(id[i]), EnumOperationType.DELETE.getOperationType(), user, "组织删除");
+        }
+        organizationService.delete(id, auditLogArr);
         return JsonDto.delete(id).toString();
     }
 
@@ -324,7 +318,7 @@ public class OrganizationController {
      * 1.2.未授权
      */
     @RequestMapping(value = "/toAuthorizationPage.do", method = RequestMethod.GET)
-    public String toAuthorizationPage(Long id, ModelMap model) {
+    public String toAuthorizationPage(Long id, ModelMap model, String index) {
         logger.info("转至授权页面");
 
         logger.info("存储表单初始化数据");
@@ -333,7 +327,7 @@ public class OrganizationController {
 
         logger.info("存储表单默认值");
         model.addAttribute("authorizationRoles", roleService.findOrganization(id));
-
+        model.addAttribute("index", index);
         return "/system/organization/authorization";
     }
 
@@ -343,14 +337,14 @@ public class OrganizationController {
      */
     @ResponseBody
     @RequestMapping(value = "/authorization.do")
-    public String authorization(Long id, @RequestParam(value = "roleId", required = false) Long[] roleIds,HttpServletRequest request) {
+    public String authorization(Long id, @RequestParam(value = "roleId", required = false) Long[] roleIds, HttpServletRequest request) {
         logger.info("授权");
         User u = (User) request.getSession().getAttribute(Constant.VS_USER);
-       
+
         /**组织授权*/
-        AuditLog auditLog = new AuditLog(EnumModule.ORGANIZATION.getModuleName(), 
-        		id, organizationService.getById(id).getName(), EnumOperationType.AUTHORIZATION.getOperationType(), u,"组织授权");
-        organizationService.authorization(id, roleIds,auditLog);
+        AuditLog auditLog = new AuditLog(EnumModule.ORGANIZATION.getModuleName(),
+                id, organizationService.getById(id).getName(), EnumOperationType.AUTHORIZATION.getOperationType(), u, "组织授权");
+        organizationService.authorization(id, roleIds, auditLog);
         return new JsonDto(id, "授权成功").toString();
     }
 

@@ -22,23 +22,7 @@
 <script type="text/javascript">
 $(function() {
 	jsUtil.datepicker(".time");//加载时间控件
-	/**
-	 * table中的复选框全选/全不选
-	 * @memberOf {TypeName} 
-	 */
-	$("#id").click(function() {
-		if (this.checked) {
-			$("input:checkbox").attr("checked", true);
-		} else {
-			$("input:checkbox").removeAttr("checked");
-		}
-	});
-	/**
-	 * 单击更改所有者按钮时执行
-	 */
-
 	$("#modifyOwner").click(function() {
-
 		var box = $("input(name=id):checked");
 		if (box.length == 0) {
 			jsUtil.alert("请选择数据");
@@ -53,45 +37,22 @@ $(function() {
 	//首次加载数据
 	grid = new Grid().init().bindExport();
 });
-
 function converter(id){
 	jsUtil.confirm("是否转换为客户",function(){
 		RcmsAjax.ajax(jsUtil.getRootPath() + '/customer/lead/leadConverter.do',
 				load, null, 'id='+id);
 	},"线索转换")
 }
-
 function convOwner() {
 	var $userObj = $(".bor_e28d1f", window.frames["dialogIframe"].document);
 	if($userObj.length > 0){
 		var $boxs = $("input(name=id):checked");
 		var param = $.param($boxs) + "&ownerId=" + $userObj.attr("id");
-		RcmsAjax.ajax(jsUtil.getRootPath() + '/customer/lead/modifyOwner.do', function() { load(); }, null, param);
+		RcmsAjax.ajax(jsUtil.getRootPath() + '/customer/lead/modifyOwner.do', load, null, param);
 	}
 }
 function load() {
 	grid.loadGrid();
-}
-//复选框点击时事件
-function checkOut(box) {
-	if (!box.checked) {
-		$("#id").removeAttr("checked");
-		return false;
-	}
-	var boxs = $("input[name=id]");
-	var flag = true;
-	for ( var i = 0; i < boxs.length; i++) {
-		if (boxs[i].checked == false) {
-			flag = false;
-		}
-	}
-	if (flag) {
-		$("#id").attr("checked", true);
-	}
-}
-function childFun(node) {//树菜单子节点点击时事件
-	$("#source").text(node.name);
-	$("#sourceId").val(node.id);
 }
 function reset() {
 	$("#form")[0].reset();

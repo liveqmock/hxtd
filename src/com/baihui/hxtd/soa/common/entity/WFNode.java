@@ -1,5 +1,7 @@
 package com.baihui.hxtd.soa.common.entity;
 
+import com.baihui.hxtd.soa.system.entity.Dictionary;
+import com.baihui.hxtd.soa.system.entity.Organization;
 import com.baihui.hxtd.soa.system.entity.Role;
 import com.baihui.hxtd.soa.system.entity.User;
 
@@ -21,43 +23,65 @@ import java.util.List;
  */
 @Entity
 @Table(name = "wf_node")
-@SuppressWarnings("serial")
 public class WFNode implements Serializable {
 
-    /**
-     * 主键ID
-     */
+    /** 主键ID */
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "ID")
     private Long id;
 
-    /**
-     * 节点代码
-     */
+    /** 节点代码 */
     @Column(name = "CODE")
     private String code;
 
-    /**
-     * 节点名称
-     */
+    /** 节点名称 */
     @Column(name = "NAME")
     private String name;
 
-    /**
-     * 流程所属模块
-     */
+    /** 节点类型 */
+    @Column(name = "TYPE_ID")
+    private Integer type;
+
+    /** 所属流程 */
     @ManyToOne
-    @JoinColumn(name = "MODULE_ID")
-    private Module module;
+    @JoinColumn(name = "FLOW_ID")
+    private Dictionary flow;
 
     /** 执行流程的角色 */
     @ManyToOne
     @JoinColumn(name = "ROLE_ID")
     private Role role;
 
+    /** 审批组织 */
+    @Transient
+    private Organization organization;
+
+    /** 待选审批人 */
     @Transient
     private List<User> approvers = new ArrayList<User>();
+
+    /** 审批人 */
+    @Transient
+    private User approver;
+
+
+    public WFNode() {
+    }
+
+    public WFNode(Long id) {
+        this.id = id;
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        return obj == null ? false : (((WFNode) obj).getId().equals(getId()));
+    }
+
+    @Override
+    public int hashCode() {
+        return id == null ? super.hashCode() : id.hashCode();
+    }
 
     public Long getId() {
         return id;
@@ -83,12 +107,20 @@ public class WFNode implements Serializable {
         this.name = name;
     }
 
-    public Module getModule() {
-        return module;
+    public Integer getType() {
+        return type;
     }
 
-    public void setModule(Module module) {
-        this.module = module;
+    public void setType(Integer type) {
+        this.type = type;
+    }
+
+    public Dictionary getFlow() {
+        return flow;
+    }
+
+    public void setFlow(Dictionary flow) {
+        this.flow = flow;
     }
 
     public Role getRole() {
@@ -99,11 +131,27 @@ public class WFNode implements Serializable {
         this.role = role;
     }
 
+    public Organization getOrganization() {
+        return organization;
+    }
+
+    public void setOrganization(Organization organization) {
+        this.organization = organization;
+    }
+
     public List<User> getApprovers() {
         return approvers;
     }
 
     public void setApprovers(List<User> approvers) {
         this.approvers = approvers;
+    }
+
+    public User getApprover() {
+        return approver;
+    }
+
+    public void setApprover(User approver) {
+        this.approver = approver;
     }
 }

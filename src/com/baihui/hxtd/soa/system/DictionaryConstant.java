@@ -140,7 +140,7 @@ public class DictionaryConstant {
     /** 延迟的 */
     public final static String USER_STORESTATUS_DELAYED = "01040402";
 
-     /*功能*/
+    /*功能*/
     /** 权限级别 */
     public final static String FUNCTION_PRIVILEGELEVEL = "010601";
     /** 公共的 */
@@ -150,5 +150,13 @@ public class DictionaryConstant {
     /** 权限认证 */
     public final static String FUNCTION_PRIVILEGELEVEL_AUTHORITY = "01060103";
 
+
+    /*流程环节*/
+    /** 流程环节类型 */
+    public final static String NODE_TYPE = "990201";
+    /** 订单审批 */
+    public final static String NODE_TYPE_ORDERAPPROVE = "99020101";
+    /** 订单赎回 */
+    public final static String NODE_TYPE_REDEMPTION = "99020102";
 
 }

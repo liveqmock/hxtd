@@ -108,7 +108,7 @@ public class RecycleBinController {
      */
 	@ResponseBody
     @RequestMapping(value = "/delete.do", produces = "text/text;charset=UTF-8")
-    public String delete(long[] id,HttpServletRequest request) {
+    public String delete(Long[] id,HttpServletRequest request) {
 		logger.info("RecycleBinController.delete删除回收站数据id={}", StringUtils.join(id,","));
 		List<Long> recordIds = new ArrayList<Long>();
 		List<Long> ids = new ArrayList<Long>();
@@ -131,9 +131,7 @@ public class RecycleBinController {
     		recycleBinService.realDelete(entityName.get(i), (Long[]) recordIds.toArray(new Long[0]), auditLogArr);
 	    }
 	    recycleBinService.delete(idArr);
-        JsonDto json = new JsonDto();
-        json.setMessage("删除成功");
-        return json.toString();
+        return JsonDto.delete(id).toString();
     }
 	
 	/**
@@ -141,7 +139,7 @@ public class RecycleBinController {
      */
 	@ResponseBody
     @RequestMapping(value = "/recovery.do", produces = "text/text;charset=UTF-8")
-    public String recovery(long[] id,HttpServletRequest request) {
+    public String recovery(Long[] id,HttpServletRequest request) {
 		logger.info("RecycleBinController.recovery还原回收站数据id={}", StringUtils.join(id,","));
 		List<Long> recordIds = new ArrayList<Long>();
 		List<Long> ids = new ArrayList<Long>();

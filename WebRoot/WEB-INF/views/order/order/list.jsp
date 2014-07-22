@@ -160,7 +160,7 @@
                 <td>{$T.row.customer.name}</td>
                 <td>{$T.row.purchaseMoney}</td>
                 <td>{$T.row.product.name}</td>
-                <td>{$T.row.status.key}</td>
+                <td>{$T.row.status.name}</td>
                 <td>{$T.row.owner.realName}</td>
                 <td>{$T.row.creator.realName}</td>
                 <td>{$T.row.createdTime}</td>
@@ -183,7 +183,7 @@
                         {#/if}
                     </c:if>
                     <c:if test="${VS_HAS_FUNCTIONS.orderExecuteApprove}">
-                        {#if !$Trow.status&&$T.row.owner.id==${VS_USER.id}}
+                        {#if ${nodeIds}.indexOf($T.row.status.id)>-1}
                         <a href="${ctx}/order/order/toExecuteApprovePage.do?id={$T.row.id}" title="进行审批" class="block_inline s_goapprove globle_img ml10"></a>
                         {#/if}
                     </c:if>

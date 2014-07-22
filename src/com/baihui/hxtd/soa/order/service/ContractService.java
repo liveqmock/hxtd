@@ -53,7 +53,7 @@ public class ContractService {
 		return contractDao.findPage(page, criteria);
 	}
 
-	private DetachedCriteria biuldQuery(Map<String, Object> searchParams,DataShift dataShift,Class entityClass) throws NoSuchFieldException{
+	private DetachedCriteria biuldQuery(Map<String, Object> searchParams,DataShift dataShift,Class<Contract> entityClass) throws NoSuchFieldException{
 		DetachedCriteria criteria = DetachedCriteria.forClass(entityClass);
 		criteria.setFetchMode("customer", FetchMode.JOIN);
 		criteria.setFetchMode("order", FetchMode.JOIN);

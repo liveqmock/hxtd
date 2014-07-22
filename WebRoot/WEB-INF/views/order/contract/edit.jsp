@@ -65,7 +65,8 @@
 					if($userObj.length > 0){
 						$("#txt_" + action).val($userObj.find("td:eq(0)").text());
 						$("#hide_" + action +"_id").val($userObj.attr("id"));
-						$("#txt_customer").val($userObj.find("td:eq(1)").text());//客户名称默认是订单的客户名称
+						$("#txt_customerName").val($userObj.find("td:eq(1)").text());//客户名称默认是订单的客户名称
+						$("#txt_customerId").val($userObj.find("td:eq(2)").text());
 					}
 				$("#txt_contract").val($("#txt_order").val());//合同编号默认为订单编号
 			});
@@ -143,10 +144,13 @@
 					<span class="w_red">*&nbsp;</span>客户：
 				</td>
 				<td align="left">
-					<input type="text" id="txt_customer"
+					<input type="text" id="txt_customerName"
 						value="${contract.customer.name }" 
 						class="text_input3 cp required" readonly/>
-					
+					<input type="hidden" id="txt_customerId" name="customer.id"
+					value="${contract.customer.id }" 
+					class="text_input3 cp required" readonly/>
+				
 				</td>
 				<td align="right">
 					<span class="w_red">*&nbsp;</span>合同金额（万）：

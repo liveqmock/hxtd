@@ -17,6 +17,7 @@ import com.baihui.hxtd.soa.system.dao.AuditLogDao;
 import com.baihui.hxtd.soa.system.dao.UserDao;
 import com.baihui.hxtd.soa.system.entity.AuditLog;
 import com.baihui.hxtd.soa.util.EnumModule;
+import com.baihui.hxtd.soa.util.EnumOperationType;
 /**
  * 功能描述：审计日志模块service层
  * @author luoxiaoli
@@ -84,10 +85,17 @@ public class AuditLogService {
 	}
 	
 	public void save(AuditLog auditLog){
+		
+		//如果备注为null，设置默认的备注
+		if(null==auditLog.getRemark() || "".equals(auditLog.getRemark())){
+		auditLog.setRemark(EnumOperationType.values()[auditLog.getType()-1].getOperationChineseName() +
+				EnumModule.valueOf(auditLog.getModuleName().toUpperCase()).getModuleChineseName());
+		}
 		auditLogDao.save(auditLog);
 	}
-	
+
 	public void save(List<AuditLog> entities){
 		auditLogDao.save(entities);
 	}
+	
 }

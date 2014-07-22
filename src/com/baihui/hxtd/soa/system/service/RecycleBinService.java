@@ -84,6 +84,9 @@ public class RecycleBinService {
 	 */
 	@Transactional(readOnly = false)
 	public void save(RecycleBin recycleBin){
+		if(recycleBin.getRemark()==null||("").equals(recycleBin.getRemark())){
+			recycleBin.setRemark("删除"+EnumModule.valueOf(recycleBin.getModuleName().toUpperCase()).getModuleChineseName());
+		}
 		recycleBinDao.save(recycleBin);
 	}
 	
@@ -169,7 +172,7 @@ public class RecycleBinService {
 	 * @param id
 	 * @return
 	 */
-	public List<RecycleBin> getByIds(long[] id) {
+	public List<RecycleBin> getByIds(Long[] id) {
 		List<Long> ids=new ArrayList<Long>();
 		for(int i=0;i<id.length;i++){
 			ids.add(id[i]);

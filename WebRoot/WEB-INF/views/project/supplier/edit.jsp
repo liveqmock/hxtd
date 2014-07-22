@@ -82,6 +82,9 @@ function searchData(action){//搜索弹出框
 			}
 	});
 }
+function clearInputVal(obj){ //清除
+	$(obj).prevAll("input").val('');
+}
 </script>
 </head>
 <body>
@@ -126,7 +129,7 @@ function searchData(action){//搜索弹出框
 					<i class="s_inquiry globle_img block_inline ml5 vm cp"
 						title="搜索用户" onclick="searchData('owner');"></i>
 					<i class="dump_btn globle_img block_inline ml5 vm cp empty"
-						title="清除"></i>
+						title="清除" onclick="clearInputVal(this)"></i>
 				</td>
 			</tr>
 

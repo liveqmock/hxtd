@@ -2,6 +2,7 @@
 package com.baihui.hxtd.soa.project.controller;
 
 import java.io.IOException;
+import java.io.PrintWriter;
 import java.util.List;
 import java.util.Map;
 
@@ -25,6 +26,7 @@ import com.baihui.hxtd.soa.base.Constant;
 import com.baihui.hxtd.soa.base.orm.hibernate.HibernatePage;
 import com.baihui.hxtd.soa.base.utils.ImportExport;
 import com.baihui.hxtd.soa.base.utils.Search;
+import com.baihui.hxtd.soa.base.utils.mapper.HibernateAwareObjectMapper;
 import com.baihui.hxtd.soa.common.controller.CommonController;
 import com.baihui.hxtd.soa.project.entity.Supplier;
 import com.baihui.hxtd.soa.project.service.SupplierService;
@@ -36,6 +38,8 @@ import com.baihui.hxtd.soa.system.service.DictionaryService;
 import com.baihui.hxtd.soa.util.EnumModule;
 import com.baihui.hxtd.soa.util.EnumOperationType;
 import com.baihui.hxtd.soa.util.JsonDto;
+import com.fasterxml.jackson.core.JsonGenerationException;
+import com.fasterxml.jackson.databind.JsonMappingException;
 
 @Controller
 @RequestMapping(value = "/project/supplier")
@@ -52,6 +56,9 @@ public class SupplierController extends CommonController<Supplier> {
 	 @Resource
 	 private DictionaryService dictionaryService;
 	 /**
+	 * @throws IOException 
+	 * @throws JsonMappingException 
+	 * @throws JsonGenerationException 
 	 * @throws NoSuchFieldException 
 	   * query(分页查询)
 	   * @Title: query
@@ -61,9 +68,8 @@ public class SupplierController extends CommonController<Supplier> {
 	   * @throws
 	  */
 	@RequestMapping(value = "/query.do",produces = "text/text;charset=UTF-8")
-	@ResponseBody
-	public String query(HibernatePage<Supplier> page,
-								HttpServletRequest request,ModelMap model) throws NoSuchFieldException{
+	public void query(HibernatePage<Supplier> page,
+								HttpServletRequest request,ModelMap model,PrintWriter out) throws NoSuchFieldException, JsonGenerationException, JsonMappingException, IOException{
 		logger.info("SupplierController.query查询组件列表");
 		Map<String, Object> searchParams = Servlets.getParametersStartingWith(
 				request, "search_");
@@ -75,7 +81,7 @@ public class SupplierController extends CommonController<Supplier> {
 		page = supplierService.findPage(searchParams,dataShift, page);
 		JsonDto json = new JsonDto();
 		json.setResult(page);
-		return json.toString();
+		HibernateAwareObjectMapper.DEFAULT.writeValue(out, json);
 	}
 	
 	 /**
@@ -200,7 +206,7 @@ public class SupplierController extends CommonController<Supplier> {
 		supplier.setModifier(u);
 		AuditLog auditLog = new AuditLog(EnumModule.SUPPLIER.getModuleName(), 
 				supplier.getId(), supplier.getName(), EnumOperationType.MODIFY.getOperationType(), u);
-		supplierService.modify(supplier,auditLog);
+		supplierService.modify(supplier, auditLog);
 		JsonDto json = new JsonDto(supplier.getId(),"保存成功!");
 		return json.toString();
 	}

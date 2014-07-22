@@ -2,6 +2,8 @@
 package com.baihui.hxtd.soa.project.dao;
 
 
+import java.util.Date;
+
 import org.springframework.stereotype.Repository;
 
 import com.baihui.hxtd.soa.base.orm.hibernate.HibernateDAOImpl;
@@ -27,16 +29,18 @@ public class SupplierDao extends HibernateDAOImpl<Supplier, Long> {
 	  * @see com.baihui.hxtd.soa.base.orm.hibernate.HibernateDAOImpl#save(java.lang.Object)
 	 */
 	public Supplier save(Supplier supplier){
-		if(supplier.getProvince().getId()==null){
-			supplier.setProvince(null);
-		}
-		if(supplier.getCity()==null){
-			supplier.setCity(null);
-		}
-		if(supplier.getCounty()==null){
-			supplier.setCounty(null);
-		}
+		Date now = getDBNow();
+		supplier.setCreatedTime(now);
+		supplier.setModifiedTime(now);
+        if(supplier.getProvince()!=null&&supplier.getProvince().getId()==null){
+        	supplier.setProvince(null);
+        }
+        if(supplier.getCity()!=null&&supplier.getCity().getId()==null){
+        	supplier.setCity(null);
+        }
+        if(supplier.getCounty()!=null&&supplier.getCounty().getId()==null){
+        	supplier.setCounty(null);
+        }
 		return super.save(supplier);
 	}
-	
 }

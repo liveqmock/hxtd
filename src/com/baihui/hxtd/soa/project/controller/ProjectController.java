@@ -2,6 +2,7 @@
 package com.baihui.hxtd.soa.project.controller;
 
 import java.io.IOException;
+import java.io.PrintWriter;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
@@ -29,6 +30,7 @@ import com.baihui.hxtd.soa.base.Constant;
 import com.baihui.hxtd.soa.base.orm.hibernate.HibernatePage;
 import com.baihui.hxtd.soa.base.utils.ImportExport;
 import com.baihui.hxtd.soa.base.utils.Search;
+import com.baihui.hxtd.soa.base.utils.mapper.HibernateAwareObjectMapper;
 import com.baihui.hxtd.soa.common.controller.CommonController;
 import com.baihui.hxtd.soa.project.entity.Project;
 import com.baihui.hxtd.soa.project.service.ProjectService;
@@ -39,6 +41,8 @@ import com.baihui.hxtd.soa.system.service.DictionaryService;
 import com.baihui.hxtd.soa.util.EnumModule;
 import com.baihui.hxtd.soa.util.EnumOperationType;
 import com.baihui.hxtd.soa.util.JsonDto;
+import com.fasterxml.jackson.core.JsonGenerationException;
+import com.fasterxml.jackson.databind.JsonMappingException;
 /**
  * 
  * 功能描述：项目模块控制器
@@ -83,8 +87,8 @@ public class ProjectController extends CommonController<Project> {
 	
 	@RequestMapping(value = "/query.do",produces = "text/text;charset=UTF-8")
 	@ResponseBody
-	public String query(HibernatePage<Project> page,
-								HttpServletRequest request) throws NoSuchFieldException{
+	public void query(HibernatePage<Project> page,
+								HttpServletRequest request,PrintWriter out) throws NoSuchFieldException, JsonGenerationException, JsonMappingException, IOException{
 		logger.info("SupplierController.query查询项目列表");
 		Map<String, Object> searchParams = Servlets.getParametersStartingWith(
 				request, "search_");
@@ -95,7 +99,7 @@ public class ProjectController extends CommonController<Project> {
 		page = projectService.findPage(searchParams, page);
 		JsonDto json = new JsonDto();
 		json.setResult(page);
-		return json.toString();
+		HibernateAwareObjectMapper.DEFAULT.writeValue(out, json);
 	}
 	/**
 	 * 

@@ -31,7 +31,7 @@
 			<ul class="fr id_table1 mt10 ml10">
 				<li>
 					<a class=" pl35 c_white f14 lh25 cp block fr"
-						href="${ctx }/project/project/toModifyPage.do?id=${com.id}"><b
+						href="${ctx }/project/project/toModifyPage.do?id=${project.id}"><b
 						class="allbtn_l block fl"></b><b
 						class="allbtn_r pr13 block fl w_auto f14">编&nbsp;&nbsp;辑</b>
 					</a>

@@ -38,7 +38,7 @@
 				});
 			});
 			function onLoad(){
-				grid.loadGrid();
+				setTimeout(function () {grid.loadGrid();}, 500);
 			}
 			function formReSet(){
 				$("#form")[0].reset();

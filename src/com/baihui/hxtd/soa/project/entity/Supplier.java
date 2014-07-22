@@ -12,6 +12,9 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
+import org.hibernate.annotations.NotFound;
+import org.hibernate.annotations.NotFoundAction;
+
 import com.baihui.hxtd.soa.common.entity.PCAS;
 import com.baihui.hxtd.soa.system.entity.Dictionary;
 import com.baihui.hxtd.soa.system.entity.User;
@@ -93,19 +96,22 @@ public class Supplier {
 	 * 省
 	 */
 	@ManyToOne(fetch = FetchType.LAZY)
-	@JoinColumn(name = "PROVINCE")
+	@JoinColumn(name = "PROVINCE", nullable = true)
+	@NotFound(action = NotFoundAction.IGNORE)
 	private PCAS province;
 	/**
 	 * 市
 	 */
 	@ManyToOne(fetch = FetchType.LAZY)
-	@JoinColumn(name = "CITY")
+	@JoinColumn(name = "CITY", nullable = true)
+	@NotFound(action = NotFoundAction.IGNORE)
 	private PCAS city;
 	/**
 	 * 区/县
 	 */
 	@ManyToOne(fetch = FetchType.LAZY)
-	@JoinColumn(name = "COUNTY")
+	@JoinColumn(name = "COUNTY", nullable = true)
+	@NotFound(action = NotFoundAction.IGNORE)
 	private PCAS county;
 	/**
 	 * 详细地址

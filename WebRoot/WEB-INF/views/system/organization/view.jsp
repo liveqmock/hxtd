@@ -23,9 +23,9 @@
             <h1 class="f14 fbnone mt10 ml10 fl">组织详细信息</h1>
             <ul class="fr id_table1 mt10 ml10">
                 <c:if test="${VS_HAS_FUNCTIONS.organizationModify}">
-                    <li><a href="${ctx }/system/organization/toModifyPage.do?id=${organization.id}" class="block c_white lh25 mr10"><b class="allbtn_l block fl"></b><b class="allbtn_r pr13 block fl w_auto f14">编&nbsp;&nbsp;辑</b></a></li>
+                    <li><a href="${ctx }/system/organization/toModifyPage.do?id=${organization.id}&index=_1" class="block c_white lh25 mr10"><b class="allbtn_l block fl"></b><b class="allbtn_r pr13 block fl w_auto f14">编&nbsp;&nbsp;辑</b></a></li>
                 </c:if>
-                <li><a href="${ctx}/system/organization/toQueryPage.do" class="block c_white lh25 mr10"><b class="allbtn_l block fl"></b><b class="allbtn_r pr13 block fl w_auto f14">返&nbsp;&nbsp;回</b></a></li>
+                <li><a href="${ctx}/system/organization/toQueryPage.do?index=_1" class="block c_white lh25 mr10"><b class="allbtn_l block fl"></b><b class="allbtn_r pr13 block fl w_auto f14">返&nbsp;&nbsp;回</b></a></li>
             </ul>
         </div>
         <b class="table_headr globle_img block fl"></b>

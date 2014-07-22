@@ -1,21 +1,31 @@
 package com.baihui.hxtd.soa.order.controller;
 
 import com.baihui.hxtd.soa.base.Constant;
+import com.baihui.hxtd.soa.base.InitApplicationConstant;
 import com.baihui.hxtd.soa.base.orm.hibernate.HibernatePage;
 import com.baihui.hxtd.soa.base.utils.ImportExport;
+import com.baihui.hxtd.soa.base.utils.ReflectionUtils;
 import com.baihui.hxtd.soa.base.utils.Search;
+import com.baihui.hxtd.soa.base.utils.mapper.HibernateAwareObjectMapper;
 import com.baihui.hxtd.soa.common.controller.CommonController;
+import com.baihui.hxtd.soa.common.controller.model.FlowModel;
 import com.baihui.hxtd.soa.common.entity.WFNode;
+import com.baihui.hxtd.soa.common.entity.WFTask;
 import com.baihui.hxtd.soa.common.service.WFNodeService;
+import com.baihui.hxtd.soa.common.service.WFTaskService;
 import com.baihui.hxtd.soa.order.entity.Order;
 import com.baihui.hxtd.soa.order.service.OrderService;
+import com.baihui.hxtd.soa.system.DictionaryConstant;
 import com.baihui.hxtd.soa.system.entity.AuditLog;
 import com.baihui.hxtd.soa.system.entity.User;
 import com.baihui.hxtd.soa.system.service.DataShift;
 import com.baihui.hxtd.soa.system.service.DictionaryService;
+import com.baihui.hxtd.soa.system.service.RoleService;
 import com.baihui.hxtd.soa.util.EnumModule;
 import com.baihui.hxtd.soa.util.EnumOperationType;
 import com.baihui.hxtd.soa.util.JsonDto;
+import com.fasterxml.jackson.core.JsonGenerationException;
+import com.fasterxml.jackson.databind.JsonMappingException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Controller;
@@ -32,6 +42,9 @@ import javax.servlet.ServletContext;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
+import java.io.PrintWriter;
+import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import java.util.Map;
 
@@ -48,7 +61,7 @@ import java.util.Map;
  */
 @Controller
 @RequestMapping(value = "/order/order")
-@SessionAttributes(value = {Constant.VS_USER, Constant.VS_DATASHIFT})
+@SessionAttributes(value = {Constant.VS_USER, Constant.VS_ORG, Constant.VS_DATASHIFT})
 public class OrderController extends CommonController<Order> {
 
     private Logger logger = LoggerFactory.getLogger(this.getClass());
@@ -57,6 +70,11 @@ public class OrderController extends CommonController<Order> {
     private OrderService orderService;
     @Resource
     private DictionaryService dictionaryService;
+    @Resource
+    private RoleService roleService;
+    @Resource
+    private WFTaskService wfTaskService;
+
 
     /**
      * 查询线索列表(从功能按钮跳转)
@@ -65,10 +83,14 @@ public class OrderController extends CommonController<Order> {
      * @param request
      * @return
      * @throws NoSuchFieldException
+     * @throws IOException
+     * @throws JsonMappingException
+     * @throws JsonGenerationException
      */
     @ResponseBody
     @RequestMapping(value = "/query.do", produces = "text/text;charset=UTF-8")
-    public String query(HibernatePage<Order> page, HttpServletRequest request, ModelMap model) throws NoSuchFieldException {
+    public void query(HibernatePage<Order> page,//
+                      HttpServletRequest request, ModelMap model, PrintWriter out) throws NoSuchFieldException, JsonGenerationException, JsonMappingException, IOException {
 
         logger.info("OrderController.query查询线索列表");
         Map<String, Object> searchParams = Servlets.getParametersStartingWith(
@@ -81,19 +103,23 @@ public class OrderController extends CommonController<Order> {
         page = orderService.findPage(searchParams, dataShift, page);
         JsonDto json = new JsonDto();
         json.setResult(page);
-        return json.toString();
+        HibernateAwareObjectMapper.DEFAULT.writeValue(out, json);
     }
+
 
     /**
      * toQueryPage(从菜单跳转,跳转线索列表页)
      *
-     * @param model
+     * @param modelMap
      * @return
      */
     @RequestMapping(value = "/toQueryPage.do")
-    public String toQueryPage(Model model) {
+    public String toQueryPage(ModelMap modelMap) {
         logger.info("OrderController.toQueryPage跳转线索列表页");
-        model.addAttribute("page", new HibernatePage<Order>().order("desc").orderBy("modifiedTime"));
+        modelMap.addAttribute("page", new HibernatePage<Order>().order("desc").orderBy("modifiedTime"));
+        User user = (User) modelMap.get(Constant.VS_USER);
+        List<WFNode> nodes = wfNodeService.findExecuteable(user, DictionaryConstant.NODE_TYPE_ORDERAPPROVE);
+        modelMap.addAttribute("nodeIds", ReflectionUtils.invokeGetterMethod(nodes, "id"));
         return "/order/order/list";
     }
 
@@ -295,24 +321,58 @@ public class OrderController extends CommonController<Order> {
     public String toStartApprovePage(Long id, ModelMap modelMap) {
         //存储订单
         Order order = orderService.get(id);
-        //存储审批流程
-//        List<WFNode> nodes = wfNodeService.findByModuleId("");
+        modelMap.addAttribute("order", order);
 
+        //存储审批流程
+        List<WFNode> nodes = wfNodeService.findByFlowValue(DictionaryConstant.NODE_TYPE_ORDERAPPROVE);
+        User user = (User) modelMap.get(Constant.VS_USER);
+        wfNodeService.fullApprover(user, nodes);
+        modelMap.addAttribute("flowNodes", nodes);
 
         return "/order/order/view";
     }
 
-    /** 启动审批 */
+    /**
+     * 启动审批
+     * 1.设置订单节点为开始
+     * 2.保存流程节点到审批记录中
+     */
     @ResponseBody
     @RequestMapping("/startApprove.do")
-    public String startApprove(Long id, ModelMap modelMap) {
-
-        return "/order/order/view";
+    public String startApprove(FlowModel flowModel, ModelMap modelMap) {
+        flowModel.setFlowType(DictionaryConstant.NODE_TYPE_ORDERAPPROVE);
+        flowModel.setModule(InitApplicationConstant.findModuleByName(Constant.MODULE_ORDER));
+        flowModel.setOperater((User) modelMap.get(Constant.VS_USER));
+        flowModel.setOperateTime(new Date());
+        wfTaskService.startFlow(flowModel);
+        JsonDto jsonDto = new JsonDto(flowModel.getId(), "启动审批成功！");
+        return jsonDto.toString();
     }
 
     /** 跳转执行审批页面 */
     @RequestMapping("/toExecuteApprovePage.do")
     public String toExecuteApprovePage(Long id, ModelMap modelMap) {
+        //存储订单
+        Order order = orderService.get(id);
+        modelMap.addAttribute("order", order);
+
+        List<WFTask> futures = wfTaskService.findFuture(Constant.MODULE_ORDER, id);
+        WFTask current = futures.remove(0);
+
+        //存储审批流程
+        List<WFNode> nodes = new ArrayList<WFNode>(futures.size());
+        for (int i = 0; i < futures.size(); i++) {
+            WFTask task = futures.get(i);
+            WFNode wfNode = task.getWfNode();
+            wfNode.setApprover(task.getApprover());
+            nodes.add(wfNode);
+        }
+        wfNodeService.fullApprover((User) modelMap.get(Constant.VS_USER), nodes);
+        modelMap.addAttribute("flowNodes", nodes);
+
+        //存储历史记录
+        List<WFTask> historys = wfTaskService.findHistory(Constant.MODULE_ORDER, id);
+        modelMap.addAttribute("historyRecords", historys);
 
         return "/order/order/view";
     }

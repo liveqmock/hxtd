@@ -159,24 +159,7 @@ public class RoleService {
      */
     @Transactional(readOnly = true)
     public List<Role> findValid(User user) {
-        logger.info("查找有效角色");
-        logger.debug("用户主键编号“{}”", user.getId());
-
-        logger.info("根据用户类型获取角色");
-        if (user.getIsManager()) {
-            logger.debug("用户类型为“管理员”，获取所有角色");
-            return findAll();
-        } else {
-            logger.debug("用户类型为“常规人员”，获取权限内角色");
-            String hql = "select role from Role role" +
-                    " inner join role.owners roleOwner" +
-                    " inner join role.organizations org" +
-                    " inner join org.owners orgOwner" +
-                    " where isDeleted=false and roleOwner.id=? or orgOwner.id=?";
-            List<Role> roles = roleDao.find(hql, user.getId(), user.getId());
-            logger.debug("数目“{}”", roles.size());
-            return roles;
-        }
+        return roleDao.findValid(user);
     }
 
     /**

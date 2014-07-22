@@ -250,7 +250,7 @@ Grid.prototype = {
                 _this.disableButton($this);
                 RcmsAjax.ajax($this.attr("uri"), function () {
                     _this.options.onDelete.call(_this, (values));
-                    _this.loadGrid();
+                   setTimeout(function () {_this.loadGrid();}, 500);
                 }, function () {_this.enableButton($this)}, $.param({id: values }, true));
             });
         };
@@ -831,8 +831,9 @@ jsUtil.organizationTreeDialog = function (targetselector, dialogselector, treese
 //    var positon = target.offset();
     //初始化对话框插件
     dialog.dialog({
-//        appendTo: targetselector, //TODO 关于appendTo无效的问题
+        //appendTo: //TODO 关于appendTo无效的问题
         autoOpen: false,
+        modal:true,//是否显示遮罩层
 //        position: [positon.left, positon.top],//TODO 定位不准确
         buttons: {
             "确定": function () {

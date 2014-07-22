@@ -70,11 +70,10 @@
                     </td>
                     <td align="right" width="15%">上级组织：</td>
                     <td align="left">
-                        <input type="text" value="${organization.parent.name}" forselector="[name=parent\.id]" class="organization text_input3 ${organizationAdd?"required":""}">
+                        <input id="org" type="text" value="${organization.parent.name}" forselector="[name=parent\.id]" class="organization text_input3 ${organizationAdd?"required":""}">
                         <input type="hidden" name="parent.id" value="${organization.parent.id}">
                         <input type="hidden" name="isLeaf" value="${organization.isLeaf}">
                         <input type="hidden" name="level" value="${organization.level}">
-
                         <div class="organization-tree" title="组织选择">
                             <ul id="organization-tree" class="ztree"></ul>
                         </div>
@@ -113,12 +112,12 @@
         <div class="cb block h40 margin0 mt10" style="width:350px;">
             <ul class="id_table1 cb">
                 <c:if test="${VS_HAS_FUNCTIONS.organizationModify}">
-                    <li><a href="javascript:void(0)" redirecturi="/system/organization/toViewPage.do?id=%s" class="block c_white lh25 submit mr10"><b class="allbtn_l block fl"></b><b class="allbtn_r pr13 block fl w_auto f14">保&nbsp;&nbsp;存</b></a></li>
+                    <li><a href="javascript:void(0)" redirecturi="/system/organization/toViewPage.do?id=%s&index=${index}" class="block c_white lh25 submit mr10"><b class="allbtn_l block fl"></b><b class="allbtn_r pr13 block fl w_auto f14">保&nbsp;&nbsp;存</b></a></li>
                     <c:if test="${VS_HAS_FUNCTIONS.organizationAdd}">
-                        <li><a href="javascript:void(0)" redirecturi="/system/organization/toAddPage.do" class="block c_white lh25 submit mr10"><b class="allbtn_l block fl"></b><b class="allbtn_r pr13 block fl w_auto f14">保存并新增</b></a></li>
+                        <li><a href="javascript:void(0)" redirecturi="/system/organization/toAddPage.do?index=${index}" class="block c_white lh25 submit mr10"><b class="allbtn_l block fl"></b><b class="allbtn_r pr13 block fl w_auto f14">保存并新增</b></a></li>
                     </c:if>
                 </c:if>
-                <li><a href="${ctx}/system/organization/toQueryPage.do" class="block c_white lh25 mr10"><b class="allbtn_l block fl"></b><b class="allbtn_r pr13 block fl w_auto f14">取&nbsp;&nbsp;消</b></a></li>
+                <li><a href="${ctx}/system/organization/toQueryPage.do?index=${index}" class="block c_white lh25 mr10"><b class="allbtn_l block fl"></b><b class="allbtn_r pr13 block fl w_auto f14">取&nbsp;&nbsp;消</b></a></li>
             </ul>
         </div>
     </form>

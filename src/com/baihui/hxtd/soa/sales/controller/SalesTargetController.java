@@ -1,6 +1,8 @@
 
 package com.baihui.hxtd.soa.sales.controller;
 
+import java.io.IOException;
+import java.io.PrintWriter;
 import java.util.List;
 import java.util.Map;
 
@@ -21,6 +23,7 @@ import org.springside.modules.web.Servlets;
 import com.baihui.hxtd.soa.base.Constant;
 import com.baihui.hxtd.soa.base.orm.hibernate.HibernatePage;
 import com.baihui.hxtd.soa.base.utils.Search;
+import com.baihui.hxtd.soa.base.utils.mapper.HibernateAwareObjectMapper;
 import com.baihui.hxtd.soa.common.controller.CommonController;
 import com.baihui.hxtd.soa.sales.entity.SalesTarget;
 import com.baihui.hxtd.soa.sales.service.SalesTargetService;
@@ -33,6 +36,8 @@ import com.baihui.hxtd.soa.system.service.OrganizationService;
 import com.baihui.hxtd.soa.util.EnumModule;
 import com.baihui.hxtd.soa.util.EnumOperationType;
 import com.baihui.hxtd.soa.util.JsonDto;
+import com.fasterxml.jackson.core.JsonGenerationException;
+import com.fasterxml.jackson.databind.JsonMappingException;
 
 @Controller
 @RequestMapping(value = "/sales/salesTarget")
@@ -50,6 +55,9 @@ public class SalesTargetController extends CommonController<SalesTarget> {
 	private OrganizationService organizationService;
 	
 	 /**
+	 * @throws IOException 
+	 * @throws JsonMappingException 
+	 * @throws JsonGenerationException 
 	 * @throws NoSuchFieldException 
 	   * query(分页查询)
 	   * @Title: query
@@ -60,8 +68,8 @@ public class SalesTargetController extends CommonController<SalesTarget> {
 	  */
 	@RequestMapping(value = "/query.do",produces = "text/text;charset=UTF-8")
 	@ResponseBody
-	public String query(HibernatePage<SalesTarget> page,
-								HttpServletRequest request,ModelMap model) throws NoSuchFieldException{
+	public void query(HibernatePage<SalesTarget> page,
+								HttpServletRequest request,ModelMap model,PrintWriter out) throws NoSuchFieldException, JsonGenerationException, JsonMappingException, IOException{
 		logger.info("SalesTargetController.query查询销售目标列表");
 		Map<String, Object> searchParams = Servlets.getParametersStartingWith(
 				request, "search_");
@@ -73,7 +81,7 @@ public class SalesTargetController extends CommonController<SalesTarget> {
 		page = salesTargetService.findPage(searchParams,dataShift, page);
 		JsonDto json = new JsonDto();
 		json.setResult(page);
-		return json.toString();
+		HibernateAwareObjectMapper.DEFAULT.writeValue(out, json);
 	}
 	
 	 /**

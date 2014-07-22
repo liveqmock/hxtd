@@ -1,8 +1,10 @@
 package com.baihui.hxtd.soa.system.dao;
 
 
-import java.util.List;
-
+import com.baihui.hxtd.soa.base.orm.hibernate.HibernateDAOImpl;
+import com.baihui.hxtd.soa.system.DictionaryConstant;
+import com.baihui.hxtd.soa.system.entity.User;
+import com.baihui.hxtd.soa.system.service.DataShift;
 import org.apache.commons.lang3.Range;
 import org.apache.commons.lang3.StringUtils;
 import org.hibernate.Criteria;
@@ -13,10 +15,7 @@ import org.hibernate.criterion.Projections;
 import org.hibernate.criterion.Restrictions;
 import org.springframework.stereotype.Repository;
 
-import com.baihui.hxtd.soa.base.orm.hibernate.HibernateDAOImpl;
-import com.baihui.hxtd.soa.system.DictionaryConstant;
-import com.baihui.hxtd.soa.system.entity.User;
-import com.baihui.hxtd.soa.system.service.DataShift;
+import java.util.List;
 
 /**
  * 用户数据访问类
@@ -39,7 +38,7 @@ public class UserDao extends HibernateDAOImpl<User, Long> {
         Criterion order = Restrictions.between(dataShift.getOrganizationAlias() + ".order", range.getMinimum(), range.getMaximum());
         return Restrictions.or(id, order);
     }
-    
+
     /**
      * 权限内数据
      * 1.当前用户
@@ -47,17 +46,17 @@ public class UserDao extends HibernateDAOImpl<User, Long> {
      * 3.下级组织
      */
     private Criterion priviOrgData(DataShift dataShift) {
-    	//根据用户id获取组织 id
-    	DetachedCriteria criteria = DetachedCriteria.forClass(User.class);
-    	criteria.setFetchMode("organization", FetchMode.JOIN);
-    	criteria.add(Restrictions.idEq(dataShift.getUserId()));
-    	User user=findUnique(criteria);
-    	long orgId=user.getOrganization().getId();
+        //根据用户id获取组织 id
+        DetachedCriteria criteria = DetachedCriteria.forClass(User.class);
+        criteria.setFetchMode("organization", FetchMode.JOIN);
+        criteria.add(Restrictions.idEq(dataShift.getUserId()));
+        User user = findUnique(criteria);
+        long orgId = user.getOrganization().getId();
         Criterion id = Restrictions.eq(dataShift.getUserAlias() + ".id", dataShift.getUserId());
         Range<Long> range = dataShift.getOrderRange();
-        Criterion current=Restrictions.eq(dataShift.getOrganizationAlias() + ".id", orgId);
+        Criterion current = Restrictions.eq(dataShift.getOrganizationAlias() + ".id", orgId);
         Criterion low = Restrictions.between(dataShift.getOrganizationAlias() + ".order", range.getMinimum(), range.getMaximum());
-        return Restrictions.or(id, current,low);
+        return Restrictions.or(id, current, low);
     }
 
     /**
@@ -72,7 +71,7 @@ public class UserDao extends HibernateDAOImpl<User, Long> {
         }
         //组织数据管理员的权限设置
         if (dataShift.getIsOrgDataManager()) {
-        	criteria.createAlias(dataShift.getUserFieldName(), dataShift.getUserAlias());
+            criteria.createAlias(dataShift.getUserFieldName(), dataShift.getUserAlias());
             criteria.createAlias(dataShift.getUserAlias() + "." + dataShift.getOrganizationFieldName(), dataShift.getOrganizationAlias());
             criteria.add(priviOrgData(dataShift));
             return criteria;
@@ -104,6 +103,23 @@ public class UserDao extends HibernateDAOImpl<User, Long> {
         Criteria executableCriteria = criteria.getExecutableCriteria(getSession());
         executableCriteria.setMaxResults(maxResults);
         return executableCriteria.list();
+    }
+
+    /** 查找用户通过角色编号 */
+    public List<User> findByRoleCode(String roleCode) {
+        String hql = "select user from User user" +
+                " inner join user.roles role" +
+                " where role.code=?";
+        return find(hql, roleCode);
+    }
+
+    /** 查找用户通过组织主键和角色编号 */
+    public List<User> findByOrgIdRoleCode(Long orgId, String roleCode) {
+        String hql = "select user from User user" +
+                " inner join user.organization org" +
+                " inner join user.roles role" +
+                " where org.id=? and role.code=?";
+        return find(hql, orgId, roleCode);
     }
 
     /**

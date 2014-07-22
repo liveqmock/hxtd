@@ -1,5 +1,7 @@
 package com.baihui.hxtd.soa.system.controller;
 
+import java.io.IOException;
+import java.io.PrintWriter;
 import java.util.List;
 import java.util.Map;
 
@@ -21,6 +23,7 @@ import org.springside.modules.web.Servlets;
 import com.baihui.hxtd.soa.base.Constant;
 import com.baihui.hxtd.soa.base.orm.hibernate.HibernatePage;
 import com.baihui.hxtd.soa.base.utils.Search;
+import com.baihui.hxtd.soa.base.utils.mapper.HibernateAwareObjectMapper;
 import com.baihui.hxtd.soa.common.service.CommonService;
 import com.baihui.hxtd.soa.system.entity.AuditLog;
 import com.baihui.hxtd.soa.system.entity.Component;
@@ -31,6 +34,8 @@ import com.baihui.hxtd.soa.system.service.DictionaryService;
 import com.baihui.hxtd.soa.util.EnumModule;
 import com.baihui.hxtd.soa.util.EnumOperationType;
 import com.baihui.hxtd.soa.util.JsonDto;
+import com.fasterxml.jackson.core.JsonGenerationException;
+import com.fasterxml.jackson.databind.JsonMappingException;
 
 /**
  * 功能描述： 组件管理控制器
@@ -68,13 +73,16 @@ public class ComponentController {
      * @param @return 参数类型
      * @return ModelAndView    返回类型
      * @throws NoSuchFieldException
+     * @throws IOException 
+     * @throws JsonMappingException 
+     * @throws JsonGenerationException 
      * @throws
      * @Title: query
      */
     @RequestMapping(value = "/query.do", produces = "text/text;charset=UTF-8")
     @ResponseBody
-    public String query(HibernatePage<Component> page,//
-                        HttpServletRequest request) throws NoSuchFieldException {
+    public void query(HibernatePage<Component> page,//
+                        HttpServletRequest request,PrintWriter out) throws NoSuchFieldException, JsonGenerationException, JsonMappingException, IOException {
         logger.info("ComponentController.query查询组件列表");
         Map<String, Object> searchParams = Servlets.getParametersStartingWith(
                 request, "search_");
@@ -84,7 +92,7 @@ public class ComponentController {
         page = componentService.findPage(searchParams, page);
         JsonDto json = new JsonDto();
         json.setResult(page);
-        return json.toString();
+        HibernateAwareObjectMapper.DEFAULT.writeValue(out, json);
     }
 
     /**

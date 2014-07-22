@@ -4,7 +4,7 @@
 <%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions" %>
 <c:set var="ctx" value="${pageContext.request.contextPath}"/>
 <link href="${ctx}/static/css/stressing/detail.css" rel="stylesheet" type="text/css"/>
-<script type="text/javascript" src="${ctx}/static/js/message.js"></script>
+<%--<script type="text/javascript" src="${ctx}/static/js/message.js"></script>--%>
 
 <!--菜单开始-->
 <div class="h_head_bg pr">

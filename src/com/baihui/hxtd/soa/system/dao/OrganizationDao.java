@@ -39,6 +39,12 @@ public class OrganizationDao extends HibernateDAOImpl<Organization, Long> {
         return findUnique(hql, id);
     }
 
+    /** 获取父节点主键编号通过组织主键编号 */
+    public Long getParentIdById(Long id) {
+        String hql = "select org.parent.id from Organization org where org.id=?";
+        return findUnique(hql, id);
+    }
+
 
     /**
      * 更新序号根据主键编号
@@ -56,5 +62,6 @@ public class OrganizationDao extends HibernateDAOImpl<Organization, Long> {
         String hql = "update Organization org set org.order=org.order+? where org.order between ? and ?";
         return createQuery(hql, increase, orderMin, orderMax).executeUpdate();
     }
+
 
 }

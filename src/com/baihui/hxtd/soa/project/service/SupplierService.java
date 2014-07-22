@@ -110,20 +110,22 @@ public class SupplierService {
      */
     public void add(Supplier entity,AuditLog auditLog) {
         logger.info("保存供应商信息{}", entity);
-        Date now = supplierDao.getDBNow();
-        entity.setCreatedTime(now);
-        entity.setModifiedTime(now);
         supplierDao.save(entity);
+        auditLog.setRecordId(entity.getId());
     }
-    
+    /**
+     * 
+      * modify(修改方法)
+      * @Title: modify
+      * @param @param entity
+      * @param @param auditLog    参数类型
+      * @return void    返回类型
+      * @throws
+     */
     public void modify(Supplier entity,AuditLog auditLog) {
         logger.info("保存供应商信息{}", entity);
-        Date now = supplierDao.getDBNow();
-        entity.setCreatedTime(now);
-        entity.setModifiedTime(now);
         supplierDao.save(entity);
     }
-
     /**
      * delete(删除供应商信息)
      *

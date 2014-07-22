@@ -1,6 +1,7 @@
 package com.baihui.hxtd.soa.customer.controller;
 
 import java.io.IOException;
+import java.io.PrintWriter;
 import java.util.List;
 import java.util.Map;
 
@@ -24,6 +25,7 @@ import com.baihui.hxtd.soa.base.Constant;
 import com.baihui.hxtd.soa.base.orm.hibernate.HibernatePage;
 import com.baihui.hxtd.soa.base.utils.ImportExport;
 import com.baihui.hxtd.soa.base.utils.Search;
+import com.baihui.hxtd.soa.base.utils.mapper.HibernateAwareObjectMapper;
 import com.baihui.hxtd.soa.common.controller.CommonController;
 import com.baihui.hxtd.soa.customer.entity.Lead;
 import com.baihui.hxtd.soa.customer.service.LeadService;
@@ -34,6 +36,8 @@ import com.baihui.hxtd.soa.system.service.DictionaryService;
 import com.baihui.hxtd.soa.util.EnumModule;
 import com.baihui.hxtd.soa.util.EnumOperationType;
 import com.baihui.hxtd.soa.util.JsonDto;
+import com.fasterxml.jackson.core.JsonGenerationException;
+import com.fasterxml.jackson.databind.JsonMappingException;
 
 /**
  * 线索控制器
@@ -62,11 +66,13 @@ public class LeadController extends CommonController<Lead>{
 	 * @param request
 	 * @return
 	 * @throws NoSuchFieldException
+	 * @throws IOException 
+	 * @throws JsonMappingException 
+	 * @throws JsonGenerationException 
 	 */
-	@ResponseBody
 	@RequestMapping(value = "/query.do", produces = "text/text;charset=UTF-8")
-	public String query(HibernatePage<Lead> page,//
-			HttpServletRequest request,ModelMap model) throws NoSuchFieldException {
+	public void query(HibernatePage<Lead> page,//
+			HttpServletRequest request,ModelMap model, PrintWriter out) throws NoSuchFieldException, JsonGenerationException, JsonMappingException, IOException {
 
 		logger.info("LeadController.query查询线索列表");
 		Map<String, Object> searchParams = Servlets.getParametersStartingWith(
@@ -79,7 +85,7 @@ public class LeadController extends CommonController<Lead>{
 		page = leadService.findPage(searchParams,dataShift, page);
 		JsonDto json = new JsonDto();
 		json.setResult(page);
-		return json.toString();
+		HibernateAwareObjectMapper.DEFAULT.writeValue(out, json);
 	}
 
 	/**
@@ -90,7 +96,7 @@ public class LeadController extends CommonController<Lead>{
 	@RequestMapping(value = "/toQueryPage.do")
 	public String toQueryPage(Model model) {
 		logger.info("LeadController.toQueryPage跳转线索列表页");
-		model.addAttribute("page",new HibernatePage<Lead>().order(HibernatePage.DESC).orderBy("modifiedTime"));
+		model.addAttribute("page",new HibernatePage<Lead>(10).order(HibernatePage.DESC).orderBy("modifiedTime"));
 		setDefaultDict(model);
 		return "/customer/lead/list";
 	}

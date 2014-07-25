@@ -80,6 +80,10 @@ public class CustomerService {
 		criteria.setFetchMode("county", FetchMode.JOIN);
 		criteria.setFetchMode("creator", FetchMode.JOIN);
 		criteria.setFetchMode("modifier", FetchMode.JOIN);
+		criteria.setFetchMode("financialAdvisor", FetchMode.JOIN);
+		criteria.setFetchMode("financialManager", FetchMode.JOIN);
+		criteria.setFetchMode("appointment", FetchMode.JOIN);
+		criteria.setFetchMode("financialDirector", FetchMode.JOIN);
 		userDao.visibleData(criteria, dataShift);
 		searchParams.put("EQ_isDeleted", false);
         Map<String, SearchFilter> filters = Search.parse(searchParams);

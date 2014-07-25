@@ -38,7 +38,7 @@ public class Menu implements Serializable, Cloneable, TreeNode<Menu>, Initialize
         function.setUrl("/system/toViewPage.do");
         SETTING.setTrigger(function);
 
-        ROOT.setId(1l);
+        ROOT.setId(0l);
         ROOT.setName("华兴控股");
         ROOT.setParent(null);
     }

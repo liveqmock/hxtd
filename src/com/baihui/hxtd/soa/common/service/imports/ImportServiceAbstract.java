@@ -7,6 +7,7 @@ import java.util.Date;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 import javax.annotation.Resource;
 
@@ -15,6 +16,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.baihui.hxtd.soa.common.dao.CommonDao;
 import com.baihui.hxtd.soa.common.dao.ImportDao;
+import com.baihui.hxtd.soa.common.imports.ImportMessage;
 import com.baihui.hxtd.soa.system.entity.User;
 @Service
 @Transactional
@@ -91,6 +93,11 @@ public abstract class ImportServiceAbstract<T,E>  {
 		   //为数据添加创建人,创建时间,修改人,修改时间
 		   addCreateAndModifyInfo(insertList, user);
 		   List<T> list = addOrModify(insertList);
+		   if(list == null || list.size()==0){
+			   Set<Integer> addRecord = ImportMessage.databaseRepeatRowNums;
+			   //新增数据失败,要么全部失败,要么全部成功,list==null||list.size()==0,全部失败
+			   ImportMessage.databaseRepeatRowNums.removeAll(addRecord);
+		   }
 		   System.out.println("新增："+list.size());
 	   }
 		// 修改数据
@@ -98,6 +105,11 @@ public abstract class ImportServiceAbstract<T,E>  {
 			// 为数据添加创建人,创建时间,修改人,修改时间
 			addCreateAndModifyInfo(updateList, user);
 			List<T> list = addOrModify(updateList);
+			if(list == null || list.size()==0){
+				   List<Integer> addRecord = ImportMessage.databaseNewRowNums;
+				   //修改数据失败,要么全部失败,要么全部成功,list==null||list.size()==0,全部失败
+				   ImportMessage.databaseNewRowNums.removeAll(addRecord);
+			   }
 			System.out.println("修改："+list.size());
 		}
    }
@@ -168,7 +180,7 @@ public abstract class ImportServiceAbstract<T,E>  {
     	}
     	
     	
-    	if ("conver".equals(duplicateType)) {//覆盖
+    	if ("cover".equals(duplicateType)) {//覆盖
     		setId(e1,e2);//将id添加到对象中
 			return e1;
 		} else if ("jump".equals(duplicateType)) {//跳过

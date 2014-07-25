@@ -40,13 +40,13 @@ public class LeadDao extends HibernateDAOImpl<Lead, Long>{
 	  * @see com.baihui.hxtd.soa.base.orm.hibernate.HibernateDAOImpl#save(java.lang.Object)
 	 */
 	public Lead save(Lead lead){
-		if(lead.getProvince().getId()==null){
+		if(lead.getProvince()!=null&lead.getProvince().getId()==null){
 			lead.setProvince(null);
 		}
-		if(lead.getCity().getId()==null){
+		if(lead.getCity()!=null&lead.getCity().getId()==null){
 			lead.setCity(null);
 		}
-		if(lead.getCounty().getId()==null){
+		if(lead.getCounty()!=null&lead.getCounty().getId()==null){
 			lead.setCounty(null);
 		}
 		return super.save(lead);

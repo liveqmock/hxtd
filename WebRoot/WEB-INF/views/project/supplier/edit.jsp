@@ -190,11 +190,11 @@ function clearInputVal(obj){ //清除
 						class="text_input3 email">
 				</td>
 				<td align="right">
-					法人：
+					<span class="w_red">*&nbsp;</span>法人：
 				</td>
 				<td align="left">
 					<input type="text" name="corporation" value="${com.corporation}"
-						class="text_input3">
+						class="text_input3 required" >
 				</td>
 			</tr>
 			<tr>
@@ -217,11 +217,11 @@ function clearInputVal(obj){ //清除
 					</select>
 				</td>
 				<td align="right">
-					证件号码：
+					<span class="w_red">*&nbsp;</span>证件号码：
 				</td>
 				<td align="left">
 					<input type="text" name="cardNum" value="${com.cardNum}"
-						class="text_input3 number">
+						class="text_input3 number {maxlength:20} required">
 				</td>
 			</tr>
 		</table>
@@ -282,7 +282,7 @@ function clearInputVal(obj){ //清除
 				<a href="javascript:;" id="save" class="block c_white lh25 mr35"><b
 					class="allbtn_l block fl"></b><b
 					class="allbtn_r pr13 block fl w_auto f14">保&nbsp&nbsp存</b>
-				</a></a>
+				</a>
 			</li>
 			<li>
 				<a href="javascript:;" id="saveAndAdd"

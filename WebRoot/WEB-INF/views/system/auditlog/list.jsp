@@ -61,7 +61,6 @@
 								class="text_input1" />
 							<input type="text" id="hide_creator_id" name="search_EQ_creator.id" class="text_input1 none" />
 							<i class="s_inquiry globle_img block_inline ml5 vm cp" title="搜索操作人" onclick="searchData('creator');"></i>
-							<i class="dump_btn globle_img block_inline ml5 vm cp empty" title="清除"></i>
 						</td>
 						<td class="f14 namewidth1" align="right">操作类型：</td>
 						<td class="f14 namewidth2" align="left">

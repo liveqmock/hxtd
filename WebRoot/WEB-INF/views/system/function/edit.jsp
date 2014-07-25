@@ -100,7 +100,15 @@ function clearInputVal(obj){ //清除
             </tr>
             <tr>
                 <td align="right">调用入口：</td>
-                <td align="left"><input type="text" name="url" value="${func.url }" class="text_input3 required"/></td>
+                <td align="left">
+                <c:choose>
+                <c:when test="${func.id==null}">
+                <input type="text" name="url" value="${func.url }" class="{required:true,unique:['Function','${function.id}']} text_input3"/>
+                </c:when>
+                <c:otherwise>
+                <input type="text" name="url" value="${func.url }" class="{required:true} text_input3"/>
+                </c:otherwise>
+                </c:choose>
                 <td align="right">归属菜单：</td>
                 <td align="left">
                 <input type="text" id="menuText"  value="${func.menu.name }" class="text_input3" onclick="searchData();" readonly/>

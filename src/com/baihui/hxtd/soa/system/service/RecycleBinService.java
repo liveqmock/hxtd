@@ -56,7 +56,7 @@ public class RecycleBinService {
 			HibernatePage<RecycleBin> page,DataShift dataShift) throws NoSuchFieldException {
 		DetachedCriteria criteria = DetachedCriteria.forClass(RecycleBin.class);
     	criteria.setFetchMode("creator", FetchMode.JOIN);
-    	//userDao.visibleData(criteria, dataShift);
+    	userDao.priviData(criteria, dataShift.renameUserFieldName("creator"));
 		Map<String, SearchFilter> filters = Search.parse(searchParams);
 		Search.buildCriteria(filters, criteria, RecycleBin.class);
 		HibernatePage<RecycleBin> pageResult=recycleBinDao.findPage(page, criteria);

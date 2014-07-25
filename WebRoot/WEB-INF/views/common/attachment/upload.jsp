@@ -100,12 +100,12 @@ function stop(){
 							<b class="allbtn_l block fl"></b> <b
 							class="allbtn_r pr13 block fl w_auto f14">开始上传</b> </a>
 					</li>
-					<li class="fl">
+					<%--<li class="fl">
 					<a class="block c_white lh25 ml10" href="javascript:stop()"> <b
 						class="allbtn_l block fl"></b> <b
 						class="allbtn_r pr13 block fl w_auto f14">取消上传</b>
 					</a>
-					</li>
+					</li>--%>
 				</div>
 				<br/><br/>
 				<div class="cb">

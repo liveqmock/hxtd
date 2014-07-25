@@ -61,9 +61,9 @@ public class ExcelParse4Lead extends ExcelParse<LeadDTO> {
 			return null;
 		}
 		//必填项
-		//姓名必填项
+		//线索名必填项
 		String contactName = sheetList.get(1);
-		if ( contactName == null || "".equals(contactName.trim()) ) {
+		if (Tools.isEmpty(contactName.trim())) {
 			msg += "<br />第"+rowNumOfSheet+"条,客户姓名不能为空!";
 			logger.warn(msg);
 			//向无效数据集合中添加一条数据
@@ -71,12 +71,67 @@ public class ExcelParse4Lead extends ExcelParse<LeadDTO> {
 			return null;
 		}
 		
+		/**
+		 * 校验数据格式
+		 */
+		//手机号码格式
+		String mobile =  sheetList.get(5);
+		if(!Tools.isEmpty(mobile)&&!isMobile(mobile)){
+			msg += "<br />第"+rowNumOfSheet+"条,手机号码内容无效!";
+			//向无效数据集合中添加一条数据
+			ImportMessage.invalidFormatRowNumMap.put(rowNumOfSheet, msg);
+			return null;
+		}
+		//电话号码，符合电话号码格式
+		String phone =  sheetList.get(6);
+		if ( !Tools.isEmpty(phone)&&!isPhone(phone.trim()) ) {
+			msg += "<br />第"+rowNumOfSheet+"条,电话号码无效!";
+			logger.warn(msg);
+			//向无效数据集合中添加一条数据
+			ImportMessage.invalidFormatRowNumMap.put(rowNumOfSheet, msg);
+			return null;
+		}
+		//传真格式，与电话号码相同
+		String fax = sheetList.get(8);
+		if(!Tools.isEmpty(fax)&&!isPhone(fax)){
+			msg += "<br />第"+rowNumOfSheet+"条,传真内容无效!";
+			//向无效数据集合中添加一条数据
+			ImportMessage.invalidFormatRowNumMap.put(rowNumOfSheet, msg);
+			return null;
+		}
+		//邮箱格式
+		String email = sheetList.get(7);
+		if(!Tools.isEmpty(email)&&!checkEmail(email)){
+			msg += "<br />第"+rowNumOfSheet+"条,邮箱内容无效!";
+			//向无效数据集合中添加一条数据
+			ImportMessage.invalidFormatRowNumMap.put(rowNumOfSheet, msg);
+			return null;
+		}
+		//邮编格式
+		String postCode = sheetList.get(17);
+		if(!Tools.isEmpty(postCode)&&!checkPostCode(postCode)){
+			msg += "<br />第"+rowNumOfSheet+"条,邮编内容无效!";
+			//向无效数据集合中添加一条数据
+			ImportMessage.invalidFormatRowNumMap.put(rowNumOfSheet, msg);
+			return null;
+		}
+		
+		
+		
+		//所有者必填项
 		//线索所有者,查找客户所有者的id,如果id存在则返回,如果不存在设置为0
 		String leadOwner = sheetList.get(0);
-		User owner = new User();
+		if (Tools.isEmpty(leadOwner.trim())) {
+			msg += "<br />第"+rowNumOfSheet+"条,线索所有者不能为空!";
+			logger.warn(msg);
+			//向无效数据集合中添加一条数据
+			ImportMessage.invalidFormatRowNumMap.put(rowNumOfSheet, msg);
+			return null;
+		}
+		User owner = null;
 		if ( leadOwner != null && !"".equals(leadOwner.trim()) ) {
 			//根据id查询客户所有者
-			owner = userService.getByName(leadOwner);
+			owner = userService.getByName(leadOwner.trim());
 			if(owner==null){
 				msg += "<br />第"+rowNumOfSheet+"条,客户所有者不存在!";
 				logger.warn(msg);
@@ -90,10 +145,19 @@ public class ExcelParse4Lead extends ExcelParse<LeadDTO> {
 		
 		//线索来源
 		String leadSource = sheetList.get(9);
-		Dictionary source = new Dictionary();
-		if ( leadSource != null && !"".equals(leadSource.trim()) ) {
+		//线索来源必填项
+		if (Tools.isEmpty(leadSource.trim())) {
+			msg += "<br />第"+rowNumOfSheet+"条,线索来源不能为空!";
+			logger.warn(msg);
+			//向无效数据集合中添加一条数据
+			ImportMessage.invalidFormatRowNumMap.put(rowNumOfSheet, msg);
+			return null;
+		}
+		//数据内容校验
+		Dictionary source = null;
+		if ( !Tools.isEmpty(leadSource.trim()) ) {
 			//根据id查询线索来源(40101)
-			source = dictionaryService.getValue(leadSource, 40101L);
+			source = dictionaryService.getValue(leadSource.trim(), 40101L);
 			if(source==null){
 				msg += "<br />第"+rowNumOfSheet+"条,线索来源无效!";
 				logger.warn(msg);
@@ -106,11 +170,20 @@ public class ExcelParse4Lead extends ExcelParse<LeadDTO> {
 		list.add(9, source==null?new Dictionary():source);
 		
 		//线索状态
+		//线索状态必填项
 		String leadStatus = sheetList.get(10);
-		Dictionary status = new Dictionary();
-		if ( leadStatus != null && !"".equals(leadStatus.trim()) ) {
+		if (Tools.isEmpty(leadStatus.trim())) {
+			msg += "<br />第"+rowNumOfSheet+"条,线索状态不能为空!";
+			logger.warn(msg);
+			//向无效数据集合中添加一条数据
+			ImportMessage.invalidFormatRowNumMap.put(rowNumOfSheet, msg);
+			return null;
+		}
+		//数据内容校验
+		Dictionary status = null;
+		if (!Tools.isEmpty(leadStatus.trim()) ) {
 			//根据id查询线索状态(40102)
-			status = dictionaryService.getValue(leadStatus, 40102L);
+			status = dictionaryService.getValue(leadStatus.trim(), 40102L);
 			//根据leadStatus没有查询到,返回null
 			if(status==null){
 				msg += "<br />第"+rowNumOfSheet+"条,线索状态无效!";
@@ -125,10 +198,19 @@ public class ExcelParse4Lead extends ExcelParse<LeadDTO> {
 		
 		//行业
 		String leadIndustry = sheetList.get(13);
-		Dictionary industry = new Dictionary();
-		if ( leadIndustry != null && !"".equals(leadIndustry.trim()) ) {
+		//行业必填项
+		if (Tools.isEmpty(leadIndustry.trim())) {
+			msg += "<br />第"+rowNumOfSheet+"条,行业不能为空!";
+			logger.warn(msg);
+			//向无效数据集合中添加一条数据
+			ImportMessage.invalidFormatRowNumMap.put(rowNumOfSheet, msg);
+			return null;
+		}
+		//数据内容校验
+		Dictionary industry = null;
+		if (! Tools.isEmpty(leadIndustry.trim()) ) {
 			//根据id查询线索状态(40305)
-			industry = dictionaryService.getValue(leadIndustry, 40305L);
+			industry = dictionaryService.getValue(leadIndustry.trim(), 40305L);
 			if(industry==null){
 				msg += "<br />第"+rowNumOfSheet+"条,行业无效!";
 				logger.warn(msg);
@@ -142,10 +224,19 @@ public class ExcelParse4Lead extends ExcelParse<LeadDTO> {
 		
 		//卡类型
 		String leadCardType = sheetList.get(11);
-		Dictionary cardType = new Dictionary();
-		if ( leadCardType != null && !"".equals(leadCardType.trim()) ) {
+		//卡类型必填项
+		if (Tools.isEmpty(leadCardType.trim())) {
+			msg += "<br />第"+rowNumOfSheet+"条,卡类型不能为空!";
+			logger.warn(msg);
+			//向无效数据集合中添加一条数据
+			ImportMessage.invalidFormatRowNumMap.put(rowNumOfSheet, msg);
+			return null;
+		}
+		//数据校验
+		Dictionary cardType = null;
+		if ( !Tools.isEmpty(leadCardType.trim()) ) {
 			//根据id查询线索状态(40103)
-			cardType = dictionaryService.getValue(leadCardType, 40103L);
+			cardType = dictionaryService.getValue(leadCardType.trim(), 40103L);
 			if(cardType==null){
 				msg += "<br />第"+rowNumOfSheet+"条,卡类型无效!";
 				logger.warn(msg);
@@ -159,10 +250,10 @@ public class ExcelParse4Lead extends ExcelParse<LeadDTO> {
 		
 		//省
 		String leadProvince = sheetList.get(14);
-		PCAS province = new PCAS();
-		if ( leadProvince != null && !"".equals(leadProvince.trim()) ) {
-			//根据id查询线索状态(40103)
-			province = pCASService.getByName(leadProvince);
+		PCAS province = null;
+		if ( !Tools.isEmpty(leadProvince) ) {
+			//查询省,省的pid=0
+			province = pCASService.getByName(leadProvince.trim(),0L);
 			if(province==null){
 				msg += "<br />第"+rowNumOfSheet+"条,该省不存在!";
 				logger.warn(msg);
@@ -172,15 +263,14 @@ public class ExcelParse4Lead extends ExcelParse<LeadDTO> {
 			}
 		}
 		list.remove(14);
-		list.add(14, province==null?new PCAS():province);
+		list.add(14, province);
 		
 		
 		//市
 		String leadCity = sheetList.get(15);
-		PCAS city = new PCAS();;
-		if ( leadCity != null && !"".equals(leadCity.trim()) ) {
-			//根据id查询线索状态(40103)
-			city = pCASService.getByName(leadCity);
+		PCAS city = null;
+		if (province != null && !Tools.isEmpty(leadCity.trim())) {
+			city = pCASService.getByName(leadCity.trim(),province.getId());
 			if(city==null){
 				msg += "<br />第"+rowNumOfSheet+"条,当前市不存在!";
 				logger.warn(msg);
@@ -190,14 +280,14 @@ public class ExcelParse4Lead extends ExcelParse<LeadDTO> {
 			}
 		}
 		list.remove(15);
-		list.add(15, city==null?new PCAS():city);
+		list.add(15, city);
 		
 		//县
 		String leadCounty = sheetList.get(16);
-		PCAS county = new PCAS();;
-		if ( leadCounty != null && !"".equals(leadCounty.trim()) ) {
+		PCAS county = null;
+		if (province != null && !Tools.isEmpty(leadCounty.trim())) {
 			//根据id查询线索状态(40103)
-			county = pCASService.getByName(leadCounty);
+			county = pCASService.getByName(leadCounty.trim(),city.getId());
 			if(county==null){
 				msg += "<br />第"+rowNumOfSheet+"条,该县不存在!";
 				logger.warn(msg);
@@ -208,7 +298,7 @@ public class ExcelParse4Lead extends ExcelParse<LeadDTO> {
 			
 		}
 		list.remove(16);
-		list.add(16, county==null?new PCAS():county);
+		list.add(16, county);
 		
 		//修改最后一列的类型为Integer类型
 		String rowNumString = sheetList.get(sheetList.size()-1);

@@ -6,6 +6,7 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
+<%@taglib prefix="tag" tagdir="/WEB-INF/tags" %>
 <c:set var="ctx" value="${pageContext.request.contextPath}"/>
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
 <html>
@@ -26,7 +27,7 @@
 		<b class="b4"></b>
 		<div class="ie_head">
 			<h1 class="f14 fbnone mt10 ml10 fl">
-				产品详情信息
+				项目详情信息
 			</h1>
 			<ul class="fr id_table1 mt10 ml10">
 				<li>
@@ -164,6 +165,80 @@
 			</tr>
 
 		</table>
+		
+		
+		<c:if test="${VS_HAS_FUNCTIONS.productQuery}">
+			<h1 class="f14 fbnone ml40 mt10">项目</h1>
+			<div class="w95b  bg_c_white margin0 mt10">
+				<br>
+				<b class="w90b f_line2 block margin0"></b>
+				<table class="cb id_table2 w90b margin0 mt10 mb10">
+					<tbody>
+						<tr>
+							<th width="10%">
+								产品名
+							</th>
+							<th width="10%">
+								产品编号
+							</th>
+							<th width="10%">
+								出售金额（万）
+							</th>
+							<th width="10%">
+								收益率（%）
+							</th>
+							<th width="10%">
+								开始时间
+							</th>
+							<th width="10%">
+								截止时间
+							</th>
+							<th width="10%">
+								赎回率（%）
+							</th>
+							<th width="10%">
+								赎回公式
+							</th>
+						</tr>
+					</tbody>
+					<tbody  class="list">
+						<c:forEach items="${products}" var="c">
+							<tr>
+								 <td>
+					                  <c:choose>
+					                      <c:when test="${VS_HAS_FUNCTIONS.productView}">
+												<a href="${ctx}/project/product/toViewPage.do?id=${c.id}"
+													class="toviewpage">${c.name }</a>
+											</c:when>
+					                      <c:otherwise>${c.name }</c:otherwise>
+					                  </c:choose>
+					              </td>
+					              <td>${c.code }</td>
+					              <td>${c.sellMoney }</td>
+								  <td>${c.rate }</td>
+					              <td><fmt:formatDate value="${c.saleBeginTime}" pattern="yyyy-MM-dd"/></td>
+					              <td><fmt:formatDate value="${c.saleEndTime}" pattern="yyyy-MM-dd"/></td>
+					              <td>${c.redeemRate }</td>
+					              <td>${c.redeemFormula }</td>
+							</tr>
+						</c:forEach>
+						
+					</tbody>
+				</table>
+				<div class=" h40"></div>
+			</div>
+		</c:if>
+		
+		<tag:attachment 
+		view="${VS_HAS_FUNCTIONS.projectAttView}" 
+		upload="${VS_HAS_FUNCTIONS.projectUpload}" 
+		query="${VS_HAS_FUNCTIONS.projectAttQuery}" 
+		down="${VS_HAS_FUNCTIONS.projectDown}"
+		deleteFlag="${VS_HAS_FUNCTIONS.projectAttDelete}" 
+		module="project"
+		id="${project.id}"></tag:attachment>
+		
+		
 		<div class=" h40"></div>
 	</div>
 	<div class="cb block h40 margin0 mt10" style="width: 350px;">

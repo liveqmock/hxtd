@@ -36,14 +36,11 @@ $(function(){
 		}
 	});
 	$("#add").click(function(){
-		workbanch.addWorkbanch(reload);
+		workbanch.addWorkbanch();
 	});
    	workbanch.initList();
    	workbanch.initReport();
 });
-function reload(){
-	window.location.reload();
-}
 </script>
 </head>
 <body>
@@ -52,7 +49,8 @@ function reload(){
 		<c:forEach items="${list }" var="work" varStatus="s">
 			<li id="${work.id }" style="width: ${work.width}"
 			uri="${ctx}${work.url}" module="${work.module}"
-			type="${work.type}" params="${work.params}">
+			type="${work.type}" params="${work.params}"
+			timeParam="${work.timeParam}">
 				<div class="block cb">
 					<b class="ba"></b>
 					<b class="bb"></b>

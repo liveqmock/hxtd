@@ -11,6 +11,6 @@
 </head>
 
 <body>
-<div class="error_img"><img src="${ctx}/static/images/img403.png" alt=""/></div>
+<div align="center" class="error_img"><img src="${ctx}/static/images/img403.png" alt=""/></div>
 </body>
 </html>

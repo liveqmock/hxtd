@@ -250,6 +250,19 @@ ALTER TABLE hxtd.sm_function ADD PRIVILEGE_LEVEL_ID int NOT NULL;
 ----角色采用主键或者编码?
 ----
 
+--07-25--
+--流程环节表、流程实例表备注信息
+--系统消息
+--财务审批
+--财务确认批准
+--市场活动审批
+--菜单移动问题
+
+--类型、金额、创建时间、订单编号、市场活动名称、financial
+
+
+
+
 
 
 

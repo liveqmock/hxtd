@@ -35,21 +35,20 @@ public class ContactDTO implements Serializable {
 	public ContactDTO(List<Object> list) {
 		this.owner = (User)list.get(0);// 0
 		this.name = (String)list.get(1);// 1
-		this.customer = (Customer)list.get(2);
-		this.department = (String)list.get(3);// 3
-		this.position = (String)list.get(4);// 4
-		this.mobile = (String)list.get(5);// 5
-		this.phone = (String)list.get(6);// 6
-		this.email = (String)list.get(7);// 7
-		this.fax = (String)list.get(8);// 8
-		this.source = (Dictionary)list.get(9);// 9
-		this.province = (PCAS)list.get(10);// 10
-		this.city = (PCAS)list.get(11);// 11
-		this.county = (PCAS)list.get(12);// 12
-		this.postCode =(String)list.get(13);;// 13
-		this.address = (String)list.get(14);;// 14
-		this.remark = (String)list.get(15);;// 15
-		this.excelRowNum = (Integer)list.get(16);// 16
+		this.department = (String)list.get(2);// 2
+		this.position = (String)list.get(3);// 3
+		this.mobile = (String)list.get(4);// 4
+		this.phone = (String)list.get(5);// 5
+		this.email = (String)list.get(6);// 6
+		this.fax = (String)list.get(7);// 7
+		this.source = (Dictionary)list.get(8);// 8
+		this.province = (PCAS)list.get(9);// 9
+		this.city = (PCAS)list.get(10);// 10
+		this.county = (PCAS)list.get(11);// 11
+		this.postCode =(String)list.get(12);;// 12
+		this.address = (String)list.get(13);;// 13
+		this.remark = (String)list.get(14);;// 14
+		this.excelRowNum = (Integer)list.get(15);// 15
 	}
 
 	public  static ContactDTO createEntity(List<Object> list){

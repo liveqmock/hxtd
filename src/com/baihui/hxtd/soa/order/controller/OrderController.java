@@ -4,15 +4,14 @@ import com.baihui.hxtd.soa.base.Constant;
 import com.baihui.hxtd.soa.base.InitApplicationConstant;
 import com.baihui.hxtd.soa.base.orm.hibernate.HibernatePage;
 import com.baihui.hxtd.soa.base.utils.ImportExport;
-import com.baihui.hxtd.soa.base.utils.ReflectionUtils;
 import com.baihui.hxtd.soa.base.utils.Search;
-import com.baihui.hxtd.soa.base.utils.mapper.HibernateAwareObjectMapper;
 import com.baihui.hxtd.soa.common.controller.CommonController;
 import com.baihui.hxtd.soa.common.controller.model.FlowModel;
-import com.baihui.hxtd.soa.common.entity.WFNode;
-import com.baihui.hxtd.soa.common.entity.WFTask;
-import com.baihui.hxtd.soa.common.service.WFNodeService;
-import com.baihui.hxtd.soa.common.service.WFTaskService;
+import com.baihui.hxtd.soa.common.entity.FlowInstance;
+import com.baihui.hxtd.soa.common.entity.FlowNode;
+import com.baihui.hxtd.soa.common.entity.NodeType;
+import com.baihui.hxtd.soa.common.service.FlowInstanceService;
+import com.baihui.hxtd.soa.common.service.FlowNodeService;
 import com.baihui.hxtd.soa.order.entity.Order;
 import com.baihui.hxtd.soa.order.service.OrderService;
 import com.baihui.hxtd.soa.system.DictionaryConstant;
@@ -24,8 +23,6 @@ import com.baihui.hxtd.soa.system.service.RoleService;
 import com.baihui.hxtd.soa.util.EnumModule;
 import com.baihui.hxtd.soa.util.EnumOperationType;
 import com.baihui.hxtd.soa.util.JsonDto;
-import com.fasterxml.jackson.core.JsonGenerationException;
-import com.fasterxml.jackson.databind.JsonMappingException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Controller;
@@ -42,9 +39,6 @@ import javax.servlet.ServletContext;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
-import java.io.PrintWriter;
-import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 import java.util.Map;
 
@@ -68,43 +62,18 @@ public class OrderController extends CommonController<Order> {
 
     @Resource
     private OrderService orderService;
+
     @Resource
     private DictionaryService dictionaryService;
+
     @Resource
     private RoleService roleService;
+
     @Resource
-    private WFTaskService wfTaskService;
+    private FlowInstanceService flowInstanceService;
 
-
-    /**
-     * 查询线索列表(从功能按钮跳转)
-     *
-     * @param page
-     * @param request
-     * @return
-     * @throws NoSuchFieldException
-     * @throws IOException
-     * @throws JsonMappingException
-     * @throws JsonGenerationException
-     */
-    @ResponseBody
-    @RequestMapping(value = "/query.do", produces = "text/text;charset=UTF-8")
-    public void query(HibernatePage<Order> page,//
-                      HttpServletRequest request, ModelMap model, PrintWriter out) throws NoSuchFieldException, JsonGenerationException, JsonMappingException, IOException {
-
-        logger.info("OrderController.query查询线索列表");
-        Map<String, Object> searchParams = Servlets.getParametersStartingWith(
-                request, "search_");
-        Search.clearBlankValue(searchParams);
-        Search.toRangeDate(searchParams, "modifiedTime");
-        Search.toRangeDate(searchParams, "createdTime");
-        logger.info("添加默认的查询条件");
-        DataShift dataShift = (DataShift) model.get(Constant.VS_DATASHIFT);
-        page = orderService.findPage(searchParams, dataShift, page);
-        JsonDto json = new JsonDto();
-        json.setResult(page);
-        HibernateAwareObjectMapper.DEFAULT.writeValue(out, json);
-    }
+    @Resource
+    private FlowNodeService flowNodeService;
 
 
     /**
@@ -117,27 +86,79 @@ public class OrderController extends CommonController<Order> {
     public String toQueryPage(ModelMap modelMap) {
         logger.info("OrderController.toQueryPage跳转线索列表页");
         modelMap.addAttribute("page", new HibernatePage<Order>().order("desc").orderBy("modifiedTime"));
-        User user = (User) modelMap.get(Constant.VS_USER);
-        List<WFNode> nodes = wfNodeService.findExecuteable(user, DictionaryConstant.NODE_TYPE_ORDERAPPROVE);
-        modelMap.addAttribute("nodeIds", ReflectionUtils.invokeGetterMethod(nodes, "id"));
+
+        modelMap.addAttribute("startNodeType", NodeType.start.getValue());
+        modelMap.addAttribute("businessNodeType", NodeType.business.getValue());
+
         return "/order/order/list";
+    }
+
+
+    /**
+     * 查询线索列表(从功能按钮跳转)
+     * --准备审批流程权限验证相关数据
+     * ----跨流程环节审批，存储待执行的流程
+     */
+    @ResponseBody
+    @RequestMapping(value = "/query.do", produces = "text/text;charset=UTF-8")
+    public String query(HibernatePage<Order> page, HttpServletRequest request, ModelMap model) throws NoSuchFieldException {
+
+        logger.info("OrderController.query查询线索列表");
+        Map<String, Object> searchParams = Servlets.getParametersStartingWith(request, "search_");
+        Search.clearBlankValue(searchParams);
+        Search.toRangeDate(searchParams, "modifiedTime");
+        Search.toRangeDate(searchParams, "createdTime");
+        logger.info("添加默认的查询条件");
+        DataShift dataShift = (DataShift) model.get(Constant.VS_DATASHIFT);
+        page = orderService.findPage(searchParams, dataShift, page);
+
+        User user = (User) model.get(Constant.VS_USER);
+        FlowNode executablePrepreerence = flowNodeService.findExecutablePrepreerence(user, DictionaryConstant.NODE_TYPE_ORDERAPPROVE);
+        if (executablePrepreerence != null) {
+            executablePrepreerence.setApprover(user);
+            flowInstanceService.fullExecutable(Constant.MODULE_ORDER, executablePrepreerence, page.getResult());
+        }
+
+        JsonDto json = new JsonDto();
+        json.setResult(page);
+        return json.toString();
     }
 
     /**
      * 查看或编辑线索
-     *
-     * @param type
-     * @param id
-     * @param model
-     * @return
      */
     @RequestMapping(value = "/toViewPage.do")
-    public String view(@RequestParam(required = false) String type,
-                       @RequestParam(required = false) Long id, Model model) {
+    public String view(@RequestParam(required = false) Long id, ModelMap modelMap) {
         logger.info("OrderController.view查询组件");
         String returnStr = "/order/order/view";
         Order order = orderService.get(id);
-        model.addAttribute("order", order);
+        modelMap.addAttribute("order", order);
+
+
+        //存储历史记录
+        List<FlowInstance> historys = flowInstanceService.findExecuted(Constant.MODULE_ORDER, id, DictionaryConstant.NODE_TYPE_ORDERAPPROVE);
+        modelMap.addAttribute("historyRecords", historys);
+
+        //存储当前流程
+        FlowNode currentFlowNode = order.getFlowNode();
+        if (currentFlowNode != null) {
+            if (currentFlowNode.getType().equals(NodeType.start.getValue())) {
+                currentFlowNode.setApprover(order.getOwner());
+            } else {
+                flowNodeService.fullReserveExecutor(Constant.MODULE_ORDER, order.getId(), currentFlowNode);
+            }
+            modelMap.addAttribute("currentFlowNode", order.getFlowNode());
+
+            //存储预定审批环节
+            List<FlowNode> flowNodes = flowNodeService.findAllOfFlow(DictionaryConstant.NODE_TYPE_ORDERAPPROVE);
+            List<FlowNode> reserveFlowNodes = flowNodeService.findAfter(flowNodes, currentFlowNode);
+            if (!currentFlowNode.getType().equals(NodeType.start.getValue())) {
+                flowNodeService.fullReserveExecutor(Constant.MODULE_ORDER, order.getId(), reserveFlowNodes);
+            }
+            modelMap.addAttribute("reserveFlowNodes", reserveFlowNodes);
+        }
+        modelMap.addAttribute("endFlowNode", NodeType.end.getValue());
+
         return returnStr;
     }
 
@@ -156,6 +177,29 @@ public class OrderController extends CommonController<Order> {
         orderService.modify(order, auditLog);
         JsonDto json = JsonDto.modify(order.getId());
         return json.toString();
+    }
+
+    /**
+     * addSecond(再次购买，复制订单信息)
+     *
+     * @param @param  model
+     * @param @param  id
+     * @param @return 参数类型
+     * @return String    返回类型
+     * @throws
+     * @Title: addSecond
+     */
+    @RequestMapping(value = "/toAddPage.do", params = "type=second")
+    public String addSecond(Model model, Long id) {
+        logger.info("OrderController.toModifyPage修改线索所有者信息");
+        String funcUrl = "/order/order/add.do";
+        model.addAttribute("funcUrl", funcUrl);
+        Order order = orderService.get(id);
+        order.setId(null);
+        order.setCode(null);
+        model.addAttribute("order", order);
+        setDefaultDict(model);
+        return "/order/order/edit";
     }
 
 
@@ -186,9 +230,12 @@ public class OrderController extends CommonController<Order> {
             auditLogArr[i] = new AuditLog(EnumModule.ORDER.getModuleName(),
                     id[i], orderService.get(id[i]).getCode(), EnumOperationType.DELETE.getOperationType(), user);
         }
-        orderService.delete(id, auditLogArr);
-        JsonDto json = JsonDto.delete(id);
-        return json.toString();
+        boolean flag = orderService.delete(id, auditLogArr);
+        if (flag) {
+            return JsonDto.delete(id).toString();
+        } else {
+            return new JsonDto("被删除数据存在关联合同，删除失败!").toString();
+        }
     }
 
     /**
@@ -293,7 +340,7 @@ public class OrderController extends CommonController<Order> {
      * @author huizijing
      */
     @ResponseBody
-    @RequestMapping(value = "/queryList.do", produces = "text/text;charset=UTF-8")
+    @RequestMapping(value = "/query.do", params = "TYPE=relation")
     public String queryList(HibernatePage<Order> page,//
                             HttpServletRequest request, ModelMap model) throws NoSuchFieldException {
 
@@ -312,77 +359,127 @@ public class OrderController extends CommonController<Order> {
     }
 
 
-    @Resource
-    private WFNodeService wfNodeService;
-
-
     /** 跳转启动审批页面 */
     @RequestMapping("/toStartApprovePage.do")
     public String toStartApprovePage(Long id, ModelMap modelMap) {
+        User user = (User) modelMap.get(Constant.VS_USER);
+
         //存储订单
         Order order = orderService.get(id);
         modelMap.addAttribute("order", order);
 
-        //存储审批流程
-        List<WFNode> nodes = wfNodeService.findByFlowValue(DictionaryConstant.NODE_TYPE_ORDERAPPROVE);
-        User user = (User) modelMap.get(Constant.VS_USER);
-        wfNodeService.fullApprover(user, nodes);
-        modelMap.addAttribute("flowNodes", nodes);
+        //存储当前流程环节
+        FlowNode currentFlowNode = order.getFlowNode();
+        currentFlowNode.setApprover(user);
+        modelMap.addAttribute("currentFlowNode", currentFlowNode);
+
+        //存储待审批流程
+        List<FlowNode> allFlowNodes = flowNodeService.findAllOfFlow(DictionaryConstant.NODE_TYPE_ORDERAPPROVE);
+        List<FlowNode> preselectionFlowNodes = flowNodeService.findAfter(allFlowNodes, currentFlowNode);
+        flowNodeService.fullPreselectionApprover(preselectionFlowNodes, user);
+        modelMap.addAttribute("preselectionFlowNodes", preselectionFlowNodes);
+        modelMap.addAttribute("reserveFlowNodes", preselectionFlowNodes);
+
+        modelMap.addAttribute("endFlowNode", NodeType.end.getValue());
+
 
         return "/order/order/view";
     }
 
     /**
-     * 启动审批
-     * 1.设置订单节点为开始
-     * 2.保存流程节点到审批记录中
+     * 启动流程
+     * --更新业务对象流程环节为下一个流程环节
+     * --保存流程环节到预审批记录中
+     * --执行预存的审批记录
      */
     @ResponseBody
     @RequestMapping("/startApprove.do")
     public String startApprove(FlowModel flowModel, ModelMap modelMap) {
-        flowModel.setFlowType(DictionaryConstant.NODE_TYPE_ORDERAPPROVE);
-        flowModel.setModule(InitApplicationConstant.findModuleByName(Constant.MODULE_ORDER));
-        flowModel.setOperater((User) modelMap.get(Constant.VS_USER));
-        flowModel.setOperateTime(new Date());
-        wfTaskService.startFlow(flowModel);
-        JsonDto jsonDto = new JsonDto(flowModel.getId(), "启动审批成功！");
+        User user = (User) modelMap.get(Constant.VS_USER);
+
+        flowModel.setFlowValue(DictionaryConstant.NODE_TYPE_ORDERAPPROVE);
+        FlowInstance executeRecord = flowModel.getExecuteRecord();
+        executeRecord.setModule(InitApplicationConstant.findModuleByName(Constant.MODULE_ORDER));
+        executeRecord.setApprover(user);
+        executeRecord.setCreator(user);
+        executeRecord.setModifier(user);
+
+        flowInstanceService.start(flowModel);
+
+        JsonDto jsonDto = new JsonDto(executeRecord.getRecordId(), "启动审批成功！");
         return jsonDto.toString();
     }
 
     /** 跳转执行审批页面 */
     @RequestMapping("/toExecuteApprovePage.do")
-    public String toExecuteApprovePage(Long id, ModelMap modelMap) {
+    public String toExecuteApprovePage(Long id, Long flowNodeId, ModelMap modelMap) {
+        User user = (User) modelMap.get(Constant.VS_USER);
+        List<FlowNode> allFlowNodes = flowNodeService.findAllOfFlow(DictionaryConstant.NODE_TYPE_ORDERAPPROVE);
+
         //存储订单
         Order order = orderService.get(id);
         modelMap.addAttribute("order", order);
 
-        List<WFTask> futures = wfTaskService.findFuture(Constant.MODULE_ORDER, id);
-        WFTask current = futures.remove(0);
-
-        //存储审批流程
-        List<WFNode> nodes = new ArrayList<WFNode>(futures.size());
-        for (int i = 0; i < futures.size(); i++) {
-            WFTask task = futures.get(i);
-            WFNode wfNode = task.getWfNode();
-            wfNode.setApprover(task.getApprover());
-            nodes.add(wfNode);
-        }
-        wfNodeService.fullApprover((User) modelMap.get(Constant.VS_USER), nodes);
-        modelMap.addAttribute("flowNodes", nodes);
-
         //存储历史记录
-        List<WFTask> historys = wfTaskService.findHistory(Constant.MODULE_ORDER, id);
+        List<FlowInstance> historys = flowInstanceService.findExecuted(Constant.MODULE_ORDER, id, DictionaryConstant.NODE_TYPE_ORDERAPPROVE);
         modelMap.addAttribute("historyRecords", historys);
+
+        //存储当前业务流程环节
+        FlowNode businessFlowNode = order.getFlowNode();
+        businessFlowNode.setApprover(user);
+        modelMap.addAttribute("businessFlowNode", businessFlowNode);
+
+        //存储当前执行流程环节
+        FlowNode currentFlowNode = businessFlowNode;
+        if (flowNodeId != null) {
+            currentFlowNode = flowNodeService.get(flowNodeId);
+            currentFlowNode.setApprover(user);
+
+            List<FlowNode> skipFlowNodes = flowNodeService.findBetween(allFlowNodes, businessFlowNode, currentFlowNode);
+            flowNodeService.fullReserveExecutor(Constant.MODULE_ORDER, order.getId(), skipFlowNodes);
+            modelMap.addAttribute("skipFlowNodes", skipFlowNodes);
+        }
+        modelMap.addAttribute("currentFlowNode", currentFlowNode);
+
+
+        //存储下一个流程
+        FlowNode nextFlowNode = flowNodeService.findNext(allFlowNodes, currentFlowNode);
+        flowNodeService.fullPreselectionApprover(nextFlowNode, user);
+        flowNodeService.fullReserveExecutor(Constant.MODULE_ORDER, order.getId(), nextFlowNode);
+        modelMap.addAttribute("nextFlowNode", nextFlowNode);
+
+        //存储待审批流程
+        List<FlowNode> preselectionFlowNodes = flowNodeService.findAfter(allFlowNodes, currentFlowNode);
+        flowNodeService.fullReserveExecutor(Constant.MODULE_ORDER, order.getId(), preselectionFlowNodes);
+        modelMap.addAttribute("reserveFlowNodes", preselectionFlowNodes);
+
+        modelMap.addAttribute("endFlowNode", NodeType.end.getValue());
 
         return "/order/order/view";
     }
 
-    /** 执行审批 */
+    /**
+     * 执行审批
+     * --更新业务对象流程环节为下一个流程环节
+     * --执行预存的审批记录
+     * --更新下一个预存的审批记录的审批人
+     */
     @ResponseBody
     @RequestMapping("/executeApprove.do")
-    public String executeApprove(Long id, ModelMap modelMap) {
+    public String executeApprove(FlowModel flowModel, ModelMap modelMap) {
+        User user = (User) modelMap.get(Constant.VS_USER);
 
-        return "/order/order/view";
+        flowModel.setFlowValue(DictionaryConstant.NODE_TYPE_ORDERAPPROVE);
+
+        FlowInstance executeRecord = flowModel.getExecuteRecord();
+        executeRecord.setModule(InitApplicationConstant.findModuleByName(Constant.MODULE_ORDER));
+        executeRecord.setApprover(user);
+        executeRecord.setCreator(user);
+        executeRecord.setModifier(user);
+
+        flowInstanceService.execute(flowModel);
+        JsonDto jsonDto = new JsonDto(executeRecord.getRecordId(), "执行审批成功！");
+        return jsonDto.toString();
     }
 
 }

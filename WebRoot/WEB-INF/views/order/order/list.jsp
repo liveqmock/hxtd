@@ -10,27 +10,37 @@
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
 <html>
 <head>
-    <title>订单列表</title>
-    <link rel="stylesheet" href="${ctx}/static/css/application.css" type="text/css"/>
-    <link rel="stylesheet" href="${ctx}/static/css/recommend/detail.css" type="text/css"/>
-    <script type="text/javascript" src="${ctx}/static/js/jquery-json.2.4.js"></script>
-    <script type="text/javascript" src="${ctx}/static/js/jquery-jtemplates.js"></script>
-    <script type="text/javascript" src="${ctx}/static/js/js-util.common.js"></script>
-    <script type="text/javascript" src="${ctx}/static/js/scrollTitle.js?v=1"></script>
-    <script type="text/javascript" src="${ctx}/static/js/pacs.js"></script>
-    <script type="text/javascript">${applicationScope.VC_PCAS}</script>
-    <script type="text/javascript">
-        $(function () {
-            jsUtil.datepicker(".time");//加载时间控件
-            jsUtil.datepickerNotNow(".time1");
-            window.grid = new Grid().init().bindExport();
-        });
-    </script>
+<title>订单列表</title>
+<link rel="stylesheet" href="${ctx}/static/css/application.css" type="text/css"/>
+<link rel="stylesheet" href="${ctx}/static/css/recommend/detail.css" type="text/css"/>
+<script type="text/javascript" src="${ctx}/static/js/jquery-json.2.4.js"></script>
+<script type="text/javascript" src="${ctx}/static/js/jquery-jtemplates.js"></script>
+<script type="text/javascript" src="${ctx}/static/js/js-util.common.js"></script>
+<script type="text/javascript" src="${ctx}/static/js/scrollTitle.js?v=1"></script>
+<script type="text/javascript" src="${ctx}/static/js/pacs.js"></script>
+<script type="text/javascript">${applicationScope.VC_PCAS}</script>
+<script type="text/javascript">
+$(function () {
+    jsUtil.datepicker(".time");//加载时间控件
+    jsUtil.datepickerNotNow(".time1");
+    window.grid = new Grid().init().bindExport();
+
+    window.executeFlowNode = function (current, executeable) {
+
+    }
+});
+
+function getProduct(id){
+	jsUtil.dialogIframe("${ctx}/project/product/toViewPage.comp?id="+id, "产品信息", 800, 470);
+}
+function getCustomer(id){
+	jsUtil.dialogIframe("${ctx}/customer/customer/toViewPage.comp?id="+id, "客户信息", 800, 700);
+}
+</script>
 </head>
 <body>
 <div class="listcontainer">
-    <form id="form" action="${ctx}/order/order/query.do"
-          onsubmit="return false;">
+    <form id="form" action="${ctx}/order/order/query.do" onsubmit="return false;">
         <table class="fl mt5 w">
             <tr>
                 <td class="f14 namewidth1" align="right">订单编号：</td>
@@ -140,7 +150,7 @@
                 <th width="12%" class="sortable orderby" orderby="createdTime">创建时间</th>
                 <th width="4%">修改者</th>
                 <th width="12%" class="sortable orderby" orderby="modifiedTime">最后修改时间</th>
-                <th width="12%" align="center">操作</th>
+                <th width="15%" align="center">操作</th>
             </tr>
             <tbody class="list"></tbody>
         </table>
@@ -157,9 +167,23 @@
                         <c:otherwise>{$T.row.code}</c:otherwise>
                     </c:choose>
                 </td>
-                <td>{$T.row.customer.name}</td>
+                <td>
+                	<c:choose>
+                        <c:when test="${VS_HAS_FUNCTIONS.customerView}">
+                            <a href="javascript:getCustomer({$T.row.customer.id})" class="toviewpage">{$T.row.customer.name}</a>
+                        </c:when>
+                        <c:otherwise>{$T.row.customer.name}</c:otherwise>
+                    </c:choose>
+                </td>
                 <td>{$T.row.purchaseMoney}</td>
-                <td>{$T.row.product.name}</td>
+                <td>
+                	<c:choose>
+                        <c:when test="${VS_HAS_FUNCTIONS.productView}">
+                            <a href="javascript:getProduct({$T.row.product.id})" class="toviewpage">{$T.row.product.name}</a>
+                        </c:when>
+                        <c:otherwise>{$T.row.product.name}</c:otherwise>
+                    </c:choose>
+                </td>
                 <td>{$T.row.status.name}</td>
                 <td>{$T.row.owner.realName}</td>
                 <td>{$T.row.creator.realName}</td>
@@ -176,15 +200,17 @@
                     <c:if test="${VS_HAS_FUNCTIONS.orderDelete}">
                         <a href="javascript:void(0)" uri="${ctx}/order/order/delete.do?id={$T.row.id}" title="删除" class="delete  block_inline s_dump_btn globle_img ml10"></a>
                     </c:if>
+                    <c:if test="${VS_HAS_FUNCTIONS.orderAdd}">
+                        <a href="${ctx}/order/order/toAddPage.do?type=second&id={$T.row.id}" title="再次购买" class="block_inline s_buy globle_img ml10"></a>
+                    </c:if>
                     <c:if test="${VS_HAS_FUNCTIONS.orderStartApprove}">
-                        <%--订单审批流程未启动&&(所有者==当前用户||当前用户能够启动的流程环节包含当前数据对应环节)--%>
-                        {#if !$T.row.status&&$T.row.owner.id==${VS_USER.id}}
+                        {#if $T.row.status.type==${startNodeType}&&$T.row.owner.id==${VS_USER.id}}
                         <a href="${ctx}/order/order/toStartApprovePage.do?id={$T.row.id}" title="启动审批" class="block_inline s_onapprove globle_img ml10"></a>
                         {#/if}
                     </c:if>
                     <c:if test="${VS_HAS_FUNCTIONS.orderExecuteApprove}">
-                        {#if ${nodeIds}.indexOf($T.row.status.id)>-1}
-                        <a href="${ctx}/order/order/toExecuteApprovePage.do?id={$T.row.id}" title="进行审批" class="block_inline s_goapprove globle_img ml10"></a>
+                        {#if $T.row.status.type==${businessNodeType}&&$T.row.status.executeFlowNode}
+                        <a href="${ctx}/order/order/toExecuteApprovePage.do?id={$T.row.id}&flowNodeId={$T.row.status.executeFlowNode.id}" title="进行审批" class="block_inline s_goapprove globle_img ml10"></a>
                         {#/if}
                     </c:if>
                 </td>

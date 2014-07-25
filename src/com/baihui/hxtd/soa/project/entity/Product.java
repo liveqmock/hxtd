@@ -1,5 +1,6 @@
 package com.baihui.hxtd.soa.project.entity;
 
+import java.io.Serializable;
 import java.math.BigDecimal;
 import java.util.Date;
 
@@ -29,8 +30,11 @@ import com.fasterxml.jackson.annotation.JsonFormat;
  */
 @Entity
 @Table(name = "PRODUCT")
-public class Product {
+public class Product implements Serializable{
 	
+	
+	private static final long serialVersionUID = -8432613162378587800L;
+
 	public Product(){}
 	
 	/**

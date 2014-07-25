@@ -27,7 +27,7 @@ public class ImportMessage {
 	public final static int LIMIT_COUNT=10001;
 	
 	/** 导入的excel记录总条数 */
-	private  int totalCount;
+	public static int totalCount;
 	
 	/** 成功导入数据提示 */
 	private String successMessage;
@@ -41,10 +41,8 @@ public class ImportMessage {
 	/**将上面这组数据保存到Map集合中.key=唯一键,value=重复记录的excel序号集合*/
 	public static Map<String, Set<Integer>> workbookRepeats = new HashMap<String,Set<Integer>>();
 	
-	/**格式错误记录的excel序号集合*/
-	public static List<Integer> invalidFormatRowNums = new ArrayList<Integer>();
 	
-	
+	/**excel数据格式错误记录的excel序号集合*/
 	public static Map<Integer, String> invalidFormatRowNumMap = new HashMap<Integer, String>();
 	
 	/** 在数据库中已经存在的记录的excel序号集合 */
@@ -61,8 +59,8 @@ public class ImportMessage {
 	/** 
 	 * excel导入数据量提示信息
 	 */
-	public static String limitMessage(int totalCount){
-		String msg = "共导入" + totalCount + "条，超过最大导入" + ImportMessage.LIMIT_COUNT + "条限制的" + (totalCount-ImportMessage.LIMIT_COUNT) + "条数据已忽略";
+	public static String limitMessage(){
+		String msg = "共导入[" + ImportMessage.totalCount + "]条，超过最大导入[" + ImportMessage.LIMIT_COUNT + "]条限制的[" + (ImportMessage.totalCount-ImportMessage.LIMIT_COUNT) + "]条数据已忽略";
 		return msg;
 	}
 
@@ -112,17 +110,13 @@ public class ImportMessage {
 		StringBuffer msg = new StringBuffer("数据格式["+ ImportMessage.invalidFormatRowNumMap.size() + " ]条"+"错误 。" );
 		if (ImportMessage.invalidFormatRowNumMap.size() > 0) {
 			Set<Integer> keySet = ImportMessage.invalidFormatRowNumMap.keySet();
-			msg.append(",他们分别是[" );
+			msg.append("他们分别是[" );
 			for(Integer key:keySet){
-				msg.append( ImportMessage.invalidFormatRowNumMap.get(key) + ", ");
+				msg.append( ImportMessage.invalidFormatRowNumMap.get(key) );
 				
 			}
-			/*msg.append(b)
-			for (int i = 0; i < ImportMessage.invalidFormatRowNums.size(); i++) {
-				msg.append(ImportMessage.invalidFormatRowNumMap.get(ImportMessage.invalidFormatRowNums.get(i)) + ", ");
-			}*/
 			
-			msg.deleteCharAt(msg.lastIndexOf(","));
+			//msg.deleteCharAt(msg.lastIndexOf(","));
 			msg.append("]");
 		}
 
@@ -164,11 +158,24 @@ public class ImportMessage {
 	 * 导入数据结果
 	 * 成功导入:新增记录数+修改的记录数
 	 * 失败导入:唯一键重复的记录+格式无效的记录
+	 * ImportMessage.workbookRepeatRowNums.size()与ImportMessage.workbookRepeats .size()的关系
+	 * ImportMessage.workbookRepeatRowNums.size():记录的是所有重复数据的行号,例
+	 * 如{1-2-3,4-7,12-34,56-76-89},这里有四组重复数据
+	 * ImportMessage.workbookRepeats .size():记录的是每一组重复数据,集合第一个元素:1-2-3,第二个元素4-7,
+	 * 第三个元素12-34,第四个元素:56-76-89.这四组数据中只有四条是有效的:那就是3,7,34,89.而剩下的是无效数据
+	 * 无效数据的个数就是ImportMessage.workbookRepeatRowNums.size() - ImportMessage.workbookRepeats .size()的结果.
+	 * 
 	 * @return
 	 */
 	public static String importResult(){
-		String msg = "成功导入 [ " + (ImportMessage.databaseNewRowNums.size() + ImportMessage.databaseRepeatRowNums.size() )+ " ]条,失败导入[ " + (ImportMessage.workbookRepeatRowNums.size()-ImportMessage.workbookRepeats .size()+ImportMessage.invalidFormatRowNums.size()) + " ]条";
-		return msg;
+		StringBuffer msg = new StringBuffer();
+		if(ImportMessage.totalCount>=10001){
+			msg.append(limitMessage()+",");
+		}else {
+			msg.append("共导入[" + ImportMessage.totalCount + "]条,");
+		}
+		msg.append("成功导入 [ " + (ImportMessage.databaseNewRowNums.size() + ImportMessage.databaseRepeatRowNums.size() )+ " ]条,失败导入[ " + (ImportMessage.workbookRepeatRowNums.size()-ImportMessage.workbookRepeats .size() + invalidFormatRowNumMap.size()) + " ]条");
+		return msg.toString();
 	}
 	
 	public static void main(String[] args){
@@ -180,14 +187,6 @@ public class ImportMessage {
 	
 	
 	
-
-	public int getTotalCount() {
-		return totalCount;
-	}
-
-	public void setTotalCount(int totalCount) {
-		this.totalCount = totalCount;
-	}
 
 	public String getSuccessMessage() {
 		return successMessage;
@@ -206,27 +205,8 @@ public class ImportMessage {
 	}
 
 
-	public List<Integer> getInvalidFormatRowNums() {
-		return invalidFormatRowNums;
-	}
 
-	
 
-	public List<Integer> getDatabaseNewRowNums() {
-		return databaseNewRowNums;
-	}
-
-	public void setDatabaseNewRowNums(List<Integer> databaseNewRowNums) {
-		this.databaseNewRowNums = databaseNewRowNums;
-	}
-
-	public Set<Integer> getWorkbookRepeatRowNums() {
-		return workbookRepeatRowNums;
-	}
-
-	public void setWorkbookRepeatRowNums(Set<Integer> workbookRepeatRowNums) {
-		this.workbookRepeatRowNums = workbookRepeatRowNums;
-	}
 
 	public static Map<String, Set<Integer>> getWorkbookRepeats() {
 		return workbookRepeats;
@@ -245,17 +225,6 @@ public class ImportMessage {
 		ImportMessage.invalidFormatRowNumMap = invalidFormatRowNumMap;
 	}
 
-	public Set<Integer> getDatabaseRepeatRowNums() {
-		return databaseRepeatRowNums;
-	}
-
-	public static void setInvalidFormatRowNums(List<Integer> invalidFormatRowNums) {
-		ImportMessage.invalidFormatRowNums = invalidFormatRowNums;
-	}
-
-	public void setDatabaseRepeatRowNums(Set<Integer> databaseRepeatRowNums) {
-		this.databaseRepeatRowNums = databaseRepeatRowNums;
-	}
 
 	public static String getMessage() {
 		return message;

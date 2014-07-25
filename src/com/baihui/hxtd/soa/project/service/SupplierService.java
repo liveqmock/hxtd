@@ -1,6 +1,5 @@
 package com.baihui.hxtd.soa.project.service;
 
-import java.util.Date;
 import java.util.List;
 import java.util.Map;
 
@@ -135,10 +134,8 @@ public class SupplierService {
      * @Title: delete
      */
     public boolean delete(Long[] id,AuditLog[] auditLogArr) {
-    	if(projectDao.getCount(id)==0){
+    	if(projectDao.getCount(id)==0&&contactDao.getCount(id, "supplier")==0){
     		supplierDao.logicalDelete(id);
-    		return true;
-    	}else if(contactDao.getCount(id, "supplier")==0){
     		return true;
     	}
     	return false;

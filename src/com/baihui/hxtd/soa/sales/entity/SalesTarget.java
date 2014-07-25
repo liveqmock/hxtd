@@ -14,8 +14,6 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
-import com.baihui.hxtd.soa.system.entity.Dictionary;
-import com.baihui.hxtd.soa.system.entity.Organization;
 import com.baihui.hxtd.soa.system.entity.User;
 import com.fasterxml.jackson.annotation.JsonFormat;
 /**
@@ -44,24 +42,34 @@ public class SalesTarget {
 	@Column(name="TITLE")
 	private String title;
 	/**
-	 * 组织机构
+	 * 标题
+	 */
+	@Column(name="TIME_STR")
+	private String timeStr;
+	/**
+	 * 定制目标的人员
 	 */
 	@ManyToOne(fetch = FetchType.LAZY)
-	@JoinColumn(name = "ORG_ID")
-	private Organization org;
+	@JoinColumn(name = "OWNER_ID",updatable=false)
+	private User owner;
 	
 	/**
 	 * 目标成交额
 	 */
 	@Column(name="BARGAIN_MONEY")
 	private BigDecimal bargainMoney;
-	
 	/**
-	 * 时间单位
+	 * 开始时间
 	 */
-	@ManyToOne(fetch=FetchType.LAZY)
-	@JoinColumn(name="UNIT_DIC")
-	private Dictionary unitDic;
+	@Column(name="BEGIN_TIME")
+	@JsonFormat(pattern = "yyyy-MM-dd", timezone = "GMT+08:00")
+	private Date beginTime;
+	/**
+	 * 结束时间
+	 */
+	@Column(name="END_TIME")
+	@JsonFormat(pattern = "yyyy-MM-dd", timezone = "GMT+08:00")
+	private Date endTime;
 	
 	/** 备注 */
 	@Column(name = "REMARK", length = 512)
@@ -107,12 +115,12 @@ public class SalesTarget {
 		this.title = title;
 	}
 
-	public Organization getOrg() {
-		return org;
+	public User getOwner() {
+		return owner;
 	}
 
-	public void setOrg(Organization org) {
-		this.org = org;
+	public void setOwner(User owner) {
+		this.owner = owner;
 	}
 
 	public BigDecimal getBargainMoney() {
@@ -123,12 +131,28 @@ public class SalesTarget {
 		this.bargainMoney = bargainMoney;
 	}
 
-	public Dictionary getUnitDic() {
-		return unitDic;
+	public Date getBeginTime() {
+		return beginTime;
 	}
 
-	public void setUnitDic(Dictionary unitDic) {
-		this.unitDic = unitDic;
+	public void setBeginTime(Date beginTime) {
+		this.beginTime = beginTime;
+	}
+
+	public Date getEndTime() {
+		return endTime;
+	}
+
+	public void setEndTime(Date endTime) {
+		this.endTime = endTime;
+	}
+
+	public String getTimeStr() {
+		return timeStr;
+	}
+
+	public void setTimeStr(String timeStr) {
+		this.timeStr = timeStr;
 	}
 
 	public String getRemark() {

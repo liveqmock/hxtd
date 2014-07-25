@@ -85,7 +85,7 @@ function searchData(action){ // 搜索
 			</td>
 		</tr>
 		<tr>
-			<td align="right"><span class="w_red">*&nbsp;</span>出售金额：</td>
+			<td align="right"><span class="w_red">*&nbsp;</span>出售金额（万）：</td>
 			<td align="left">
 				<fmt:formatNumber value="${product.sellMoney}" pattern="###,##0.00" var="sellMoney"/>
 				<input type="text" value="${sellMoney}" class="text_input3 right required money" style="ime-mode:disabled"/>
@@ -97,7 +97,7 @@ function searchData(action){ // 搜索
 			</td>
 		</tr>
 		<tr>
-			<td align="right">预期收益：</td>
+			<td align="right">预期收益（万）：</td>
 			<td align="left">
 				<fmt:formatNumber value="${product.expectProfit}" pattern="###,##0.00" var="expectProfit"/>
 				<input type="text" value="${expectProfit}" class="right text_input3 money" style="ime-mode:disabled"/>

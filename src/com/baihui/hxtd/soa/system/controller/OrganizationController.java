@@ -87,7 +87,7 @@ public class OrganizationController {
         logger.info("存储分页数据");
         HibernatePage<User> userPage = new HibernatePage<User>();
         userPage.setHibernateOrderBy("createdTime");
-        userPage.setHibernateOrder(HibernatePage.ASC);
+        userPage.setHibernateOrder(HibernatePage.DESC);
         model.addAttribute("userPage", userPage);
 
         page.setHibernateOrderBy("order");
@@ -120,6 +120,8 @@ public class OrganizationController {
         logger.debug("组织序号区间值“[{},{}]”", orderMin, orderMax);
 
         logger.info("获取分页数据");
+        page.setHibernateOrderBy("order");
+        page.setHibernateOrder(HibernatePage.ASC);
         page = organizationService.findPage(searchParams, page);
         logger.debug("数目“{}”", page.getResult().size());
 

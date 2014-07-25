@@ -144,7 +144,8 @@ public class MarketActivityController {
 		User user = (User) model.get(Constant.VS_USER);
 		Date date = new Date();
 		MarketActivity entity = new MarketActivity();
-		entity.setSponsor(user);
+		entity.setSponsor(user); //所有者
+		entity.setBossHead(user); //负责人
 		entity.setTimes(Long.parseLong("1"));
 		entity.setBeginDate(date);
 		entity.setEndDate(date);
@@ -170,12 +171,6 @@ public class MarketActivityController {
 		activity.setCreator(user);
 		activity.setCreatedTime(date);
 		activity.setModifier(user);
-		if(activity.getStatusDic().getId() == null){
-			activity.setStatusDic(null);
-		}
-		if(activity.getTypeDic().getId() == null){
-			activity.setTypeDic(null);
-		}
 		
 		/************ 新增 *****************************/
 		AuditLog auditLog = new AuditLog(EnumModule.MARKETACTIVITY.getModuleName(), 
@@ -211,12 +206,6 @@ public class MarketActivityController {
 	@RequestMapping(value = "/modify.do")
 	public String modify(MarketActivity activity, 
 			@ModelAttribute(Constant.VS_USER_ID) Long userId) {
-		if(activity.getStatusDic().getId() == null){
-			activity.setStatusDic(null);
-		}
-		if(activity.getTypeDic().getId() == null){
-			activity.setTypeDic(null);
-		}
 		User user = new User(userId);
 		activity.setModifier(user);
 		

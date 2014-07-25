@@ -1,4 +1,4 @@
-TRUNCATE TABLE attachment;
+TRUNCATE table attachment;
 TRUNCATE table contact;
 TRUNCATE table customer;
 TRUNCATE table lead;
@@ -35,3 +35,5 @@ TRUNCATE table contract;
 TRUNCATE table sm_user_position;
 TRUNCATE table pro_city_area;
 TRUNCATE table sm_dictionary;
+TRUNCATE table wf_node;
+TRUNCATE table wf_task;

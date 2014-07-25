@@ -30,9 +30,10 @@ public class ErrorController {
 
     @RequestMapping(value = "/adapter.do")
     public void adapter(HttpServletRequest request, HttpServletResponse response) throws IOException, ServletException {
-        logger.info("异常适配处理");
+        logger.info("异常适配处理{}", request.getRequestURI());
         Exception exception = (Exception) request.getAttribute(SimpleMappingExceptionResolver.DEFAULT_EXCEPTION_ATTRIBUTE);
         logger.error("捕获到异常", exception);
+
 
         logger.info("返回失败结果");
         if (RequestUtil.isAjax(request)) {
@@ -49,7 +50,18 @@ public class ErrorController {
         }
         request.setAttribute(Constant.VM_BUSINESS, exception.getMessage());
         logger.debug("是一个常规请求，转至“{}”页面", errorForwardUri);
-        request.getRequestDispatcher(errorForwardUri).forward(request, response);
+
+        try {
+            if (!response.isCommitted()) {
+                request.getRequestDispatcher(errorForwardUri).forward(request, response);
+            } else {
+                logger.warn("response 已经提交，不进行页面跳转！");
+            }
+        } catch (ServletException e) {
+            logger.error("跳转异常", e);
+        } catch (IOException e) {
+            logger.error("跳转异常", e);
+        }
     }
 
     @RequestMapping(value = "/{code}.do")

@@ -33,7 +33,9 @@ import com.baihui.hxtd.soa.base.utils.ImportExport;
 import com.baihui.hxtd.soa.base.utils.Search;
 import com.baihui.hxtd.soa.base.utils.mapper.HibernateAwareObjectMapper;
 import com.baihui.hxtd.soa.common.controller.CommonController;
+import com.baihui.hxtd.soa.customer.entity.Contact;
 import com.baihui.hxtd.soa.customer.entity.Customer;
+import com.baihui.hxtd.soa.customer.service.ContactService;
 import com.baihui.hxtd.soa.customer.service.CustomerService;
 import com.baihui.hxtd.soa.system.entity.AuditLog;
 import com.baihui.hxtd.soa.system.entity.Dictionary;
@@ -67,6 +69,8 @@ public class CustomerController extends CommonController<Customer>{
 	@Resource
 	 private DictionaryService dictionaryService;
 	
+	@Resource
+	 private ContactService contactService;
 	@InitBinder
     public void initBinder(WebDataBinder binder) {
         SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
@@ -106,7 +110,7 @@ public class CustomerController extends CommonController<Customer>{
 	 * @return
 	 */
 	@RequestMapping("/toQueryPage.do")
-	public String toQueryPage(Model  model) {
+	public String toQueryPage(ModelMap  model) {
 		logger.info("CustomerController.toQueryPage跳转客户列表页");
 		List<Dictionary> dict = dictionaryService.findChildren("040301");
 		StringBuffer sb = new StringBuffer("[");
@@ -138,7 +142,7 @@ public class CustomerController extends CommonController<Customer>{
 	 */
 	@RequestMapping(value = "/toViewPage.do")
 	public String view(@RequestParam(required = false) String type,
-			@RequestParam(required = false) Long id, Model model) {
+			@RequestParam(required = false) Long id, ModelMap model) {
 		logger.info("CustomerController.view查询组件");
 		String funcUrl="";
 		String returnStr="/customer/customer/view";
@@ -148,11 +152,22 @@ public class CustomerController extends CommonController<Customer>{
 			returnStr= "/customer/customer/edit";
 		}
 		customer = customerService.getById(id);
+		List<Contact> contacts=contactService.findContactByCustomer(customer);
 		//获取所有数据字典类型
 		getDictionary(model);
+		model.addAttribute("contacts",contacts);
 		model.addAttribute("customer",customer);
 		model.addAttribute("funcUrl", funcUrl);
 		return returnStr;
+	}
+	
+	@RequestMapping(value = "/toViewPage.comp")
+	public String viewComp(@RequestParam(required = false) String type,
+			@RequestParam(required = false) Long id, ModelMap model) {
+		logger.info("CustomerController.view查询组件");
+		Customer customer  = customerService.getById(id);
+		model.addAttribute("customer",customer);
+		return "/customer/customer/viewcomp";
 	}
 	
 	/**
@@ -205,12 +220,14 @@ public class CustomerController extends CommonController<Customer>{
 	 * @return
 	 */
 	@RequestMapping(value = "/toAddPage.do")
-	public String toAddPage( Model model){
+	public String toAddPage( ModelMap model){
 		logger.info("CustomerController.toAddPage新建客户");
 		String funcUrl="/customer/customer/add.do";
 		model.addAttribute("funcUrl", funcUrl);
 		//获取所有数据字典类型
 		getDictionary(model);
+		Customer customer=new Customer();
+		customer.setOwner((User) model.get(Constant.VS_USER));
 		return "/customer/customer/edit";
 	}
 	
@@ -287,7 +304,7 @@ public class CustomerController extends CommonController<Customer>{
      * 获取所有数据字典类型
      * @author huizijing
      */
-	public void getDictionary(Model model){
+	public void getDictionary(ModelMap model){
 		//设置客户类型
 		List<Dictionary> cType = dictionaryService.findChildren("040301");
 		model.addAttribute("cType",cType);
@@ -339,6 +356,18 @@ public class CustomerController extends CommonController<Customer>{
 		}
 		if(null==customer.getCounty().getId()){
 			customer.setCounty(null);
+		}
+		if(customer.getAppointment().getId()==null||customer.getAppointment()==null){
+			customer.setAppointment(null);
+		}
+		if(customer.getFinancialAdvisor().getId()==null||customer.getFinancialAdvisor()==null){
+			customer.setFinancialAdvisor(null);
+		}
+		if(customer.getFinancialDirector().getId()==null||customer.getFinancialDirector()==null){
+			customer.setFinancialDirector(null);
+		}
+		if(customer.getFinancialManager().getId()==null||customer.getFinancialManager()==null){
+			customer.setFinancialManager(null);
 		}
 	}
 	  /**

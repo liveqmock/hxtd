@@ -83,7 +83,7 @@
                             <td align="left">
                                 <c:choose>
                                     <c:when test="${user.id==null}">
-                                        <input type="text" maxlength="20" class="{required:true,userName:true,maxlength:32,unique:['User','${user.id}']} text_input3 " name="name" value="${user.name}"/>
+                                        <input type="text" maxlength="20" class="{required:true,userName:true,maxlength:30,unique:['User','${user.id}']} text_input3" name="name" value="${user.name}"/>
                                     </c:when>
                                     <c:otherwise>
                                         <input readonly maxlength="20" type="text" class="text_input3" name="name" value="${user.name}"/>
@@ -94,7 +94,7 @@
                             <td align="left">
                             	<c:choose>
                                   <c:when test="${user.id==null}">
-                                  <input type="password" class="{required:true,maxlength:64} text_input3" name="password" value="${user.password}"/>
+                                  <input type="password" class="{required:true,maxlength:64} text_input3 password" name="password" value="${user.password}"/>
                                   </c:when>
                                   <c:otherwise>
                                   <input type="password" readonly class="{required:true,maxlength:64} text_input3" name="password" value="${user.password}"/>

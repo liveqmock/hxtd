@@ -92,9 +92,9 @@ function clearInputVal(obj){//清除
 	<div class="ml35 mr35 bg_c_blue cb">
 		<h1 class="f14 fbnone ml40 pt10">
 			基本信息
+			<input type="hidden" name="id" value="${project.id}" />
 		</h1>
 		<table class="cb id_table3 w95b bg_c_white margin0 mt10">
-			<input type="hidden" name="id" value="${project.id}" />
 			<tr>
 				<td align="right" width="15%">
 					项目名：
@@ -114,11 +114,11 @@ function clearInputVal(obj){//清除
 
 			<tr>
 				<td align="right">
-					融资额度：
+					融资额度（万）：
 				</td>
 				<td align="left">
 					<input type="text" name="financeLimit"
-						value="${project.financeLimit }" class="text_input3 number">
+						value="${project.financeLimit }" class="text_input3 number required">
 				</td>
 				<td align="right">
 					开始时间：
@@ -128,7 +128,7 @@ function clearInputVal(obj){//清除
 						pattern="yyyy-MM-dd" var="beginTime" />
 					<a href="javascript:;" class="pa time_closenone1"></a>
 					<input type="text" value="${beginTime }" name="beginTime"
-						class="time text_input3 input_close1" readonly/>
+						class="time text_input3 input_close1 required" readonly/>
 				</td>
 			</tr>
 
@@ -139,7 +139,7 @@ function clearInputVal(obj){//清除
 				<td align="left">
 					<input type="text" name="beforeFinanceCycle"
 						value="${project.beforeFinanceCycle }"
-						class="text_input3 number">
+						class="text_input3 number required">
 				</td>
 				<td align="right">
 					截止时间：
@@ -149,24 +149,24 @@ function clearInputVal(obj){//清除
 						pattern="yyyy-MM-dd" var="dendlineTime" />
 					<a href="javascript:;" class="pa time_closenone1"></a>
 					<input type="text" value="${dendlineTime}" name="dendlineTime"
-						class="time text_input3 input_close1" readonly>
+						class="time text_input3 input_close1 required" readonly>
 				</td>
 			</tr>
 
 			<tr>
 				<td align="right">
-					融资周期：
+					融资周期（天）：
 				</td>
 				<td align="left">
 					<input type="text" name="financeCycle"
-						value="${project.financeCycle }" class="text_input3 number">
+						value="${project.financeCycle }" class="text_input3 number required">
 				</td>
 				<td align="right">
 					收益率（%）：
 				</td>
 				<td align="left">
 					<input type="text" name="er" value="${project.er }"
-						class="text_input3 number">
+						class="text_input3 number required">
 				</td>
 			</tr>
 
@@ -175,7 +175,7 @@ function clearInputVal(obj){//清除
 					支付方式：
 				</td>
 				<td align="left">
-					<select name="payType.id" class="select1">
+					<select name="payType.id" class="select1 required">
 						<option value="">--请选择--</option>
 						<c:forEach items="${payType}" var="p">
 							<option value="${p.id}"
@@ -189,7 +189,7 @@ function clearInputVal(obj){//清除
 				</td>
 				<td align="left">
 					<input type="text" name="aer" value="${project.aer }"
-						class="text_input3 number">
+						class="text_input3 number required">
 				</td>
 			</tr>
 
@@ -214,7 +214,7 @@ function clearInputVal(obj){//清除
 						var="openTime" />
 					<a href="javascript:;" class="pa time_closenone1"></a>
 					<input type="text" value="${openTime}" name="openTime"
-						class="text_input3 time input_close1" readonly>
+						class="text_input3 time input_close1 required" readonly>
 				</td>
 			</tr>
 
@@ -228,7 +228,7 @@ function clearInputVal(obj){//清除
 					备注：
 				</td>
 				<td align="left" width="85%">
-					<textarea name="remark" class="remarks_input1">${project.remark}</textarea>
+					<textarea name="remark" class="remarks_input1 {maxlength:512}">${project.remark}</textarea>
 				</td>
 
 			</tr>

@@ -36,5 +36,12 @@ public class OrderDao extends HibernateDAOImpl<Order, Long> {
 	}
 	
 	
+	public Order save(Order order){
+		if(order.getStatus()!=null&&order.getStatus().getId()==null){
+			order.setStatus(null);
+		}
+		return super.save(order);
+	}
+	
 	
 }

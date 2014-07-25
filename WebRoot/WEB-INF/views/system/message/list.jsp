@@ -157,16 +157,27 @@
                         <c:otherwise>{$T.row.message.title}</c:otherwise>
                     </c:choose>
                 </td>
-                <td align="left">{$T.row.message.creator.realName}</td>
+                <td>
+		 			<c:choose>
+		            <c:when test="${userMessage.message.creator.id==null}">系统发送</c:when>
+		            <c:otherwise>${userMessage.message.creator.realName}</c:otherwise>
+		            </c:choose>	
+				</td>
                 <td>{$T.row.createdTime}</td>
                 <td>{$T.row.user.realName}</td>
                 <td align="left">
                     <c:if test="${VS_HAS_FUNCTIONS.messageView}">
                         <a href="${ctx}/system/message/toViewPage.do?id={$T.row.id}" title="详情" class=" block_inline s_detail_btn globle_img ml10"></a>
                     </c:if>
-                    <c:if test="${VS_HAS_FUNCTIONS.messageModify}">
+                    <c:choose>
+		            <c:when test="${userMessage.message.creator.createdTime==null}"></c:when>
+		            <c:otherwise>
+					<c:if test="${VS_HAS_FUNCTIONS.messageModify}">
                         <a href="${ctx}/system/message/toViewPage.do?id={$T.row.id}&type=edit" title="回复" class=" block_inline s_reply globle_img ml10"></a>
                     </c:if>
+					</c:otherwise>
+		            </c:choose>	
+                    
                     <c:if test="${VS_HAS_FUNCTIONS.messageDelete}">
                         <a href="javascript:void(0)" class=" block_inline s_dump_btn globle_img ml10 delete" title="删除" uri="${ctx}/system/message/delete.do?id={$T.row.id}"></a>
                     </c:if>

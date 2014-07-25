@@ -36,8 +36,8 @@ public class CustomerDTO implements Serializable {
 			Dictionary riskGrade, Dictionary cardType, String cardNum, String dept,String job,
 			String postCode, Dictionary ownerShip, Dictionary openBank, String bankName, String bankAccount,
 			PCAS province, PCAS city, PCAS county, String address, String contributionType, 
-			String contributionScale, String appointment, String financialAdvisor, String financialManager,
-			String financialDirector, String remark,int excelRowNum){
+			String contributionScale, User appointment, User financialAdvisor, User financialManager,
+			User financialDirector, String remark,int excelRowNum){
 		this.owner = owner;//0
 		this.name = name;//1
 		this.company = company;//2
@@ -84,7 +84,7 @@ public class CustomerDTO implements Serializable {
 				
 				(PCAS)list.get(20), (PCAS)list.get(21), (PCAS)list.get(22),
 				(String)list.get(23), (String)list.get(24), (String)list.get(25),
-				(String)list.get(26), (String)list.get(27), (String)list.get(28),(String)list.get(29),
+				(User)list.get(26), (User)list.get(27), (User)list.get(28),(User)list.get(29),
 				(String)list.get(30), (Integer)list.get(31));
 	}
 
@@ -243,26 +243,30 @@ public class CustomerDTO implements Serializable {
 	/**
 	 * 理财顾问
 	 */
-	@Column(name = "FINANCIAL_ADVISOR")
-	private String financialAdvisor;
+	@ManyToOne(fetch = FetchType.LAZY)
+	@JoinColumn(name = "FINANCIAL_ADVISOR")
+	private User financialAdvisor;
 	
 	/**
 	 * 理财经理
 	 */
-	@Column(name = "FINANCIAL_MANAGER")
-	private String financialManager;
+	@ManyToOne(fetch = FetchType.LAZY)
+	@JoinColumn(name = "FINANCIAL_MANAGER")
+	private User financialManager;
 	
 	/**
 	 * 邀约人
 	 */
-	@Column(name = "APPOINTMENT")
-	private String appointment;
+	@ManyToOne(fetch = FetchType.LAZY)
+	@JoinColumn(name = "APPOINTMENT")
+	private User appointment;
 
 	/**
 	 * 理财总监
 	 */
-	@Column(name = "FINANCIAL_DIRECTOR")
-	private String financialDirector;
+	@ManyToOne(fetch = FetchType.LAZY)
+	@JoinColumn(name = "FINANCIAL_DIRECTOR")
+	private User financialDirector;
 
 	/**
 	 * 所在部门
@@ -538,37 +542,7 @@ public class CustomerDTO implements Serializable {
 		this.familyAddr = familyAddr;
 	}
 
-	public String getFinancialAdvisor() {
-		return financialAdvisor;
-	}
-
-	public void setFinancialAdvisor(String financialAdvisor) {
-		this.financialAdvisor = financialAdvisor;
-	}
-
-	public String getFinancialManager() {
-		return financialManager;
-	}
-
-	public void setFinancialManager(String financialManager) {
-		this.financialManager = financialManager;
-	}
-
-	public String getAppointment() {
-		return appointment;
-	}
-
-	public void setAppointment(String appointment) {
-		this.appointment = appointment;
-	}
-
-	public String getFinancialDirector() {
-		return financialDirector;
-	}
-
-	public void setFinancialDirector(String financialDirector) {
-		this.financialDirector = financialDirector;
-	}
+	
 
 	public String getDept() {
 		return dept;
@@ -600,6 +574,38 @@ public class CustomerDTO implements Serializable {
 
 	public void setExcelRowNum(int excelRowNum) {
 		this.excelRowNum = excelRowNum;
+	}
+
+	public User getFinancialAdvisor() {
+		return financialAdvisor;
+	}
+
+	public void setFinancialAdvisor(User financialAdvisor) {
+		this.financialAdvisor = financialAdvisor;
+	}
+
+	public User getFinancialManager() {
+		return financialManager;
+	}
+
+	public void setFinancialManager(User financialManager) {
+		this.financialManager = financialManager;
+	}
+
+	public User getAppointment() {
+		return appointment;
+	}
+
+	public void setAppointment(User appointment) {
+		this.appointment = appointment;
+	}
+
+	public User getFinancialDirector() {
+		return financialDirector;
+	}
+
+	public void setFinancialDirector(User financialDirector) {
+		this.financialDirector = financialDirector;
 	}
 	
 	

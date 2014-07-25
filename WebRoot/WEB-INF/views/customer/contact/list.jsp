@@ -105,9 +105,9 @@ $(function(){
 				</li>
 			</ul>
 			<ul class="fr id_table1 mt10 mr10">
-				<c:if test="${VS_HAS_FUNCTIONS.leadImport}">
+				<c:if test="${VS_HAS_FUNCTIONS.contactImport}">
 					<li>
-						<a href="${ctx}/common/imports/toImportPage.do?module=contact"
+						<a href="${ctx}/contact/imports/toImportPage.do?module=contact"
 									class="leading_in globle_img block_inline mr10" title="导入"></a>
 					</li>
 				</c:if>

@@ -209,6 +209,13 @@ public class ProductController extends CommonController<Product> {
 		
 		return "/project/product/view";
 	}
+	
+	
+	@RequestMapping(value = "/toViewPage.comp")
+	public String toViewPageComp(Long id, Model model) {
+		model.addAttribute("product", productService.get(id));
+		return "/project/product/viewcomp";
+	}
 
 	/**
 	  * delete(删除产品记录)

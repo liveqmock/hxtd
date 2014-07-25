@@ -116,8 +116,8 @@ public class UserDao extends HibernateDAOImpl<User, Long> {
     /** 查找用户通过组织主键和角色编号 */
     public List<User> findByOrgIdRoleCode(Long orgId, String roleCode) {
         String hql = "select user from User user" +
-                " inner join user.organization org" +
-                " inner join user.roles role" +
+                " inner join fetch user.organization org" +
+                " inner join fetch user.roles role" +
                 " where org.id=? and role.code=?";
         return find(hql, orgId, roleCode);
     }

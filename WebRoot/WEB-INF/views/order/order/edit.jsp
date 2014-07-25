@@ -52,6 +52,7 @@ $(function(){
 	});
 	jsUtil.datepickerNotNow(".time");
 });
+productFlag = false;
 function searchData(action){//搜索弹出框
 	var url, title;
 	if(action == "owner"||action == "salesManager"||action == "salesMajordomo"){
@@ -63,15 +64,17 @@ function searchData(action){//搜索弹出框
 	}else if(action == "product"){
 		url = "${ctx}/project/product/toQueryPage.comp";
 		title = "产品";
+		productFlag=true;
 	}
 	jsUtil.dialogIframe(url, title, 800, 465, function(){//确定回调
 		var $userObj = $(".bor_e28d1f", window.frames["dialogIframe"].document);
 			if($userObj.length > 0){
 				$("#txt_" + action).val($userObj.find("td:eq(1)").text());
 				$("#hide_" + action +"_id").val($userObj.attr("id"));
-				if(action="product"){
+				if(productFlag){
 					$("#earningRate").val($userObj.find("td:eq(2)").text().replace("%",""));
 					$("#redeemFormula").val($userObj.find("td:eq(3)").text())
+					productFlag=false;
 				}
 			}
 	});
@@ -129,7 +132,7 @@ function clearInputVal(obj){//清除
 					<i class="s_inquiry globle_img block_inline ml5 vm cp"
 						title="搜索所有者" onclick="searchData('owner');"></i>
 					<i class="dump_btn globle_img block_inline ml5 vm cp empty"
-						title="清除"></i>
+						onclick="clearInputVal(this)" title="清除"></i>
 				</td>
 			</tr>
 			<tr>
@@ -146,7 +149,7 @@ function clearInputVal(obj){//清除
 					<i class="s_inquiry globle_img block_inline ml5 vm cp"
 						title="搜索产品" onclick="searchData('product');"></i>
 					<i class="dump_btn globle_img block_inline ml5 vm cp empty"
-						title="清除"></i>
+						onclick="clearInputVal(this)" title="清除"></i>
 				</td>
 				<td align="right">
 					<span class="w_red">*&nbsp;</span>客户：
@@ -161,25 +164,19 @@ function clearInputVal(obj){//清除
 					<i class="s_inquiry globle_img block_inline ml5 vm cp"
 						title="搜索客户" onclick="searchData('customer');"></i>
 					<i class="dump_btn globle_img block_inline ml5 vm cp empty"
-						title="清除"></i>
+						onclick="clearInputVal(this)" title="清除"></i>
 				</td>
 			</tr>
 			<tr>
 				<td align="right">
-					<span class="w_red">*&nbsp;</span>订单状态：
+					<span class="w_red">*&nbsp;</span>结束时间：
 				</td>
 				<td align="left">
-					<select name="status.id" class="select1 pr requiredSelect">
-						<option value="-1">
-							--无--
-						</option>
-						<c:forEach items="${status}" var="s">
-							<option value="${s.id}"
-								<c:if test="${s.id==order.status.id}">selected</c:if>>
-								${s.key}
-							</option>
-						</c:forEach>
-					</select>
+				<fmt:formatDate value="${order.orderEndTime }"
+						pattern="yyyy-MM-dd" var="endTime" />
+						<a href="javascript:;" class="pa time_closenone1"></a>
+					<input type="text" name="orderEndTime" value="${endTime }"
+						class="text_input3 input_close1 time required" readonly />
 				</td>
 				<td align="right">
 					<span class="w_red">*&nbsp;</span>投资方式：
@@ -205,14 +202,14 @@ function clearInputVal(obj){//清除
 				</td>
 				<td align="left">
 					<input type="text" name="purchaseMoney"
-						value="${order.purchaseMoney}" class="text_input3 number" />
+						value="${order.purchaseMoney}" class="text_input3 number required" />
 				</td>
 				<td align="right">
 					<span class="w_red">*&nbsp;</span>收益率（%）：
 				</td>
 				<td align="left">
 					<input type="text" name="earningRate" id="earningRate" readonly
-						value="${order.earningRate}" class="text_input3 number" />
+						value="${order.earningRate}" class="text_input3 number required" />
 				</td>
 
 			</tr>
@@ -222,14 +219,14 @@ function clearInputVal(obj){//清除
 				</td>
 				<td align="left">
 					<input type="text" name="arr" value="${order.arr }"
-						class="text_input3 number" />
+						class="text_input3 number required" />
 				</td>
 				<td align="right">
 					<span class="w_red">*&nbsp;</span>赎回公式：
 				</td>
 				<td align="left">
 					<input type="text" name="redeemFormula" id="redeemFormula" readonly
-						value="${order.redeemFormula }" class="text_input3" />
+						value="${order.redeemFormula }" class="text_input3 required" />
 				</td>
 			</tr>
 			<tr>
@@ -246,7 +243,7 @@ function clearInputVal(obj){//清除
 					<i class="s_inquiry globle_img block_inline ml5 vm cp"
 						title="搜索所有者" onclick="searchData('salesManager');"></i>
 					<i class="dump_btn globle_img block_inline ml5 vm cp empty"
-						title="清除"></i>
+						onclick="clearInputVal(this)" title="清除"></i>
 				</td>
 				<td align="right" width="15%">
 					<span class="w_red">*&nbsp;</span>销售总监：
@@ -261,19 +258,7 @@ function clearInputVal(obj){//清除
 					<i class="s_inquiry globle_img block_inline ml5 vm cp"
 						title="搜索所有者" onclick="searchData('salesMajordomo');"></i>
 					<i class="dump_btn globle_img block_inline ml5 vm cp empty"
-						title="清除"></i>
-				</td>
-			</tr>
-			<tr>
-				<td align="right">
-					<span class="w_red">*&nbsp;</span>结束时间：
-				</td>
-				<td align="left">
-				<fmt:formatDate value="${order.orderEndTime }"
-						pattern="yyyy-MM-dd" var="endTime" />
-						<a href="javascript:;" class="pa time_closenone1"></a>
-					<input type="text" name="orderEndTime" value="${endTime }"
-						class="text_input3 input_close1 time required" readonly />
+						onclick="clearInputVal(this)" title="清除"></i>
 				</td>
 			</tr>
 		</table>

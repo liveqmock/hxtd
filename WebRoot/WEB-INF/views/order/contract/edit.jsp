@@ -120,7 +120,7 @@
 				</td>
 				<td align="left">
 				<input type="text" name="code" id="txt_contract"
-						value="${contract.code}" class="text_input3 required" />
+						value="${contract.code}" class="{required:true,maxlength:30,unique:['Contract','${contract.code}']} text_input3" />
 				</td>
 			</tr>
 			<tr>

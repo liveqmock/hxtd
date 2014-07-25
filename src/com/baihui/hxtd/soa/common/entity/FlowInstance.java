@@ -16,7 +16,7 @@ import java.util.Date;
  * @version (版本)1
  * @company 北京市百会纵横科技有限公司
  * @copyright (版权)  本文件归属 北京市百会纵横科技有限公司
- * @ClassName: com.baihui.hxtd.soa.common.entity.WFTask.java
+ * @ClassName: com.baihui.hxtd.soa.common.entity.FlowInstance.java
  * @date 2014-5-26 上午09:47:36
  * @since (该版本支持的 JDK 版本) ： 1.6
  */
@@ -24,19 +24,19 @@ import java.util.Date;
 @Table(name = "wf_task")
 @DynamicInsert(true)
 @SuppressWarnings("serial")
-public class WFTask implements Serializable {
+public class FlowInstance implements Serializable {
 
-    public WFTask() {
+    public FlowInstance() {
     }
 
-    public WFTask(WFNode node, Module typeDic, Long moduleId, Organization org, User approver,
-                  String status, Date approveTime, String reason, User creator, Date createdTime) {
-        this.wfNode = node;
-        this.moduleId = moduleId;
+    public FlowInstance(FlowNode node, Module typeDic, Long recordId, Organization org, User approver,
+                        Boolean isPassed, Date approveTime, String reason, User creator, Date createdTime) {
+        this.flowNode = node;
+        this.recordId = recordId;
         this.module = typeDic;
         this.org = org;
         this.approver = approver;
-        this.status = status;
+        this.isPassed = isPassed;
         this.approveTime = approveTime;
         this.reason = reason;
         this.creator = creator;
@@ -52,11 +52,11 @@ public class WFTask implements Serializable {
     private Long id;
 
     /**
-     * 流程节点
+     * 流程环节
      */
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "NODE_ID")
-    private WFNode wfNode;
+    private FlowNode flowNode;
     /**
      * 模块
      */
@@ -67,7 +67,7 @@ public class WFTask implements Serializable {
      * 关联模块ID
      */
     @Column(name = "RECORD_ID")
-    private Long moduleId;
+    private Long recordId;
     /**
      * 所处机构
      */
@@ -83,8 +83,8 @@ public class WFTask implements Serializable {
     /**
      * 审批状态
      */
-    @Column(name = "APPROVE_STATUS")
-    private String status;
+    @Column(name = "IS_PASSED")
+    private Boolean isPassed;
     /**
      * 创建时间
      */
@@ -121,6 +121,10 @@ public class WFTask implements Serializable {
     @Column(name = "MODIFIED_TIME")
     private Date modifiedTime;
 
+    /** 流程业务实体 */
+    @Transient
+    private IdFlowable flowBusiness;
+
     public Long getId() {
         return id;
     }
@@ -129,12 +133,12 @@ public class WFTask implements Serializable {
         this.id = id;
     }
 
-    public WFNode getWfNode() {
-        return wfNode;
+    public FlowNode getFlowNode() {
+        return flowNode;
     }
 
-    public void setWfNode(WFNode wfNode) {
-        this.wfNode = wfNode;
+    public void setFlowNode(FlowNode flowNode) {
+        this.flowNode = flowNode;
     }
 
     public Module getModule() {
@@ -145,12 +149,12 @@ public class WFTask implements Serializable {
         this.module = module;
     }
 
-    public Long getModuleId() {
-        return moduleId;
+    public Long getRecordId() {
+        return recordId;
     }
 
-    public void setModuleId(Long moduleId) {
-        this.moduleId = moduleId;
+    public void setRecordId(Long recordId) {
+        this.recordId = recordId;
     }
 
     public Organization getOrg() {
@@ -169,12 +173,12 @@ public class WFTask implements Serializable {
         this.approver = approver;
     }
 
-    public String getStatus() {
-        return status;
+    public Boolean getIsPassed() {
+        return isPassed;
     }
 
-    public void setStatus(String status) {
-        this.status = status;
+    public void setIsPassed(Boolean isPassed) {
+        this.isPassed = isPassed;
     }
 
     public Date getApproveTime() {
@@ -223,5 +227,13 @@ public class WFTask implements Serializable {
 
     public void setModifiedTime(Date modifiedTime) {
         this.modifiedTime = modifiedTime;
+    }
+
+    public IdFlowable getFlowBusiness() {
+        return flowBusiness;
+    }
+
+    public void setFlowBusiness(IdFlowable flowBusiness) {
+        this.flowBusiness = flowBusiness;
     }
 }

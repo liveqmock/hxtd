@@ -26,14 +26,15 @@ message._requestMessageAjax = function (data){
 	   		}else{
 	   			$("#message").removeClass().addClass("head_news globle_img fl");
 	   		}
+		    var ss=$("#message").val();
 	   		var messages=eval(data.result.result);
-	   		var ss='<li>系统消息：</li>';
 	   		var len=messages.length>3?3:messages.length;
 	   		if(len==0){
-	   			ss+='<li>无新消息</li>';
+	   			ss='<li>暂无系统消息</li>';
 	   		}else{
+	   		    ss='<li>系统消息：</li>';
 	   		for(var i=0;i<len;i++){
-	           ss+='<li><c:if test=\"${VS_HAS_FUNCTIONS.messageView}\"><a href=\"'+message.setting.rootPath+'/system/message/toViewPage.do?id='+messages[i].id+'\">'+messages[i].message.title+'</a></c:if></li>';
+	            ss+='<li><c:if test=\"${VS_HAS_FUNCTIONS.messageView}\"><a href=\"'+message.setting.rootPath+'/system/message/toViewPage.do?id='+messages[i].id+'\">'+messages[i].message.title+'</a></c:if></li>';
 	   		}
 	   		}
 	   		$("#messages").html(ss);
@@ -54,11 +55,12 @@ message._requestNoticeAjax=function (data){
 			$("#notice").removeClass().addClass("head_system globle_img fl mr15");
 		}
 		var notices=eval(data.result.result);
-		var ss='';
+		var ss=$("#notice").val();
 		if(notices.length>0){
+			  ss='<li>系统公告：</li>';
 		      ss+='<li><c:if test=\"${VS_HAS_FUNCTIONS.noticeView}\"><a href=\"'+message.setting.rootPath+'/system/notice/toViewPage.do?id='+notices[0].id+'\">'+notices[0].title+'</a></c:if></li>';
 		}else{
-			ss+='<li>无公告</li>';
+			  ss='<li>暂无系统公告</li>';
 		}
 		$("#notices").html(ss);
 };

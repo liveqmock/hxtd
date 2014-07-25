@@ -17,7 +17,7 @@ $(function(){
 	new Grid().init().bindExport(); // 生成Grid
 });
 function getProject(id){
-	jsUtil.dialogIframe("${ctx}/project/project/toViewPage.comp?id="+id, "供应商信息", 800, 800);
+	jsUtil.dialogIframe("${ctx}/project/project/toViewPage.comp?id="+id, "供应商信息", 800, 480);
 }
 </script>
 </head>
@@ -30,7 +30,7 @@ function getProject(id){
     		<td class="f14 namewidth2" align="left"><input type="text" class="text_input1" name="search_LIKE_name"/></td>
     		<td class="f14 namewidth1" align="right">产品编号：</td>
     		<td class="f14 namewidth2" align="left"><input type="text" class="text_input1" name="search_LIKE_code"/></td>
-    		<td class="f14 namewidth1" align="right">出售金额：</td>
+    		<td class="f14 namewidth1" align="right">出售金额（万）：</td>
     		<td class="f14 namewidth2" align="left">
     			<div class="pr vm">
 	    			<input class="text_input2" name="search_GTE_sellMoney" type="text"/>-<input class="text_input2" 
@@ -123,8 +123,9 @@ function getProject(id){
 			    <th width="14%">产品编号</th>
 			    <th width="11%">产品名称</th>
 			    <th width="10%">所属项目</th>
-			    <th width="7%">出售金额</th>
-			    <th width="8%">收益率%</th>
+			    <th width="8%">出售金额（万）</th>
+			    <th width="8%">收益率（%）</th>
+			    <th width="8%">赎回赔率（%）</th>
 			    <th width="8%">销售期限</th>
 			    <th width="12%" class="sortable orderby" orderby="saleBeginTime">销售开始日期</th>
 			    <th width="12%" class="sortable orderby" orderby="saleEndTime">销售结束日期</th>
@@ -139,8 +140,9 @@ function getProject(id){
 		    <th width="14%">产品编号</th>
 		    <th width="11%">产品名称</th>
 		    <th width="10%">所属项目</th>
-		    <th width="7%">出售金额</th>
-		    <th width="8%">收益率%</th>
+		    <th width="8%">出售金额（万）</th>
+		    <th width="8%">收益率（%）</th>
+		    <th width="8%">赎回赔率（%）</th>
 		    <th width="8%">销售期限</th>
 		    <th width="12%" class="sortable orderby" orderby="saleBeginTime">销售开始日期</th>
 		    <th width="12%" class="sortable orderby" orderby="saleEndTime">销售结束日期</th>
@@ -162,9 +164,18 @@ function getProject(id){
 	                <c:otherwise>{$T.row.name}</c:otherwise>
 	            </c:choose>
 	        </td>
-	        <td><a href="javascript:getProject({$T.row.project.id})">{$T.row.project.name}</a></td>
+	        <td>
+	        	<c:choose>
+                     <c:when test="${VS_HAS_FUNCTIONS.projectView}">
+                         <a href="javascript:getProject({$T.row.project.id})">{$T.row.project.name}</a>
+                     </c:when>
+                     <c:otherwise>{$T.row.project.name}</c:otherwise>
+                 </c:choose>
+	        </td>
+	        
 	        <td align="right">{jsUtil.formatDiff($T.row.sellMoney, 2)}</td>
-	        <td>{$T.row.rate}%</td>
+	        <td>{$T.row.rate==null?"0":$T.row.rate}%</td>
+	        <td>{$T.row.redeemRate==null?"0":$T.row.redeemRate}%</td>
 	        <td>{$T.row.saleLimit}{$T.row.saleUnit.key}</td>
 	        <td>{$T.row.saleBeginTime}</td>
 	        <td>{$T.row.saleEndTime}</td>

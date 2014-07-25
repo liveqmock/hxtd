@@ -39,7 +39,7 @@ $(function(){
 <body>
 <div class="listcontainer">
 	<div class="margin0">
-		<form action="${ctx}/order/order/queryList.do" onsubmit="return false;">
+		<form action="${ctx}/order/order/query.do?TYPE=relation" onsubmit="return false;">
 		<div>
 			<table class="w pr10 pl10">
 				<tr>
@@ -66,10 +66,12 @@ $(function(){
 			    {#foreach $T.result as row}
 				<li>
 					<div class="module" id="{$T.row.id}">
-						<table class="w mt10">
+						<table  class="w">
 							<tr><td>{$T.row.code}</td></tr>
 							<tr><td>{$T.row.customer.name}</td></tr>
 							<tr style="display:none"><td>{$T.row.customer.id}</td></tr>
+							<tr><td>{$T.row.purchaseMoney}</td></tr>
+							<tr><td>{$T.row.product.name}</td></tr>
 						</table>
 					</div>
 				</li>

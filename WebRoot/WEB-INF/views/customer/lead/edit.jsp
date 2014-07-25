@@ -30,6 +30,9 @@ var sourceMarketActivity = ${isMarketActivity};
 $(function(){
 	$("#saveAndAdd").click(function(){
 		var $form = $("#form");
+		if($("#source").val()!=sourceMarketActivity){
+			$("#txt_marketActivity").removeClass("required");
+		}
 		if($form.valid()){
 			RcmsAjax.ajax($form.attr("action"),function(result){
 				setTimeout(function(){
@@ -41,6 +44,9 @@ $(function(){
 	});
 	$("#save").click(function(){
 		var $form = $("#form");
+		if($("#source").val()!=sourceMarketActivity){
+			$("#txt_marketActivity").removeClass("required");
+		}
 		if($form.valid()){
 			RcmsAjax.ajax($form.attr("action"),function(result){
 				//redirect
@@ -264,8 +270,8 @@ function clearInputVal(obj){ //清除
 					<span class="w_red">*&nbsp;</span>线索来源：
 				</td>
 				<td align="left">
-					<select name="source.id" id="source" class="select1 pr requiredSelect">
-						<option value="-1">
+					<select name="source.id" id="source" class="select1 pr required">
+						<option value="">
 							--无--
 						</option>
 						<c:forEach items="${source}" var="s">
@@ -295,10 +301,10 @@ function clearInputVal(obj){ //清除
 					</select>
 				</td>
 				<td align="right" class="marketActivity">
-					市场活动：
+					<span class="w_red">*&nbsp;</span>市场活动
 				</td>
 				<td align="left" class="marketActivity">
-					<input type="text" id="txt_marketActivity" value="${lead.marketActivity.name }"
+					<input type="text" name="txt_m" id="txt_marketActivity" value="${lead.marketActivity.name }"
 						 class="text_input3 cp required" onclick="searchData('marketActivity');" readonly />
 					<input type="hidden" id="hide_marketActivity_id" name="marketActivity.id"
 						value="${lead.marketActivity.id }" />

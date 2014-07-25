@@ -39,42 +39,42 @@
 		<tr>
 			<td width="15%" align="right">活动所有者：</td>
 			<td align="left">${activity.sponsor.realName}</td>
-			<td width="15%" align="right">类型：</td>
-			<td align="left">${activity.typeDic.key}</td>
+			<td width="15%" align="right">活动名称：</td>
+			<td align="left">${activity.name}</td>
 		</tr>
 		<tr>
-			<td align="right">活动名称：</td>
-			<td align="left">${activity.name}</td>
-			<td align="right">状态：</td>
-			<td align="left">${activity.statusDic.key}</td>
+			<td align="right">负责人：</td>
+			<td align="left">${activity.bossHead.realName}</td>
+			<td align="right">活动类型：</td>
+			<td align="left">${activity.typeDic.key}</td>
 		</tr>
 		<tr>
 			<td align="right">开始日期：</td>
 			<td align="left">
 				<fmt:formatDate value="${activity.beginDate}" pattern="yyyy-MM-dd" var="beginDate"/>${beginDate}
 			</td>
-			<td align="right">预计成本：</td>
-			<td align="left"><fmt:formatNumber value="${activity.predictCost}" pattern="###,##0.00" var="predictCost"/>${predictCost}</td>
+			<td align="right">活动状态：</td>
+			<td align="left">${activity.statusDic.key}</td>
 		</tr>
 		<tr>
 			<td align="right">结束日期：</td>
 			<td align="left">
 				<fmt:formatDate value="${activity.endDate}" pattern="yyyy-MM-dd" var="endDate"/>${endDate}
 			</td>
-			<td align="right">实际成本：</td>
-			<td align="left"><fmt:formatNumber value="${activity.realityCost}" pattern="###,##0.00" var="realityCost"/>${realityCost}</td>
+			<td align="right">预计成本：</td>
+			<td align="left"><fmt:formatNumber value="${activity.predictCost}" pattern="###,##0.00" var="predictCost"/>${predictCost}</td>
 		</tr>
 		<tr>
 			<td align="right">预期效果：</td>
 			<td align="left">${activity.expectEffect}</td>
-			<td align="right">活动次数：</td>
-			<td align="left">${activity.times}</td>
+			<td align="right">实际成本：</td>
+			<td align="left"><fmt:formatNumber value="${activity.realityCost}" pattern="###,##0.00" var="realityCost"/>${realityCost}</td>
 		</tr>
 		<tr>
 			<td align="right">期望成功率%：</td>
 			<td align="left">${activity.expectSuccessRate}</td>
-			<td align="right">负责人：</td>
-			<td align="left">${activity.bossHead.realName}</td>
+			<td align="right">活动次数：</td>
+			<td align="left">${activity.times}</td>
 		</tr>
 		</table>
 		<h1 class="f14 fbnone ml40 pt10">描述信息</h1>

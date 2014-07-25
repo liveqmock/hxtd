@@ -78,6 +78,7 @@ public class Project {
 	 * 开放期 
 	 */
 	@Column(name="OPEN_TIME")
+	@JsonFormat(pattern = "yyyy-MM-dd", timezone = "GMT+08:00")
 	private Date openTime;
 	/**
 	 * 截止时间

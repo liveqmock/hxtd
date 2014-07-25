@@ -32,6 +32,9 @@ public class Module implements Serializable, Idable {
     @Column(name = "ENTITY_CLASS", length = 255, nullable = false)
     private String entityClass;
 
+    @Column(name = "url", length = 64, nullable = false)
+    private String url;
+
     @Transient
     private Class entityClazz;
 
@@ -79,6 +82,14 @@ public class Module implements Serializable, Idable {
 
     public void setEntityClass(String entityClass) {
         this.entityClass = entityClass;
+    }
+
+    public String getUrl() {
+        return url;
+    }
+
+    public void setUrl(String url) {
+        this.url = url;
     }
 
     public Class getEntityClazz() {

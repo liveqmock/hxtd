@@ -58,6 +58,7 @@ public class Contact implements Serializable {
 	@JsonIgnore
 	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "ACCOUNT_ID")
+	@NotFound(action = NotFoundAction.IGNORE)
 	private Customer customer;
 	
 	/** 关联供应商ID */

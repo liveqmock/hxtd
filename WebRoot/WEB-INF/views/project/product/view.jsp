@@ -49,13 +49,13 @@
 			<td align="left">${product.project.name}</td>
 		</tr>
 		<tr>
-			<td align="right">出售金额：</td>
+			<td align="right">出售金额（万）：</td>
 			<td align="left"><fmt:formatNumber value="${product.sellMoney}" pattern="###,##0.00" var="sellMoney"/>${sellMoney}</td>
-			<td align="right">收益率%：</td>
+			<td align="right">收益率（%）：</td>
 			<td align="left">${product.rate}%</td>
 		</tr>
 		<tr>
-			<td align="right">预期收益：</td>
+			<td align="right">预期收益（万）：</td>
 			<td align="left"><fmt:formatNumber value="${product.expectProfit}" pattern="###,##0.00" var="expectProfit"/>${expectProfit}</td>
 			<td align="right">销售期限：</td>
 			<td align="left">${product.saleLimit}${product.saleUnit.key}</td>
@@ -63,7 +63,7 @@
 		<tr>
 			<td align="right">销售开始日期：</td>
 			<td align="left"><fmt:formatDate value="${product.saleBeginTime}" pattern="yyyy-MM-dd" var="saleBeginTime"/>${saleBeginTime}</td>
-			<td align="right">赎回赔率%：</td>
+			<td align="right">赎回赔率（%）：</td>
 			<td align="left">${product.redeemRate}</td>
 		</tr>
 		<tr>

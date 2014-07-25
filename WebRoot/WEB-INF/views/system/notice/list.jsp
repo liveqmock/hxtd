@@ -105,7 +105,7 @@
            <th width="15%">创建者</th>
            <th width="15%" class="sortable orderby" orderby="sentTime">发送时间</th>
            <th width="15%" class="sortable orderby" orderby="createdTime">创建时间</th>
-           <th width="15%"class="sortable orderby" orderby="deadTime">过期时间</th>
+           <th width="15%" class="sortable orderby" orderby="deadTime">过期时间</th>
            <th align="center" width="15%">操作</th>
         </tr>
     </table>
@@ -129,47 +129,47 @@
             {#foreach $T.result as row}
             <tr class="{$T.row$index%2==1?'':'bg_c_blue w'}">
                 <td align="center"><input type="checkbox" name="id" class="checkitem" value="{$T.row.id}"/></td>
-                <td >
-	<c:choose>
-		<c:when test="${VS_HAS_FUNCTIONS.noticeView}">
-			<a href="${ctx}/system/notice/toViewPage.do?id={$T.row.id}" class="toviewpage">{$T.row.title}
-				<div class="none w240">
-					<div class="w240 pr">
-						<i class="block globle_img pa tan_leftjian"></i>
-						<b class="bb1"></b>
-						<b class="bb2"></b>
-						<b class="bb3"></b>
-						<b class="bb4"></b>
-						<b class="bb5"></b>
-						<b class="bb5"></b>
-						<b class="bb5"></b>
-						<b class="bb5"></b>
-						<span class="block" style="background-color:#fff; 
-								 width:238px; height:100%; border-left:1px solid #666666; border-right:1px solid #666666;">
-						<span class=" block ml10 mr10">
-						<h1>名称：</h1>
-						<p class="fbnone">{$T.row.title}</p>
-						<h1>内容：</h1>
-						<p class="fbnone">{$T.row.content}</p>
-						<h1>发送时间：</h1>
-						<p class="fbnone"> {$T.row.sentTime}</p>
-						<p></p>
-						</span>
-						</span>
-						<b class="bb6"></b>
-						<b class="bb6"></b>
-						<b class="bb6"></b>
-						<b class="bb6"></b>
-						<b class="bb7"></b>
-						<b class="bb8"></b>
-						<b class="bb9"></b>
-						<b class="bb0"></b>
-					</div>
-				</div>
-			</a>
-		</c:when>
-		<c:otherwise>{$T.row.title}</c:otherwise>
-	</c:choose>
+                <td>
+				<c:choose>
+					<c:when test="${VS_HAS_FUNCTIONS.noticeView}">
+						<a href="${ctx}/system/notice/toViewPage.do?id={$T.row.id}" class="toviewpage">{$T.row.title}
+							<div class="none w240">
+								<div class="w240 pr">
+									<i class="block globle_img pa tan_leftjian"></i>
+									<b class="bb1"></b>
+									<b class="bb2"></b>
+									<b class="bb3"></b>
+									<b class="bb4"></b>
+									<b class="bb5"></b>
+									<b class="bb5"></b>
+									<b class="bb5"></b>
+									<b class="bb5"></b>
+									<span class="block" style="background-color:#fff; 
+											 width:238px; height:100%; border-left:1px solid #666666; border-right:1px solid #666666;">
+									<span class=" block ml10 mr10">
+									<h1>名称：</h1>
+									<p class="fbnone">{$T.row.title}</p>
+									<h1>内容：</h1>
+									<p class="fbnone">{$T.row.content}</p>
+									<h1>发送时间：</h1>
+									<p class="fbnone"> {$T.row.sentTime}</p>
+									<p></p>
+									</span>
+									</span>
+									<b class="bb6"></b>
+									<b class="bb6"></b>
+									<b class="bb6"></b>
+									<b class="bb6"></b>
+									<b class="bb7"></b>
+									<b class="bb8"></b>
+									<b class="bb9"></b>
+									<b class="bb0"></b>
+								</div>
+							</div>
+						</a>
+					</c:when>
+					<c:otherwise>{$T.row.title}</c:otherwise>
+				</c:choose>
                 </td>
                 <td>{$T.row.creator.realName}</td>
                 <td >{$T.row.sentTime} </td>

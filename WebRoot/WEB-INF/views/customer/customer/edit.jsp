@@ -19,7 +19,6 @@
 $(function(){
 	new PCAS("province", "city", "county", '${customer.province.id}', 
 		'${customer.city.id}', '${customer.county.id}'); // 修改为根据ID选择组件，之前用name选择组件当name中出现“.”时有问题
-	
 	$("#save").click(function(){ //保存按钮事件
 		var $form = $("#form");
 		if($("#form").valid()){
@@ -166,21 +165,6 @@ function searchData(action){ // 搜索
 						</c:forEach>
 					</select>
 				</td>
-				<td align="right" width="15%">开户银行：</td>
-				<td align="left">
-					<select name="openBank.id" class="select1 pr">
-						<option value="">--无--</option>
-						<c:forEach items="${openBank}" var="openBank">
-					       <option value="${openBank.id }"
-							<c:if test="${customer.openBank.id == openBank.id}">
-								selected
-							</c:if>
-							>${openBank.key }</option>
-						</c:forEach>
-					</select>
-				</td>
-			</tr>
-			<tr>
 				<td align="right" width="15%"><span class="w_red">*&nbsp;</span>行业：</td>
 				<td align="left">
 					<select name="industry.id" class="select1 pr requiredSelect ">
@@ -194,47 +178,91 @@ function searchData(action){ // 搜索
 						</c:forEach>
 					</select>
 				</td>
-				<td align="right" width="15%">银行户名：</td>
-				<td align="left"><input class="text_input3" name="bankName" type="text" value="${customer.bankName}"/></td>
 			</tr>
 			<tr>
 				<td align="right" width="15%">所在部门：</td>
 				<td align="left"><input class="text_input3" name="dept" type="text" value="${customer.dept}"/></td>
-				<td align="right" width="15%">银行账号：</td>
-				<td align="left"><input class="text_input3" name="bankAccount" type="text" value="${customer.bankAccount}"/></td>
-			</tr>
-			<tr>
 				<td align="right" width="15%">职务名称：</td>
 				<td align="left"><input class="text_input3" name="job" type="text" value="${customer.job}"/></td>
+			</tr>
+			<tr>
 				<td align="right" width="15%">出资方式：</td>
 				<td align="left"><input name="contributionType" type="text" value="${customer.contributionType}" class="text_input3"/></td>
+				<td align="right" width="15%">邮箱：</td>
+				<td align="left"><input name="email" type="text" value="${customer.email}" class="text_input3 email"/></td>
 			</tr>
 			<tr>
-				<td align="right" width="15%">邮箱：</td>
-				<td align="left"><input name="email" type="text" value="${customer.email}" class="text_input3"/></td>
 				<td align="right" width="15%">出资规模：</td>
 				<td align="left"><input class="text_input3" name="contributionScale" type="text" value="${customer.contributionScale}"/></td>
-			</tr>
-			<tr>
 				<td align="right" width="15%">传真：</td>
 				<td align="left"><input class="text_input3 isTel" name="fax" type="text" value="${customer.fax}"/></td>
+			</tr>
+			<tr>
 				<td align="right" width="15%">理财顾问：</td>
-				<td align="left"><input class="text_input3" name="financialAdvisor" type="text" value="${customer.financialAdvisor}"/></td>
-			</tr>
-			<tr>
+				<td align="left">
+					<input id="txt_financialAdvisor" type="text" value="${customer.financialAdvisor.realName}" readonly 
+						class="text_input3 cp" onclick="searchData('financialAdvisor');"/>
+					<input id="hide_financialAdvisor_id" type="hidden" name="financialAdvisor.id" value="${customer.financialAdvisor.id}"/>
+					<i class="s_inquiry globle_img block_inline ml5 vm cp" title="搜索所有者" onclick="searchData('financialAdvisor');"></i>
+					<i class="dump_btn globle_img block_inline ml5 vm cp empty" title="清除"></i>
+				</td>
 				<td align="right" width="15%">邮编：</td>
-				<td align="left"><input class="text_input3" name="postCode" type="text" value="${customer.postCode}"/></td>
+				<td align="left"><input class="text_input3 isZipCode" name="postCode" type="text" value="${customer.postCode}"/></td>
+			</tr>
+			<tr>
 				<td align="right" width="15%">理财经理：</td>
-				<td align="left"><input class="text_input3" name="financialManager" type="text" value="${customer.financialManager}"/></td>
-			</tr>
-			<tr>
+				<td align="left">
+					<input id="txt_financialManager" type="text" value="${customer.financialManager.realName}" readonly 
+						class="text_input3 cp" onclick="searchData('financialManager');"/>
+					<input id="hide_financialManager_id" type="hidden" name="financialManager.id" value="${customer.financialManager.id}"/>
+					<i class="s_inquiry globle_img block_inline ml5 vm cp" title="搜索所有者" onclick="searchData('financialManager');"></i>
+					<i class="dump_btn globle_img block_inline ml5 vm cp empty" title="清除"></i>
+				</td>
 				<td align="right" width="15%">邀约人：</td>
-				<td align="left"><input class="text_input3" name="appointment" type="text" value="${customer.appointment}"/></td>
-				<td align="right" width="15%">理财总监：</td>
-				<td align="left"><input class="text_input3" name="financialDirector" type="text" value="${customer.financialDirector}"/></td>
+				<td align="left">
+					<input id="txt_appointment" type="text" value="${customer.appointment.realName}" readonly 
+						class="text_input3 cp" onclick="searchData('appointment');"/>
+					<input id="hide_appointment_id" type="hidden" name="appointment.id" value="${customer.appointment.id}"/>
+					<i class="s_inquiry globle_img block_inline ml5 vm cp" title="搜索所有者" onclick="searchData('appointment');"></i>
+					<i class="dump_btn globle_img block_inline ml5 vm cp empty" title="清除"></i>
+			    </td>
 			</tr>
 			<tr>
+				<td align="right" width="15%">理财总监：</td>
+				<td align="left">
+					<input id="txt_financialDirector" type="text" value="${customer.financialDirector.realName}" readonly 
+						class="text_input3 cp" onclick="searchData('financialDirector');"/>
+					<input id="hide_financialDirector_id" type="hidden" name="financialDirector.id" value="${customer.financialDirector.id}"/>
+					<i class="s_inquiry globle_img block_inline ml5 vm cp" title="搜索所有者" onclick="searchData('financialDirector');"></i>
+					<i class="dump_btn globle_img block_inline ml5 vm cp empty" title="清除"></i>
+				</td>
 				<td align="right" width="15%"></td>
+				<td align="left"></td>
+			</tr>
+		</table>
+		<h1 class="f14 fbnone ml40 pt10">银行信息</h1>
+		<table class="cb id_table3 w95b bg_c_white margin0 mt10">
+			<tr>
+				<td align="right" width="15%">开户银行：</td>
+				<td align="left">
+					<select name="openBank.id" class="select1 pr">
+						<option value="">--无--</option>
+						<c:forEach items="${openBank}" var="openBank">
+					       <option value="${openBank.id }"
+							<c:if test="${customer.openBank.id == openBank.id}">
+								selected
+							</c:if>
+							>${openBank.key }</option>
+						</c:forEach>
+					</select>
+				</td>
+				<td align="right" width="15%">银行户名：</td>
+				<td align="left"><input class="text_input3" name="bankName" type="text" value="${customer.bankName}"/></td>
+			</tr>
+			<tr>
+				<td align="right" width="15%">银行账号：</td>
+				<td align="left"><input class="text_input3" name="bankAccount" type="text" value="${customer.bankAccount}"/></td>
+				<td align="right"></td>
 				<td align="left"></td>
 			</tr>
 		</table>
@@ -243,18 +271,18 @@ function searchData(action){ // 搜索
 			<tr>
 				<td width="15%" align="right">省份：</td>
 				<td align="left"><select id="province" name="province.id" class="select1"></select></td>
-				<td align="right" width="15%">家庭地址：</td>
-				<td align="left"><input name="familyAddr" type="text" value="${customer.familyAddr}" class="text_input3"/></td>
-			</tr>
-			<tr>
-				<td align="right">城市：</td>
+				<td align="right" width="15%">城市：</td>
 				<td align="left"><select id="city" name="city.id" class="select1"></select></td>
-				<td align="right">详细地址：</td>
-				<td align="left"><input name="address" type="text" value="${customer.address}" class="text_input3"/></td>
 			</tr>
 			<tr>
 				<td align="right">区县：</td>
 				<td align="left"><select id="county" name="county.id" class="select1"></select></td>
+				<td align="right">详细地址：</td>
+				<td align="left"><input name="address" type="text" value="${customer.address}" class="text_input3"/></td>
+			</tr>
+			<tr>
+				<td align="right" width="15%">家庭地址：</td>
+				<td align="left"><input name="familyAddr" type="text" value="${customer.familyAddr}" class="text_input3"/></td>
 				<td align="right"></td>
 				<td align="left"></td>
 			</tr>

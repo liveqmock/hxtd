@@ -38,8 +38,8 @@ public class AttachmentDao extends HibernateDAOImpl<Attachment, Long> {
 
 	
 	public void leadConverter(Lead l,Contact c){
-		String hql = "update Attachment att set att.moduleId=? , att.type = 11010104 " +
-				"where att.type=11010103 and att.moduleId=?";
+		String hql = "update Attachment att set att.recordId=? , att.module.id = 11010104 " +
+				"where att.module.id=11010103 and att.recordId=?";
 		Query query = createQuery(hql);
 		query.setParameter(0, c.getId());
 		query.setParameter(1, l.getId());

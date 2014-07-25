@@ -12,19 +12,15 @@ val<%--
 <html>
 <head>
     <title>${VR_LAST_MENU.name}</title>
-
     <link rel="stylesheet" href="${ctx}/static/css/application.css" type="text/css"/>
     <link rel="stylesheet" href="${ctx}/static/css/recommend/empower.css" type="text/css"/>
-
     <link rel="stylesheet" href="${ctx}/static/component/zTree_v3/css/zTreeStyle.css" type="text/css"/>
     <script type="text/javascript" src="${ctx}/static/component/zTree_v3/js/jquery.ztree.core-3.5.js"></script>
     <script type="text/javascript" src="${ctx}/static/component/zTree_v3/js/jquery.ztree.exedit-3.5.js"></script>
-
     <script type="text/javascript" src="${ctx}/static/js/jquery-json.2.4.js"></script>
     <script type="text/javascript" src="${ctx}/static/js/jquery-jtemplates.js"></script>
     <script type="text/javascript" src="${ctx}/static/js/scrollTitle.js?v=1"></script>
     <script type="text/javascript" src="${ctx}/static/js/js-util.common.js"></script>
-
     <script type="text/javascript">
         $(function () {
 
@@ -96,6 +92,7 @@ val<%--
         <div class="fr" style="width:80%;">
             <form action="${ctx}/system/menu/query.do" onsubmit="return false;">
                 <input type="hidden" name="id" value="${parentId}"/>
+                <tags:paginationparams page="${page}"/>
             </form>
             <div class="cb"></div>
 
@@ -104,7 +101,6 @@ val<%--
                 <b class="b2"></b>
                 <b class="b3"></b>
                 <b class="b4"></b>
-
                 <div class="ie_head">
                     <ul class="fl id_table1 mt10 ml10">
                         <c:if test="${VS_HAS_FUNCTIONS.menuDelete}">
@@ -121,8 +117,7 @@ val<%--
             </div>
 
             <div>
-                <table class="cb id_table2 w pr35">
-                    <thead>
+                    <table class="cb id_table2 w tablesorter">
                     <tr>
                         <th style="width: 2%"><input type="checkbox" class="checkall"/></th>
                         <th style="width: 10%">菜单名称</th>
@@ -136,11 +131,11 @@ val<%--
                         <th style="width: 10%">序号</th>
                         <th style="width: 15%">操作</th>
                     </tr>
-                    </thead>
-                    <%@include file="/WEB-INF/template/sort.jsp" %>
                     <tbody class="list"></tbody>
+                    </table>
+                    <div class="pagination cb ml35 mt20 h40 "></div>
+                    <%@include file="/WEB-INF/template/sort.jsp" %>
                     <textarea id="template-tbody" class="template template-tbody">
-                        {#if $T.list.length>0}
                         {#foreach $T.list as row}
                         <tr class="row {#cycle values=['bg_c_blue','']}">
                             <td><input type="checkbox" class="checkitem" value="{$T.row.id}"/></td>
@@ -156,31 +151,7 @@ val<%--
                             <td>{$T.row.isLeaf?"否":"是"}</td>
                             <td>{$T.row.isActive?"是":"否"}</td>
                             <td>{$T.row.defaultShow?"是":"否"}</td>
-                            {#if $T.row.showLocationType==1}
-                            <td>菜单栏</td><td>{$T.row.order}</td>
-                       	    <td style="text-align: left">
-                              <c:if test="${VS_HAS_FUNCTIONS.menuView}">
-                                  <a href="${ctx}/system/menu/toViewPage.do?id={$T.row.id}" class=" block_inline s_detail_btn  globle_img ml10" title="详情"></a>
-                              </c:if>
-                              <c:if test="${VS_HAS_FUNCTIONS.menuModify}">
-                                  {#if !$T.row.isInitialized}
-                                  <a href="${ctx}/system/menu/toModifyPage.do?id={$T.row.id}" class=" block_inline s_edit_btn globle_img ml10" title="编辑"></a>
-                                  {#/if}
-                                  {#if !$T.row$first}
-                                  <a href="javascript:void(0)" uri="${ctx}/system/menu/move.doself?sourceId={$T.row.id}&targetId={$T.list[$T.row$index-1].id}" redirecturi="${ctx}/system/menu/toQueryPage.do?defaultSelected={$T.row.parent.id}" class="block_inline s_toup globle_img ml10 move" title="上移"></a>
-                                  {#/if}
-                                  {#if !$T.row$last}
-                                  <a href="javascript:void(0)" uri="${ctx}/system/menu/move.doself?sourceId={$T.row.id}&targetId={$T.list[$T.row$index+1].id}" redirecturi="${ctx}/system/menu/toQueryPage.do?defaultSelected={$T.row.parent.id}" class="block_inline s_todown globle_img ml10 move" title="下移"></a>
-                                  {#/if}
-                              </c:if>
-                              <c:if test="${VS_HAS_FUNCTIONS.menuDelete}">
-                                  {#if !$T.row.isInitialized}
-                                  <a href="javascript:void(0)" uri="${ctx}/system/menu/delete.do?id={$T.row.id}" class=" block_inline s_dump_btn  globle_img ml10 delete" title="删除"></a>
-                                  {#/if}
-                              </c:if>
-                            </td>
-                            {#else} <td>设置栏</td>{/#if}
-                            </td>
+                            <td>{$T.row.showLocationType==1?"菜单栏":"设置栏"}</td>
                             <td>{$T.row.order}</td>
                             <td style="text-align: left">
                                 <c:if test="${VS_HAS_FUNCTIONS.menuView}">
@@ -205,15 +176,8 @@ val<%--
                             </td>
                         </tr>
                         {#/for}
-                        {#else}
-                        <tr class="row">
-                            <td colspan="10">没有符合条件的数据</td>
-                        </tr>
-                        {#/if}
                     </textarea>
-                </table>
             </div>
-            <div class="cb ml35 mt20 h40 pagination"></div>
             <%@include file="/WEB-INF/template/pagination.jsp" %>
         </div>
     </div>

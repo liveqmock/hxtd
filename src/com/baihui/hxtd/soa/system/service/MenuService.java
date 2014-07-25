@@ -258,7 +258,7 @@ public class MenuService {
             }
         }
 
-        throw new RuntimeException("菜单默认选中数据值状态异常，没有默认选中的菜单（有且仅有一项处于默认选中状态）");
+         throw new RuntimeException("菜单默认选中数据值状态异常，没有默认选中的菜单（有且仅有一项处于默认选中状态）");
     }
 
     /**

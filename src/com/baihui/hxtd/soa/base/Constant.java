@@ -133,7 +133,7 @@ public class Constant {
     public final static String ROLE_ORGMANAGER_CODE = "5";
 
     /** 组织序号层次长度 */
-    public final static int ORG_ORDER_TIER_LENGTH = 5;
+    public final static int ORG_ORDER_TIER_LENGTH = 2;
 
     /** 线索来源为市场活动获得 */
     public final static int SOURCE_MARKET_ACTIVITY = 4010101;
@@ -142,7 +142,7 @@ public class Constant {
     public final static int EXCEL_IMPORT_LEAD_COLUMNS = 20;
 
     /** 导入联系人的列数 */
-    public final static int EXCEL_IMPORT_CONTACT_COLUMNS = 16;
+    public final static int EXCEL_IMPORT_CONTACT_COLUMNS = 15;
 
     /** 导入客户的列数 */
     public final static int EXCEL_IMPORT_CUSTOMER_COLUMNS = 31;

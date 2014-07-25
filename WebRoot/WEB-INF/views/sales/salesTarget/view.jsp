@@ -55,14 +55,14 @@
 			<tr>
 				<td align="right" width="15%">标题：</td>
 				<td align="left">${salesTarget.title}</td>
-				<td align="right" width="15%">组织机构：</td>
-				<td align="left">${salesTarget.org.name }</td>
+				<td align="right" width="15%">目标人员：</td>
+				<td align="left">${salesTarget.owner.realName }</td>
 			</tr>
 			<tr>
 				<td align="right">目标成交额（万）：</td>
 				<td align="left">${salesTarget.bargainMoney}</td>
 				<td align="right">时间周期：</td>
-				<td align="left">${salesTarget.unitDic.key }</td>
+				<td align="left">${salesTarget.timeStr }</td>
 			</tr>
 		</table>
 		<h1 class="f14 fbnone ml40 pt10">描述信息</h1>

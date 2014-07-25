@@ -13,7 +13,7 @@
 <script type="text/javascript" src="${ctx}/static/js/scrollTitle.js?v=1"></script>
 <script type="text/javascript">
 $(function () {
-    new Grid().init();
+    new Grid().init(); //生成Gird
 });
 </script>
 </head>
@@ -32,7 +32,7 @@ $(function () {
 				</select>
     		</td>
     		<td class="f14 namewidth1" align="right">字典名称：</td>
-    		<td class="f14 namewidth2" align="right"><input type="text" class="text_input1" name="search_LIKE_key"/></td>
+    		<td class="f14 namewidth2" align="left"><input type="text" class="text_input1" name="search_LIKE_key"/></td>
     		<td width="namewidth3">
     			<a href="javascript:;" class="reset a_underline fr w_blue mt5">清除</a>
     			<a href="javascript:;" class="block c_white lh25 fr mr10">
@@ -40,8 +40,8 @@ $(function () {
     				<b class="allbtn_r pr13 block fl w_auto f14 submit">查&nbsp;&nbsp;询</b>
     			</a>
     		</td>
-    		<td class="f14" align="right" width="6%"></td>
-    		<td class="f14" align="right" width="16%"></td>
+    		<td></td>
+    		<td></td>
     	</tr>
     </table>
     <div class="cb"></div>
@@ -64,7 +64,7 @@ $(function () {
 				</c:if>
 				<c:if test="${VS_HAS_FUNCTIONS.dictionaryAdd}">
 					<li>
-						<a href="${ctx}/system/dictionary/toAddPage.do" class="block c_white lh25">
+						<a href="${ctx}/system/dictionary/toAddPage.do" class="block c_white mr10 lh25">
 							<b class="allbtn_l block fl"></b>
 							<b class="allbtn_r pr13 block fl w_auto f14">新&nbsp;&nbsp;增</b>
 						</a>

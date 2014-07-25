@@ -15,6 +15,10 @@ workbanch.modules = {
 	supplier : {
 		titles : [ '供应商', '法人', '电话', '手机', '传真' ],
 		fields : [ 'name', 'corporation', 'phone', 'mobile', 'fax' ]
+	},
+	order : {
+		titles : [ '编号' ,'金额', '创建时间', '修改时间' ],
+		fields : [ 'code', 'purchaseMoney' , 'createdTime', 'modifiedTime']
 	}
 };
 workbanch.getModule = function(module) {
@@ -32,32 +36,37 @@ workbanch.getParams=function(ele){
 	} else {
 		$this = $(this);
 	}
-	var flag = $this.attr("params");
+	var flag = $this.attr("timeParam");
 	var time;
 	if(flag){
 		time = {};
 		var date = new Date();
-		var today = date.getFullYear()+"-"+(date.getMonth()+1)+"-"+date.getDate();
 		switch(flag){
 			case "today":
+				var today = date.getFullYear()+"-"+(date.getMonth()+1)+"-"+date.getDate();
 				time.search_GTE_createdTime=today;
 				time.search_LTE_createdTime=today;
 				break;
 			case "week":
-				var week = new Date(date.getTime()-(1000*60*60*24*7));
-				week = week.getFullYear()+"-"+(week.getMonth()+1)+"-"+week.getDate();
-				time.search_GTE_createdTime=week;
-				time.search_LTE_createdTime=today;
+				var year = date.getFullYear();
+				var month = date.getMonth()+1;
+				var currDay = date.getDate();
+				var day = date.getDay();
+				time.search_GTE_createdTime=year+"-"+month+"-"+(currDay+1-day);
+				time.search_LTE_createdTime=year+"-"+month+"-"+(currDay+7-day);;
 				break;
 			case "month":
-				var month = new Date(date.getTime()-(1000*60*60*24*30));
-				month = month.getFullYear()+"-"+(month.getMonth()+1)+"-"+month.getDate();
-				time.search_GTE_createdTime=month;
-				time.search_LTE_createdTime=today;
+				var year = date.getFullYear();
+				var month = date.getMonth()+1;
+				var lastDay = workbanch.getLastDay(year,month);
+				time.search_GTE_createdTime=year+"-"+month+"-1";
+				time.search_LTE_createdTime=year+"-"+month+"-"+lastDay;
 				break;
 		}
 	}
-	return $.param(time);
+	var pa = $this.attr("params");
+	var param = eval("("+pa+")");
+	return $.param(time)+"&"+$.param(param);
 };
 workbanch.loadData = function(ele) {
 	var $this;
@@ -131,13 +140,13 @@ workbanch.initReport=function(){
 workbanch.modifyOrder = function() {
 	var ids = new Array();
 	$(".gbin1-list li").each(function() {
-		ids.push("ids=", $(this).attr("id"), "&");
+		var id= $(this).attr("id");
+		if(id!="add"){
+			ids.push("ids="+ $(this).attr("id"));
+		}
 	});
-	if (ids.length > 1) {
-		ids.pop();
-	}
 	RcmsAjax.ajaxNoMsg(jsUtil.getRootPath() + "/workbanch/modifyOrder.do?"
-			+ ids.join(""));
+			+ ids.join("&"));
 };
 workbanch.bindDelete = function() {
 	$(".delete").click(
@@ -188,26 +197,21 @@ workbanch.href=function(ele,id){
 	var url= $ele.attr("uri").replace("query.do","toViewPage.do?id="+id);
 	window.location.href=url;
 };
-workbanch.addWorkbanch=function(funcParam){//搜索弹出框
+workbanch.addWorkbanch=function(){//搜索弹出框
 	var path = jsUtil.getRootPath();
-	jsUtil.dialogIframe(path+"/workbanch/add.comp", "自定义工作台", 800, 300, function(){//确定回调
-		var $form = $("#listForm", window.frames["dialogIframe"].document);
-		var type = $("#type", window.frames["dialogIframe"].document).val();
-		if(type=='list'){
-			$("#report",window.frames["dialogIframe"].document).removeClass("required");
-			$("#module",window.frames["dialogIframe"].document).addClass("required");
-		}else{
-			$("#module",window.frames["dialogIframe"].document).removeClass("required");
-			$("#report",window.frames["dialogIframe"].document).addClass("required");
-		}
-		if($form.valid()){
-			var formData = $form.formSerialize();
-			RcmsAjax.ajax(path+"/workbanch/add.do",funcParam,null,formData);
-		}else{
-			return false;
-		}
-	});
+	window.location.href=path+"/workbanch/toAddPage.do";
 };
+workbanch.getLastDay =function(year,month){        
+	 var new_year = year;    //取当前的年份        
+	 var new_month = month++;//取下一个月的第一天，方便计算（最后一天不固定）        
+	 if(month>12)            //如果当前大于12月，则年份转到下一年        
+	 {        
+	  new_month -=12;        //月份减        
+	  new_year++;            //年份增        
+	 }        
+	 var new_date = new Date(new_year,new_month,1);                //取当年当月中的第一天        
+	 return (new Date(new_date.getTime()-1000*60*60*24)).getDate();//获取当月最后一天日期        
+}  
 $(function() {
 	workbanch.bindFunction();
 });

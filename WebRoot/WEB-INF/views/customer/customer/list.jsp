@@ -54,7 +54,9 @@ $(function () {
 		if($userObj.length > 0){
 			var boxs = $("input(name=id):checked");
 			var param = $.param(boxs)+"&ownerId=" + $userObj.attr("id");
-			RcmsAjax.ajax(jsUtil.getRootPath() + '/customer/customer/modify.do?type=modifyOwner', function(){load();}, null, param);
+			RcmsAjax.ajax(jsUtil.getRootPath() + '/customer/customer/modify.do?type=modifyOwner', function(){
+				setTimeout(function () {load();}, 500);
+				}, null, param);
 		}
 	}
 	function load() { // 加载数据的方法
@@ -123,15 +125,15 @@ $(function () {
 			<td></td>
 		</tr>
 		<tr class="more-content">
-			<td class="f14" align="right">省：</td>
+			<td class="f14" align="right">省份：</td>
 			<td class="f14" align="left" >
 				<select id="province" name="search_EQ_province.id" class="select2"></select>
 			</td>
-			<td class="f14" align="right">市：</td>
+			<td class="f14" align="right">城市：</td>
 			<td class="f14" align="left" >
 				<select id="city" name="search_EQ_city.id" class="select2"></select>
 			</td>
-			<td class="f14" align="right">县：</td>
+			<td class="f14" align="right">区县：</td>
 			<td class="f14" align="left">
 				<select id="county" name="search_EQ_county.id" class="select2"></select>
 			</td>
@@ -195,9 +197,9 @@ $(function () {
 					</li>
 				</ul>
 				<ul class="fr id_table1 mt10 ml10">
-						<c:if test="${VS_HAS_FUNCTIONS.leadImport}">
+						<c:if test="${VS_HAS_FUNCTIONS.customerImport}">
 							<li>
-								<a href="${ctx}/common/imports/toImportPage.do?module=customer"
+								<a href="${ctx}/customer/imports/toImportPage.do?module=customer"
 									class="leading_in globle_img block_inline mr10" title="导入"></a>
 							</li>
 						</c:if>
@@ -216,33 +218,35 @@ $(function () {
 		<table class="cb id_table2 w" >
 			<tr>
 				<th width="4%"><input type="checkbox" id="id" class="checkall"/></th>
-				<th width="8%">客户名称 </th>
-				<th width="8%">客户所有者</th>
-				<th width="8%">客户类型</th>
-				<th width="10%">公司名称</th>
-				<th width="10%">手机</th>
-				<th width="10%">电话</th>
-				<th width="8%">创建者</th>
-				<th width="12%" class="sortable orderby" orderby="createdTime">创建时间</th>
-				<th width="12%" class="sortable orderby" orderby="modifiedTime">最后修改时间</th>
-				<th width="11%" align="center">操作</th>
+				<th width="7%">客户名称 </th>
+				<th width="7%">客户所有者</th>
+				<th width="7%">客户类型</th>
+				<th width="7%">风险等级</th>
+				<th width="9%">公司名称</th>
+				<th width="9%">手机</th>
+				<th width="9%">电话</th>
+				<th width="7%">创建者</th>
+				<th width="11%" class="sortable orderby" orderby="createdTime">创建时间</th>
+				<th width="11%" class="sortable orderby" orderby="modifiedTime">最后修改时间</th>
+				<th width="10%" align="center">操作</th>
 			</tr>
 		</table>
 	</div>
     <div class="ml35 mr35" >
         <table class="cb id_table2 w pr35" id="table">
 			<tr id="recordDiv"align="left">
-				<th width="4%" ><input type="checkbox" id="id" class="checkall"/></th>
-				<th width="8%">客户名称 </th>
-				<th width="8%">客户所有者</th>
-				<th width="8%">客户类型</th>
-				<th width="10%">公司名称</th>
-				<th width="10%">手机</th>
-				<th width="10%">电话</th>
-				<th width="8%">创建者</th>
-				<th width="12%" class="sortable orderby" orderby="createdTime">创建时间</th>
-				<th width="12%" class="sortable orderby" orderby="modifiedTime">最后修改时间</th>
-				<th width="11%" align="center">操作</th>
+				<th width="3%"><input type="checkbox" id="id" class="checkall"/></th>
+				<th width="7%">客户名称 </th>
+				<th width="7%">客户所有者</th>
+				<th width="7%">客户类型</th>
+				<th width="7%">风险等级</th>
+				<th width="9%">公司名称</th>
+				<th width="9%">手机</th>
+				<th width="9%">电话</th>
+				<th width="7%">创建者</th>
+				<th width="11%" class="sortable orderby" orderby="createdTime">创建时间</th>
+				<th width="11%" class="sortable orderby" orderby="modifiedTime">最后修改时间</th>
+				<th width="10%" align="center">操作</th>
 			</tr>
 			<tbody id="tbody" class="list"></tbody>
 		</table>
@@ -260,6 +264,7 @@ $(function () {
                 </td>
                 <td>{$T.row.owner.realName}</td>
                 <td>{$T.row.type.key}</td>
+                <td>{$T.row.riskGrade.key}</td>
                 <td>{$T.row.company}</td>
                 <td>{$T.row.mobile}</td>
                 <td>{$T.row.phone}</td>

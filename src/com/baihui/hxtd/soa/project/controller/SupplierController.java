@@ -28,7 +28,11 @@ import com.baihui.hxtd.soa.base.utils.ImportExport;
 import com.baihui.hxtd.soa.base.utils.Search;
 import com.baihui.hxtd.soa.base.utils.mapper.HibernateAwareObjectMapper;
 import com.baihui.hxtd.soa.common.controller.CommonController;
+import com.baihui.hxtd.soa.customer.entity.Contact;
+import com.baihui.hxtd.soa.customer.service.ContactService;
+import com.baihui.hxtd.soa.project.entity.Project;
 import com.baihui.hxtd.soa.project.entity.Supplier;
+import com.baihui.hxtd.soa.project.service.ProjectService;
 import com.baihui.hxtd.soa.project.service.SupplierService;
 import com.baihui.hxtd.soa.system.entity.AuditLog;
 import com.baihui.hxtd.soa.system.entity.Dictionary;
@@ -55,6 +59,12 @@ public class SupplierController extends CommonController<Supplier> {
 	 
 	 @Resource
 	 private DictionaryService dictionaryService;
+	 
+	 @Resource
+	 private ContactService contectService;
+	 
+	 @Resource
+	 private ProjectService projectService;
 	 /**
 	 * @throws IOException 
 	 * @throws JsonMappingException 
@@ -120,7 +130,11 @@ public class SupplierController extends CommonController<Supplier> {
 							  Model model){
 		logger.info("SupplierController.view查询组件");
 		Supplier com = supplierService.get(id);
+		List<Contact> contacts = contectService.findContactBySupplier(com);
+		List<Project> projects = projectService.findProjectBySupplier(com);
 		model.addAttribute("com",com);
+		model.addAttribute("contacts",contacts);
+		model.addAttribute("projects",projects);
 		return "/project/supplier/view";
 	}
 	/**
@@ -153,11 +167,15 @@ public class SupplierController extends CommonController<Supplier> {
 	  * @throws
 	 */
 	@RequestMapping(value = "/toAddPage.do")
-	public String toAddPage(Model model){
+	public String toAddPage(ModelMap model){
 		logger.info("SupplierController.view查询组件");
 		String funcUrl="/project/supplier/add.do";
-		setDefaultDict(model);
+		model.addAttribute("type",dictionaryService.findChildren("050101"));
+		model.addAttribute("cardType",dictionaryService.findChildren("040303"));
 		model.addAttribute("funcUrl", funcUrl);
+		Supplier com = new Supplier();
+		com.setOwner((User)model.get(Constant.VS_USER));
+		model.addAttribute("com",com);
 		return "/project/supplier/edit";
 	}
 	/**

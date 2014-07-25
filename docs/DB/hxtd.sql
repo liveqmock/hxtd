@@ -778,3 +778,40 @@ CREATE TABLE `sysmessage` (
 -- ----------------------------
 -- Records of sysmessage
 -- ----------------------------
+
+-- ----------------------------
+-- Table structure for `wf_node`
+-- ----------------------------
+DROP TABLE IF EXISTS `wf_node`;
+CREATE TABLE `wf_node` (
+  `ID` int(11) NOT NULL AUTO_INCREMENT COMMENT '主键ID',
+  `CODE` varchar(16) DEFAULT NULL,
+  `NAME` varchar(32) NOT NULL,
+  `FLOW_ID` int(11) NOT NULL,
+  `ROLE_ID` int(11) DEFAULT NULL,
+  `TYPE_ID` int(11) NOT NULL,
+  PRIMARY KEY (`ID`),
+  UNIQUE KEY `INDEX_CODE` (`CODE`)
+) ENGINE=InnoDB AUTO_INCREMENT=16 DEFAULT CHARSET=utf8 COMMENT='流程节点表';
+
+-- ----------------------------
+-- Table structure for `wf_task`
+-- ----------------------------
+DROP TABLE IF EXISTS `wf_task`;
+CREATE TABLE `wf_task` (
+  `ID` int(11) NOT NULL AUTO_INCREMENT COMMENT '主键',
+  `NODE_ID` int(11) DEFAULT NULL COMMENT '节点ID',
+  `MODULE_ID` int(11) DEFAULT NULL COMMENT '模块类型id',
+  `RECORD_ID` int(11) DEFAULT NULL COMMENT '关联模块记录ID',
+  `ORG_ID` int(11) DEFAULT NULL COMMENT '机构id',
+  `APPROVER_ID` int(11) DEFAULT NULL COMMENT '审批者',
+  `IS_PASSED` tinyint(4) DEFAULT NULL,
+  `APPROVE_TIME` datetime DEFAULT NULL COMMENT '审批时间',
+  `REJECT_REASON` varchar(255) DEFAULT NULL COMMENT '退回原因',
+  `CREATOR_ID` int(11) DEFAULT NULL COMMENT '流程创建者',
+  `CREATED_TIME` datetime DEFAULT NULL COMMENT '创建时间',
+  `MODIFIER_ID` int(11) DEFAULT NULL COMMENT '最后修改者',
+  `MODIFIED_TIME` timestamp NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '最后修改时间',
+  PRIMARY KEY (`ID`)
+) ENGINE=InnoDB AUTO_INCREMENT=9 DEFAULT CHARSET=utf8 COMMENT='流程任务表';
+

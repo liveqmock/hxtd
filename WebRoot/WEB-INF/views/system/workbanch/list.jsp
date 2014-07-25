@@ -1,5 +1,5 @@
 <%--
-  功能描述：组件管理列表页
+  工作台描述：工作台管理列表页
   User: ruisong.luan
   Date:2014/5/6
 --%>
@@ -9,7 +9,7 @@
 <c:set var="ctx" value="${pageContext.request.contextPath}"/>
 <html>
 <head>
-<title>功能列表</title>
+<title>工作台列表</title>
 <link rel="stylesheet" href="${ctx}/static/css/application.css" type="text/css" />
 <link rel="stylesheet" href="${ctx}/static/css/recommend/detail.css" type="text/css" />
 <script type="text/javascript" src="${ctx}/static/js/jquery-json.2.4.js"></script>
@@ -20,7 +20,8 @@
 <script type="text/javascript" src="${ctx}/static/js/jquery.validate.js"></script>
 <script type="text/javascript" src="${ctx}/static/js/jquery.metadata.js"></script>
 <script type="text/javascript" src="${ctx}/static/js/validator.js"></script>
-<script type="text/javascript" src="${ctx}/static/js/workbanch.js"></script>
+<script type="text/javascript" src="${ctx}/static/component/open-flash-chart-2/js/json/json2.js"></script>
+<script type="text/javascript" src="${ctx}/static/component/open-flash-chart-2/js/swfobject.js"></script>
 <script type="text/javascript">
 $(function() {
 	$("#id").click(function() {
@@ -64,7 +65,7 @@ $(function() {
 						</a>
 					</li>
 					<li>
-						<a href="javascript:workbanch.addWorkbanch(grid.loadGrid);"
+						<a href="${ctx}/workbanch/toAddPage.do"
 							class="block c_white lh25 ml10"><b
 							class="allbtn_l block fl"></b><b
 							class="allbtn_r pr13 block fl w_auto f14">新&nbsp;&nbsp;增</b>

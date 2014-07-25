@@ -5,7 +5,6 @@ import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 import java.util.Set;
 import java.util.TreeSet;
 
@@ -20,6 +19,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -50,7 +50,6 @@ import com.baihui.hxtd.soa.util.PropertyManager;
  *
  */
 @Controller
-@RequestMapping(value = "/common/imports")
 @SessionAttributes(value={Constant.VS_USER})
 public class ImportController {
 	
@@ -62,12 +61,13 @@ public class ImportController {
 	
 	/**
 	 * 跳转到import页面
+	 * /{module}/imports/toImportPage.do  表示,拦截符合这种规则的请求
 	 * @param modelMap
 	 * @return
 	 * @throws NoSuchFieldException
 	 */
-	@RequestMapping(value = "/toImportPage.do")
-	public String toImportPage(Model model,@RequestParam(required=false) String module) throws NoSuchFieldException{
+	@RequestMapping(value = "/{module}/imports/toImportPage.do",produces = "text/text;charset=UTF-8")
+	public String toImportPage(@PathVariable String module, Model model) throws NoSuchFieldException{
 		model.addAttribute("userTemplement", "user.xls");
 		//枚举获取导入文件的类型
 		EnumModule[] enumModule = EnumModule.values();
@@ -83,7 +83,7 @@ public class ImportController {
 	
 	@SuppressWarnings("unchecked")
 	@ResponseBody
-	@RequestMapping(value = "/import.do", produces = "text/text;charset=UTF-8", method=RequestMethod.POST)
+	@RequestMapping(value = "/{module}/imports/import.do", produces = "text/text;charset=UTF-8", method=RequestMethod.POST)
 	public String imports(MultipartFile file, HttpSession session,
             @RequestParam(required=false) String duplicateType,
             @RequestParam(required=false) List<String> checkWay,
@@ -100,9 +100,6 @@ public class ImportController {
 		ImportMessage.workbookRepeats = new HashMap<String,Set<Integer>>();
 		
 		/**格式错误记录的excel序号集合*/
-		ImportMessage.invalidFormatRowNums = new ArrayList<Integer>();
-		
-		
 		ImportMessage.invalidFormatRowNumMap = new HashMap<Integer, String>();
 		
 		/** 在数据库中已经存在的记录的excel序号集合 */

@@ -44,7 +44,7 @@ public class PCASService {
 		return pcasDao.getChildren(pid);
 	}
 
-	public PCAS getByName(String name){
-		return pcasDao.getByName(name);
+	public PCAS getByName(String name,Long pid){
+		return pcasDao.getByName(name,pid);
 	}
 }

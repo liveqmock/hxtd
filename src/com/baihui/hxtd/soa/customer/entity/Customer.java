@@ -13,6 +13,9 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
+import org.hibernate.annotations.NotFound;
+import org.hibernate.annotations.NotFoundAction;
+
 import com.baihui.hxtd.soa.common.entity.PCAS;
 import com.baihui.hxtd.soa.system.entity.Dictionary;
 import com.baihui.hxtd.soa.system.entity.User;
@@ -39,6 +42,7 @@ public class Customer implements Serializable {
 	/** 客户所有者 */
 	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "OWNER")
+	@NotFound(action = NotFoundAction.IGNORE)
 	private User owner;
 
 	/** 客户名称 */
@@ -185,26 +189,34 @@ public class Customer implements Serializable {
 	/**
 	 * 理财顾问
 	 */
-	@Column(name = "FINANCIAL_ADVISOR")
-	private String financialAdvisor;
+	@ManyToOne(fetch = FetchType.LAZY)
+	@JoinColumn(name = "FINANCIAL_ADVISOR")
+	@NotFound(action = NotFoundAction.IGNORE)
+	private User financialAdvisor;
 	
 	/**
 	 * 理财经理
 	 */
-	@Column(name = "FINANCIAL_MANAGER")
-	private String financialManager;
+	@ManyToOne(fetch = FetchType.LAZY)
+	@JoinColumn(name = "FINANCIAL_MANAGER")
+	@NotFound(action = NotFoundAction.IGNORE)
+	private User financialManager;
 	
 	/**
 	 * 邀约人
 	 */
-	@Column(name = "APPOINTMENT")
-	private String appointment;
+	@ManyToOne(fetch = FetchType.LAZY)
+	@JoinColumn(name = "APPOINTMENT")
+	@NotFound(action = NotFoundAction.IGNORE)
+	private User appointment;
 
 	/**
 	 * 理财总监
 	 */
-	@Column(name = "FINANCIAL_DIRECTOR")
-	private String financialDirector;
+	@ManyToOne(fetch = FetchType.LAZY)
+	@JoinColumn(name = "FINANCIAL_DIRECTOR")
+	@NotFound(action = NotFoundAction.IGNORE)
+	private User financialDirector;
 
 	/**
 	 * 所在部门
@@ -470,35 +482,36 @@ public class Customer implements Serializable {
 		this.familyAddr = familyAddr;
 	}
 
-	public String getFinancialAdvisor() {
+
+	public User getFinancialAdvisor() {
 		return financialAdvisor;
 	}
 
-	public void setFinancialAdvisor(String financialAdvisor) {
+	public void setFinancialAdvisor(User financialAdvisor) {
 		this.financialAdvisor = financialAdvisor;
 	}
 
-	public String getFinancialManager() {
+	public User getFinancialManager() {
 		return financialManager;
 	}
 
-	public void setFinancialManager(String financialManager) {
+	public void setFinancialManager(User financialManager) {
 		this.financialManager = financialManager;
 	}
 
-	public String getAppointment() {
+	public User getAppointment() {
 		return appointment;
 	}
 
-	public void setAppointment(String appointment) {
+	public void setAppointment(User appointment) {
 		this.appointment = appointment;
 	}
 
-	public String getFinancialDirector() {
+	public User getFinancialDirector() {
 		return financialDirector;
 	}
 
-	public void setFinancialDirector(String financialDirector) {
+	public void setFinancialDirector(User financialDirector) {
 		this.financialDirector = financialDirector;
 	}
 

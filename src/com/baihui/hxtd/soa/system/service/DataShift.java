@@ -56,7 +56,7 @@ public class DataShift {
      * 1.根据当前对象创建出修改用户字段名称后的对象
      */
     public DataShift renameUserFieldName(String userFieldName) {
-        return new DataShift(this.getIsSysDataManager(),this.getIsOrgDataManager(), userFieldName, this.getUserId(), this.getOrderRange());
+        return new DataShift(this.getIsSysDataManager(),this.getIsOrgDataManager(),this.getOrganizationFieldName(), this.getOrganizationAlias(), userFieldName,userFieldName,this.getUserId(), this.getOrderRange());
     }
 
     /**

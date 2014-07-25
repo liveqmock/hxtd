@@ -156,7 +156,7 @@ public class ImportCustomerService extends ImportServiceAbstract<CustomerDTO,Cus
 		//出资规模25
 		customer.setContributionScale(customerDTO.getContributionScale());
 		
-		//要约人26
+		//邀约人26
 		customer.setAppointment(customerDTO.getAppointment());
 		
 		//理财顾问27
@@ -317,22 +317,22 @@ public class ImportCustomerService extends ImportServiceAbstract<CustomerDTO,Cus
 		
 		
 		//邀约人26
-		if(Tools.isEmpty(customer.getAppointment())){
+		if(customer.getAppointment() == null){
 			customer.setAppointment(customerByDB.getAppointment());
 		}
 		
 		//理财顾问27
-		if(Tools.isEmpty(customer.getFinancialAdvisor())){
+		if(customer.getFinancialAdvisor() == null){
 			customer.setFinancialAdvisor(customerByDB.getFinancialAdvisor());
 		}
 		
 		//理财经理28
-		if(Tools.isEmpty(customer.getFinancialManager())){
+		if(customer.getFinancialManager() == null){
 			customer.setFinancialManager(customerByDB.getFinancialManager());
 		}
 		
 		//理财总监29
-		if(Tools.isEmpty(customer.getFinancialDirector())){
+		if(customer.getFinancialDirector()==null){
 			customer.setFinancialDirector(customerByDB.getFinancialDirector());
 		}
 		

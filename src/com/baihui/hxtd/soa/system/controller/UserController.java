@@ -37,8 +37,10 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import java.io.IOException;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 /**
  * 用户控制器
@@ -572,12 +574,14 @@ public class UserController extends CommonController<User> {
     	Organization organization = (Organization) model.get(Constant.VS_ORG);
     	//得到当前组织下的子组织
     	List<Organization> orgList = organizationService.findChildren(organization.getId());
+    	//orgList.add(organization);
     	User u = (User) model.get(Constant.VS_USER);
         StringBuffer sb = new StringBuffer("[");
+        sb.append("{id:"+u.getId()+", name:\""+u.getRealName()+"\", pId:"+0+", type:\"user\"},");
         Long oldOrgId = 0l;
         for (int i = 0; i < orgList.size(); i++) {
             Organization org = orgList.get(i);
-            if (org.getId() == oldOrgId) {
+            if (org.getId() == oldOrgId||orgList.get(i).getOwners().size()==0) {
                 continue;
             }
             sb.append(String.format("{id:-%s, name:\"%s\", pId:-%s, type:\"%s\"},", new Object[]{
@@ -586,17 +590,18 @@ public class UserController extends CommonController<User> {
                     org.getParent() == null ? "0" : org.getParent().getId(),
                     "org"
             }));
-            for (User user : org.getOwners()) {//用户
-                sb.append(String.format("{id:%s, name:\"%s\", pId:-%s, type:\"%s\",chkDisabled:%s},", new Object[]{
-                        user.getId(),
-                        user.getRealName(),
-                        org.getId(),
-                        "user",
-                        user.getId() == u.getId() ? true : false
+            
+            for (User user :org.getOwners()) {//用户
+                sb.append(String.format("{id:%s, name:\"%s\", pId:-%s, type:\"%s\"},", new Object[]{
+                    user.getId(),
+                    user.getRealName(),
+                    org.getId(),
+                    "user",
                 }));
             }
             oldOrgId = org.getId();
         }
+        //sb.append("{id:"+u.getId()+", name:\""+u.getRealName()+"\", pId:"+-u.getOrganization().getId()+", type:\"user\"},");
         sb.toString().substring(0, sb.toString().length() - 2);
         sb.append("]");
         model.addAttribute("json", sb.toString());

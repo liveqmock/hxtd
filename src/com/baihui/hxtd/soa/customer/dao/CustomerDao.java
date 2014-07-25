@@ -52,6 +52,10 @@ public class CustomerDao extends HibernateDAOImpl<Customer, Long>{
         hql.append("left join fetch customer.province ");
         hql.append("left join fetch customer.city ");
         hql.append("left join fetch customer.county ");
+        hql.append("left join fetch customer.financialAdvisor ");
+        hql.append("left join fetch customer.financialManager ");
+        hql.append("left join fetch customer.appointment ");
+        hql.append("left join fetch customer.financialDirector ");
         hql.append("where customer.id=? ");
 		return findUnique(hql.toString(), id);
 	}

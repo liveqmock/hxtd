@@ -16,12 +16,14 @@ $(function(){
 	jsUtil.formatMoney(".money"); //设置千分位
 	var dates=$("#start,#end"); //日历设置
 	dates.datepicker({
-		closeText : '关闭',
+		closeText : '清空',
 		minDate: 0,
 	    onSelect: function(selectedDate){
 	       var option = this.id == "start" ? "minDate" : "maxDate";
 	       dates.not(this).datepicker("option", option, selectedDate);
 	    }
+	}).focus(function(){
+		clearDate($(this), true);
 	});
 	$(".empty").click(function(){ //清除
 		$(this).prevAll("input").val('');
@@ -60,7 +62,19 @@ function searchData(action){ //搜索
 				<input name="sponsorname" type="text" value="${activity.sponsor.realName}" readonly class="text_input3"/>
 				<input type="hidden" name="sponsor.id" value="${activity.sponsor.id}"/>
 			</td>
-			<td width="15%" align="right">类型：</td>
+			<td width="15%" align="right"><span class="w_red">*&nbsp;</span>活动名称：</td>
+			<td align="left"><input name="name" type="text" value="${activity.name}" class="text_input3 required" maxlength="30"/></td>
+		</tr>
+		<tr>
+			<td align="right"><span class="w_red">*&nbsp;</span>负责人：</td>
+			<td align="left">
+				<input type="text" id="txt_boss" name="bossname" value="${activity.bossHead.realName}" readonly
+					 class="text_input3 required cp" onclick="searchData('boss');"/>
+				<input type="hidden"id="hide_boss_id" name="bossHead.id" value="${activity.bossHead.id}"/>
+				<i class="s_inquiry globle_img block_inline ml5 vm cp" title="搜索责任人" onclick="searchData('boss');"></i>
+				<i class="dump_btn globle_img block_inline ml5 vm cp empty" title="清除"></i>
+			</td>
+			<td align="right">活动类型：</td>
 			<td align="left">
 				<select name="typeDic.id" class="select1 pr">
 					<option value="">--无--</option>
@@ -71,9 +85,12 @@ function searchData(action){ //搜索
 			</td>
 		</tr>
 		<tr>
-			<td align="right"><span class="w_red">*&nbsp;</span>活动名称：</td>
-			<td align="left"><input name="name" type="text" value="${activity.name}" class="text_input3 required"/></td>
-			<td align="right">状态：</td>
+			<td align="right"><span class="w_red">*&nbsp;</span>开始日期：</td>
+			<td align="left">
+				<fmt:formatDate value="${activity.beginDate}" pattern="yyyy-MM-dd" var="beginDate"/>
+				<input type="text" id="start" name="beginDate" value="${beginDate}" readonly class="text_input3 input_close1 required"/>
+			</td>
+			<td align="right">活动状态：</td>
 			<td align="left">
 				<select name="statusDic.id" class="select1 pr">
 					<option value="">--无--</option>
@@ -84,11 +101,10 @@ function searchData(action){ //搜索
 			</td>
 		</tr>
 		<tr>
-			<td align="right">开始日期：</td>
+			<td align="right">结束日期：</td>
 			<td align="left">
-				<fmt:formatDate value="${activity.beginDate}" pattern="yyyy-MM-dd" var="beginDate"/>
-				<a href="javascript:;" class="pa time_closenone1"></a>
-				<input type="text" id="start" name="beginDate" value="${beginDate}" readonly="readonly" class="text_input3 input_close1"/>
+				<fmt:formatDate value="${activity.endDate}" pattern="yyyy-MM-dd" var="endDate"/>
+				<input type="text" id="end" name="endDate" value="${endDate}" readonly class="text_input3 input_close1"/>
 			</td>
 			<td align="right">预计成本：</td>
 			<td align="left">
@@ -98,37 +114,21 @@ function searchData(action){ //搜索
 			</td>
 		</tr>
 		<tr>
-			<td align="right">结束日期：</td>
-			<td align="left">
-				<fmt:formatDate value="${activity.endDate}" pattern="yyyy-MM-dd" var="endDate"/>
-				<a href="javascript:;" class="pa time_closenone1"></a>
-				<input type="text" id="end" name="endDate" value="${endDate}" readonly="readonly" class="text_input3 input_close1"/>
-			</td>
+			<td align="right">预期效果：</td>
+			<td align="left"><input name="expectEffect" type="text" value="${activity.expectEffect}" class="text_input3" maxlength="30"/></td>
 			<td align="right">实际成本：</td>
 			<td align="left">
 				<fmt:formatNumber value="${activity.realityCost}" pattern="###,##0.00" var="realityCost"/>
 				<input type="text" value="${realityCost}" class="text_input3 money" maxlength="13" style="ime-mode:disabled"/>
-				<input type="hidden" name="realityCost" value="${activity.predictCost}"/>
+				<input type="hidden" name="realityCost" value="${activity.realityCost}"/>
 			</td>
-		</tr>
-		<tr>
-			<td align="right">预期效果：</td>
-			<td align="left"><input name="expectEffect" type="text" value="${activity.expectEffect}" class="text_input3"/></td>
-			<td align="right">活动次数：</td>
-			<td align="left"><input name="times" type="text" value="${activity.times}" class="text_input3 digits"/></td>
 		</tr>
 		<tr>
 			<td align="right">期望成功率（%）：</td>
 			<td align="left"><input type="text" name="expectSuccessRate" value="${activity.expectSuccessRate}" 
-				class="text_input3 amount" maxlength="3" style="ime-mode:disabled"/></td>
-			<td align="right"><span class="w_red">*&nbsp;</span>负责人：</td>
-			<td align="left">
-				<input type="text" id="txt_boss" name="bossname" value="${activity.bossHead.realName}" readonly
-					 class="text_input3 required cp" onclick="searchData('boss');"/>
-				<input type="hidden"id="hide_boss_id" name="bossHead.id" value="${activity.bossHead.id}"/>
-				<i class="s_inquiry globle_img block_inline ml5 vm cp" title="搜索责任人" onclick="searchData('boss');"></i>
-				<i class="dump_btn globle_img block_inline ml5 vm cp empty" title="清除"></i>
-			</td>
+				class="text_input3 amount" maxlength="5" style="ime-mode:disabled"/></td>
+			<td align="right">活动次数：</td>
+			<td align="left"><input name="times" type="text" value="${activity.times}" class="text_input3 digits"/></td>
 		</tr>
 		</table>
 		<h1 class="f14 fbnone ml40 pt10">描述信息</h1>
@@ -136,7 +136,7 @@ function searchData(action){ //搜索
 			<tr>
 				<td align="right" width="15%" valign="top">备注：</td>
 				<td align="left" width="85%" valign="top"><textarea name="remark" class="remarks_input1"
-					style="resize: none;">${activity.remark}</textarea></td>
+					 maxlength="500">${activity.remark}</textarea></td>
 			</tr>
 		</table>
 	<div class="h40"></div>

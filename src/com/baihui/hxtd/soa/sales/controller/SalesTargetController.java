@@ -120,6 +120,16 @@ public class SalesTargetController extends CommonController<SalesTarget> {
 		return "/sales/salesTarget/view";
 	}
 	
+	@RequestMapping(value = "/view.comp",params="type=time")
+	public String view( Model model){
+		logger.info("SalesTargetController.view时间段生成控件");
+		return "/sales/salesTarget/view_time";
+	}
+	
+	
+	
+	
+	
 	/**
 	  * toAddPage(跳转新增页面)
 	  * @Title: view
@@ -160,34 +170,24 @@ public class SalesTargetController extends CommonController<SalesTarget> {
 		return "/sales/salesTarget/edit";
 	}
 	
+	@RequestMapping(value = "/toAddPage.do",params="type=second")
+	public String addSecond(@RequestParam(required=false)Long id,
+							  Model model){
+		logger.info("SalesTargetController.toModifyPage查询销售目标");
+		String funcUrl="/sales/salesTarget/add.do";
+		SalesTarget com  = salesTargetService.get(id);
+		setDefaultDict(model);
+		com.setId(null);
+		com.setOwner(null);
+		model.addAttribute("salesTarget",com);
+		model.addAttribute("funcUrl", funcUrl);
+		return "/sales/salesTarget/edit";
+	}
 	
 	
 	private void setDefaultDict(Model model){
-		model.addAttribute("unit",dictionaryService.findChildren("080101"));
-		model.addAttribute("orgTree",getOrgTree());
 	}
 	
-	private String getOrgTree(){
-		StringBuffer sb = new StringBuffer("[");
-		List<Organization> list = organizationService.getAllOrg();
-		for(Organization o :list){
-			sb.append("{");
-			sb.append("id:"+o.getId()+",");
-			if(o.getParent()!=null){
-				sb.append("pId:"+o.getParent().getId()+",");
-			}
-			if(o.getId()==1){
-				sb.append("open:true,");
-			}
-			sb.append("name:\""+o.getName()+"\"");
-			sb.append("},");
-		}
-		if(sb.length()>2){
-			sb.deleteCharAt(sb.length()-1);
-		}
-		sb.append("]");
-		return sb.toString();
-	}
 	/**
 	  * modify(保存：修改)
 	  * @Title: modify
@@ -221,22 +221,26 @@ public class SalesTargetController extends CommonController<SalesTarget> {
 	 */
 	@ResponseBody
 	@RequestMapping(value = "/add.do", produces = "text/text;charset=UTF-8")
-	public String add(SalesTarget salesTarget,HttpServletRequest request){
+	public String add(SalesTarget salesTarget,String ownerIds,HttpServletRequest request){
 		logger.info("SalesTargetController.query查询销售目标列表");
 		//临时代码，时间类型应从数据库中取
 		User u = (User) request.getSession().getAttribute(Constant.VS_USER);
 		logger.info("SalesTargetController.query 获得当前操作的用户{}",u.getRealName());
 		salesTarget.setCreator(u);
 		salesTarget.setModifier(u);
-		AuditLog auditLog = new AuditLog(EnumModule.SALESTARGET.getModuleName(), 
-				salesTarget.getId(), salesTarget.getTitle(), EnumOperationType.ADD.getOperationType(), u);
-		salesTargetService.add(salesTarget, auditLog);
+		String[] owners = ownerIds.split(",");
+		AuditLog [] auditLogArr = new AuditLog [owners.length];
+		for(int i=0; i<owners.length; i++){
+			auditLogArr[i] = new AuditLog(EnumModule.SALESTARGET.getModuleName(), 
+					null, salesTarget.getTitle(), EnumOperationType.ADD.getOperationType(), u);
+		}
+		salesTargetService.add(salesTarget,owners, auditLogArr);
 		JsonDto json = JsonDto.add(salesTarget.getId());
 		return json.toString();
 	}
 	/**
 	 * 
-	  * delete(保存：新建)
+	  * (保存：新建)
 	  * @Title: delete
 	  * @param  SalesTarget销售目标实体类对象
 	  * @return  view  
@@ -250,7 +254,7 @@ public class SalesTargetController extends CommonController<SalesTarget> {
 		User user = (User) modelMap.get(Constant.VS_USER);
 		AuditLog [] auditLogArr = new AuditLog [id.length];
 		for(int i=0; i<id.length; i++){
-			auditLogArr[i] = new AuditLog(EnumModule.LEAD.getModuleName(), 
+			auditLogArr[i] = new AuditLog(EnumModule.SALESTARGET.getModuleName(), 
 					id[i], salesTargetService.get(id[i]).getTitle(), EnumOperationType.DELETE.getOperationType(), user);
 		}
 		salesTargetService.delete(id,auditLogArr);

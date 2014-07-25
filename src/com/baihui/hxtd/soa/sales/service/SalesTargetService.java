@@ -11,6 +11,7 @@ import org.hibernate.criterion.DetachedCriteria;
 import org.hibernate.criterion.Restrictions;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.BeanUtils;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springside.modules.persistence.SearchFilter;
@@ -19,7 +20,9 @@ import com.baihui.hxtd.soa.base.orm.hibernate.HibernatePage;
 import com.baihui.hxtd.soa.base.utils.Search;
 import com.baihui.hxtd.soa.sales.dao.SalesTargetDao;
 import com.baihui.hxtd.soa.sales.entity.SalesTarget;
+import com.baihui.hxtd.soa.system.dao.UserDao;
 import com.baihui.hxtd.soa.system.entity.AuditLog;
+import com.baihui.hxtd.soa.system.entity.User;
 import com.baihui.hxtd.soa.system.service.DataShift;
 
 @Service
@@ -30,7 +33,8 @@ public class SalesTargetService {
 	
 	@Resource
 	private SalesTargetDao salesTargetDao;
-	
+	@Resource
+	private UserDao userDao;
 	 /**
      * findPage(分页查询供应商列表)
      *
@@ -45,10 +49,10 @@ public class SalesTargetService {
     public HibernatePage<SalesTarget> findPage(Map<String, Object> searchParams,DataShift dataShift, HibernatePage<SalesTarget> page) throws NoSuchFieldException {
         DetachedCriteria criteria = DetachedCriteria.forClass(SalesTarget.class);
         criteria.add(Restrictions.eq("isDeleted", false));
-        criteria.setFetchMode("org", FetchMode.JOIN);
+        criteria.setFetchMode("owner", FetchMode.JOIN);
         criteria.setFetchMode("modifier", FetchMode.JOIN);
-        criteria.setFetchMode("unitDic", FetchMode.JOIN);
         criteria.setFetchMode("creator", FetchMode.JOIN);
+        userDao.visibleData(criteria, dataShift);
         Map<String, SearchFilter> filters = Search.parse(searchParams);
         Search.buildCriteria(filters, criteria, SalesTarget.class);
         return salesTargetDao.findPage(page, criteria);
@@ -66,15 +70,20 @@ public class SalesTargetService {
     public SalesTarget get(Long id) {
         logger.info("查询单个供应商信息{}", id);
         String hql = "select entity from SalesTarget entity  " +
-        				"left join fetch entity.org " +
-        				"left join fetch entity.unitDic where entity.id = ?";
+        				"left join fetch entity.owner where entity.id = ?";
         return salesTargetDao.findUnique(hql,id);
     }
 	
-	public void add(SalesTarget entity,AuditLog auditLog){
+	public void add(SalesTarget entity,String[] owners,AuditLog [] auditLogArr){
 		setDBTime(entity);
-		salesTargetDao.save(entity);
-		auditLog.setRecordId(entity.getId());
+		SalesTarget salesTmp = null;
+		for(int i=0;i<owners.length;i++){
+			salesTmp = new SalesTarget();
+			BeanUtils.copyProperties(entity, salesTmp);
+			salesTmp.setOwner(new User(Long.valueOf(owners[i])));
+			salesTargetDao.save(salesTmp);
+			auditLogArr[i].setRecordId(salesTmp.getId());
+		}
 	}
 	
 	public void modify(SalesTarget entity,AuditLog auditLog){

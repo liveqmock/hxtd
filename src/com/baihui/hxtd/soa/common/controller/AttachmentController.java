@@ -60,10 +60,11 @@ public class AttachmentController {
 	static{
 		moduleMap = new HashMap<String,String>();
 		moduleMap.put("supplier", "11010101");
+		moduleMap.put("customer", "11010102");
 		moduleMap.put("lead", "11010103");
 		moduleMap.put("contact", "11010104");
-		moduleMap.put("customer", "11010102");
-		moduleMap.put("contract", "11010105");
+		moduleMap.put("project", "11010105");
+		moduleMap.put("contract", "11010106");
 	}
 	@Resource
 	private AttachmentService attachmentService; 

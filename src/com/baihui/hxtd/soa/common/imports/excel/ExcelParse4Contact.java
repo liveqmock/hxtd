@@ -13,8 +13,6 @@ import com.baihui.hxtd.soa.common.entity.PCAS;
 import com.baihui.hxtd.soa.common.imports.ImportMessage;
 import com.baihui.hxtd.soa.common.service.PCASService;
 import com.baihui.hxtd.soa.customer.entity.ContactDTO;
-import com.baihui.hxtd.soa.customer.entity.Customer;
-import com.baihui.hxtd.soa.customer.service.CustomerService;
 import com.baihui.hxtd.soa.system.entity.Dictionary;
 import com.baihui.hxtd.soa.system.entity.User;
 import com.baihui.hxtd.soa.system.service.DictionaryService;
@@ -42,7 +40,6 @@ public class ExcelParse4Contact extends ExcelParse<ContactDTO> {
 	
 	private PCASService pCASService = (PCASService)ContextLoaderListenerAware.ctx.getBean("PCASService");
 	
-	private CustomerService customerService= (CustomerService)ContextLoaderListenerAware.ctx.getBean("customerService");
 	/**
 	 * 校验第rowNumOfSheet行的数据格式是否正确,并将List<String>类型的数据转换成对象格式
 	 */
@@ -61,7 +58,7 @@ public class ExcelParse4Contact extends ExcelParse<ContactDTO> {
 		//必填项
 		//姓名必填项
 		String contactName = sheetList.get(1);
-		if ( contactName == null || "".equals(contactName.trim()) ) {
+		if ( Tools.isEmpty(contactName.trim()) ) {
 			msg += "<br />第"+rowNumOfSheet+"条,联系人姓名不能为空!";
 			logger.warn(msg);
 			//向无效数据集合中添加一条数据
@@ -69,12 +66,64 @@ public class ExcelParse4Contact extends ExcelParse<ContactDTO> {
 			return null;
 		}
 		
-		//线索所有者,查找联系人所有者的id,如果id存在则返回,如果不存在设置为0
+		/**
+		 * 校验数据格式
+		 */
+		//手机号码格式
+		String mobile =  sheetList.get(4);
+		if(!Tools.isEmpty(mobile)&&!isMobile(mobile)){
+			msg += "<br />第"+rowNumOfSheet+"条,手机号码内容无效!";
+			//向无效数据集合中添加一条数据
+			ImportMessage.invalidFormatRowNumMap.put(rowNumOfSheet, msg);
+			return null;
+		}
+		//电话号码，符合电话号码格式
+		String phone =  sheetList.get(5);
+		if (!Tools.isEmpty(phone) && !isPhone(phone) ) {
+			msg += "<br />第"+rowNumOfSheet+"条,电话号码内容无效!";
+			logger.warn(msg);
+			//向无效数据集合中添加一条数据
+			ImportMessage.invalidFormatRowNumMap.put(rowNumOfSheet, msg);
+			return null;
+		}
+		//传真格式，与电话号码相同
+		String fax = sheetList.get(7);
+		if(!Tools.isEmpty(fax) && !isPhone(fax)){
+			msg += "<br />第"+rowNumOfSheet+"条,传真内容无效!";
+			//向无效数据集合中添加一条数据
+			ImportMessage.invalidFormatRowNumMap.put(rowNumOfSheet, msg);
+			return null;
+		}
+		//邮箱格式
+		String email = sheetList.get(6);
+		if(!Tools.isEmpty(email)&&!checkEmail(email)){
+			msg += "<br />第"+rowNumOfSheet+"条,邮箱内容无效!";
+			//向无效数据集合中添加一条数据
+			ImportMessage.invalidFormatRowNumMap.put(rowNumOfSheet, msg);
+			return null;
+		}
+		//邮编格式
+		String postCode = sheetList.get(12);
+		if(!Tools.isEmpty(postCode)&&!checkPostCode(postCode)){
+			msg += "<br />第"+rowNumOfSheet+"条,邮编内容无效!";
+			//向无效数据集合中添加一条数据
+			ImportMessage.invalidFormatRowNumMap.put(rowNumOfSheet, msg);
+			return null;
+		}
+		
+		
+		
+		
+		/**
+		 * 数据有效性 
+		 */
+		
+		//联系人所有者,查找联系人所有者的id,如果id存在则返回,如果不存在,给出提示,跳过这条记录
 		String contactOwner = sheetList.get(0);
 		User owner = null;
-		if ( contactOwner != null && !"".equals(contactOwner.trim()) ) {
+		if ( !Tools.isEmpty(contactOwner.trim()) ) {
 			//根据id查询联系人所有者
-			owner = userService.getByName(contactOwner);
+			owner = userService.getByName(contactOwner.trim());
 			if(owner==null){
 				msg += "<br />第"+rowNumOfSheet+"条,联系人所有者不存在!";
 				logger.warn(msg);
@@ -86,47 +135,29 @@ public class ExcelParse4Contact extends ExcelParse<ContactDTO> {
 		list.remove(0);
 		list.add(0, owner==null?new User():owner);
 		
-		//线索所有者,查找联系人所有者的id,如果id存在则返回,如果不存在设置为0
-		String customer = sheetList.get(2);
-		Customer c = null;
-		if ( customer != null && !"".equals(customer.trim()) ) {
-			//根据id查询联系人所有者
-			c = customerService.getByName(customer);
-			if(c==null){
-				msg += "<br />第"+rowNumOfSheet+"条,关联客户不存在!";
-				logger.warn(msg);
-				//向无效数据集合中添加一条数据
-				ImportMessage.invalidFormatRowNumMap.put(rowNumOfSheet, msg);
-				return null;
-			}
-		}
-		list.remove(2);
-		list.add(2, c==null?new Customer():c);
-		
-		//线索来源
-		String contactSource = sheetList.get(9);
+		//联系人来源
+		String contactSource = sheetList.get(8);
 		Dictionary source = null;
-		if ( contactSource != null && !"".equals(contactSource.trim()) ) {
+		if ( !Tools.isEmpty(contactSource.trim()) ) {
 			//根据id查询线索来源(40101)
-			source = dictionaryService.getValue(contactSource, 40101L);
+			source = dictionaryService.getValue(contactSource.trim(), 40101L);
 			if(source==null){
-				msg += "<br />第"+rowNumOfSheet+"条,线索来源无效!";
+				msg += "<br />第"+rowNumOfSheet+"条,联系人来源无效!";
 				logger.warn(msg);
 				//向无效数据集合中添加一条数据
 				ImportMessage.invalidFormatRowNumMap.put(rowNumOfSheet, msg);
 				return null;
 			}
 		}
-		list.remove(9);
-		list.add(9, source==null?new Dictionary():source);
+		list.remove(8);
+		list.add(8, source==null?new Dictionary():source);
 		
 		
 		//省
-		String contactProvince = sheetList.get(10);
+		String contactProvince = sheetList.get(9);
 		PCAS province = null;
-		if ( contactProvince != null && !"".equals(contactProvince.trim()) ) {
-			//根据id查询线索状态(40103)
-			province = pCASService.getByName(contactProvince);
+		if ( !Tools.isEmpty(contactProvince.trim()) ) {
+			province = pCASService.getByName(contactProvince.trim(), 0L);
 			if(province==null){
 				msg += "<br />第"+rowNumOfSheet+"条,该省不存在!";
 				logger.warn(msg);
@@ -135,33 +166,33 @@ public class ExcelParse4Contact extends ExcelParse<ContactDTO> {
 				return null;
 			}
 		}
-		list.remove(10);
-		list.add(10, province==null?new PCAS():province);
+		list.remove(9);
+		list.add(9, province);
 		
 		
 		//市
-		String contactCity = sheetList.get(11);
+		String contactCity = sheetList.get(10);
 		PCAS city = null;
-		if ( contactCity != null && !"".equals(contactCity.trim()) ) {
+		if ( province!=null && !Tools.isEmpty(contactCity.trim()) ) {
 			//根据id查询线索状态(40103)
-			city = pCASService.getByName(contactCity);
+			city = pCASService.getByName(contactCity.trim(),province.getId());
 			if(city==null){
-				msg += "<br />第"+rowNumOfSheet+"条,当前市不存在!";
+				msg += "<br />第"+rowNumOfSheet+"条,该市不存在!";
 				logger.warn(msg);
 				//向无效数据集合中添加一条数据
 				ImportMessage.invalidFormatRowNumMap.put(rowNumOfSheet, msg);
 				return null;
 			}
 		}
-		list.remove(11);
-		list.add(11, city==null?new PCAS():city);
+		list.remove(10);
+		list.add(10, city);
 		
 		//县
-		String contactCounty = sheetList.get(12);
+		String contactCounty = sheetList.get(11);
 		PCAS county = new PCAS();
-		if ( contactCounty != null && !"".equals(contactCounty.trim()) ) {
+		if (city!=null && ! Tools.isEmpty(contactCounty.trim()) ) {
 			//根据id查询线索状态(40103)
-			county = pCASService.getByName(contactCounty);
+			county = pCASService.getByName(contactCounty.trim(),city.getId());
 			if(county==null){
 				msg += "<br />第"+rowNumOfSheet+"条,该县不存在!";
 				logger.warn(msg);
@@ -171,14 +202,14 @@ public class ExcelParse4Contact extends ExcelParse<ContactDTO> {
 			}
 			
 		}
-		list.remove(12);
-		list.add(12, county==null?new PCAS():county);
+		list.remove(11);
+		list.add(11, county);
 		
 		//修改最后一列的类型为Integer类型
 		String rowNumString = sheetList.get(sheetList.size()-1);
 		int rowNum = Integer.valueOf(rowNumString);
-		list.remove(16);
-		list.add(16,rowNum);
+		list.remove(15);
+		list.add(15,rowNum);
 		//将其保存为对象
 		return ContactDTO.createEntity(list);
 	}

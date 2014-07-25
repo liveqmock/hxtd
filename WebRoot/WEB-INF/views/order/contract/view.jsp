@@ -53,22 +53,22 @@
 		</h1>
 		<table class="cb id_table3 w95b bg_c_white margin0 mt10">
 			<tr>
+			    <td align="right">订单编号：</td>
+				<td align="left">${contract.order.code}</td>
 				<td align="right" width="15%">合同编号：</td>
 				<td align="left">${contract.code}</td>
-				<td align="right" width="15%">合同名称：</td>
-				<td align="left">${contract.name }</td>
 			</tr>
 			<tr>
 				<!-- <td align="right">合同类型：</td> 
 				<td align="left">${contract.type.key}</td>-->
-				<td align="right">合同金额（万）：</td>
-				<td align="left">${contract.purchaseMoney }</td>
 				<td align="right">客户：</td>
 				<td align="left">${contract.customer.name }</td>
+				<td align="right">合同金额（万）：</td>
+				<td align="left">${contract.purchaseMoney }</td>
 			</tr>
 			<tr>
-				<td align="right">订单编号：</td>
-				<td align="left">${contract.order.code}</td>
+				<td align="right" width="15%">合同名称：</td>
+				<td align="left">${contract.name }</td>
 				<td align="right">赎回方式：</td>
 				<td align="left">${contract.redeemType.key}</td>
 			</tr>

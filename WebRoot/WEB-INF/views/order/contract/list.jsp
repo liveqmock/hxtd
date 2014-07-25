@@ -124,16 +124,17 @@
 		<tr>
            <th align="center" width="5%" ><input type="checkbox" class="checkall"/></th>
                 <th align="center" width="4%" ><input type="checkbox" class="checkall"/></th>
-                <th width="11%" class="sortable orderby" orderby="title">合同编号</th>
-                <th width="11%">合同名称</th>
-                <th width="8%">合同金额(万)</th>
-                <th width="8%">客户</th>
-                <th width="8%">赎回方式</th>
-                <th width="6%">创建者</th>
-                <th width="10%" class="sortable orderby" orderby="signTime">签订时间</th>
-                <th width="10%" class="sortable orderby" orderby="effectTime">生效时间</th>
-                <th width="10%" class="sortable orderby" orderby="bereftTime">失效时间</th>
-                <th align="center" width="13%">操作</th>
+                <th width="10%" class="sortable orderby" orderby="title">合同编号</th>
+                <th width="10%" class="sortable orderby" orderby="title">订单编号</th>
+                <th width="10%">合同名称</th>
+                <th width="7%">合同金额(万)</th>
+                <th width="7%">客户</th>
+                <th width="7%">赎回方式</th>
+                <th width="5%">创建者</th>
+                <th width="9%" class="sortable orderby" orderby="signTime">签订时间</th>
+                <th width="9%" class="sortable orderby" orderby="effectTime">生效时间</th>
+                <th width="9%" class="sortable orderby" orderby="bereftTime">失效时间</th>
+                <th align="center" width="12%">操作</th>
         </tr>
     </table>
 </div>
@@ -142,16 +143,17 @@
         <table id="table" class="cb id_table2 w pr35">
             <tr id="recordDiv">
                 <th align="center" width="4%" ><input type="checkbox" class="checkall"/></th>
-                <th width="11%" class="sortable orderby" orderby="title">合同编号</th>
-                <th width="11%">合同名称</th>
-                <th width="8%">合同金额(万)</th>
-                <th width="8%">客户</th>
-                <th width="8%">赎回方式</th>
-                <th width="6%">创建者</th>
-                <th width="10%" class="sortable orderby" orderby="signTime">签订时间</th>
-                <th width="10%" class="sortable orderby" orderby="effectTime">生效时间</th>
-                <th width="10%" class="sortable orderby" orderby="bereftTime">失效时间</th>
-                <th align="center" width="13%">操作</th>
+                <th width="11%" class="sortable orderby" orderby="code">合同编号</th>
+                <th width="11%" >订单编号</th>
+                <th width="10%">合同名称</th>
+                <th width="7%">合同金额(万)</th>
+                <th width="7%">客户</th>
+                <th width="7%">赎回方式</th>
+                <th width="5%">创建者</th>
+                <th width="9%" class="sortable orderby" orderby="signTime">签订时间</th>
+                <th width="9%" class="sortable orderby" orderby="effectTime">生效时间</th>
+                <th width="9%" class="sortable orderby" orderby="bereftTime">失效时间</th>
+                <th align="center" width="11%">操作</th>
             </tr>
             <tbody id="tbody" class="list"></tbody>
         </table>
@@ -168,6 +170,7 @@
 					<c:otherwise>{$T.row.code}</c:otherwise>
 				</c:choose>
                 </td>
+                <td>{$T.row.order.code}</td>
                 <td>{$T.row.name}</td>
                 <td align="right">{$T.row.purchaseMoney}</td>
                 <td>{$T.row.customer.name}</td>

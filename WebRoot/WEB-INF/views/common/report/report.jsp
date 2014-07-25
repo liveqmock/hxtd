@@ -72,8 +72,8 @@
         <input type="hidden" name="id" value="${report.id}">
         <table class="fl mt5 w">
             <tr>
-                <td class="f14" align="right" width="6%">列：</td>
-                <td class="f14" align="left" width="16%">
+                <td class="f14 namewidth1" align="right">列：</td>
+                <td class="f14 namewidth2" align="left">
                     <div class="pr">
                         <select name="fieldName" class="select2 pr">
                             <c:forEach items="${moduleFields}" var="item">
@@ -82,8 +82,8 @@
                         </select>
                     </div>
                 </td>
-                <td class="f14" align="right" width="6%">日期范围：</td>
-                <td class="f14" align="left" width="16%">
+                <td class="f14 namewidth1" align="right">日期范围：</td>
+                <td class="f14 namewidth2" align="left">
                     <div class="pr">
                         <select class="select2 pr timetype">
                             <c:forEach items="${timeTypes}" var="entity">
@@ -94,8 +94,8 @@
                         </select>
                     </div>
                 </td>
-                <td class="f14" align="right" width="6%">起止时间：</td>
-                <td class="f14" align="left" width="20%">
+                <td class="f14 namewidth1" align="right">起止时间：</td>
+                <td class="f14" align="left" width="24%">
                     <div class="vm">
                         <input type="text" data-name="search_GTE_" value="${time}" class="text_input2 input_close3 globle_img untime time" readonly/>
                         -
@@ -104,10 +104,8 @@
                 </td>
                 <td width="12%">
                     <a href="javascript:void(0)" class="a_underline block_inline fr w_blue mt5 reset">清除</a>
-                    <a href="javascript:void(0)" class="block_inline c_white lh25 fr mr10 submit"><b class="allbtn_l block fl"></b><b class="allbtn_r pr13 block fl w_auto f14">查&nbsp;&nbsp;询</b></a>
+                    <a href="javascript:void(0)" class="block_inline c_white lh25 fr mr10 submit"><b class="allbtn_l block fl"></b><b class="allbtn_r pr13 block fl w_auto f14">统&nbsp;&nbsp;计</b></a>
                 </td>
-                <td class="f14" align="right" width="6%"></td>
-                <%--<td class="f14" align="left" width="16%"></td>--%>
             </tr>
         </table>
     </form>

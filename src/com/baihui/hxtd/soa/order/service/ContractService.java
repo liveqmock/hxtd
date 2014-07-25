@@ -62,7 +62,7 @@ public class ContractService {
 		criteria.setFetchMode("creator", FetchMode.JOIN);
 		criteria.setFetchMode("modifier", FetchMode.JOIN);
 		Map<String, SearchFilter> filters = Search.parse(searchParams);
-		//userDao.visibleData(criteria, dataShift);
+		userDao.visibleData(criteria, dataShift.renameUserFieldName("creator"));
 		Search.buildCriteria(filters, criteria, entityClass);
 		return criteria;
 	}

@@ -1,8 +1,8 @@
 package com.baihui.hxtd.soa.common.dao;
 
 import com.baihui.hxtd.soa.base.orm.hibernate.HibernateDAOImpl;
+import com.baihui.hxtd.soa.common.entity.FlowNode;
 import com.baihui.hxtd.soa.common.entity.NodeType;
-import com.baihui.hxtd.soa.common.entity.WFNode;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
@@ -19,30 +19,30 @@ import java.util.List;
  * @since (该版本支持的 JDK 版本) ： 1.5
  */
 @Repository
-public class WFNodeDao extends HibernateDAOImpl<WFNode, Long> {
+public class FlowNodeDao extends HibernateDAOImpl<FlowNode, Long> {
 
-    /** 查找流程节点通过流程类型值 */
-    public List<WFNode> findByFlowValue(String flowValue) {
-        String hql = "select node from WFNode node" +
+    /** 查找流程环节通过流程类型值 */
+    public List<FlowNode> findAllOfFlow(String flowValue) {
+        String hql = "select node from FlowNode node" +
+                " inner join fetch node.flow flow" +
                 " left join fetch node.role role" +
-                " left join fetch node.flow flow" +
                 " where flow.value=?" +
                 " order by node.code";
         return find(hql, flowValue);
     }
 
-    /** 查找开始流程节点通过流程类型值 */
-    public WFNode findStartByFlowValue(String flowValue) {
-        String hql = "select node from WFNode node" +
-                " left join fetch node.role role" +
+    /** 查找开始流程环节通过流程类型值 */
+    public FlowNode findStartOfFlow(String flowValue) {
+        String hql = "select node from FlowNode node" +
                 " left join fetch node.flow flow" +
+                " left join fetch node.role role" +
                 " where flow.value=? and node.type=?";
         return findUnique(hql, flowValue, NodeType.start.getValue());
     }
 
-    /** 查找结束流程节点通过流程类型值 */
-    public List<WFNode> findEndByFlowValue(String flowValue) {
-        String hql = "select node from WFNode node" +
+    /** 查找结束流程环节通过流程类型值 */
+    public List<FlowNode> findEndOfFlow(String flowValue) {
+        String hql = "select node from FlowNode node" +
                 " left join fetch node.role role" +
                 " left join fetch node.flow flow" +
                 " where flow.value=? and node.type=?";

@@ -168,13 +168,15 @@
             {#foreach $T.result as row}
             <tr class="row {#cycle values=['bg_c_blue','']}">
                 <td><input type="checkbox" class="checkitem" value="{$T.row.id}"/></td>
-                <td>{$T.row.realName}</td>
                 <td>
-                    <c:choose>
-                        <c:when test="${VS_HAS_FUNCTIONS.userView}"><a href="${ctx}/system/user/toViewPage.do?id={$T.row.id}" class="toviewpage">{$T.row.name}</a></c:when>
-                        <c:otherwise>{$T.row.name}</c:otherwise>
-                    </c:choose>
+                <c:choose>
+           		<c:when test="${VS_HAS_FUNCTIONS.userView}">
+           			<a class="toviewpage" href="${ctx}/system/user/toViewPage.do?id={$T.row.id}">{$T.row.realName}</a>
+           		</c:when>
+           		<c:otherwise>{$T.row.realName}</c:otherwise>
+           		</c:choose>
                 </td>
+                <td>{$T.row.name}</td>
                 <td>{$T.row.isManager?"是":"否"}</td>
                 <td class="isactive">{$T.row.isActive?"是":"否"}</td>
                 <td>{$T.row.organization.name}</td>
@@ -250,15 +252,16 @@
         <table class="cb id_table2 w pr35 org" forform="form" formaction="${ctx}/system/organization/query.do" forpagination="#tabs-org .pagination">
             <tr class="header">
                 <th style="width: 4%"><input type="checkbox" class="checkall"/></th>
-                <th style="width: 12%">名称</th>
-                <th style="width: 8%">类型</th>
-                <th style="width: 8%" class="sortable orderby" orderby="level">级别</th>
-                <th style="width: 8%">上级组织</th>
-                <th style="width: 12%">含有下级组织</th>
+                <th style="width: 5%">ID</th>
+                <th style="width: 10%">名称</th>
+                <th style="width: 6%">类型</th>
+                <th style="width: 6%" class="sortable orderby" orderby="level">级别</th>
+                <th style="width: 10%">上级组织</th>
+                <th style="width: 10%">含有下级组织</th>
                 <th style="width: 12%">电话</th>
-                <th style="width: 16%">网址</th>
-                <th style="width: 10%" class="sortable orderby" orderby="order">序号</th>
-                <th style="width: 16%">操作</th>
+                <th style="width: 14%">网址</th>
+                <th style="width: 9%" class="sortable orderby" orderby="order">序号</th>
+                <th style="width: 14%">操作</th>
             </tr>
             <%@include file="/WEB-INF/template/sort.jsp" %>
             <tbody class="list"></tbody>
@@ -266,6 +269,7 @@
                 {#foreach $T.result as row}
                 <tr class="row {#cycle values=['bg_c_blue','']}">
                     <td><input type="checkbox" class="checkitem" value="{$T.row.id}"/></td>
+                    <td>{$T.row.id}</td>
                     <td>
                         <c:choose>
                             <c:when test="${VS_HAS_FUNCTIONS.organizationView}"><a href="${ctx}/system/organization/toViewPage.do?id={$T.row.id}&index=_1" class="toviewpage">{$T.row.name}</a></c:when>
@@ -279,7 +283,7 @@
                     <td>{$T.row.phone}</td>
                     <td><a href="{$T.row.webSite}">{$T.row.webSite}</a></td>
                     <td>{$T.row.order}</td>
-                    <td style="text-align: left">
+                    <td style="text-align: center">
                         <c:if test="${VS_HAS_FUNCTIONS.organizationView}">
                             <a href="${ctx}/system/organization/toViewPage.do?id={$T.row.id}&index=_1" class="block_inline s_detail_btn globle_img ml10" title="详情"></a>
                         </c:if>

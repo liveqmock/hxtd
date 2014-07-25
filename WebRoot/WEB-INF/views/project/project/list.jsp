@@ -59,7 +59,7 @@ function formReset() {
 	$("#typeId").removeAttr("value");
 }
 function getSupplier(id){
-	jsUtil.dialogIframe("${ctx}/project/supplier/toViewPage.comp?id="+id, "供应商信息", 800, 800);
+	jsUtil.dialogIframe("${ctx}/project/supplier/toViewPage.comp?id="+id, "供应商信息", 800, 520);
 }
 </script>
 </head>
@@ -226,7 +226,7 @@ function getSupplier(id){
 	<div id="title" style="display: none;z-index: 1; background-color: #f5f5f6;"
 		class=" ml35 mr35">
 		<table class="cb id_table2 w">
-			<tr >
+			<tr id="recordDiv">
 				<td width="2%">
 					<input type="checkbox" id="id" class="checkall" />
 				</td>
@@ -243,16 +243,16 @@ function getSupplier(id){
 					融资额度（万）
 				</th>
 				<th>
-					创建者
+					融资周期（天）
 				</th>
-				<th width="10%" class="sortable orderby" orderby="createdTime">
-					创建时间
+				<th width="10%" class="sortable orderby" orderby="beginTime">
+					开始时间
 				</th>
-				<th>
-					修改者
+				<th width="10%" class="sortable orderby" orderby="dendlineTime">
+					结束时间
 				</th>
-				<th width="10%" class="sortable orderby" orderby="modifiedTime">
-					修改时间
+				<th width="10%" class="sortable orderby" orderby="openTime">
+					开放期
 				</th>
 				<th width="8%">
 					操作
@@ -281,16 +281,16 @@ function getSupplier(id){
 					融资额度（万）
 				</th>
 				<th>
-					创建者
+					融资周期（天）
 				</th>
-				<th width="10%" class="sortable orderby" orderby="createdTime">
-					创建时间
+				<th width="10%" class="sortable orderby" orderby="beginTime">
+					开始时间
 				</th>
-				<th>
-					修改者
+				<th width="10%" class="sortable orderby" orderby="dendlineTime">
+					结束时间
 				</th>
-				<th width="10%" class="sortable orderby" orderby="modifiedTime">
-					修改时间
+				<th width="10%" class="sortable orderby" orderby="openTime">
+					开放期
 				</th>
 				<th width="8%">
 					操作
@@ -316,12 +316,19 @@ function getSupplier(id){
                   </c:choose>
               </td>
               <td>{$T.row.code}</td>
-              <td><a href="javascript:getSupplier({$T.row.supplier.id});">{$T.row.supplier.name}</a></td>
+              <td>
+             		<c:choose>
+                       <c:when test="${VS_HAS_FUNCTIONS.supplierView}">
+                            <a href="javascript:getSupplier({$T.row.supplier.id});">{$T.row.supplier.name}</a>
+                       </c:when>
+                       <c:otherwise>{$T.row.supplier.name}</c:otherwise>
+                   </c:choose>
+              </td>
               <td>{$T.row.financeLimit}</td>
-              <td>{$T.row.creator.realName}</td>
-              <td>{$T.row.createdTime}</td>
-              <td>{$T.row.modifier.realName}</td>
-              <td>{$T.row.modifiedTime}</td>
+              <td>{$T.row.financeCycle}</td>
+              <td>{$T.row.beginTime}</td>
+              <td>{$T.row.dendlineTime}</td>
+              <td>{$T.row.openTime}</td>
               <td>
                       <c:if test="${VS_HAS_FUNCTIONS.projectView}">
                         <a

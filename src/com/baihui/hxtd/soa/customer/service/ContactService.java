@@ -5,6 +5,7 @@ import java.util.Map;
 
 import javax.annotation.Resource;
 
+import org.hibernate.FetchMode;
 import org.hibernate.criterion.DetachedCriteria;
 import org.hibernate.criterion.Restrictions;
 import org.springframework.stereotype.Service;
@@ -15,6 +16,8 @@ import com.baihui.hxtd.soa.base.orm.hibernate.HibernatePage;
 import com.baihui.hxtd.soa.base.utils.Search;
 import com.baihui.hxtd.soa.customer.dao.ContactDao;
 import com.baihui.hxtd.soa.customer.entity.Contact;
+import com.baihui.hxtd.soa.customer.entity.Customer;
+import com.baihui.hxtd.soa.project.entity.Supplier;
 import com.baihui.hxtd.soa.system.dao.UserDao;
 import com.baihui.hxtd.soa.system.entity.AuditLog;
 import com.baihui.hxtd.soa.system.entity.User;
@@ -155,4 +158,29 @@ public class ContactService {
     public void delete(User user, Long[] id, AuditLog [] auditLog) {
         contactDao.delete(id);
     }
+
+    /**
+     * 根据客户查找联系人
+     * @param customer
+     * @return
+     */
+	public List<Contact> findContactByCustomer(Customer customer) {
+		DetachedCriteria criteria = DetachedCriteria.forClass(Contact.class);
+		criteria.setFetchMode("customer", FetchMode.JOIN);
+   		criteria.add(Restrictions.eq("isDeleted", false));
+   		criteria.add(Restrictions.eq("customer", customer));
+		return contactDao.find(criteria);
+	}
+	
+	 /**
+     * 根据客户查找联系人
+     * @param customer
+     * @return
+     */
+	public List<Contact> findContactBySupplier(Supplier supplier) {
+		DetachedCriteria criteria = DetachedCriteria.forClass(Contact.class);
+   		criteria.add(Restrictions.eq("isDeleted", false));
+   		criteria.add(Restrictions.eq("supplier", supplier));
+		return contactDao.find(criteria);
+	}
 }

@@ -53,7 +53,7 @@ public class AuditLogService {
     	DetachedCriteria criteria = DetachedCriteria.forClass(AuditLog.class);
     	criteria.setFetchMode("type", FetchMode.JOIN);
     	criteria.setFetchMode("creator", FetchMode.JOIN);
-    	//userDao.visibleData(criteria, dataShift);
+    	userDao.priviData(criteria, dataShift.renameUserFieldName("creator"));
 		Map<String, SearchFilter> filters = Search.parse(searchParams);// 构建参数
 		Search.buildCriteria(filters, criteria, AuditLog.class);
         HibernatePage<AuditLog> pageResult=auditLogDao.findPage(page, criteria);

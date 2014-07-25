@@ -53,6 +53,12 @@ public class Workbanch {
 	 */
 	@Column(name = "PARAMS")
 	private String params;
+	
+	/**
+	 * 时间参数
+	 */
+	@Column(name = "TIME_PARAM")
+	private String timeParam;
 	/**
 	 * 所有者
 	 */
@@ -147,6 +153,10 @@ public class Workbanch {
 	public void setModifiedTime(Date modifiedTime) {
 		this.modifiedTime = modifiedTime;
 	}
-	
-	
+	public String getTimeParam() {
+		return timeParam;
+	}
+	public void setTimeParam(String timeParam) {
+		this.timeParam = timeParam;
+	}
 }

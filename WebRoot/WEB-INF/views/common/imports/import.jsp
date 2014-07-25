@@ -30,6 +30,8 @@
 			.uploadify:hover .uploadify-button {
 				background-color: transparent;
 			}
+			.over{display: none;position: absolute;top: 0;left: 0;width: 100%;height: 100%;background-color: #f5f5f5;opacity:0.5;z-index: 1000;}
+			.layout{display: none;position: absolute;top: 40%;left: 40%;width: 20%;height: 20%;z-index: 1001;text-align:center;}
 		</style>
 		
 		
@@ -43,7 +45,22 @@
 				//设置模块默认值
 				var module = "${moduleName}";
 				if(module!="" && module!=null){
-					$("#moduleName").attr("value", module);
+					$("#moduleName").css("display","none");
+					if("${moduleName}" == "lead"){//导入线索
+						$("#moduleInput").text("线索");
+						$("#moduleName").attr("value","${moduleName}");
+					}else if("${moduleName}" == "contact"){//导入联系人
+						$("#moduleInput").text("联系人");
+						$("#moduleName").attr("value","${moduleName}");
+					}else if("${moduleName}" == "customer"){//导入客户
+						$("#moduleInput").text("客户");
+						$("#moduleName").attr("value","${moduleName}");
+					}else if("${moduleName}" == "supplier"){//导入供应商
+						$("#moduleInput").text("供应商");
+						$("#moduleName").attr("value","${moduleName}");
+					}else{
+						$("#moduleName").css("display","block");//从设置导入
+					}
 				}
 				
 				$("#moduleName").change(function(){
@@ -71,7 +88,7 @@
 					moduleName = $("#moduleName").val();
 				});
 			
-				var url = jsUtil.getRootPath() + "/common/imports/import.do";
+				var url = jsUtil.getRootPath() + "/" + module + "/imports/import.do";
 				$att = $("#file");
 				$att.uploadify( {
 					'auto' : false,//是否自动上传
@@ -82,15 +99,15 @@
 					'width' : 80,
 					'height' : 27,
 					'simUploadLimit': 5,
-					'uploadLimit' : 1,//最多上传文件数量
-					'queueSizeLimit' : 1,// 允许同时上传的个数
+					//'uploadLimit' : 1,//最多上传文件数量(每次刷新url只允许上传一次)
+					'queueSizeLimit' : 1,// 允许同时上传的个数(每次上传的文件个数,最多是一个)
 					'fileSizeLimit' : '5MB',//上传文件大小限制
 					'removeTimeout' : 1,//上传完成后多久删除队列中的进度条
 					'successTimeout' : 60*15,//表示文件上传完成后等待服务器相应的时间.超过改时间,那么将认为上传成功
 	 				'multi' : false,//是否允许多文件上传
 					'method' : "post",
 					'swf' : jsUtil.getRootPath() + '/static/css/uploadify.swf',
-					'uploader' : url,//后台处理的请求
+					'uploader' : url+";jsessionid=${pageContext.session.id}",//url跳转后台处理的请求   //注:使用uploader插件上传文件时报http错误的时候,需要加上这句话
 					'onSelect':function(file){//选择文件后触发
 						var fileSize = 0;
 						if (file.size > 1024 * 1024){
@@ -125,6 +142,8 @@
 						//文件上传完成以后，将"浏览"按钮恢复颜色（注意：这个浏览按钮的id是自动生成的，通过页面查看元素就可得到）
 			           	 $('#file-button').css({"background-image" : "url(" + buttonAdd + ")"});
 			           	 $att.uploadify('disable', false);
+			           	 //上传完成以后关闭蒙版
+						hideLoading();
 		            },	
 					'onUploadSuccess' : function(file, data, response) {//在每一个文件上传成功后触发
 						//data:从服务器返回回来
@@ -149,12 +168,16 @@
 						}else{
 							$("#importResult").html("文件解析异常,请重新导入!");
 						}
+						//上传完成以后关闭蒙版
+						hideLoading();
 					}
 				});
 			});
 			
 			function upload() {
 				if (checkType()) {
+					//添加蒙版
+					showLoading();
 					//文件上传期间，将"浏览"按钮置灰（注意：这个浏览按钮的id是自动生成的，通过页面查看元素就可得到）
 					$att.uploadify('disable', true)
 					$('#file-button').css( {
@@ -162,6 +185,15 @@
 					});
 					//上传队列中的所有的文件
 					$att.uploadify('upload', '*');
+					//将导入信息清空
+					//$("#fileName").html("");
+					//$("#fileSize").html("");
+					//$("#fileType").html("");
+					$("#importResult").html("");
+					$("#repeatData").html("");
+					$("#invalidFormatData").html("");
+					$("#databaseUpdateData").html("");
+					$("#databaseNew").html("");
 				}
 			}
 			
@@ -175,6 +207,16 @@
 					$("#errorMsg").text("");
 					return true;
 				}
+			}
+			
+			function showLoading(){
+				$('#over').show();
+				$('#layout').show();
+			}
+			
+			function hideLoading(){
+				$('#over').hide();
+				$('#layout').hide();
 			}
 			
 		</script>
@@ -192,45 +234,50 @@
 			<form action="${ctx}/common/imports/import.do" method="POST" id="importForm" enctype="multipart/form-data">
 				<div class="ml35 mr35 bg_c_blue cb">
 					<div style="width: 50%;" class="fl">
-						<table class="margin0 pt20">
+						<table class="margin0 pt20 w85b" >
 							<tr class=" lh40">
-								<td width="40%" align="right">文件类型：</td>
+								<td width="20%" align="right" class="f12">模块：</td>
 								<td>
-									<select class="select2" id="moduleName" name="moduleName">
-										<option value="">请选择</option>
-										<%--<c:forEach var="item" items="${enumModules}">--%>
+									<select class="select2 f12" id="moduleName" name="moduleName">
+										<option value="" checked>请选择</option>
+										<!-- 添加权限校验 -->
+										<c:if test="${VS_HAS_FUNCTIONS.leadAdd}">
 											<option value="lead">线索</option>
+										</c:if>
+										<c:if test="${VS_HAS_FUNCTIONS.customerAdd}">
 											<option value="customer">客户</option>
+										</c:if>
+										<c:if test="${VS_HAS_FUNCTIONS.contactAdd}">
 											<option value="contact">联系人</option>
+										</c:if>
+										<c:if test="${VS_HAS_FUNCTIONS.supplierAdd}">
 											<option value="supplier">供应商</option>
-											<%--<option value="${item.moduleName}">
-												${item.moduleChineseName}
-											</option>
-										</c:forEach>--%>
+										</c:if>
 									</select>
-									<label id="errorMsg" class="w_red"></label>
+									
+									<label class="f12" id="moduleInput"></label>
 								</td>
 							</tr>
 							<tr class=" lh40">
-								<td align="right">选择导入的文件：</td>
+								<td align="right" class="f12">选择文件：</td>
 								<td>
-									<div class="vm"><input type="file" id="file" name="file" size="28" /></div>
+									<div class="vm f12"><input type="file" id="file" name="file" size="28" /></div>
 								</td>
 							</tr>
 							<tr class=" lh40">
-								<td align="right">重复记录：</td>
-								<td>
+								<td align="right" class="f12">重复记录：</td>
+								<td  class="f12">
 									<input type="radio" name="duplicateType" value="jump" />
 									跳过&nbsp;&nbsp;&nbsp;&nbsp;
-									<input type="radio" name="duplicateType" value="conver" />
+									<input type="radio" name="duplicateType" value="cover" />
 									覆盖&nbsp;&nbsp;&nbsp;&nbsp;
 									<input type="radio" name="duplicateType" value="merge" checked />
 									合并
 								</td>
 							</tr>
 							<tr class=" lh40">
-								<td align="right">重复数据标识列：</td>
-								<td>
+								<td align="right" class="f12">重复数据标识列：</td>
+								<td class="f12">
 									<input type="checkbox" name="checkWay" value="mobile" checked />
 									手机&nbsp;&nbsp;&nbsp;&nbsp;
 									<input type="checkbox" name="checkWay" value="email" />
@@ -238,59 +285,66 @@
 								</td>
 							</tr>
 						</table>
-						<div class="bg_c_white w50b margin0 mt20"
-							style="height: 220px; overflow-y: auto;">
+						<div class="bg_c_white w85b margin0 mt20"
+							style="height: 355px; overflow-y: auto;">
 							<ul class="p10 lh30">
-								<li><font color="red">导入信息:</font></li>
+								<li><font color="red"  class="f14">导入信息:</font></li>
 								<li>
-									<div id="fileName"></div>
-									<div id="fileSize"></div>
-									<div id="fileType"></div>
+									<div class="f14" id="fileName"></div>
+									<div class="f14" id="fileSize"></div>
+									<div class="f14" id="fileType"></div>
 								</li>
-								<li><div id="importResult"></div></li>
-								<li><div id="repeatData"></div></li>
-								<li><div id="invalidFormatData"></div></li>
-								<li><div id="databaseUpdateData"></div></li>
-								<li><div id="databaseNew"></div></li>
+								<li><div class="f14" id="importResult"></div></li>
+								<li><div id="repeatData"  class="w_red f14"></div></li>
+								<li><div id="invalidFormatData"  class="w_red f14"></div></li>
+								<li><div id="databaseUpdateData"  class="f14"></div></li>
+								<li><div id="databaseNew" class="f14"></div></li>
 							</ul>
 						</div>
-						<div class=" w50b margin0 mt20" style="height: 120px; overflow-y: auto;">
-							<p class="mt40">
+						
+					</div>
+					<div class="fl mt20 p10 divright"
+						style="background: url(${ctx}/static/images/divrbg.png) no-repeat;	width: 445px;height: 554px; padding:35px; ">
+						<div>
+							<p class="lh25" style="color:#828181; font-size:16px;">导入事项：</p>
+							<ul class="lh25 " style="color:#828181;">
+								<li class="f12">
+									1. 请严格参考模板文件。模板文件在导入页面的左下角。
+								</li>
+								<li class="f12">2. 导入功能支持的模块有：线索，客户，联系人，供应商。</li>
+								<li class="f12">3. excel文件格式为.xlsx或.xls文件。</li>
+								<li class="f12">4. 每次导入数据量不得超过10000条，文件大小不得超过5M。</li>
+								<li class="f12">5. 导入数据时需要选择导入类型，重复记录，重复数据标识列。重复记录默认是合并，重复数据标识列默认是手机。</li>
+								<li class="f12">6. 重复记录：您可以根据您的需求，选择遇到重复数据时，您希望如何处理。
+								
+								<li class="f12">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;->跳过：保留原数据；</li>
+								<li class="f12">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;->覆盖：保留新数据；</li>
+								<li class="f12">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;->合并：将原数据和新数据合并，合并原则是以新数据为主，新数据值为空，则取原数据值。</li>
+								<li class="f12">7. 重复数据标识列：如何判断您要导入的数据与数据库中已有数据重复。可选项是：按手机和按邮箱。默认按手机的方式。</li>
+								
+								<li class="f12">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;->手机：以手机号判断数据是否重复；</li>
+								<li class="f12">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;->邮箱：以邮箱判断数据是否重复；</li>
+								<li class="f12">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;->手机和邮箱：以手机,邮箱同时满足的方式判断数据是否重复.</li>
+								<li class="f12">8. 只导入excel中第一个sheet页的内容,如其他sheet也有内如,将不被导入。</li>
+								<li class="f12">9. 电话号码和传真的格式:010-12345678</li>
+							</ul>
+						</div>
+						<div class=" cb w mt40 fr" style="height:60px;">
+							<p class="f12">
 								模板：
 								<a href="${ctx}/static/template/import/${templateLead}">${templateLead}</a>&nbsp;&nbsp;
 								<a href="${ctx}/static/template/import/${templateCustomer}">${templateCustomer}</a>&nbsp;&nbsp;
 								<a href="${ctx}/static/template/import/${templateContact}">${templateContact}</a>&nbsp;&nbsp;
 								<a href="${ctx}/static/template/import/${templateSupplier}">${templateSupplier}</a>&nbsp;&nbsp;
 							</p>
-							<p style="color: red;">
+							<p style="color: red;" class="f14">
 								1.请先下载模板，并在此基础上进行修改。<br />
 								2.管理员、启用、性别都是“是否”类型的数据。<br />
 							</p>
 						</div>
 					</div>
-					<div class="fl mt20 p10 divright"
-						style="background: url(${ctx}/static/images/divrbg.png) no-repeat;	width: 445px;height: 494px; padding:40px; ">
-						<div>
-							<p class="lh25" style="color:#828181; font-size:16px;">导入事项：</p>
-							<ul class="lh25 " style="color:#828181;">
-								<li class="f14">
-									1. 请严格参考模板文件。模板文件在导入页面的左下角。
-								</li>
-								<li class="f14">2. 导入功能支持的模块有：线索，客户，联系人，供应商。</li>
-								<li class="f14">3. excel文件格式为.xlsx或.xls文件。</li>
-								<li class="f14">4. 每次导入数据量不得超过10000条，文件大小不得超过5M。</li>
-								<li class="f14">5. 导入数据时需要选择导入类型，重复记录，重复数据标识列。重复记录默认是合并，重复数据标识列默认是手机。</li>
-								<li class="f14">6. 重复记录：您可以根据您的需求，选择遇到重复数据时，您希望如何处理。
-								
-								<li class="f14">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;->跳过：保留原数据；</li>
-								<li class="f14">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;->覆盖：保留新数据；</li>
-								<li class="f14">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;->合并：将原数据和新数据合并，合并原则是以新数据为主，新数据值为空，则取原数据值。</li>
-								<li class="f14">7. 重复数据标识列：如何判断您要导入的数据与数据库中已有数据重复。可选项是：按手机和按邮箱。默认按手机的方式。</li>
-								<li class="f14">8. 导入完成以后，会给出导入信息提示。您可根据提示，重新导入失败的数据。</li>
-							</ul>
-						</div>
-					</div>
-					<div class="w240 margin0 cb h40 mt20">
+					
+					<div class="w240 margin0 cb h40 mt40">
 						<c:if test="${VS_HAS_FUNCTIONS.userImport}">
 							<a href="javascript:upload()" class="block c_white lh25 mr10 fl">
 								<b class="allbtn_l block fl"></b> 
@@ -302,6 +356,13 @@
 							</a>
 						</c:if>
 					</div>
+					<div>
+						<ul>
+							<li><div id="over" class="over"></div></li>
+							<li><div id="layout" class="layout"><img src="${ctx}/static/images/loading.gif" /></div></li>
+						</ul>
+					</div>
+					
 				</div>
 			</form>
 		</div>

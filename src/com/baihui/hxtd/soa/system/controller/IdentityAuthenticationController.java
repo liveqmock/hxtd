@@ -1,14 +1,17 @@
 package com.baihui.hxtd.soa.system.controller;
 
-import java.io.IOException;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-
-import javax.annotation.Resource;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpSession;
-
+import com.baihui.hxtd.soa.base.Constant;
+import com.baihui.hxtd.soa.base.InitApplicationConstant;
+import com.baihui.hxtd.soa.base.ServiceException;
+import com.baihui.hxtd.soa.base.utils.ReflectionUtils;
+import com.baihui.hxtd.soa.base.utils.mapper.HibernateAwareObjectMapper;
+import com.baihui.hxtd.soa.base.utils.serial.TierSerials;
+import com.baihui.hxtd.soa.system.entity.Component;
+import com.baihui.hxtd.soa.system.entity.Function;
+import com.baihui.hxtd.soa.system.entity.Menu;
+import com.baihui.hxtd.soa.system.entity.User;
+import com.baihui.hxtd.soa.system.service.*;
+import com.baihui.hxtd.soa.util.Constants;
 import org.apache.commons.collections.BidiMap;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -21,23 +24,13 @@ import org.springframework.web.bind.annotation.SessionAttributes;
 import org.springframework.web.bind.support.SessionStatus;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
-import com.baihui.hxtd.soa.base.Constant;
-import com.baihui.hxtd.soa.base.InitApplicationConstant;
-import com.baihui.hxtd.soa.base.ServiceException;
-import com.baihui.hxtd.soa.base.utils.ReflectionUtils;
-import com.baihui.hxtd.soa.base.utils.mapper.HibernateAwareObjectMapper;
-import com.baihui.hxtd.soa.base.utils.serial.TierSerials;
-import com.baihui.hxtd.soa.system.entity.Component;
-import com.baihui.hxtd.soa.system.entity.Function;
-import com.baihui.hxtd.soa.system.entity.Menu;
-import com.baihui.hxtd.soa.system.entity.User;
-import com.baihui.hxtd.soa.system.service.ComponentService;
-import com.baihui.hxtd.soa.system.service.DataShift;
-import com.baihui.hxtd.soa.system.service.FunctionService;
-import com.baihui.hxtd.soa.system.service.MenuService;
-import com.baihui.hxtd.soa.system.service.RoleService;
-import com.baihui.hxtd.soa.system.service.UserService;
-import com.baihui.hxtd.soa.util.Constants;
+import javax.annotation.Resource;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpSession;
+import java.io.IOException;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 /**
  * 身份认证控制器
@@ -56,9 +49,6 @@ public class IdentityAuthenticationController {
 
     //    @Value(value = "${application.login_url}")
     private String loginUrl = "/login.doself";
-
-    //    @Value(value = "${system.organization.tier.length}")
-    private Integer orgTierLength = 2;
 
     @Resource
     private UserService userService;
@@ -133,7 +123,7 @@ public class IdentityAuthenticationController {
         session.setAttribute(Constant.VS_ORG, persistUser.getOrganization());
         //数据筛选
         Long order = persistUser.getOrganization().getOrder();
-        DataShift dataShift = new DataShift(roleService.isSysDataManager(persistUser),roleService.isOrgDataManager(persistUser), persistUser.getId(), TierSerials.getYoungerRange(order, orgTierLength));
+        DataShift dataShift = new DataShift(roleService.isSysDataManager(persistUser), roleService.isOrgDataManager(persistUser), persistUser.getId(), TierSerials.getYoungerRange(order, Constant.ORG_ORDER_TIER_LENGTH));
         session.setAttribute(Constant.VS_DATASHIFT, dataShift);
 
         //菜单

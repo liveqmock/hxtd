@@ -5,6 +5,7 @@
 --%>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
 <%@taglib prefix="tag" tagdir="/WEB-INF/tags" %>
 <c:set var="ctx" value="${pageContext.request.contextPath}"/>
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
@@ -159,7 +160,131 @@
 			</tr>
 
 		</table>
-		<!-- 附件组件调用开始  -->
+		<c:if test="${VS_HAS_FUNCTIONS.projectQuery}">
+			<h1 class="f14 fbnone ml40 mt10">项目</h1>
+			<div class="w95b  bg_c_white margin0 mt10">
+				<br>
+				<b class="w90b f_line2 block margin0"></b>
+				<table class="cb id_table2 w90b margin0 mt10 mb10">
+					<tbody>
+						<tr>
+							<th width="10%">
+								项目名
+							</th>
+							<th width="10%">
+								项目编号
+							</th>
+							<th width="10%">
+								融资额度
+							</th>
+							<th width="10%">
+								周期（天）
+							</th>
+							<th width="10%">
+								开始时间
+							</th>
+							<th width="10%">
+								截止时间
+							</th>
+							<th width="10%">
+								开放期
+							</th>
+							<th width="10%">
+								收益率（%）
+							</th>
+							<th width="10%">
+								赎回率（%）
+							</th>
+						</tr>
+					</tbody>
+					<tbody  class="list">
+						<c:forEach items="${projects}" var="c">
+							<tr>
+								 <td>
+					                  <c:choose>
+					                      <c:when test="${VS_HAS_FUNCTIONS.projectView}">
+												<a href="${ctx}/project/project/toViewPage.do?id=${c.id}"
+													class="toviewpage">${c.name }</a>
+											</c:when>
+					                      <c:otherwise>${c.name }</c:otherwise>
+					                  </c:choose>
+					              </td>
+					              <td>${c.code }</td>
+					              <td>${c.financeLimit }</td>
+								  <td>${c.financeCycle }</td>
+					              <td><fmt:formatDate value="${c.beginTime}" pattern="yyyy-MM-dd"/></td>
+					              <td><fmt:formatDate value="${c.dendlineTime}" pattern="yyyy-MM-dd"/></td>
+					              <td><fmt:formatDate value="${c.openTime}" pattern="yyyy-MM-dd"/></td>
+					              <td>${c.er }</td>
+								  <td>${c.aer }</td>	
+							</tr>
+						</c:forEach>
+						
+					</tbody>
+				</table>
+				<div class=" h40"></div>
+			</div>
+		</c:if>
+		
+		
+		<c:if test="${VS_HAS_FUNCTIONS.projectQuery}">
+			<h1 class="f14 fbnone ml40 mt10">联系人</h1>
+			<div class="w95b  bg_c_white margin0 mt10">
+				<br>
+				<b class="w90b f_line2 block margin0"></b>
+				<table class="cb id_table2 w90b margin0 mt10 mb10">
+					<tbody>
+						<tr>
+							<th width="10%">
+								姓名
+							</th>
+							<th width="15%">
+								电话
+							</th>
+							<th width="15%">
+								手机
+							</th>
+							<th width="15%">
+								邮箱
+							</th>
+							<th width="15%">
+								传真
+							</th>
+							<th width="15%">
+								部门
+							</th>
+							<th width="15%">
+								职位
+							</th>
+						</tr>
+					</tbody>
+					<tbody  class="list">
+						<c:forEach items="${contacts}" var="c">
+							<tr>
+								<td>
+				                  <c:choose>
+				                      <c:when test="${VS_HAS_FUNCTIONS.contactView}">
+											<a href="${ctx}/customer/contact/toViewPage.do?id=${c.id}"
+												class="toviewpage">${c.name }</a>
+										</c:when>
+				                      <c:otherwise>${c.name }</c:otherwise>
+				                  </c:choose>
+				             	</td>
+								<td>${c.phone }</td>
+								<td>${c.mobile }</td>
+								<td>${c.email }</td>
+								<td>${c.fax }</td>
+								<td>${c.department }</td>
+								<td>${c.position }</td>
+							</tr>
+						</c:forEach>
+						
+					</tbody>
+				</table>
+				<div class=" h40"></div>
+			</div>
+		</c:if>
+				<!-- 附件组件调用开始  -->
 		<tag:attachment 
 		view="${VS_HAS_FUNCTIONS.supplierAttView}" 
 		upload="${VS_HAS_FUNCTIONS.supplierUpload}" 

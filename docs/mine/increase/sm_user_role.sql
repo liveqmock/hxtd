@@ -1,0 +1,24 @@
+
+DELETE FROM hxtd.sm_user_role;
+INSERT INTO hxtd.sm_user_role (USER_ID, ROLE_ID) VALUES (3, 3);
+INSERT INTO hxtd.sm_user_role (USER_ID, ROLE_ID) VALUES (5, 3);
+INSERT INTO hxtd.sm_user_role (USER_ID, ROLE_ID) VALUES (13, 3);
+INSERT INTO hxtd.sm_user_role (USER_ID, ROLE_ID) VALUES (2, 6);
+INSERT INTO hxtd.sm_user_role (USER_ID, ROLE_ID) VALUES (3, 6);
+INSERT INTO hxtd.sm_user_role (USER_ID, ROLE_ID) VALUES (3, 7);
+INSERT INTO hxtd.sm_user_role (USER_ID, ROLE_ID) VALUES (9, 7);
+INSERT INTO hxtd.sm_user_role (USER_ID, ROLE_ID) VALUES (4, 8);
+INSERT INTO hxtd.sm_user_role (USER_ID, ROLE_ID) VALUES (10, 8);
+INSERT INTO hxtd.sm_user_role (USER_ID, ROLE_ID) VALUES (5, 9);
+INSERT INTO hxtd.sm_user_role (USER_ID, ROLE_ID) VALUES (6, 10);
+INSERT INTO hxtd.sm_user_role (USER_ID, ROLE_ID) VALUES (7, 11);
+INSERT INTO hxtd.sm_user_role (USER_ID, ROLE_ID) VALUES (2, 12);
+INSERT INTO hxtd.sm_user_role (USER_ID, ROLE_ID) VALUES (3, 12);
+INSERT INTO hxtd.sm_user_role (USER_ID, ROLE_ID) VALUES (4, 12);
+INSERT INTO hxtd.sm_user_role (USER_ID, ROLE_ID) VALUES (5, 12);
+INSERT INTO hxtd.sm_user_role (USER_ID, ROLE_ID) VALUES (6, 12);
+INSERT INTO hxtd.sm_user_role (USER_ID, ROLE_ID) VALUES (7, 12);
+INSERT INTO hxtd.sm_user_role (USER_ID, ROLE_ID) VALUES (8, 12);
+INSERT INTO hxtd.sm_user_role (USER_ID, ROLE_ID) VALUES (9, 12);
+INSERT INTO hxtd.sm_user_role (USER_ID, ROLE_ID) VALUES (10, 12);
+INSERT INTO hxtd.sm_user_role (USER_ID, ROLE_ID) VALUES (8, 9999);

@@ -56,7 +56,12 @@
         </tr>
         <tr>
             <td align="right" width="15%">发送者：</td>
-            <td align="left">${userMessage.message.creator.realName}</td>
+            <td align="left">
+            <c:choose>
+            <c:when test="${userMessage.message.creator.id==null}">系统发送</c:when>
+            <c:otherwise>${userMessage.message.creator.realName}</c:otherwise>
+            </c:choose>
+            </td>
         </tr>
         <tr>
         <td align="right" width="15%">发送时间：</td>

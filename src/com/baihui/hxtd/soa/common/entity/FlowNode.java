@@ -11,19 +11,19 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * 功能描述：流程节点实体类
+ * 功能描述：流程环节实体类
  *
  * @author lihua
  * @version (版本)1
  * @company 北京市百会纵横科技有限公司
  * @copyright (版权)  本文件归属 北京市百会纵横科技有限公司
- * @ClassName: com.baihui.hxtd.soa.common.entity.WFNode.java
+ * @ClassName: com.baihui.hxtd.soa.common.entity.FlowNode.java
  * @date 2014-5-26 上午09:47:36
  * @since (该版本支持的 JDK 版本) ： 1.6
  */
 @Entity
 @Table(name = "wf_node")
-public class WFNode implements Serializable {
+public class FlowNode implements Serializable, Orderable {
 
     /** 主键ID */
     @Id
@@ -53,6 +53,10 @@ public class WFNode implements Serializable {
     @JoinColumn(name = "ROLE_ID")
     private Role role;
 
+    /** 节点类型 */
+    @Column(name = "`ORDER`")
+    private Long order;
+
     /** 审批组织 */
     @Transient
     private Organization organization;
@@ -61,21 +65,25 @@ public class WFNode implements Serializable {
     @Transient
     private List<User> approvers = new ArrayList<User>();
 
-    /** 审批人 */
+    /** 执行审批人 */
     @Transient
     private User approver;
 
+    /** 执行流程环节 */
+    @Transient
+    private FlowNode executeFlowNode;
 
-    public WFNode() {
+
+    public FlowNode() {
     }
 
-    public WFNode(Long id) {
+    public FlowNode(Long id) {
         this.id = id;
     }
 
     @Override
     public boolean equals(Object obj) {
-        return obj == null ? false : (((WFNode) obj).getId().equals(getId()));
+        return obj == null ? false : (((FlowNode) obj).getId().equals(getId()));
     }
 
     @Override
@@ -153,5 +161,28 @@ public class WFNode implements Serializable {
 
     public void setApprover(User approver) {
         this.approver = approver;
+    }
+
+    @Override
+    public Long getOrder() {
+        return order;
+    }
+
+    @Override
+    public void setOrder(Long order) {
+        this.order = order;
+    }
+
+    public FlowNode getExecuteFlowNode() {
+        return executeFlowNode;
+    }
+
+    public void setExecuteFlowNode(FlowNode executeFlowNode) {
+        this.executeFlowNode = executeFlowNode;
+    }
+
+    @Override
+    public int compareTo(Orderable orderable) {
+        return (int) (getOrder() - orderable.getOrder());
     }
 }

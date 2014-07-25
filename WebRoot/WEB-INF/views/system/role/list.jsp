@@ -31,18 +31,21 @@
     <form action="${ctx}/system/role/query.do" onsubmit="return false;">
         <table class="fl mt5 w">
             <tr>
-                <td class="f14" align="right" width="6%">角色名称：</td>
-                <td class="f14" align="left" width="16%"><input type="text" name="search_LIKE_name" value="${name}" class="text_input1"/></td>
-                <td width="12%">
-                    <a href="javascript:void(0)" class="a_underline block_inline fr w_blue mt5 reset">清除</a>
-                    <a href="javascript:void(0)" class="block_inline c_white lh25 fr mr10 submit"><b class="allbtn_l block fl"></b><b class="allbtn_r pr13 block fl w_auto f14">查&nbsp;&nbsp;询</b></a>
-                </td>
-                <td class="f14" align="right" width="6%"></td>
-                <td class="f14" align="left" width="16%"></td>
-                <td class="f14" align="right" width="6%"></td>
-                <td class="f14" align="left" width="16%"></td>
-                <td class="f14" align="right" width="6%"></td>
-                <td class="f14" align="left" width="16%"></td>
+                <td class="f14 namewidth1" align="right">角色名称：</td>
+                <td class="f14 namewidth2" align="left"><input type="text" name="search_LIKE_name" value="${name}" class="text_input1"/></td>
+                <td width="namewidth3">
+    			<a href="javascript:;" class="c_222 block cp fr ml10 packup  mt8 mr20 more" title="展开"></a>
+    			<a href="javascript:;" class="reset a_underline fr w_blue mt5">清除</a>
+    			<a href="javascript:;" class="block c_white lh25 fr mr10 submit">
+    				<b class="allbtn_l block fl"></b>
+    				<b class="allbtn_r pr13 block fl w_auto f14">查&nbsp;&nbsp;询</b>
+    			</a>
+    			</td>
+                <td class="f14 namewidth1" align="right"></td>
+                <td class="f14 namewidth2" align="left"></td>
+                <td class="f14 namewidth1" align="right"></td>
+                <td class="f14 namewidth2" align="left"></td>
+                
             </tr>
         </table>
         <tags:paginationparams page="${page}"/>

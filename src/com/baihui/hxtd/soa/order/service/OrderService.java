@@ -2,11 +2,11 @@ package com.baihui.hxtd.soa.order.service;
 
 import com.baihui.hxtd.soa.base.orm.hibernate.HibernatePage;
 import com.baihui.hxtd.soa.base.utils.Search;
-import com.baihui.hxtd.soa.common.controller.model.FlowModel;
+import com.baihui.hxtd.soa.common.dao.FlowNodeDao;
 import com.baihui.hxtd.soa.order.dao.ContractDao;
 import com.baihui.hxtd.soa.order.dao.OrderDao;
 import com.baihui.hxtd.soa.order.entity.Order;
-import com.baihui.hxtd.soa.system.dao.RoleDao;
+import com.baihui.hxtd.soa.system.DictionaryConstant;
 import com.baihui.hxtd.soa.system.dao.UserDao;
 import com.baihui.hxtd.soa.system.entity.AuditLog;
 import com.baihui.hxtd.soa.system.service.DataShift;
@@ -45,19 +45,16 @@ public class OrderService {
     @Resource
     private UserDao userDao;
 
-
     @Resource
     private ContractDao contractDao;
-    /*@Resource
-	private WFNodeService wfNodeService;
-	
-	@Resource
-	private WFTaskService wfTaskService;*/
+
+    @Resource
+    private FlowNodeDao flowNodeDao;
 
     @SuppressWarnings("unchecked")
     private DetachedCriteria biuldQuery(Map<String, Object> searchParams, DataShift dataShift, Class entityClass) throws NoSuchFieldException {
         DetachedCriteria criteria = DetachedCriteria.forClass(entityClass);
-//        criteria.setFetchMode("product", FetchMode.JOIN);
+        criteria.setFetchMode("product", FetchMode.JOIN);
         criteria.setFetchMode("status", FetchMode.JOIN);
         criteria.setFetchMode("customer", FetchMode.JOIN);
         criteria.setFetchMode("investmentWay", FetchMode.JOIN);
@@ -95,7 +92,7 @@ public class OrderService {
     public Order get(Long id) {
         String hql = " select ord from Order ord "
                 + " left join fetch ord.status "
-//                + " left join fetch ord.product "
+                + " left join fetch ord.product "
                 + " left join fetch ord.customer "
                 + " left join fetch ord.investmentWay "
                 + " left join fetch ord.owner "
@@ -109,16 +106,8 @@ public class OrderService {
         Date now = orderDao.getDBNow();
         order.setCreatedTime(now);
         order.setModifiedTime(now);
+        order.setStatus(flowNodeDao.findStartOfFlow(DictionaryConstant.NODE_TYPE_ORDERAPPROVE));
         orderDao.save(order);
-
-        /************新增订单审批任务***************/
-		/*List<WFNode> nodeLst = wfNodeService.findByFlowValue("a00");
-		List<WFTask> taskLst;
-		for(WFNode node : nodeLst){
-			WFTask task = new WFTask();
-			
-		}*/
-        //todo: lihua
 
 
         auditLog.setRecordId(order.getId());
@@ -131,8 +120,13 @@ public class OrderService {
         orderDao.save(order);
     }
 
-    public void delete(Long[] ids, AuditLog[] auditLogArr) {
-        orderDao.delete(ids);
+    public boolean delete(Long[] ids, AuditLog[] auditLogArr) {
+        if (contractDao.getCount(ids, "order") > 0) {
+            return false;
+        } else {
+            orderDao.logicalDelete(ids);
+            return true;
+        }
     }
 
     /**
@@ -160,10 +154,13 @@ public class OrderService {
         page.setResult(orders);
         return page;
     }
-
-    public void startApprove(FlowModel flowModel){
-        String hql = "";
+    
+    
+    public Long getSumMoneyByTime(Date beginTime,Date endTime){
+    	String hql = "select sum(order.purchaseMoney) from Order order " +
+    					"where order.isDeleted = false " +
+    					"and order.payStatus=true " +
+    					"and order.modifiedTime between ? and ?";
+    	return orderDao.findUnique(hql,beginTime,endTime);
     }
-
-
 }

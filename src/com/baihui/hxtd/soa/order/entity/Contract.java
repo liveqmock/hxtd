@@ -13,6 +13,9 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
+import org.hibernate.annotations.NotFound;
+import org.hibernate.annotations.NotFoundAction;
+
 import com.baihui.hxtd.soa.customer.entity.Customer;
 import com.baihui.hxtd.soa.system.entity.Dictionary;
 import com.baihui.hxtd.soa.system.entity.User;
@@ -74,16 +77,19 @@ public class Contract {
 	/** 关联订单 */
 	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "ORDER_ID")
+	@NotFound(action = NotFoundAction.IGNORE)
 	private Order order;
 	
 	/** 关联客户 */
 	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "ACCOUNT_ID")
+	@NotFound(action = NotFoundAction.IGNORE)
 	private Customer customer;
 	
 	/** 赎回方式 */
 	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "REDEEM_TYPE_DIC")
+	@NotFound(action = NotFoundAction.IGNORE)
 	private Dictionary redeemType;
 	
 	/** 签订时间 */
@@ -107,6 +113,7 @@ public class Contract {
 	/** 创建者 */
 	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "CREATOR_ID", updatable = false)
+	@NotFound(action = NotFoundAction.IGNORE)
 	private User creator;
 
 	/** 创建时间 */
@@ -117,6 +124,7 @@ public class Contract {
 	/** 修改者 */
 	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "MODIFIER_ID")
+	@NotFound(action = NotFoundAction.IGNORE)
 	private User modifier;
 	
 	/** 最终修改时间 */

@@ -103,6 +103,10 @@ public class MarketActivity implements Serializable {
 	@Column(name = "REMARK")
 	private String remark;
 	
+	/**是否发送消息提醒*/
+	@Column(name = "IS_SEND")
+	private Long isSendMsg;
+
 	/**删除标记*/
 	@Column(name = "IS_DELETED")
 	private Boolean isDeleted = false;
@@ -242,6 +246,14 @@ public class MarketActivity implements Serializable {
 		this.remark = remark;
 	}
 
+	public Long getIsSendMsg() {
+		return isSendMsg;
+	}
+
+	public void setIsSendMsg(Long isSendMsg) {
+		this.isSendMsg = isSendMsg;
+	}
+	
 	public Boolean getIsDeleted() {
 		return isDeleted;
 	}

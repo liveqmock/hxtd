@@ -1,11 +1,9 @@
 package com.baihui.hxtd.soa.common.controller.model;
 
-import com.baihui.hxtd.soa.common.entity.Module;
-import com.baihui.hxtd.soa.common.entity.WFNode;
-import com.baihui.hxtd.soa.system.entity.User;
+import com.baihui.hxtd.soa.common.entity.FlowInstance;
+import com.baihui.hxtd.soa.common.entity.FlowNode;
 
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 
 /**
@@ -17,63 +15,53 @@ import java.util.List;
 public class FlowModel {
 
     /** 流程类型 */
-    private String flowType;
-    /** 所属模块 */
-    private Module module;
-    /** 主键编号值 */
-    private Long id;
-    /** 节点列表 */
-    private List<WFNode> nodes = new ArrayList<WFNode>();
-    /** 操作者 */
-    private User operater;
-    /** 操作时间 */
-    private Date operateTime;
+    private String flowValue;
+    /** 预定执行记录列表 */
+    private List<FlowInstance> reserveExecuteRecoreds = new ArrayList<FlowInstance>();
+    /** 当前执行记录 */
+    private FlowInstance executeRecord;
+    /** 当前流程环节 */
+    private FlowNode currentFlowNode;
+    /** 下一个流程环节 */
+    private FlowNode nextFlowNode;
 
-    public Long getId() {
-        return id;
+    public String getFlowValue() {
+        return flowValue;
     }
 
-    public void setId(Long id) {
-        this.id = id;
+    public void setFlowValue(String flowValue) {
+        this.flowValue = flowValue;
     }
 
-    public String getFlowType() {
-        return flowType;
+    public List<FlowInstance> getReserveExecuteRecoreds() {
+        return reserveExecuteRecoreds;
     }
 
-    public void setFlowType(String flowType) {
-        this.flowType = flowType;
+    public void setReserveExecuteRecoreds(List<FlowInstance> reserveExecuteRecoreds) {
+        this.reserveExecuteRecoreds = reserveExecuteRecoreds;
     }
 
-    public Module getModule() {
-        return module;
+    public FlowInstance getExecuteRecord() {
+        return executeRecord;
     }
 
-    public void setModule(Module module) {
-        this.module = module;
+    public void setExecuteRecord(FlowInstance executeRecord) {
+        this.executeRecord = executeRecord;
     }
 
-    public List<WFNode> getNodes() {
-        return nodes;
+    public FlowNode getCurrentFlowNode() {
+        return currentFlowNode;
     }
 
-    public void setNodes(List<WFNode> nodes) {
-        this.nodes = nodes;
+    public void setCurrentFlowNode(FlowNode currentFlowNode) {
+        this.currentFlowNode = currentFlowNode;
     }
 
-    public User getOperater() {
-        return operater;
+    public FlowNode getNextFlowNode() {
+        return nextFlowNode;
     }
 
-    public void setOperater(User operater) {
-        this.operater = operater;
-    }
-
-    public Date getOperateTime() {
-        return operateTime;
-    }
-
-    public void setOperateTime(Date operateTime) {
-        this.operateTime = operateTime;
+    public void setNextFlowNode(FlowNode nextFlowNode) {
+        this.nextFlowNode = nextFlowNode;
     }
 }

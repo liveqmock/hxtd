@@ -18,6 +18,21 @@ $(function(){
 	$(".empty").click(function(){ //清除
 		$(this).prevAll("input").val('');
 	});
+	$("#contactType").change(function(){
+		$("#txt_customer").removeClass("required");
+		$("#txt_supplier").removeClass("required");
+		$(".customer").hide();
+		$(".supplier").hide();
+		var val = $(this).val();
+		if(val == "customer"){
+			$(".customer").show();
+			$("#txt_customer").addClass("required");
+		} else {
+			$(".supplier").show();
+			$("#txt_supplier").addClass("required");
+		}
+	});
+	$("#contactType").val("${contact.supplier.name != null ? 'supplier' : 'customer'}").change();
 });
 function searchData(action){ //搜索弹出框
 	var url, title;
@@ -58,7 +73,7 @@ function searchData(action){ //搜索弹出框
 	<h1 class="f14 fbnone ml40 pt10">基本信息</h1>
 	<table class="cb id_table3 w95b bg_c_white margin0 mt10">
 		<tr>
-			<td width="15%" align="right">联系人所有者：</td>
+			<td width="15%" align="right"><span class="w_red">*&nbsp;</span>联系人所有者：</td>
 			<td align="left">
 				<input id="txt_owner" type="text" value="${contact.owner.realName}" class="text_input3 cp" readonly 
 					onclick="searchData('owner');"/>
@@ -79,21 +94,28 @@ function searchData(action){ //搜索弹出框
 		<tr>
 			<td align="right"><span class="w_red">*&nbsp;</span>联系人名：</td>
 			<td align="left"><input name="name" type="text" value="${contact.name}" class="text_input3 required"/></td>
-			<td align="right">客户名：</td>
+			<td align="right">联系人类型：</td>
 			<td align="left">
-				<input id="txt_customer" type="text" value="${contact.customer.name}" readonly class="text_input3 cp" 
-					onclick="searchData('customer');"/>
-				<input id="hide_customer_id" name="customer.id" type="hidden" value="${contact.customer.id}"/>
-				<i class="s_inquiry globle_img block_inline ml5 vm cp" title="搜索客户" onclick="searchData('customer');"></i>
-				<i class="dump_btn globle_img block_inline ml5 vm cp empty" title="清除"></i>
+				<select id="contactType" name="contactType" class="select1">
+					<option value="customer">客户</option>
+					<option value="supplier">供应商</option>
+				</select>
 			</td>
 		</tr>
 		<tr>
 			<td align="right">电话：</td>
 			<td align="left"><input name="phone" type="text" value="${contact.phone}" class="text_input3 isPhone"/></td>
-			<td align="right">供应商名：</td>
-			<td align="left">
-				<input id="txt_supplier" type="text" value="${contact.supplier.name}" readonly class="text_input3 cp" 
+			<td align="right" class="customer"><span class="w_red">*&nbsp;</span>客户名：</td>
+			<td align="left" class="customer">
+				<input id="txt_customer" type="text" value="${contact.customer.name}" readonly class="text_input3 cp required" 
+					onclick="searchData('customer');"/>
+				<input id="hide_customer_id" name="customer.id" type="hidden" value="${contact.customer.id}"/>
+				<i class="s_inquiry globle_img block_inline ml5 vm cp" title="搜索客户" onclick="searchData('customer');"></i>
+				<i class="dump_btn globle_img block_inline ml5 vm cp empty" title="清除"></i>
+			</td>
+			<td align="right" class="supplier" style="display:none;"><span class="w_red">*&nbsp;</span>供应商名：</td>
+			<td align="left" class="supplier" style="display:none;">
+				<input id="txt_supplier" type="text" value="${contact.supplier.name}" readonly class="text_input3 cp required" 
 					onclick="searchData('supplier');"/>
 				<input id="hide_supplier_id" name="supplier.id" type="hidden" value="${contact.supplier.id}"/>
 				<i class="s_inquiry globle_img block_inline ml5 vm cp" title="搜索供应商" onclick="searchData('supplier');"></i>

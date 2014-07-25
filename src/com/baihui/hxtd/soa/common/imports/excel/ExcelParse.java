@@ -6,17 +6,15 @@ import java.io.InputStream;
 import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import java.util.TreeSet;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import org.apache.poi.hssf.usermodel.HSSFCell;
 import org.apache.poi.hssf.usermodel.HSSFDateUtil;
-import org.apache.poi.hssf.usermodel.HSSFRow;
-import org.apache.poi.hssf.usermodel.HSSFSheet;
-import org.apache.poi.hssf.usermodel.HSSFWorkbook;
 import org.apache.poi.ss.usermodel.Cell;
 import org.apache.poi.ss.usermodel.Row;
 import org.apache.poi.ss.usermodel.Sheet;
@@ -87,16 +85,18 @@ public abstract class ExcelParse<T> {
 		Workbook wb = ImportExport.create(in);
 		//记录sheet页中所有记录的行数,每一行有都是一个数据,里面记录了单元格的信息
 		Map<Integer, T> resultMap = new HashMap<Integer, T>();
-		int wbLength = wb.getNumberOfSheets();
-		logger.info("一共有几个sheet页:["+wbLength+"]");
-		//读取sheet页
-		for (int numSheets = 0; numSheets < wbLength; numSheets++) {
+		//int wbLength = wb.getNumberOfSheets();
+		//logger.info("一共有几个sheet页:["+wbLength+"]");
+		//读取第一个sheet页
+		for (int numSheets = 0; numSheets < 1; numSheets++) {
 			Sheet sheet = wb.getSheetAt(numSheets);
 			if ( sheet == null ){
 				continue;
 			}
 			//获取sheet的行数,sheet页的row从0开始,sheet.getLastRowNum()=1时,表示已经有两条记录了
 			int sheetRowNum = sheet.getLastRowNum();
+			//记录导入记录数
+			ImportMessage.totalCount = sheetRowNum;
 			logger.info("第"+(numSheets+1)+"个sheet页中有"+sheetRowNum+"行记录");
 			if (sheetRowNum < 1) {
 				msg = "您上传的第"+(numSheets+1)+"个sheet页文件内容为空";
@@ -106,9 +106,10 @@ public abstract class ExcelParse<T> {
 			//超过允许导入的最大行数10001,截取前10001条数据
 			if(sheetRowNum>ImportMessage.LIMIT_COUNT){
 				sheetRowNum = ImportMessage.LIMIT_COUNT;
-				msg = ImportMessage.limitMessage(sheetRowNum);
+				//上传大于10001条给出提示,取前10001条
+				//msg = ImportMessage.limitMessage();
+				//ImportMessage.message = msg;
 			}
-			ImportMessage.message = msg;
 			//遍历sheet页中的记录,rowNumOfSheet = 1,从第二行开始读,不读取第一行,因为第一行是title.
 			for (int rowNumOfSheet = 1; rowNumOfSheet <= sheetRowNum; rowNumOfSheet++) {
 				//获取第rowNumOfSheet行数据
@@ -131,6 +132,7 @@ public abstract class ExcelParse<T> {
 				}
 			}
 		}
+		
 		return resultMap;
 	}
 	
@@ -298,6 +300,66 @@ public abstract class ExcelParse<T> {
 		//最后将entityMap的value取出,传回
 		return valueList;
 	}
+	
+	/**
+	 * 手机号验证
+	 * 
+	 * @param  str
+	 * @return 验证通过返回true
+	 */
+	public static boolean isMobile(String str) { 
+		Pattern p = null;
+		Matcher m = null;
+		boolean b = false; 
+		p = Pattern.compile("^(((13[0-9]{1})|(15[0-9]{1})|(18[0-9]{1}))+\\d{8})$"); // 验证手机号
+		m = p.matcher(str);
+		b = m.matches(); 
+		return b;
+	}
+	
+	/**
+	 * 电话号码验证
+	 * 格式:010-12345678
+	 * @param  str
+	 * @return 验证通过返回true
+	 */
+	public static boolean isPhone(String str) { 
+		
+		Pattern p = Pattern.compile("^\\d{3,4}-?\\d{7,9}$"); 
+		Matcher m = p.matcher(str);
+		return m.matches(); 
+	}
+
+	/**
+	 * 电子邮件校验
+	 */
+	public static boolean checkEmail(String email) {
+
+		String EMAIL_REGEX = "^((([a-z]|\\d|[!#\\$%&'\\*\\+\\-\\/=\\?\\^_`{\\|}~]|[\\u00A0-\\uD7FF\\uF900-\\uFDCF\\uFDF0-\\uFFEF])+(\\.([a-z]|\\d|[!#\\$%&'\\*\\+\\-\\/=\\?\\^_`{\\|}~]|[\\u00A0-\\uD7FF\\uF900-\\uFDCF\\uFDF0-\\uFFEF])+)*)|((\\x22)((((\\x20|\\x09)*(\\x0d\\x0a))?(\\x20|\\x09)+)?(([\\x01-\\x08\\x0b\\x0c\\x0e-\\x1f\\x7f]|\\x21|[\\x23-\\x5b]|[\\x5d-\\x7e]|[\\u00A0-\\uD7FF\\uF900-\\uFDCF\\uFDF0-\\uFFEF])|(\\\\([\\x01-\\x09\\x0b\\x0c\\x0d-\\x7f]|[\\u00A0-\\uD7FF\\uF900-\\uFDCF\\uFDF0-\\uFFEF]))))*(((\\x20|\\x09)*(\\x0d\\x0a))?(\\x20|\\x09)+)?(\\x22)))@((([a-z]|\\d|[\\u00A0-\\uD7FF\\uF900-\\uFDCF\\uFDF0-\\uFFEF])|(([a-z]|\\d|[\\u00A0-\\uD7FF\\uF900-\\uFDCF\\uFDF0-\\uFFEF])([a-z]|\\d|-|\\.|_|~|[\\u00A0-\\uD7FF\\uF900-\\uFDCF\\uFDF0-\\uFFEF])*([a-z]|\\d|[\\u00A0-\\uD7FF\\uF900-\\uFDCF\\uFDF0-\\uFFEF])))\\.)+(([a-z]|[\\u00A0-\\uD7FF\\uF900-\\uFDCF\\uFDF0-\\uFFEF])|(([a-z]|[\\u00A0-\\uD7FF\\uF900-\\uFDCF\\uFDF0-\\uFFEF])([a-z]|\\d|-|\\.|_|~|[\\u00A0-\\uD7FF\\uF900-\\uFDCF\\uFDF0-\\uFFEF])*([a-z]|[\\u00A0-\\uD7FF\\uF900-\\uFDCF\\uFDF0-\\uFFEF])))\\.?$";
+		
+		return email.matches(EMAIL_REGEX);
+	}
+
+
+
+	
+	/**
+	 * 邮编校验
+	 */
+	public static boolean checkPostCode(String postCode){
+        
+		return postCode.matches("^[0-9]{6}$"); 
+
+	}
+	
+	public static void main(String[] args) {
+		System.out.println(isMobile("11036409512"));
+		System.out.println(isPhone("78965123"));
+		System.out.println(checkEmail("362350061@qq.com"));
+		System.out.println(checkPostCode("100000"));
+	}
+
+	
 	
 	/**
 	 * 将List<String>转换成对象

@@ -241,7 +241,7 @@ function reset() {
 					<ul class="fr id_table1 mt10 ml10">
 						<c:if test="${VS_HAS_FUNCTIONS.leadImport}">
 							<li>
-								<a href="${ctx}/common/imports/toImportPage.do?module=lead"
+								<a href="${ctx}/lead/imports/toImportPage.do?module=lead"
 									class="leading_in globle_img block_inline mr10" title="导入"></a>
 							</li>
 						</c:if>

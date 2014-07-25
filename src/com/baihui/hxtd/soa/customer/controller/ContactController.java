@@ -116,9 +116,13 @@ public class ContactController extends CommonController<Contact> {
 	  * @return String 新增联系人视图地址
 	 */
 	@RequestMapping(value = "/toAddPage.do")
-	public String toAddPage(Model model) {
+	public String toAddPage(ModelMap model) {
 		initPageDic(model);
-		model.addAttribute("contact", new Contact());// 初始化联系人
+		Contact contact = new Contact();
+		User user = (User) model.get(Constant.VS_USER);
+		contact.setOwner(user);
+		
+		model.addAttribute("contact", contact);// 初始化联系人
 
 		return "/customer/contact/edit";
 	}
@@ -131,32 +135,17 @@ public class ContactController extends CommonController<Contact> {
 	 */
 	@ResponseBody
 	@RequestMapping(value = "/add.do", method = RequestMethod.POST)
-	public String add(Contact contact,
+	public String add(Contact contact, 
+			String contactType,
 			@ModelAttribute(Constant.VS_USER_ID) Long userId) {
 		User user = new User(userId);
 		contact.setCreator(user);
 		contact.setModifier(user);
 		contact.setCreatedTime(new Date());
-		if(contact.getCustomer().getId() == null){
-			contact.setCustomer(null);
-		}
-		if(contact.getSupplier().getId() == null){
+		if(contactType.equals("customer")){
 			contact.setSupplier(null);
-		}
-		if(contact.getOwner().getId() == null){
-			contact.setOwner(null);
-		}
-		if(contact.getSource().getId() == null){
-			contact.setSource(null);
-		}
-		if(contact.getProvince().getId() == null){
-			contact.setProvince(null);
-		}
-		if(contact.getCity().getId() == null){
-			contact.setCity(null);
-		}
-		if(contact.getCounty().getId() == null){
-			contact.setCounty(null);
+		} else {
+			contact.setCustomer(null);
 		}
 		
 		/************ 新增 *****************************/
@@ -176,7 +165,7 @@ public class ContactController extends CommonController<Contact> {
 	  * @throws
 	 */
 	@RequestMapping(value = "/toModifyPage.do")
-	public String toModifyPage(Long id, Model model) {
+	public String toModifyPage(Long id, ModelMap model) {
 		initPageDic(model);
 		model.addAttribute("contact", contactService.get(id));
 		
@@ -192,29 +181,14 @@ public class ContactController extends CommonController<Contact> {
 	@ResponseBody
 	@RequestMapping(value = "/modify.do")
 	public String modify(Contact contact, 
+			String contactType, 
 			@ModelAttribute(Constant.VS_USER_ID) Long userId) {
 		User user = new User(userId);
 		contact.setModifier(user);
-		if(contact.getCustomer().getId() == null){
-			contact.setCustomer(null);
-		}
-		if(contact.getSupplier().getId() == null){
+		if(contactType.equals("customer")){
 			contact.setSupplier(null);
-		}
-		if(contact.getOwner().getId() == null){
-			contact.setOwner(null);
-		}
-		if(contact.getSource().getId() == null){
-			contact.setSource(null);
-		}
-		if(contact.getProvince().getId() == null){
-			contact.setProvince(null);
-		}
-		if(contact.getCity().getId() == null){
-			contact.setCity(null);
-		}
-		if(contact.getCounty().getId() == null){
-			contact.setCounty(null);
+		} else {
+			contact.setCustomer(null);
 		}
 		
 		AuditLog auditLog = new AuditLog(EnumModule.CONTACT.getModuleName(), 
@@ -289,7 +263,7 @@ public class ContactController extends CommonController<Contact> {
 	  * @Description: 获取视图字典数据
 	  * @param model Model
 	 */
-	private void initPageDic(Model model){
+	private void initPageDic(ModelMap model){
 		List<Dictionary> dict = dictionaryService.findChildren("040101");//线索来源
 		if(null == dict){
 			dict = new ArrayList<Dictionary>();

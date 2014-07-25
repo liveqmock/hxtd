@@ -69,69 +69,78 @@
 			<tr>
 				<td align="right">所有权：</td>
 				<td align="left">${customer.ownerShip.key}</td>
-				<td align="right">开户银行：</td>
-				<td align="left">${customer.openBank.key}</td>
-			</tr>
-			<tr>
 				<td align="right">行业：</td>
 				<td align="left">${customer.industry.key}</td>
-				<td align="right">银行户名：</td>
-				<td align="left">${customer.bankName}</td>
 			</tr>
 			<tr>
 				<td align="right">所在部门：</td>
 				<td align="left">${customer.dept}</td>
-				<td align="right">银行账号：</td>
-				<td align="left">${customer.bankAccount}</td>
-			</tr>
-			<tr>
 				<td align="right">职务名称：</td>
 				<td align="left">${customer.job}</td>
+			</tr>
+			<tr>
 				<td align="right">出资方式：</td>
 				<td align="left">${customer.contributionType}</td>
-			</tr>
-			<tr>
 				<td align="right">邮箱：</td>
 				<td align="left">${customer.email}</td>
+			</tr>
+			<tr>
 				<td align="right">出资规模：</td>
 				<td align="left">${customer.contributionScale}</td>
-			</tr>
-			<tr>
 				<td align="right">传真：</td>
 				<td align="left">${customer.fax }</td>
-				<td align="right">理财顾问：</td>
-				<td align="left">${customer.financialAdvisor}</td>
 			</tr>
 			<tr>
+				<td align="right">理财顾问：</td>
+				<td align="left">${customer.financialAdvisor.realName}</td>
 				<td align="right">邮编：</td>
 				<td align="left">${customer.postCode}</td>
-				<td align="right">理财经理：</td>
-				<td align="left">${customer.financialManager}</td>
 			</tr>
 			<tr>
+				<td align="right">理财经理：</td>
+				<td align="left">${customer.financialManager.realName}</td>
 				<td align="right">邀约人：</td>
-				<td align="left">${customer.appointment}</td>
+				<td align="left">${customer.appointment.realName}</td>
+			</tr>
+			<tr>
 				<td align="right">理财总监：</td>
-				<td align="left">${customer.financialDirector}</td>
+				<td align="left">${customer.financialDirector.realName}</td>
+				<td align="right"></td>
+				<td align="left"></td>
 		    </tr>
+		</table>
+		<h1 class="f14 fbnone ml40 pt10">银行信息</h1>
+		<table class="cb id_table3 w95b bg_c_white margin0 mt10">
+			<tr>
+			    <td align="right"  width="15%">开户银行：</td>
+				<td align="left">${customer.openBank.key}</td>
+				<td align="right"  width="15%">银行户名：</td>
+				<td align="left">${customer.bankName}</td>
+			</tr>
+			<tr>
+				<td align="right">银行账号：</td>
+				<td align="left">${customer.bankAccount}</td>
+				<td align="right"></td>
+				<td align="left"></td>
+			</tr>
 		</table>
 		<h1 class="f14 fbnone ml40 pt10">地址信息</h1>
 		<table class="cb id_table3 w95b bg_c_white margin0 mt10">
 			<tr>
-			    <td align="right" width="15%">省：</td>
+			    <td align="right"  width="15%">省份：</td>
 				<td align="left">${customer.province.name}</td>
-				<td align="right" width="15%">家庭地址：</td>
-				<td align="left">${customer.familyAddr}</td>
+				<td align="right" width="15%">城市：</td>
+				<td align="left">${customer.city.name}</td>
 			</tr>
 			<tr>
-				<td align="right">市：</td>
-				<td align="left">${customer.city.name}</td>
+				<td align="right">区县：</td>
+				<td align="left">${customer.county.name}</td>
 				<td align="right">详细地址：</td>
 				<td align="left">${customer.address}</td>
 			</tr>
 			<tr>
-				<td align="right">县：</td>
-				<td align="left">${customer.county.name}</td>
+				<td align="right"  width="15%">家庭地址：</td>
+				<td align="left">${customer.familyAddr}</td>
 				<td align="right"></td>
 				<td align="left"></td>
 			</tr>
@@ -144,11 +153,32 @@
 				<div class="w85b">${customer.remark}</div>
 				</td>
 			</tr>
+		</table>
+		<h1 class="f14 fbnone ml40 pt10">联系人</h1>
+		<div class="w95b  bg_c_white margin0 mt10">
+		<table class="cb id_table2 w90b margin0 mt10 mb10">
+			<tr>
+				<th>联系人名称</th>
+				<th>职位</th>
+				<th>电话</th>
+				<th>手机</th>
+				<th>创建时间</th>
+			</tr>
+			<c:forEach items="${contacts}" varStatus="i" var="item" >
+			<tr>
+				<td>${item.name}</td>
+				<td>${item.position}</td>
+				<td>${item.phone}</td>
+				<td>${item.mobile}</td>
+				<td>${item.createdTime}</td>
+			</tr>
+			</c:forEach>
 		</table> 
+		</div>
+		<tag:memoir view="true" edit="true" query="true" delete="true" moduleType="customer" moduleId="${customer.id}"></tag:memoir>
 		<tag:attachment view="${VS_HAS_FUNCTIONS.customerAttView}" upload="${VS_HAS_FUNCTIONS.customerUpload}" 
 			module="customer" query="${VS_HAS_FUNCTIONS.customerAttQuery}" down="${VS_HAS_FUNCTIONS.customerDown}" 
 			deleteFlag="true" id="${customer.id}"></tag:attachment>
-		<tag:memoir view="true" edit="true" query="true" delete="true" moduleType="customer" moduleId="${customer.id}"></tag:memoir>
 		<div class="h40"></div>
     </div>
 </body>

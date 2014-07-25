@@ -1,5 +1,5 @@
 <%@tag pageEncoding="UTF-8" %>
-<%@ attribute name="flowNodes" type="java.util.List" required="true" %>
+<%@ attribute name="reserveExecuteRecoreds" type="java.util.List" required="true" %>
 <%@ attribute name="historyRecords" type="java.util.List" required="true" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ taglib prefix="tags" tagdir="/WEB-INF/tags" %>
@@ -16,13 +16,13 @@
             <th>操作</th>
         </tr>
         <tbody class="list">
-        <c:forEach items="${flowNodes}" var="flowNode" varStatus="status">
+        <c:forEach items="${reserveExecuteRecoreds}" var="flowNode" varStatus="status">
             <tr class="bg_c_blue">
-                <td>${flowNode.name}<input type="hidden" name="nodes[${status.index}].id" value="${flowNode.id}"></td>
+                <td>${flowNode.name}<input type="hidden" name="reserveExecuteRecoreds[${status.index}].id" value="${flowNode.id}"></td>
                 <td>
-                    <select name="nodes[${status.index}].approver.id" class="select3 pr">
+                    <select name="reserveExecuteRecoreds[${status.index}].approver.id" class="select3 pr">
                         <c:forEach items="${flowNode.approvers}" var="approver">
-                            <option value="${approver.id}">${approver.realName}</option>
+                            <option value="${approver.id}" ${approver.id==flowNode.approver.id?"selected":""}>${approver.realName}</option>
                         </c:forEach>
                     </select>
                 </td>
@@ -42,13 +42,15 @@
             <th>备注</th>
         </tr>
         <tbody class="list">
-        <tr class="bg_c_blue">
-            <td>理财经理</td>
-            <td>市场营销部</td>
-            <td>理财经理A1</td>
-            <td>通过</td>
-            <td>已审批</td>
-        </tr>
+        <c:forEach items="${historyRecords}" var="historyRecord">
+            <tr class="bg_c_blue">
+                <td>${historyRecord.flowNode.name}</td>
+                <td></td>
+                <td>${historyRecord.approver.realName}</td>
+                <td>${historyRecord.isPassed?"通过":"未通过"}</td>
+                <td>${historyRecord.reason}</td>
+            </tr>
+        </c:forEach>
         <tr>
             <td>投资经理</td>
             <td>市场营销部</td>

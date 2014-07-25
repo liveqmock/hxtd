@@ -33,6 +33,7 @@ import com.baihui.hxtd.soa.base.utils.Search;
 import com.baihui.hxtd.soa.base.utils.mapper.HibernateAwareObjectMapper;
 import com.baihui.hxtd.soa.common.controller.CommonController;
 import com.baihui.hxtd.soa.project.entity.Project;
+import com.baihui.hxtd.soa.project.service.ProductService;
 import com.baihui.hxtd.soa.project.service.ProjectService;
 import com.baihui.hxtd.soa.system.entity.AuditLog;
 import com.baihui.hxtd.soa.system.entity.User;
@@ -73,6 +74,9 @@ public class ProjectController extends CommonController<Project> {
 	
 	@Resource
 	private DictionaryService dictionaryService;
+	
+	@Resource
+	private ProductService productService;
 	
 	@RequestMapping(value="/toQueryPage.do")
 	public String toQueryPage(ModelMap model){
@@ -115,6 +119,7 @@ public class ProjectController extends CommonController<Project> {
 	public String view(Long id,Model model){
 		Project project = projectService.get(id);
 		model.addAttribute("project",project);
+		model.addAttribute("products",productService.findProductByProject(project));
 		return "/project/project/view";
 	}
 	/**

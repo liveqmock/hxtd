@@ -12,6 +12,6 @@
     <title>华兴控股</title>
 </head>
 <body>
-<div class="error_img"><img src="${ctx}/static/images/img404.png" alt=""/></div>
+<div align="center" class="error_img"><img src="${ctx}/static/images/img404.png" alt=""/></div>
 </body>
 </html>

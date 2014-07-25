@@ -16,6 +16,7 @@ import com.baihui.hxtd.soa.base.orm.hibernate.HibernatePage;
 import com.baihui.hxtd.soa.base.utils.Search;
 import com.baihui.hxtd.soa.project.dao.ProductDao;
 import com.baihui.hxtd.soa.project.entity.Product;
+import com.baihui.hxtd.soa.project.entity.Project;
 import com.baihui.hxtd.soa.system.entity.AuditLog;
 import com.baihui.hxtd.soa.system.entity.User;
 import com.baihui.hxtd.soa.system.service.DataShift;
@@ -165,4 +166,12 @@ public class ProductService {
 	   }
 	   
    }
+   
+   public List<Product> findProductByProject(Project project) {
+		DetachedCriteria criteria = DetachedCriteria.forClass(Product.class);
+  		criteria.add(Restrictions.eq("isDeleted", false));
+  		criteria.add(Restrictions.eq("project", project));
+		return productDao.find(criteria);
+	}
+   
 }

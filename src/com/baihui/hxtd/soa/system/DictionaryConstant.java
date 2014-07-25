@@ -140,7 +140,8 @@ public class DictionaryConstant {
     /** 延迟的 */
     public final static String USER_STORESTATUS_DELAYED = "01040402";
 
-    /*功能*/
+    
+     /*功能*/
     /** 权限级别 */
     public final static String FUNCTION_PRIVILEGELEVEL = "010601";
     /** 公共的 */

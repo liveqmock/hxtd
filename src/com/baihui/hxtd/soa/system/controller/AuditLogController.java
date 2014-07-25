@@ -15,6 +15,7 @@ import org.springframework.ui.Model;
 import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.SessionAttributes;
 import org.springside.modules.web.Servlets;
 
 import com.baihui.hxtd.soa.base.Constant;
@@ -42,6 +43,7 @@ import com.baihui.hxtd.soa.util.JsonDto;
  */
 @Controller
 @RequestMapping(value = "/system/auditlog")
+@SessionAttributes(value = {Constant.VS_USER, Constant.VS_DATASHIFT})
 public class AuditLogController {
 
 	private Logger logger = LoggerFactory.getLogger(this.getClass());

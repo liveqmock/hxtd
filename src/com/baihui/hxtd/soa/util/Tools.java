@@ -1,7 +1,6 @@
 
 package com.baihui.hxtd.soa.util;
 
-import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.regex.Matcher;
@@ -109,7 +108,7 @@ public class Tools {
 	}
 	
 	public static boolean isEmpty(String str){
-		if("".equals(str) || str == null || str == "null"){
+		if("".equals(str.trim()) || str == null || str == "null"){
 			return true;
 		}else {
 			return false;

@@ -80,7 +80,7 @@ function reset() {
 								id="name" value="" />
 						</td>
 						<td class="f14 namewidth1" align="right" >
-							组织机构：
+							目标人员：
 						</td>
 						<td class="f14 namewidth2" align="left" >
 							<input type="text" class="text_input1" name="search_LIKE_org.name"
@@ -93,9 +93,9 @@ function reset() {
 							<div class="pr vm">
 								<input class="text_input2"
 									name="search_GTE_bargainMoney" type="text" 
-									readonly />-<input 
+									/>-<input 
 									class="text_input2"
-									name="search_LTE_bargainMoney" type="text" readonly />
+									name="search_LTE_bargainMoney" type="text" />
 							</div>
 						</td>
 						<td class="namewidth3">
@@ -192,7 +192,6 @@ function reset() {
 				class=" ml35 mr35">
 				<table class="cb id_table2 w ">
 					<tr id="recordDiv">
-						<tr id="recordDiv">
 						<th>
 							<input type="checkbox" name="" class="checkall" id="id" />
 						</th>
@@ -200,13 +199,10 @@ function reset() {
 							标题
 						</th>
 						<th>
-							组织机构
+							目标人员
 						</th>
 						<th>
-							目标成交额
-						</th>
-						<th>
-							时间周期
+							目标成交额（万）
 						</th>
 						<th width="4%">
 							创建者
@@ -224,7 +220,6 @@ function reset() {
 							操作
 						</th>
 					</tr>
-					</tr>
 				</table>
 			</div>
 			<div class="ml35 mr35 content">
@@ -237,13 +232,10 @@ function reset() {
 							标题
 						</th>
 						<th>
-							组织机构
+							目标人员
 						</th>
 						<th>
-							目标成交额
-						</th>
-						<th>
-							时间周期
+							目标成交额（万）
 						</th>
 						<th width="4%">
 							创建者
@@ -280,9 +272,8 @@ function reset() {
                         <c:otherwise>{$T.row.code}</c:otherwise>
                     </c:choose>
                 </td>
-                <td>{$T.row.org.name}</td>
+                <td>{$T.row.owner.realName}</td>
                 <td>{$T.row.bargainMoney}</td>
-                <td>{$T.row.unitDic.key}</td>
                 <td>{$T.row.creator.realName}</td>
                 <td>{$T.row.createdTime}</td>
                 <td>{$T.row.modifier.realName}</td>
@@ -297,6 +288,11 @@ function reset() {
                             <a
 									href="${ctx}/sales/salesTarget/toModifyPage.do?id={$T.row.id}"
 									title="编辑" class=" block_inline s_edit_btn globle_img ml10"></a>
+                        </c:if>
+                        <c:if test="${VS_HAS_FUNCTIONS.salesTargetAdd}">
+                            <a
+									href="${ctx}/sales/salesTarget/toAddPage.do?type=second&id={$T.row.id}"
+									title="复制目标" class=" block_inline s_copy globle_img ml10"></a>
                         </c:if>
                         <c:if test="${VS_HAS_FUNCTIONS.salesTargetDelete}">
                             <a href="javascript:void(0)"

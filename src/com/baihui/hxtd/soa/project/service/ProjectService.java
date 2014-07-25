@@ -21,6 +21,7 @@ import com.baihui.hxtd.soa.base.utils.Search;
 import com.baihui.hxtd.soa.project.dao.ProductDao;
 import com.baihui.hxtd.soa.project.dao.ProjectDao;
 import com.baihui.hxtd.soa.project.entity.Project;
+import com.baihui.hxtd.soa.project.entity.Supplier;
 import com.baihui.hxtd.soa.system.entity.AuditLog;
 import com.baihui.hxtd.soa.system.service.DataShift;
 /**
@@ -60,8 +61,6 @@ public class ProjectService {
     public HibernatePage<Project> findPage(Map<String, Object> searchParams, HibernatePage<Project> page) throws NoSuchFieldException {
         DetachedCriteria criteria = DetachedCriteria.forClass(Project.class);
         criteria.add(Restrictions.eq("isDeleted", false));
-        criteria.setFetchMode("creator", FetchMode.JOIN);
-        criteria.setFetchMode("modifier", FetchMode.JOIN);
         criteria.setFetchMode("supplier", FetchMode.JOIN);
         Map<String, SearchFilter> filters = Search.parse(searchParams);
         Search.buildCriteria(filters, criteria, Project.class);
@@ -135,6 +134,14 @@ public class ProjectService {
         Map<String, SearchFilter> filters = Search.parse(searchParams);
         Search.buildCriteria(filters, criteria, Project.class);
         return projectDao.find(criteria,3000);
+	}
+	
+	
+	public List<Project> findProjectBySupplier(Supplier supplierr) {
+		DetachedCriteria criteria = DetachedCriteria.forClass(Project.class);
+   		criteria.add(Restrictions.eq("isDeleted", false));
+   		criteria.add(Restrictions.eq("supplier", supplierr));
+		return projectDao.find(criteria);
 	}
 	
 	

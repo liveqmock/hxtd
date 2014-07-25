@@ -15,7 +15,6 @@ import com.baihui.hxtd.soa.common.entity.PCAS;
 import com.baihui.hxtd.soa.common.imports.ImportMessage;
 import com.baihui.hxtd.soa.common.service.PCASService;
 import com.baihui.hxtd.soa.customer.entity.CustomerDTO;
-import com.baihui.hxtd.soa.customer.entity.LeadDTO;
 import com.baihui.hxtd.soa.system.entity.Dictionary;
 import com.baihui.hxtd.soa.system.entity.User;
 import com.baihui.hxtd.soa.system.service.DictionaryService;
@@ -64,20 +63,108 @@ public class ExcelParse4Customer extends ExcelParse<CustomerDTO> {
 		//必填项
 		//姓名必填项
 		String name = sheetList.get(1);
-		if ( name == null || "".equals(name.trim()) ) {
+		if ( Tools.isEmpty(name.trim()) ) {
 			msg += "<br />第"+rowNumOfSheet+"条,客户名不能为空!";
 			logger.warn(msg);
 			//向无效数据集合中添加一条数据
 			ImportMessage.invalidFormatRowNumMap.put(rowNumOfSheet, msg);
 			return null;
 		}
+		//公司必填项
+		String company = sheetList.get(2);
+		if ( Tools.isEmpty(company.trim()) ) {
+			msg += "<br />第"+rowNumOfSheet+"条,公司不能为空!";
+			logger.warn(msg);
+			//向无效数据集合中添加一条数据
+			ImportMessage.invalidFormatRowNumMap.put(rowNumOfSheet, msg);
+			return null;
+		}
 		
+		
+		
+		/**
+		 * 校验数据格式
+		 */
+		//手机号码格式
+		String mobile =  sheetList.get(4);
+		//手机号码必填项
+		if ( Tools.isEmpty(mobile.trim()) ) {
+			msg += "<br />第"+rowNumOfSheet+"条,手机号码不能为空!";
+			logger.warn(msg);
+			//向无效数据集合中添加一条数据
+			ImportMessage.invalidFormatRowNumMap.put(rowNumOfSheet, msg);
+			return null;
+		}
+		if(!isMobile(mobile)){
+			msg += "<br />第"+rowNumOfSheet+"条,手机号码内容无效!";
+			//向无效数据集合中添加一条数据
+			ImportMessage.invalidFormatRowNumMap.put(rowNumOfSheet, msg);
+			return null;
+		}
+		
+		
+		//电话号码格式
+		String phone =  sheetList.get(3);
+		if ( Tools.isEmpty(phone.trim()) ) {
+			msg += "<br />第"+rowNumOfSheet+"条,电话号码不能为空!";
+			logger.warn(msg);
+			//向无效数据集合中添加一条数据
+			ImportMessage.invalidFormatRowNumMap.put(rowNumOfSheet, msg);
+			return null;
+		}
+		if(!isPhone(phone)){
+			msg += "<br />第"+rowNumOfSheet+"条,电话号码内容无效!";
+			//向无效数据集合中添加一条数据
+			ImportMessage.invalidFormatRowNumMap.put(rowNumOfSheet, msg);
+			return null;
+		}
+		
+		
+		//传真格式，与电话号码相同
+		String fax = sheetList.get(6);
+		if(!Tools.isEmpty(fax) && !isPhone(fax)){
+			msg += "<br />第"+rowNumOfSheet+"条,传真内容无效!";
+			//向无效数据集合中添加一条数据
+			ImportMessage.invalidFormatRowNumMap.put(rowNumOfSheet, msg);
+			return null;
+		}
+		
+		
+		//邮箱格式
+		String email = sheetList.get(5);
+		if(!Tools.isEmpty(email)&&!checkEmail(email)){
+			msg += "<br />第"+rowNumOfSheet+"条,邮箱内容无效!";
+			//向无效数据集合中添加一条数据
+			ImportMessage.invalidFormatRowNumMap.put(rowNumOfSheet, msg);
+			return null;
+		}
+		//邮编格式
+		String postCode = sheetList.get(15);
+		if(!Tools.isEmpty(postCode)&&!checkPostCode(postCode)){
+			msg += "<br />第"+rowNumOfSheet+"条,邮编内容无效!";
+			//向无效数据集合中添加一条数据
+			ImportMessage.invalidFormatRowNumMap.put(rowNumOfSheet, msg);
+			return null;
+		}
+		
+		/**
+		 * 校验必填,以及校验数据内容是否正确
+		 */
 		//客户所有者,查找客户所有者的id,如果id存在则返回,如果不存在设置为0
 		String customerOwner = sheetList.get(0);
-		User owner = new User();
-		if ( customerOwner != null && !"".equals(customerOwner.trim()) ) {
+		//客户所有者必填
+		if ( Tools.isEmpty(customerOwner.trim())) {
+			msg += "<br />第"+rowNumOfSheet+"条,客户所有者不能为空!";
+			logger.warn(msg);
+			//向无效数据集合中添加一条数据
+			ImportMessage.invalidFormatRowNumMap.put(rowNumOfSheet, msg);
+			return null;
+		}
+		//校验数据内容是否正确
+		User owner = null;
+		if ( !Tools.isEmpty(customerOwner.trim()) ) {
 			//根据id查询客户所有者
-			owner = userService.getByName(customerOwner);
+			owner = userService.getByName(customerOwner.trim());
 			if(owner==null){
 				msg += "<br />第"+rowNumOfSheet+"条,客户所有者不存在!";
 				logger.warn(msg);
@@ -91,10 +178,19 @@ public class ExcelParse4Customer extends ExcelParse<CustomerDTO> {
 		
 		//来源
 		String customerSource = sheetList.get(7);
+		//来源必填
+		if ( Tools.isEmpty(customerOwner.trim())) {
+			msg += "<br />第"+rowNumOfSheet+"条,客户来源不能为空!";
+			logger.warn(msg);
+			//向无效数据集合中添加一条数据
+			ImportMessage.invalidFormatRowNumMap.put(rowNumOfSheet, msg);
+			return null;
+		}
+		//校验数据内容是否正确
 		Dictionary source = null;
-		if ( customerSource != null && !"".equals(customerSource.trim()) ) {
+		if ( !Tools.isEmpty(customerSource.trim()) ) {
 			//根据id查询线索来源(40101)
-			source = dictionaryService.getValue(customerSource, 40302L);
+			source = dictionaryService.getValue(customerSource.trim(), 40302L);
 			if(source==null){
 				msg += "<br />第"+rowNumOfSheet+"条,客户来源无效!";
 				logger.warn(msg);
@@ -109,10 +205,19 @@ public class ExcelParse4Customer extends ExcelParse<CustomerDTO> {
 		
 		//行业
 		String customerIndustry = sheetList.get(8);
-		Dictionary industry = new Dictionary();
-		if ( customerIndustry != null && !"".equals(customerIndustry.trim()) ) {
+		//行业必填
+		if ( Tools.isEmpty(customerIndustry.trim())) {
+			msg += "<br />第"+rowNumOfSheet+"条,行业不能为空!";
+			logger.warn(msg);
+			//向无效数据集合中添加一条数据
+			ImportMessage.invalidFormatRowNumMap.put(rowNumOfSheet, msg);
+			return null;
+		}
+		//校验数据内容是否正确
+		Dictionary industry = null;
+		if ( !Tools.isEmpty(customerIndustry.trim()) ) {
 			//根据id查询线索状态(40305)
-			industry = dictionaryService.getValue(customerIndustry, 40305L);
+			industry = dictionaryService.getValue(customerIndustry.trim(), 40305L);
 			if(industry==null){
 				msg += "<br />第"+rowNumOfSheet+"条,行业无效!";
 				logger.warn(msg);
@@ -126,10 +231,10 @@ public class ExcelParse4Customer extends ExcelParse<CustomerDTO> {
 		
 		//客户类型
 		String customerType = sheetList.get(9);
-		Dictionary type = new Dictionary();
-		if ( customerType != null && !"".equals(customerType.trim()) ) {
+		Dictionary type = null;
+		if ( !Tools.isEmpty(customerType.trim()) ) {
 			//根据id查询线索状态(40102)
-			type = dictionaryService.getValue(customerType, 40301L);
+			type = dictionaryService.getValue(customerType.trim(), 40301L);
 			//根据customerType没有查询到,返回null
 			if(type==null){
 				msg += "<br />第"+rowNumOfSheet+"条,客户类型无效!";
@@ -144,10 +249,10 @@ public class ExcelParse4Customer extends ExcelParse<CustomerDTO> {
 		
 		//风险等级
 		String customerRiskGrade = sheetList.get(10);
-		Dictionary riskGrade = new Dictionary();
-		if ( customerRiskGrade != null && !"".equals(customerRiskGrade.trim()) ) {
+		Dictionary riskGrade = null;
+		if ( !Tools.isEmpty(customerRiskGrade.trim()) ) {
 			//根据id查询线索状态(40102)
-			riskGrade = dictionaryService.getValue(customerRiskGrade, 40304L);
+			riskGrade = dictionaryService.getValue(customerRiskGrade.trim(), 40304L);
 			//根据customerType没有查询到,返回null
 			if(riskGrade==null){
 				msg += "<br />第"+rowNumOfSheet+"条,风险等级无效!";
@@ -163,10 +268,10 @@ public class ExcelParse4Customer extends ExcelParse<CustomerDTO> {
 		
 		//证件类型
 		String customerCardType = sheetList.get(11);
-		Dictionary cardType = new Dictionary();
-		if ( customerCardType != null && !"".equals(customerCardType.trim()) ) {
+		Dictionary cardType = null;
+		if ( !Tools.isEmpty(customerCardType.trim()) ) {
 			//根据id查询线索状态(40103)
-			cardType = dictionaryService.getValue(customerCardType, 40303L);
+			cardType = dictionaryService.getValue(customerCardType.trim(), 40303L);
 			if(cardType==null){
 				msg += "<br />第"+rowNumOfSheet+"条,证件类型无效!";
 				logger.warn(msg);
@@ -178,12 +283,77 @@ public class ExcelParse4Customer extends ExcelParse<CustomerDTO> {
 		list.remove(11);
 		list.add(11, cardType==null?new Dictionary():cardType);
 		
+		//邀约人
+		String customerAppointment = sheetList.get(26);
+		User appointment = null;
+		if (! Tools.isEmpty(customerAppointment.trim()) ) {
+			//根据id查询邀约人
+			appointment = userService.getByName(customerAppointment.trim());
+			if(appointment==null){
+				msg += "<br />第"+rowNumOfSheet+"条,邀约人无效!";
+				logger.warn(msg);
+				//向无效数据集合中添加一条数据
+				ImportMessage.invalidFormatRowNumMap.put(rowNumOfSheet, msg);
+				return null;
+			}
+		}
+		list.remove(26);
+		list.add(26, appointment==null?new User():appointment);
+		
+		//理财顾问
+		String customerFinancialAdvisor = sheetList.get(27);
+		User financialAdvisor = null;
+		if ( !Tools.isEmpty(customerFinancialAdvisor.trim()) ) {
+			//根据id查询客户所有者
+			financialAdvisor = userService.getByName(customerFinancialAdvisor.trim());
+			if(financialAdvisor==null){
+				msg += "<br />第"+rowNumOfSheet+"条,理财顾问无效!";
+				logger.warn(msg);
+				//向无效数据集合中添加一条数据
+				ImportMessage.invalidFormatRowNumMap.put(rowNumOfSheet, msg);
+				return null;
+			}
+		}
+		list.remove(27);
+		list.add(27, financialAdvisor==null?new User():financialAdvisor);
+		
+		//理财经理
+		String customerFinancialManager = sheetList.get(28);
+		User financialManager = null;
+		if ( !Tools.isEmpty(customerFinancialManager.trim()) ) {
+			financialManager = userService.getByName(customerFinancialManager.trim());
+			if(cardType==null){
+				msg += "<br />第"+rowNumOfSheet+"条,理财经理无效!";
+				logger.warn(msg);
+				//向无效数据集合中添加一条数据
+				ImportMessage.invalidFormatRowNumMap.put(rowNumOfSheet, msg);
+				return null;
+			}
+		}
+		list.remove(28);
+		list.add(28, financialManager==null?new User():financialManager);
+
+		//理财总监
+		String customerFinancialDirector = sheetList.get(28);
+		User financialDirector = null;
+		if ( !Tools.isEmpty(customerFinancialDirector.trim()) ) {
+			financialDirector = userService.getByName(customerFinancialDirector.trim());
+			if(financialDirector==null){
+				msg += "<br />第"+rowNumOfSheet+"条,理财总监无效!";
+				logger.warn(msg);
+				//向无效数据集合中添加一条数据
+				ImportMessage.invalidFormatRowNumMap.put(rowNumOfSheet, msg);
+				return null;
+			}
+		}
+		list.remove(29);
+		list.add(29, financialDirector==null?new User():financialDirector);
 		//所有权
 		String customerOwnerShip = sheetList.get(16);
 		Dictionary ownerShip = new Dictionary();
-		if ( customerOwnerShip != null && !"".equals(customerOwnerShip.trim()) ) {
+		if (! Tools.isEmpty(customerOwnerShip.trim()) ) {
 			//根据id查询线索状态(40103)
-			ownerShip = dictionaryService.getValue(customerOwnerShip, 40306L);
+			ownerShip = dictionaryService.getValue(customerOwnerShip.trim(), 40306L);
 			if(ownerShip==null){
 				msg += "<br />第"+rowNumOfSheet+"条,所有权无效!";
 				logger.warn(msg);
@@ -198,9 +368,9 @@ public class ExcelParse4Customer extends ExcelParse<CustomerDTO> {
 		//开户银行
 		String customerOpenBank = sheetList.get(17);
 		Dictionary openBank = new Dictionary();
-		if ( customerOpenBank != null && !"".equals(customerOpenBank.trim()) ) {
+		if ( !Tools.isEmpty(customerOpenBank.trim()) ) {
 			//根据id查询线索状态(40103)
-			openBank = dictionaryService.getValue(customerOpenBank, 40307L);
+			openBank = dictionaryService.getValue(customerOpenBank.trim(), 40307L);
 			if(openBank==null){
 				msg += "<br />第"+rowNumOfSheet+"条,开户银行无效!";
 				logger.warn(msg);
@@ -215,10 +385,9 @@ public class ExcelParse4Customer extends ExcelParse<CustomerDTO> {
 		
 		//省
 		String customerProvince = sheetList.get(20);
-		PCAS province = new PCAS();
-		if ( customerProvince != null && !"".equals(customerProvince.trim()) ) {
-			//根据id查询线索状态(40103)
-			province = pCASService.getByName(customerProvince);
+		PCAS province = null;
+		if (! Tools.isEmpty(customerProvince.trim()) ) {
+			province = pCASService.getByName(customerProvince.trim(),0L);
 			if(province==null){
 				msg += "<br />第"+rowNumOfSheet+"条,该省不存在!";
 				logger.warn(msg);
@@ -228,15 +397,14 @@ public class ExcelParse4Customer extends ExcelParse<CustomerDTO> {
 			}
 		}
 		list.remove(20);
-		list.add(20, province==null?new PCAS():province);
+		list.add(20, province);
 		
 		
 		//市
 		String customerCity = sheetList.get(21);
-		PCAS city = new PCAS();;
-		if ( customerCity != null && !"".equals(customerCity.trim()) ) {
-			//根据id查询线索状态(40103)
-			city = pCASService.getByName(customerCity);
+		PCAS city = null;
+		if (province!=null && !Tools.isEmpty(customerCity.trim()) ) {
+			city = pCASService.getByName(customerCity.trim(),province.getId());
 			if(city==null){
 				msg += "<br />第"+rowNumOfSheet+"条,该市不存在!";
 				logger.warn(msg);
@@ -246,14 +414,13 @@ public class ExcelParse4Customer extends ExcelParse<CustomerDTO> {
 			}
 		}
 		list.remove(21);
-		list.add(21, city==null?new PCAS():city);
+		list.add(21, city);
 		
 		//县
 		String customerCounty = sheetList.get(22);
-		PCAS county = new PCAS();;
-		if ( customerCounty != null && !"".equals(customerCounty.trim()) ) {
-			//根据id查询线索状态(40103)
-			county = pCASService.getByName(customerCounty);
+		PCAS county = null;
+		if (city != null && !Tools.isEmpty(customerCounty.trim()) ) {
+			county = pCASService.getByName(customerCounty.trim(),city.getId());
 			if(county==null){
 				msg += "<br />第"+rowNumOfSheet+"条,该县不存在!";
 				logger.warn(msg);
@@ -264,7 +431,7 @@ public class ExcelParse4Customer extends ExcelParse<CustomerDTO> {
 			
 		}
 		list.remove(22);
-		list.add(22, county==null?new PCAS():county);
+		list.add(22, county);
 		
 		
 		

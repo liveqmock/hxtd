@@ -11,8 +11,11 @@ import org.apache.commons.lang3.Range;
  * @date 2014/6/22
  */
 public class DataShift {
+	
+	/**系统管理员（可以看到所有数据）*/
+    private Boolean isSysManager = false;
 
-	/**系统数据管理员（可以看到所有数据）*/
+	/**系统数据管理员（可以看到自己和下属所有数据）*/
     private Boolean isSysDataManager = false;
     
     /**组织数据管理员（可以看到同一组织中的数据）*/
@@ -25,8 +28,9 @@ public class DataShift {
     private Long userId;
     private Range<Long> orderRange;
 
-    public DataShift(boolean isSysDataManager, boolean isOrgDataManager,Long userId, Range<Long> orderRange) {
-        this.isSysDataManager = isSysDataManager;
+    public DataShift(boolean isSysManager,boolean isSysDataManager, boolean isOrgDataManager,Long userId, Range<Long> orderRange) {
+        this.isSysManager=isSysManager;
+    	this.isSysDataManager = isSysDataManager;
         this.isOrgDataManager = isOrgDataManager;
         this.userId = userId;
         this.orderRange = orderRange;
@@ -102,6 +106,10 @@ public class DataShift {
 
 	public Boolean getIsOrgDataManager() {
 		return isOrgDataManager;
+	}
+
+	public Boolean getIsSysManager() {
+		return isSysManager;
 	}
 
 }

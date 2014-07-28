@@ -80,6 +80,8 @@ public class Report implements Serializable, Idable, Initialized {
     @Column(name = "MODIFIED_TIME", updatable = false)
     private Date modifiedTime;
 
+    @Transient
+    private int timeType;
 
     public Report() {
     }
@@ -230,5 +232,13 @@ public class Report implements Serializable, Idable, Initialized {
 
     public void setModifiedTime(Date modifiedTime) {
         this.modifiedTime = modifiedTime;
+    }
+
+    public int getTimeType() {
+        return timeType;
+    }
+
+    public void setTimeType(int timeType) {
+        this.timeType = timeType;
     }
 }

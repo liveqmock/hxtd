@@ -5,6 +5,7 @@ import com.baihui.hxtd.soa.base.InitApplicationConstant;
 import com.baihui.hxtd.soa.base.orm.hibernate.HibernatePage;
 import com.baihui.hxtd.soa.base.utils.ImportExport;
 import com.baihui.hxtd.soa.base.utils.Search;
+import com.baihui.hxtd.soa.base.utils.mapper.HibernateAwareObjectMapper;
 import com.baihui.hxtd.soa.common.controller.CommonController;
 import com.baihui.hxtd.soa.common.controller.model.FlowModel;
 import com.baihui.hxtd.soa.common.entity.FlowInstance;
@@ -19,19 +20,17 @@ import com.baihui.hxtd.soa.system.entity.AuditLog;
 import com.baihui.hxtd.soa.system.entity.User;
 import com.baihui.hxtd.soa.system.service.DataShift;
 import com.baihui.hxtd.soa.system.service.DictionaryService;
-import com.baihui.hxtd.soa.system.service.RoleService;
 import com.baihui.hxtd.soa.util.EnumModule;
 import com.baihui.hxtd.soa.util.EnumOperationType;
 import com.baihui.hxtd.soa.util.JsonDto;
+import com.fasterxml.jackson.core.JsonGenerationException;
+import com.fasterxml.jackson.databind.JsonMappingException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.ui.ModelMap;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.ResponseBody;
-import org.springframework.web.bind.annotation.SessionAttributes;
+import org.springframework.web.bind.annotation.*;
 import org.springside.modules.web.Servlets;
 
 import javax.annotation.Resource;
@@ -39,6 +38,7 @@ import javax.servlet.ServletContext;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
+import java.io.PrintWriter;
 import java.util.List;
 import java.util.Map;
 
@@ -67,45 +67,50 @@ public class OrderController extends CommonController<Order> {
     private DictionaryService dictionaryService;
 
     @Resource
-    private RoleService roleService;
-
-    @Resource
     private FlowInstanceService flowInstanceService;
 
     @Resource
     private FlowNodeService flowNodeService;
 
 
+    @ModelAttribute
+    public void flowNodeType(ModelMap modelMap) {
+        modelMap.addAttribute("startNodeType", NodeType.start.getValue());
+        modelMap.addAttribute("businessNodeType", NodeType.business.getValue());
+        modelMap.addAttribute("endNodeType", NodeType.end.getValue());
+    }
+
     /**
-     * toQueryPage(从菜单跳转,跳转线索列表页)
+     * toQueryPage(从菜单跳转,跳转订单列表页)
      *
      * @param modelMap
      * @return
      */
     @RequestMapping(value = "/toQueryPage.do")
     public String toQueryPage(ModelMap modelMap) {
-        logger.info("OrderController.toQueryPage跳转线索列表页");
-        modelMap.addAttribute("page", new HibernatePage<Order>().order("desc").orderBy("modifiedTime"));
-
-        modelMap.addAttribute("startNodeType", NodeType.start.getValue());
-        modelMap.addAttribute("businessNodeType", NodeType.business.getValue());
-
+        logger.info("OrderController.toQueryPage跳转订单列表页");
+        modelMap.addAttribute("page", new HibernatePage<Order>().order(HibernatePage.DESC).orderBy("modifiedTime"));
         return "/order/order/list";
     }
 
 
     /**
-     * 查询线索列表(从功能按钮跳转)
+     * 查询订单列表(从功能按钮跳转)
      * --准备审批流程权限验证相关数据
      * ----跨流程环节审批，存储待执行的流程
+     *
+     * @throws IOException
+     * @throws JsonMappingException
+     * @throws JsonGenerationException
      */
     @ResponseBody
     @RequestMapping(value = "/query.do", produces = "text/text;charset=UTF-8")
-    public String query(HibernatePage<Order> page, HttpServletRequest request, ModelMap model) throws NoSuchFieldException {
+    public void query(HibernatePage<Order> page, HttpServletRequest request, PrintWriter out, ModelMap model) throws NoSuchFieldException, JsonGenerationException, JsonMappingException, IOException {
 
-        logger.info("OrderController.query查询线索列表");
+        logger.info("OrderController.query查询订单列表");
         Map<String, Object> searchParams = Servlets.getParametersStartingWith(request, "search_");
         Search.clearBlankValue(searchParams);
+        Search.trimValue(searchParams);
         Search.toRangeDate(searchParams, "modifiedTime");
         Search.toRangeDate(searchParams, "createdTime");
         logger.info("添加默认的查询条件");
@@ -121,18 +126,20 @@ public class OrderController extends CommonController<Order> {
 
         JsonDto json = new JsonDto();
         json.setResult(page);
-        return json.toString();
+        HibernateAwareObjectMapper.DEFAULT.writeValue(out, json);
     }
 
     /**
-     * 查看或编辑线索
+     * 查看或编辑订单
      */
     @RequestMapping(value = "/toViewPage.do")
-    public String view(@RequestParam(required = false) Long id, ModelMap modelMap) {
+    public String view(Long id, ModelMap modelMap) {
         logger.info("OrderController.view查询组件");
-        String returnStr = "/order/order/view";
+        User user = (User) modelMap.get(Constant.VS_USER);
+
         Order order = orderService.get(id);
         modelMap.addAttribute("order", order);
+        modelMap.addAttribute("entity", order);
 
 
         //存储历史记录
@@ -143,7 +150,7 @@ public class OrderController extends CommonController<Order> {
         FlowNode currentFlowNode = order.getFlowNode();
         if (currentFlowNode != null) {
             if (currentFlowNode.getType().equals(NodeType.start.getValue())) {
-                currentFlowNode.setApprover(order.getOwner());
+                currentFlowNode.setApprover(user);
             } else {
                 flowNodeService.fullReserveExecutor(Constant.MODULE_ORDER, order.getId(), currentFlowNode);
             }
@@ -151,7 +158,7 @@ public class OrderController extends CommonController<Order> {
 
             //存储预定审批环节
             List<FlowNode> flowNodes = flowNodeService.findAllOfFlow(DictionaryConstant.NODE_TYPE_ORDERAPPROVE);
-            List<FlowNode> reserveFlowNodes = flowNodeService.findAfter(flowNodes, currentFlowNode);
+            List<FlowNode> reserveFlowNodes = FlowNodeService.findAfter(flowNodes, currentFlowNode);
             if (!currentFlowNode.getType().equals(NodeType.start.getValue())) {
                 flowNodeService.fullReserveExecutor(Constant.MODULE_ORDER, order.getId(), reserveFlowNodes);
             }
@@ -159,15 +166,40 @@ public class OrderController extends CommonController<Order> {
         }
         modelMap.addAttribute("endFlowNode", NodeType.end.getValue());
 
-        return returnStr;
+        return "/order/order/view";
     }
 
+    /**
+     * 赎回组件
+     */
+    @RequestMapping(value = "/redemption.comp")
+    public String redemptionComp(@RequestParam(required = false) Long id, ModelMap modelMap) {
+        logger.info("OrderController.view查询组件");
+        Order order = orderService.get(id);
+        modelMap.addAttribute("order", order);
+        return "/order/order/redemption";
+    }
+
+    /**
+     * 提前赎回订单
+     */
+    @ResponseBody
+    @RequestMapping(value = "/redemption.do")
+    public String advanceRedemptionOrder(@RequestParam(required = false) Long id, ModelMap modelMap) {
+        logger.info("OrderController.view查询组件");
+        User user = (User) modelMap.get(Constant.VS_USER);
+        AuditLog auditLog = new AuditLog(EnumModule.ORDER.getModuleName(),
+                id, orderService.get(id).getCode(), EnumOperationType.MODIFY.getOperationType(), user);
+        auditLog.setRemark("提前赎回生成付款单");
+        orderService.advanceRedemptionOrder(id, user, auditLog);
+        return JsonDto.modify(id).toString();
+    }
 
     @ResponseBody
     @RequestMapping(value = "/modify.do", produces = "text/text;charset=UTF-8")
     public String modify(Order order,
                          HttpServletRequest request) {
-        logger.info("OrderController.modify修改线索信息");
+        logger.info("OrderController.modify修改订单信息");
         User u = (User) request.getSession().getAttribute(Constant.VS_USER);
         logger.info("获得当前操作用户{}", u.getName());
         order.setModifier(u);
@@ -191,7 +223,7 @@ public class OrderController extends CommonController<Order> {
      */
     @RequestMapping(value = "/toAddPage.do", params = "type=second")
     public String addSecond(Model model, Long id) {
-        logger.info("OrderController.toModifyPage修改线索所有者信息");
+        logger.info("OrderController.toModifyPage修改订单所有者信息");
         String funcUrl = "/order/order/add.do";
         model.addAttribute("funcUrl", funcUrl);
         Order order = orderService.get(id);
@@ -205,7 +237,7 @@ public class OrderController extends CommonController<Order> {
 
     @RequestMapping(value = "/toModifyPage.do")
     public String toModifyPage(Model model, Long id) {
-        logger.info("OrderController.toModifyPage修改线索所有者信息");
+        logger.info("OrderController.toModifyPage修改订单所有者信息");
         String funcUrl = "/order/order/modify.do";
         model.addAttribute("funcUrl", funcUrl);
         Order order = orderService.get(id);
@@ -215,7 +247,7 @@ public class OrderController extends CommonController<Order> {
     }
 
     /**
-     * delete(删除线索)
+     * delete(删除订单)
      *
      * @param id
      * @return
@@ -223,7 +255,7 @@ public class OrderController extends CommonController<Order> {
     @ResponseBody
     @RequestMapping(value = "/delete.do", produces = "text/text;charset=UTF-8")
     public String delete(ModelMap modelMap, Long[] id) {
-        logger.info("OrderController.delete删除线索");
+        logger.info("OrderController.delete删除订单");
         User user = (User) modelMap.get(Constant.VS_USER);
         AuditLog[] auditLogArr = new AuditLog[id.length];
         for (int i = 0; i < id.length; i++) {
@@ -246,20 +278,18 @@ public class OrderController extends CommonController<Order> {
      */
     @RequestMapping(value = "/toAddPage.do")
     public String toAddPage(ModelMap model) {
-        logger.info("OrderController.toAddPage新建线索");
+        logger.info("OrderController.toAddPage新建订单");
         String funcUrl = "/order/order/add.do";
         model.addAttribute("funcUrl", funcUrl);
         Order order = new Order();
         order.setOwner((User) model.get(Constant.VS_USER));
         model.addAttribute("order", order);
-        model.addAttribute("investmentWay", dictionaryService.findChildren("060101"));
-        model.addAttribute("status", dictionaryService.findChildren("060102"));
+        model.addAttribute("investmentWay", dictionaryService.findChildren(DictionaryConstant.VC_INVESTMENT_WAY, true));
         return "/order/order/edit";
     }
 
     private void setDefaultDict(Model model) {
-        model.addAttribute("investmentWay", dictionaryService.findChildren("060101"));
-        model.addAttribute("status", dictionaryService.findChildren("060102"));
+        model.addAttribute("investmentWay", dictionaryService.findChildren(DictionaryConstant.VC_INVESTMENT_WAY, true));
     }
 
 
@@ -273,15 +303,15 @@ public class OrderController extends CommonController<Order> {
      */
     @ResponseBody
     @RequestMapping(value = "/add.do", produces = "text/text;charset=UTF-8")
-    public String add(Order order, HttpServletRequest request) {
+    public String add(ModelMap modelMap, Order order, HttpServletRequest request) {
         logger.info("ComponentController.query查询组件列表");
         //临时代码，时间类型应从数据库中取
-        User u = (User) request.getSession().getAttribute(Constant.VS_USER);
-        logger.info("ComponentController.query 获得当前操作的用户{}", u.getName());
-        order.setCreator(u);
-        order.setModifier(u);
+        User user = (User) modelMap.get(Constant.VS_USER);
+        logger.info("ComponentController.query 获得当前操作的用户{}", user.getName());
+        order.setCreator(user);
+        order.setModifier(user);
         AuditLog auditLog = new AuditLog(EnumModule.ORDER.getModuleName(),
-                order.getId(), order.getCode(), EnumOperationType.ADD.getOperationType(), u);
+                order.getId(), order.getCode(), EnumOperationType.ADD.getOperationType(), user);
         orderService.add(order, auditLog);
         JsonDto json = JsonDto.add(order.getId());
         return json.toString();
@@ -317,14 +347,14 @@ public class OrderController extends CommonController<Order> {
      * @author huizijing
      */
     @RequestMapping(value = "/toQueryPage.comp")
-    public String toCustomerLstPage(HibernatePage<Order> page,
+    public String toCustomerLstPage(HibernatePage<Order> page, String type,
                                     HttpServletRequest request, Model model) throws NoSuchFieldException {
         Map<String, Object> searchParams = Servlets.getParametersStartingWith(request, "search_");
         Search.clearBlankValue(searchParams);
 
-        if (page == null) {
-            page = new HibernatePage<Order>(12);
-        }
+        page.setHibernatePageSize(12);// 设置每页显示12个
+        //如果是合同页面，要过滤掉已有合同的订单，如果是应付款页面不用过滤
+        model.addAttribute("type", type);
         model.addAttribute("page", page);
         return "/order/order/listcomp";
     }
@@ -337,12 +367,15 @@ public class OrderController extends CommonController<Order> {
      * @param page
      * @return
      * @throws NoSuchFieldException
+     * @throws IOException
+     * @throws JsonMappingException
+     * @throws JsonGenerationException
      * @author huizijing
      */
     @ResponseBody
     @RequestMapping(value = "/query.do", params = "TYPE=relation")
-    public String queryList(HibernatePage<Order> page,//
-                            HttpServletRequest request, ModelMap model) throws NoSuchFieldException {
+    public void queryList(HibernatePage<Order> page,
+                          HttpServletRequest request, ModelMap model, PrintWriter out) throws NoSuchFieldException, JsonGenerationException, JsonMappingException, IOException {
 
         logger.info("OrderController.query查询订单列表");
         Map<String, Object> searchParams = Servlets.getParametersStartingWith(
@@ -355,7 +388,9 @@ public class OrderController extends CommonController<Order> {
         page = orderService.findListPage(searchParams, dataShift, page);
         JsonDto json = new JsonDto();
         json.setResult(page);
-        return json.toString();
+        page.setHibernateOrderBy("modifiedTime");
+        page.setHibernateOrder(HibernatePage.DESC);
+        HibernateAwareObjectMapper.DEFAULT.writeValue(out, json);
     }
 
 
@@ -367,6 +402,7 @@ public class OrderController extends CommonController<Order> {
         //存储订单
         Order order = orderService.get(id);
         modelMap.addAttribute("order", order);
+        modelMap.addAttribute("entity", order);
 
         //存储当前流程环节
         FlowNode currentFlowNode = order.getFlowNode();
@@ -375,13 +411,10 @@ public class OrderController extends CommonController<Order> {
 
         //存储待审批流程
         List<FlowNode> allFlowNodes = flowNodeService.findAllOfFlow(DictionaryConstant.NODE_TYPE_ORDERAPPROVE);
-        List<FlowNode> preselectionFlowNodes = flowNodeService.findAfter(allFlowNodes, currentFlowNode);
+        List<FlowNode> preselectionFlowNodes = FlowNodeService.findAfter(allFlowNodes, currentFlowNode);
         flowNodeService.fullPreselectionApprover(preselectionFlowNodes, user);
         modelMap.addAttribute("preselectionFlowNodes", preselectionFlowNodes);
         modelMap.addAttribute("reserveFlowNodes", preselectionFlowNodes);
-
-        modelMap.addAttribute("endFlowNode", NodeType.end.getValue());
-
 
         return "/order/order/view";
     }
@@ -405,7 +438,8 @@ public class OrderController extends CommonController<Order> {
         executeRecord.setModifier(user);
 
         flowInstanceService.start(flowModel);
-
+        // 修改订单状态为审批中
+        orderService.modifyOrderNoteing(flowModel.getExecuteRecord().getRecordId());
         JsonDto jsonDto = new JsonDto(executeRecord.getRecordId(), "启动审批成功！");
         return jsonDto.toString();
     }
@@ -419,6 +453,7 @@ public class OrderController extends CommonController<Order> {
         //存储订单
         Order order = orderService.get(id);
         modelMap.addAttribute("order", order);
+        modelMap.addAttribute("entity", order);
 
         //存储历史记录
         List<FlowInstance> historys = flowInstanceService.findExecuted(Constant.MODULE_ORDER, id, DictionaryConstant.NODE_TYPE_ORDERAPPROVE);
@@ -435,7 +470,7 @@ public class OrderController extends CommonController<Order> {
             currentFlowNode = flowNodeService.get(flowNodeId);
             currentFlowNode.setApprover(user);
 
-            List<FlowNode> skipFlowNodes = flowNodeService.findBetween(allFlowNodes, businessFlowNode, currentFlowNode);
+            List<FlowNode> skipFlowNodes = FlowNodeService.findBetween(allFlowNodes, businessFlowNode, currentFlowNode);
             flowNodeService.fullReserveExecutor(Constant.MODULE_ORDER, order.getId(), skipFlowNodes);
             modelMap.addAttribute("skipFlowNodes", skipFlowNodes);
         }
@@ -443,17 +478,15 @@ public class OrderController extends CommonController<Order> {
 
 
         //存储下一个流程
-        FlowNode nextFlowNode = flowNodeService.findNext(allFlowNodes, currentFlowNode);
+        FlowNode nextFlowNode = FlowNodeService.findNext(allFlowNodes, currentFlowNode);
         flowNodeService.fullPreselectionApprover(nextFlowNode, user);
         flowNodeService.fullReserveExecutor(Constant.MODULE_ORDER, order.getId(), nextFlowNode);
         modelMap.addAttribute("nextFlowNode", nextFlowNode);
 
         //存储待审批流程
-        List<FlowNode> preselectionFlowNodes = flowNodeService.findAfter(allFlowNodes, currentFlowNode);
+        List<FlowNode> preselectionFlowNodes = FlowNodeService.findAfter(allFlowNodes, currentFlowNode);
         flowNodeService.fullReserveExecutor(Constant.MODULE_ORDER, order.getId(), preselectionFlowNodes);
         modelMap.addAttribute("reserveFlowNodes", preselectionFlowNodes);
-
-        modelMap.addAttribute("endFlowNode", NodeType.end.getValue());
 
         return "/order/order/view";
     }
@@ -478,6 +511,15 @@ public class OrderController extends CommonController<Order> {
         executeRecord.setModifier(user);
 
         flowInstanceService.execute(flowModel);
+        // 审批通过
+        if (executeRecord.getIsPassed() && flowModel.getNextFlowNode().getType().equals(NodeType.end.getValue())) {
+        	// 修改对应订单的订单状态
+        	Long id = flowModel.getExecuteRecord().getRecordId();
+        	AuditLog auditLog = new AuditLog(EnumModule.ORDER.getModuleName(),
+                    id, orderService.get(id).getCode(), EnumOperationType.MODIFY.getOperationType(), user);
+        	auditLog.setRemark("审批完成自动生成收款单");
+        	orderService.modifyOrderNoteFinish(id, user, auditLog);
+        }
         JsonDto jsonDto = new JsonDto(executeRecord.getRecordId(), "执行审批成功！");
         return jsonDto.toString();
     }

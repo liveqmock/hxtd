@@ -8,6 +8,8 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Table;
+
+import com.fasterxml.jackson.annotation.JsonFormat;
 /**
  * 工作台实体类
  * @author ruisong.luan
@@ -75,9 +77,11 @@ public class Workbanch {
 	@Column(name = "IS_DELETED")
 	private Boolean isDeleted=false;
 	
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss", timezone = "GMT+08:00")
 	@Column(name = "CREATED_TIME")
 	private Date createdTime;
-	
+    
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss", timezone = "GMT+08:00")
 	@Column(name = "MODIFIED_TIME")
 	private Date modifiedTime;
 	

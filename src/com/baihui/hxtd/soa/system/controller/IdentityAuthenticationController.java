@@ -123,7 +123,7 @@ public class IdentityAuthenticationController {
         session.setAttribute(Constant.VS_ORG, persistUser.getOrganization());
         //数据筛选
         Long order = persistUser.getOrganization().getOrder();
-        DataShift dataShift = new DataShift(roleService.isSysDataManager(persistUser), roleService.isOrgDataManager(persistUser), persistUser.getId(), TierSerials.getYoungerRange(order, Constant.ORG_ORDER_TIER_LENGTH));
+        DataShift dataShift = new DataShift(roleService.isSysManager(persistUser),roleService.isSysDataManager(persistUser), roleService.isOrgDataManager(persistUser), persistUser.getId(), TierSerials.getYoungerRange(order, Constant.ORG_ORDER_TIER_LENGTH));
         session.setAttribute(Constant.VS_DATASHIFT, dataShift);
 
         //菜单

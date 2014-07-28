@@ -83,7 +83,7 @@ function reset() {
 							目标人员：
 						</td>
 						<td class="f14 namewidth2" align="left" >
-							<input type="text" class="text_input1" name="search_LIKE_org.name"
+							<input type="text" class="text_input1" name="search_LIKE_owner.name"
 								id="name" value="" />
 						</td>
 						<td class="f14 namewidth1" align="right" >

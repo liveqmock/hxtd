@@ -30,6 +30,7 @@ function Grid() {}
 
 Grid.defaults = {
     containerSelector: ".listcontainer",
+    activeFlowHeader: true,//启用浮动表头
     //表单
     formSelector: "form",
     formPageNoSelector: "[name=hibernatePageNo]",
@@ -72,10 +73,10 @@ Grid.defaults = {
     sortableSelector: ".sortable",
     orderBySelector: ".orderby",
     orderSelector: ".order",
-    sortAscUnselectedClass: "sort_btm",
-    sortAscSelectedClass: "sort_btm_orange",
-    sortDescUnselectedClass: "sort_top",
-    sortDescSelectedClass: "sort_top_orange",
+    sortAscUnselectedClass: "sort_top",
+    sortAscSelectedClass: "sort_top_orange",
+    sortDescUnselectedClass: "sort_btm",
+    sortDescSelectedClass: "sort_btm_orange",
     sortableTemplateId: "template-sort",
     //分页
     paginationActive: true,//是否启用分页
@@ -152,11 +153,6 @@ Grid.prototype = {
         this.btnCheckAll = this.header.find(options.checkAllSelector);
         this.sortCells = this.header.find(options.sortableSelector);
         this.result = this.grid.find(options.resultSelector);
-        this.btnDeleteOne = this.result.find(options.deleteOneSelector);
-        this.btnEnable = this.result.find(options.enableSelector);
-        this.btnDisable = this.result.find(options.disableSelector);
-        this.btnResetPassword = this.result.find(options.resetPasswordSelector);
-        this.btnMove = this.result.find(options.moveSelector);
 
         this.paginationbar = this.container.find(options.paginationbarSelector);
         var forpagination = this.grid.attr(options.gridForPagination);
@@ -172,7 +168,7 @@ Grid.prototype = {
         this.bindDeleteSome();
         this.bindRefresh();
         this.bindCheckAll();
-        this.initFloatHeader();
+        this.options.activeFlowHeader && this.initFloatHeader();
         this.renderSort();
         this.bindSort();
         this.setPagination();
@@ -250,7 +246,7 @@ Grid.prototype = {
                 _this.disableButton($this);
                 RcmsAjax.ajax($this.attr("uri"), function () {
                     _this.options.onDelete.call(_this, (values));
-                   setTimeout(function () {_this.loadGrid();}, 500);
+                    setTimeout(function () {_this.loadGrid();}, 500);
                 }, function () {_this.enableButton($this)}, $.param({id: values }, true));
             });
         };
@@ -523,7 +519,8 @@ Grid.prototype = {
             var _this = this;
             $(this.grid).bind("pagination", function (event, page) {
                 var result = page.result || page.list;
-                if (result.length >= _this.options.paginationCountLimit) {
+                var length = result ? result.length : 0;
+                if (length >= _this.options.paginationCountLimit) {
                     _this.renderPagination(page);
                     _this.bindPagination();
                 }
@@ -833,7 +830,7 @@ jsUtil.organizationTreeDialog = function (targetselector, dialogselector, treese
     dialog.dialog({
         //appendTo: //TODO 关于appendTo无效的问题
         autoOpen: false,
-        modal:true,//是否显示遮罩层
+        modal: true,//是否显示遮罩层
 //        position: [positon.left, positon.top],//TODO 定位不准确
         buttons: {
             "确定": function () {
@@ -994,4 +991,84 @@ jsUtil.renderRequiredFromInput = function (options) {
 }
 
 
+jsUtil.Flow = function () {
+
+}
+
+jsUtil.Flow.prototype = {
+    init: function (options) {
+        this.options = $.extend({}, jsUtil.Flow.defaults, options);
+        this.setElement();
+        this.initUi();
+        return this;
+    },
+    setElement: function () {
+        this.operateButton = $(this.options.operateButton);
+        this.operateDialog = $(this.options.operateDialog);
+        this.form = this.operateDialog.find("form");
+        return this;
+    },
+    initUi: function () {
+        var _this = this;
+        if (this.options.operateType == jsUtil.Flow.OperateType.start) {
+            this.initStartDialog();
+        } else if (this.options.operateType == jsUtil.Flow.OperateType.execute) {
+            this.initExecuteDialog();
+        }
+        this.operateButton.click(function () {_this.operateDialog.dialog("open");});
+        return this;
+    },
+    initStartDialog: function () {
+        var _this = this;
+        this.operateDialog.dialog({
+            autoOpen: false,
+            modal: false,
+            width: 500,
+            buttons: {
+                "确定": function () {
+                    RcmsAjax.ajax(_this.form.attr("action"), function (result) {
+                        setTimeout(function () {window.open(_this.options.redirectURI, "_self");}, 500);
+                    }, null, _this.form.formSerialize());
+                },
+                "关闭": function () {$(this).dialog("close");}
+            }});
+        return this;
+    },
+    initExecuteDialog: function () {
+        var _this = this;
+        this.operateDialog.dialog({
+            autoOpen: false,
+            modal: false,
+            width: 500,
+            buttons: {
+                "确定": function () {
+                    RcmsAjax.ajax(_this.form.attr("action"), function (result) {
+                        setTimeout(function () {window.open(_this.options.redirectURI, "_self");}, 500);
+                    }, null, _this.form.formSerialize());
+                },
+                "关闭": function () {$(this).dialog("close");}
+            }});
+        return this;
+    },
+    start: function () {
+
+    },
+    execute: function () {
+
+    }
+
+}
+
+jsUtil.Flow.defaults = {
+    operateButton: ".flow-operate",
+    operateDialog: ".flow-dialog",
+    operateType: "start",//start||execute
+    redirectURI: "",
+    startSelector: ".flow-start",
+    executeSelector: ".flow-execute"
+}
+jsUtil.Flow.OperateType = {
+    start: "start",
+    execute: "execute"
+}
 

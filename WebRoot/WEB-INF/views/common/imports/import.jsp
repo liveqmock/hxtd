@@ -1,6 +1,6 @@
 <%--
   系统导入页
-  User: xiayouxue
+  User: xiaoli.luo
   Date:2014/5/8
 --%>
 <%@ page contentType="text/html;charset=UTF-8" language="java"%>
@@ -103,11 +103,14 @@
 					'queueSizeLimit' : 1,// 允许同时上传的个数(每次上传的文件个数,最多是一个)
 					'fileSizeLimit' : '5MB',//上传文件大小限制
 					'removeTimeout' : 1,//上传完成后多久删除队列中的进度条
-					'successTimeout' : 60*15,//表示文件上传完成后等待服务器相应的时间.超过改时间,那么将认为上传成功
+					'successTimeout' : 60*60,//表示文件上传完成后等待服务器相应的时间.超过改时间,那么将认为上传成功
 	 				'multi' : false,//是否允许多文件上传
 					'method' : "post",
 					'swf' : jsUtil.getRootPath() + '/static/css/uploadify.swf',
 					'uploader' : url+";jsessionid=${pageContext.session.id}",//url跳转后台处理的请求   //注:使用uploader插件上传文件时报http错误的时候,需要加上这句话
+					'onFallback':function(){
+						jsUtil.alert("您的flash版本不兼容，请尝试其他版本！");
+					},
 					'onSelect':function(file){//选择文件后触发
 						var fileSize = 0;
 						if (file.size > 1024 * 1024){
@@ -120,6 +123,7 @@
 						$("#fileType").html("文件类型："+file.type);
 					},
 					'onUploadStart' : function(file) {//在一个文件开始上传之前触发
+						//文件开始上传之前记录上传时间
 						var _moduleName = $("#moduleName option:selected").text();
 			
 						//校验重复记录处理方式
@@ -138,13 +142,19 @@
 							}
 						)
 					},
+					
 					'onQueueComplete': function(){
+						//文件上传完成记录时间
 						//文件上传完成以后，将"浏览"按钮恢复颜色（注意：这个浏览按钮的id是自动生成的，通过页面查看元素就可得到）
 			           	 $('#file-button').css({"background-image" : "url(" + buttonAdd + ")"});
 			           	 $att.uploadify('disable', false);
 			           	 //上传完成以后关闭蒙版
 						hideLoading();
 		            },	
+		            'onUploadError':function(file,errorCode,errorMsg,errorString){//上传文件失败触发
+		            	//tomcat挂了,或者服务器断了
+		            	showMsg({successFlag:false,message:errorString});
+		            },
 					'onUploadSuccess' : function(file, data, response) {//在每一个文件上传成功后触发
 						//data:从服务器返回回来
 						//response:响应成功true,响应失败false
@@ -153,14 +163,17 @@
 							if (returnData.indexOf(";") > 0) {
 								var messages = returnData.split(";");
 								if(messages.length==2){
+									//导入失败提示信息
 									$("#importResult").html(messages[0]);
 									$("#repeatData").html(messages[1]);
 								}else{
+									//结束正常流程
 									$("#importResult").html(messages[0]);
 									$("#repeatData").html(messages[1]);
 									$("#invalidFormatData").html(messages[2]);
 									$("#databaseUpdateData").html(messages[3]);
 									$("#databaseNew").html(messages[4]);
+									$("#time").html("本次导入用时:"+messages[5]);
 								}
 							} else {
 								$("#importResult").html(returnData);
@@ -172,41 +185,59 @@
 						hideLoading();
 					}
 				});
+				//点击上传按钮前校验是否有需要上传的文件
+				$("#upload").click(function(){
+					var num = $att.data('uploadify').queueData.queueLength;
+					if(num>0){
+						upload();
+					}else{
+						showMsg({successFlag:false,message:'上传队列中不存在文件，请检查！'});
+						setTimeout(_hide(),RcmsAjax.global.showTime);
+						hideLoading();
+					}
+				});
 			});
 			
 			function upload() {
+				//
 				if (checkType()) {
-					//添加蒙版
-					showLoading();
-					//文件上传期间，将"浏览"按钮置灰（注意：这个浏览按钮的id是自动生成的，通过页面查看元素就可得到）
-					$att.uploadify('disable', true)
-					$('#file-button').css( {
-						"background-image" : "url(" + buttonNoneAdd + ")"
+					jsUtil.confirm("请确认您上传文件的类型正确。",function(){
+						//添加蒙版
+						showLoading();
+						//文件上传期间，将"浏览"按钮置灰（注意：这个浏览按钮的id是自动生成的，通过页面查看元素就可得到）
+						$att.uploadify('disable', true)
+						$('#file-button').css( {
+							"background-image" : "url(" + buttonNoneAdd + ")"
+						});
+						//上传队列中的所有的文件
+						$att.uploadify('upload', '*');
+						//将导入信息清空
+						//$("#fileName").html("");
+						//$("#fileSize").html("");
+						//$("#fileType").html("");
+						$("#importResult").html("");
+						$("#repeatData").html("");
+						$("#invalidFormatData").html("");
+						$("#databaseUpdateData").html("");
+						$("#databaseNew").html("");
 					});
-					//上传队列中的所有的文件
-					$att.uploadify('upload', '*');
-					//将导入信息清空
-					//$("#fileName").html("");
-					//$("#fileSize").html("");
-					//$("#fileType").html("");
-					$("#importResult").html("");
-					$("#repeatData").html("");
-					$("#invalidFormatData").html("");
-					$("#databaseUpdateData").html("");
-					$("#databaseNew").html("");
 				}
 			}
 			
 			//校验是否选择上传文件类型
 			function checkType() {
-				var moduleName = $("#moduleName option:selected").text();
+				var moduleName = $("#moduleName option:selected").val();
 				if (moduleName == "") {
-					$("#errorMsg").text("请选择一个上传文件类型");
+					showMsg({successFlag:false,message:'请选择一个模块名称！'});
+					setTimeout(_hide(),RcmsAjax.global.showTime);
+					$("#repeatData").text("请选择一个模块名称");
+					hideLoading();
 					return false;
 				} else {
-					$("#errorMsg").text("");
+					$("#repeatData").text("");
 					return true;
 				}
+				
 			}
 			
 			function showLoading(){
@@ -218,7 +249,6 @@
 				$('#over').hide();
 				$('#layout').hide();
 			}
-			
 		</script>
 	</head>
 	<body>
@@ -229,7 +259,9 @@
 				<b class="b2"></b>
 				<b class="b3"></b>
 				<b class="b4"></b>
-				<div class="ie_head"><h1 class="f14 fbnone mt10 ml10 fl">导入数据</h1></div>
+				<div class="ie_head" style="height:30px;">
+					<h1 class="f14 fbnone mt10 ml10 fl">导入数据</h1>
+				</div>
 			</div>
 			<form action="${ctx}/common/imports/import.do" method="POST" id="importForm" enctype="multipart/form-data">
 				<div class="ml35 mr35 bg_c_blue cb">
@@ -285,8 +317,20 @@
 								</td>
 							</tr>
 						</table>
+						<div class="w240 margin0 cb h40">
+							<c:if test="${VS_HAS_FUNCTIONS.userImport}">
+								<a href="javascript:;" id="upload" class="block c_white lh25 mr10 fl">
+									<b class="allbtn_l block fl" id="upload"></b> 
+									<b class="allbtn_r pr13 block fl w_auto f14">导&nbsp;&nbsp;入</b> 
+								</a>
+								<%--<a href="javascript:$('file').uploadify('cancel');" id="reset" class="block c_white lh25 mr10 fr">
+									<b class="allbtn_l block fl"></b>
+									<b class="allbtn_r pr13 block fl w_auto f14">重&nbsp;&nbsp;置</b> 
+								</a>
+							--%></c:if>
+						</div>
 						<div class="bg_c_white w85b margin0 mt20"
-							style="height: 355px; overflow-y: auto;">
+							style="height: 274px; overflow-y: auto; margin-top:0px;">
 							<ul class="p10 lh30">
 								<li><font color="red"  class="f14">导入信息:</font></li>
 								<li>
@@ -294,6 +338,7 @@
 									<div class="f14" id="fileSize"></div>
 									<div class="f14" id="fileType"></div>
 								</li>
+								<li><div class="f14" id="time"></div></li>
 								<li><div class="f14" id="importResult"></div></li>
 								<li><div id="repeatData"  class="w_red f14"></div></li>
 								<li><div id="invalidFormatData"  class="w_red f14"></div></li>
@@ -304,57 +349,48 @@
 						
 					</div>
 					<div class="fl mt20 p10 divright"
-						style="background: url(${ctx}/static/images/divrbg.png) no-repeat;	width: 445px;height: 554px; padding:35px; ">
+						style="background: url(${ctx}/static/images/divrbg.png) no-repeat;	width: 465px;height: 460px; padding-left:35px; ">
 						<div>
-							<p class="lh25" style="color:#828181; font-size:16px;">导入事项：</p>
-							<ul class="lh25 " style="color:#828181;">
+							<p class="lh25" style="color:#828181; font-size:14px;">导入事项：</p>
+							<ul class=" " style="color:#828181;width:440px;">
 								<li class="f12">
-									1. 请严格参考模板文件。模板文件在导入页面的左下角。
+									1. <font style="color:red;">请严格参考模板文件。模板中各列顺序不可更改。</font>模板文件在"导入事项"底部。
 								</li>
-								<li class="f12">2. 导入功能支持的模块有：线索，客户，联系人，供应商。</li>
+								<li class="f12">2. 导入功能支持的模块：线索，客户，联系人，供应商。</li>
 								<li class="f12">3. excel文件格式为.xlsx或.xls文件。</li>
-								<li class="f12">4. 每次导入数据量不得超过10000条，文件大小不得超过5M。</li>
-								<li class="f12">5. 导入数据时需要选择导入类型，重复记录，重复数据标识列。重复记录默认是合并，重复数据标识列默认是手机。</li>
-								<li class="f12">6. 重复记录：您可以根据您的需求，选择遇到重复数据时，您希望如何处理。
+								<li class="f12">4. 每次导入数据量不得超过1000条，文件大小不得超过2M。</li>
+								<li class="f12">5. 重复记录：您可以根据您的需求，选择遇到重复数据时，您希望如何处理。
 								
 								<li class="f12">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;->跳过：保留原数据；</li>
 								<li class="f12">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;->覆盖：保留新数据；</li>
 								<li class="f12">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;->合并：将原数据和新数据合并，合并原则是以新数据为主，新数据值为空，则取原数据值。</li>
-								<li class="f12">7. 重复数据标识列：如何判断您要导入的数据与数据库中已有数据重复。可选项是：按手机和按邮箱。默认按手机的方式。</li>
+								<li class="f12">6. 重复数据标识列：如何判断您要导入的数据与数据库中已有数据重复。可选项是：按手机和按邮箱。默认按手机的方式。</li>
 								
 								<li class="f12">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;->手机：以手机号判断数据是否重复；</li>
 								<li class="f12">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;->邮箱：以邮箱判断数据是否重复；</li>
 								<li class="f12">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;->手机和邮箱：以手机,邮箱同时满足的方式判断数据是否重复.</li>
-								<li class="f12">8. 只导入excel中第一个sheet页的内容,如其他sheet也有内如,将不被导入。</li>
-								<li class="f12">9. 电话号码和传真的格式:010-12345678</li>
+								<li class="f12">7. 重复数据标识列：如何判断您要导入的数据与数据库中已有数据重复。可选项是：按手机和按邮箱。默认按手机的方式。</li>
+								<li class="f12">8. 重复数据标识列：如何判断您要导入的数据与数据库中已有数据重复。可选项是：按手机和按邮箱。默认按手机的方式。</li>
+								<li class="f12">9. 重复数据标识列：如何判断您要导入的数据与数据库中已有数据重复。可选项是：按手机和按邮箱。默认按手机的方式。</li>
+								<li class="f12">10. 重复数据标识列：如何判断您要导入的数据与数据库中已有数据重复。可选项是：按手机和按邮箱。默认按手机的方式。</li>
 							</ul>
 						</div>
-						<div class=" cb w mt40 fr" style="height:60px;">
-							<p class="f12">
+						<div class=" cb" style="height:60px; ">
+							<p class="f14" style="font-weight:bold;">
 								模板：
 								<a href="${ctx}/static/template/import/${templateLead}">${templateLead}</a>&nbsp;&nbsp;
 								<a href="${ctx}/static/template/import/${templateCustomer}">${templateCustomer}</a>&nbsp;&nbsp;
 								<a href="${ctx}/static/template/import/${templateContact}">${templateContact}</a>&nbsp;&nbsp;
 								<a href="${ctx}/static/template/import/${templateSupplier}">${templateSupplier}</a>&nbsp;&nbsp;
 							</p>
-							<p style="color: red;" class="f14">
+							<p style="color: red;font-weight:bold;" class="f14">
 								1.请先下载模板，并在此基础上进行修改。<br />
-								2.管理员、启用、性别都是“是否”类型的数据。<br />
+								2.下载方式,单击右键,选择"目标另存为"即可保存文件。<br />
 							</p>
 						</div>
 					</div>
 					
 					<div class="w240 margin0 cb h40 mt40">
-						<c:if test="${VS_HAS_FUNCTIONS.userImport}">
-							<a href="javascript:upload()" class="block c_white lh25 mr10 fl">
-								<b class="allbtn_l block fl"></b> 
-								<b class="allbtn_r pr13 block fl w_auto f14">导&nbsp;&nbsp;入</b> 
-							</a>
-							<a href="javascript:$('file').uploadify('cancel');" id="reset" class="block c_white lh25 mr10 fr">
-								<b class="allbtn_l block fl"></b>
-								<b class="allbtn_r pr13 block fl w_auto f14">重&nbsp;&nbsp;置</b> 
-							</a>
-						</c:if>
 					</div>
 					<div>
 						<ul>

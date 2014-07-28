@@ -25,6 +25,7 @@ import com.baihui.hxtd.soa.base.orm.hibernate.HibernatePage;
 import com.baihui.hxtd.soa.base.utils.Search;
 import com.baihui.hxtd.soa.base.utils.mapper.HibernateAwareObjectMapper;
 import com.baihui.hxtd.soa.common.service.CommonService;
+import com.baihui.hxtd.soa.system.DictionaryConstant;
 import com.baihui.hxtd.soa.system.entity.AuditLog;
 import com.baihui.hxtd.soa.system.entity.Component;
 import com.baihui.hxtd.soa.system.entity.Dictionary;
@@ -87,6 +88,7 @@ public class ComponentController {
         Map<String, Object> searchParams = Servlets.getParametersStartingWith(
                 request, "search_");
         Search.clearBlankValue(searchParams);
+        Search.trimValue(searchParams);
         Search.toRangeDate(searchParams, "modifiedTime");
         Search.toRangeDate(searchParams, "createdTime");
         page = componentService.findPage(searchParams, page);
@@ -107,7 +109,7 @@ public class ComponentController {
     @RequestMapping(value = "/toQueryPage.do")
     public String toQueryPage(Model model) {
         logger.info("ComponentController.toQueryPage跳转列表页");
-        model.addAttribute("page", new HibernatePage<Component>().order("desc").orderBy("modifiedTime"));
+        model.addAttribute("page", new HibernatePage<Component>().order(HibernatePage.DESC).orderBy("modifiedTime"));
         return "/system/component/list";
     }
 
@@ -149,7 +151,7 @@ public class ComponentController {
         logger.info("ComponentController.view查询组件");
         Component com = componentService.get(id);
         model.addAttribute("com", com);
-        List<Dictionary> dict = dictionaryService.findChildren("010601");
+        List<Dictionary> dict = dictionaryService.findChildren(DictionaryConstant.FUNCTION_PRIVILEGELEVEL);
         model.addAttribute("dict", dict);
         model.addAttribute("funcUrl", "/system/component/modify.do");
         return "/system/component/edit";
@@ -170,7 +172,7 @@ public class ComponentController {
     public String toAddPage(Model model) {
         logger.info("ComponentController.view查询组件");
         String funcUrl = "/system/component/add.do";
-        List<Dictionary> dict = dictionaryService.findChildren("010601");
+        List<Dictionary> dict = dictionaryService.findChildren(DictionaryConstant.FUNCTION_PRIVILEGELEVEL);
         model.addAttribute("dict", dict);
         model.addAttribute("funcUrl", funcUrl);
         return "/system/component/edit";

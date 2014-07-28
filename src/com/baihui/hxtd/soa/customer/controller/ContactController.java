@@ -30,6 +30,7 @@ import com.baihui.hxtd.soa.base.utils.mapper.HibernateAwareObjectMapper;
 import com.baihui.hxtd.soa.common.controller.CommonController;
 import com.baihui.hxtd.soa.customer.entity.Contact;
 import com.baihui.hxtd.soa.customer.service.ContactService;
+import com.baihui.hxtd.soa.system.DictionaryConstant;
 import com.baihui.hxtd.soa.system.entity.AuditLog;
 import com.baihui.hxtd.soa.system.entity.Dictionary;
 import com.baihui.hxtd.soa.system.entity.User;
@@ -75,6 +76,8 @@ public class ContactController extends CommonController<Contact> {
 	 */
 	@RequestMapping(value = "/toQueryPage.do")
 	public String toQueryPage(HibernatePage<Contact> page, Model model) {
+		page.setHibernateOrderBy("modifiedTime");// 默认按照修改时间倒序排序
+		page.setHibernateOrder(HibernatePage.DESC);
 		model.addAttribute("page", page);
 		
 		return "/customer/contact/list";
@@ -264,7 +267,7 @@ public class ContactController extends CommonController<Contact> {
 	  * @param model Model
 	 */
 	private void initPageDic(ModelMap model){
-		List<Dictionary> dict = dictionaryService.findChildren("040101");//线索来源
+		List<Dictionary> dict = dictionaryService.findChildren(DictionaryConstant.VC_LEADSOURCE, true);//线索来源
 		if(null == dict){
 			dict = new ArrayList<Dictionary>();
 		}

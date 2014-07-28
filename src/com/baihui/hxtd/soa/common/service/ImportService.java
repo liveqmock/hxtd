@@ -1,14 +1,19 @@
 package com.baihui.hxtd.soa.common.service;
 
 import java.lang.reflect.InvocationTargetException;
+import java.util.Date;
 import java.util.List;
+
+import javax.annotation.Resource;
 
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.baihui.hxtd.soa.base.ContextLoaderListenerAware;
+import com.baihui.hxtd.soa.common.dao.CommonDao;
 import com.baihui.hxtd.soa.common.service.imports.ImportServiceAbstract;
 import com.baihui.hxtd.soa.system.entity.User;
 /**
@@ -26,10 +31,14 @@ import com.baihui.hxtd.soa.system.entity.User;
 
 
 @Service
+@Transactional
 public class ImportService {
 
 	private Logger logger = LoggerFactory.getLogger(this.getClass());
-
+	
+	@Resource
+	private CommonDao commonDao;
+	
 	@SuppressWarnings("unchecked")
 	ImportServiceAbstract importServiceAbstract;
 	//导入数据到DB
@@ -50,5 +59,13 @@ public class ImportService {
 		String serviceStr = "Import"+moduleName.subSequence(0, 1).toString().toUpperCase()+moduleName.substring(1).toLowerCase()+"Service";
 		System.out.println(serviceStr);
 	}
+	/**
+     * 获取数据库时间
+     * @return
+     */
+    public Date getDBNow(){
+    	return commonDao.getDBNow();
+    }
+    
 	
 }

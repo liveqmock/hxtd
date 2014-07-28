@@ -10,14 +10,6 @@
 <html>
 <head>
 <title>供应商详情</title>
-<meta http-equiv="pragma" content="no-cache">
-<meta http-equiv="cache-control" content="no-cache">
-<meta http-equiv="expires" content="0">    
-<meta http-equiv="keywords" content="keyword1,keyword2,keyword3">
-<meta http-equiv="description" content="This is my page">
-<!--
-<link rel="stylesheet" type="text/css" href="styles.css">
--->
 <link rel="stylesheet" href="${ctx}/static/css/recommend/detail_a.css"/>
 <link rel="stylesheet" href="${ctx}/static/css/recommend/detail.css"/>
 <script type="text/javascript" src="${ctx}/static/js/pacs.js"></script>
@@ -52,8 +44,6 @@ $(function(){
 		}
 		return false;
 	});
-	
-	//jsUtil.renderRequiredFromInput();
 	//获得省市县代码，加载三级联动
 	var province = '${com.province.id}';
 	var city = '${com.city.id}';
@@ -91,7 +81,6 @@ function clearInputVal(obj){ //清除
 <form id="form" action="${ctx }${funcUrl}" method="post">
 <div>
 	<div class="cb"></div>
-	<!--列表开始-->
 	<div class="ml35 mr35 mt20 block cb cb">
 		<b class="b1"></b>
 		<b class="b2"></b>
@@ -132,34 +121,25 @@ function clearInputVal(obj){ //清除
 						title="清除" onclick="clearInputVal(this)"></i>
 				</td>
 			</tr>
-
-			<tr>	
-				
+			<tr>
 				<td align="right" width="15%">
 					<span class="w_red">*&nbsp;</span>供应商类型：
 				</td>
 				<td align="left">
 					<select name="type.id" class="select1 pr requiredSelect">
-						<option value="-1">
-							--请选择--
-						</option>
+						<option value="-1">--无--</option>
 						<c:forEach items="${type}" var="d">
-							<option value="${d.id}"
-								<c:if test="${d.id==com.type.id}">
-             				selected
-             			</c:if>>
+							<option value="${d.id}" <c:if test="${d.id==com.type.id}">selected</c:if>>
 								${d.key}
 							</option>
 						</c:forEach>
 					</select>
 				</td>
-			
 				<td align="right">
 					电话：
 				</td>
 				<td align="left">
-					<input type="text" name="phone" value="${com.phone}"
-						class="text_input3 isTel">
+					<input type="text" name="phone" value="${com.phone}" class="text_input3 isTel">
 				</td>
 			</tr>
 			<tr>
@@ -167,18 +147,13 @@ function clearInputVal(obj){ //清除
 					手机：
 				</td>
 				<td align="left">
-					<input type="text" name="mobile" value="${com.mobile}"
-						class="text_input3 isMobile">
+					<input type="text" name="mobile" value="${com.mobile}" class="text_input3 isMobile">
 				</td>
-			
-
-			
 				<td align="right">
 					传真：
 				</td>
 				<td align="left">
-					<input type="text" name="fax" value="${com.fax}"
-						class="text_input3 isTel">
+					<input type="text" name="fax" value="${com.fax}" class="text_input3 isTel">
 				</td>
 			</tr>
 			<tr>
@@ -198,30 +173,20 @@ function clearInputVal(obj){ //清除
 				</td>
 			</tr>
 			<tr>
-				<td align="right">
-					<span class="w_red">*&nbsp;</span>证件类型：
-				</td>
+				<td align="right"><span class="w_red">*&nbsp;</span>证件类型：</td>
 				<td align="left">
 					<select name="cardType.id" class="select1 pr requiredSelect">
-						<option value="-1">
-							--请选择--
-						</option>
+						<option value="-1">--无--</option>
 						<c:forEach items="${cardType}" var="d">
-							<option value="${d.id}"
-								<c:if test="${d.id==com.cardType.id}">
-             					selected
-             					</c:if>
-             				>${d.key}
+							<option value="${d.id}" <c:if test="${d.id==com.cardType.id}">selected</c:if>>
+             					${d.key}
 							</option>
 						</c:forEach>
 					</select>
 				</td>
-				<td align="right">
-					<span class="w_red">*&nbsp;</span>证件号码：
-				</td>
+				<td align="right"><span class="w_red">*&nbsp;</span>证件号码：</td>
 				<td align="left">
-					<input type="text" name="cardNum" value="${com.cardNum}"
-						class="text_input3 number {maxlength:20} required">
+					<input type="text" name="cardNum" value="${com.cardNum}" class="text_input3 number {maxlength:20} required">
 				</td>
 			</tr>
 		</table>
@@ -254,46 +219,39 @@ function clearInputVal(obj){ //清除
 					详细地址：
 				</td>
 				<td align="left">
-					<input name="address" type="text" value="${com.address}"
-						class="text_input3" />
+					<input name="address" type="text" value="${com.address}" class="text_input3" />
 				</td>
 			</tr>
 		</table>
-		<h1 class="f14 fbnone ml40 pt10">
-			描述信息
-		</h1>
+		<h1 class="f14 fbnone ml40 pt10">描述信息</h1>
 		<table class="cb id_table4 w95b bg_c_white margin0 mt10">
 			<tr>
-				<td align="right" width="15%" valign="top">
-					备注：
-				</td>
+				<td align="right" width="15%" valign="top">备注：</td>
 				<td align="left" width="85%">
 					<textarea name="remark" class="remarks_input1">${com.remark}</textarea>
 				</td>
-
 			</tr>
-
 		</table>
 		<div class=" h40"></div>
 	</div>
 	<div class="cb block h40 margin0 mt10" style="width: 350px;">
 		<ul class="id_table1 cb">
 			<li>
-				<a href="javascript:;" id="save" class="block c_white lh25 mr35"><b
+				<a href="javascript:;" id="save" class="block c_white lh25 mr10"><b
 					class="allbtn_l block fl"></b><b
-					class="allbtn_r pr13 block fl w_auto f14">保&nbsp&nbsp存</b>
+					class="allbtn_r pr13 block fl w_auto f14">保&nbsp;&nbsp;存</b>
 				</a>
 			</li>
 			<li>
 				<a href="javascript:;" id="saveAndAdd"
-					class="block c_white lh25 mr35"><b class="allbtn_l block fl"></b><b
+					class="block c_white lh25 mr10"><b class="allbtn_l block fl"></b><b
 					class="allbtn_r pr13 block fl w_auto f14">保存并新建</b>
 				</a>
 			</li>
 			<li>
 				<a href="${ctx}/project/supplier/toQueryPage.do"
 					class="block c_white lh25"><b class="allbtn_l block fl"></b><b
-					class="allbtn_r pr13 block fl w_auto f14">取&nbsp&nbsp消</b>
+					class="allbtn_r pr13 block fl w_auto f14">取&nbsp;&nbsp;消</b>
 				</a>
 			</li>
 		</ul>

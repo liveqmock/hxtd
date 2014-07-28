@@ -11,7 +11,7 @@ $(function(){
 	//如果没有，追加一个到body的底部
 	var div = $('#point4Ajax');
 	if(div.length <= 0){
-		$('body').append('<div id="point4Ajax" style="padding:5px;position: fixed;z-index:101;top:40%;left:0;border-radius:4px;-moz-border-radius:4px;-webkit-border-radius:4px;-o-border-radius:4px; display:block;"></div>');
+		$('body').append('<div class="zzc" id="point4Ajax" style="padding:5px;position: fixed;z-index:102;top:40%;left:30%;border-radius:4px;-moz-border-radius:4px;-webkit-border-radius:4px;-o-border-radius:4px; display:none;"></div>');
 	}
 	RcmsAjax.global.pointDiv = $('#point4Ajax', window.top.document);
 });
@@ -30,9 +30,9 @@ RcmsAjax.bgImage = {
 }
 
 RcmsAjax.msgDiv = {
-	begin : '<div class="zzc"><img width="50" height="51" class="fl mt20 ml10" src="'+jsUtil.getRootPath()+'/static/images/',
+	begin : '<img width="50" height="51" class="fl mt20 ml10" src="'+jsUtil.getRootPath()+'/static/images/',
 	middle : '" /><p class="fr mr20 mt35 w100">',
-	end : '</p></div>'
+	end : '</p>'
 }
 
 
@@ -145,7 +145,7 @@ RcmsAjax._ajax =  function (_excuteMsgFlag, _url, _successCallBack, _completeCal
 			}
 		},
 		complete: function(XMLHttpRequest, textStatus){
-			_stop();
+			_stop(_excuteMsgFlag);
 			if(_completeCallback){
 				_completeCallback();
 			}
@@ -176,9 +176,9 @@ function _beforeSend4Msg(_beforeMsg){
  * ajax停止时恢复button
  * @memberOf {TypeName} 
  */
-function _stop(){
+function _stop(_excuteMsgFlag){
 	clearTimeout(RcmsAjax.global.timer);
-	RcmsAjax.global.timer = setTimeout(_hide(),RcmsAjax.global.showTime);
+	RcmsAjax.global.timer = setTimeout(_hide(_excuteMsgFlag),RcmsAjax.global.showTime);
 }
 
 /**
@@ -216,6 +216,7 @@ function _success4Msg(_successMsg){
  * @param {Object} msg
  */
 function _showProcessMsg(msg){
+	$('#point4AjaxPMDiv', window.top.document).show();
 	RcmsAjax.global.pointDiv.html(msg);
 	var leftPos = (window.top.document.documentElement.clientWidth-RcmsAjax.global.pointDiv.width())/2;
 	RcmsAjax.global.pointDiv.css({ "left":leftPos}).slideDown('fast');
@@ -237,6 +238,7 @@ function _showMsg(msg){
  * @param {Object} showTime
  */
 function _showMsgByTime(msg, _showTime, _speed){
+	$('#point4AjaxPMDiv', window.top.document).show();
 	RcmsAjax.global.pointDiv.html(msg);
 	if(!_showTime){
 		_showTime = RcmsAjax.global.showTime;
@@ -246,7 +248,8 @@ function _showMsgByTime(msg, _showTime, _speed){
 }
 
 
-function _hide(speed){
+function _hide(_excuteMsgFlag,speed){
+	$('#point4AjaxPMDiv', window.top.document).hide();
 	return function(){
 		if(!speed){
 			speed = 'normal';

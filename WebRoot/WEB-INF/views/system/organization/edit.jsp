@@ -103,7 +103,7 @@
                 <tr>
                     <td align="right" width="15%" valign="top">备注：</td>
                     <td align="left" width="85%">
-                        <textarea name="remark" class="{maxlength:512} remarks_input1">${organization.remark}</textarea>
+                        <textarea name="remark" class="remarks_input1">${organization.remark}</textarea>
                     </td>
                 </tr>
             </table>

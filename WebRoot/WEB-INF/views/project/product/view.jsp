@@ -52,13 +52,13 @@
 			<td align="right">出售金额（万）：</td>
 			<td align="left"><fmt:formatNumber value="${product.sellMoney}" pattern="###,##0.00" var="sellMoney"/>${sellMoney}</td>
 			<td align="right">收益率（%）：</td>
-			<td align="left">${product.rate}%</td>
+			<td align="left">${product.rate}</td>
 		</tr>
 		<tr>
 			<td align="right">预期收益（万）：</td>
 			<td align="left"><fmt:formatNumber value="${product.expectProfit}" pattern="###,##0.00" var="expectProfit"/>${expectProfit}</td>
 			<td align="right">销售期限：</td>
-			<td align="left">${product.saleLimit}${product.saleUnit.key}</td>
+			<td align="left">${product.saleLimit}${product.saleLimit!=null?product.saleUnit.key:""}</td>
 		</tr>
 		<tr>
 			<td align="right">销售开始日期：</td>
@@ -74,7 +74,7 @@
 		</tr>
 		</table>
 		<h1 class="f14 fbnone ml40 pt10">描述信息</h1>
-		<table class="cb id_table4 w95b bg_c_white margin0 mt10">
+		<table class="cb id_table6 w95b bg_c_white margin0 mt10">
 			<tr>
 				<td align="right" width="15%" valign="top">备注：</td>
 				<td align="left" valign="top"><div class="w85b">${product.remark}</div></td>

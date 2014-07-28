@@ -56,8 +56,8 @@ public class Order implements IdFlowable {
 
     /** 状态 */
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "STATUS")
-    private FlowNode status;
+    @JoinColumn(name = "STATUS", updatable = false)
+    private FlowNode flowNode;
 
     /** 投资方式 */
     @ManyToOne(fetch = FetchType.LAZY)
@@ -97,7 +97,11 @@ public class Order implements IdFlowable {
 
     @Column(name = "ORDER_END_TIME")
     private Date orderEndTime;
-
+    
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "ORDER_STATUS")
+    private Dictionary orderStatus;
+    
     /** 备注 */
     @Column(name = "REMARK", length = 512)
     private String remark;
@@ -126,17 +130,19 @@ public class Order implements IdFlowable {
     @Column(name = "IS_DELETED", nullable = false, updatable = false)
     private Boolean isDeleted = false;
 
-    @Column(name = "PAY_STATUS", nullable = false, updatable = false)
-    private Boolean payStatus = false;
+    /** 财务状态(已付款、未付款、已收款、未收款、部分收款) */
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "PAY_STATUS")
+    private Dictionary payStatus;
 
-    @Override
-    public FlowNode getFlowNode() {
-        return getStatus();
-    }
-
-    public String toString() {
-        return String.format("订单编号：%s", getId());
-    }
+//    @Override
+//    public FlowNode getFlowNode() {
+//        return getStatus();
+//    }
+//
+//    public String toString() {
+//        return String.format("订单编号：%s", getId());
+//    }
 
     public Long getId() {
         return id;
@@ -170,12 +176,12 @@ public class Order implements IdFlowable {
         this.customer = customer;
     }
 
-    public FlowNode getStatus() {
-        return status;
+    public FlowNode getFlowNode() {
+        return flowNode;
     }
 
-    public void setStatus(FlowNode status) {
-        this.status = status;
+    public void setFlowNode(FlowNode flowNode) {
+        this.flowNode = flowNode;
     }
 
     public Dictionary getInvestmentWay() {
@@ -298,13 +304,21 @@ public class Order implements IdFlowable {
         this.isDeleted = isDeleted;
     }
 
-    public Boolean getPayStatus() {
+    public Dictionary getPayStatus() {
         return payStatus;
     }
 
-    public void setPayStatus(Boolean payStatus) {
+    public void setPayStatus(Dictionary payStatus) {
         this.payStatus = payStatus;
     }
+
+	public Dictionary getOrderStatus() {
+		return orderStatus;
+	}
+
+	public void setOrderStatus(Dictionary orderStatus) {
+		this.orderStatus = orderStatus;
+	}
 
 
 }

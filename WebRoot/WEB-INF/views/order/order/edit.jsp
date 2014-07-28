@@ -69,9 +69,11 @@ function searchData(action){//搜索弹出框
 	jsUtil.dialogIframe(url, title, 800, 465, function(){//确定回调
 		var $userObj = $(".bor_e28d1f", window.frames["dialogIframe"].document);
 			if($userObj.length > 0){
-				$("#txt_" + action).val($userObj.find("td:eq(1)").text());
+				$("#txt_" + action).val($userObj.find("td:eq(0)").text());
 				$("#hide_" + action +"_id").val($userObj.attr("id"));
 				if(productFlag){
+					$("#txt_" + action).val($userObj.find("td:eq(1)").text());
+					$("#hide_" + action +"_id").val($userObj.attr("id"));
 					$("#earningRate").val($userObj.find("td:eq(2)").text().replace("%",""));
 					$("#redeemFormula").val($userObj.find("td:eq(3)").text())
 					productFlag=false;
@@ -118,14 +120,14 @@ function clearInputVal(obj){//清除
 				</td>
 				<td align="left">
 				<input type="text" name="code"
-						value="${order.code}" class="text_input3 required" />
+						value="${order.code}" class="text_input3 required {unique:['Order','${order.code}']}" />
 				</td>
 				<td align="right" width="15%">
 					<span class="w_red">*&nbsp;</span>所有者：
 				</td>
 				<td align="left">
 					<input type="text" id="txt_owner" value="${order.owner.realName }"
-						class="text_input3 cp required" readonly 
+						class="text_input3 cp required" readonly  name="name_owner"
 						onclick="searchData('owner');" />
 					<input type="hidden" id="hide_owner_id" name="owner.id"
 						value="${order.owner.id }" />
@@ -142,7 +144,7 @@ function clearInputVal(obj){//清除
 				<td align="left">
 					<input type="text" value="${order.product.name }"
 						class="text_input3 cp required" id="txt_product" 
-						onclick="searchData('product');" 
+						onclick="searchData('product');"   name="name_product"
 						readonly/>
 					<input type="hidden" value="${order.product.id}"
 						id="hide_product_id" name="product.id" />
@@ -156,7 +158,7 @@ function clearInputVal(obj){//清除
 				</td>
 				<td align="left">
 					<input type="text" id="txt_customer"
-						value="${order.customer.name }" 
+						value="${order.customer.name }" name="name_customer"
 						class="text_input3 cp required" readonly
 						 onclick="searchData('customer');"/>
 					<input type="hidden" value="${order.customer.id}"
@@ -235,7 +237,7 @@ function clearInputVal(obj){//清除
 				</td>
 				<td align="left">
 					<input type="text" id="txt_salesManager"
-						value="${order.salesManager.name }"
+						value="${order.salesManager.name }" name="name_salesManager"
 						class="text_input3 cp required" readonly 
 						onclick="searchData('salesManager');"/>
 					<input type="hidden" id="hide_salesManager_id"
@@ -250,7 +252,7 @@ function clearInputVal(obj){//清除
 				</td>
 				<td align="left">
 					<input type="text" id="txt_salesMajordomo"
-						value="${order.salesMajordomo.name }"
+						value="${order.salesMajordomo.name }"  name="name_salesMajordomo"
 						class="text_input3 cp required" readonly
 						onclick="searchData('salesMajordomo');" />
 					<input type="hidden" id="hide_salesMajordomo_id"
@@ -271,7 +273,7 @@ function clearInputVal(obj){//清除
 					备注：
 				</td>
 				<td align="left" width="85%">
-					<textarea name="remark" class="remarks_input1">${order.remark}</textarea>
+					<textarea name="remark" class="remarks_input1 {}">${order.remark}</textarea>
 				</td>
 			</tr>
 
@@ -281,19 +283,19 @@ function clearInputVal(obj){//清除
 	<div class="cb block h40 margin0 mt10" style="width: 350px;">
 		<ul class="id_table1 cb">
 			<li>
-				<a href="javascript:;" id="save" class="block c_white lh25 mr35"><b
+				<a href="javascript:;" id="save" class="block c_white lh25 mr10"><b
 					class="allbtn_l block fl"></b><b
-					class="allbtn_r pr13 block fl w_auto f14">保&nbsp&nbsp存</b> </a></a>
+					class="allbtn_r pr13 block fl w_auto f14">保&nbsp;&nbsp;存</b> </a>
 			</li>
 			<li>
 				<a href="javascript:;" id="saveAndAdd"
-					class="block c_white lh25 mr35"><b class="allbtn_l block fl"></b><b
+					class="block c_white lh25 mr10"><b class="allbtn_l block fl"></b><b
 					class="allbtn_r pr13 block fl w_auto f14">保存并新建</b> </a>
 			</li>
 			<li>
 				<a href="${ctx}/order/order/toQueryPage.do"
 					class="block c_white lh25"><b class="allbtn_l block fl"></b><b
-					class="allbtn_r pr13 block fl w_auto f14">取&nbsp&nbsp消</b> </a>
+					class="allbtn_r pr13 block fl w_auto f14">取&nbsp;&nbsp;消</b> </a>
 			</li>
 		</ul>
 	</div>

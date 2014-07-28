@@ -26,14 +26,17 @@ function submitForm(){ // 提交表单
 	if($("#form").valid()){
 		var moduleType =$("#moduleType", parent.document).val();
 		var moduleId = $("#moduleId", parent.document).val();
-		RcmsAjax.ajaxNoMsg(form.action, callback, null, 
-			$("form").serialize() + "&moduleType=" + moduleType + "&moduleId=" + moduleId);
-	}
-}
-function callback(obj){ // ajax回调函数
-	if(obj.successFlag){
-		parent.DIALOG.dialog("close");
-		parent.grid.loadGrid();
+		RcmsAjax.ajax(form.action, function(obj){
+				if(obj.successFlag){
+					setTimeout(function(){
+						parent.DIALOG.dialog("close");
+						parent.grid.loadGrid();
+					}, 500);
+				}
+			}, 
+			null, 
+			$("form").serialize() + "&moduleType=" + moduleType + "&moduleId=" + moduleId
+		);
 	}
 }
 </script>
@@ -56,15 +59,15 @@ function callback(obj){ // ajax回调函数
         </tr>
         <tr class="h80">
           <td align="right"><i class="mt3 block">下次联系要点：</i></td>
-          <td><textarea name="nextContactPoints" class="remarks_input3">${memoir.nextContactPoints}</textarea></td>
+          <td><textarea name="nextContactPoints" class="remarks_input3" maxlength="500">${memoir.nextContactPoints}</textarea></td>
         </tr>
         <tr class="h80">
-          <td align="right"><i class="mt3 block">联系纪要：</i></td>
-          <td><textarea name="summary" class="remarks_input3 required">${memoir.summary}</textarea></td>
+          <td align="right"><i class="mt3 block"><span class="w_red">*&nbsp;</span>联系纪要：</i></td>
+          <td><textarea name="summary" class="remarks_input3 required" maxlength="500">${memoir.summary}</textarea></td>
         </tr>
         <tr class="h80">
           <td align="right"><i class="mt3 block">备注：</i></td>
-          <td><textarea name="remark" class="remarks_input3">${memoir.remark}</textarea></td>
+          <td><textarea name="remark" class="remarks_input3" maxlength="500">${memoir.remark}</textarea></td>
         </tr>
       </table>
     </div>

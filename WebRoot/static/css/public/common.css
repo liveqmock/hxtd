@@ -203,6 +203,7 @@ i{font-style:normal}
 
 
 /*遮罩层*/
+.zzcbg{background:url(../../images/zzcbg.png) repeat; width:100%; height:100%; top:0}
 .zzc{  background:url(../../images/zzc.png) no-repeat; width:200px; height:90px;}
 .id_table3li .h_tabbtn_l{background:url(../../images/tab_bg.png) no-repeat; background-position:left bottom; height:32px; cursor:pointer;}
 .id_table3li .h_tabbtn_r{ background:url(../../images/tab_bg.png) no-repeat; background-position: right bottom; color:#fff; cursor:pointer;}
@@ -211,7 +212,9 @@ i{font-style:normal}
 
 
 .id_tantable1 tr td .module {background:url(../../images/System_bg.png) repeat-x; border: 1px solid #c2c2c2; height: 20px;margin: 5px 5px 0 0; padding:5px; width:90%; height:100%}
-.id_tantable1 li .module {background:url(../../images/System_bg.png) repeat-x; border: 1px solid #c2c2c2; height: 20px; padding:5px; width:90%; height:80px; cursor:pointer;}
+.id_tantable1 tr td .module1 {background:url(../../images/System_bg.png) repeat-x; border: 1px solid #c2c2c2; height: 20px;margin: 5px 5px 0 0; padding:5px; width:90%; height:100%}
+.id_tantable1 li .module {background:url(../../images/System_bg.png) repeat-x; border: 1px solid #c2c2c2; padding:5px; width:90%; min-height:60px; cursor:pointer;}
+.id_tantable1 li .module1 {background:url(../../images/System_bg.png) repeat-x; border: 1px solid #c2c2c2; padding:5px; width:90%; min-height:60px; cursor:pointer;}
 .id_tantable1 li div:hover{ border:1px solid #e28d1f;}
 .id_tantable1 li{ float:left; width:25%; margin-top:5px;}
 

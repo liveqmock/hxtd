@@ -1,34 +1,50 @@
 package com.baihui.hxtd.soa.common.service;
 
+import com.baihui.hxtd.soa.base.Constant;
+import com.baihui.hxtd.soa.base.orm.hibernate.HibernatePage;
 import com.baihui.hxtd.soa.common.controller.model.FlowModel;
 import com.baihui.hxtd.soa.common.dao.FlowInstanceDao;
 import com.baihui.hxtd.soa.common.dao.FlowNodeDao;
 import com.baihui.hxtd.soa.common.entity.*;
-import com.baihui.hxtd.soa.system.entity.User;
+import com.baihui.hxtd.soa.system.dao.MessageDao;
+import com.baihui.hxtd.soa.system.dao.OrganizationDao;
+import com.baihui.hxtd.soa.system.dao.UserDao;
+import com.baihui.hxtd.soa.system.dao.UserMessageDao;
+import com.baihui.hxtd.soa.system.entity.*;
+import org.apache.commons.lang3.ArrayUtils;
+import org.apache.commons.lang3.StringUtils;
+import org.apache.commons.lang3.Validate;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.annotation.Resource;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
+import java.text.SimpleDateFormat;
+import java.util.*;
 
 /**
- * 功能描述：联系纪要service层
+ * 流程实例服务类
  *
- * @author lihua
- * @version (版本)1
- * @company 北京市百会纵横科技有限公司
- * @copyright (版权)  本文件归属 北京市百会纵横科技有限公司
- * @ClassName: com.baihui.hxtd.soa.common.service.FlowInstanceService.java
- * @date 2014-5-26 上午11:16:20
- * @since (该版本支持的 JDK 版本) ： 1.5
+ * @author xiayouxue
+ * @date 2014/7/20
  */
 @Service
 @Transactional
 public class FlowInstanceService {
+
+    /*
+    开始            所有者
+    理财经理审核    属于流程启动者所属组织 并且 具有理财经理角色
+    投资经理审核    属于流程启动者所属组织 并且 具有投资经理角色
+    投资总监审核    属于流程启动者所属组织的上一级组织 并且 具有投资总监角色
+    副总裁审核      具有副总裁角色
+    总裁审核        具有总裁角色
+    财务审核        具有财务角色
+    结束
+
+    可以跨级审批
+    */
 
     private Logger logger = LoggerFactory.getLogger(this.getClass());
 
@@ -38,9 +54,100 @@ public class FlowInstanceService {
     @Resource
     private FlowNodeDao flowNodeDao;
 
+    @Resource
+    private UserDao userDao;
+
+    @Resource
+    private OrganizationDao organizationDao;
+
+    @Resource
+    private UserMessageDao userMessageDao;
+
+    @Resource
+    private MessageDao messageDao;
+
+    /**
+     * 填充审批者
+     * 根据角色查找对应的审批人员
+     */
+    @Transactional(readOnly = true)
+    public List<FlowInstance> fullPreselectionExecutor(List<FlowInstance> flowInstances, User user) {
+
+        //设置业务节点
+        Organization organization = user.getOrganization();
+        Map<String, List<User>> approvers = new HashMap<String, List<User>>();
+        approvers.put(Constant.ROLE_CEO, userDao.findByRoleCode(Constant.ROLE_CEO));
+        approvers.put(Constant.ROLE_VICECEO, userDao.findByRoleCode(Constant.ROLE_VICECEO));
+        approvers.put(Constant.ROLE_FINANCER, userDao.findByRoleCode(Constant.ROLE_FINANCER));
+        approvers.put(Constant.ROLE_INVESTMENTDIRECTOR, userDao.findByOrgIdRoleCode(organizationDao.getParentIdById(organization.getId()), Constant.ROLE_INVESTMENTDIRECTOR));
+        approvers.put(Constant.ROLE_INVESTMENTMANAGER, userDao.findByOrgIdRoleCode(organization.getId(), Constant.ROLE_INVESTMENTMANAGER));
+        approvers.put(Constant.ROLE_FINANCIALMANAGER, userDao.findByOrgIdRoleCode(organization.getId(), Constant.ROLE_FINANCIALMANAGER));
+
+        for (int i = 0; i < flowInstances.size(); i++) {
+            FlowInstance flowInstance = flowInstances.get(i);
+            FlowNode flowNode = flowInstance.getFlowNode();
+            //设置开始节点
+            if (flowNode.getType().equals(NodeType.start.getValue())) {
+                flowInstances.get(0).setExecutors(Arrays.asList(user));
+            }
+            //设置业务节点
+            else if (flowNode.getType().equals(NodeType.business.getValue())) {
+                Role role = flowNode.getRole();
+                if (role != null) {
+                    String roleCode = role.getCode();
+                    flowNode.setApprovers(approvers.get(roleCode));
+                }
+            }
+        }
+
+        return flowInstances;
+    }
+
+    /**
+     * 填充预选执行者
+     */
+    @Transactional(readOnly = true)
+    public FlowInstance fullPreselectionExecutor(FlowInstance flowInstance, User user) {
+
+        Organization organization = user.getOrganization();
+        FlowNode flowNode = flowInstance.getFlowNode();
+        //设置开始节点
+        if (flowNode.getType().equals(NodeType.start.getValue())) {
+            flowNode.setApprovers(Arrays.asList(user));
+        }
+        //设置业务节点
+        else if (flowNode.getType().equals(NodeType.business.getValue())) {
+            String roleCode = flowNode.getRole().getCode();
+            if (roleCode.equals(Constant.ROLE_CEO) || roleCode.equals(Constant.ROLE_VICECEO) || roleCode.equals(Constant.ROLE_FINANCER)) {
+                flowNode.setApprovers(userDao.findByRoleCode(roleCode));
+            } else if (roleCode.equals(Constant.ROLE_INVESTMENTDIRECTOR)) {
+                flowNode.setApprovers(userDao.findByOrgIdRoleCode(organizationDao.getParentIdById(organization.getId()), roleCode));
+            } else {
+                flowNode.setApprovers(userDao.findByOrgIdRoleCode(organization.getId(), roleCode));
+            }
+        }
+        return flowInstance;
+    }
+
+    /** 查找预定的 */
+    @Transactional(readOnly = true)
+    public List<FlowInstance> findReserve(String moduleName, Long idValue, String flowType) {
+        String hql = "select instance from FlowInstance instance" +
+                " inner join fetch instance.flowNode flowNode" +
+                " inner join fetch flowNode.flow flowType" +
+                " inner join fetch instance.module module" +
+                " left join fetch instance.approver approver" +
+                " where module.name=?" +
+                " and instance.recordId=?" +
+                " and flowType.value=?" +
+                " and instance.isPassed is null" +
+                " order by flowNode.order";
+        return flowInstanceDao.find(hql, moduleName, idValue, flowType);
+    }
+
     /** 查找流程环节的执行者 */
     @Transactional(readOnly = true)
-    public User findReserveExecuter(String moduleName, Long idValue, FlowNode flowNode) {
+    public User findReserveExecutor(String moduleName, Long idValue, FlowNode flowNode) {
         return flowInstanceDao.findReserveExecutor(moduleName, idValue, flowNode);
     }
 
@@ -55,23 +162,7 @@ public class FlowInstanceService {
         return flowNodes;
     }
 
-    /** 查找预存储未执行的task */
-    @Transactional(readOnly = true)
-    public List<FlowInstance> findFuture(String moduleName, Long idValue, String flowType) {
-        String hql = "select task from FlowInstance task" +
-                " inner join fetch task.wfNode flowNode" +
-                " inner join fetch flowNode.flow flowType" +
-                " inner join fetch task.module module" +
-                " inner join fetch task.approver approver" +
-                " where module.name=?" +
-                " and task.recordId=?" +
-                " and flowType.value=?" +
-                " and task.isPassed is null" +
-                " order by flowNode.code";
-        return flowInstanceDao.find(hql, moduleName, idValue, flowType);
-    }
-
-    /** 查找已执行的task */
+    /** 查找已执行的instance */
     @Transactional(readOnly = true)
     public List<FlowInstance> findExecuted(String moduleName, Long idValue, String flowType) {
         return flowInstanceDao.findExecuted(moduleName, idValue, flowType);
@@ -95,26 +186,47 @@ public class FlowInstanceService {
      * 查找可执行的流程实例
      * 1.流程实例行进至当前流程环节的上一个流程环节
      */
-    public List<FlowInstance> findExecutable(String roleCode) {
-        String lastInstanceHql = "select max(instance.id) from FlowInstance instance" +
-                " where instance.isPassed is not null" +
-                " group by instance.module,instance.recordId,instance.flowNode.flow";
-        String hql = "select instance from FlowInstance instance,FlowNode flowNode" +
-                " inner join fetch instance.module" +
-                " inner join fetch instance.flowNode" +
+    public HibernatePage<FlowInstance> findExecutablePagination(Map<String, Object> conditions, HibernatePage<FlowInstance> page) {
+        String type = (String) conditions.get("type");
+        Validate.notNull(type, "类型不能为null");
+        String[] types = {"approving", "approved"};
+        Validate.validIndex(types, ArrayUtils.indexOf(types, type), "type“%s”必须是“%s”中的一个值", type, StringUtils.join(types, ","));
+
+        //固定的条件数目，type&&roleCode=2
+        int fixConditionLength = 2;
+
+        List<String> conditionExps = new ArrayList<String>();
+        String lastInstanceHql = "select max(lastInstance.id) from FlowInstance lastInstance" +
+                " where lastInstance.isPassed is not null" +
+                " and exists(select flowNode from FlowNode flowNode where flowNode.flow=lastInstance.flowNode.flow and flowNode.role.code=:roleCode)" +
+                StringUtils.repeat(" %s", conditions.size() - fixConditionLength) +
+                " group by lastInstance.module,lastInstance.recordId,lastInstance.flowNode.flow";
+        if (conditions.containsKey("moduleId")) {
+            conditionExps.add("and lastInstance.module.id=:moduleId");
+            conditions.put("moduleId", Long.parseLong(conditions.get("moduleId").toString()));
+        }
+        if (conditions.containsKey("flowId")) {
+            conditionExps.add("and lastInstance.flowNode.flow.id=:flowId");
+            conditions.put("flowId", Long.parseLong(conditions.get("flowId").toString()));
+        }
+        lastInstanceHql = String.format(lastInstanceHql, conditionExps.toArray());
+
+        String hql = "select instance from FlowInstance instance" +
                 " where instance.id in (%s)" +
-                " and instance.flowNode.flow=flowNode.flow" +
-                " and instance.flowNode.order+1=flowNode.order" +
-                " and flowNode.role.code=?";
-        hql = String.format(hql, lastInstanceHql);
-        List<FlowInstance> flowInstances = flowInstanceDao.find(hql, roleCode);
-        logger.info("flowInstances.size={}", flowInstances);
-        return flowInstances;
+                " and exists(select flowNode from FlowNode flowNode where flowNode.flow=instance.flowNode.flow and flowNode.order=instance.flowNode.order+1 %s)";
+        if (type.equals(types[0])) {
+            hql = String.format(hql, lastInstanceHql, "and flowNode.role.code=:roleCode");
+        } else if (type.equals(types[1])) {
+            hql = String.format(hql, lastInstanceHql, "and flowNode.type=" + NodeType.end.getValue());
+        }
+        flowInstanceDao.findPage(page, hql, conditions);
+        logger.info("{}数目={}", type, page.getResult().size());
+        return page;
     }
 
     /** 填充流程业务实体 */
     public List<FlowInstance> fullFlowBusiness(List<FlowInstance> flowInstances) {
-        String hql = "select entity from %s entity where entity.id=?";
+        String hql = "select entity from %s entity inner join fetch entity.flowNode where entity.id=?";
         for (int i = 0; i < flowInstances.size(); i++) {
             FlowInstance flowInstance = flowInstances.get(i);
             String hqlInstance = String.format(hql, flowInstance.getModule().getEntityClass());
@@ -122,6 +234,8 @@ public class FlowInstanceService {
         }
         return flowInstances;
     }
+
+    private SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd HH:mm");
 
     /**
      * 启动流程
@@ -131,11 +245,13 @@ public class FlowInstanceService {
      */
     @Transactional
     public void start(FlowModel flowModel) {
+        //设置流程业务对象流程环节
         FlowInstance executeRecord = flowModel.getExecuteRecord();
-        String hql = String.format("update %s entity set entity.status=? where id=?", executeRecord.getModule().getEntityClass());
+        String hql = String.format("update %s entity set entity.flowNode=? where id=?", executeRecord.getModule().getEntityClass());
         List<FlowNode> flowNodes = flowNodeDao.findAllOfFlow(flowModel.getFlowValue());
         flowInstanceDao.batchExecute(hql, FlowNodeService.findNext(flowNodes, executeRecord.getFlowNode()), executeRecord.getRecordId());
 
+        //保存当前流程实例
         Date now = new Date();
         executeRecord.setIsPassed(true);
         executeRecord.setApproveTime(now);
@@ -143,6 +259,9 @@ public class FlowInstanceService {
         executeRecord.setModifiedTime(now);
         flowInstanceDao.save(executeRecord);
 
+        //删除预存的流程实例（退回到开始时，需要进行）
+        flowInstanceDao.deleteReserve(executeRecord.getModule(), executeRecord.getRecordId(), flowModel.getFlowValue());
+        //保存预存的流程实例
         List<FlowInstance> reserveExecuteRecoreds = flowModel.getReserveExecuteRecoreds();
         for (int i = 0; i < reserveExecuteRecoreds.size(); i++) {
             FlowInstance reserveExecuteRecored = reserveExecuteRecoreds.get(i);
@@ -150,7 +269,26 @@ public class FlowInstanceService {
             reserveExecuteRecored.setRecordId(executeRecord.getRecordId());
         }
         flowInstanceDao.save(reserveExecuteRecoreds);
+        /*
+        //保存系统消息
+        Message message = new Message();
+        String flowValue = executeRecord.getFlowNode().getFlow().getKey();
+        message.setTitle(String.format("%s（%s%s）", flowValue, executeRecord.getModule().getName(), executeRecord.getRecordId()));
+        String personName = executeRecord.getApprover().getRealName();
+        message.setContent(String.format("%s%s启动%s，特发此系统消息提醒您及时进行审批！", personName, format.format(executeRecord.getApproveTime()), message.getTitle()));
+        message.setCreator(executeRecord.getApprover());
+        message.setCreatedTime(executeRecord.getApproveTime());
+        messageDao.save(message);
 
+        UserMessage userMessage = new UserMessage();
+        userMessage.setMessage(message);
+        userMessage.setUser(reserveExecuteRecoreds.get(0).getApprover());
+        userMessage.setCreatedTime(executeRecord.getApproveTime());
+        userMessage.setType(true);
+        userMessage.setStatus(false);
+        userMessage.setCreatedTime(executeRecord.getApproveTime());
+        userMessageDao.saveUserMessage(userMessage);
+        */
     }
 
 
@@ -168,7 +306,7 @@ public class FlowInstanceService {
 
         //更新订单流程环节
         List<FlowNode> allFlowNodes = flowNodeDao.findAllOfFlow(flowModel.getFlowValue());
-        String hql = String.format("update %s entity set entity.status=? where id=?", module.getEntityClass());
+        String hql = String.format("update %s entity set entity.flowNode=? where id=?", module.getEntityClass());
         FlowNode updateFlowNode;
         //通过，更新流程环节为当前用户执行流程环节的下一个
         if (executeRecord.getIsPassed()) {
@@ -192,6 +330,7 @@ public class FlowInstanceService {
                 skipExecuteRecord.setIsPassed(true);
                 skipExecuteRecord.setReason(String.format("直接%s", executeRecord.getFlowNode().getName()));
                 skipExecuteRecord.setApprover(flowInstanceDao.findReserveExecutor(module.getName(), executeRecord.getRecordId(), skipExecuteRecord.getFlowNode()));
+                skipExecuteRecord.setApproveTime(now);
                 skipExecuteRecord.setCreator(executeRecord.getCreator());
                 skipExecuteRecord.setCreatedTime(now);
                 skipExecuteRecord.setModifier(executeRecord.getModifier());

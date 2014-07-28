@@ -97,6 +97,7 @@ jQuery.validator.addMethod("unique", function (value, element, param) {
     arguments[2] = {
         url: (window.ctx || "/hxtd") + "/common/common/unique.docomp",
         type: "post",
+        async: false,
         data: {entityName: param[0], fieldName: element.name, fieldValue: value}
     };
 
@@ -129,6 +130,7 @@ jQuery.validator.addMethod("unique", function (value, element, param) {
         port: "validate" + element.name,
         dataType: "json",
         data: data,
+        async: false,
         success: function (response) {
             validator.settings.messages[element.name].unique = previous.originalMessage;
             var valid = response === true;

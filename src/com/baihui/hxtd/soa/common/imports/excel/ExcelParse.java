@@ -143,6 +143,7 @@ public abstract class ExcelParse<T> {
 	 * @return
 	 */
 	public List<String> HSSFRow2ListString(Row row,int rowNumOfSheet){
+		logger.info("当前第["+rowNumOfSheet+"]行数据");
 		// 获取总列数
 		int cellNum = row.getLastCellNum();
 		cellNum = cellNum <= getColumnNum() ? cellNum : getColumnNum();
@@ -201,8 +202,8 @@ public abstract class ExcelParse<T> {
 	 * 处理方式:1.如果集合为空则直接将这条数据添加到ImportMessage.workbookRepeats集合中
 	 * 2.如果这条数据已经在重复记录集合中有记录了,那么直接添加到集合中
 	 * 3.如果重复记录中没有这条数据,则吧这条数据添加到集合中
-	 * @param key
-	 * @param rowNum
+	 * @param key 主键(电话,邮箱)
+	 * @param rowNum 行号
 	 */
 	public void AddDuplicateData(String key,Integer rowNum){
 		//重复数据的行号集合
@@ -233,6 +234,8 @@ public abstract class ExcelParse<T> {
 				//将该记录的行号添加到Set集合中
 				rowNumSet = map.get(key);
 				rowNumSet.add(rowNum);
+				//删除原来的这条记录,然后在重新添加.为避免内存溢出.
+				ImportMessage.workbookRepeats.remove(key);
 				//保存重复记录到ImportMessage.workbookRepeats
 				ImportMessage.workbookRepeats.put(key, rowNumSet);
 				flag = true;

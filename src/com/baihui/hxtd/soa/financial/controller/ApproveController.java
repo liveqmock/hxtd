@@ -1,14 +1,10 @@
 package com.baihui.hxtd.soa.financial.controller;
 
-import com.baihui.hxtd.soa.base.Constant;
-import com.baihui.hxtd.soa.base.InitApplicationConstant;
-import com.baihui.hxtd.soa.base.orm.hibernate.HibernatePage;
-import com.baihui.hxtd.soa.common.entity.FlowInstance;
-import com.baihui.hxtd.soa.common.service.FlowInstanceService;
-import com.baihui.hxtd.soa.system.DictionaryConstant;
-import com.baihui.hxtd.soa.system.service.DictionaryService;
-import com.baihui.hxtd.soa.util.JsonDto;
-import com.fasterxml.jackson.core.JsonProcessingException;
+import java.util.Map;
+
+import javax.annotation.Resource;
+import javax.servlet.http.HttpServletRequest;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Controller;
@@ -16,10 +12,18 @@ import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.SessionAttributes;
+import org.springside.modules.web.Servlets;
 
-import javax.annotation.Resource;
-import javax.servlet.http.HttpServletRequest;
-import java.util.List;
+import com.baihui.hxtd.soa.base.Constant;
+import com.baihui.hxtd.soa.base.InitApplicationConstant;
+import com.baihui.hxtd.soa.base.orm.hibernate.HibernatePage;
+import com.baihui.hxtd.soa.base.utils.Search;
+import com.baihui.hxtd.soa.common.entity.FlowInstance;
+import com.baihui.hxtd.soa.common.service.FlowInstanceService;
+import com.baihui.hxtd.soa.system.DictionaryConstant;
+import com.baihui.hxtd.soa.system.service.DictionaryService;
+import com.baihui.hxtd.soa.util.JsonDto;
+import com.fasterxml.jackson.core.JsonProcessingException;
 
 /**
  * 财务审批控制器
@@ -66,11 +70,14 @@ public class ApproveController {
     @ResponseBody
     @RequestMapping(value = "/query.do")
     public String query(HttpServletRequest request, HibernatePage<FlowInstance> page, ModelMap modelMap) throws NoSuchFieldException, JsonProcessingException {
-        FlowInstance flowInstance = new FlowInstance();
-        List<FlowInstance> flowInstances = flowInstanceService.findExecutable(Constant.ROLE_FINANCER);
-        flowInstanceService.fullFlowBusiness(flowInstances);
 
-        page.setResult(flowInstances);
+        Map<String, Object> searchParams = Servlets.getParametersStartingWith(request, "search_");
+        Search.clearBlankValue(searchParams);
+        searchParams.put("roleCode", Constant.ROLE_FINANCER);
+
+        page = flowInstanceService.findExecutablePagination(searchParams, page);
+        flowInstanceService.fullFlowBusiness(page.getResult());
+
         logger.info("转换为TDO格式");
         JsonDto jsonDto = new JsonDto();
         jsonDto.setSuccessFlag(true);
@@ -78,6 +85,7 @@ public class ApproveController {
 
         return jsonDto.toString();
     }
+
 
     /**
      * 跳转至列表页

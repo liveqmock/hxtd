@@ -42,8 +42,17 @@ public class OrganizationService {
     @Resource
     private RoleDao roleDao;
 
-    @Resource
-    private UserDao userDao;
+    /** 查找根节点 */
+    @Transactional(readOnly = true)
+    public Organization findRoot() {
+        DetachedCriteria criteria = DetachedCriteria.forClass(Organization.class);
+        criteria.setFetchMode("type", FetchMode.JOIN);
+        criteria.setFetchMode("status", FetchMode.JOIN);
+        criteria.setFetchMode("creator", FetchMode.JOIN);
+        criteria.setFetchMode("modifier", FetchMode.JOIN);
+        criteria.add(Restrictions.isNull("parent"));
+        return organizationDao.findUnique(criteria);
+    }
 
     /**
      * 查找扇化组织列表

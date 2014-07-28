@@ -25,7 +25,7 @@
 	<script type="text/javascript" src="${ctx}/static/js/htmlbox/htmlbox.styles.js"></script>
 	<script type="text/javascript" src="${ctx}/static/js/htmlbox/htmlbox.syntax.js"></script>
 	<script type="text/javascript" src="${ctx}/static/js/htmlbox/xhtml.js"></script>
-	<script type="text/javascript" src="${ctx}/static/js/htmlbox/htmlbox.min.js"></script>
+	<script type="text/javascript" src="${ctx}/static/js/htmlbox/htmlbox.full.js"></script>
 	<script type="text/javascript">
 		$(function(){
 			$("#saveAndAdd").click(function(){
@@ -57,7 +57,7 @@
 		function searchData(action){//搜索弹出框
 			var url, title;
 			if(action == "order"){
-				url = "${ctx}/order/order/toQueryPage.comp";
+				url = "${ctx}/order/order/toQueryPage.comp?type=relation";
 				title = "订单";
 			}
 			jsUtil.dialogIframe(url, title, 800, 465, function(){//确定回调
@@ -67,12 +67,18 @@
 						$("#hide_" + action +"_id").val($userObj.attr("id"));
 						$("#txt_customerName").val($userObj.find("td:eq(1)").text());//客户名称默认是订单的客户名称
 						$("#txt_customerId").val($userObj.find("td:eq(2)").text());
+						$("#txt_purchaseMoney").val($userObj.find("td:eq(3)").text());
+						
 					}
 				$("#txt_contract").val($("#txt_order").val());//合同编号默认为订单编号
 			});
 		}
-		function clearInputVal(obj){//清除
-			$(obj).prevAll("input").val('');
+		function clearInputVal(){//清除
+			$("#txt_order").val('');
+			$("#txt_customerName").val('');
+		    $("#txt_customerId").val('');
+		    $("#txt_purchaseMoney").val('');
+		    $("#txt_contract").val('');
 		}
 	</script>
 </head>
@@ -112,7 +118,7 @@
 					id="hide_order_id" name="order.id" />
 				<i class="s_inquiry globle_img block_inline ml5 vm cp"
 					title="搜索订单" onclick="searchData('order');"></i>
-				<i class="dump_btn globle_img block_inline ml5 vm cp empty"
+				<i class="dump_btn globle_img block_inline ml5 vm cp empty" onclick="clearInputVal()"
 					title="清除"></i>
 				</td>
 				<td align="right" width="15%">
@@ -156,7 +162,7 @@
 					<span class="w_red">*&nbsp;</span>合同金额（万）：
 				</td>
 				<td align="left">
-					<input type="text" name="purchaseMoney" value="${contract.purchaseMoney}" class="text_input3 number required" />
+					<input id="txt_purchaseMoney" type="text" name="purchaseMoney" value="${contract.purchaseMoney}" class="text_input3 number required" />
 				</td>
 			</tr>
 			<tr>
@@ -164,7 +170,7 @@
 					<span class="w_red">*&nbsp;</span>合同名称：
 				</td>
 				<td align="left">
-				<input type="text" name="name"
+				<input type="text" name="name" maxlength="30" 
 						value="${contract.name}" class="text_input3 required" />
 				</td>
 				<td align="right">
@@ -219,7 +225,7 @@
 		</h1>
 		<div class="cb  w95b bg_c_white margin0 mt10">
 					<div class="margin0 w70b pt10">
-						<textarea id="ha" name="content" class="remarks_input1">${contract.content}</textarea>
+						<textarea id="ha" name="content" maxlength=10000 class="remarks_input1">${contract.content}</textarea>
 						<script  type="text/javascript">
 							$("#ha").css("width","100%").htmlbox({
 							    toolbars:[
@@ -239,7 +245,7 @@
 									],
 									[
 									"separator","removeformat","striptags","hr","paragraph",
-									"separator","quote","styles","syntax"
+									"separator","quote","syntax"
 									]
 								],
 								skin:"blue"
@@ -267,19 +273,19 @@
 	<div class="cb block h40 margin0 mt10" style="width: 350px;">
 		<ul class="id_table1 cb">
 			<li>
-				<a href="javascript:;" id="save" class="block c_white lh25 mr35"><b
+				<a href="javascript:;" id="save" class="block c_white lh25 mr10"><b
 					class="allbtn_l block fl"></b><b
-					class="allbtn_r pr13 block fl w_auto f14">保&nbsp&nbsp存</b> </a></a>
+					class="allbtn_r pr13 block fl w_auto f14">保&nbsp;&nbsp;存</b> </a></a>
 			</li>
 			<li>
 				<a href="javascript:;" id="saveAndAdd"
-					class="block c_white lh25 mr35"><b class="allbtn_l block fl"></b><b
+					class="block c_white lh25 mr10"><b class="allbtn_l block fl"></b><b
 					class="allbtn_r pr13 block fl w_auto f14">保存并新建</b> </a>
 			</li>
 			<li>
 				<a href="${ctx}/order/contract/toQueryPage.do"
 					class="block c_white lh25"><b class="allbtn_l block fl"></b><b
-					class="allbtn_r pr13 block fl w_auto f14">取&nbsp&nbsp消</b> </a>
+					class="allbtn_r pr13 block fl w_auto f14">取&nbsp;&nbsp;消</b> </a>
 			</li>
 		</ul>
 	</div>

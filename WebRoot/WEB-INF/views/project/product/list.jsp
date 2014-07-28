@@ -120,15 +120,15 @@ function getProject(id){
 		<table class="cb id_table2 w">
 			<tr>
 				<th width="2%"><input type="checkbox" class="checkall"/></th>
-			    <th width="14%">产品编号</th>
-			    <th width="11%">产品名称</th>
+			    <th width="10%">产品编号</th>
+			    <th width="10%">产品名称</th>
 			    <th width="10%">所属项目</th>
 			    <th width="8%">出售金额（万）</th>
 			    <th width="8%">收益率（%）</th>
 			    <th width="8%">赎回赔率（%）</th>
-			    <th width="8%">销售期限</th>
-			    <th width="12%" class="sortable orderby" orderby="saleBeginTime">销售开始日期</th>
-			    <th width="12%" class="sortable orderby" orderby="saleEndTime">销售结束日期</th>
+			    <th width="6%">销售期限</th>
+			    <th width="10%" class="sortable orderby" orderby="saleBeginTime">销售开始日期</th>
+			    <th width="10%" class="sortable orderby" orderby="saleEndTime">销售结束日期</th>
 			    <th width="6%">创建者</th>
 			    <th width="10%">操作</th>
 			</tr>
@@ -137,15 +137,15 @@ function getProject(id){
 	<table class="cb id_table2 w pr35">
 		<tr id="recordDiv">
 			<th width="2%"><input type="checkbox" class="checkall"/></th>
-		    <th width="14%">产品编号</th>
-		    <th width="11%">产品名称</th>
+		    <th width="10%">产品编号</th>
+		    <th width="10%">产品名称</th>
 		    <th width="10%">所属项目</th>
 		    <th width="8%">出售金额（万）</th>
 		    <th width="8%">收益率（%）</th>
 		    <th width="8%">赎回赔率（%）</th>
-		    <th width="8%">销售期限</th>
-		    <th width="12%" class="sortable orderby" orderby="saleBeginTime">销售开始日期</th>
-		    <th width="12%" class="sortable orderby" orderby="saleEndTime">销售结束日期</th>
+		    <th width="6%">销售期限</th>
+		    <th width="10%" class="sortable orderby" orderby="saleBeginTime">销售开始日期</th>
+		    <th width="10%" class="sortable orderby" orderby="saleEndTime">销售结束日期</th>
 		    <th width="6%">创建者</th>
 		    <th width="10%">操作</th>
 		</tr>
@@ -172,11 +172,10 @@ function getProject(id){
                      <c:otherwise>{$T.row.project.name}</c:otherwise>
                  </c:choose>
 	        </td>
-	        
 	        <td align="right">{jsUtil.formatDiff($T.row.sellMoney, 2)}</td>
 	        <td>{$T.row.rate==null?"0":$T.row.rate}%</td>
 	        <td>{$T.row.redeemRate==null?"0":$T.row.redeemRate}%</td>
-	        <td>{$T.row.saleLimit}{$T.row.saleUnit.key}</td>
+	        <td>{$T.row.saleLimit}{$T.row.saleLimit!=null?$T.row.saleUnit.key:""}</td>
 	        <td>{$T.row.saleBeginTime}</td>
 	        <td>{$T.row.saleEndTime}</td>
 	        <td>{$T.row.creator.realName}</td>

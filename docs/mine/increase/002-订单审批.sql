@@ -27,16 +27,16 @@
 # 测试数据
 
 # 用户
-DELETE FROM hxtd.sm_user where login_name in('majingliang','lihua','xiayouxue','luoxiaoli','luanruisong','huizijing','lijinghan','renliqun','haohongqin','','','');
-INSERT INTO hxtd.sm_user (LOGIN_NAME, PASSWORD, USER_NAME, SEX_ID, PHONE, MOBILE, EMAIL, QQ, JOB_NAME, JOB_SITUATION_ID, IS_MANAGER, IS_ACTIVE, ORGANIZATION_ID, REMARK, STORE_STATUS_ID, IS_DELETED, IS_INITIALIZED, CREATOR_ID, CREATED_TIME, MODIFIER_ID, MODIFIED_TIME) VALUES ('majingliang', 'e10adc3949ba59abbe56e057f20f883e', '马敬亮', 11010215, null, null, null, null, null, 1040301, 0, '1', (select id from sm_org where `order`=101000000),  '订单审批流程 总裁', 1040401, 0, 1, 1, '2014-07-23 13:54:57.0', 1, '2014-07-23 13:54:57.0');
-INSERT INTO hxtd.sm_user (LOGIN_NAME, PASSWORD, USER_NAME, SEX_ID, PHONE, MOBILE, EMAIL, QQ, JOB_NAME, JOB_SITUATION_ID, IS_MANAGER, IS_ACTIVE, ORGANIZATION_ID, REMARK, STORE_STATUS_ID, IS_DELETED, IS_INITIALIZED, CREATOR_ID, CREATED_TIME, MODIFIER_ID, MODIFIED_TIME) VALUES ('lihua', 'e10adc3949ba59abbe56e057f20f883e', '李华', 11010215, '18620088324', '0000000000', '00000000@gmail.com', '000000000', '工程师', 1040301, 0, '1', (select id from sm_org where `order`=101000000),'订单审批流程 副总裁', 1040401, 0, 1, 1, '2014-05-26 00:00:00.0', 1, '2014-05-26 19:29:03.0');
-INSERT INTO hxtd.sm_user (LOGIN_NAME, PASSWORD, USER_NAME, SEX_ID, PHONE, MOBILE, EMAIL, QQ, JOB_NAME, JOB_SITUATION_ID, IS_MANAGER, IS_ACTIVE, ORGANIZATION_ID, REMARK, STORE_STATUS_ID, IS_DELETED, IS_INITIALIZED, CREATOR_ID, CREATED_TIME, MODIFIER_ID, MODIFIED_TIME) VALUES ('xiayouxue', 'e10adc3949ba59abbe56e057f20f883e', '夏幼学', 11010215, null, null, null, null, null, 1040301, 0, '1', (select id from sm_org where `order`=101000000), '订单审批流程 副总裁', 1040401, 0, 1, 1, '2014-07-23 13:54:57.0', 1, '2014-07-23 13:54:57.0');
-INSERT INTO hxtd.sm_user (LOGIN_NAME, PASSWORD, USER_NAME, SEX_ID, PHONE, MOBILE, EMAIL, QQ, JOB_NAME, JOB_SITUATION_ID, IS_MANAGER, IS_ACTIVE, ORGANIZATION_ID, REMARK, STORE_STATUS_ID, IS_DELETED, IS_INITIALIZED, CREATOR_ID, CREATED_TIME, MODIFIER_ID, MODIFIED_TIME) VALUES ('luoxiaoli', 'e10adc3949ba59abbe56e057f20f883e', '罗晓丽', 11010215, '18620088324', '0000000000', '00000000@gmail.com', '000000000', '工程师', 1040301, 0, '1', (select id from sm_org where `order`=127030000), '订单审批流程 财务', 1040401, 0, 1, 1, '2014-05-26 00:00:00.0', 1, '2014-05-26 19:29:03.0');
-INSERT INTO hxtd.sm_user (LOGIN_NAME, PASSWORD, USER_NAME, SEX_ID, PHONE, MOBILE, EMAIL, QQ, JOB_NAME, JOB_SITUATION_ID, IS_MANAGER, IS_ACTIVE, ORGANIZATION_ID, REMARK, STORE_STATUS_ID, IS_DELETED, IS_INITIALIZED, CREATOR_ID, CREATED_TIME, MODIFIER_ID, MODIFIED_TIME) VALUES ('luanruisong', 'e10adc3949ba59abbe56e057f20f883e', '栾瑞松', 11010215, null, null, null, null, null, 1040301, 0, '1', (select id from sm_org where `order`=128070200), '订单审批流程 投资总监', 1040401, 0, 1, 1, '2014-07-23 13:54:57.0', 1, '2014-07-23 13:54:57.0');
-INSERT INTO hxtd.sm_user (LOGIN_NAME, PASSWORD, USER_NAME, SEX_ID, PHONE, MOBILE, EMAIL, QQ, JOB_NAME, JOB_SITUATION_ID, IS_MANAGER, IS_ACTIVE, ORGANIZATION_ID, REMARK, STORE_STATUS_ID, IS_DELETED, IS_INITIALIZED, CREATOR_ID, CREATED_TIME, MODIFIER_ID, MODIFIED_TIME) VALUES ('huizijing', 'e10adc3949ba59abbe56e057f20f883e', '惠子敬', 11010215, '18620088324', '0000000000', '00000000@gmail.com', '000000000', '工程师', 1040301, 0, '1', (select id from sm_org where `order`=128070201), '订单审批流程 投资经理', 1040401, 0, 1, 1, '2014-05-26 00:00:00.0', 1, '2014-05-26 19:29:03.0');
-INSERT INTO hxtd.sm_user (LOGIN_NAME, PASSWORD, USER_NAME, SEX_ID, PHONE, MOBILE, EMAIL, QQ, JOB_NAME, JOB_SITUATION_ID, IS_MANAGER, IS_ACTIVE, ORGANIZATION_ID, REMARK, STORE_STATUS_ID, IS_DELETED, IS_INITIALIZED, CREATOR_ID, CREATED_TIME, MODIFIER_ID, MODIFIED_TIME) VALUES ('lijinghan', 'e10adc3949ba59abbe56e057f20f883e', '李静含', 11010215, null, null, null, null, null, 1040301, 0, '1', (select id from sm_org where `order`=128070201), '订单审批流程 理财经理', 1040401, 0, 1, 1, '2014-07-23 13:54:57.0', 1, '2014-07-23 13:54:57.0');
-INSERT INTO hxtd.sm_user (LOGIN_NAME, PASSWORD, USER_NAME, SEX_ID, PHONE, MOBILE, EMAIL, QQ, JOB_NAME, JOB_SITUATION_ID, IS_MANAGER, IS_ACTIVE, ORGANIZATION_ID, REMARK, STORE_STATUS_ID, IS_DELETED, IS_INITIALIZED, CREATOR_ID, CREATED_TIME, MODIFIER_ID, MODIFIED_TIME) VALUES ('renliqun', 'e10adc3949ba59abbe56e057f20f883e', '任莉群', 11010215, '18620088324', '0000000000', '00000000@gmail.com', '000000000', '工程师', 1040301, 0, '1', (select id from sm_org where `order`=128070201), '订单审批流程 理财经理', 1040401, 0, 1, 1, '2014-05-26 00:00:00.0', 1, '2014-05-26 19:29:03.0');
-INSERT INTO hxtd.sm_user (LOGIN_NAME, PASSWORD, USER_NAME, SEX_ID, PHONE, MOBILE, EMAIL, QQ, JOB_NAME, JOB_SITUATION_ID, IS_MANAGER, IS_ACTIVE, ORGANIZATION_ID, REMARK, STORE_STATUS_ID, IS_DELETED, IS_INITIALIZED, CREATOR_ID, CREATED_TIME, MODIFIER_ID, MODIFIED_TIME) VALUES ('haohongqin', 'e10adc3949ba59abbe56e057f20f883e', '郝红琴', 11010215, '18620088324', '0000000000', '00000000@gmail.com', '000000000', '工程师', 1040301, 0, '1', (select id from sm_org where `order`=128070201), '订单审批流程 销售人员', 1040401, 0, 1, 1, '2014-05-26 00:00:00.0', 1, '2014-05-26 19:29:03.0');
+# DELETE FROM hxtd.sm_user where login_name in('majingliang','lihua','xiayouxue','luoxiaoli','luanruisong','huizijing','lijinghan','renliqun','haohongqin','','','');
+# INSERT INTO hxtd.sm_user (LOGIN_NAME, PASSWORD, USER_NAME, SEX_ID, PHONE, MOBILE, EMAIL, QQ, JOB_NAME, JOB_SITUATION_ID, IS_MANAGER, IS_ACTIVE, ORGANIZATION_ID, REMARK, STORE_STATUS_ID, IS_DELETED, IS_INITIALIZED, CREATOR_ID, CREATED_TIME, MODIFIER_ID, MODIFIED_TIME) VALUES ('majingliang', 'e10adc3949ba59abbe56e057f20f883e', '马敬亮', 11010215, null, null, null, null, null, 1040301, 0, '1', (select id from sm_org where `order`=101000000),  '订单审批流程 总裁', 1040401, 0, 1, 1, '2014-07-23 13:54:57.0', 1, '2014-07-23 13:54:57.0');
+# INSERT INTO hxtd.sm_user (LOGIN_NAME, PASSWORD, USER_NAME, SEX_ID, PHONE, MOBILE, EMAIL, QQ, JOB_NAME, JOB_SITUATION_ID, IS_MANAGER, IS_ACTIVE, ORGANIZATION_ID, REMARK, STORE_STATUS_ID, IS_DELETED, IS_INITIALIZED, CREATOR_ID, CREATED_TIME, MODIFIER_ID, MODIFIED_TIME) VALUES ('lihua', 'e10adc3949ba59abbe56e057f20f883e', '李华', 11010215, '18620088324', '0000000000', '00000000@gmail.com', '000000000', '工程师', 1040301, 0, '1', (select id from sm_org where `order`=101000000),'订单审批流程 副总裁', 1040401, 0, 1, 1, '2014-05-26 00:00:00.0', 1, '2014-05-26 19:29:03.0');
+# INSERT INTO hxtd.sm_user (LOGIN_NAME, PASSWORD, USER_NAME, SEX_ID, PHONE, MOBILE, EMAIL, QQ, JOB_NAME, JOB_SITUATION_ID, IS_MANAGER, IS_ACTIVE, ORGANIZATION_ID, REMARK, STORE_STATUS_ID, IS_DELETED, IS_INITIALIZED, CREATOR_ID, CREATED_TIME, MODIFIER_ID, MODIFIED_TIME) VALUES ('xiayouxue', 'e10adc3949ba59abbe56e057f20f883e', '夏幼学', 11010215, null, null, null, null, null, 1040301, 0, '1', (select id from sm_org where `order`=101000000), '订单审批流程 副总裁', 1040401, 0, 1, 1, '2014-07-23 13:54:57.0', 1, '2014-07-23 13:54:57.0');
+# INSERT INTO hxtd.sm_user (LOGIN_NAME, PASSWORD, USER_NAME, SEX_ID, PHONE, MOBILE, EMAIL, QQ, JOB_NAME, JOB_SITUATION_ID, IS_MANAGER, IS_ACTIVE, ORGANIZATION_ID, REMARK, STORE_STATUS_ID, IS_DELETED, IS_INITIALIZED, CREATOR_ID, CREATED_TIME, MODIFIER_ID, MODIFIED_TIME) VALUES ('luoxiaoli', 'e10adc3949ba59abbe56e057f20f883e', '罗晓丽', 11010215, '18620088324', '0000000000', '00000000@gmail.com', '000000000', '工程师', 1040301, 0, '1', (select id from sm_org where `order`=127030000), '订单审批流程 财务', 1040401, 0, 1, 1, '2014-05-26 00:00:00.0', 1, '2014-05-26 19:29:03.0');
+# INSERT INTO hxtd.sm_user (LOGIN_NAME, PASSWORD, USER_NAME, SEX_ID, PHONE, MOBILE, EMAIL, QQ, JOB_NAME, JOB_SITUATION_ID, IS_MANAGER, IS_ACTIVE, ORGANIZATION_ID, REMARK, STORE_STATUS_ID, IS_DELETED, IS_INITIALIZED, CREATOR_ID, CREATED_TIME, MODIFIER_ID, MODIFIED_TIME) VALUES ('luanruisong', 'e10adc3949ba59abbe56e057f20f883e', '栾瑞松', 11010215, null, null, null, null, null, 1040301, 0, '1', (select id from sm_org where `order`=128070200), '订单审批流程 投资总监', 1040401, 0, 1, 1, '2014-07-23 13:54:57.0', 1, '2014-07-23 13:54:57.0');
+# INSERT INTO hxtd.sm_user (LOGIN_NAME, PASSWORD, USER_NAME, SEX_ID, PHONE, MOBILE, EMAIL, QQ, JOB_NAME, JOB_SITUATION_ID, IS_MANAGER, IS_ACTIVE, ORGANIZATION_ID, REMARK, STORE_STATUS_ID, IS_DELETED, IS_INITIALIZED, CREATOR_ID, CREATED_TIME, MODIFIER_ID, MODIFIED_TIME) VALUES ('huizijing', 'e10adc3949ba59abbe56e057f20f883e', '惠子敬', 11010215, '18620088324', '0000000000', '00000000@gmail.com', '000000000', '工程师', 1040301, 0, '1', (select id from sm_org where `order`=128070201), '订单审批流程 投资经理', 1040401, 0, 1, 1, '2014-05-26 00:00:00.0', 1, '2014-05-26 19:29:03.0');
+# INSERT INTO hxtd.sm_user (LOGIN_NAME, PASSWORD, USER_NAME, SEX_ID, PHONE, MOBILE, EMAIL, QQ, JOB_NAME, JOB_SITUATION_ID, IS_MANAGER, IS_ACTIVE, ORGANIZATION_ID, REMARK, STORE_STATUS_ID, IS_DELETED, IS_INITIALIZED, CREATOR_ID, CREATED_TIME, MODIFIER_ID, MODIFIED_TIME) VALUES ('lijinghan', 'e10adc3949ba59abbe56e057f20f883e', '李静含', 11010215, null, null, null, null, null, 1040301, 0, '1', (select id from sm_org where `order`=128070201), '订单审批流程 理财经理', 1040401, 0, 1, 1, '2014-07-23 13:54:57.0', 1, '2014-07-23 13:54:57.0');
+# INSERT INTO hxtd.sm_user (LOGIN_NAME, PASSWORD, USER_NAME, SEX_ID, PHONE, MOBILE, EMAIL, QQ, JOB_NAME, JOB_SITUATION_ID, IS_MANAGER, IS_ACTIVE, ORGANIZATION_ID, REMARK, STORE_STATUS_ID, IS_DELETED, IS_INITIALIZED, CREATOR_ID, CREATED_TIME, MODIFIER_ID, MODIFIED_TIME) VALUES ('renliqun', 'e10adc3949ba59abbe56e057f20f883e', '任莉群', 11010215, '18620088324', '0000000000', '00000000@gmail.com', '000000000', '工程师', 1040301, 0, '1', (select id from sm_org where `order`=128070201), '订单审批流程 理财经理', 1040401, 0, 1, 1, '2014-05-26 00:00:00.0', 1, '2014-05-26 19:29:03.0');
+# INSERT INTO hxtd.sm_user (LOGIN_NAME, PASSWORD, USER_NAME, SEX_ID, PHONE, MOBILE, EMAIL, QQ, JOB_NAME, JOB_SITUATION_ID, IS_MANAGER, IS_ACTIVE, ORGANIZATION_ID, REMARK, STORE_STATUS_ID, IS_DELETED, IS_INITIALIZED, CREATOR_ID, CREATED_TIME, MODIFIER_ID, MODIFIED_TIME) VALUES ('haohongqin', 'e10adc3949ba59abbe56e057f20f883e', '郝红琴', 11010215, '18620088324', '0000000000', '00000000@gmail.com', '000000000', '工程师', 1040301, 0, '1', (select id from sm_org where `order`=128070201), '订单审批流程 销售人员', 1040401, 0, 1, 1, '2014-05-26 00:00:00.0', 1, '2014-05-26 19:29:03.0');
 
 # 新增订单测试角色
 # INSERT INTO hxtd.sm_role ( CODE, NAME, TYPE, REMARK, IS_DELETED, IS_INITIALIZED, CREATOR_ID, CREATED_TIME, MODIFIER_ID, MODIFIED_TIME) VALUES ('ORG_00001', '总裁', 1050101, '总裁', 0, 1, 1, '2014-07-16 17:26:02.0', 1, '2014-07-22 14:27:47.0');
@@ -48,29 +48,29 @@ INSERT INTO hxtd.sm_user (LOGIN_NAME, PASSWORD, USER_NAME, SEX_ID, PHONE, MOBILE
 # INSERT INTO hxtd.sm_role (CODE, NAME, TYPE, REMARK, IS_DELETED, IS_INITIALIZED, CREATOR_ID, CREATED_TIME, MODIFIER_ID, MODIFIED_TIME)VALUES ( 'test', '订单审批流程测试角色', 1050101, '订单审批流程测试角色', 0, 1, 1, '2014-07-18 16:46:09.0', 1, '2014-07-18 16:46:09.0');
 
 # 用户角色关联
-INSERT INTO sm_user_role (USER_ID, ROLE_ID) VALUES ((select id from sm_user where login_name='majingliang'), (select id from sm_role where `code`='ORG_00001'));
-INSERT INTO sm_user_role (USER_ID, ROLE_ID) VALUES ((select id from sm_user where login_name='lihua'),  (select id from sm_role where `code`='ORG_00002'));
-INSERT INTO sm_user_role (USER_ID, ROLE_ID) VALUES ((select id from sm_user where login_name='xiayouxue'),  (select id from sm_role where `code`='ORG_00002'));
-INSERT INTO sm_user_role (USER_ID, ROLE_ID) VALUES ((select id from sm_user where login_name='luoxiaoli'),  (select id from sm_role where `code`='ORG_00003'));
-INSERT INTO sm_user_role (USER_ID, ROLE_ID) VALUES ((select id from sm_user where login_name='luanruisong'),  (select id from sm_role where `code`='ORG_00004'));
-INSERT INTO sm_user_role (USER_ID, ROLE_ID) VALUES ((select id from sm_user where login_name='huizijing'),  (select id from sm_role where `code`='ORG_00005'));
-INSERT INTO sm_user_role (USER_ID, ROLE_ID) VALUES ((select id from sm_user where login_name='lijinghan'),  (select id from sm_role where `code`='ORG_00006'));
-INSERT INTO sm_user_role (USER_ID, ROLE_ID) VALUES ((select id from sm_user where login_name='renliqun'),  (select id from sm_role where `code`='ORG_00006'));
-
-INSERT INTO sm_user_role (USER_ID, ROLE_ID) VALUES ((select id from sm_user where login_name='majingliang'), (select id from sm_role where `code`='2'));
-INSERT INTO sm_user_role (USER_ID, ROLE_ID) VALUES ((select id from sm_user where login_name='lihua'),  (select id from sm_role where `code`='2'));
-INSERT INTO sm_user_role (USER_ID, ROLE_ID) VALUES ((select id from sm_user where login_name='xiayouxue'),  (select id from sm_role where `code`='2'));
-INSERT INTO sm_user_role (USER_ID, ROLE_ID) VALUES ((select id from sm_user where login_name='luoxiaoli'),  (select id from sm_role where `code`='2'));
-
-INSERT INTO sm_user_role (USER_ID, ROLE_ID) VALUES ((select id from sm_user where login_name='majingliang'), (select id from sm_role where `code`='test'));
-INSERT INTO sm_user_role (USER_ID, ROLE_ID) VALUES ((select id from sm_user where login_name='lihua'),  (select id from sm_role where `code`='test'));
-INSERT INTO sm_user_role (USER_ID, ROLE_ID) VALUES ((select id from sm_user where login_name='xiayouxue'),  (select id from sm_role where `code`='test'));
-INSERT INTO sm_user_role (USER_ID, ROLE_ID) VALUES ((select id from sm_user where login_name='luoxiaoli'),  (select id from sm_role where `code`='test'));
-INSERT INTO sm_user_role (USER_ID, ROLE_ID) VALUES ((select id from sm_user where login_name='luanruisong'),  (select id from sm_role where `code`='test'));
-INSERT INTO sm_user_role (USER_ID, ROLE_ID) VALUES ((select id from sm_user where login_name='huizijing'),  (select id from sm_role where `code`='test'));
-INSERT INTO sm_user_role (USER_ID, ROLE_ID) VALUES ((select id from sm_user where login_name='lijinghan'),  (select id from sm_role where `code`='test'));
-INSERT INTO sm_user_role (USER_ID, ROLE_ID) VALUES ((select id from sm_user where login_name='renliqun'),  (select id from sm_role where `code`='test'));
-INSERT INTO sm_user_role (USER_ID, ROLE_ID) VALUES ((select id from sm_user where login_name='haohongqin'),  (select id from sm_role where `code`='test'));
+# INSERT INTO sm_user_role (USER_ID, ROLE_ID) VALUES ((select id from sm_user where login_name='majingliang'), (select id from sm_role where `code`='ORG_00001'));
+# INSERT INTO sm_user_role (USER_ID, ROLE_ID) VALUES ((select id from sm_user where login_name='lihua'),  (select id from sm_role where `code`='ORG_00002'));
+# INSERT INTO sm_user_role (USER_ID, ROLE_ID) VALUES ((select id from sm_user where login_name='xiayouxue'),  (select id from sm_role where `code`='ORG_00002'));
+# INSERT INTO sm_user_role (USER_ID, ROLE_ID) VALUES ((select id from sm_user where login_name='luoxiaoli'),  (select id from sm_role where `code`='ORG_00003'));
+# INSERT INTO sm_user_role (USER_ID, ROLE_ID) VALUES ((select id from sm_user where login_name='luanruisong'),  (select id from sm_role where `code`='ORG_00004'));
+# INSERT INTO sm_user_role (USER_ID, ROLE_ID) VALUES ((select id from sm_user where login_name='huizijing'),  (select id from sm_role where `code`='ORG_00005'));
+# INSERT INTO sm_user_role (USER_ID, ROLE_ID) VALUES ((select id from sm_user where login_name='lijinghan'),  (select id from sm_role where `code`='ORG_00006'));
+# INSERT INTO sm_user_role (USER_ID, ROLE_ID) VALUES ((select id from sm_user where login_name='renliqun'),  (select id from sm_role where `code`='ORG_00006'));
+#
+# INSERT INTO sm_user_role (USER_ID, ROLE_ID) VALUES ((select id from sm_user where login_name='majingliang'), (select id from sm_role where `code`='2'));
+# INSERT INTO sm_user_role (USER_ID, ROLE_ID) VALUES ((select id from sm_user where login_name='lihua'),  (select id from sm_role where `code`='2'));
+# INSERT INTO sm_user_role (USER_ID, ROLE_ID) VALUES ((select id from sm_user where login_name='xiayouxue'),  (select id from sm_role where `code`='2'));
+# INSERT INTO sm_user_role (USER_ID, ROLE_ID) VALUES ((select id from sm_user where login_name='luoxiaoli'),  (select id from sm_role where `code`='2'));
+#
+# INSERT INTO sm_user_role (USER_ID, ROLE_ID) VALUES ((select id from sm_user where login_name='majingliang'), (select id from sm_role where `code`='test'));
+# INSERT INTO sm_user_role (USER_ID, ROLE_ID) VALUES ((select id from sm_user where login_name='lihua'),  (select id from sm_role where `code`='test'));
+# INSERT INTO sm_user_role (USER_ID, ROLE_ID) VALUES ((select id from sm_user where login_name='xiayouxue'),  (select id from sm_role where `code`='test'));
+# INSERT INTO sm_user_role (USER_ID, ROLE_ID) VALUES ((select id from sm_user where login_name='luoxiaoli'),  (select id from sm_role where `code`='test'));
+# INSERT INTO sm_user_role (USER_ID, ROLE_ID) VALUES ((select id from sm_user where login_name='luanruisong'),  (select id from sm_role where `code`='test'));
+# INSERT INTO sm_user_role (USER_ID, ROLE_ID) VALUES ((select id from sm_user where login_name='huizijing'),  (select id from sm_role where `code`='test'));
+# INSERT INTO sm_user_role (USER_ID, ROLE_ID) VALUES ((select id from sm_user where login_name='lijinghan'),  (select id from sm_role where `code`='test'));
+# INSERT INTO sm_user_role (USER_ID, ROLE_ID) VALUES ((select id from sm_user where login_name='renliqun'),  (select id from sm_role where `code`='test'));
+# INSERT INTO sm_user_role (USER_ID, ROLE_ID) VALUES ((select id from sm_user where login_name='haohongqin'),  (select id from sm_role where `code`='test'));
 
 # 订单->产品->客户
 
@@ -104,6 +104,7 @@ INSERT INTO sm_user_role (USER_ID, ROLE_ID) VALUES ((select id from sm_user wher
 # ALTER TABLE hxtd.sm_module ADD URL VARCHAR(64) NOT NULL;
 # ALTER TABLE hxtd.sm_module ADD CONSTRAINT INDEX_URL UNIQUE (URL);
 # DELETE FROM hxtd.sm_module;
+# INSERT INTO `sm_module` VALUES ('1', 'marketActivity', '市场活动', 'com.baihui.hxtd.soa.market.entity.MarketActivity', '/market/marketActivity');
 # INSERT INTO `sm_module` VALUES ('2', 'lead', '线索', 'com.baihui.hxtd.soa.customer.entity.Lead', '/customer/lead');
 # INSERT INTO `sm_module` VALUES ('3', 'contact', '联系人', 'com.baihui.hxtd.soa.customer.entity.Contact', '/customer/contact');
 # INSERT INTO `sm_module` VALUES ('4', 'customer', '客户', 'com.baihui.hxtd.soa.customer.entity.Customer', '/customer/customer');
@@ -125,3 +126,5 @@ INSERT INTO sm_user_role (USER_ID, ROLE_ID) VALUES ((select id from sm_user wher
 # INSERT INTO `sm_module` VALUES ('20', 'attachment', '附件', 'com.baihui.hxtd.soa.common.entity.Attachment', '/common/attachment');
 # INSERT INTO `sm_module` VALUES ('21', 'memoir', '联系人纪要', 'com.baihui.hxtd.soa.common.entity.Memoir', '/common/memoir');
 # 初始化模块数据
+
+# update `order` set status =1;

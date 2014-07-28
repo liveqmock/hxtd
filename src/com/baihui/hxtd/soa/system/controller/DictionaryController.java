@@ -117,9 +117,9 @@ public class DictionaryController {
      */
     @RequestMapping(value = "/add.do", method = RequestMethod.POST)
     public String add(Dictionary dict,
-                      String typename,
-                      @RequestParam(defaultValue = "/system/dictionary/toModifyPage.do?id=%s") String redirectUri,
-                      @ModelAttribute(Constant.VS_USER_ID) Long userId) {
+    		String typename, 
+    		String redirectUri, 
+    		@ModelAttribute(Constant.VS_USER_ID) Long userId) {
         if (dict.getParent().getId() == null) {
             dict.setParent(null);
         }
@@ -168,14 +168,13 @@ public class DictionaryController {
      * @Description: 保存修改后的字典信息
      */
     @RequestMapping(value = "/modify.do")
-    public String modify(Dictionary dict,
-                         String typename,
-                         @RequestParam(defaultValue = "/system/dictionary/toModifyPage.do?id=%s") String redirectUri,
-                         @ModelAttribute(Constant.VS_USER_ID) Long userId) {
-
-        if (commonService.isInitialized(Dictionary.class, dict.getId())) {
+    public String modify(Dictionary dict, 
+    		String typename,
+    		String redirectUri,
+    		@ModelAttribute(Constant.VS_USER_ID) Long userId) {
+        /*if (commonService.isInitialized(Dictionary.class, dict.getId())) {
             return new JsonDto("系统初始化数据不允许修改！").toString();
-        }
+        }*/
 
         if (dict.getParent().getId() == null) {
             dict.setParent(null);

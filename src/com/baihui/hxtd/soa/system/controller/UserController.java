@@ -37,10 +37,8 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import java.io.IOException;
-import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
-import java.util.Set;
 
 /**
  * 用户控制器
@@ -56,17 +54,6 @@ import java.util.Set;
 public class UserController extends CommonController<User> {
 
     private Logger logger = LoggerFactory.getLogger(this.getClass());
-
-    //    @Value("${system.user.type}")
-    private String typeValue = "010401";
-    //    @Value("${system.user.type.manager}")
-//    private String typeManagerValue = "01040101";
-    //    @Value("${system.user.type.normal}")
-//    private String typeNormalValue = "01040102";
-    //    @Value("${system.user.jobsituation}")
-    private String jobsituationValue = "010403";
-    //    @Value("${system.user.jobsituation.on}")
-    private String jobsituationOnValue = "01040301";
 
     @Resource
     private UserService userService;
@@ -148,15 +135,11 @@ public class UserController extends CommonController<User> {
     public void detail(ModelMap model) {
         logger.info("存储表单初始化数据");
 
-        List<Dictionary> sexs = dictionaryService.findChildren("0001");
+        List<Dictionary> sexs = dictionaryService.findChildren(DictionaryConstant.PUBLIC_SEX);
         model.addAttribute("sexs", sexs);
         logger.debug("性别数目“{}”", sexs.size());
 
-        List<Dictionary> types = dictionaryService.findChildren(typeValue);
-        model.addAttribute("types", types);
-        logger.debug("类型数目“{}”", types.size());
-
-        List<Dictionary> jobsituation = dictionaryService.findChildren(jobsituationValue);
+        List<Dictionary> jobsituation = dictionaryService.findChildren(DictionaryConstant.USER_JOBSITUATION);
         model.addAttribute("jobsituations", jobsituation);
         logger.debug("工作状态数目“{}”", jobsituation.size());
 
@@ -304,7 +287,7 @@ public class UserController extends CommonController<User> {
         if (ArrayUtils.contains(id, sessionId)) {
             return new JsonDto("不允许删除当前操作用户").toString();
         }
-        User sessionUser = (User) userService.getById(sessionId);
+        User sessionUser = userService.getById(sessionId);
 
         AuditLog[] auditLogArr = new AuditLog[id.length];
         for (int i = 0; i < id.length; i++) {
@@ -477,12 +460,10 @@ public class UserController extends CommonController<User> {
         List<User> users = ImportExport.imports(workbook, descNames.get("user"), User.class);
 
         logger.info("设置默认的属性值");
-        Dictionary jobsituation = dictionaryService.getByValue(jobsituationOnValue);
         for (User user : users) {
             user.setCreator(sessionUser);
             user.setModifier(sessionUser);
             user.setOrganization(organization);
-            user.setJobSituation(jobsituation);
         }
         logger.debug("导入信息“{}”", HibernateAwareObjectMapper.DEFAULT.writeValueAsString(users));
         logger.debug("对象集合数目“{}”", users.size());
@@ -570,18 +551,18 @@ public class UserController extends CommonController<User> {
      */
     @RequestMapping(value = "/toQueryUser.comp", params = "TYPE=business")
     public String toOwnerOrgTree(ModelMap model) throws NoSuchFieldException {
-    	//获取当前组织
-    	Organization organization = (Organization) model.get(Constant.VS_ORG);
-    	//得到当前组织下的子组织
-    	List<Organization> orgList = organizationService.findChildren(organization.getId());
-    	//orgList.add(organization);
-    	User u = (User) model.get(Constant.VS_USER);
+        //获取当前组织
+        Organization organization = (Organization) model.get(Constant.VS_ORG);
+        //得到当前组织下的子组织
+        List<Organization> orgList = organizationService.findChildren(organization.getId());
+        //orgList.add(organization);
+        User u = (User) model.get(Constant.VS_USER);
         StringBuffer sb = new StringBuffer("[");
-        sb.append("{id:"+u.getId()+", name:\""+u.getRealName()+"\", pId:"+0+", type:\"user\"},");
+        sb.append("{id:" + u.getId() + ", name:\"" + u.getRealName() + "\", pId:" + 0 + ", type:\"user\"},");
         Long oldOrgId = 0l;
         for (int i = 0; i < orgList.size(); i++) {
             Organization org = orgList.get(i);
-            if (org.getId() == oldOrgId||orgList.get(i).getOwners().size()==0) {
+            if (org.getId() == oldOrgId || orgList.get(i).getOwners().size() == 0) {
                 continue;
             }
             sb.append(String.format("{id:-%s, name:\"%s\", pId:-%s, type:\"%s\"},", new Object[]{
@@ -590,13 +571,13 @@ public class UserController extends CommonController<User> {
                     org.getParent() == null ? "0" : org.getParent().getId(),
                     "org"
             }));
-            
-            for (User user :org.getOwners()) {//用户
+
+            for (User user : org.getOwners()) {//用户
                 sb.append(String.format("{id:%s, name:\"%s\", pId:-%s, type:\"%s\"},", new Object[]{
-                    user.getId(),
-                    user.getRealName(),
-                    org.getId(),
-                    "user",
+                        user.getId(),
+                        user.getRealName(),
+                        org.getId(),
+                        "user",
                 }));
             }
             oldOrgId = org.getId();
@@ -607,7 +588,7 @@ public class UserController extends CommonController<User> {
         model.addAttribute("json", sb.toString());
         return "/system/message/listcomp";
     }
-    
+
     /**
      * 弹出组织结构树,所有的用户
      *
@@ -620,7 +601,7 @@ public class UserController extends CommonController<User> {
      */
     @RequestMapping(value = "/toQueryUser.comp")
     public String toAllOwnerOrgTree(ModelMap model) throws NoSuchFieldException {
-    	User u = (User) model.get(Constant.VS_USER);
+        User u = (User) model.get(Constant.VS_USER);
         List<Organization> orgList = organizationService.getAllOrgAndUsers();
         StringBuffer sb = new StringBuffer("[");
         Long oldOrgId = 0l;

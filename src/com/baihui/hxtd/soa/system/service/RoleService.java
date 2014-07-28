@@ -6,6 +6,7 @@ import com.baihui.hxtd.soa.base.utils.Search;
 import com.baihui.hxtd.soa.system.dao.RoleDao;
 import com.baihui.hxtd.soa.system.dao.UserDao;
 import com.baihui.hxtd.soa.system.entity.*;
+
 import org.hibernate.FetchMode;
 import org.hibernate.criterion.DetachedCriteria;
 import org.slf4j.Logger;
@@ -112,7 +113,24 @@ public class RoleService {
         roleDao.logicalDelete(ids);
     }
 
+    /**
+     * 是否是系统管理员
+     */
+    @Transactional(readOnly = true)
+    public boolean isSysManager(User user) {
+    	logger.info("是否是系统管理员");
 
+        if (user.getIsManager()) {
+            return true;
+        }
+
+        String hql = "select count(role.id)" +
+        " from Role role" +
+        " inner join role.owners owner" +
+        " where owner.id=? and role.code=?";
+        return (Long) roleDao.findUnique(hql, user.getId(), Constant.ROLE_SYSMANAGER) > 0;
+	}
+    
     /**
      * 是否是系统数据管理员
      */
@@ -128,7 +146,7 @@ public class RoleService {
                 " from Role role" +
                 " inner join role.owners owner" +
                 " where owner.id=? and role.code=?";
-        return (Long) roleDao.findUnique(hql, user.getId(), Constant.ROLE_SYSMANAGER) > 0;
+        return (Long) roleDao.findUnique(hql, user.getId(), Constant.ROLE_SYSDATAMANAGER) > 0;
     }
 
     /**
@@ -237,5 +255,7 @@ public class RoleService {
     public String getNameById(Long id) {
         return roleDao.get(id).getName();
     }
+
+	
 
 }

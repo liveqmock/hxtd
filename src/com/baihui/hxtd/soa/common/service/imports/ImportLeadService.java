@@ -38,7 +38,8 @@ public class ImportLeadService extends ImportServiceAbstract<LeadDTO,Lead> {
 		 * 2:修改
 		 */
 		Map<Integer, Lead> entityMap = new HashMap<Integer, Lead>();
-		for(int i = 0; i<uniqueString.size(); i++){
+		int uniqueLength = uniqueString.size();
+		for(int i = 0; i<uniqueLength; i++){
 			//获取唯一标记
 			String unique = uniqueString.get(i);
 			if("email".equals(unique)){

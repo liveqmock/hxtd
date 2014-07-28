@@ -86,17 +86,11 @@ $(function() {
 		class="mr35">
 		<table class="cb id_table2 w">
 			<tr>
-				<th>
+				<th width="3%">
 					<input type="checkbox" name="" id="id" class="checkall" />
 				</th>
 				<th>
 					标题
-				</th>
-				<th width="18%">
-					调用入口
-				</th>
-				<th>
-					模块
 				</th>
 				<th>
 					类型
@@ -119,17 +113,11 @@ $(function() {
 			id="table">
 			<thead>
 				<tr>
-					<th>
+					<th width="3%">
 						<input type="checkbox" name="" id="id" class="checkall" />
 					</th>
 					<th>
 						标题
-					</th>
-					<th width="18%">
-						调用入口
-					</th>
-					<th>
-						模块
 					</th>
 					<th>
 						类型
@@ -158,8 +146,6 @@ $(function() {
               <td>
                   {$T.row.title}
               </td>
-              <td>{$T.row.url}</td>
-              <td>{$T.row.module}</td>
               <td>{$T.row.type=='list'?'列表':'报表'}</td>
               <td>{$T.row.createdTime}</td>
               <td>{$T.row.modifiedTime}</td>

@@ -260,6 +260,13 @@ ALTER TABLE hxtd.sm_function ADD PRIVILEGE_LEVEL_ID int NOT NULL;
 
 --类型、金额、创建时间、订单编号、市场活动名称、financial
 
+--重新开始bug
+--编辑的控制
+--待审批、审批 排序
+
+--订单
+----新增
+------销售主管
 
 
 

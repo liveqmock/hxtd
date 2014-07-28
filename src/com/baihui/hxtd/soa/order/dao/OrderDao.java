@@ -6,6 +6,7 @@ import org.springframework.stereotype.Repository;
 
 import com.baihui.hxtd.soa.base.orm.hibernate.HibernateDAOImpl;
 import com.baihui.hxtd.soa.order.entity.Order;
+import com.baihui.hxtd.soa.system.entity.Dictionary;
 /**
  * 
  * 功能描述：订单持久化类
@@ -37,10 +38,23 @@ public class OrderDao extends HibernateDAOImpl<Order, Long> {
 	
 	
 	public Order save(Order order){
-		if(order.getStatus()!=null&&order.getStatus().getId()==null){
-			order.setStatus(null);
+		if(order.getFlowNode()!=null&&order.getFlowNode().getId()==null){
+			order.setFlowNode(null);
 		}
 		return super.save(order);
+	}
+	
+	/**
+     * 更新订单财务状态
+	 * @Title: setOrderPayStatusById
+	 * @param @param dictionary
+	 * @param @param id
+	 * @return void
+	 * @throws
+     */
+	public void modifyOrderPayStatusByIdStatus(Dictionary dictionary, Long id){
+		String hql = "update Order o set o.orderStatus = ? where o.id=?";
+    	this.createQuery(hql, dictionary, id).executeUpdate();
 	}
 	
 	

@@ -20,7 +20,7 @@
 <script type="text/javascript" src="${ctx}/static/js/js-util.common.js"></script>
 <script type="text/javascript">
 $(function(){
-	new Grid().init({ paginationSizeShow:false, paginationCountLimit:13 });
+	new Grid().init();
 	$(".list .module").live({
 		click: function(){ // 样式优先级问题 待解决...
 			$(".module").removeAttr("style");

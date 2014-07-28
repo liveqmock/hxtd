@@ -63,7 +63,7 @@ function searchData(action){ //搜索
 				<input type="hidden" name="sponsor.id" value="${activity.sponsor.id}"/>
 			</td>
 			<td width="15%" align="right"><span class="w_red">*&nbsp;</span>活动名称：</td>
-			<td align="left"><input name="name" type="text" value="${activity.name}" class="text_input3 required" maxlength="30"/></td>
+			<td align="left"><input name="name" type="text" value="${activity.name}" class="text_input3 required {unique:['MarketActivity','${activity.name}']}" maxlength="30"/></td>
 		</tr>
 		<tr>
 			<td align="right"><span class="w_red">*&nbsp;</span>负责人：</td>
@@ -128,7 +128,7 @@ function searchData(action){ //搜索
 			<td align="left"><input type="text" name="expectSuccessRate" value="${activity.expectSuccessRate}" 
 				class="text_input3 amount" maxlength="5" style="ime-mode:disabled"/></td>
 			<td align="right">活动次数：</td>
-			<td align="left"><input name="times" type="text" value="${activity.times}" class="text_input3 digits"/></td>
+			<td align="left"><input name="times" type="text" value="${activity.times}" class="text_input3 digits" maxlength="3"/></td>
 		</tr>
 		</table>
 		<h1 class="f14 fbnone ml40 pt10">描述信息</h1>

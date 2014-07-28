@@ -155,8 +155,10 @@ public class Constant {
 
 
     /*角色*/
+    /** 系统管理员 */
+    public final static String ROLE_SYSMANAGER = "1";
     /** 系统数据管理员 */
-    public final static String ROLE_SYSMANAGER = "2";
+    public final static String ROLE_SYSDATAMANAGER = "2";
     /** 主管数据管理员 */
     public final static String ROLE_ORGMANAGER = "3";
 
@@ -214,5 +216,15 @@ public class Constant {
     /** 联系人纪要 */
     public final static String MODULE_MEMOIR = "memoir";
 
+    /*财务管理 */
+    
+    /** 应付款名称前缀 */
+    public final static String FINANCIAL_PAYMENTS_BEFORE = "应付款";
+    
+    /** 应收款名称前缀 */
+    public final static String FINANCIAL_RECEIVABLES_BEFORE = "应收款";
+    
+    /** 应收、应付款默认备注 */
+    public final static String FINANCIAL_AUTH_REMARK = "订单自动生成";
 
 }

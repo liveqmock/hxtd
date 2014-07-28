@@ -34,6 +34,7 @@ import com.baihui.hxtd.soa.project.entity.Project;
 import com.baihui.hxtd.soa.project.entity.Supplier;
 import com.baihui.hxtd.soa.project.service.ProjectService;
 import com.baihui.hxtd.soa.project.service.SupplierService;
+import com.baihui.hxtd.soa.system.DictionaryConstant;
 import com.baihui.hxtd.soa.system.entity.AuditLog;
 import com.baihui.hxtd.soa.system.entity.Dictionary;
 import com.baihui.hxtd.soa.system.entity.User;
@@ -42,8 +43,6 @@ import com.baihui.hxtd.soa.system.service.DictionaryService;
 import com.baihui.hxtd.soa.util.EnumModule;
 import com.baihui.hxtd.soa.util.EnumOperationType;
 import com.baihui.hxtd.soa.util.JsonDto;
-import com.fasterxml.jackson.core.JsonGenerationException;
-import com.fasterxml.jackson.databind.JsonMappingException;
 
 @Controller
 @RequestMapping(value = "/project/supplier")
@@ -56,251 +55,214 @@ public class SupplierController extends CommonController<Supplier> {
 	  */
 	 @Resource
 	 private SupplierService supplierService;
-	 
 	 @Resource
 	 private DictionaryService dictionaryService;
-	 
 	 @Resource
 	 private ContactService contectService;
-	 
 	 @Resource
 	 private ProjectService projectService;
+	 
 	 /**
-	 * @throws IOException 
-	 * @throws JsonMappingException 
-	 * @throws JsonGenerationException 
-	 * @throws NoSuchFieldException 
-	   * query(分页查询)
-	   * @Title: query
-	   * @param @param page
-	   * @param @return    参数类型
-	   * @return ModelAndView    返回类型
-	   * @throws
-	  */
-	@RequestMapping(value = "/query.do",produces = "text/text;charset=UTF-8")
-	public void query(HibernatePage<Supplier> page,
-								HttpServletRequest request,ModelMap model,PrintWriter out) throws NoSuchFieldException, JsonGenerationException, JsonMappingException, IOException{
-		logger.info("SupplierController.query查询组件列表");
-		Map<String, Object> searchParams = Servlets.getParametersStartingWith(
-				request, "search_");
-		Search.clearBlankValue(searchParams);
-		Search.toRangeDate(searchParams, "modifiedTime");
-		Search.toRangeDate(searchParams, "createdTime");
-		logger.info("添加默认的查询条件");
-		DataShift dataShift = (DataShift) model.get(Constant.VS_DATASHIFT);		
-		page = supplierService.findPage(searchParams,dataShift, page);
-		JsonDto json = new JsonDto();
-		json.setResult(page);
-		HibernateAwareObjectMapper.DEFAULT.writeValue(out, json);
-	}
-	
-	 /**
-	   * toQueryPage(跳转列表页)
-	   * @Title: toQueryPage
-	   * @param @param 
-	   * @param @return    参数类型
-	   * @return ModelAndView    返回类型
-	   * @throws
-	  */
+	  * toQueryPage(链接到供应商列表页面)
+	  * @Description: 请求供应商列表页面
+	  * @param model 模型映射
+	  * @return String 供应商JSP地址
+	  * @throws NoSuchFieldException
+	 */
 	@RequestMapping(value = "/toQueryPage.do")
-	public String toQueryPage(ModelMap model) throws NoSuchFieldException {
-        logger.info("转至查询页面");
-
-        logger.info("存储表单初始化数据");
-
-        logger.info("存储表单默认值");
-        HibernatePage<Supplier> page = new HibernatePage<Supplier>();
+	public String toQueryPage(ModelMap model) {
+		/**************初始化分页(默认按照最后修改时间倒叙)**************/
+        HibernatePage<Supplier> page = new HibernatePage<Supplier>().order(HibernatePage.DESC).orderBy("modifiedTime");
         model.addAttribute("page", page);
-		List<Dictionary> dict = dictionaryService.findChildren("050101");
-		model.addAttribute("dict",dict);
+        
+        /***************供应商类型字典*************/
+		List<Dictionary> dict = dictionaryService.findChildren(DictionaryConstant.VC_SUPPLIERTYPE, true);
+		model.addAttribute("dict", dict);
+		
 		return "/project/supplier/list";
 	}
-	/**
-	  * view(查询单个组件信息)
-	  * @Title: view
-	  * @param @param type
-	  * @param @param id
-	  * @param @param model
-	  * @param @return    参数类型
-	  * @return String    返回类型
-	  * @throws
-	 */
-	@RequestMapping(value = "/toViewPage.do")
-	public String view(@RequestParam(required=false)Long id,
-							  Model model){
-		logger.info("SupplierController.view查询组件");
-		Supplier com = supplierService.get(id);
-		List<Contact> contacts = contectService.findContactBySupplier(com);
-		List<Project> projects = projectService.findProjectBySupplier(com);
-		model.addAttribute("com",com);
-		model.addAttribute("contacts",contacts);
-		model.addAttribute("projects",projects);
-		return "/project/supplier/view";
+	 /**
+	   * query(异步查询供应商列表数据)
+	   * @Description: JqueryAjax异步请求获取供应商数据
+	   * @param page 分页设置
+	   * @param request Http请求
+	   * @param model 模型映射
+	   * @param out PrintWriter
+	   * @throws NoSuchFieldException, IOException
+	  */
+	@RequestMapping(value = "/query.do",produces = "text/text;charset=UTF-8")
+	public void query(HibernatePage<Supplier> page, 
+			HttpServletRequest request, 
+			ModelMap model, 
+			PrintWriter out) throws NoSuchFieldException, IOException{
+		/***************组装查询条件*************/
+		Map<String, Object> searchParams = Servlets.getParametersStartingWith(request, "search_");
+		Search.clearBlankValue(searchParams);
+		Search.trimValue(searchParams);
+		Search.toRangeDate(searchParams, "modifiedTime");
+		Search.toRangeDate(searchParams, "createdTime");
+		
+		/**************数据级权限过滤***********/
+		DataShift dataShift = (DataShift) model.get(Constant.VS_DATASHIFT);		
+		page = supplierService.findPage(searchParams,dataShift, page);
+		
+		/*************JSON转换****************/
+		JsonDto json = new JsonDto();
+		json.setResult(page);
+		
+		HibernateAwareObjectMapper.DEFAULT.writeValue(out, json);
 	}
 	/**
-	 * 
-	  * viewCom(查询简单的供应商信息)
-	  * @Title: viewCom
-	  * @param @param id
-	  * @param @param model
-	  * @param @return    参数类型
-	  * @return String    返回类型
-	  * @throws
-	 */
-	@RequestMapping(value = "/toViewPage.comp")
-	public String viewCom(@RequestParam(required=false)Long id,
-							  Model model){
-		logger.info("SupplierController.view查询组件");
-		Supplier com = supplierService.get(id);
-		model.addAttribute("com",com);
-		return "/project/supplier/viewcomp";
-	}
-	
-	/**
-	  * toAddPage(跳转新增页面)
-	  * @Title: view
-	  * @param @param type
-	  * @param @param id
-	  * @param @param model
-	  * @param @return    参数类型
-	  * @return String    返回类型
-	  * @throws
+	  * toAddPage(请求新增供应商)
+	  * @Description: 请求新增供应商
+	  * @param model 模型映射
+	  * @return String 供应商新增JSP地址
 	 */
 	@RequestMapping(value = "/toAddPage.do")
 	public String toAddPage(ModelMap model){
-		logger.info("SupplierController.view查询组件");
+		/***************初始化供应商********************/
+		Supplier supplier = new Supplier();
+		supplier.setOwner((User)model.get(Constant.VS_USER));
+		model.addAttribute("com", supplier);
+		
 		String funcUrl="/project/supplier/add.do";
-		model.addAttribute("type",dictionaryService.findChildren("050101"));
-		model.addAttribute("cardType",dictionaryService.findChildren("040303"));
 		model.addAttribute("funcUrl", funcUrl);
-		Supplier com = new Supplier();
-		com.setOwner((User)model.get(Constant.VS_USER));
-		model.addAttribute("com",com);
-		return "/project/supplier/edit";
-	}
-	/**
-	 * 
-	  * toModifyPage(跳转修改页面)
-	  * @Title: toModifyPage
-	  * @param @param id
-	  * @param @param model
-	  * @param @return    参数类型
-	  * @return String    返回类型
-	  * @throws
-	 */
-	@RequestMapping(value = "/toModifyPage.do")
-	public String toModifyPage(@RequestParam(required=false)Long id,
-							  Model model){
-		logger.info("SupplierController.toModifyPage查询组件");
-		String funcUrl="/project/supplier/modify.do";
-		Supplier com  = supplierService.get(id);
 		setDefaultDict(model);
-		model.addAttribute("com",com);
-		model.addAttribute("funcUrl", funcUrl);
+		
 		return "/project/supplier/edit";
 	}
-	
-	
-	
-	
-	private void setDefaultDict(Model model){
-		model.addAttribute("type",dictionaryService.findChildren("050101"));
-		model.addAttribute("cardType",dictionaryService.findChildren("040303"));
-	}
 	/**
-	  * modify(保存：修改)
-	  * @Title: modify
-	  * @param  Supplier组件实体类对象
-	  * @return  view  
-	  * @return String    返回类型
-	  * @throws
-	 */
-	@ResponseBody
-	@RequestMapping(value = "/modify.do", produces = "text/text;charset=UTF-8")
-	public String modify(Supplier supplier,String type,HttpServletRequest request){
-		logger.info("SupplierController.modify修改组件信息");
-		User u = (User) request.getSession().getAttribute(Constant.VS_USER);
-		logger.info("获得当前操作用户{}",u.getName());
-		supplier.setModifier(u);
-		AuditLog auditLog = new AuditLog(EnumModule.SUPPLIER.getModuleName(), 
-				supplier.getId(), supplier.getName(), EnumOperationType.MODIFY.getOperationType(), u);
-		supplierService.modify(supplier, auditLog);
-		JsonDto json = new JsonDto(supplier.getId(),"保存成功!");
-		return json.toString();
-	}
-	/**
-	 * 
-	  * add(保存：新建)
+	  * add(异步新增供应商)
 	  * @Title: add
-	  * @param  Supplier组件实体类对象
-	  * @return  view  
-	  * @return String    返回类型
-	  * @throws
+	  * @Description: 异步新增供应商
+	  * @param supplier 供应商实体
+	  * @param type 请求类型(已失效)
+	  * @param request HTTP对象
+	  * @return String 新增结果信息
 	 */
 	@ResponseBody
 	@RequestMapping(value = "/add.do", produces = "text/text;charset=UTF-8")
-	public String add(Supplier supplier,String type,HttpServletRequest request){
-		logger.info("SupplierController.query查询组件列表");
-		//临时代码，时间类型应从数据库中取
-		User u = (User) request.getSession().getAttribute(Constant.VS_USER);
-		logger.info("SupplierController.query 获得当前操作的用户{}",u.getName());
-		supplier.setCreator(u);
-		supplier.setModifier(u);
+	public String add(Supplier supplier, 
+			String type, 
+			HttpServletRequest request){
+		User user = (User) request.getSession().getAttribute(Constant.VS_USER);
+		supplier.setCreator(user);
+		supplier.setModifier(user);
+		
+		/***************审计日志*******************/
 		AuditLog auditLog = new AuditLog(EnumModule.SUPPLIER.getModuleName(), 
-				supplier.getId(), supplier.getName(), EnumOperationType.ADD.getOperationType(), u);
+				supplier.getId(), supplier.getName(), EnumOperationType.ADD.getOperationType(), user);
+		
 		supplierService.add(supplier, auditLog);
-		JsonDto json = JsonDto.add(supplier.getId());
-		return json.toString();
+		
+		return JsonDto.add(supplier.getId()).toString();
 	}
 	/**
-	 * 
-	  * delete(保存：新建)
-	  * @Title: delete
-	  * @param  Supplier组件实体类对象
-	  * @return  view  
-	  * @return String    返回类型
+	  * view(查看供应商详情信息)
+	  * @Description: 请求查看供应商详情
+	  * @param id 供应商ID
+	  * @param model 模型映射
+	  * @return String 供应商详情JSP地址
 	  * @throws
 	 */
+	@RequestMapping(value = "/toViewPage.do")
+	public String view(@RequestParam(required = false) Long id,
+			Model model){
+		/*******************供应商详情*****************/
+		Supplier supplier = supplierService.get(id);
+		model.addAttribute("com", supplier);
+		
+		/**********供应商关联联系人、项目列表************/
+		List<Contact> contacts = contectService.findContactBySupplier(supplier);
+		List<Project> projects = projectService.findProjectBySupplier(supplier);
+		model.addAttribute("contacts", contacts);
+		model.addAttribute("projects", projects);
+		
+		return "/project/supplier/view";
+	}
+	/**
+	  * toModifyPage(请求供应商编辑页面)
+	  * @Description: 跳转供应商编辑页面
+	  * @param id 供应商ID
+	  * @param model 模型映射
+	  * @return String 供应商编辑JSP地址
+	 */
+	@RequestMapping(value = "/toModifyPage.do")
+	public String toModifyPage(@RequestParam(required = false) Long id,
+			ModelMap model){
+		Supplier supplier  = supplierService.get(id);
+		model.addAttribute("com", supplier);
+		
+		String funcUrl = "/project/supplier/modify.do";
+		model.addAttribute("funcUrl", funcUrl);
+		
+		setDefaultDict(model);
+		
+		return "/project/supplier/edit";
+	}
+	/**
+	  * modify(异步更新供应商信息)
+	  * @Title: modify
+	  * @Description: 异步更新供应商信息
+	  * @param supplier 供应商实体
+	  * @param type 请求类型(已失效)
+	  * @param request HTTP对象
+	  * @return String 更新结果信息
+	 */
 	@ResponseBody
-	@RequestMapping(value = "/delete.do",produces = "text/text;charset=UTF-8")
+	@RequestMapping(value = "/modify.do", produces = "text/text;charset=UTF-8")
+	public String modify(Supplier supplier, 
+			String type, 
+			HttpServletRequest request){
+		logger.info("SupplierController.modify修改供应商信息");
+		
+		User user = (User) request.getSession().getAttribute(Constant.VS_USER);
+		supplier.setModifier(user);
+		AuditLog auditLog = new AuditLog(EnumModule.SUPPLIER.getModuleName(), 
+				supplier.getId(), supplier.getName(), EnumOperationType.MODIFY.getOperationType(), user);
+		
+		supplierService.modify(supplier, auditLog);
+		
+		return JsonDto.modify(supplier.getId()).toString();
+	}
+	/**
+	  * delete(标记批量删除供应商)
+	  * @Title: modify
+	  * @Description: 标记批量删除供应商
+	  * @param modelMap 模型映射
+	  * @param id 供应商IDS
+	  * @return String 删除结果信息
+	 */
+	@ResponseBody
+	@RequestMapping(value = "/delete.do", produces = "text/text;charset=UTF-8")
 	public String delete(ModelMap modelMap, Long[] id){
-		logger.info("SupplierController.delete删除组件");
+		logger.info("SupplierController.delete删除供应商");
+		
 		User user = (User) modelMap.get(Constant.VS_USER);
 		AuditLog [] auditLogArr = new AuditLog [id.length];
 		for(int i=0; i<id.length; i++){
 			auditLogArr[i] = new AuditLog(EnumModule.LEAD.getModuleName(), 
 					id[i], supplierService.get(id[i]).getName(), EnumOperationType.DELETE.getOperationType(), user);
 		}
-		boolean flag = supplierService.delete(id,auditLogArr);
-		if(flag){
-			return JsonDto.delete(id).toString();
-		}else{
-			return new JsonDto("被删除数据存在关联项目或联系人，无法删除!").toString(); 
+		
+		JsonDto json = new JsonDto();
+		if(supplierService.delete(id, auditLogArr)){
+			json = JsonDto.delete(id);
+		} else{
+			json.setMessage("被删除数据存在关联项目或联系人，无法删除!");
 		}
+		
+		return json.toString();
 	}
 	
 	/**
-     * toSupplierLstPage(跳转至供应商组件列表界面)
-     * todo: lihua 2014-05-22
-     */
-    @RequestMapping(value = "/toQueryPage.comp")
-    public String toSupplierLstPage(HttpServletRequest request,
-    		HibernatePage<Supplier> page,
-    		Model model) throws NoSuchFieldException {
-        model.addAttribute("page", page);
-        //page.setHibernateOrderBy(orderBy);
-        //page.setHibernateOrder(order);
-        
-        return "/project/supplier/listcomp";
-    }
-    
-    
-    /**
      * 导出分页数据
      * 1.在分页列表上根据当前条件进行导出
      */
     @RequestMapping(value = "/export.do", params = "TYPE=pagination")
-    public void exportPagination(HttpServletRequest request,  ModelMap model, HttpServletResponse response) throws NoSuchFieldException, IOException {
+    public void exportPagination(HttpServletRequest request, 
+    		ModelMap model, 
+    		HttpServletResponse response) throws NoSuchFieldException, IOException {
         logger.info("导出excel文件");
 
         logger.info("解析页面查询条件");
@@ -318,4 +280,49 @@ public class SupplierController extends CommonController<Supplier> {
         ServletContext servletContext = request.getSession().getServletContext();
         ImportExport.exportExcel(response, servletContext, "supplier", supplier).write(response.getOutputStream());
     }
+	
+	/*******************************************供应商组件***********************************************/
+	/**
+	  * viewCom(请求查看供应商组件详情页)
+	  * @Description: 请求查看供应商组件详情页
+	  * @param id 供应商ID
+	  * @param model 模型映射
+	  * @return String 供应商组件JSP地址
+	 */
+	@RequestMapping(value = "/toViewPage.comp")
+	public String viewCom(@RequestParam(required=false)Long id,
+			Model model){
+		logger.info("SupplierController.view查询供应商");
+		Supplier com = supplierService.get(id);
+		model.addAttribute("com",com);
+		
+		return "/project/supplier/viewcomp";
+	}
+	/**
+	  * toSupplierLstPage(跳转至供应商供应商列表组件页)
+	  * @Title: toSupplierLstPage
+	  * @Description: 请求供应商供应商列表组件页
+	  * @param request HTTP请求
+	  * @param page 分页设置
+	  * @param model 模型映射
+	  * @return String 供应商组件列表
+	  * @throws NoSuchFieldException
+	 */
+    @RequestMapping(value = "/toQueryPage.comp")
+    public String toSupplierLstPage(HttpServletRequest request,
+    		HibernatePage<Supplier> page,
+    		Model model) throws NoSuchFieldException {
+        model.addAttribute("page", page);
+        
+        return "/project/supplier/listcomp";
+    }
+    
+    /*************************************************获取字典*************************************************/
+    /**
+     * 设置字典
+     */
+    private void setDefaultDict(ModelMap model){
+		model.addAttribute("type", dictionaryService.findChildren(DictionaryConstant.VC_SUPPLIERTYPE, true));
+		model.addAttribute("cardType", dictionaryService.findChildren(DictionaryConstant.VC_DOCTYPE, true));
+	}
 }

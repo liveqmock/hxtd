@@ -3,6 +3,7 @@ package com.baihui.hxtd.soa.common.imports.excel;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 import javax.annotation.Resource;
 
@@ -55,7 +56,7 @@ public class ExcelParse4Lead extends ExcelParse<LeadDTO> {
 		list.addAll(sheetList);
 		//行记录是否为空
 		if (sheetList == null || sheetList.isEmpty() ) {
-			msg += "第"+rowNumOfSheet+"条,被解析的集合为空!";
+			msg += "第"+rowNumOfSheet+"条数据,被解析的集合为空!";
 			logger.warn(msg);
 			ImportMessage.message = msg;
 			return null;
@@ -64,7 +65,7 @@ public class ExcelParse4Lead extends ExcelParse<LeadDTO> {
 		//线索名必填项
 		String contactName = sheetList.get(1);
 		if (Tools.isEmpty(contactName.trim())) {
-			msg += "<br />第"+rowNumOfSheet+"条,客户姓名不能为空!";
+			msg += "<br />第"+rowNumOfSheet+"条数据,客户姓名不能为空!";
 			logger.warn(msg);
 			//向无效数据集合中添加一条数据
 			ImportMessage.invalidFormatRowNumMap.put(rowNumOfSheet, msg);
@@ -77,7 +78,7 @@ public class ExcelParse4Lead extends ExcelParse<LeadDTO> {
 		//手机号码格式
 		String mobile =  sheetList.get(5);
 		if(!Tools.isEmpty(mobile)&&!isMobile(mobile)){
-			msg += "<br />第"+rowNumOfSheet+"条,手机号码内容无效!";
+			msg += "<br />第"+rowNumOfSheet+"条数据,手机号码内容无效!";
 			//向无效数据集合中添加一条数据
 			ImportMessage.invalidFormatRowNumMap.put(rowNumOfSheet, msg);
 			return null;
@@ -85,7 +86,7 @@ public class ExcelParse4Lead extends ExcelParse<LeadDTO> {
 		//电话号码，符合电话号码格式
 		String phone =  sheetList.get(6);
 		if ( !Tools.isEmpty(phone)&&!isPhone(phone.trim()) ) {
-			msg += "<br />第"+rowNumOfSheet+"条,电话号码无效!";
+			msg += "<br />第"+rowNumOfSheet+"条数据,电话号码无效!";
 			logger.warn(msg);
 			//向无效数据集合中添加一条数据
 			ImportMessage.invalidFormatRowNumMap.put(rowNumOfSheet, msg);
@@ -94,7 +95,7 @@ public class ExcelParse4Lead extends ExcelParse<LeadDTO> {
 		//传真格式，与电话号码相同
 		String fax = sheetList.get(8);
 		if(!Tools.isEmpty(fax)&&!isPhone(fax)){
-			msg += "<br />第"+rowNumOfSheet+"条,传真内容无效!";
+			msg += "<br />第"+rowNumOfSheet+"条数据,传真内容无效!";
 			//向无效数据集合中添加一条数据
 			ImportMessage.invalidFormatRowNumMap.put(rowNumOfSheet, msg);
 			return null;
@@ -102,7 +103,7 @@ public class ExcelParse4Lead extends ExcelParse<LeadDTO> {
 		//邮箱格式
 		String email = sheetList.get(7);
 		if(!Tools.isEmpty(email)&&!checkEmail(email)){
-			msg += "<br />第"+rowNumOfSheet+"条,邮箱内容无效!";
+			msg += "<br />第"+rowNumOfSheet+"条数据,邮箱内容无效!";
 			//向无效数据集合中添加一条数据
 			ImportMessage.invalidFormatRowNumMap.put(rowNumOfSheet, msg);
 			return null;
@@ -110,7 +111,7 @@ public class ExcelParse4Lead extends ExcelParse<LeadDTO> {
 		//邮编格式
 		String postCode = sheetList.get(17);
 		if(!Tools.isEmpty(postCode)&&!checkPostCode(postCode)){
-			msg += "<br />第"+rowNumOfSheet+"条,邮编内容无效!";
+			msg += "<br />第"+rowNumOfSheet+"条数据,邮编内容无效!";
 			//向无效数据集合中添加一条数据
 			ImportMessage.invalidFormatRowNumMap.put(rowNumOfSheet, msg);
 			return null;
@@ -122,7 +123,7 @@ public class ExcelParse4Lead extends ExcelParse<LeadDTO> {
 		//线索所有者,查找客户所有者的id,如果id存在则返回,如果不存在设置为0
 		String leadOwner = sheetList.get(0);
 		if (Tools.isEmpty(leadOwner.trim())) {
-			msg += "<br />第"+rowNumOfSheet+"条,线索所有者不能为空!";
+			msg += "<br />第"+rowNumOfSheet+"条数据,线索所有者不能为空!";
 			logger.warn(msg);
 			//向无效数据集合中添加一条数据
 			ImportMessage.invalidFormatRowNumMap.put(rowNumOfSheet, msg);
@@ -133,7 +134,7 @@ public class ExcelParse4Lead extends ExcelParse<LeadDTO> {
 			//根据id查询客户所有者
 			owner = userService.getByName(leadOwner.trim());
 			if(owner==null){
-				msg += "<br />第"+rowNumOfSheet+"条,客户所有者不存在!";
+				msg += "<br />第"+rowNumOfSheet+"条数据,客户所有者不存在!";
 				logger.warn(msg);
 				//向无效数据集合中添加一条数据
 				ImportMessage.invalidFormatRowNumMap.put(rowNumOfSheet, msg);
@@ -147,7 +148,7 @@ public class ExcelParse4Lead extends ExcelParse<LeadDTO> {
 		String leadSource = sheetList.get(9);
 		//线索来源必填项
 		if (Tools.isEmpty(leadSource.trim())) {
-			msg += "<br />第"+rowNumOfSheet+"条,线索来源不能为空!";
+			msg += "<br />第"+rowNumOfSheet+"条数据,线索来源不能为空!";
 			logger.warn(msg);
 			//向无效数据集合中添加一条数据
 			ImportMessage.invalidFormatRowNumMap.put(rowNumOfSheet, msg);
@@ -159,7 +160,7 @@ public class ExcelParse4Lead extends ExcelParse<LeadDTO> {
 			//根据id查询线索来源(40101)
 			source = dictionaryService.getValue(leadSource.trim(), 40101L);
 			if(source==null){
-				msg += "<br />第"+rowNumOfSheet+"条,线索来源无效!";
+				msg += "<br />第"+rowNumOfSheet+"条数据,线索来源无效!";
 				logger.warn(msg);
 				//向无效数据集合中添加一条数据
 				ImportMessage.invalidFormatRowNumMap.put(rowNumOfSheet, msg);
@@ -173,7 +174,7 @@ public class ExcelParse4Lead extends ExcelParse<LeadDTO> {
 		//线索状态必填项
 		String leadStatus = sheetList.get(10);
 		if (Tools.isEmpty(leadStatus.trim())) {
-			msg += "<br />第"+rowNumOfSheet+"条,线索状态不能为空!";
+			msg += "<br />第"+rowNumOfSheet+"条数据,线索状态不能为空!";
 			logger.warn(msg);
 			//向无效数据集合中添加一条数据
 			ImportMessage.invalidFormatRowNumMap.put(rowNumOfSheet, msg);
@@ -186,7 +187,7 @@ public class ExcelParse4Lead extends ExcelParse<LeadDTO> {
 			status = dictionaryService.getValue(leadStatus.trim(), 40102L);
 			//根据leadStatus没有查询到,返回null
 			if(status==null){
-				msg += "<br />第"+rowNumOfSheet+"条,线索状态无效!";
+				msg += "<br />第"+rowNumOfSheet+"条数据,线索状态无效!";
 				logger.warn(msg);
 				//向无效数据集合中添加一条数据
 				ImportMessage.invalidFormatRowNumMap.put(rowNumOfSheet, msg);
@@ -200,7 +201,7 @@ public class ExcelParse4Lead extends ExcelParse<LeadDTO> {
 		String leadIndustry = sheetList.get(13);
 		//行业必填项
 		if (Tools.isEmpty(leadIndustry.trim())) {
-			msg += "<br />第"+rowNumOfSheet+"条,行业不能为空!";
+			msg += "<br />第"+rowNumOfSheet+"条数据,行业不能为空!";
 			logger.warn(msg);
 			//向无效数据集合中添加一条数据
 			ImportMessage.invalidFormatRowNumMap.put(rowNumOfSheet, msg);
@@ -212,7 +213,7 @@ public class ExcelParse4Lead extends ExcelParse<LeadDTO> {
 			//根据id查询线索状态(40305)
 			industry = dictionaryService.getValue(leadIndustry.trim(), 40305L);
 			if(industry==null){
-				msg += "<br />第"+rowNumOfSheet+"条,行业无效!";
+				msg += "<br />第"+rowNumOfSheet+"条数据,行业无效!";
 				logger.warn(msg);
 				//向无效数据集合中添加一条数据
 				ImportMessage.invalidFormatRowNumMap.put(rowNumOfSheet, msg);
@@ -226,7 +227,7 @@ public class ExcelParse4Lead extends ExcelParse<LeadDTO> {
 		String leadCardType = sheetList.get(11);
 		//卡类型必填项
 		if (Tools.isEmpty(leadCardType.trim())) {
-			msg += "<br />第"+rowNumOfSheet+"条,卡类型不能为空!";
+			msg += "<br />第"+rowNumOfSheet+"条数据,卡类型不能为空!";
 			logger.warn(msg);
 			//向无效数据集合中添加一条数据
 			ImportMessage.invalidFormatRowNumMap.put(rowNumOfSheet, msg);
@@ -238,7 +239,7 @@ public class ExcelParse4Lead extends ExcelParse<LeadDTO> {
 			//根据id查询线索状态(40103)
 			cardType = dictionaryService.getValue(leadCardType.trim(), 40103L);
 			if(cardType==null){
-				msg += "<br />第"+rowNumOfSheet+"条,卡类型无效!";
+				msg += "<br />第"+rowNumOfSheet+"条数据,卡类型无效!";
 				logger.warn(msg);
 				//向无效数据集合中添加一条数据
 				ImportMessage.invalidFormatRowNumMap.put(rowNumOfSheet, msg);
@@ -255,7 +256,7 @@ public class ExcelParse4Lead extends ExcelParse<LeadDTO> {
 			//查询省,省的pid=0
 			province = pCASService.getByName(leadProvince.trim(),0L);
 			if(province==null){
-				msg += "<br />第"+rowNumOfSheet+"条,该省不存在!";
+				msg += "<br />第"+rowNumOfSheet+"条数据,该省不存在!";
 				logger.warn(msg);
 				//向无效数据集合中添加一条数据
 				ImportMessage.invalidFormatRowNumMap.put(rowNumOfSheet, msg);
@@ -272,9 +273,9 @@ public class ExcelParse4Lead extends ExcelParse<LeadDTO> {
 		if (province != null && !Tools.isEmpty(leadCity.trim())) {
 			city = pCASService.getByName(leadCity.trim(),province.getId());
 			if(city==null){
-				msg += "<br />第"+rowNumOfSheet+"条,当前市不存在!";
+				msg += "<br />第"+rowNumOfSheet+"条数据,当前市不存在!";
 				logger.warn(msg);
-				//向无效数据集合中添加一条数据
+				//向无效数据集合中添加一条数据数据
 				ImportMessage.invalidFormatRowNumMap.put(rowNumOfSheet, msg);
 				return null;
 			}
@@ -289,7 +290,7 @@ public class ExcelParse4Lead extends ExcelParse<LeadDTO> {
 			//根据id查询线索状态(40103)
 			county = pCASService.getByName(leadCounty.trim(),city.getId());
 			if(county==null){
-				msg += "<br />第"+rowNumOfSheet+"条,该县不存在!";
+				msg += "<br />第"+rowNumOfSheet+"条数据,该县不存在!";
 				logger.warn(msg);
 				//向无效数据集合中添加一条数据
 				ImportMessage.invalidFormatRowNumMap.put(rowNumOfSheet, msg);
@@ -324,7 +325,7 @@ public class ExcelParse4Lead extends ExcelParse<LeadDTO> {
 	 */
 	@Override
 	public void getDuplicateDate(Map<Integer, LeadDTO> entityMap,List<String> paramList) {
-		if(paramList==null || paramList.size()==0){
+		if(paramList==null || paramList.size() == 0){
 			return;
 		}
 		//获取所有的参数
@@ -337,9 +338,13 @@ public class ExcelParse4Lead extends ExcelParse<LeadDTO> {
 		/*
 		 * 判断第一个集合中的数据是否和第二个集合中的数据有重复
 		 */
-		for(Integer rowNum1:entityMap.keySet()){
+		Set<Integer> keySets1 = entityMap.keySet();
+		for(Integer rowNum1:keySets1){
 			lead1 = entityMap.get(rowNum1);
-			for(Integer rowNum2:entityMap.keySet()){
+			String mobile1 = lead1.getMobile().trim();
+			String email1 = lead1.getEmail().trim();
+			Set<Integer> keySets2 = entityMap.keySet();
+			for(Integer rowNum2:keySets2){
 				LeadDTO lead2 = entityMap.get(rowNum2);
 				//和处理自己以外的其他数据比较
 				if(rowNum1==rowNum2){
@@ -358,7 +363,9 @@ public class ExcelParse4Lead extends ExcelParse<LeadDTO> {
 				 * 按手机排重
 				 * 条件：查重的主键包含mobile，并且(lead1和lead2的)主键内容不为null，""和"null"。最后判断两个mobile是否相等
 				 */
-				if((params.contains("mobile")) && !Tools.isEmpty(lead1.getMobile().trim()) && !Tools.isEmpty(lead2.getMobile().trim()) && (lead1.getMobile().trim().equals(lead2.getMobile().trim()))){
+				String mobile2 = lead2.getMobile().trim();
+				String email2 = lead2.getEmail().trim();
+				if((params.contains("mobile")) && !Tools.isEmpty(mobile1) && !Tools.isEmpty(mobile2) && (mobile1.equals(mobile2))){
 					//第一参数相同 b  
 					flag1 = true;
 					//拼接唯一键
@@ -369,7 +376,7 @@ public class ExcelParse4Lead extends ExcelParse<LeadDTO> {
 					}
 				}
 				//按邮箱排重
-				if((params.contains("email")) && !Tools.isEmpty(lead1.getEmail().trim()) && !Tools.isEmpty(lead2.getEmail().trim()) && (lead1.getEmail().equals(lead2.getEmail()))){
+				if((params.contains("email")) && !Tools.isEmpty(email1) && !Tools.isEmpty(email2) && (email1.equals(email2))){
 					//第二参数相同
 					flag2 = true;
 					//拼接唯一键

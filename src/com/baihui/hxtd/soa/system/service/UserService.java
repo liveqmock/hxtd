@@ -15,6 +15,7 @@ import com.baihui.hxtd.soa.system.entity.*;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import org.apache.commons.lang3.Range;
 import org.hibernate.FetchMode;
+import org.hibernate.criterion.CriteriaSpecification;
 import org.hibernate.criterion.DetachedCriteria;
 import org.hibernate.criterion.Order;
 import org.hibernate.criterion.Restrictions;
@@ -135,10 +136,13 @@ public class UserService {
     public HibernatePage<User> findPage(Map<String, Object> searchParams, HibernatePage<User> page, User user, Long organizationId) throws NoSuchFieldException {
         logger.info("分页查找用户");
         DetachedCriteria detachedCriteria = DetachedCriteria.forClass(User.class);
+        detachedCriteria.setResultTransformer(CriteriaSpecification.DISTINCT_ROOT_ENTITY);
+
         detachedCriteria.setFetchMode("sex", FetchMode.JOIN);
         detachedCriteria.setFetchMode("type", FetchMode.JOIN);
         detachedCriteria.setFetchMode("jobSituation", FetchMode.JOIN);
         detachedCriteria.setFetchMode("organization", FetchMode.JOIN);
+        detachedCriteria.setFetchMode("roles", FetchMode.JOIN);
 
         detachedCriteria.createAlias("organization", "org");
         Long order = organizationDao.getOrderById(organizationId);

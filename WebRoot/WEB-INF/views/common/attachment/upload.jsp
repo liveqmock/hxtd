@@ -51,6 +51,15 @@ $(function(){
            	 $att.uploadify('disable', false);
             }
 	});
+	$("#upload").click(function(){
+		var num = $att.data('uploadify').queueData.queueLength;
+		if(num>0){
+			upload();
+		}else{
+			showMsg({successFlag:false,message:'上传队列中不存在文件，请检查！'});
+			setTimeout(_hide(),RcmsAjax.global.showTime);
+		}
+	});
 });
 function upload(){
 	if(checkType()){
@@ -96,7 +105,7 @@ function stop(){
 				
 				<div class="fr">
 					<li class="fl">
-						<a class="block c_white lh25 ml10" href="javascript:upload()">
+						<a id="upload" class="block c_white lh25 ml10" href="javascript:;">
 							<b class="allbtn_l block fl"></b> <b
 							class="allbtn_r pr13 block fl w_auto f14">开始上传</b> </a>
 					</li>

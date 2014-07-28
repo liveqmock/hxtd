@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.SessionAttributes;
 
 import com.baihui.hxtd.soa.base.Constant;
+import com.baihui.hxtd.soa.system.DictionaryConstant;
 import com.baihui.hxtd.soa.system.entity.Workbanch;
 import com.baihui.hxtd.soa.system.service.DictionaryService;
 import com.baihui.hxtd.soa.system.service.WorkbanchService;
@@ -46,17 +47,17 @@ public class WorkbanchController {
     
     private void setDefaultDict(ModelMap model){
     	//线索来源
-		model.addAttribute("leadSource",dictionaryService.findChildren("040101"));
+		model.addAttribute("leadSource",dictionaryService.findChildren(DictionaryConstant.LEAD_SOURCE));
 		//设置客户类型
-		model.addAttribute("customerType",dictionaryService.findChildren("040301"));
+		model.addAttribute("customerType",dictionaryService.findChildren(DictionaryConstant.CUSTOMER_TYPE));
 		//设置客户来源
-		model.addAttribute("customerSource", dictionaryService.findChildren("040302"));
+		model.addAttribute("customerSource", dictionaryService.findChildren(DictionaryConstant.CUSTOMER_SOURCE));
 		//供应商类型
-		model.addAttribute("supplierType",dictionaryService.findChildren("050101"));
+		model.addAttribute("supplierType",dictionaryService.findChildren(DictionaryConstant.SUPPLIER_TYPE));
 		//支付类型
-		model.addAttribute("payType",dictionaryService.findChildren("040201"));
+		model.addAttribute("payType",dictionaryService.findChildren(DictionaryConstant.PROJECT_PAY_TYPE));
 		//行业
-		model.addAttribute("industry",dictionaryService.findChildren("040305"));
+		model.addAttribute("industry",dictionaryService.findChildren(DictionaryConstant.INDUSTRY));
 	}
     
     @RequestMapping(value = "/toQueryPage.do")

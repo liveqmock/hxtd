@@ -7,7 +7,9 @@ import org.hibernate.annotations.DynamicInsert;
 
 import javax.persistence.*;
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 
 /**
  * 功能描述：流程任务实体类
@@ -54,13 +56,13 @@ public class FlowInstance implements Serializable {
     /**
      * 流程环节
      */
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne
     @JoinColumn(name = "NODE_ID")
     private FlowNode flowNode;
     /**
      * 模块
      */
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne
     @JoinColumn(name = "MODULE_ID")
     private Module module;
     /**
@@ -124,6 +126,10 @@ public class FlowInstance implements Serializable {
     /** 流程业务实体 */
     @Transient
     private IdFlowable flowBusiness;
+
+    /** 待选执行者 */
+    @Transient
+    private List<User> executors = new ArrayList<User>();
 
     public Long getId() {
         return id;
@@ -235,5 +241,13 @@ public class FlowInstance implements Serializable {
 
     public void setFlowBusiness(IdFlowable flowBusiness) {
         this.flowBusiness = flowBusiness;
+    }
+
+    public List<User> getExecutors() {
+        return executors;
+    }
+
+    public void setExecutors(List<User> executors) {
+        this.executors = executors;
     }
 }

@@ -1,23 +1,12 @@
 package com.baihui.hxtd.soa.system.controller;
 
-import com.baihui.hxtd.soa.base.Constant;
-import com.baihui.hxtd.soa.base.orm.hibernate.HibernatePage;
-import com.baihui.hxtd.soa.base.utils.Search;
-import com.baihui.hxtd.soa.base.utils.mapper.HibernateAwareObjectMapper;
-import com.baihui.hxtd.soa.common.service.CommonService;
-import com.baihui.hxtd.soa.system.entity.AuditLog;
-import com.baihui.hxtd.soa.system.entity.Function;
-import com.baihui.hxtd.soa.system.entity.User;
-import com.baihui.hxtd.soa.system.service.DictionaryService;
-import com.baihui.hxtd.soa.system.service.FunctionService;
-import com.baihui.hxtd.soa.system.service.MenuService;
-import com.baihui.hxtd.soa.util.EnumModule;
-import com.baihui.hxtd.soa.util.EnumOperationType;
-import com.baihui.hxtd.soa.util.JsonDto;
-import com.fasterxml.jackson.core.JsonGenerationException;
-import com.fasterxml.jackson.databind.JsonMappingException;
+import java.io.IOException;
+import java.io.PrintWriter;
+import java.util.Map;
 
-import org.apache.commons.lang3.StringUtils;
+import javax.annotation.Resource;
+import javax.servlet.http.HttpServletRequest;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Controller;
@@ -29,13 +18,23 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.SessionAttributes;
 import org.springside.modules.web.Servlets;
 
-import javax.annotation.Resource;
-import javax.servlet.http.HttpServletRequest;
-
-import java.io.IOException;
-import java.io.PrintWriter;
-import java.sql.Date;
-import java.util.Map;
+import com.baihui.hxtd.soa.base.Constant;
+import com.baihui.hxtd.soa.base.orm.hibernate.HibernatePage;
+import com.baihui.hxtd.soa.base.utils.Search;
+import com.baihui.hxtd.soa.base.utils.mapper.HibernateAwareObjectMapper;
+import com.baihui.hxtd.soa.common.service.CommonService;
+import com.baihui.hxtd.soa.system.DictionaryConstant;
+import com.baihui.hxtd.soa.system.entity.AuditLog;
+import com.baihui.hxtd.soa.system.entity.Function;
+import com.baihui.hxtd.soa.system.entity.User;
+import com.baihui.hxtd.soa.system.service.DictionaryService;
+import com.baihui.hxtd.soa.system.service.FunctionService;
+import com.baihui.hxtd.soa.system.service.MenuService;
+import com.baihui.hxtd.soa.util.EnumModule;
+import com.baihui.hxtd.soa.util.EnumOperationType;
+import com.baihui.hxtd.soa.util.JsonDto;
+import com.fasterxml.jackson.core.JsonGenerationException;
+import com.fasterxml.jackson.databind.JsonMappingException;
 
 @Controller
 @RequestMapping(value = "/system/function")
@@ -102,7 +101,7 @@ public class FunctionController {
         model.addAttribute("zNode", menuService.getMenuJsonData());
         model.addAttribute("func", func);
         model.addAttribute("funcUrl", "/system/function/modify.do");
-        model.addAttribute("level", dictionaryService.findChildren("010601"));
+        model.addAttribute("level", dictionaryService.findChildren(DictionaryConstant.FUNCTION_PRIVILEGELEVEL));
         return "/system/function/edit";
     }
 
@@ -123,7 +122,7 @@ public class FunctionController {
         String funcUrl = "/system/function/add.do";
         model.addAttribute("zNode", menuService.getMenuJsonData());
         model.addAttribute("funcUrl", funcUrl);
-        model.addAttribute("level", dictionaryService.findChildren("010601"));
+        model.addAttribute("level", dictionaryService.findChildren(DictionaryConstant.FUNCTION_PRIVILEGELEVEL));
         return "/system/function/edit";
     }
 
@@ -165,6 +164,7 @@ public class FunctionController {
         Map<String, Object> searchParams = Servlets.getParametersStartingWith(
                 request, "search_");
         Search.clearBlankValue(searchParams);
+        Search.trimValue(searchParams);
         Search.toRangeDate(searchParams, "modifiedTime");
         Search.toRangeDate(searchParams, "createdTime");
         page = functionService.findPage(searchParams, page);

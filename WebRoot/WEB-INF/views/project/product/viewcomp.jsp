@@ -11,7 +11,7 @@
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
 <html>
 <head>
-<title>产品情</title>
+<title>产品详情</title>
 <meta http-equiv="pragma" content="no-cache">
 <meta http-equiv="cache-control" content="no-cache">
 <meta http-equiv="expires" content="0">    
@@ -31,7 +31,7 @@
 		<b class="b4"></b>
 		<div class="ie_head">
 			<h1 class="f14 fbnone mt10 ml10 fl">
-				产品情信息
+				产品信息
 			</h1>
 			<ul class="fr id_table1 mt10 ml10">
 			</ul>

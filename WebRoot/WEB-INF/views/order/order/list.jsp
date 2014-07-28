@@ -1,6 +1,5 @@
 <%--
   功能描述：线索管理列表页
-  User: xiaoli.luo
   Date:2014/5/17
 --%>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
@@ -10,33 +9,28 @@
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
 <html>
 <head>
-<title>订单列表</title>
-<link rel="stylesheet" href="${ctx}/static/css/application.css" type="text/css"/>
-<link rel="stylesheet" href="${ctx}/static/css/recommend/detail.css" type="text/css"/>
-<script type="text/javascript" src="${ctx}/static/js/jquery-json.2.4.js"></script>
-<script type="text/javascript" src="${ctx}/static/js/jquery-jtemplates.js"></script>
-<script type="text/javascript" src="${ctx}/static/js/js-util.common.js"></script>
-<script type="text/javascript" src="${ctx}/static/js/scrollTitle.js?v=1"></script>
-<script type="text/javascript" src="${ctx}/static/js/pacs.js"></script>
-<script type="text/javascript">${applicationScope.VC_PCAS}</script>
-<script type="text/javascript">
-$(function () {
-    jsUtil.datepicker(".time");//加载时间控件
-    jsUtil.datepickerNotNow(".time1");
-    window.grid = new Grid().init().bindExport();
+    <title>订单列表</title>
+    <link rel="stylesheet" href="${ctx}/static/css/application.css" type="text/css"/>
+    <link rel="stylesheet" href="${ctx}/static/css/recommend/detail.css" type="text/css"/>
+    <script type="text/javascript" src="${ctx}/static/js/jquery-jtemplates.js"></script>
+    <script type="text/javascript" src="${ctx}/static/js/js-util.common.js"></script>
+    <script type="text/javascript" src="${ctx}/static/js/scrollTitle.js?v=1"></script>
+    <script type="text/javascript" src="${ctx}/static/js/pacs.js"></script>
+    <script type="text/javascript">${applicationScope.VC_PCAS}</script>
+    <script type="text/javascript">
+        $(function () {
+            jsUtil.datepicker(".time");//加载时间控件
+            jsUtil.datepickerNotNow(".time1");
+            window.grid = new Grid().init().bindExport();
+        });
 
-    window.executeFlowNode = function (current, executeable) {
-
-    }
-});
-
-function getProduct(id){
-	jsUtil.dialogIframe("${ctx}/project/product/toViewPage.comp?id="+id, "产品信息", 800, 470);
-}
-function getCustomer(id){
-	jsUtil.dialogIframe("${ctx}/customer/customer/toViewPage.comp?id="+id, "客户信息", 800, 700);
-}
-</script>
+        function getProduct(id) {
+            jsUtil.dialogIframe("${ctx}/project/product/toViewPage.comp?id=" + id, "产品信息", 800, 470);
+        }
+        function getCustomer(id) {
+            jsUtil.dialogIframe("${ctx}/customer/customer/toViewPage.comp?id=" + id, "客户信息", 800, 700);
+        }
+    </script>
 </head>
 <body>
 <div class="listcontainer">
@@ -142,9 +136,10 @@ function getCustomer(id){
                 </th>
                 <th>订单编号</th>
                 <th>客户</th>
-                <th>金额</th>
+                <th>金额（万）</th>
                 <th>产品</th>
-                <th width="4%">状态</th>
+                <th width="6%">审批环节</th>
+                <th width="5%">状态</th>
                 <th>所有者</th>
                 <th width="4%">创建者</th>
                 <th width="12%" class="sortable orderby" orderby="createdTime">创建时间</th>
@@ -168,7 +163,7 @@ function getCustomer(id){
                     </c:choose>
                 </td>
                 <td>
-                	<c:choose>
+                    <c:choose>
                         <c:when test="${VS_HAS_FUNCTIONS.customerView}">
                             <a href="javascript:getCustomer({$T.row.customer.id})" class="toviewpage">{$T.row.customer.name}</a>
                         </c:when>
@@ -177,25 +172,28 @@ function getCustomer(id){
                 </td>
                 <td>{$T.row.purchaseMoney}</td>
                 <td>
-                	<c:choose>
+                    <c:choose>
                         <c:when test="${VS_HAS_FUNCTIONS.productView}">
                             <a href="javascript:getProduct({$T.row.product.id})" class="toviewpage">{$T.row.product.name}</a>
                         </c:when>
                         <c:otherwise>{$T.row.product.name}</c:otherwise>
                     </c:choose>
                 </td>
-                <td>{$T.row.status.name}</td>
+                <td>{$T.row.flowNode.type==${endNodeType}?"":"待"}{$T.row.flowNode.name}</td>
+                <td>{$T.row.orderStatus.key}</td>
                 <td>{$T.row.owner.realName}</td>
                 <td>{$T.row.creator.realName}</td>
                 <td>{$T.row.createdTime}</td>
                 <td>{$T.row.modifier.realName}</td>
                 <td>{$T.row.modifiedTime}</td>
-                <td align="center">
+                <td align="left">
                     <c:if test="${VS_HAS_FUNCTIONS.orderView}">
                         <a href="${ctx}/order/order/toViewPage.do?id={$T.row.id}" title="详情" class=" block_inline s_detail_btn globle_img ml10"></a>
                     </c:if>
                     <c:if test="${VS_HAS_FUNCTIONS.orderModify}">
+                        {#if $T.row.flowNode.type==${startNodeType}}
                         <a href="${ctx}/order/order/toModifyPage.do?id={$T.row.id}" title="编辑" class=" block_inline s_edit_btn globle_img ml10"></a>
+                        {#/if}
                     </c:if>
                     <c:if test="${VS_HAS_FUNCTIONS.orderDelete}">
                         <a href="javascript:void(0)" uri="${ctx}/order/order/delete.do?id={$T.row.id}" title="删除" class="delete  block_inline s_dump_btn globle_img ml10"></a>
@@ -204,13 +202,13 @@ function getCustomer(id){
                         <a href="${ctx}/order/order/toAddPage.do?type=second&id={$T.row.id}" title="再次购买" class="block_inline s_buy globle_img ml10"></a>
                     </c:if>
                     <c:if test="${VS_HAS_FUNCTIONS.orderStartApprove}">
-                        {#if $T.row.status.type==${startNodeType}&&$T.row.owner.id==${VS_USER.id}}
+                        {#if $T.row.flowNode.type==${startNodeType}&&$T.row.owner.id==${VS_USER.id}}
                         <a href="${ctx}/order/order/toStartApprovePage.do?id={$T.row.id}" title="启动审批" class="block_inline s_onapprove globle_img ml10"></a>
                         {#/if}
                     </c:if>
                     <c:if test="${VS_HAS_FUNCTIONS.orderExecuteApprove}">
-                        {#if $T.row.status.type==${businessNodeType}&&$T.row.status.executeFlowNode}
-                        <a href="${ctx}/order/order/toExecuteApprovePage.do?id={$T.row.id}&flowNodeId={$T.row.status.executeFlowNode.id}" title="进行审批" class="block_inline s_goapprove globle_img ml10"></a>
+                        {#if $T.row.flowNode.type==${businessNodeType}&&$T.row.flowNode.executeFlowNode}
+                        <a href="${ctx}/order/order/toExecuteApprovePage.do?id={$T.row.id}&flowNodeId={$T.row.flowNode.executeFlowNode.id}" title="进行审批" class="block_inline s_goapprove globle_img ml10"></a>
                         {#/if}
                     </c:if>
                 </td>

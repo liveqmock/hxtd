@@ -3,6 +3,7 @@ package com.baihui.hxtd.soa.common.imports.excel;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 import javax.annotation.Resource;
 
@@ -55,7 +56,7 @@ public class ExcelParse4Customer extends ExcelParse<CustomerDTO> {
 		list.addAll(sheetList);
 		//行记录是否为空
 		if (sheetList == null || sheetList.isEmpty() ) {
-			msg += "第"+rowNumOfSheet+"条,被解析的集合为空!";
+			msg += "第"+rowNumOfSheet+"条数据,被解析的集合为空!";
 			logger.warn(msg);
 			ImportMessage.message = msg;
 			return null;
@@ -64,7 +65,7 @@ public class ExcelParse4Customer extends ExcelParse<CustomerDTO> {
 		//姓名必填项
 		String name = sheetList.get(1);
 		if ( Tools.isEmpty(name.trim()) ) {
-			msg += "<br />第"+rowNumOfSheet+"条,客户名不能为空!";
+			msg += "<br />第"+rowNumOfSheet+"条数据,客户名不能为空!";
 			logger.warn(msg);
 			//向无效数据集合中添加一条数据
 			ImportMessage.invalidFormatRowNumMap.put(rowNumOfSheet, msg);
@@ -73,7 +74,7 @@ public class ExcelParse4Customer extends ExcelParse<CustomerDTO> {
 		//公司必填项
 		String company = sheetList.get(2);
 		if ( Tools.isEmpty(company.trim()) ) {
-			msg += "<br />第"+rowNumOfSheet+"条,公司不能为空!";
+			msg += "<br />第"+rowNumOfSheet+"条数据,公司不能为空!";
 			logger.warn(msg);
 			//向无效数据集合中添加一条数据
 			ImportMessage.invalidFormatRowNumMap.put(rowNumOfSheet, msg);
@@ -89,14 +90,14 @@ public class ExcelParse4Customer extends ExcelParse<CustomerDTO> {
 		String mobile =  sheetList.get(4);
 		//手机号码必填项
 		if ( Tools.isEmpty(mobile.trim()) ) {
-			msg += "<br />第"+rowNumOfSheet+"条,手机号码不能为空!";
+			msg += "<br />第"+rowNumOfSheet+"条数据,手机号码不能为空!";
 			logger.warn(msg);
 			//向无效数据集合中添加一条数据
 			ImportMessage.invalidFormatRowNumMap.put(rowNumOfSheet, msg);
 			return null;
 		}
 		if(!isMobile(mobile)){
-			msg += "<br />第"+rowNumOfSheet+"条,手机号码内容无效!";
+			msg += "<br />第"+rowNumOfSheet+"条数据,手机号码内容无效!";
 			//向无效数据集合中添加一条数据
 			ImportMessage.invalidFormatRowNumMap.put(rowNumOfSheet, msg);
 			return null;
@@ -106,14 +107,14 @@ public class ExcelParse4Customer extends ExcelParse<CustomerDTO> {
 		//电话号码格式
 		String phone =  sheetList.get(3);
 		if ( Tools.isEmpty(phone.trim()) ) {
-			msg += "<br />第"+rowNumOfSheet+"条,电话号码不能为空!";
+			msg += "<br />第"+rowNumOfSheet+"条数据,电话号码不能为空!";
 			logger.warn(msg);
 			//向无效数据集合中添加一条数据
 			ImportMessage.invalidFormatRowNumMap.put(rowNumOfSheet, msg);
 			return null;
 		}
 		if(!isPhone(phone)){
-			msg += "<br />第"+rowNumOfSheet+"条,电话号码内容无效!";
+			msg += "<br />第"+rowNumOfSheet+"条数据,电话号码内容无效!";
 			//向无效数据集合中添加一条数据
 			ImportMessage.invalidFormatRowNumMap.put(rowNumOfSheet, msg);
 			return null;
@@ -123,7 +124,7 @@ public class ExcelParse4Customer extends ExcelParse<CustomerDTO> {
 		//传真格式，与电话号码相同
 		String fax = sheetList.get(6);
 		if(!Tools.isEmpty(fax) && !isPhone(fax)){
-			msg += "<br />第"+rowNumOfSheet+"条,传真内容无效!";
+			msg += "<br />第"+rowNumOfSheet+"条数据,传真内容无效!";
 			//向无效数据集合中添加一条数据
 			ImportMessage.invalidFormatRowNumMap.put(rowNumOfSheet, msg);
 			return null;
@@ -133,7 +134,7 @@ public class ExcelParse4Customer extends ExcelParse<CustomerDTO> {
 		//邮箱格式
 		String email = sheetList.get(5);
 		if(!Tools.isEmpty(email)&&!checkEmail(email)){
-			msg += "<br />第"+rowNumOfSheet+"条,邮箱内容无效!";
+			msg += "<br />第"+rowNumOfSheet+"条数据,邮箱内容无效!";
 			//向无效数据集合中添加一条数据
 			ImportMessage.invalidFormatRowNumMap.put(rowNumOfSheet, msg);
 			return null;
@@ -141,7 +142,7 @@ public class ExcelParse4Customer extends ExcelParse<CustomerDTO> {
 		//邮编格式
 		String postCode = sheetList.get(15);
 		if(!Tools.isEmpty(postCode)&&!checkPostCode(postCode)){
-			msg += "<br />第"+rowNumOfSheet+"条,邮编内容无效!";
+			msg += "<br />第"+rowNumOfSheet+"条数据,邮编内容无效!";
 			//向无效数据集合中添加一条数据
 			ImportMessage.invalidFormatRowNumMap.put(rowNumOfSheet, msg);
 			return null;
@@ -154,7 +155,7 @@ public class ExcelParse4Customer extends ExcelParse<CustomerDTO> {
 		String customerOwner = sheetList.get(0);
 		//客户所有者必填
 		if ( Tools.isEmpty(customerOwner.trim())) {
-			msg += "<br />第"+rowNumOfSheet+"条,客户所有者不能为空!";
+			msg += "<br />第"+rowNumOfSheet+"条数据,客户所有者不能为空!";
 			logger.warn(msg);
 			//向无效数据集合中添加一条数据
 			ImportMessage.invalidFormatRowNumMap.put(rowNumOfSheet, msg);
@@ -166,7 +167,7 @@ public class ExcelParse4Customer extends ExcelParse<CustomerDTO> {
 			//根据id查询客户所有者
 			owner = userService.getByName(customerOwner.trim());
 			if(owner==null){
-				msg += "<br />第"+rowNumOfSheet+"条,客户所有者不存在!";
+				msg += "<br />第"+rowNumOfSheet+"条数据,客户所有者不存在!";
 				logger.warn(msg);
 				//向无效数据集合中添加一条数据
 				ImportMessage.invalidFormatRowNumMap.put(rowNumOfSheet, msg);
@@ -180,7 +181,7 @@ public class ExcelParse4Customer extends ExcelParse<CustomerDTO> {
 		String customerSource = sheetList.get(7);
 		//来源必填
 		if ( Tools.isEmpty(customerOwner.trim())) {
-			msg += "<br />第"+rowNumOfSheet+"条,客户来源不能为空!";
+			msg += "<br />第"+rowNumOfSheet+"条数据,客户来源不能为空!";
 			logger.warn(msg);
 			//向无效数据集合中添加一条数据
 			ImportMessage.invalidFormatRowNumMap.put(rowNumOfSheet, msg);
@@ -192,7 +193,7 @@ public class ExcelParse4Customer extends ExcelParse<CustomerDTO> {
 			//根据id查询线索来源(40101)
 			source = dictionaryService.getValue(customerSource.trim(), 40302L);
 			if(source==null){
-				msg += "<br />第"+rowNumOfSheet+"条,客户来源无效!";
+				msg += "<br />第"+rowNumOfSheet+"条数据,客户来源无效!";
 				logger.warn(msg);
 				//向无效数据集合中添加一条数据
 				ImportMessage.invalidFormatRowNumMap.put(rowNumOfSheet, msg);
@@ -207,7 +208,7 @@ public class ExcelParse4Customer extends ExcelParse<CustomerDTO> {
 		String customerIndustry = sheetList.get(8);
 		//行业必填
 		if ( Tools.isEmpty(customerIndustry.trim())) {
-			msg += "<br />第"+rowNumOfSheet+"条,行业不能为空!";
+			msg += "<br />第"+rowNumOfSheet+"条数据,行业不能为空!";
 			logger.warn(msg);
 			//向无效数据集合中添加一条数据
 			ImportMessage.invalidFormatRowNumMap.put(rowNumOfSheet, msg);
@@ -219,7 +220,7 @@ public class ExcelParse4Customer extends ExcelParse<CustomerDTO> {
 			//根据id查询线索状态(40305)
 			industry = dictionaryService.getValue(customerIndustry.trim(), 40305L);
 			if(industry==null){
-				msg += "<br />第"+rowNumOfSheet+"条,行业无效!";
+				msg += "<br />第"+rowNumOfSheet+"条数据,行业无效!";
 				logger.warn(msg);
 				//向无效数据集合中添加一条数据
 				ImportMessage.invalidFormatRowNumMap.put(rowNumOfSheet, msg);
@@ -237,7 +238,7 @@ public class ExcelParse4Customer extends ExcelParse<CustomerDTO> {
 			type = dictionaryService.getValue(customerType.trim(), 40301L);
 			//根据customerType没有查询到,返回null
 			if(type==null){
-				msg += "<br />第"+rowNumOfSheet+"条,客户类型无效!";
+				msg += "<br />第"+rowNumOfSheet+"条数据,客户类型无效!";
 				logger.warn(msg);
 				//向无效数据集合中添加一条数据
 				ImportMessage.invalidFormatRowNumMap.put(rowNumOfSheet, msg);
@@ -255,7 +256,7 @@ public class ExcelParse4Customer extends ExcelParse<CustomerDTO> {
 			riskGrade = dictionaryService.getValue(customerRiskGrade.trim(), 40304L);
 			//根据customerType没有查询到,返回null
 			if(riskGrade==null){
-				msg += "<br />第"+rowNumOfSheet+"条,风险等级无效!";
+				msg += "<br />第"+rowNumOfSheet+"条数据,风险等级无效!";
 				logger.warn(msg);
 				//向无效数据集合中添加一条数据
 				ImportMessage.invalidFormatRowNumMap.put(rowNumOfSheet, msg);
@@ -273,7 +274,7 @@ public class ExcelParse4Customer extends ExcelParse<CustomerDTO> {
 			//根据id查询线索状态(40103)
 			cardType = dictionaryService.getValue(customerCardType.trim(), 40303L);
 			if(cardType==null){
-				msg += "<br />第"+rowNumOfSheet+"条,证件类型无效!";
+				msg += "<br />第"+rowNumOfSheet+"条数据,证件类型无效!";
 				logger.warn(msg);
 				//向无效数据集合中添加一条数据
 				ImportMessage.invalidFormatRowNumMap.put(rowNumOfSheet, msg);
@@ -290,7 +291,7 @@ public class ExcelParse4Customer extends ExcelParse<CustomerDTO> {
 			//根据id查询邀约人
 			appointment = userService.getByName(customerAppointment.trim());
 			if(appointment==null){
-				msg += "<br />第"+rowNumOfSheet+"条,邀约人无效!";
+				msg += "<br />第"+rowNumOfSheet+"条数据,邀约人无效!";
 				logger.warn(msg);
 				//向无效数据集合中添加一条数据
 				ImportMessage.invalidFormatRowNumMap.put(rowNumOfSheet, msg);
@@ -307,7 +308,7 @@ public class ExcelParse4Customer extends ExcelParse<CustomerDTO> {
 			//根据id查询客户所有者
 			financialAdvisor = userService.getByName(customerFinancialAdvisor.trim());
 			if(financialAdvisor==null){
-				msg += "<br />第"+rowNumOfSheet+"条,理财顾问无效!";
+				msg += "<br />第"+rowNumOfSheet+"条数据,理财顾问无效!";
 				logger.warn(msg);
 				//向无效数据集合中添加一条数据
 				ImportMessage.invalidFormatRowNumMap.put(rowNumOfSheet, msg);
@@ -323,7 +324,7 @@ public class ExcelParse4Customer extends ExcelParse<CustomerDTO> {
 		if ( !Tools.isEmpty(customerFinancialManager.trim()) ) {
 			financialManager = userService.getByName(customerFinancialManager.trim());
 			if(cardType==null){
-				msg += "<br />第"+rowNumOfSheet+"条,理财经理无效!";
+				msg += "<br />第"+rowNumOfSheet+"条数据,理财经理无效!";
 				logger.warn(msg);
 				//向无效数据集合中添加一条数据
 				ImportMessage.invalidFormatRowNumMap.put(rowNumOfSheet, msg);
@@ -339,7 +340,7 @@ public class ExcelParse4Customer extends ExcelParse<CustomerDTO> {
 		if ( !Tools.isEmpty(customerFinancialDirector.trim()) ) {
 			financialDirector = userService.getByName(customerFinancialDirector.trim());
 			if(financialDirector==null){
-				msg += "<br />第"+rowNumOfSheet+"条,理财总监无效!";
+				msg += "<br />第"+rowNumOfSheet+"条数据,理财总监无效!";
 				logger.warn(msg);
 				//向无效数据集合中添加一条数据
 				ImportMessage.invalidFormatRowNumMap.put(rowNumOfSheet, msg);
@@ -355,7 +356,7 @@ public class ExcelParse4Customer extends ExcelParse<CustomerDTO> {
 			//根据id查询线索状态(40103)
 			ownerShip = dictionaryService.getValue(customerOwnerShip.trim(), 40306L);
 			if(ownerShip==null){
-				msg += "<br />第"+rowNumOfSheet+"条,所有权无效!";
+				msg += "<br />第"+rowNumOfSheet+"条数据,所有权无效!";
 				logger.warn(msg);
 				//向无效数据集合中添加一条数据
 				ImportMessage.invalidFormatRowNumMap.put(rowNumOfSheet, msg);
@@ -372,7 +373,7 @@ public class ExcelParse4Customer extends ExcelParse<CustomerDTO> {
 			//根据id查询线索状态(40103)
 			openBank = dictionaryService.getValue(customerOpenBank.trim(), 40307L);
 			if(openBank==null){
-				msg += "<br />第"+rowNumOfSheet+"条,开户银行无效!";
+				msg += "<br />第"+rowNumOfSheet+"条数据,开户银行无效!";
 				logger.warn(msg);
 				//向无效数据集合中添加一条数据
 				ImportMessage.invalidFormatRowNumMap.put(rowNumOfSheet, msg);
@@ -389,7 +390,7 @@ public class ExcelParse4Customer extends ExcelParse<CustomerDTO> {
 		if (! Tools.isEmpty(customerProvince.trim()) ) {
 			province = pCASService.getByName(customerProvince.trim(),0L);
 			if(province==null){
-				msg += "<br />第"+rowNumOfSheet+"条,该省不存在!";
+				msg += "<br />第"+rowNumOfSheet+"条数据,该省不存在!";
 				logger.warn(msg);
 				//向无效数据集合中添加一条数据
 				ImportMessage.invalidFormatRowNumMap.put(rowNumOfSheet, msg);
@@ -406,7 +407,7 @@ public class ExcelParse4Customer extends ExcelParse<CustomerDTO> {
 		if (province!=null && !Tools.isEmpty(customerCity.trim()) ) {
 			city = pCASService.getByName(customerCity.trim(),province.getId());
 			if(city==null){
-				msg += "<br />第"+rowNumOfSheet+"条,该市不存在!";
+				msg += "<br />第"+rowNumOfSheet+"条数据,该市不存在!";
 				logger.warn(msg);
 				//向无效数据集合中添加一条数据
 				ImportMessage.invalidFormatRowNumMap.put(rowNumOfSheet, msg);
@@ -422,7 +423,7 @@ public class ExcelParse4Customer extends ExcelParse<CustomerDTO> {
 		if (city != null && !Tools.isEmpty(customerCounty.trim()) ) {
 			county = pCASService.getByName(customerCounty.trim(),city.getId());
 			if(county==null){
-				msg += "<br />第"+rowNumOfSheet+"条,该县不存在!";
+				msg += "<br />第"+rowNumOfSheet+"条数据,该县不存在!";
 				logger.warn(msg);
 				//向无效数据集合中添加一条数据
 				ImportMessage.invalidFormatRowNumMap.put(rowNumOfSheet, msg);
@@ -472,9 +473,13 @@ public class ExcelParse4Customer extends ExcelParse<CustomerDTO> {
 		/*
 		 * 判断第一个集合中的数据是否和第二个集合中的数据有重复
 		 */
-		for(Integer rowNum1:entityMap.keySet()){
+		Set<Integer> keySet1 = entityMap.keySet();
+		for(Integer rowNum1:keySet1){
 			customer1 = entityMap.get(rowNum1);
-			for(Integer rowNum2:entityMap.keySet()){
+			String mobile1 = customer1.getMobile().trim();
+			String email1 = customer1.getEmail().trim();
+			Set<Integer> keySet2 = entityMap.keySet();
+			for(Integer rowNum2:keySet2){
 				CustomerDTO customer2 = entityMap.get(rowNum2);
 				//和处理自己以外的其他数据比较
 				if(rowNum1==rowNum2){
@@ -487,13 +492,14 @@ public class ExcelParse4Customer extends ExcelParse<CustomerDTO> {
 				 * 2.如果比较的两个对象的值都是""或者null,则可以做排空处理
 				 */
 				String uniqueString = "";
-				
+				String mobile2 = customer2.getMobile().trim();
+				String email2 = customer2.getEmail().trim();
 				
 				/*
 				 * 按手机排重
 				 * 条件：查重的主键包含mobile，并且(customer1和customer2的)主键内容不为null，""和"null"。最后判断两个mobile是否相等
 				 */
-				if((params.contains("mobile")) && !Tools.isEmpty(customer1.getMobile().trim()) && !Tools.isEmpty(customer2.getMobile().trim()) && (customer1.getMobile().trim().equals(customer2.getMobile().trim()))){
+				if((params.contains("mobile")) && !Tools.isEmpty(mobile1) && !Tools.isEmpty(mobile2) && (mobile1.equals(mobile2))){
 					//第一参数相同 b  
 					flag1 = true;
 					//拼接唯一键
@@ -504,7 +510,7 @@ public class ExcelParse4Customer extends ExcelParse<CustomerDTO> {
 					}
 				}
 				//按邮箱排重
-				if((params.contains("email")) && !Tools.isEmpty(customer1.getEmail().trim()) && !Tools.isEmpty(customer2.getEmail().trim()) && (customer1.getEmail().equals(customer2.getEmail()))){
+				if((params.contains("email")) && !Tools.isEmpty(email1) && !Tools.isEmpty(email2) && (email1.equals(email2))){
 					//第二参数相同
 					flag2 = true;
 					//拼接唯一键

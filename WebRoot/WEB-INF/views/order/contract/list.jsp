@@ -127,7 +127,7 @@
                 <th width="10%" class="sortable orderby" orderby="title">合同编号</th>
                 <th width="10%" class="sortable orderby" orderby="title">订单编号</th>
                 <th width="10%">合同名称</th>
-                <th width="7%">合同金额(万)</th>
+                <th width="7%">合同金额（万）</th>
                 <th width="7%">客户</th>
                 <th width="7%">赎回方式</th>
                 <th width="5%">创建者</th>

@@ -3,6 +3,7 @@ package com.baihui.hxtd.soa.common.controller;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Set;
@@ -92,23 +93,23 @@ public class ImportController {
             @ModelAttribute(Constant.VS_ORG) Organization organization,
             ModelMap modelMap,
             RedirectAttributes model) throws IOException, InvalidFormatException, InstantiationException, IllegalAccessException, ClassNotFoundException {
+		
 		logger.info("导入excel文件");
-		//初始化静态变量
+		
+		//记录开始导入时间
+		Date beginTime = importService.getDBNow();
+		
+		/**
+		 * 初始化静态变量,每次导入都清空集合
+		 */
+		/*ImportMessage.totalCount = 0;
 		ImportMessage.workbookRepeatRowNums = new TreeSet<Integer>();
-		
-		/**将上面这组数据保存到Map集合中.key=唯一键,value=重复记录的excel序号集合*/
 		ImportMessage.workbookRepeats = new HashMap<String,Set<Integer>>();
-		
-		/**格式错误记录的excel序号集合*/
 		ImportMessage.invalidFormatRowNumMap = new HashMap<Integer, String>();
-		
-		/** 在数据库中已经存在的记录的excel序号集合 */
 		ImportMessage.databaseRepeatRowNums = new TreeSet<Integer>();
-		
-		/** 新增到数据库中记录的excel序号集合 */
 		ImportMessage.databaseNewRowNums = new ArrayList<Integer>();
+		ImportMessage.message = "";*/
 
-		
 		logger.info("检查文件是否为空");
 		String msg = "";
 		
@@ -116,7 +117,9 @@ public class ImportController {
         JsonDto json = null;
 		
         msg = checkFileItem(file,modelMap);
+        
         if(!"".equals(msg)){
+        	logger.info("文件导入失败:" + ImportMessage.message);
         	//导入失败的原因
         	json = new JsonDto(ImportMessage.message);
      		json.setSuccessFlag(false);
@@ -138,6 +141,7 @@ public class ImportController {
         		importResult += ImportMessage.importResult() +";";
         		importResult +=ImportMessage.invalidFormatMessage();
         	}else{
+        		logger.info("导入失败：解析文件内容为空");
         		importResult +="导入失败：解析文件内容为空!";
         	}
         	json = new JsonDto(importResult);
@@ -154,7 +158,11 @@ public class ImportController {
 		} catch (Exception e) {
 			e.printStackTrace();
 		} 
-        
+		//记录导入结束时间
+		Date endTime = importService.getDBNow();
+		//导入记录时间
+		int spendTime = (int) ((endTime.getTime() - beginTime.getTime()) /(1000*60));
+		int spendTime2 = (int) ((endTime.getTime() - beginTime.getTime()) %(1000*60));
 
         logger.info("导入完成");
         //model.addFlashAttribute(ImportMessage.message, "导入成功");
@@ -162,16 +170,26 @@ public class ImportController {
         importResult += ImportMessage.importResult() +";";
         //获取excel内部数据重复的列表
         importResult += ImportMessage.workbookRepeatMessage() + ";";
-        
         //因数据格式不正确忽略的记录
         importResult += ImportMessage.invalidFormatMessage() + ";";
-        
         //修改数据的记录数
         importResult += ImportMessage.databaseRepeatMessage("merge".equals(duplicateType) ? "合并":("jump".equals(duplicateType)?"跳过":("cover".equals(duplicateType)?"覆盖":"合并"))) + ";";
-        
         //新增数据的记录数
-        importResult += ImportMessage.databaseNewMessage();
+        importResult += ImportMessage.databaseNewMessage()+";";
+        importResult += String.valueOf(spendTime);
         
+        /**
+		 * 初始化静态变量,导入完成后清空集合
+		 */
+		ImportMessage.totalCount = 0;
+		ImportMessage.workbookRepeatRowNums = new TreeSet<Integer>();
+		ImportMessage.workbookRepeats = new HashMap<String,Set<Integer>>();
+		ImportMessage.invalidFormatRowNumMap = new HashMap<Integer, String>();
+		ImportMessage.databaseRepeatRowNums = new TreeSet<Integer>();
+		ImportMessage.databaseNewRowNums = new ArrayList<Integer>();
+		ImportMessage.message = "";
+       
+		
         json = new JsonDto(importResult);
  		json.setSuccessFlag(true);
  		return json.toString();
@@ -239,12 +257,17 @@ public class ImportController {
 	
 	
 	public static void main(String[] args) {
+		
+		Date beginTime = new Date();
+		
 		String moduleName = "marketActiviey";
 		StringBuffer  moduleValue = new StringBuffer( moduleName.substring(0, 1).toUpperCase()+moduleName.substring(1));
 		moduleValue.insert(0, "ExcelParse4");
 		 moduleValue.insert(0, "com.baihui.hxtd.soa.common.imports.excel.");
 		System.out.println(moduleValue.toString());
-		
+		Date endTime = new Date();
+		int iDay = (int) ((beginTime.getTime() - endTime.getTime()) / 86400000);	
+		System.out.println(iDay);
 	}
 
 }

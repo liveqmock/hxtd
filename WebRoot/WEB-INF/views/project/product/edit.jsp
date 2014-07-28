@@ -57,9 +57,9 @@ function searchData(action){ // 搜索
 	<table class="cb id_table3 w95b bg_c_white margin0 mt10">
 		<tr>
 			<td width="15%" align="right"><span class="w_red">*&nbsp;</span>产品名称：</td>
-			<td align="left"><input name="name" type="text" value="${product.name}" class="text_input3 required"/></td>
+			<td align="left"><input name="name" type="text" value="${product.name}" class="text_input3 required" maxlength="30"/></td>
 			<td width="15%" align="right"><span class="w_red">*&nbsp;</span>产品编号：</td>
-			<td align="left"><input name="code" type="text" value="${product.code}" class="text_input3"/></td>
+			<td align="left"><input name="code" type="text" value="${product.code}" class="text_input3 {unique:['Product','${product.code}']}" maxlength="30"/></td>
 		</tr>
 		<tr>
 			<td align="right">产品类型：</td>
@@ -88,24 +88,24 @@ function searchData(action){ // 搜索
 			<td align="right"><span class="w_red">*&nbsp;</span>出售金额（万）：</td>
 			<td align="left">
 				<fmt:formatNumber value="${product.sellMoney}" pattern="###,##0.00" var="sellMoney"/>
-				<input type="text" value="${sellMoney}" class="text_input3 right required money" style="ime-mode:disabled"/>
+				<input type="text" value="${sellMoney}" class="text_input3 right required money" style="ime-mode:disabled" maxlength="13"/>
 				<input type="hidden" name="sellMoney" value="${product.sellMoney}"/>
 			</td>
-			<td align="right">收益率（%）：</td>
+			<td align="right"><span class="w_red">*&nbsp;</span>收益率（%）：</td>
 			<td align="left">
-				<input name="rate" type="text" value="${product.rate}" class="text_input3 right"/>
+				<input name="rate" type="text" value="${product.rate}" class="text_input3 right required" maxlength="5"/>
 			</td>
 		</tr>
 		<tr>
 			<td align="right">预期收益（万）：</td>
 			<td align="left">
 				<fmt:formatNumber value="${product.expectProfit}" pattern="###,##0.00" var="expectProfit"/>
-				<input type="text" value="${expectProfit}" class="right text_input3 money" style="ime-mode:disabled"/>
+				<input type="text" value="${expectProfit}" class="right text_input3 money" style="ime-mode:disabled" maxlength="13"/>
 				<input type="hidden" name="expectProfit" value="${product.expectProfit}"/>
 			</td>
 			<td align="right">销售期限：</td>
 			<td align="left">
-				<input name="saleLimit" type="text" value="${product.saleLimit}" class="right text_input4"/>
+				<input name="saleLimit" type="text" value="${product.saleLimit}" class="right text_input4" maxlength="3"/>
 				&nbsp;/&nbsp;<select name="saleUnit.id" class="select3" style="width: 130px;">
 				 	<c:forEach items="${dicUnit}" var="d">
 				 		<option value="${d.id}" 
@@ -125,8 +125,8 @@ function searchData(action){ // 搜索
 				<input id="start" name="saleBeginTime" type="text" value="${saleBeginTime}" 
 					class="text_input3 input_close1 required" readonly/>
 			</td>
-			<td align="right">赎回赔率（%）：</td>
-			<td align="left"><input name="redeemRate" type="text" value="${product.redeemRate}" class="right text_input3 amount"/></td>
+			<td align="right"><span class="w_red">*&nbsp;</span>赎回赔率（%）：</td>
+			<td align="left"><input name="redeemRate" type="text" value="${product.redeemRate}" class="right text_input3 required amount" maxlength="5"/></td>
 		</tr>
 		<tr>
 			<td align="right"><span class="w_red">*&nbsp;</span>销售结束日期：</td>
@@ -136,8 +136,8 @@ function searchData(action){ // 搜索
 				<input id="end" name="saleEndTime" type="text" value="${saleEndTime}" readonly 
 					class="text_input3 input_close1 required"/>
 			</td>
-			<td align="right">赎回公式：</td>
-			<td align="left"><input name="redeemFormula" type="text" value="${product.redeemFormula}" class="text_input3"/></td>
+			<td align="right"><span class="w_red">*&nbsp;</span>赎回公式：</td>
+			<td align="left"><input name="redeemFormula" type="text" value="${product.redeemFormula}" class="text_input3 required" maxlength="100"/></td>
 		</tr>
 	</table>
 	<h1 class="f14 fbnone ml40 pt10">描述信息</h1>
@@ -145,7 +145,7 @@ function searchData(action){ // 搜索
 		<tr>
 			<td align="right" width="15%" valign="top">备注：</td>
 			<td align="left" width="85%" valign="top"><textarea name="remark" 
-				class="remarks_input1" style="resize: none;">${product.remark}</textarea></td>
+				class="remarks_input1" maxlength="500">${product.remark}</textarea></td>
 		</tr>
 	</table>
 	<div class="h40"></div>

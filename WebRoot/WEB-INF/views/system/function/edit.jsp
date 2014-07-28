@@ -96,7 +96,7 @@ function clearInputVal(obj){ //清除
                 <td align="right" width="15%">功能名：</td>
                 <td align="left"><input type="text" name="name" value="${func.name }" class="text_input3 required"/></td>
                 <td align="right" width="15%">功能编号：</td>
-                <td align="left"><input type="text" name="code" value="${func.code }" class="text_input3 required"/></td>
+                <td align="left"><input type="text" name="code" value="${func.code }" class="text_input3 required {unique:['Function','${func.code}']}"/></td>
             </tr>
             <tr>
                 <td align="right">调用入口：</td>
@@ -140,7 +140,7 @@ function clearInputVal(obj){ //清除
         <table class="cb id_table4 w95b bg_c_white margin0 mt10">
             <tr>
                 <td align="right" width="15%" valign="top">备注：</td>
-                <td align="left" width="85%"><textarea name="remark"  class="remarks_input1">${func.remark}</textarea></td>
+                <td align="left" width="85%"><textarea name="remark"  class="remarks_input1 {maxlength:300}">${func.remark}</textarea></td>
             </tr>
         </table>
         <div class=" h40"></div>

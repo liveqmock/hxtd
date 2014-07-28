@@ -7,8 +7,6 @@ import java.util.Map;
 import java.util.Set;
 import java.util.TreeSet;
 
-import com.sun.org.apache.bcel.internal.generic.NEW;
-
 /**
  * 功能描述：导入信息类
  * @see: 与该类相关的类，写出具体的路径：包括完整的包名和类名.java
@@ -60,7 +58,7 @@ public class ImportMessage {
 	 * excel导入数据量提示信息
 	 */
 	public static String limitMessage(){
-		String msg = "共导入[" + ImportMessage.totalCount + "]条，超过最大导入[" + ImportMessage.LIMIT_COUNT + "]条限制的[" + (ImportMessage.totalCount-ImportMessage.LIMIT_COUNT) + "]条数据已忽略";
+		String msg = "共导入[" + ImportMessage.totalCount + "]条数据，超过最大导入[" + ImportMessage.LIMIT_COUNT + "]条数据限制的[" + (ImportMessage.totalCount-ImportMessage.LIMIT_COUNT) + "]条数据已忽略";
 		return msg;
 	}
 
@@ -172,9 +170,9 @@ public class ImportMessage {
 		if(ImportMessage.totalCount>=10001){
 			msg.append(limitMessage()+",");
 		}else {
-			msg.append("共导入[" + ImportMessage.totalCount + "]条,");
+			msg.append("共导入[" + ImportMessage.totalCount + "]条数据,");
 		}
-		msg.append("成功导入 [ " + (ImportMessage.databaseNewRowNums.size() + ImportMessage.databaseRepeatRowNums.size() )+ " ]条,失败导入[ " + (ImportMessage.workbookRepeatRowNums.size()-ImportMessage.workbookRepeats .size() + invalidFormatRowNumMap.size()) + " ]条");
+		msg.append("成功导入 [ " + (ImportMessage.databaseNewRowNums.size() + ImportMessage.databaseRepeatRowNums.size() )+ " ]条数据,失败导入[ " + (ImportMessage.workbookRepeatRowNums.size()-ImportMessage.workbookRepeats .size() + invalidFormatRowNumMap.size()) + " ]条数据");
 		return msg.toString();
 	}
 	

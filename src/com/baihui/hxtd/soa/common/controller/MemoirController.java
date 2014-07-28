@@ -142,10 +142,7 @@ public class MemoirController {
 		
 		memoirService.add(memoir, user);
 		
-		JsonDto json = new JsonDto("保存成功");
-		json.setSuccessFlag(true);
-		
-		return json.toString();
+		return JsonDto.add(memoir.getId()).toString();
 	}
 	
 	/**
@@ -192,10 +189,7 @@ public class MemoirController {
 		
 		memoirService.modify(memoir, user);
 		
-		JsonDto json = new JsonDto("保存成功");
-		json.setSuccessFlag(true);
-		
-		return json.toString();
+		return JsonDto.modify(memoir.getId()).toString();
 	}
 	
 	/**

@@ -35,6 +35,7 @@ import com.baihui.hxtd.soa.common.controller.CommonController;
 import com.baihui.hxtd.soa.project.entity.Project;
 import com.baihui.hxtd.soa.project.service.ProductService;
 import com.baihui.hxtd.soa.project.service.ProjectService;
+import com.baihui.hxtd.soa.system.DictionaryConstant;
 import com.baihui.hxtd.soa.system.entity.AuditLog;
 import com.baihui.hxtd.soa.system.entity.User;
 import com.baihui.hxtd.soa.system.service.DataShift;
@@ -82,9 +83,9 @@ public class ProjectController extends CommonController<Project> {
 	public String toQueryPage(ModelMap model){
         logger.info("转至查询页面");
         logger.info("存储表单默认值");
-        HibernatePage<Project> page = new HibernatePage<Project>();
+        HibernatePage<Project> page = new HibernatePage<Project>().order(HibernatePage.DESC).orderBy("modifiedTime");
         model.addAttribute("page", page);
-        model.addAttribute("payType", dictionaryService.findChildren("040201"));
+        model.addAttribute("payType", dictionaryService.findChildren(DictionaryConstant.VC_PAY_TYPE, true));
 		return "/project/project/list";
 	}
 	
@@ -97,6 +98,7 @@ public class ProjectController extends CommonController<Project> {
 		Map<String, Object> searchParams = Servlets.getParametersStartingWith(
 				request, "search_");
 		Search.clearBlankValue(searchParams);
+		Search.trimValue(searchParams);
 		Search.toRangeDate(searchParams, "modifiedTime");
 		Search.toRangeDate(searchParams, "createdTime");
 		logger.info("添加默认的查询条件");
@@ -153,7 +155,7 @@ public class ProjectController extends CommonController<Project> {
 	public String toModifyPage(Long id,Model model){
 		Project project = projectService.get(id);
 		model.addAttribute("project",project);
-		model.addAttribute("payType", dictionaryService.findChildren("040201"));
+		model.addAttribute("payType", dictionaryService.findChildren(DictionaryConstant.VC_PAY_TYPE, true));
 		model.addAttribute("funcUrl","/project/project/modify.do");
 		return "/project/project/edit";
 	}
@@ -195,7 +197,7 @@ public class ProjectController extends CommonController<Project> {
 	@RequestMapping(value="/toAddPage.do")
 	public String toAddPage(Long id,Model model){
 		model.addAttribute("funcUrl","/project/project/add.do");
-		model.addAttribute("payType", dictionaryService.findChildren("040201"));
+		model.addAttribute("payType", dictionaryService.findChildren(DictionaryConstant.VC_PAY_TYPE, true));
 		return "/project/project/edit";
 	}
 

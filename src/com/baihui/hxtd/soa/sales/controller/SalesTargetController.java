@@ -3,7 +3,6 @@ package com.baihui.hxtd.soa.sales.controller;
 
 import java.io.IOException;
 import java.io.PrintWriter;
-import java.util.List;
 import java.util.Map;
 
 import javax.annotation.Resource;
@@ -28,11 +27,8 @@ import com.baihui.hxtd.soa.common.controller.CommonController;
 import com.baihui.hxtd.soa.sales.entity.SalesTarget;
 import com.baihui.hxtd.soa.sales.service.SalesTargetService;
 import com.baihui.hxtd.soa.system.entity.AuditLog;
-import com.baihui.hxtd.soa.system.entity.Organization;
 import com.baihui.hxtd.soa.system.entity.User;
 import com.baihui.hxtd.soa.system.service.DataShift;
-import com.baihui.hxtd.soa.system.service.DictionaryService;
-import com.baihui.hxtd.soa.system.service.OrganizationService;
 import com.baihui.hxtd.soa.util.EnumModule;
 import com.baihui.hxtd.soa.util.EnumOperationType;
 import com.baihui.hxtd.soa.util.JsonDto;
@@ -48,11 +44,7 @@ public class SalesTargetController extends CommonController<SalesTarget> {
 	@Resource
 	private SalesTargetService salesTargetService;
 	
-	@Resource
-	private DictionaryService dictionaryService;
 	
-	@Resource
-	private OrganizationService organizationService;
 	
 	 /**
 	 * @throws IOException 
@@ -74,6 +66,7 @@ public class SalesTargetController extends CommonController<SalesTarget> {
 		Map<String, Object> searchParams = Servlets.getParametersStartingWith(
 				request, "search_");
 		Search.clearBlankValue(searchParams);
+		Search.trimValue(searchParams);
 		Search.toRangeDate(searchParams, "modifiedTime");
 		Search.toRangeDate(searchParams, "createdTime");
 		logger.info("添加默认的查询条件");
@@ -96,7 +89,7 @@ public class SalesTargetController extends CommonController<SalesTarget> {
 	public String toQueryPage(ModelMap model) throws NoSuchFieldException {
         logger.info("转至查询页面");
         logger.info("存储表单默认值");
-        HibernatePage<SalesTarget> page = new HibernatePage<SalesTarget>();
+        HibernatePage<SalesTarget> page = new HibernatePage<SalesTarget>().order(HibernatePage.DESC).orderBy("modifiedTime");
         model.addAttribute("page", page);
 		return "/sales/salesTarget/list";
 	}

@@ -13,6 +13,7 @@ import com.baihui.hxtd.soa.system.entity.AuditLog;
 import com.baihui.hxtd.soa.system.entity.Dictionary;
 import com.baihui.hxtd.soa.system.entity.Organization;
 import com.baihui.hxtd.soa.system.entity.User;
+import com.baihui.hxtd.soa.system.service.DataShift;
 import com.baihui.hxtd.soa.system.service.DictionaryService;
 import com.baihui.hxtd.soa.system.service.OrganizationService;
 import com.baihui.hxtd.soa.system.service.RoleService;
@@ -75,6 +76,13 @@ public class OrganizationController {
         logger.info("转至查询页面");
 
         Organization organization = (Organization) model.get(Constant.VS_ORG);
+        DataShift dataShift = (DataShift) model.get(Constant.VS_DATASHIFT);
+        User user = (User) model.get(Constant.VS_USER);
+
+        //如果是系统管理员、系统数据管理员、管理员可以查看所有组织
+        if (dataShift.getIsSysManager() || dataShift.getIsSysDataManager() || user.getIsManager()) {
+            organization = organizationService.findRoot();
+        }
         logger.info("存储查询条件表单初始化数据");
         List<Organization> organizations = organizationService.findChildrenById(organization.getId());
         organizations.add(0, organization);

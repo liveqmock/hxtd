@@ -44,6 +44,14 @@
             }
             return json;
         },
+        /**查找数组属性值*/
+        findArrayAttr: function (array, attr) {
+            var attrs = [];
+            for (var i = 0; i < array.length; i++) {
+                attrs.push(array[i][attr]);
+            }
+            return attrs;
+        },
         /**选中通过样式*/
         selectByClass: function (jqele, selected, unselected) {
             jqele.addClass(selected).removeClass(unselected);

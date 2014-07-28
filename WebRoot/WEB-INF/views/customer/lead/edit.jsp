@@ -10,14 +10,6 @@
 <html>
 <head>
 <title>线索编辑页</title>
-<meta http-equiv="pragma" content="no-cache">
-<meta http-equiv="cache-control" content="no-cache">
-<meta http-equiv="expires" content="0">    
-<meta http-equiv="keywords" content="keyword1,keyword2,keyword3">
-<meta http-equiv="description" content="This is my page">
-<!--
-<link rel="stylesheet" type="text/css" href="styles.css">
--->
 <link rel="stylesheet" href="${ctx}/static/css/recommend/detail.css" type="text/css"/>
 <link rel="stylesheet" href="${ctx}/static/css/recommend/detail_a.css" type="text/css"/>
 <script type="text/javascript" src="${ctx}/static/js/jquery.validate.js"></script>
@@ -115,12 +107,7 @@ function clearInputVal(obj){ //清除
 <body>
 <form id="form" action="${ctx }${funcUrl}" method="post">
 <div>
-	<!--请在此处使用iframe--->
-	<!--查询条件开始-->
-
-	<!--查询条件结束-->
 	<div class="cb"></div>
-	<!--列表开始-->
 	<div class="ml35 mr35 mt20 block cb cb">
 		<b class="b1"></b>
 		<b class="b2"></b>
@@ -161,122 +148,26 @@ function clearInputVal(obj){ //清除
 				</td>
 			</tr>
 			<tr>
-				<td align="right">
-					电话：
-				</td>
-				<td align="left">
-					<input type="text" name="phone" value="${lead.phone }"
-						class="text_input3 isPhone" />
-				</td>
-				<td align="right">
-					手机：
-				</td>
-				<td align="left">
-					<input type="text" name="mobile" value="${lead.mobile }"
-						class="text_input3 isMobile" />
-				</td>
+				<td align="right">电话：</td>
+				<td align="left"><input type="text" name="phone" value="${lead.phone}" class="text_input3 isPhone"/></td>
+				<td align="right">传真：</td>
+				<td align="left"><input type="text" name="fax" value="${lead.fax}" class="text_input3 isTel"/></td>
 			</tr>
 			<tr>
-				<td align="right">
-					公司名：
-				</td>
-				<td align="left">
-					<input type="text" name="company" value="${lead.company }"
-						class="text_input3" />
-				</td>
-				<td align="right">
-					部门：
-				</td>
-				<td align="left">
-					<input type="text" name="department" value="${lead.department }"
-						class="text_input3" />
-				</td>
+				<td align="right">手机：</td>
+				<td align="left"><input type="text" name="mobile" value="${lead.mobile}" class="text_input3 isMobile"/></td>
+				<td align="right">邮箱：</td>
+				<td align="left"><input type="text" name="email" value="${lead.email}" class="text_input3 email"/></td>
 			</tr>
 			<tr>
-				<td align="right">
-					职位：
-				</td>
-				<td align="left">
-					<input type="text" name="position" value="${lead.position}"
-						class="text_input3" />
-				</td>
-				<td align="right">
-					<span class="w_red">*&nbsp;</span>线索状态：
-				</td>
-				<td align="left">
-					<select name="status.id" class="select1 pr requiredSelect">
-						<option value="-1">
-							--无--
-						</option>
-						<c:forEach items="${status}" var="s">
-							<option value="${s.id}"
-								<c:if test="${s.id==lead.status.id}">selected</c:if>>
-								${s.key}
-							</option>
-						</c:forEach>
-					</select>
-				</td>
-			</tr>
-			<tr>
-				<td align="right">
-					传真：
-				</td>
-				<td align="left">
-					<input type="text" name="fax" value="${lead.fax }"
-						class="text_input3 isTel" />
-				</td>
-				<td align="right">
-					邮箱：
-				</td>
-				<td align="left">
-					<input type="text" name="email" value="${lead.email }"
-						class="text_input3 email" />
-				</td>
-			</tr>
-			<tr>
-				<td align="right">
-					<span class="w_red">*&nbsp;</span>卡类型：
-				</td>
+				<td align="right">公司名：</td>
+				<td align="left"><input type="text" name="company" value="${lead.company}" class="text_input3"/></td>
+				<td align="right"><span class="w_red">*&nbsp;</span>卡类型：</td>
 				<td align="left">
 					<select name="cardType.id" class="select1 pr requiredSelect">
-						<option value="-1">
-							--无--
-						</option>
+						<option value="-1">--无--</option>
 						<c:forEach items="${cardType}" var="s">
-							<option value="${s.id}"
-								<c:if test="${s.id==lead.cardType.id}">selected</c:if>>
-								${s.key}
-							</option>
-						</c:forEach>
-					</select>
-				</td>
-				<td align="right">
-					卡号码：
-				</td>
-				<td align="left">
-					<input type="text" name="cardNum" value="${lead.cardNum }"
-						class="text_input3 {maxlength:22}" />
-				</td>
-			</tr>
-			<tr>
-				<td align="right">
-					邮编：
-				</td>
-				<td align="left">
-					<input type="text" name="postCode" value="${lead.postCode }"
-						class="text_input3 isZipCode" />
-				</td>
-				<td align="right">
-					<span class="w_red">*&nbsp;</span>线索来源：
-				</td>
-				<td align="left">
-					<select name="source.id" id="source" class="select1 pr required">
-						<option value="">
-							--无--
-						</option>
-						<c:forEach items="${source}" var="s">
-							<option value="${s.id}"
-								<c:if test="${s.id==lead.source.id}">selected</c:if>>
+							<option value="${s.id}" <c:if test="${s.id==lead.cardType.id}">selected</c:if>>
 								${s.key}
 							</option>
 						</c:forEach>
@@ -284,25 +175,54 @@ function clearInputVal(obj){ //清除
 				</td>
 			</tr>
 			<tr>
-				<td align="right">
-					<span class="w_red">*&nbsp;</span>行业：
-				</td>
+				<td align="right"><span class="w_red">*&nbsp;</span>行业：</td>
 				<td align="left">
 					<select name="industry.id" class="select1 pr requiredSelect">
-						<option value="-1">
-							--无--
-						</option>
+						<option value="-1">--无--</option>
 						<c:forEach items="${industry}" var="s">
-							<option value="${s.id}"
-								<c:if test="${s.id==lead.industry.id}">selected</c:if>>
+							<option value="${s.id}" <c:if test="${s.id==lead.industry.id}">selected</c:if>>
 								${s.key}
 							</option>
 						</c:forEach>
 					</select>
 				</td>
-				<td align="right" class="marketActivity">
-					<span class="w_red">*&nbsp;</span>市场活动
+				<td align="right">卡号码：</td>
+				<td align="left"><input type="text" name="cardNum" value="${lead.cardNum}" class="text_input3 {maxlength:22}"/></td>
+			</tr>
+			<tr>
+				<td align="right">部门：</td>
+				<td align="left"><input type="text" name="department" value="${lead.department}" class="text_input3"/></td>
+				<td align="right"><span class="w_red">*&nbsp;</span>线索状态：</td>
+				<td align="left">
+					<select name="status.id" class="select1 pr requiredSelect">
+						<option value="-1">--无--</option>
+						<c:forEach items="${status}" var="s">
+							<option value="${s.id}" <c:if test="${s.id==lead.status.id}">selected</c:if>>
+								${s.key}
+							</option>
+						</c:forEach>
+					</select>
 				</td>
+			</tr>
+			<tr>
+				<td align="right">职位：</td>
+				<td align="left"><input type="text" name="position" value="${lead.position}" class="text_input3"/></td>
+				<td align="right"><span class="w_red">*&nbsp;</span>线索来源：</td>
+				<td align="left">
+					<select name="source.id" id="source" class="select1 pr required">
+						<option value="">--无--</option>
+						<c:forEach items="${source}" var="s">
+							<option value="${s.id}" <c:if test="${s.id==lead.source.id}">selected</c:if>>
+								${s.key}
+							</option>
+						</c:forEach>
+					</select>
+				</td>
+			</tr>
+			<tr>
+				<td align="right">邮编：</td>
+				<td align="left"><input type="text" name="postCode" value="${lead.postCode}" class="text_input3 isZipCode"/></td>
+				<td align="right" class="marketActivity"><span class="w_red">*&nbsp;</span>市场活动</td>
 				<td align="left" class="marketActivity">
 					<input type="text" name="txt_m" id="txt_marketActivity" value="${lead.marketActivity.name }"
 						 class="text_input3 cp required" onclick="searchData('marketActivity');" readonly />
@@ -366,13 +286,13 @@ function clearInputVal(obj){ //清除
 	<div class="cb block h40 margin0 mt10" style="width: 350px;">
 		<ul class="id_table1 cb">
 			<li>
-				<a href="javascript:;" id="save" class="block c_white lh25 mr35"><b
+				<a href="javascript:;" id="save" class="block c_white lh25 mr10"><b
 					class="allbtn_l block fl"></b><b
 					class="allbtn_r pr13 block fl w_auto f14">保&nbsp&nbsp存</b> </a></a>
 			</li>
 			<li>
 				<a href="javascript:;" id="saveAndAdd"
-					class="block c_white lh25 mr35"><b class="allbtn_l block fl"></b><b
+					class="block c_white lh25 mr10"><b class="allbtn_l block fl"></b><b
 					class="allbtn_r pr13 block fl w_auto f14">保存并新建</b> </a>
 			</li>
 			<li>

@@ -33,7 +33,6 @@ import org.springside.modules.web.Servlets;
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
 import java.lang.reflect.Field;
-import java.text.SimpleDateFormat;
 import java.util.*;
 
 /**
@@ -80,6 +79,23 @@ public class ReportController {
         modelMap.addAttribute("types", dictionaryService.findChildren(DictionaryConstant.REPORT_CHART));
 
         return "/common/report/list";
+    }
+
+
+    @RequestMapping(value = "/toQueryPage.comp")
+    public String toQuerySimplePage(HibernatePage<Report> page, ModelMap modelMap) {
+
+        page.setHibernateOrderBy("modifiedTime");
+        page.setHibernateOrder("desc");
+        modelMap.addAttribute("page", page);
+
+        Long moduleTypeId = dictionaryService.getIdByValue(DictionaryConstant.MODULE_TYPE_REPORT);
+        List<Long> moduleIds = moduleTypeService.findModuleIdByTypeId(moduleTypeId);
+        List<Module> modules = ReflectionUtils.findNameValueMatched(InitApplicationConstant.MODULES, "id", moduleIds);
+        modelMap.addAttribute("modules", modules);
+        modelMap.addAttribute("types", dictionaryService.findChildren(DictionaryConstant.REPORT_CHART));
+
+        return "/common/report/listcomp";
     }
 
     @ResponseBody
@@ -333,6 +349,9 @@ public class ReportController {
 
         //获取report
         Report report = reportService.get(id);
+
+        String timeType = request.getParameter("timeType");
+        report.setTimeType(StringUtils.isNotBlank(timeType) ? Integer.parseInt(timeType) : Calendar.MONTH);
         Module module = InitApplicationConstant.findModuleById(report.getModule().getId());
         report.setModule(module);
 
@@ -356,20 +375,26 @@ public class ReportController {
     }
 
 
-    
     /**
      * 转至生成报表页面
      */
     @ResponseBody
-    @RequestMapping(value="/reportWorkbanch.comp" )
+    @RequestMapping(value = "/reportWorkbanch.comp")
     public String generateWorkbanch(Long id, HttpServletRequest request) throws NoSuchFieldException {
         logger.info("生成报表");
         logger.debug("报表主键编号={}", id);
         //获取report
-      //获取report
         Report report = reportService.get(id);
         Module module = InitApplicationConstant.findModuleById(report.getModule().getId());
         report.setModule(module);
+
+        //添加时间类型
+        String timeType = request.getParameter("timeType");
+        if (StringUtils.isBlank(timeType)) {
+            report.setTimeType(Calendar.DAY_OF_MONTH);
+        } else {
+            report.setTimeType(Integer.parseInt(timeType));
+        }
 
         //获取查询条件
         Map<String, Object> searchParams = Servlets.getParametersStartingWith(request, "search_");

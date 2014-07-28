@@ -65,7 +65,9 @@
         </tr>
         <tr>
         <td align="right" width="15%">发送时间：</td>
-            <td align="left">${userMessage.createdTime}</td>
+            <td align="left">
+            <fmt:formatDate value="${userMessage.createdTime }" pattern="yyyy-MM-dd hh:mm:ss" var="createdTime"/>${createdTime }
+            </td>
         </tr>
     </table>
 	<div class=" h40"></div>

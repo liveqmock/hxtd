@@ -20,12 +20,12 @@
 <script type="text/javascript" src="${ctx}/static/js/js-util.common.js"></script>
 <script type="text/javascript">
 $(function(){
-	new Grid().init({ paginationSizeShow:false, paginationCountLimit:13 });
-	$(".list .module").live({
+	new Grid().init();
+	$(".list .module1").live({
 		click: function(){
-			$(".module").removeAttr("style");
+			$(".module1").removeAttr("style");
 			$(this).css({"border":"1px solid #e28d1f"});
-			$(".module").removeClass("bor_e28d1f");
+			$(".module1").removeClass("bor_e28d1f");
 			$(this).addClass("bor_e28d1f");
 		},
 		dblclick: function(){
@@ -39,7 +39,7 @@ $(function(){
 <body>
 <div class="listcontainer">
 	<div class="margin0">
-		<form action="${ctx}/order/order/query.do?TYPE=relation" onsubmit="return false;">
+		<form action="${ctx}/order/order/query.do?TYPE=${type}" onsubmit="return false;">
 		<div>
 			<table class="w pr10 pl10">
 				<tr>
@@ -65,7 +65,7 @@ $(function(){
 			<textarea id="template-tbody" class="template template-tbody">
 			    {#foreach $T.result as row}
 				<li>
-					<div class="module" id="{$T.row.id}">
+					<div class="module1" id="{$T.row.id}">
 						<table  class="w">
 							<tr><td>{$T.row.code}</td></tr>
 							<tr><td>{$T.row.customer.name}</td></tr>

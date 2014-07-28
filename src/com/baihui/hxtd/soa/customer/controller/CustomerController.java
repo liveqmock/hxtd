@@ -37,6 +37,7 @@ import com.baihui.hxtd.soa.customer.entity.Contact;
 import com.baihui.hxtd.soa.customer.entity.Customer;
 import com.baihui.hxtd.soa.customer.service.ContactService;
 import com.baihui.hxtd.soa.customer.service.CustomerService;
+import com.baihui.hxtd.soa.system.DictionaryConstant;
 import com.baihui.hxtd.soa.system.entity.AuditLog;
 import com.baihui.hxtd.soa.system.entity.Dictionary;
 import com.baihui.hxtd.soa.system.entity.User;
@@ -111,8 +112,7 @@ public class CustomerController extends CommonController<Customer>{
 	 */
 	@RequestMapping("/toQueryPage.do")
 	public String toQueryPage(ModelMap  model) {
-		logger.info("CustomerController.toQueryPage跳转客户列表页");
-		List<Dictionary> dict = dictionaryService.findChildren("040301");
+		/*List<Dictionary> dict = dictionaryService.findChildren("040301");
 		StringBuffer sb = new StringBuffer("[");
 		for(Dictionary d:dict){
 			sb.append("{");
@@ -122,13 +122,17 @@ public class CustomerController extends CommonController<Customer>{
 			sb.append("},");
 		}
 		sb.deleteCharAt(sb.length()-1); 
-		sb.append("]");
+		sb.append("]");*/
+		
+		/*model.addAttribute("dict",sb.toString());*/
+		
+		logger.info("CustomerController.toQueryPage跳转客户列表页");
 		HibernatePage<Customer> page=new HibernatePage<Customer>();
 		page.setHibernateOrder(HibernatePage.DESC);
 		page.setHibernateOrderBy("modifiedTime");
 		model.addAttribute("page",page);
-		model.addAttribute("dict",sb.toString());
 		getDictionary(model);
+		
 		return "/customer/customer/list";
 	}
 
@@ -306,25 +310,25 @@ public class CustomerController extends CommonController<Customer>{
      */
 	public void getDictionary(ModelMap model){
 		//设置客户类型
-		List<Dictionary> cType = dictionaryService.findChildren("040301");
+		List<Dictionary> cType = dictionaryService.findChildren(DictionaryConstant.VC_CUSTOMERTYPE, true);
 		model.addAttribute("cType",cType);
 		//设置客户来源
-		List<Dictionary> source = dictionaryService.findChildren("040302");
+		List<Dictionary> source = dictionaryService.findChildren(DictionaryConstant.VC_CUSTOMERSOURCE, true);
 		model.addAttribute("source", source);
 		//设置证件类型
-		List<Dictionary> cardType = dictionaryService.findChildren("040303");
+		List<Dictionary> cardType = dictionaryService.findChildren(DictionaryConstant.VC_DOCTYPE, true);
 		model.addAttribute("cardType", cardType);
 		//设置风险等级
-		List<Dictionary> riskGrade = dictionaryService.findChildren("040304");
+		List<Dictionary> riskGrade = dictionaryService.findChildren(DictionaryConstant.VC_RISKLEVEL, true);
 		model.addAttribute("riskGrade", riskGrade);
 		//设置行业
-		List<Dictionary> industry = dictionaryService.findChildren("040305");
+		List<Dictionary> industry = dictionaryService.findChildren(DictionaryConstant.VC_BUSINESS, true);
 		model.addAttribute("industry", industry);
 		//设置所有权
-		List<Dictionary> ownerShip = dictionaryService.findChildren("040306");
+		List<Dictionary> ownerShip = dictionaryService.findChildren(DictionaryConstant.VC_OWNERSHIP, true);
 		model.addAttribute("ownerShip", ownerShip);
 		//设置开户行
-		List<Dictionary> openBank = dictionaryService.findChildren("040307");
+		List<Dictionary> openBank = dictionaryService.findChildren(DictionaryConstant.VC_OPENBANK, true);
 		model.addAttribute("openBank", openBank);
 	}
 	

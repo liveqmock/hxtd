@@ -92,17 +92,17 @@
         <table class="cb id_table2 w pr35">
             <tr>
                 <th style="width:2%"><input type="checkbox" class="checkall"/></th>
-                <th style="width:10%" class="sortable orderby" orderby="code">编码</th>
-                <th style="width:10%">名称</th>
-                <th style="width:10%">所属模块</th>
-                <th style="width:10%">x轴字段名</th>
-                <th style="width:10%">x轴分组类型</th>
-                <th style="width:10%">y轴字段名</th>
-                <th style="width:10%">y轴聚合类型</th>
-                <th style="width:10%">z轴字段名</th>
-                <th style="width:10%">z轴分组类型</th>
-                <th style="width:10%">图表类型</th>
-                <th style="width:15%">操作</th>
+                <th style="width:6%" class="sortable orderby" orderby="code">编码</th>
+                <th style="width:8%">名称</th>
+                <th style="width:8%">所属模块</th>
+                <th style="width:8%">x轴字段名</th>
+                <th style="width:8%">x轴分组类型</th>
+                <th style="width:8%">y轴字段名</th>
+                <th style="width:8%">y轴聚合类型</th>
+                <th style="width:8%">z轴字段名</th>
+                <th style="width:8%">z轴分组类型</th>
+                <th style="width:8%">图表类型</th>
+                <th style="width:10%">操作</th>
             </tr>
             <%@include file="/WEB-INF/template/sort.jsp" %>
             <tbody class="list"></tbody>

@@ -21,6 +21,7 @@ import com.baihui.hxtd.soa.system.entity.Dictionary;
 import com.baihui.hxtd.soa.system.service.DataShift;
 import com.baihui.hxtd.soa.util.CommonCalendar;
 import org.apache.commons.collections.CollectionUtils;
+import org.apache.commons.lang3.Range;
 import org.apache.commons.lang3.time.DateUtils;
 import org.hibernate.FetchMode;
 import org.hibernate.criterion.DetachedCriteria;
@@ -60,10 +61,45 @@ public class ReportService {
     @Resource
     private ChartGenerate chartGenerate;
 
+    /** 查找时间类型字段，默认返回createdTime */
+    public static String findTimeTypeFieldName(Report report) {
+        Module module = InitApplicationConstant.findModuleById(report.getModule().getId());
+        Field[] fields = module.getFields();
+        String[] names = {report.getxFieldName(), report.getyFieldName(), report.getzFieldName()};
+        for (int i = 0; i < names.length; i++) {
+            String name = names[i];
+            if (name != null) {
+                Field field = ModuleUtil.findFieldByName(fields, name);
+                if (field.getType().equals(Date.class)) {
+                    return name;
+                }
+            }
+        }
+        return "createdTime";
+    }
+
+    /**
+     * 构建以当前时间为基础的过滤器
+     *
+     * @param name 字段名称
+     * @param type 时间类型，使用Calendar的时间单位
+     * @return
+     */
+    public static Collection<SearchFilter> buildTimeFilter(String name, int type) {
+        List<SearchFilter> searchFilters = new ArrayList<SearchFilter>();
+        Range<Date> range = CommonCalendar.generateDateRange(new Date(), type);
+        searchFilters.add(new SearchFilter(name, SearchFilter.Operator.GTE, range.getMinimum()));
+        searchFilters.add(new SearchFilter(name, SearchFilter.Operator.LT, range.getMaximum()));
+        return searchFilters;
+    }
 
     /** 生成报表数据 */
     @Transactional(readOnly = true)
     public ChartModel generate(Report report, Collection<SearchFilter> filters) throws NoSuchFieldException {
+
+        if (filters.size() == 0) {
+            filters = buildTimeFilter(findTimeTypeFieldName(report), report.getTimeType());
+        }
 
         Module module = report.getModule();
         Field[] fields = module.getFields();

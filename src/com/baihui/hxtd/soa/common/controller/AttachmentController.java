@@ -32,6 +32,7 @@ import com.baihui.hxtd.soa.base.Constant;
 import com.baihui.hxtd.soa.common.controller.model.ListModel;
 import com.baihui.hxtd.soa.common.entity.Attachment;
 import com.baihui.hxtd.soa.common.service.AttachmentService;
+import com.baihui.hxtd.soa.system.DictionaryConstant;
 import com.baihui.hxtd.soa.system.entity.Dictionary;
 import com.baihui.hxtd.soa.system.entity.User;
 import com.baihui.hxtd.soa.system.service.DictionaryService;
@@ -95,7 +96,7 @@ public class AttachmentController {
 	
 	@RequestMapping(value="/{module}/attachment/upload.comp")
 	public String view(Model model){
-		List<Dictionary> list = dictionaryService.findChildren("110102");
+		List<Dictionary> list = dictionaryService.findChildren(DictionaryConstant.VC_ATTACHMENT_TYPE, true);
 		model.addAttribute("dict",list);
 		return "/common/attachment/upload";
 	}

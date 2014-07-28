@@ -12,8 +12,10 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
+import com.baihui.hxtd.soa.base.FieldInfo;
 import com.baihui.hxtd.soa.common.entity.PCAS;
 import com.baihui.hxtd.soa.market.entity.MarketActivity;
+import com.baihui.hxtd.soa.system.DictionaryConstant;
 import com.baihui.hxtd.soa.system.entity.Dictionary;
 import com.baihui.hxtd.soa.system.entity.User;
 import com.fasterxml.jackson.annotation.JsonFormat;
@@ -58,89 +60,108 @@ public class Lead {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	@Column(name = "ID")
+	@FieldInfo(desc="主键")
 	private Long id;
 
 	/** 线索所有者 */
 	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "OWNER")
+	@FieldInfo(desc="所有者")
 	private User owner;
 
 	/** 公司名称 */
 	@Column(name = "COMPANY")
+	@FieldInfo(desc="公司")
 	private String company;
 
 	/** 姓名 */
 	@Column(name = "NAME", length = 64, nullable = false)
+	@FieldInfo(desc="姓名")
 	private String name;
 
 	/** 部门 */
 	@Column(name = "DEPARTMENT", length = 64)
+	@FieldInfo(desc="部门")
 	private String department;
 
 	/** 职位 */
 	@Column(name = "POSITION", length = 64)
+	@FieldInfo(desc="职位")
 	private String position;
 
 	/** 邮箱 */
 	@Column(name = "EMAIL", length = 64)
+	@FieldInfo(desc="邮箱")
 	private String email;
 
 	/** 电话 */
 	@Column(name = "PHONE", length = 32)
+	@FieldInfo(desc="电话")
 	private String phone;
 
 	/** 传真 */
 	@Column(name = "FAX", length = 32)
+	@FieldInfo(desc="传真")
 	private String fax;
 
 	/** 手机 */
 	@Column(name = "MOBILE", length = 32, nullable = false)
+	@FieldInfo(desc="手机")
 	private String mobile;
 
 	/** 线索来源 */
 	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "SOURCE")
+	@FieldInfo(desc="来源",dictionary = DictionaryConstant.LEAD_SOURCE)
 	private Dictionary source;
 
 	/** 线索状态 */
 	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "STATUS")
+	@FieldInfo(desc="状态",dictionary = DictionaryConstant.LEAD_STATUS)
 	private Dictionary status;
 
 	/** 证件类型 */
 	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "CARD_TYPE")
+	@FieldInfo(desc="证件类型",dictionary = DictionaryConstant.LEAD_CARD_TYPE)
 	private Dictionary cardType;
 
 	/** 证件号码 */
 	@Column(name = "CARD_NUM", length = 64)
+	@FieldInfo(desc="证件号码")
 	private String cardNum;
 
 	/** 行业 */
 	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "INDUSTRY")
+	@FieldInfo(desc="行业",dictionary = DictionaryConstant.INDUSTRY)
 	private Dictionary industry;
 
 	/** 邮编 */
 	@Column(name = "POST_CODE", length = 16)
+	@FieldInfo(desc="邮编")
 	private String postCode;
 	/**
 	 * 省
 	 */
 	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "PROVINCE",nullable = true)
+	@FieldInfo(desc="省")
 	private PCAS province;
 	/**
 	 * 市
 	 */
 	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "CITY",nullable = true)
+	@FieldInfo(desc="市")
 	private PCAS city;
 	/**
 	 * 区/县
 	 */
 	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "COUNTY",nullable = true)
+	@FieldInfo(desc="区/县")
 	private PCAS county;
 	
 	/**
@@ -148,34 +169,41 @@ public class Lead {
 	 */
 	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "MARKET_ACTIVITY_ID",nullable = true)
+	@FieldInfo(desc="市场活动")
 	private MarketActivity marketActivity;
 	
 	/** 详细地址 */
 	@Column(name = "ADDRESS", length = 256)
+	@FieldInfo(desc="详细地址")
 	private String address;
 
 	/** 备注 */
 	@Column(name = "REMARK", length = 512)
+	@FieldInfo(desc="备注")
 	private String remark;
 
 	/** 创建者 */
 	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "CREATOR_ID", updatable = false)
+	@FieldInfo(desc="创建者")
 	private User creator;
 
 	/** 创建时间 */
 	@JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss", timezone = "GMT+08:00")
 	@Column(name = "CREATED_TIME")
+	@FieldInfo(desc="创建时间")
 	private Date createdTime;
 
 	/** 修改者 */
 	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "MODIFIER_ID")
+	@FieldInfo(desc="修改者")
 	private User modifier;
 
 	/** 最终修改时间 */
 	@JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss", timezone = "GMT+08:00")
 	@Column(name = "MODIFIED_TIME")
+	@FieldInfo(desc="修改时间")
 	private Date modifiedTime;
 
 	@Column(name = "IS_DELETED", nullable = false, updatable = false)

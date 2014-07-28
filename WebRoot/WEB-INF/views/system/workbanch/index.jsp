@@ -30,7 +30,6 @@ $(function(){
 		cursor: 'move', //拖动的时候鼠标样式
 		connectWith: ".column",
 		scroll: false,
-		cancel:"#add",
 		update:function() {
 			workbanch.modifyOrder();
 		}
@@ -78,6 +77,8 @@ $(function(){
 				</div>
 			</li>
 		</c:forEach>
+	</ul>
+	<ul>
 		<li style="width: 49%;float:left;" id="add">
 			<a class="tc vm w h_add_workbanch block cp">+</a>
 		</li>

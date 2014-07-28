@@ -183,12 +183,11 @@ INSERT INTO sm_component VALUES ('6', '006', '省市区三级联动获取根', '
 INSERT INTO sm_component VALUES ('7', '000101', '唯一性验证', '/common/common/unique.docomp', '', '1060101', '0', '1', '1', '2014-01-01 00:00:00', '1', '2014-07-23 21:54:45');
 INSERT INTO sm_component VALUES ('8', '090001', '查找分组类型', '/common/report/findGroupType.docomp', '查找分组类型通过模块名称和字段名称', '1060102', '0', '1', '1', '2014-01-01 00:00:00', '1', '2014-07-23 21:54:48');
 INSERT INTO sm_component VALUES ('9', '007', '项目列表组件', '/project/project/toQueryPage.comp', '项目列表组件', '1060101', '0', '1', '1', '2014-06-10 00:00:00', '1', '2014-07-23 21:54:50');
-INSERT INTO sm_component VALUES ('11', '0200', '线索名称', '/workbanch/toViewPage.do', 'FDASF', '1060101', '0', '1', '1', '2014-06-19 00:00:00', '1', '2014-07-23 21:54:54');
-INSERT INTO sm_component VALUES ('12', '008', '产品组件', '/project/product/toQueryPage.comp', '', '1060101', '0', '1', '1', '2014-07-01 09:35:35', '1', '2014-07-23 21:54:56');
-INSERT INTO sm_component VALUES ('17', '009', '工作台位置记忆', '/workbanch/modifyOrder.do', '', '1060101', '0', '0', '1', '2014-07-09 00:00:00', '1', '2014-07-23 21:55:06');
-INSERT INTO sm_component VALUES ('18', '010', '工作台删除', '/workbanch/delete.do', '', '1060101', '0', '0', '1', '2014-07-09 00:00:00', '1', '2014-07-23 21:55:08');
-INSERT INTO sm_component VALUES ('19', '990110', '查找模块字段', '/common/module/findModuleFields.docomp', '查找模块字段通过模块主键编号', '1060102', '0', '1', '1', '2014-01-01 00:00:00', '1', '2014-07-23 21:55:10');
-
+INSERT INTO sm_component VALUES ('10', '0200', '线索名称', '/workbanch/toViewPage.do', 'FDASF', '1060101', '0', '1', '1', '2014-06-19 00:00:00', '1', '2014-07-23 21:54:54');
+INSERT INTO sm_component VALUES ('11', '008', '产品组件', '/project/product/toQueryPage.comp', '', '1060101', '0', '1', '1', '2014-07-01 09:35:35', '1', '2014-07-23 21:54:56');
+INSERT INTO sm_component VALUES ('12', '009', '工作台位置记忆', '/workbanch/modifyOrder.do', '', '1060101', '0', '0', '1', '2014-07-09 00:00:00', '1', '2014-07-23 21:55:06');
+INSERT INTO sm_component VALUES ('13', '010', '工作台删除', '/workbanch/delete.do', '', '1060101', '0', '0', '1', '2014-07-09 00:00:00', '1', '2014-07-23 21:55:08');
+INSERT INTO sm_component VALUES ('14', '990110', '查找模块字段', '/common/module/findModuleFields.docomp', '查找模块字段通过模块主键编号', '1060102', '0', '1', '1', '2014-01-01 00:00:00', '1', '2014-07-23 21:55:10');
 
 -- ----------------------------
 -- Records of sm_function
@@ -298,8 +297,8 @@ INSERT INTO sm_function VALUES ('128', '8', '090003', '查看', '/common/report/
 INSERT INTO sm_function VALUES ('129', '8', '090004', '修改', '/common/report/modify.do', '', '0', '1060103', null, '1', '1', '2014-05-26 00:00:00', '1', '2014-07-14 10:07:18');
 INSERT INTO sm_function VALUES ('130', '8', '090005', '删除', '/common/report/delete.do', '', '0', '1060103', null, '1', '1', '2014-05-26 00:00:00', '1', '2014-07-14 10:07:18');
 INSERT INTO sm_function VALUES ('131', '8', '090006', '生成报表', '/common/report/generate.do', '', '0', '1060103', null, '1', '1', '2014-05-26 00:00:00', '1', '2014-07-14 10:07:19');
-INSERT INTO sm_function VALUES ('132', '32', '100101', '详情', '/system/user/view.do', '', '0', '1060103', null, '1', '1', '2014-05-26 00:00:00', '1', '2014-07-11 17:41:50');
-INSERT INTO sm_function VALUES ('133', '32', '100201', '修改密码', '/system/user/modifyPassword.do', '', '0', '1060103', null, '1', '1', '2014-05-26 00:00:00', '1', '2014-07-11 17:41:52');
+INSERT INTO sm_function VALUES ('132', '27', '100101', '详情', '/system/user/view.do', '', '0', '1060103', null, '1', '1', '2014-05-26 00:00:00', '1', '2014-07-25 15:57:58');
+INSERT INTO sm_function VALUES ('133', '28', '100201', '修改密码', '/system/user/modifyPassword.do', '', '0', '1060103', null, '1', '1', '2014-05-26 00:00:00', '1', '2014-07-25 15:53:29');
 INSERT INTO sm_function VALUES ('134', '1', '100301', '详情', '/system/workbench/custom.do', '', '0', '1060103', null, '1', '1', '2014-05-26 00:00:00', '1', '2014-07-11 17:41:59');
 INSERT INTO sm_function VALUES ('135', '30', '100501', '查询', '/system/message/query.do', '', '0', '1060103', null, '1', '1', '2014-05-31 00:00:00', '1', '2014-07-11 17:42:01');
 INSERT INTO sm_function VALUES ('136', '30', '100502', '新增', '/system/message/add.do', '', '0', '1060103', null, '1', '1', '2014-05-31 00:00:00', '1', '2014-07-11 17:42:02');
@@ -382,85 +381,118 @@ INSERT INTO sm_function VALUES ('214', '23', '060210', '附件下载', '/contrac
 INSERT INTO sm_function VALUES ('215', '23', '060211', '附件删除', '/contract/attachment/delete.do', '', '0', '1060103', null, '1', '1', '2014-06-27 09:39:53', '1', '2014-07-23 16:50:06');
 INSERT INTO sm_function VALUES ('217', '22', '060108', '启动审批', '/order/order/startApprove.do', '', '0', '1060102', null, '1', '1', '2014-07-17 15:33:54', '1', '2014-07-23 14:21:19');
 INSERT INTO sm_function VALUES ('218', '22', '060109', '执行审批', '/order/order/executeApprove.do', '', '0', '1060102', null, '1', '1', '2014-07-17 15:33:54', '1', '2014-07-23 14:21:22');
+INSERT INTO sm_function VALUES ('219', '22', '060110', '赎回订单', '/order/order/redemption.do', '', '0', '1060103', null, '1', '1', '2014-07-26 11:10:23', '1', '2014-07-26 11:10:04');
 INSERT INTO sm_function VALUES ('220', '29', '020003', '添加工作台', '/workbanch/add.do', '', '0', '1060101', null, '1', '1', '2014-07-23 22:00:37', '1', '2014-07-23 22:01:25');
 INSERT INTO sm_function VALUES ('221', '18', '040312', '客户导入', '/customer/imports/import.do', '', '0', '1060103', null, '1', '1', '2014-07-23 20:10:13', '1', '2014-07-24 11:10:56');
 INSERT INTO sm_function VALUES ('222', '17', '040207', '联系人导入', '/contact/imports/import.do', '', '0', '1060103', null, '1', '1', '2014-07-23 20:11:15', '0', '2014-07-24 11:11:00');
 INSERT INTO sm_function VALUES ('223', '19', '050112', '供应商导入', '/supplier/imports/import.do', '', '0', '1060103', null, '1', '1', '2014-07-23 20:15:59', '0', '2014-07-24 11:12:31');
-INSERT INTO sm_function VALUES ('250', '51', '130501', '查询', '/system/imports/import.do', '', '0', '1060103', null, '1', '1', '2014-07-24 15:44:57', '1', '2014-07-24 16:23:13');
+INSERT INTO sm_function VALUES ('224', '20', '050207', '附件列表', '/project/attachment/query.do', '', '0', '1060103', null, '1', '1', '2014-06-22 16:34:33', '1', '2014-07-11 17:38:43');
+INSERT INTO sm_function VALUES ('225', '20', '050208', '附件上传', '/project/attachment/upload.do', '', '0', '1060103', null, '1', '1', '2014-06-22 16:35:39', '1', '2014-07-11 17:38:45');
+INSERT INTO sm_function VALUES ('226', '20', '050209', '附件预览', '/project/attachment/view.comp', '', '0', '1060103', null, '1', '1', '2014-06-22 16:37:16', '1', '2014-07-11 17:38:50');
+INSERT INTO sm_function VALUES ('227', '20', '050210', '附件下载', '/project/attachment/download.do', '', '0', '1060103', null, '1', '1', '2014-06-22 16:38:30', '1', '2014-07-11 17:38:52');
+INSERT INTO sm_function VALUES ('228', '20', '050211', '附件删除', '/project/attachment/delete.do', '', '0', '1060103', null, '1', '1', '2014-06-22 16:38:30', '1', '2014-07-11 17:38:52');
+INSERT INTO sm_function VALUES ('250', '45', '130501', '查询', '/system/imports/import.do', '', '0', '1060103', null, '1', '1', '2014-07-24 15:44:57', '1', '2014-07-25 22:18:52');
+INSERT INTO sm_function VALUES ('260', '54', '', '查询', '/test/test/query.do', '', '1', '1060103', null, '0', '1', '2014-07-24 18:55:09', '1', '2014-07-25 11:38:18');
+INSERT INTO sm_function VALUES ('275', '46', '080301', '查询', '/financial/payments/query.do', '', '0', '1060103', null, '1', '1', '2014-07-25 20:57:18', '1', '2014-07-27 09:53:50');
+INSERT INTO sm_function VALUES ('276', '46', '080303', '详情', '/financial/payments/view.do', '', '0', '1060103', null, '1', '1', '2014-07-25 20:57:18', '1', '2014-07-27 11:38:36');
+INSERT INTO sm_function VALUES ('277', '66', '', '查询', '/financial/receiveorder/query.do', '', '0', '1060103', null, '0', '1', '2014-07-25 21:16:32', '1', '2014-07-25 21:16:32');
+INSERT INTO sm_function VALUES ('278', '66', '', '新增', '/financial/receiveorder/add.do', '', '0', '1060103', null, '0', '1', '2014-07-25 21:16:33', '1', '2014-07-25 21:16:33');
+INSERT INTO sm_function VALUES ('279', '66', '', '详情', '/financial/receiveorder/view.do', '', '0', '1060103', null, '0', '1', '2014-07-25 21:16:33', '1', '2014-07-25 21:16:33');
+INSERT INTO sm_function VALUES ('280', '66', '', '编辑', '/financial/receiveorder/modify.do', '', '0', '1060103', null, '0', '1', '2014-07-25 21:16:33', '1', '2014-07-25 21:16:33');
+INSERT INTO sm_function VALUES ('281', '66', '', '删除', '/financial/receiveorder/delete.do', '', '0', '1060103', null, '0', '1', '2014-07-25 21:16:33', '1', '2014-07-25 21:16:33');
+INSERT INTO sm_function VALUES ('282', '24', '080101', '查询', '/financial/approve/query.do', '', '0', '1060103', null, '1', '1', '2014-05-26 00:00:00', '1', '2014-06-03 15:43:28');
+INSERT INTO sm_function VALUES ('283', '24', '080102', '新增', '/financial/approve/add.do', '', '0', '1060103', null, '1', '1', '2014-05-26 00:00:00', '1', '2014-06-03 15:43:30');
+INSERT INTO sm_function VALUES ('284', '24', '080103', '详情', '/financial/approve/view.do', '', '0', '1060103', null, '1', '1', '2014-05-26 00:00:00', '1', '2014-06-18 11:04:29');
+INSERT INTO sm_function VALUES ('285', '24', '080104', '编辑', '/financial/approve/modify.do', '', '0', '1060103', null, '1', '1', '2014-05-26 00:00:00', '1', '2014-06-18 11:04:45');
+INSERT INTO sm_function VALUES ('286', '24', '080105', '删除', '/financial/approve/delete.do', '', '0', '1060103', null, '1', '1', '2014-05-26 00:00:00', '1', '2014-05-26 19:29:05');
+INSERT INTO sm_function VALUES ('287', '24', '080106', '进行审批', '/financial/approve/approve.do', '', '0', '1060102', null, '1', '1', '2014-05-26 00:00:00', '1', '2014-05-26 19:29:05');
+INSERT INTO sm_function VALUES ('288', '25', '080201', '查询', '/financial/receivables/query.do', '', '0', '1060103', null, '1', '1', '2014-05-26 00:00:00', '1', '2014-07-26 15:32:56');
+INSERT INTO sm_function VALUES ('289', '25', '080202', '新增', '/financial/receivables/add.do', '', '0', '1060103', null, '1', '1', '2014-05-26 00:00:00', '1', '2014-07-26 15:32:59');
+INSERT INTO sm_function VALUES ('290', '25', '080203', '详情', '/financial/receivables/view.do', '', '0', '1060103', null, '1', '1', '2014-05-26 00:00:00', '1', '2014-07-26 15:33:02');
+INSERT INTO sm_function VALUES ('291', '25', '080204', '编辑', '/financial/receivables/modify.do', '', '0', '1060103', null, '1', '1', '2014-05-26 00:00:00', '1', '2014-07-26 15:33:05');
+INSERT INTO sm_function VALUES ('292', '25', '080205', '删除', '/financial/receivables/delete.do', '', '0', '1060103', null, '1', '1', '2014-05-26 00:00:00', '1', '2014-07-26 15:33:17');
+INSERT INTO sm_function VALUES ('294', '46', '080302', '新增', '/financial/payments/add.do', '', '0', '1060103', null, '1', '1', '2014-05-26 00:00:00', '1', '2014-07-27 11:38:34');
+INSERT INTO sm_function VALUES ('296', '46', '080304', '编辑', '/financial/payments/modify.do', '', '0', '1060103', null, '1', '1', '2014-05-26 00:00:00', '1', '2014-07-27 11:38:38');
+INSERT INTO sm_function VALUES ('297', '46', '080305', '删除', '/financial/payments/delete.do', '', '0', '1060103', null, '1', '1', '2014-05-26 00:00:00', '1', '2014-07-27 11:38:42');
+INSERT INTO sm_function VALUES ('303', '2', '030107', '启动审批', '/market/marketactivity/startApprove.do', '', '0', '1060102', null, '1', '1', '2014-07-17 15:33:54', '1', '2014-07-17 16:43:42');
+INSERT INTO sm_function VALUES ('304', '2', '030108', '执行审批', '/market/marketactivity/executeApprove.do', '', '0', '1060102', null, '1', '1', '2014-07-17 15:33:54', '1', '2014-07-17 16:43:42');
+INSERT INTO sm_function VALUES ('308', '75', '', '查询', '/testww/test/query.do', '', '0', '1060103', null, '0', '1', '2014-07-27 14:26:50', '1', '2014-07-27 14:26:50');
 
 -- ----------------------------
 -- Records of sm_menu
 -- ----------------------------
-INSERT INTO sm_menu VALUES ('1', '工作台', '/workbanch/toViewPage.do', '1', '1', '33', '1', '1', '1', null, '20000', '', '0', '1', '1', '2014-05-26 00:00:00', '1', '2014-07-24 11:40:21');
-INSERT INTO sm_menu VALUES ('2', '市场营销', null, '1', '0', null, '1', '1', '0', null, '30000', '', '0', '1', '1', '2014-05-26 00:00:00', '1', '2014-07-24 17:26:55');
-INSERT INTO sm_menu VALUES ('3', '客户管理', null, '1', '0', null, '1', '1', '0', null, '40000', '', '0', '1', '1', '2014-05-26 00:00:00', '1', '2014-07-24 17:26:55');
-INSERT INTO sm_menu VALUES ('4', '项目管理', null, '1', '0', null, '1', '1', '0', null, '50000', '', '0', '1', '1', '2014-05-26 00:00:00', '1', '2014-07-24 17:26:55');
-INSERT INTO sm_menu VALUES ('5', '订单管理', null, '1', '0', null, '1', '1', '0', null, '60000', '', '0', '1', '1', '2014-05-26 00:00:00', '1', '2014-07-24 17:26:55');
-INSERT INTO sm_menu VALUES ('6', '财务管理', null, '1', '0', null, '1', '1', '0', null, '70000', '', '0', '1', '1', '2014-05-26 00:00:00', '1', '2014-07-24 17:26:55');
-INSERT INTO sm_menu VALUES ('7', '销售管理', null, '1', '0', null, '1', '1', '0', null, '80000', '', '0', '1', '1', '2014-05-26 00:00:00', '1', '2014-07-24 17:26:55');
+INSERT INTO sm_menu VALUES ('1', '工作台', '/workbanch/toViewPage.do', '1', '1', '33', '1', '1', '1', null, '20000', '', '0', '1', '1', '2014-05-26 00:00:00', '1', '2014-07-26 14:56:01');
+INSERT INTO sm_menu VALUES ('2', '市场营销', '', '1', '0', null, '1', '1', '0', null, '30000', '', '0', '1', '1', '2014-05-26 00:00:00', '1', '2014-07-25 14:48:44');
+INSERT INTO sm_menu VALUES ('3', '客户管理', '', '1', '0', null, '1', '1', '0', null, '40000', '', '0', '1', '1', '2014-05-26 00:00:00', '1', '2014-07-25 14:48:45');
+INSERT INTO sm_menu VALUES ('4', '项目管理', '', '1', '0', null, '1', '1', '0', null, '50000', '', '0', '1', '1', '2014-05-26 00:00:00', '1', '2014-07-25 14:48:45');
+INSERT INTO sm_menu VALUES ('5', '订单管理', '', '1', '0', null, '1', '1', '0', null, '60000', '', '0', '1', '1', '2014-05-26 00:00:00', '1', '2014-07-25 14:48:46');
+INSERT INTO sm_menu VALUES ('6', '财务管理', '', '1', '0', null, '1', '1', '0', null, '70000', '', '0', '1', '1', '2014-05-26 00:00:00', '1', '2014-07-25 21:17:04');
+INSERT INTO sm_menu VALUES ('7', '销售管理', '', '1', '0', null, '1', '1', '0', null, '80000', '', '0', '1', '1', '2014-05-26 00:00:00', '1', '2014-07-25 14:48:48');
 INSERT INTO sm_menu VALUES ('8', '报表管理', '/common/report/toQueryPage.do', '1', '0', '126', '1', '1', '1', null, '90000', '', '0', '1', '1', '2014-05-26 00:00:00', '1', '2014-07-24 17:26:55');
 INSERT INTO sm_menu VALUES ('9', '个人设置', '', '2', '0', null, '1', '1', '0', null, '100000', '', '0', '1', '1', '2014-05-26 00:00:00', '1', '2014-07-24 17:26:55');
-INSERT INTO sm_menu VALUES ('10', '用户及权限', null, '2', '0', null, '1', '1', '0', null, '110000', '', '0', '1', '1', '2014-05-26 00:00:00', '1', '2014-07-24 17:26:55');
-INSERT INTO sm_menu VALUES ('11', '机构设置', null, '2', '0', null, '1', '1', '0', null, '120000', '', '0', '1', '1', '2014-05-26 00:00:00', '1', '2014-07-24 17:26:55');
+INSERT INTO sm_menu VALUES ('10', '用户及权限', '', '2', '0', null, '1', '1', '0', null, '110000', '', '0', '1', '1', '2014-05-26 00:00:00', '1', '2014-07-25 14:48:50');
+INSERT INTO sm_menu VALUES ('11', '机构设置', '', '2', '0', null, '1', '1', '0', null, '120000', '', '0', '1', '1', '2014-05-26 00:00:00', '1', '2014-07-25 14:48:51');
 INSERT INTO sm_menu VALUES ('12', '数据管理', '', '2', '0', null, '1', '1', '0', null, '130000', '', '0', '1', '1', '2014-05-26 00:00:00', '1', '2014-07-24 17:26:55');
 INSERT INTO sm_menu VALUES ('13', '开发者空间', '', '2', '0', null, '1', '1', '0', null, '140000', '', '0', '1', '1', '2014-05-26 00:00:00', '1', '2014-07-24 17:26:55');
 INSERT INTO sm_menu VALUES ('14', '帮助', '', '2', '0', null, '1', '1', '0', null, '150000', '', '0', '1', '1', '2014-07-01 17:39:20', '1', '2014-07-24 17:26:55');
 INSERT INTO sm_menu VALUES ('15', '市场活动', '/market/marketactivity/toQueryPage.do', '1', '0', '35', '1', '2', '1', '2', '30100', '', '0', '1', '1', '2014-05-26 00:00:00', '1', '2014-07-24 17:26:55');
-INSERT INTO sm_menu VALUES ('16', '线索', '/customer/lead/toQueryPage.do', '1', '0', '41', '1', '2', '1', '3', '40100', '', '0', '1', '1', '2014-05-26 00:00:00', '1', '2014-07-24 17:26:55');
-INSERT INTO sm_menu VALUES ('17', '联系人', '/customer/contact/toQueryPage.do', '1', '0', '54', '1', '2', '1', '3', '40300', '', '0', '1', '1', '2014-05-26 00:00:00', '1', '2014-07-24 17:26:55');
-INSERT INTO sm_menu VALUES ('18', '客户', '/customer/customer/toQueryPage.do', '1', '0', '60', '1', '2', '1', '3', '40300', '', '0', '1', '1', '2014-05-26 00:00:00', '1', '2014-07-24 17:26:55');
-INSERT INTO sm_menu VALUES ('19', '供应商', '/project/supplier/toQueryPage.do', '1', '0', '72', '1', '2', '1', '4', '50100', '', '0', '1', '1', '2014-05-26 00:00:00', '1', '2014-07-24 17:26:55');
-INSERT INTO sm_menu VALUES ('20', '项目', '/project/project/toQueryPage.do', '1', '0', '83', '1', '2', '1', '4', '50200', '', '0', '1', '1', '2014-05-26 00:00:00', '1', '2014-07-24 17:26:55');
-INSERT INTO sm_menu VALUES ('21', '产品', null, '1', '0', '89', '1', '2', '1', '4', '50300', '', '0', '1', '1', '2014-05-26 00:00:00', '1', '2014-07-24 17:26:55');
-INSERT INTO sm_menu VALUES ('22', '订单', '/order/order/toQueryPage.do', '1', '0', '104', '1', '2', '1', '5', '60100', '', '0', '1', '1', '2014-05-26 00:00:00', '1', '2014-07-24 17:26:55');
-INSERT INTO sm_menu VALUES ('23', '合同', '/order/contract/toQueryPage.do', '1', '0', '110', '1', '2', '1', '5', '60200', '', '0', '1', '1', '2014-05-26 00:00:00', '1', '2014-07-24 17:26:55');
-INSERT INTO sm_menu VALUES ('24', '财务审批', null, '1', '0', '110', '1', '2', '1', '6', '70100', '', '0', '1', '1', '2014-05-26 00:00:00', '1', '2014-07-24 17:26:55');
-INSERT INTO sm_menu VALUES ('25', '财务款项', null, '1', '0', '116', '1', '2', '1', '6', '70200', '', '0', '1', '1', '2014-05-26 00:00:00', '1', '2014-07-24 17:26:55');
+INSERT INTO sm_menu VALUES ('16', '线索', '/customer/lead/toQueryPage.do', '1', '0', '41', '1', '2', '1', '3', '40100', '', '0', '1', '1', '2014-05-26 00:00:00', '1', '2014-07-26 09:37:27');
+INSERT INTO sm_menu VALUES ('17', '联系人', '/customer/contact/toQueryPage.do', '1', '0', '54', '1', '2', '1', '3', '40200', '', '0', '1', '1', '2014-05-26 00:00:00', '1', '2014-07-26 09:55:46');
+INSERT INTO sm_menu VALUES ('18', '客户', '/customer/customer/toQueryPage.do', '1', '0', '60', '1', '2', '1', '3', '40300', '', '0', '1', '1', '2014-05-26 00:00:00', '1', '2014-07-26 09:55:51');
+INSERT INTO sm_menu VALUES ('19', '供应商', '/project/supplier/toQueryPage.do', '1', '0', '72', '1', '2', '1', '4', '50100', '', '0', '1', '1', '2014-05-26 00:00:00', '1', '2014-07-26 09:56:18');
+INSERT INTO sm_menu VALUES ('20', '项目', '/project/project/toQueryPage.do', '1', '0', '83', '1', '2', '1', '4', '50200', '', '0', '1', '1', '2014-05-26 00:00:00', '1', '2014-07-26 09:56:26');
+INSERT INTO sm_menu VALUES ('21', '产品', '/project/product/toQueryPage.do', '1', '0', '89', '1', '2', '1', '4', '50300', '', '0', '1', '1', '2014-05-26 00:00:00', '1', '2014-07-26 09:38:26');
+INSERT INTO sm_menu VALUES ('22', '订单', '/order/order/toQueryPage.do', '1', '0', '104', '1', '2', '1', '5', '60100', '', '0', '1', '1', '2014-05-26 00:00:00', '1', '2014-07-26 09:56:35');
+INSERT INTO sm_menu VALUES ('23', '合同', '/order/contract/toQueryPage.do', '1', '0', '110', '1', '2', '1', '5', '60200', '', '0', '1', '1', '2014-05-26 00:00:00', '1', '2014-07-26 09:39:19');
+INSERT INTO sm_menu VALUES ('24', '财务审批', '/financial/approve/query.do', '1', '0', '282', '1', '2', '1', '6', '70100', '', '0', '1', '1', '2014-05-26 00:00:00', '1', '2014-07-26 09:39:49');
+INSERT INTO sm_menu VALUES ('25', '收款管理', '/financial/receivables/toQueryPage.do', '1', '0', '288', '1', '2', '1', '6', '70200', '', '0', '1', '1', '2014-05-26 00:00:00', '1', '2014-07-26 15:47:26');
 INSERT INTO sm_menu VALUES ('26', '销售目标', '/sales/salesTarget/toQueryPage.do', '1', '0', '121', '1', '2', '1', '7', '80100', '', '0', '1', '1', '2014-05-26 00:00:00', '1', '2014-07-24 17:26:55');
-INSERT INTO sm_menu VALUES ('27', '账号信息', '/system/user/toViewPage.do', '2', '0', '132', '1', '2', '1', '9', '100100', '', '0', '1', '1', '2014-05-26 00:00:00', '1', '2014-07-24 17:26:55');
-INSERT INTO sm_menu VALUES ('28', '更改密码', '/system/user/toModifyPasswordPage.do', '2', '0', '133', '1', '2', '1', '9', '100200', '', '0', '1', '1', '2014-05-26 00:00:00', '1', '2014-07-24 17:26:55');
+INSERT INTO sm_menu VALUES ('27', '账号信息', '/system/user/toViewPage.do', '2', '0', '132', '1', '2', '1', '9', '100100', '', '0', '1', '1', '2014-05-26 00:00:00', '1', '2014-07-26 09:40:51');
+INSERT INTO sm_menu VALUES ('28', '更改密码', '/system/user/toModifyPasswordPage.do', '2', '0', '133', '1', '2', '1', '9', '100200', '', '0', '1', '1', '2014-05-26 00:00:00', '1', '2014-07-26 09:56:58');
 INSERT INTO sm_menu VALUES ('29', '自定义工作台', '/workbanch/toQueryPage.do', '2', '0', '134', '1', '2', '1', '9', '100300', '', '0', '1', '1', '2014-05-26 00:00:00', '1', '2014-07-24 17:26:55');
 INSERT INTO sm_menu VALUES ('30', '系统消息', '/system/message/toQueryPage.do', '2', '0', '135', '1', '2', '1', '9', '100500', '', '0', '1', '1', '2014-06-26 11:35:41', '0', '2014-07-24 17:26:55');
 INSERT INTO sm_menu VALUES ('31', '系统公告', '/system/notice/toQueryPage.do', '2', '0', '141', '1', '2', '1', '9', '100600', '', '0', '1', '1', '2014-05-26 00:00:00', '1', '2014-07-24 17:26:55');
-INSERT INTO sm_menu VALUES ('32', '用户', '/system/user/toQueryPage.do', '2', '0', '149', '1', '2', '1', '10', '110100', '', '0', '1', '1', '2014-05-26 00:00:00', '1', '2014-07-24 17:26:55');
-INSERT INTO sm_menu VALUES ('33', '角色', '/system/role/toQueryPage.do', '2', '0', '161', '1', '2', '1', '10', '110200', '', '0', '1', '1', '2014-05-26 00:00:00', '1', '2014-07-24 17:26:55');
+INSERT INTO sm_menu VALUES ('32', '用户', '/system/user/toQueryPage.do', '2', '0', '149', '1', '2', '1', '10', '110100', '', '0', '1', '1', '2014-05-26 00:00:00', '1', '2014-07-26 09:41:08');
+INSERT INTO sm_menu VALUES ('33', '角色', '/system/role/toQueryPage.do', '2', '0', '161', '1', '2', '1', '10', '110200', '', '0', '1', '1', '2014-05-26 00:00:00', '1', '2014-07-26 09:49:33');
 INSERT INTO sm_menu VALUES ('34', '菜单', '/system/menu/toQueryPage.do', '2', '0', '167', '1', '2', '1', '10', '110300', '', '0', '1', '1', '2014-05-26 00:00:00', '1', '2014-07-24 17:26:55');
 INSERT INTO sm_menu VALUES ('35', '功能', '/system/function/toQueryPage.do', '2', '0', '173', '1', '2', '1', '10', '110400', '', '0', '1', '1', '2014-05-26 00:00:00', '1', '2014-07-24 17:26:55');
 INSERT INTO sm_menu VALUES ('36', '组件', '/system/component/toQueryPage.do', '2', '0', '179', '1', '2', '1', '10', '110500', '', '0', '1', '1', '2014-05-26 00:00:00', '1', '2014-07-24 17:26:55');
 INSERT INTO sm_menu VALUES ('37', '权限设置', '/system/user/toAuthorizationPage.do', '2', '0', '184', '1', '2', '1', '10', '110600', '', '0', '1', '1', '2014-05-26 00:00:00', '1', '2014-07-24 17:26:55');
 INSERT INTO sm_menu VALUES ('38', '组织机构', '/system/organization/toQueryPage.do', '2', '0', '185', '1', '2', '1', '11', '120100', '', '0', '1', '1', '2014-05-26 00:00:00', '1', '2014-07-24 17:26:55');
-INSERT INTO sm_menu VALUES ('39', '字典维护', '/system/dictionary/toQueryPage.do', '2', '0', '192', '1', '2', '1', '12', '130100', '', '0', '1', '1', '2014-05-26 00:00:00', '1', '2014-07-24 17:26:55');
-INSERT INTO sm_menu VALUES ('40', '导出数据', '/system/data/toExportPage.do', '2', '0', '197', '1', '2', '1', '12', '130200', '', '0', '1', '1', '2014-05-26 00:00:00', '1', '2014-07-24 17:26:55');
-INSERT INTO sm_menu VALUES ('41', '回收站', '/system/recyclebin/toQueryPage.do', '2', '0', '198', '1', '2', '1', '12', '130300', '', '0', '1', '1', '2014-05-26 00:00:00', '1', '2014-07-24 17:26:55');
-INSERT INTO sm_menu VALUES ('42', '审计日志', '/system/auditlog/toQueryPage.do', '2', '0', '201', '1', '2', '1', '12', '130400', '', '0', '1', '1', '2014-06-22 16:41:41', '1', '2014-07-24 17:26:55');
+INSERT INTO sm_menu VALUES ('39', '字典维护', '/system/dictionary/toQueryPage.do', '2', '0', '192', '1', '2', '1', '12', '130100', '', '0', '1', '1', '2014-05-26 00:00:00', '1', '2014-07-26 09:44:21');
+INSERT INTO sm_menu VALUES ('40', '导出数据', '/system/data/toExportPage.do', '2', '0', '197', '1', '2', '1', '12', '130300', '', '0', '1', '1', '2014-05-26 00:00:00', '1', '2014-07-26 09:47:43');
+INSERT INTO sm_menu VALUES ('41', '回收站', '/system/recyclebin/toQueryPage.do', '2', '0', '198', '1', '2', '1', '12', '130500', '', '0', '1', '1', '2014-05-26 00:00:00', '1', '2014-07-26 09:47:50');
+INSERT INTO sm_menu VALUES ('42', '审计日志', '/system/auditlog/toQueryPage.do', '2', '0', '201', '1', '2', '1', '12', '130400', '', '0', '1', '1', '2014-06-22 16:41:41', '1', '2014-07-26 09:43:46');
 INSERT INTO sm_menu VALUES ('43', 'CRM API', '/system/developer/toViewPage.do', '2', '0', '206', '1', '2', '1', '13', '140100', '', '0', '1', '1', '2014-05-26 00:00:00', '1', '2014-07-24 17:26:55');
 INSERT INTO sm_menu VALUES ('44', '系统操作手册', '/system/help/toViewPage.do', '2', '0', '0', '1', '2', '1', '14', '150100', '', '0', '1', '1', '2014-05-26 00:00:00', '1', '2014-07-24 17:26:55');
-INSERT INTO sm_menu VALUES ('51', '导入数据', '/system/imports/toImportPage.do', '2', '0', '250', '1', '2', '1', '12', '130150', null, '0', '1', '1', '2014-07-24 15:38:14', '1', '2014-07-24 17:26:55');
+INSERT INTO sm_menu VALUES ('45', '导入数据', '/system/imports/toImportPage.do', '2', '0', '250', '1', '2', '1', '12', '130200', null, '0', '1', '1', '2014-07-24 15:38:14', '1', '2014-07-26 09:46:48');
+INSERT INTO sm_menu VALUES ('46', '付款管理', '/financial/payments/toQueryPage.do', '1', '0', '275', '1', '2', '1', '6', '70300', null, '0', '0', '1', '2014-07-25 20:57:50', '1', '2014-07-27 10:59:43');
+INSERT INTO sm_menu VALUES ('66', '收款单', '/financial/receiveorder/toQueryPage.do', '1', '0', '278', '1', '2', '1', '6', '70400', null, '0', '0', '1', '2014-07-25 21:17:04', '1', '2014-07-26 18:10:43');
 
 -- ----------------------------
 -- Records of sm_module
 -- ----------------------------
-INSERT INTO sm_module VALUES ('1', 'marketActivity', '市场活动', 'com.baihui.hxtd.soa.market.entity.MarketActivity');
-INSERT INTO sm_module VALUES ('2', 'lead', '线索', 'com.baihui.hxtd.soa.customer.entity.Lead');
-INSERT INTO sm_module VALUES ('3', 'contact', '联系人', 'com.baihui.hxtd.soa.customer.entity.Contact');
-INSERT INTO sm_module VALUES ('4', 'customer', '客户', 'com.baihui.hxtd.soa.customer.entity.Customer');
-INSERT INTO sm_module VALUES ('5', 'supplier', '供应商', 'com.baihui.hxtd.soa.project.entity.Supplier');
-INSERT INTO sm_module VALUES ('6', 'project', '项目', 'com.baihui.hxtd.soa.project.entity.Project');
-INSERT INTO sm_module VALUES ('7', 'product', '产品', 'com.baihui.hxtd.soa.project.entity.Product');
-INSERT INTO sm_module VALUES ('8', 'order', '订单', 'com.baihui.hxtd.soa.order.entity.Order');
-INSERT INTO sm_module VALUES ('9', 'user', '用户', 'com.baihui.hxtd.soa.system.entity.User');
-INSERT INTO sm_module VALUES ('10', 'role', '角色', 'com.baihui.hxtd.soa.system.entity.Role');
-INSERT INTO sm_module VALUES ('11', 'menu', '菜单', 'com.baihui.hxtd.soa.system.entity.Menu');
-INSERT INTO sm_module VALUES ('12', 'function', '功能', 'com.baihui.hxtd.soa.system.entity.Function');
-INSERT INTO sm_module VALUES ('13', 'component', '组件', 'com.baihui.hxtd.soa.system.entity.Component');
-INSERT INTO sm_module VALUES ('14', 'organization', '组织', 'com.baihui.hxtd.soa.system.entity.Organization');
-INSERT INTO sm_module VALUES ('15', 'userMessage', '系统消息', 'com.baihui.hxtd.soa.system.entity.UserMessage');
-INSERT INTO sm_module VALUES ('16', 'notice', '系统公告', 'com.baihui.hxtd.soa.system.entity.Notice');
-INSERT INTO sm_module VALUES ('17', 'dictionary', '字典', 'com.baihui.hxtd.soa.system.entity.Dictionary');
-INSERT INTO sm_module VALUES ('18', 'auditLog', '审计日志', 'com.baihui.hxtd.soa.system.entity.AuditLog');
-INSERT INTO sm_module VALUES ('19', 'recycleBin', '回收站', 'com.baihui.hxtd.soa.system.entity.RecycleBin');
-INSERT INTO sm_module VALUES ('20', 'attachment', '附件', 'com.baihui.hxtd.soa.common.entity.Attachment');
-INSERT INTO sm_module VALUES ('21', 'memoir', '联系人纪要', 'com.baihui.hxtd.soa.common.entity.Memoir');
+INSERT INTO sm_module VALUES ('1', 'marketActivity', '市场活动', 'com.baihui.hxtd.soa.market.entity.MarketActivity', '/market/marketActivity');
+INSERT INTO sm_module VALUES ('2', 'lead', '线索', 'com.baihui.hxtd.soa.customer.entity.Lead', '/customer/lead');
+INSERT INTO sm_module VALUES ('3', 'contact', '联系人', 'com.baihui.hxtd.soa.customer.entity.Contact', '/customer/contact');
+INSERT INTO sm_module VALUES ('4', 'customer', '客户', 'com.baihui.hxtd.soa.customer.entity.Customer', '/customer/customer');
+INSERT INTO sm_module VALUES ('5', 'supplier', '供应商', 'com.baihui.hxtd.soa.project.entity.Supplier', '/project/supplier');
+INSERT INTO sm_module VALUES ('6', 'project', '项目', 'com.baihui.hxtd.soa.project.entity.Project', '/project/project');
+INSERT INTO sm_module VALUES ('7', 'product', '产品', 'com.baihui.hxtd.soa.project.entity.Product', '/project/product');
+INSERT INTO sm_module VALUES ('8', 'order', '订单', 'com.baihui.hxtd.soa.order.entity.Order', '/order/order');
+INSERT INTO sm_module VALUES ('9', 'user', '用户', 'com.baihui.hxtd.soa.system.entity.User', '/system/user');
+INSERT INTO sm_module VALUES ('10', 'role', '角色', 'com.baihui.hxtd.soa.system.entity.Role', '/system/role');
+INSERT INTO sm_module VALUES ('11', 'menu', '菜单', 'com.baihui.hxtd.soa.system.entity.Menu', '/system/menu');
+INSERT INTO sm_module VALUES ('12', 'function', '功能', 'com.baihui.hxtd.soa.system.entity.Function', '/system/function');
+INSERT INTO sm_module VALUES ('13', 'component', '组件', 'com.baihui.hxtd.soa.system.entity.Component', '/system/component');
+INSERT INTO sm_module VALUES ('14', 'organization', '组织', 'com.baihui.hxtd.soa.system.entity.Organization', '/system/organization');
+INSERT INTO sm_module VALUES ('15', 'userMessage', '系统消息', 'com.baihui.hxtd.soa.system.entity.UserMessage', '/system/userMessage');
+INSERT INTO sm_module VALUES ('16', 'notice', '系统公告', 'com.baihui.hxtd.soa.system.entity.Notice', '/system/notice');
+INSERT INTO sm_module VALUES ('17', 'dictionary', '字典', 'com.baihui.hxtd.soa.system.entity.Dictionary', '/system/dictionary');
+INSERT INTO sm_module VALUES ('18', 'auditLog', '审计日志', 'com.baihui.hxtd.soa.system.entity.AuditLog', '/system/auditLog');
+INSERT INTO sm_module VALUES ('19', 'recycleBin', '回收站', 'com.baihui.hxtd.soa.system.entity.RecycleBin', '/system/recycleBin');
+INSERT INTO sm_module VALUES ('20', 'attachment', '附件', 'com.baihui.hxtd.soa.common.entity.Attachment', '/common/attachment');
+INSERT INTO sm_module VALUES ('21', 'memoir', '联系人纪要', 'com.baihui.hxtd.soa.common.entity.Memoir', '/common/memoir');
 
 -- ----------------------------
 -- Records of sm_module_type
@@ -550,6 +582,7 @@ INSERT INTO sm_org VALUES ('104', '换新', '112333', '1030102', null, null, nul
 INSERT INTO sm_org VALUES ('105', '企划部1', '企划部1', '1030102', null, null, null, null, null, null, '4', '1', '57', '127090100', '0', '0', '1', '2014-07-24 13:14:12', '1', '2014-07-24 13:31:09');
 INSERT INTO sm_org VALUES ('106', '1', '3', '1030103', null, null, null, null, null, null, '3', '1', '104', '130010000', '1', '0', '1', '2014-07-24 13:15:08', '1', '2014-07-24 13:16:12');
 INSERT INTO sm_org VALUES ('107', '123456', '6666', '1030102', null, null, null, null, null, null, '2', '1', '1', '131000000', '0', '0', '1', '2014-07-24 13:27:17', '1', '2014-07-24 13:27:17');
+INSERT INTO sm_org VALUES ('108', 'test', 'test', '1030102', '18620623071', null, null, null, 'http://192.168.1.31/hxtd/customer/customer/toQueryPage.do', null, '2', '1', '1', '134000000', '0', '0', '1', '2014-07-25 10:00:30', '1', '2014-07-25 10:03:44');
 
 -- ----------------------------
 -- Records of sm_role
@@ -572,11 +605,19 @@ INSERT INTO sm_user VALUES ('1', 'admin', 'e10adc3949ba59abbe56e057f20f883e', '�
 -- ----------------------------
 -- Records of wf_node
 -- ----------------------------
-INSERT INTO wf_node VALUES ('8', '060100', '开始', '99020101', null, '1');
-INSERT INTO wf_node VALUES ('9', '060101', '理财经理审核', '99020101', '11', '2');
-INSERT INTO wf_node VALUES ('10', '060102', '投资经理审核', '99020101', '10', '2');
-INSERT INTO wf_node VALUES ('11', '060103', '投资总监审核', '99020101', '9', '2');
-INSERT INTO wf_node VALUES ('12', '060104', '副总裁审核', '99020101', '7', '2');
-INSERT INTO wf_node VALUES ('13', '060105', '总裁审核', '99020101', '6', '2');
-INSERT INTO wf_node VALUES ('14', '060106', '财务审核', '99020101', '8', '2');
-INSERT INTO wf_node VALUES ('15', '060107', '结束', '99020101', null, '3');
+INSERT INTO wf_node VALUES ('1', '060100', '开始', '99020101', null, '1', '1');
+INSERT INTO wf_node VALUES ('2', '060101', '理财经理审核', '99020101', '11', '2', '2');
+INSERT INTO wf_node VALUES ('3', '060102', '投资经理审核', '99020101', '10', '2', '3');
+INSERT INTO wf_node VALUES ('4', '060103', '投资总监审核', '99020101', '9', '2', '4');
+INSERT INTO wf_node VALUES ('5', '060104', '副总裁审核', '99020101', '7', '2', '5');
+INSERT INTO wf_node VALUES ('6', '060105', '总裁审核', '99020101', '6', '2', '6');
+INSERT INTO wf_node VALUES ('7', '060106', '财务审核', '99020101', '8', '2', '7');
+INSERT INTO wf_node VALUES ('8', '060107', '结束', '99020101', null, '3', '8');
+INSERT INTO wf_node VALUES ('9', '030101', '开始', '99020102', null, '1', '1');
+INSERT INTO wf_node VALUES ('10', '030102', '投资总监审核', '99020102', '9', '2', '2');
+INSERT INTO wf_node VALUES ('11', '030103', '总裁审核', '99020102', '6', '2', '3');
+INSERT INTO wf_node VALUES ('12', '030104', '财务审核', '99020102', '8', '2', '4');
+INSERT INTO wf_node VALUES ('13', '030105', '结束', '99020102', null, '3', '5');
+INSERT INTO wf_node VALUES ('14', '030111', '开始', '99020103', null, '1', '1');
+INSERT INTO wf_node VALUES ('15', '030113', '结束', '99020103', null, '3', '3');
+INSERT INTO wf_node VALUES ('16', '030112', '理财经理审核', '99020103', '11', '2', '2');

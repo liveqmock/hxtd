@@ -26,12 +26,11 @@
             new Grid().init({gridName: "send", gridSelector: ".send", resultTemplateId: "send-template"});
             new Grid().init({gridName: "accept", gridSelector: ".accept", resultTemplateId: "accept-template"});
             $C.tab({onSelected: function (event, title, panel) {
-                $("[name=hibernatePageNo]").val(1);
-            }
-            }
+                         $("[name=hibernatePageNo]").val(1);
+                    },
+                    defaultSelected: window.location.href.indexOf("send") > -1 ? 1 : 0
+                }
             );
-            
-	        $C.tab({defaultSelected: window.location.href.indexOf("send") > -1 ? 1 : 0})
         });
     </script>
 </head>

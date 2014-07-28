@@ -148,7 +148,7 @@
                             <td align="right" width="15%">菜单名称：</td>
                             <td align="left"><input type="text" name="name" class="{required:true,unique:['Menu','${menu.name}']} text_input3" value="${menu.name}"/></td>
                             <td align="right" width="15%" class="required">调用入口：</td>
-                            <td align="left"><input type="text" name="url" class="{required:true,ruleUrl:true,unique:['Menu','${menu.url}']} text_input3" value="${menu.url}"/></td>
+                            <td align="left"><input type="text" name="url" class="{required:true,ruleUrl:true,unique:['Function','${menu.url}'],unique:['Menu','${menu.url}']} text_input3" value="${menu.url}"/></td>
                         </tr>
                         <tr>
                             <td align="right" width="15%" class="required">启用：</td>

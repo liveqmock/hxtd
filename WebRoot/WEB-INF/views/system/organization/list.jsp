@@ -47,14 +47,15 @@
             window.gridOrg = new Grid().init({onDelete: Grid.deleteSynTree(ztree, $("[name=organizationId]")), gridName: "org", gridSelector: ".org", resultTemplateId: "org-template"});
             window.gridOrgdetail = new Grid().init({gridName: "orgdetail", gridSelector: ".orgdetail", resultTemplateId: "orgdetail-template"});
             $C.tab({onSelected: function (event, title, panel) {
-                $("[name=hibernatePageNo]").val(1);
-            }
+	                $("[name=hibernatePageNo]").val(1);
+		            },
+		            defaultSelected: window.location.href.indexOf("index=")>-1?(window.location.href.indexOf("index=_2") > -1 ? 2 : 1):0
             });
             $("#orgdetail").click(function(){
             	var remark=$("#remark").val();
             	$(".remar").html(remark);
             });
-            $C.tab({defaultSelected: window.location.href.indexOf("index=")>-1?(window.location.href.indexOf("index=_2") > -1 ? 2 : 1):0})
+           // $C.tab({defaultSelected: window.location.href.indexOf("index=")>-1?(window.location.href.indexOf("index=_2") > -1 ? 2 : 1):0})
         });
     </script>
 </head>

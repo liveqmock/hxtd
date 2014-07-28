@@ -44,6 +44,12 @@ public enum EnumModule {
 	/** 合同 */
 	CONTRACT("contract","合同"),
 	
+	/** 应收账款 */
+    RECEIVABLES("receivables","应收账款"),
+    
+    /** 应付账款 */
+    PAYMENTS("payments","应付账款"),
+    
 	/** 用户 */
 	USER("user","用户"),
 	
@@ -71,14 +77,14 @@ public enum EnumModule {
 	/** 数据字典*/
 	DICTIONARY("dictionary","数据字典"),
 	
-	/**回收站*/
+	/** 回收站*/
 	RECYCLEBIN("recyclebin","回收站"),
 
-    /**报表*/
+    /** 报表*/
     REPORT("report","报表"),
     
-    /**销售目标*/
-    SALESTARGET("salesTarget","销售目标")
+    /** 销售目标*/
+    SALESTARGET("salesTarget","销售目标"),
     
 	;
 	

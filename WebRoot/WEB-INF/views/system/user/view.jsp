@@ -118,7 +118,7 @@
                     </tr>
                 </table>
                 <h1 class="f14 fbnone ml40 pt10">描述信息</h1>
-                <table class="cb id_table4 w95b bg_c_white margin0 mt10">
+                <table class="cb id_table6 w95b bg_c_white margin0 mt10">
                     <tr>
                         <td align="right" width="15%" valign="top">备注：</td>
                         <td align="left" width="85%" valign="top">

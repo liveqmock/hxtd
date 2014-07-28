@@ -67,7 +67,7 @@
 				<td align="left">${customer.cardNum}</td>
 			</tr>
 			<tr>
-				<td align="right">所有权：</td>
+				<td align="right">公司性质：</td>
 				<td align="left">${customer.ownerShip.key}</td>
 				<td align="right">行业：</td>
 				<td align="left">${customer.industry.key}</td>
@@ -109,7 +109,7 @@
 				<td align="left"></td>
 		    </tr>
 		</table>
-		<h1 class="f14 fbnone ml40 pt10">银行信息</h1>
+		<h1 class="f14 fbnone ml40 pt10">账号信息</h1>
 		<table class="cb id_table3 w95b bg_c_white margin0 mt10">
 			<tr>
 			    <td align="right"  width="15%">开户银行：</td>
@@ -146,7 +146,7 @@
 			</tr>
 		</table>
 		<h1 class="f14 fbnone ml40 pt10">描述信息</h1>
-		<table class="cb id_table4 w95b bg_c_white margin0 mt10">
+		<table class="cb id_table6 w95b bg_c_white margin0 mt10">
 			<tr>
 				<td align="right" width="15%" valign="top">备注：</td>
 				<td align="left" width="85%" valign="top">

@@ -4,7 +4,7 @@
 <%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions" %>
 <c:set var="ctx" value="${pageContext.request.contextPath}"/>
 <link href="${ctx}/static/css/stressing/detail.css" rel="stylesheet" type="text/css"/>
-<%--<script type="text/javascript" src="${ctx}/static/js/message.js"></script>--%>
+<script type="text/javascript" src="${ctx}/static/js/message.js"></script>
 
 <!--菜单开始-->
 <div class="h_head_bg pr">
@@ -160,9 +160,8 @@
                         <b class="bb5"></b>
                         <b class="bb5"></b>
 		        <span class="block">
-		        <ul class=" block">
-                    <li>公告：</li>
-                    <li id="notices"></li>
+		        <ul id="notices" class=" block">
+                    <li>暂无系统消息</li>
                 </ul>
 		        </span>
                         <b class="bb6"></b>
@@ -193,7 +192,7 @@
                         <b class="bb5"></b>
 		        <span class="block">
 		         <ul id="messages" class=" block">
-
+					<li>暂无系统消息</li>
                  </ul>
 		        </span>
                         <b class="bb6"></b>
@@ -212,4 +211,6 @@
     </ul>
 </div>
 <!--当前页及功能条结束-->
-<div id="point4Ajax" style="padding:5px;position: fixed;z-index:101;top:40%;left:0;border-radius:4px;-moz-border-radius:4px;-webkit-border-radius:4px;-o-border-radius:4px; display:block;"></div>
+<!--  <div id="point4Ajax" class="zzcbg" style=""></div>  -->
+<div class="zzcbg pa" id="point4AjaxPMDiv" style="position:fixed; top:0; display: none;z-index:101;"></div>
+<div class="zzc" id="point4Ajax" style="padding:5px;position: fixed;z-index:102;top:40%;left:30%;border-radius:4px;-moz-border-radius:4px;-webkit-border-radius:4px;-o-border-radius:4px; display:none;"></div>

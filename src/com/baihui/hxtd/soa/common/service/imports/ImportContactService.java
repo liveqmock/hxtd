@@ -39,7 +39,8 @@ public class ImportContactService extends ImportServiceAbstract<ContactDTO,Conta
 		 * 2:修改
 		 */
 		Map<Integer, Contact> entityMap = new HashMap<Integer, Contact>();
-		for(int i = 0; i<uniqueString.size(); i++){
+		int uniqueLength = uniqueString.size();
+		for(int i = 0; i<uniqueLength; i++){
 			//获取唯一标记
 			String unique = uniqueString.get(i);
 			if("email".equals(unique)){

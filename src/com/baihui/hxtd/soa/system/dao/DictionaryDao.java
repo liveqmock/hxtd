@@ -37,6 +37,8 @@ public class DictionaryDao extends HibernateDAOImpl<Dictionary, Long> {
      */
     public List<Dictionary> findChildren(String parentValue) {
         String hql = "from Dictionary dic where dic.parent.value=? order by dic.value";
+//        String hql = "from Dictionary dic where dic.value like ? order by dic.value";
+//        parentValue = parentValue + "__";
         return find(hql, parentValue);
     }
 
@@ -54,8 +56,8 @@ public class DictionaryDao extends HibernateDAOImpl<Dictionary, Long> {
         String hql = "from Dictionary dic where dic.parent.id=? and dic.key=? and dic.isDeleted=false";
         return findUnique(hql, parentId, key);
     }
-    
-    
+
+
     public Dictionary getValueByType(String key, String type) {
         String hql = "from Dictionary dic where dic.type=? and dic.key=? and dic.isDeleted=false";
         return findUnique(hql, type, key);

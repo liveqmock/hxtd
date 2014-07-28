@@ -6,6 +6,7 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
+<%@ taglib prefix="tags" tagdir="/WEB-INF/tags" %>
 <c:set var="ctx" value="${pageContext.request.contextPath}"/>
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
 <html>
@@ -33,30 +34,31 @@ urlMap['supplier']='/project/supplier/query.do';
 urlMap['project']='/project/project/query.do';
 urlMap['product']='/project/product/query.do';
 urlMap['order']='/order/order/query.do';
+urlMap['report']='/common/report/reportWorkbanch.comp';
 $(function(){
 	$("#saveAndAdd").click(function(){
 		var $form = $("#form");
 		if($form.valid()){
-			if(true==false){
-				RcmsAjax.ajax($form.attr("action"),function(result){
-					setTimeout(function(){
-						window.location.replace("${ctx}/workbanch/toAddPage.do")
-					},500);
-				},null,$form.formSerialize()+"&params="+getParam());
-			}
+			var params = getParam();
+			RcmsAjax.ajax($form.attr("action"),function(result){
+				setTimeout(function(){
+					window.location.replace("${ctx}/workbanch/toAddPage.do")
+				},500);
+			},null,$form.formSerialize()+"&params="+params);
 		}
 		return false;
 	});
 	$("#save").click(function(){
 		var $form = $("#form");
 		if($form.valid()){
+			var params = getParam();
 			RcmsAjax.ajax($form.attr("action"),function(result){
 				//redirect
 				var id = result.result.result;
 				setTimeout(function(){
 					window.location.replace("${ctx}/workbanch/toQueryPage.do")
 				},500);
-			},null,$form.formSerialize()+"&params="+getParam());
+			},null,$form.formSerialize()+"&params="+params);
 		}
 		return false;
 	});
@@ -67,17 +69,43 @@ $(function(){
 		if(module!=""){
 			$("#param").show();
 			$("#url").val(urlMap[module]);
+			$("#type").val("list");
+			$("#report").hide();
 			if(module=="report"){
-				$("#link").show();
+				$("#type").val("report");
+				$("#report").show();
 				$("#param").hide();
 			}
 		}else{
+			$("#type").val('');
 			$("#url").val('');
 			$("#param").hide();
+			$('#report').hide();
 		}
 		$("."+module).show();
 	});
 });
+function loadIframe(){
+	getReportList();
+}
+
+function getReportList(){
+	jsUtil.dialogIframe("${ctx}/common/report/toQueryPage.comp", "报表列表", 900, 570,
+		function(){ // 确定回调
+			var $reportObj = $(".bor_e28d1f", window.frames["dialogIframe"].document);
+			if($reportObj.length > 0){
+				var nameAndValue = $reportObj.find("td:eq(0)").text();
+				// 名称:用户报表1
+				$("#reportName").val(nameAndValue.substring(nameAndValue.indexOf(':')+1));
+				$("#reportId").val($reportObj.attr("id"));
+			}
+	});
+}
+
+function clearInputVal(obj){ //清除
+	$(obj).prevAll("input").val('');
+}
+
 function getParam(){
 	var module = $("#module").val();
 	var inputs = $("."+module+" input");
@@ -95,6 +123,9 @@ function getParam(){
 			param.push("'"+$this.attr("paramName")+"':'"+$this.val()+"'");
 		}	
 	});
+	if(module=="report"){
+		$("#url").val($("#url").val()+"?id="+$('#reportId').val());
+	}
 	return encodeURI("{"+param.join(",")+"}");
 }
 </script>
@@ -121,7 +152,6 @@ function getParam(){
 			</ul>
 		</div>
 	</div>
-	<input type="hidden" id="id" name="id" value="${salesTarget.id}" />
 	<div class="ml35 mr35 bg_c_blue cb">
 		<h1 class="f14 fbnone ml40 pt10">
 			基本信息
@@ -141,7 +171,7 @@ function getParam(){
 				<td align="left">
 					<select class="select1" name="width" class="select1">
 						<option value="49">50%</option>
-						<option value="100">100%</option>
+						<option value="99">100%</option>
 					</select>
 				</td>
 			</tr>
@@ -162,7 +192,7 @@ function getParam(){
 						<c:if test="${VS_HAS_FUNCTIONS.reportQuery}"><option value="report">统计图表</option></c:if>
 					</select>
 					<input type="hidden" name="url" id="url"/>
-					<input type="hidden" name="type" value="list"/>
+					<input type="hidden" name="type" id="type"/>
 				</td>
 				<td align="right" id="paramText">创建时间：</td>
 				<td align="left">
@@ -176,9 +206,6 @@ function getParam(){
 				
 			</tr>
 		</table>
-		<div id="link" class=" ml40 pt10 param" style="display: none;">
-			选择统计图表模块请 &nbsp<a href="javascript:alert('此功能尚未开放，请联系管理员');">点击这里</a>
-		</div>
 		<h1 class="f14 fbnone ml40 pt10 " id="param" style="display: none">
 			查询条件
 		</h1>
@@ -217,7 +244,7 @@ function getParam(){
 				</td>
 				<td align="left">
 					<select class="select1" paramName="search_EQ_source.id">
-						<option vvalue="">请选择</option>
+						<option value="">请选择</option>
 						<c:forEach items="${leadSource}" var="v">
 							<option value="${v.id}">${v.key}</option>
 						</c:forEach>
@@ -444,6 +471,30 @@ function getParam(){
 				</td>
 			</tr>
 		</table>
+		
+		<div id="report" style="display: none;">
+			<h1 class="f14 fbnone ml40 pt10">
+				统计图表列表
+			</h1>
+			<table class="cb id_table3 w95b bg_c_white margin0 mt10">
+			<tr>
+				<td align="right" width="15%">
+					<span class="w_red">*&nbsp;</span>选择统计图表：
+				</td>
+				<td align="left">
+					<input type="text" paramName="reportName" id="reportName" value="" class="text_input3" onclick="getReportList();"/>
+					<input type="hidden" paramName="reportId" id="reportId" value="" class="text_input3" />
+					<i class="s_inquiry globle_img block_inline ml5 vm cp" title="选择统计图表" onclick="getReportList();"></i>
+					<i class="dump_btn globle_img block_inline ml5 vm cp empty" title="清除" onclick="clearInputVal(this)"></i>
+				</td>
+				<td align="right" width="15%">
+				</td>
+				<td align="left">
+				</td>
+			</tr>
+		</table>
+		</div>
+		
 		
 		<h1 class="f14 fbnone ml40 pt10">
 			描述信息

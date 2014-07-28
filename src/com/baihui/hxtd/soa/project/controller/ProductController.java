@@ -81,6 +81,8 @@ public class ProductController extends CommonController<Product> {
 	 */
 	@RequestMapping(value = "/toQueryPage.do")
 	public String toQueryPage(HibernatePage<Product> page, Model model) {
+		page.setHibernateOrderBy("saleBeginTime");// 默认按照销售开始时间倒序排序
+		page.setHibernateOrder(HibernatePage.DESC);
 		model.addAttribute("page", page);
 		
 		return "/project/product/list";

@@ -65,11 +65,12 @@ public class UserDao extends HibernateDAOImpl<User, Long> {
      * 2.下级组织
      */
     public DetachedCriteria priviData(DetachedCriteria criteria, DataShift dataShift) {
-        //系统数据管理员不做限制
-        if (dataShift.getIsSysDataManager()) {
+        
+    	//系统管理员或系统数据管理员不做权限限制
+        if (dataShift.getIsSysDataManager()||dataShift.getIsSysManager()) {
             return criteria;
         }
-        //组织数据管理员的权限设置
+        //组织数据管理员的权限设置，自己所在组和下级组织
         if (dataShift.getIsOrgDataManager()) {
             criteria.createAlias(dataShift.getUserFieldName(), dataShift.getUserAlias());
             criteria.createAlias(dataShift.getUserAlias() + "." + dataShift.getOrganizationFieldName(), dataShift.getOrganizationAlias());

@@ -108,7 +108,7 @@ function clearInputVal(obj){//清除
 				</td>
 				<td align="left">
 					<input type="text" name="code" value="${project.code }"
-						class="text_input3 required">
+						class="text_input3 required {unique:['Project','${project.code}']}">
 				</td>
 			</tr>
 
@@ -238,21 +238,21 @@ function clearInputVal(obj){//清除
 	<div class="cb block h40 margin0 mt10" style="width: 350px;">
 		<ul class="id_table1 cb">
 			<li>
-				<a href="javascript:;" id="save" class="block c_white lh25 mr35"><b
+				<a href="javascript:;" id="save" class="block c_white lh25 mr10"><b
 					class="allbtn_l block fl"></b><b
-					class="allbtn_r pr13 block fl w_auto f14">保&nbsp&nbsp存</b>
-				</a></a>
+					class="allbtn_r pr13 block fl w_auto f14">保&nbsp;&nbsp;存</b>
+				</a>
 			</li>
 			<li>
 				<a href="javascript:;" id="saveAndAdd"
-					class="block c_white lh25 mr35"><b class="allbtn_l block fl"></b><b
+					class="block c_white lh25 mr10"><b class="allbtn_l block fl"></b><b
 					class="allbtn_r pr13 block fl w_auto f14">保存并新建</b>
 				</a>
 			</li>
 			<li>
 				<a href="${ctx}/project/project/toQueryPage.do"
 					class="block c_white lh25"><b class="allbtn_l block fl"></b><b
-					class="allbtn_r pr13 block fl w_auto f14">取&nbsp&nbsp消</b>
+					class="allbtn_r pr13 block fl w_auto f14">取&nbsp;&nbsp;消</b>
 				</a>
 			</li>
 		</ul>

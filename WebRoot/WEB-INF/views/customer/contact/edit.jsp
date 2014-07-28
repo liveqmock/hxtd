@@ -33,6 +33,9 @@ $(function(){
 		}
 	});
 	$("#contactType").val("${contact.supplier.name != null ? 'supplier' : 'customer'}").change();
+	jQuery.validator.addMethod("check", function() { //自定义验证
+    	return $(".isPhone").val().length > 0 || $(".isMobile").val().length > 0;
+    }, "电话和手机必须一个有值！");
 });
 function searchData(action){ //搜索弹出框
 	var url, title;
@@ -93,7 +96,7 @@ function searchData(action){ //搜索弹出框
 		</tr>
 		<tr>
 			<td align="right"><span class="w_red">*&nbsp;</span>联系人名：</td>
-			<td align="left"><input name="name" type="text" value="${contact.name}" class="text_input3 required"/></td>
+			<td align="left"><input name="name" type="text" value="${contact.name}" class="text_input3 required" maxlength="10"/></td>
 			<td align="right">联系人类型：</td>
 			<td align="left">
 				<select id="contactType" name="contactType" class="select1">
@@ -104,7 +107,7 @@ function searchData(action){ //搜索弹出框
 		</tr>
 		<tr>
 			<td align="right">电话：</td>
-			<td align="left"><input name="phone" type="text" value="${contact.phone}" class="text_input3 isPhone"/></td>
+			<td align="left"><input name="phone" type="text" value="${contact.phone}" class="text_input3 isPhone check"/></td>
 			<td align="right" class="customer"><span class="w_red">*&nbsp;</span>客户名：</td>
 			<td align="left" class="customer">
 				<input id="txt_customer" type="text" value="${contact.customer.name}" readonly class="text_input3 cp required" 
@@ -124,7 +127,7 @@ function searchData(action){ //搜索弹出框
 		</tr>
 		<tr>
 			<td align="right">手机：</td>
-			<td align="left"><input name="mobile" type="text" value="${contact.mobile}" class="text_input3 isMobile"/></td>
+			<td align="left"><input name="mobile" type="text" value="${contact.mobile}" class="text_input3 isMobile check"/></td>
 			<td align="right">邮箱：</td>
 			<td align="left"><input type="text" name="email" value="${contact.email}" class="text_input3 email"/></td>
 		</tr>
@@ -136,7 +139,7 @@ function searchData(action){ //搜索弹出框
 		</tr>
 		<tr>
 			<td align="right">职位：</td>
-			<td align="left"><input type="text" name="position" value="${contact.position}" class="text_input3"/></td>
+			<td align="left"><input type="text" name="position" value="${contact.position}" class="text_input3" maxlength="30"/></td>
 			<td align="right">邮编：</td>
 			<td align="left"><input name="postCode" type="text" value="${contact.postCode}" class="text_input3 isZipCode"/></td>
 		</tr>
@@ -153,14 +156,14 @@ function searchData(action){ //搜索弹出框
 			<td align="right">区县：</td>
 			<td align="left"><select id="county" name="county.id" class="select1"></select></td>
 			<td align="right">详细地址：</td>
-			<td align="left"><input name="address" type="text" value="${contact.address}" class="text_input3"/></td>
+			<td align="left"><input name="address" type="text" value="${contact.address}" class="text_input3" maxlength="50"/></td>
 		</tr>
 	</table>
 	<h1 class="f14 fbnone ml40 pt10">描述信息</h1>
 	<table class="cb id_table4 w95b bg_c_white margin0 mt10">
 		<tr>
 			<td align="right" width="15%" valign="top">备注：</td>
-			<td align="left" width="85%" valign="top"><textarea name="remark" class="remarks_input1" style="resize: none;">${contact.remark}</textarea></td>
+			<td align="left" width="85%" valign="top"><textarea name="remark" class="remarks_input1" maxlength="500">${contact.remark}</textarea></td>
 		</tr>
 	</table>
 	<div class="h40"></div>

@@ -31,6 +31,7 @@ import com.baihui.hxtd.soa.base.utils.mapper.HibernateAwareObjectMapper;
 import com.baihui.hxtd.soa.common.controller.CommonController;
 import com.baihui.hxtd.soa.order.entity.Contract;
 import com.baihui.hxtd.soa.order.service.ContractService;
+import com.baihui.hxtd.soa.system.DictionaryConstant;
 import com.baihui.hxtd.soa.system.entity.AuditLog;
 import com.baihui.hxtd.soa.system.entity.User;
 import com.baihui.hxtd.soa.system.service.DataShift;
@@ -203,7 +204,7 @@ public class ContractController extends CommonController<Contract> {
 	}
 	
 	private void setDefaultDict(Model model){
-		model.addAttribute("redeemType",dictionaryService.findChildren("070101"));
+		model.addAttribute("redeemType",dictionaryService.findChildren(DictionaryConstant.VC_REDEEM_TYPE, true));
 	}
 	
 

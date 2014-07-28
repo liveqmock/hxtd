@@ -2,7 +2,6 @@ package com.baihui.hxtd.soa.common.controller;
 
 import java.io.IOException;
 import java.io.PrintWriter;
-import java.text.SimpleDateFormat;
 import java.util.Map;
 
 import javax.annotation.Resource;
@@ -25,7 +24,6 @@ import com.baihui.hxtd.soa.base.utils.Search;
 import com.baihui.hxtd.soa.base.utils.mapper.HibernateAwareObjectMapper;
 import com.baihui.hxtd.soa.common.entity.Attachment;
 import com.baihui.hxtd.soa.common.service.AttachmentService;
-import com.baihui.hxtd.soa.system.entity.Notice;
 import com.baihui.hxtd.soa.util.JsonDto;
 import com.fasterxml.jackson.core.JsonGenerationException;
 import com.fasterxml.jackson.databind.JsonMappingException;

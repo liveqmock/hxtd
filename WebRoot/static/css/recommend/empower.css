@@ -36,3 +36,8 @@
 
 .allnoright2{ background:url(../../images/allnoright_2.png) no-repeat; width:20px; height:20px; }
 .allright2{ background:url(../../images/allright_2.png) no-repeat; width:20px; height:20px; }
+
+.right_fbg{ position:fixed; top:0;}
+.right_fbg ul li{ float:left; margin-left:20px; margin-top:10px;}
+
+

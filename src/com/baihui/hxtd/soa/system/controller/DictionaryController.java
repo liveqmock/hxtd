@@ -1,5 +1,28 @@
 package com.baihui.hxtd.soa.system.controller;
 
+import java.io.IOException;
+import java.io.PrintWriter;
+import java.text.SimpleDateFormat;
+import java.util.Date;
+import java.util.List;
+import java.util.Map;
+
+import javax.annotation.Resource;
+import javax.servlet.http.HttpServletRequest;
+
+import org.springframework.beans.propertyeditors.CustomDateEditor;
+import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
+import org.springframework.ui.ModelMap;
+import org.springframework.web.bind.WebDataBinder;
+import org.springframework.web.bind.annotation.InitBinder;
+import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.SessionAttributes;
+import org.springside.modules.web.Servlets;
+
 import com.baihui.hxtd.soa.base.Constant;
 import com.baihui.hxtd.soa.base.orm.hibernate.HibernatePage;
 import com.baihui.hxtd.soa.base.utils.Search;
@@ -9,24 +32,10 @@ import com.baihui.hxtd.soa.system.entity.AuditLog;
 import com.baihui.hxtd.soa.system.entity.Dictionary;
 import com.baihui.hxtd.soa.system.entity.User;
 import com.baihui.hxtd.soa.system.service.DictionaryService;
+import com.baihui.hxtd.soa.util.BusinessResult;
 import com.baihui.hxtd.soa.util.EnumModule;
 import com.baihui.hxtd.soa.util.EnumOperationType;
 import com.baihui.hxtd.soa.util.JsonDto;
-import org.springframework.beans.propertyeditors.CustomDateEditor;
-import org.springframework.stereotype.Controller;
-import org.springframework.ui.Model;
-import org.springframework.ui.ModelMap;
-import org.springframework.web.bind.WebDataBinder;
-import org.springframework.web.bind.annotation.*;
-import org.springside.modules.web.Servlets;
-
-import javax.annotation.Resource;
-import javax.servlet.http.HttpServletRequest;
-import java.io.IOException;
-import java.io.PrintWriter;
-import java.text.SimpleDateFormat;
-import java.util.Date;
-import java.util.Map;
 
 @Controller
 @RequestMapping(value = "/system/dictionary")
@@ -87,6 +96,22 @@ public class DictionaryController {
 
         HibernateAwareObjectMapper.DEFAULT.writeValue(out, json);
     }
+    /**
+     * anscyQuery(异步加载数据列表)
+     *
+     * @param request HttpServletRequest
+     * @param page    分页
+     * @throws NoSuchFieldException, IOException
+     * @Description: 分页异步加载数据
+     */
+    @RequestMapping(value = "/query.do", params = { "TYPE=childlst" })
+    public void anscyQuery(HttpServletRequest request, Long parentId, PrintWriter out) throws IOException {
+        /************JSON转换 ****************/
+        JsonDto json = new JsonDto();
+        json.setResult(new BusinessResult<List<Dictionary>>(dicService.findChildDicLst(parentId)));
+
+        HibernateAwareObjectMapper.DEFAULT.writeValue(out, json);
+    }
 
     /**
      * toAddPage(跳转至新增字典页)
@@ -116,9 +141,7 @@ public class DictionaryController {
      * @Description: 新增一条字典数据
      */
     @RequestMapping(value = "/add.do", method = RequestMethod.POST)
-    public String add(Dictionary dict,
-    		String typename, 
-    		String redirectUri, 
+    public String add(Dictionary dict, String typename, String redirectUri, 
     		@ModelAttribute(Constant.VS_USER_ID) Long userId) {
         if (dict.getParent().getId() == null) {
             dict.setParent(null);

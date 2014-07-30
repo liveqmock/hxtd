@@ -20,7 +20,6 @@ import com.baihui.hxtd.soa.system.entity.AuditLog;
 import com.baihui.hxtd.soa.system.entity.Dictionary;
 import com.baihui.hxtd.soa.system.service.DataShift;
 import com.baihui.hxtd.soa.util.CommonCalendar;
-import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang3.Range;
 import org.apache.commons.lang3.time.DateUtils;
 import org.hibernate.FetchMode;
@@ -87,7 +86,7 @@ public class ReportService {
      */
     public static Collection<SearchFilter> buildTimeFilter(String name, int type) {
         List<SearchFilter> searchFilters = new ArrayList<SearchFilter>();
-        Range<Date> range = CommonCalendar.generateDateRange(new Date(), type);
+        Range<Date> range = CommonCalendar.unitRange(Calendar.getInstance(), type);
         searchFilters.add(new SearchFilter(name, SearchFilter.Operator.GTE, range.getMinimum()));
         searchFilters.add(new SearchFilter(name, SearchFilter.Operator.LT, range.getMaximum()));
         return searchFilters;
@@ -130,12 +129,12 @@ public class ReportService {
             chartTable.setyAxisHeader(new ArrayList());
             chartTable.getyAxisHeader().add("数值");
             chartTable.setRows(new ArrayList());
-            chartTable.getRows().add(ChartUtil.toTable(reportData.getRows(), reportData.getxAxis()));
+            chartTable.getRows().add(ChartUtil.toTable(reportData.getRows(), reportData.getxAxis(), reportData.getNumberType()));
         } else {
             chartTable.setyAxisTitle(FieldInfoParser.toModuleField(ModuleUtil.findFieldByName(fields, report.getzFieldName())).getDesc());
             List<String> zAxisDescs = ReflectionUtils.invokeGetterMethod(reportData.getzAxis(), "desc");
             chartTable.setyAxisHeader(zAxisDescs);
-            chartTable.setRows(ChartUtil.toTable(reportData.getRows(), reportData.getxAxis(), reportData.getzAxis()));
+            chartTable.setRows(ChartUtil.toTable(reportData.getRows(), reportData.getxAxis(), reportData.getzAxis(), reportData.getNumberType()));
         }
         chartModel.setChartTable(chartTable);
 
@@ -146,6 +145,10 @@ public class ReportService {
         reportChart.setDimensionality(report.getzFieldName() == null ? ReportChart.Dimensionality.two : ReportChart.Dimensionality.three);
         reportChart.setxAxisTitle(chartTable.getxAxisTitle());
         reportChart.setxAxisLabels(chartTable.getxAxisHeader());
+        List numbers = ChartUtil.collect(chartTable.getRows());
+        Collections.sort(numbers);
+        reportData.getyAxisRange().setMin((Number) numbers.get(0));
+        reportData.getyAxisRange().setMax((Number) numbers.get(numbers.size() - 1));
         reportChart.setyAxisRange(reportData.getyAxisRange());
         reportChart.setzAxisTitle(chartTable.getyAxisTitle());
         reportChart.setzAxisLabels(chartTable.getyAxisHeader());
@@ -201,6 +204,8 @@ public class ReportService {
         PATTERNS.put(Calendar.SECOND, new String[]{"s", "秒"});
     }
 
+    public final static ChineseFormat chineseFormat = new ChineseFormat();
+
     /**
      * 取出日期区间内指定单位的日期值
      * 1.将起止值精确到相同单位，防止比较时因精度不一致导致数据缺失
@@ -209,14 +214,14 @@ public class ReportService {
     public static List<AxisInfo> dateValues(Date min, Date max, int type) {
         List<AxisInfo> dates = new ArrayList<AxisInfo>();
 
-        if (type == CommonCalendar.QUARTER) {
-
-        } else if (type == Calendar.WEEK_OF_MONTH) {
-
-        } else {
-            min = DateUtils.truncate(min, type);
-            max = DateUtils.truncate(max, type);
-        }
+//        if (type == CommonCalendar.QUARTER) {
+//
+//        } else if (type == Calendar.WEEK_OF_MONTH) {
+//
+//        } else {
+        min = DateUtils.truncate(min, type);
+        max = DateUtils.truncate(max, type);
+//        }
 
         Calendar calendar = Calendar.getInstance();
         calendar.setTime(min);
@@ -228,7 +233,7 @@ public class ReportService {
             String value = format.format(min);
             axisInfo.setValue(Integer.parseInt(value));
             format.applyPattern(patterns[1]);
-            axisInfo.setDesc(new ChineseFormat().format(value) + format.format(min));
+            axisInfo.setDesc(chineseFormat.format(value).replace("一十", "十") + format.format(min));
             dates.add(axisInfo);
             calendar.add(type, 1);
             min = calendar.getTime();
@@ -318,29 +323,29 @@ public class ReportService {
 
     /** 构建数据 */
     public void buildData(Report report, ExtendItemSelectHql hql, ReportData reportData) {
-        buildXAxisHql(report, hql);
+        buildXAxisHql(report, hql, reportData);
         if (report.getzFieldName() != null) {
-            buildZAxisHql(report, hql);
+            buildZAxisHql(report, hql, reportData);
         }
-        buildYAxisHql(report, hql);
+        buildYAxisHql(report, hql, reportData);
 
         List rows = reportDao.find(hql.toString(), hql.getConditionValues());
         logger.debug("rows={}", JsonMapper.nonEmptyMapper().toJson(rows));
         reportData.setRows(rows);
 
-        reportData.getyAxisRange().setMax(10);
-        if (CollectionUtils.isNotEmpty(rows)) {
-            List numbers = new ArrayList();
+        //设置数值类型，根据返回值确定
+        if (rows.size() > 0) {
             int index = report.getzFieldName() == null ? 1 : 2;
-            for (int i = 0; i < rows.size(); i++) {
-                Object[] row = (Object[]) rows.get(i);
-                numbers.add(row[index]);
-            }
-            Collections.sort(numbers);
-            reportData.getyAxisRange().setMin((Number) numbers.get(0));
-            reportData.getyAxisRange().setMax((Number) numbers.get(numbers.size() - 1));
+            Object[] row = (Object[]) rows.get(0);
+            reportData.setNumberType((Class<Number>) row[index].getClass());
         }
+        //默认为Integer
+        else {
+            reportData.setNumberType(Integer.class);
+        }
+
     }
+
 
     /** 时间分组函数映射 */
     private static Map<String, String> TIME_GROUP_FUNCTION = new HashMap<String, String>();
@@ -376,19 +381,19 @@ public class ReportService {
     }
 
     /** 构建x轴hql语句 */
-    public void buildXAxisHql(Report report, ExtendItemSelectHql hql) {
+    public void buildXAxisHql(Report report, ExtendItemSelectHql hql, ReportData reportData) {
         buildAxisHql(ModuleUtil.findFieldByName(report.getModule().getFields(), report.getxFieldName()), report.getxGroupType(), hql);
     }
 
     /** 构建y轴hql语句 */
-    public void buildYAxisHql(Report report, ExtendItemSelectHql hql) {
-        String function = HqlFunction.AGGREGATES.get(report.getyAggregateType().getValue()).getName();
-        String ySelectItem = String.format("%s(%s.%s)", function, hql.getEntityAlias(), report.getyFieldName());
+    public void buildYAxisHql(Report report, ExtendItemSelectHql hql, ReportData reportData) {
+        HqlFunction hqlFunction = HqlFunction.AGGREGATES.get(report.getyAggregateType().getValue());
+        String ySelectItem = String.format("%s(%s.%s)", hqlFunction.getName(), hql.getEntityAlias(), report.getyFieldName());
         hql.getSelectItems().add(ySelectItem);
     }
 
     /** 构建z轴hql语句 */
-    public void buildZAxisHql(Report report, ExtendItemSelectHql hql) {
+    public void buildZAxisHql(Report report, ExtendItemSelectHql hql, ReportData reportData) {
         buildAxisHql(ModuleUtil.findFieldByName(report.getModule().getFields(), report.getzFieldName()), report.getzGroupType(), hql);
     }
 

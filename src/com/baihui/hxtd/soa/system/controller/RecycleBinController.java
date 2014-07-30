@@ -3,12 +3,13 @@ package com.baihui.hxtd.soa.system.controller;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
 import javax.annotation.Resource;
+import javax.servlet.ServletContext;
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
@@ -24,8 +25,10 @@ import org.springside.modules.web.Servlets;
 
 import com.baihui.hxtd.soa.base.Constant;
 import com.baihui.hxtd.soa.base.orm.hibernate.HibernatePage;
+import com.baihui.hxtd.soa.base.utils.ImportExport;
 import com.baihui.hxtd.soa.base.utils.Search;
 import com.baihui.hxtd.soa.base.utils.mapper.HibernateAwareObjectMapper;
+import com.baihui.hxtd.soa.common.controller.CommonController;
 import com.baihui.hxtd.soa.system.entity.AuditLog;
 import com.baihui.hxtd.soa.system.entity.RecycleBin;
 import com.baihui.hxtd.soa.system.entity.User;
@@ -50,7 +53,7 @@ import com.baihui.hxtd.soa.util.JsonDto;
 @Controller
 @RequestMapping(value = "/system/recyclebin")
 @SessionAttributes(value = { Constant.VS_USER_ID, Constant.VS_USER, Constant.VS_DATASHIFT})
-public class RecycleBinController {
+public class RecycleBinController extends CommonController<RecycleBin>{
 	private Logger logger = LoggerFactory.getLogger(this.getClass());
 	
 	@Resource
@@ -166,6 +169,5 @@ public class RecycleBinController {
         json.setMessage("恢复数据成功!");
         return json.toString();
     }
-	
 	
 }

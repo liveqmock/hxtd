@@ -19,7 +19,7 @@ public class HqlFunction {
     /** 总数 */
     public final static HqlFunction AGGREGATE_SUM = new HqlFunction("SUM", "总数", Long.class);
     /** 平均 */
-    public final static HqlFunction AGGREGATE_AVG = new HqlFunction("AVG", "平均", Long.class);
+    public final static HqlFunction AGGREGATE_AVG = new HqlFunction("AVG", "平均", Double.class);
     /** 最大 */
     public final static HqlFunction AGGREGATE_MAX = new HqlFunction("MAX", "最大", Long.class);
     /** 最小 */
@@ -70,7 +70,7 @@ public class HqlFunction {
     private String desc;
 
     /** 返回值类型 */
-    private Class returnType;
+    private Class<? extends Number> returnType;
 
     public HqlFunction() {
     }
@@ -97,11 +97,11 @@ public class HqlFunction {
         this.desc = desc;
     }
 
-    public Class getReturnType() {
+    public Class<? extends Number> getReturnType() {
         return returnType;
     }
 
-    public void setReturnType(Class returnType) {
+    public void setReturnType(Class<? extends Number> returnType) {
         this.returnType = returnType;
     }
 }

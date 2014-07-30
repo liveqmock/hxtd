@@ -223,7 +223,7 @@ public class CommonCalendar {
     /** 日历单位和范围描述配置 */
     public final static Map<Integer, String> CALENDAR_UNITS = new LinkedHashMap<Integer, String>();
 
-    /** 季度月份范围配置 季度从1~4，月份从0~11（匹配Calendar提供的英文月份值） */
+    /** 季度月份范围配置 季度从1~4，月份从1~12（匹配Calendar提供的英文月份值） */
     public final static Map<Integer, Range<Integer>> QUARTER_MONTH_RANGES = new HashMap<Integer, Range<Integer>>();
 
     /** 周范围1~7从周日至周六 */
@@ -273,15 +273,13 @@ public class CommonCalendar {
         //本季度
         if (CALENDAR_UNITS.containsKey(QUARTER)) {
             calendar.setTime(current);
-            Range<Date> quarterRange = quarterRange(calendar);
-            ranges.put(CALENDAR_UNITS.get(QUARTER), quarterRange);
+            ranges.put(CALENDAR_UNITS.get(QUARTER), quarterRange(calendar));
         }
 
         //本周
         if (CALENDAR_UNITS.containsKey(Calendar.WEEK_OF_MONTH)) {
             calendar.setTime(current);
-            int weekDay = calendar.get(Calendar.DAY_OF_WEEK) - 1;
-            ranges.put(CALENDAR_UNITS.get(Calendar.WEEK_OF_MONTH), unitRange(calendar, Calendar.DAY_OF_MONTH, weekDay, WEEK_RANGE));
+            ranges.put(CALENDAR_UNITS.get(Calendar.WEEK_OF_MONTH), weekRange(calendar));
         }
 
         return ranges;
@@ -290,11 +288,6 @@ public class CommonCalendar {
     /** 生成当前日期范围 */
     public static Map<String, Range<Date>> generateDateRange() {
         return generateDateRange(new Date());
-    }
-
-    /** 生成日期范围 */  //TODO 待优化
-    public static Range<Date> generateDateRange(Date current, int type) {
-        return generateDateRange(current).get(CALENDAR_UNITS.get(type));
     }
 
     /**
@@ -329,7 +322,7 @@ public class CommonCalendar {
      * @return 最大日期
      * @see #unitMin(java.util.Calendar, int) min由该方法提供
      */
-    public static Date unitMax(Calendar min, int unit) {
+    public static Date unitMaxFromMin(Calendar min, int unit) {
         if (!ArrayUtils.contains(STANDARD_UNITS, unit)) {
             String message = String.format("不支持的时间单位%s，应该在[%s]中", unit, StringUtils.join(STANDARD_UNITS, ","));
             throw new RuntimeException(message);
@@ -340,12 +333,43 @@ public class CommonCalendar {
         return min.getTime();
     }
 
+    /**
+     * 指定单位最大的日期
+     *
+     * @param calendar 指定日历
+     * @param unit     时间单位，使用Calendar的时间单位
+     * @return 最大日期
+     * @see #unitMin(java.util.Calendar, int) min由该方法提供
+     */
+    public static Date unitMax(Calendar calendar, int unit) {
+        if (unit == QUARTER) {
+            return quarterMax(calendar);
+        }
+
+        if (unit == Calendar.DAY_OF_WEEK) {
+            return weekMax(calendar);
+        }
+
+        Date max = DateUtils.ceiling(calendar.getTime(), unit);
+        calendar.setTime(max);
+        calendar.add(Calendar.MILLISECOND, -1);
+        return calendar.getTime();
+    }
+
     /** 当前日期单位范围 */
-    public static Range<Date> unitRange(Calendar calendar, int unit, int value, Range<Integer> range) {
-        calendar.add(unit, -(value - range.getMinimum()));
-        Date min = DateUtils.truncate(calendar.getTime(), unit);
-        calendar.add(unit, range.getMaximum() - range.getMinimum());
-        Date max = unitMax(calendar, unit);
+    public static Range<Date> unitRange(Calendar calendar, int unit) {
+        if (unit == QUARTER) {
+            return quarterRange(calendar);
+        }
+
+        if (unit == Calendar.DAY_OF_WEEK) {
+            return weekRange(calendar);
+        }
+
+        Date min = unitMin(calendar, unit);
+
+        calendar.setTime(min);
+        Date max = unitMaxFromMin(calendar, unit);
         return Range.between(min, max);
     }
 
@@ -358,19 +382,14 @@ public class CommonCalendar {
             }
         }
 
-        throw new RuntimeException(String.format("%s不是一个有效的月份值，应该在1~12之间", month));
-    }
-
-    /** 当前季度范围 */
-    public static Range<Date> quarterRange(Calendar calendar) {
-        int month = calendar.get(Calendar.MONTH) + 1;
-        int quarter = findQuarter(month);
-        Range<Integer> range = QUARTER_MONTH_RANGES.get(quarter);
-        return unitRange(calendar, Calendar.MONTH, quarter, range);
+        throw new RuntimeException(String.format("%s不是一个有效的月份值，应该在%s~%s之间", month, Calendar.JANUARY, Calendar.DECEMBER));
     }
 
     /** 当前季度最小值 */
     public static Date quarterMin(Calendar calendar) {
+        // 设置天数为1，防止在设置月份时，因不同月份天数不同，而自动增长。
+        // 例如：3月31日月份设置为2时，月份值仍为3，2月没有31天，会自动增长
+        calendar.set(Calendar.DATE, 1);
         int month = calendar.get(Calendar.MONTH);
         int quarter = findQuarter(month);
         Range<Integer> range = QUARTER_MONTH_RANGES.get(quarter);
@@ -380,36 +399,67 @@ public class CommonCalendar {
 
     /** 当前季度最大值 */
     public static Date quarterMax(Calendar calendar) {
+        // 设置天数为1，防止在设置月份时，因不同月份天数不同，而自动增长。
+        // 例如：3月31日月份设置为2时，月份值仍为3，2月没有31天，会自动增长
+        calendar.set(Calendar.DATE, 1);
         int month = calendar.get(Calendar.MONTH);
         int quarter = findQuarter(month);
         Range<Integer> range = QUARTER_MONTH_RANGES.get(quarter);
         calendar.set(Calendar.MONTH, range.getMaximum());
         Date max = DateUtils.truncate(calendar.getTime(), Calendar.MONTH);
         calendar.setTime(max);
-        return unitMax(calendar, Calendar.MONTH);
+        return unitMaxFromMin(calendar, Calendar.MONTH);
+    }
+
+    /** 当前季度范围 */
+    public static Range<Date> quarterRange(Calendar calendar) {
+        // 设置天数为1，防止在设置月份时，因不同月份天数不同，而自动增长。
+        // 例如：3月31日月份设置为2时，月份值仍为3，2月没有31天，会自动增长
+        calendar.set(Calendar.DATE, 1);//防止月份增长
+        int month = calendar.get(Calendar.MONTH);
+        int quarter = findQuarter(month);
+        Range<Integer> range = QUARTER_MONTH_RANGES.get(quarter);
+        calendar.set(Calendar.MONTH, range.getMinimum());
+        Date min = DateUtils.truncate(calendar.getTime(), Calendar.MONTH);
+        calendar.setTime(min);
+        calendar.set(Calendar.MONTH, range.getMaximum());
+        Date max = unitMaxFromMin(calendar, Calendar.MONTH);
+        return Range.between(min, max);
+    }
+
+    /** 转换至汉式周 */
+    public static int toChineseWeek(int week) {
+        return week == Calendar.SUNDAY ? Calendar.SATURDAY : --week;
+    }
+
+
+    /** 当前周最小值 */
+    public static Date weekMin(Calendar calendar) {
+        int week = calendar.get(Calendar.DAY_OF_WEEK);
+        week = toChineseWeek(week);
+        calendar.add(Calendar.DATE, -(week - WEEK_RANGE.getMinimum()));
+        return DateUtils.truncate(calendar.getTime(), Calendar.DATE);
+    }
+
+    /** 当前周最大值 */
+    public static Date weekMax(Calendar calendar) {
+        int week = calendar.get(Calendar.DAY_OF_WEEK);
+        week = toChineseWeek(week);
+        calendar.add(Calendar.DATE, WEEK_RANGE.getMaximum() - week);
+        Date min = DateUtils.truncate(calendar.getTime(), Calendar.DATE);
+        calendar.setTime(min);
+        return unitMaxFromMin(calendar, Calendar.DATE);
     }
 
     /** 当前周范围 */
     public static Range<Date> weekRange(Calendar calendar) {
-        int weekDay = calendar.get(Calendar.DAY_OF_WEEK) - 1;
-        return unitRange(calendar, Calendar.DAY_OF_MONTH, weekDay, WEEK_RANGE);
-    }
-
-    /** 当前周最小值 */
-    public static Date weekMin(Calendar calendar) {
-        int month = calendar.get(Calendar.MONTH) + 1;
-        int quarter = findQuarter(month);
-        Range<Integer> range = QUARTER_MONTH_RANGES.get(quarter);
-        calendar.set(Calendar.MONTH, range.getMinimum() - 1);
-        return new Date();
-    }
-
-    /** 当前周最大值 */
-    public static Range<Date> weekMax(Calendar calendar) {
-        int month = calendar.get(Calendar.MONTH) + 1;
-        int quarter = findQuarter(month);
-        Range<Integer> range = QUARTER_MONTH_RANGES.get(quarter);
-        return unitRange(calendar, Calendar.MONTH, quarter, range);
+        int week = calendar.get(Calendar.DAY_OF_WEEK);
+        week = toChineseWeek(week);
+        calendar.add(Calendar.DATE, -(week - WEEK_RANGE.getMinimum()));
+        Date min = DateUtils.truncate(calendar.getTime(), Calendar.DATE);
+        calendar.setTime(min);
+        calendar.add(Calendar.DATE, WEEK_RANGE.getMaximum() - WEEK_RANGE.getMinimum());
+        return Range.between(min, unitMaxFromMin(calendar, Calendar.DATE));
     }
 
     /** 精确 */
@@ -427,7 +477,7 @@ public class CommonCalendar {
 
         Date min = DateUtils.truncate(date, unit);
         calendar.setTime(min);
-        return Range.between(min, unitMax(calendar, unit));
+        return Range.between(min, unitMaxFromMin(calendar, unit));
     }
 
     /** 精确 */

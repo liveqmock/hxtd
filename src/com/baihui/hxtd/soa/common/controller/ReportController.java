@@ -323,7 +323,7 @@ public class ReportController {
 
         //z轴字段
         if (report.getzFieldName() != null) {
-            Field zAxisField = ModuleUtil.findFieldByName(fields, report.getxFieldName());
+            Field zAxisField = ModuleUtil.findFieldByName(fields, report.getzFieldName());
             if (ReflectionUtils.getEntityFieldType(zAxisField).equals(Date.class)) {
                 moduleFields.add(FieldInfoParser.toModuleField(zAxisField));
                 return moduleFields;

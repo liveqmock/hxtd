@@ -141,7 +141,8 @@ Grid.prototype = {
         this.btnExport = this.operatebar.find(options.exportSelector);
 
         this.grid = this.container.find(options.gridSelector);
-        this.grid.length == 0 && (this.grid = this.container.find("table:last"));
+    	options.gridSelector == ".listcontainer .grid" && (this.grid = $(options.gridSelector)); //lihua
+    	this.grid.length == 0 && (this.grid = this.container.find("table:last"));
 
         var forform = this.grid.attr(options.gridForForm);
         forform && (this.form = this.container.find(forform));

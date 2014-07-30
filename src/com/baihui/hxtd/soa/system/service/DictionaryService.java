@@ -1,11 +1,9 @@
 package com.baihui.hxtd.soa.system.service;
 
-import com.baihui.hxtd.soa.base.orm.hibernate.HibernatePage;
-import com.baihui.hxtd.soa.base.utils.Search;
-import com.baihui.hxtd.soa.system.dao.DictionaryDao;
-import com.baihui.hxtd.soa.system.entity.AuditLog;
-import com.baihui.hxtd.soa.system.entity.Dictionary;
-import com.baihui.hxtd.soa.system.entity.User;
+import java.util.List;
+import java.util.Map;
+
+import javax.annotation.Resource;
 
 import org.hibernate.criterion.DetachedCriteria;
 import org.hibernate.criterion.Restrictions;
@@ -13,9 +11,11 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springside.modules.persistence.SearchFilter;
 
-import javax.annotation.Resource;
-import java.util.List;
-import java.util.Map;
+import com.baihui.hxtd.soa.base.orm.hibernate.HibernatePage;
+import com.baihui.hxtd.soa.base.utils.Search;
+import com.baihui.hxtd.soa.system.dao.DictionaryDao;
+import com.baihui.hxtd.soa.system.entity.AuditLog;
+import com.baihui.hxtd.soa.system.entity.Dictionary;
 
 /**
  * 字典服务类
@@ -53,15 +53,24 @@ public class DictionaryService {
      * @Description: 获取字典数据分页列表
      */
     @Transactional(readOnly = true)
-    public HibernatePage<Dictionary> findPage(Map<String, Object> searchParams,
-                                              HibernatePage<Dictionary> page) throws NoSuchFieldException {
+    public HibernatePage<Dictionary> findPage(Map<String, Object> searchParams, HibernatePage<Dictionary> page) throws NoSuchFieldException {
         DetachedCriteria criteria = DetachedCriteria.forClass(Dictionary.class);
         criteria.add(Restrictions.eq("isDeleted", false));// 过滤已删除
+        criteria.add(Restrictions.isNull("type"));
 
         Map<String, SearchFilter> filters = Search.parse(searchParams);
         Search.buildCriteria(filters, criteria, Dictionary.class);
 
         return dictionaryDao.findPage(page, criteria);
+    }
+    
+    public List<Dictionary> findChildDicLst(Long parentId){
+    	DetachedCriteria criteria = DetachedCriteria.forClass(Dictionary.class);
+    	criteria.add(Restrictions.eq("isDeleted", false));
+    	criteria.createAlias("parent", "parent");
+        criteria.add(Restrictions.eq("parent.id", parentId));
+        
+        return dictionaryDao.find(criteria);
     }
 
     /**

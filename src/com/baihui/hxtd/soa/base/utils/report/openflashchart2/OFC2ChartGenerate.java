@@ -2,6 +2,7 @@ package com.baihui.hxtd.soa.base.utils.report.openflashchart2;
 
 import com.baihui.hxtd.soa.base.utils.report.ChartGenerate;
 import com.baihui.hxtd.soa.base.utils.report.ReportChart;
+import com.baihui.hxtd.soa.base.utils.report.YAxisRange;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import ro.nextreports.jofc2.model.Chart;
@@ -26,10 +27,14 @@ public class OFC2ChartGenerate implements ChartGenerate {
 
     public String generateChart(ReportChart reportChart) {
         Chart chart = new Chart(reportChart.getTitle());
+
         chart.setXAxis(new XAxis());
         chart.getXAxis().addLabels(reportChart.getxAxisLabels().toArray(new String[]{}));
+
         chart.setYAxis(new YAxis());
-        chart.getYAxis().setRange(0, reportChart.getyAxisRange().getMax());
+        generateStep(reportChart.getyAxisRange());
+        chart.getYAxis().setRange(reportChart.getyAxisRange().getMin(), reportChart.getyAxisRange().getMax(), reportChart.getyAxisRange().getStep());
+
         Collection<Element> elements = new ArrayList<Element>();
         List<List<Number>> rows = reportChart.getData();
         List zAxisLabels = reportChart.getzAxisLabels();
@@ -74,13 +79,68 @@ public class OFC2ChartGenerate implements ChartGenerate {
         return stringChart;
     }
 
-    /** 获取标签对应的颜色 */
-    public List<String> getColours(List labels) {
-        Set<String> colours = new HashSet<String>();
-        while (colours.size() < labels.size()) {
-            colours.add("#" + generateRandomColourCode());
+    /**
+     * 生成递增值
+     * -y轴固定显示10个数值
+     * -递增值
+     * --不考虑小数情况
+     * --递增值为n*10~次方
+     *
+     * @return
+     */
+    public static Number generateStep(YAxisRange<Number> range) {
+        Number min = range.getMin();
+        Number max = range.getMax();
+        if (min instanceof Long && max instanceof Long) {
+            long differ = (Long) max - (Long) min + 1;
+            long step = differ / 10;
+            long remainder = differ % 10;
+            int time = 0;
+            while (step > 10) {
+                step = step / 10;
+                remainder = step % 10;
+                time++;
+            }
+            if (remainder > 0) {
+                step++;
+            }
+            step *= (int) Math.pow(10, time);
+            range.setStep(step);
+            range.setMax((Long) min + step * 10);
+            return step;
+        } else if (min instanceof Integer && max instanceof Integer) {
+            int differ = (Integer) max - (Integer) min + 1;
+            int step = differ / 10;
+            int remainder = differ % 10;
+            int time = 0;
+            while (step > 10) {
+                step = step / 10;
+                remainder = step % 10;
+                time++;
+            }
+            if (remainder > 0) {
+                step++;
+            }
+            step *= (int) Math.pow(10, time);
+            range.setStep(step);
+            range.setMax((Integer) min + step * 10);
+            return step;
         }
-        return new ArrayList<String>(colours);
+        throw new RuntimeException(String.format("未预期的值%s和%s", min, max));
+    }
+
+
+    /** 颜色，初始化13种，需要时自动扩涨 */
+    private final static Set<String> COLOURS = new LinkedHashSet<String>(Arrays.asList("#FF0000", "#00FF00", "#0000FF",/* "#FFFF00",*/ "#00FFFF", "#FF00FF", "#02d1b1",
+            "#00c6ff", "#b9e415", "#f28f02", "#ec31e1", "#e45915", "#f798db", "#8b97ef"));
+
+
+    /** 获取标签对应的颜色 */
+    public static List<String> getColours(List labels) {
+        while (COLOURS.size() <= labels.size()) {
+            COLOURS.add("#" + generateRandomColourCode());
+        }
+        return new ArrayList<String>(COLOURS);
     }
 
     /** 生成随机的颜色代码 */

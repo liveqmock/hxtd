@@ -58,7 +58,11 @@
 					}else if("${moduleName}" == "supplier"){//导入供应商
 						$("#moduleInput").text("供应商");
 						$("#moduleName").attr("value","${moduleName}");
-					}else{
+					}else if("${moduleName}" == "recyclebin"){//导入回收站
+						$("#moduleInput").text("回收站");
+						$("#moduleName").attr("value","${moduleName}");
+					}
+					else{
 						$("#moduleName").css("display","block");//从设置导入
 					}
 				}
@@ -285,6 +289,9 @@
 										<c:if test="${VS_HAS_FUNCTIONS.supplierAdd}">
 											<option value="supplier">供应商</option>
 										</c:if>
+										<c:if test="${VS_HAS_FUNCTIONS.recycleAdd}">
+											<option value="recyclebin">回收站</option>
+										</c:if>
 									</select>
 									
 									<label class="f12" id="moduleInput"></label>
@@ -382,6 +389,7 @@
 								<a href="${ctx}/static/template/import/${templateCustomer}">${templateCustomer}</a>&nbsp;&nbsp;
 								<a href="${ctx}/static/template/import/${templateContact}">${templateContact}</a>&nbsp;&nbsp;
 								<a href="${ctx}/static/template/import/${templateSupplier}">${templateSupplier}</a>&nbsp;&nbsp;
+								<a href="${ctx}/static/template/import/${templateRecycleBin}">${templateRecycleBin}</a>&nbsp;&nbsp;
 							</p>
 							<p style="color: red;font-weight:bold;" class="f14">
 								1.请先下载模板，并在此基础上进行修改。<br />

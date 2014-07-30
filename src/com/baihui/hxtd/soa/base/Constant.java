@@ -152,6 +152,9 @@ public class Constant {
 
     /** 导入线索的列数 */
     public final static int EXCEL_IMPORT_lEAD_COLUMNS = 20;
+    
+    /** 导入回收站的列数 */
+    public final static int EXCEL_IMPORT_RECYCLEBIN_COLUMNS = 5;
 
 
     /*角色*/

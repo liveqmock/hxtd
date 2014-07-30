@@ -10,6 +10,9 @@ import javax.annotation.Resource;
 
 import org.hibernate.FetchMode;
 import org.hibernate.criterion.DetachedCriteria;
+import org.hibernate.criterion.Restrictions;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springside.modules.persistence.SearchFilter;
@@ -17,6 +20,8 @@ import org.springside.modules.persistence.SearchFilter;
 import com.baihui.hxtd.soa.base.orm.hibernate.HibernatePage;
 import com.baihui.hxtd.soa.base.utils.Search;
 import com.baihui.hxtd.soa.common.dao.CommonDao;
+import com.baihui.hxtd.soa.customer.entity.Customer;
+import com.baihui.hxtd.soa.customer.service.LeadService;
 import com.baihui.hxtd.soa.system.dao.RecycleBinDao;
 import com.baihui.hxtd.soa.system.dao.UserDao;
 import com.baihui.hxtd.soa.system.entity.AuditLog;
@@ -37,6 +42,8 @@ import com.baihui.hxtd.soa.util.EnumModule;
 @Transactional(readOnly = true)
 public class RecycleBinService {
 	
+	private Logger logger = LoggerFactory.getLogger(RecycleBinService.class);
+	
 	@Resource
 	private RecycleBinDao recycleBinDao;
 	
@@ -45,6 +52,9 @@ public class RecycleBinService {
 	
 	@Resource
 	private UserDao userDao;
+	
+	private Integer exportCounts = 5000;
+	
 	/**
 	 * 分页查找数据
 	 * @param searchParams
@@ -178,6 +188,26 @@ public class RecycleBinService {
 			ids.add(id[i]);
 		}
 		return recycleBinDao.get(ids);
+	}
+
+	/**
+	 * 分页查找回收站数据
+	 * @param searchParams
+	 * @return
+	 * @throws NoSuchFieldException 
+	 */
+	public List<RecycleBin> find(Map<String, Object> searchParams) throws NoSuchFieldException {
+		logger.info("分页查找回收站数据");
+        DetachedCriteria detachedCriteria = DetachedCriteria.forClass(RecycleBin.class);
+        detachedCriteria.setFetchMode("creator", FetchMode.JOIN);
+        Map<String, SearchFilter> filters = Search.parse(searchParams);
+        Search.buildCriteria(filters, detachedCriteria, RecycleBin.class);
+        List<RecycleBin> recycleBins=recycleBinDao.find(detachedCriteria, exportCounts);
+        for (int i = 0; i < recycleBins.size(); i++) {
+        	recycleBins.get(i).setModuleName(EnumModule.valueOf(recycleBins.get(i).getModuleName())
+        			.getModuleChineseName());
+		}
+        return recycleBins;
 	}
 
 }

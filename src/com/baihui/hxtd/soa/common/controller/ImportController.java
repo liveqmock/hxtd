@@ -2,6 +2,7 @@ package com.baihui.hxtd.soa.common.controller;
 
 import java.io.IOException;
 import java.io.InputStream;
+import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
@@ -79,6 +80,7 @@ public class ImportController {
 		model.addAttribute("templateContact", "contact.xlsx");
 		model.addAttribute("templateCustomer", "customer.xlsx");
 		model.addAttribute("templateSupplier", "supplier.xlsx");
+		model.addAttribute("templateRecycleBin", "recyclebin.xlsx");
 		return "/common/imports/import";
 	}
 	
@@ -92,7 +94,7 @@ public class ImportController {
             @ModelAttribute(Constant.VS_USER) User sessionUser,
             @ModelAttribute(Constant.VS_ORG) Organization organization,
             ModelMap modelMap,
-            RedirectAttributes model) throws IOException, InvalidFormatException, InstantiationException, IllegalAccessException, ClassNotFoundException {
+            RedirectAttributes model) throws IOException, InvalidFormatException, InstantiationException, IllegalAccessException, ClassNotFoundException, ParseException {
 		
 		logger.info("导入excel文件");
 		

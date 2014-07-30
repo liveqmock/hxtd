@@ -67,8 +67,8 @@ public class DictionaryConstant {
     public final static String VC_REDEEM_TYPE = "赎回方式";
     /** 投资方式 */
     public final static String VC_INVESTMENT_WAY = "投资方式";
-    /** 投资方式 */
-    public final static String VC_ATTACHMENT_TYPE = "投资方式";
+    /** 附件类型 */
+    public final static String VC_ATTACHMENT_TYPE = "附件类型";
     /** 财务状态 */
     public final static String VC_FINANCIAL_WAY = "财务状态";
     

@@ -3,10 +3,7 @@ package com.baihui.hxtd.soa.base.utils.report;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 /**
  * 报表工具类
@@ -19,8 +16,8 @@ public class ChartUtil {
     private static Logger logger = LoggerFactory.getLogger(ChartUtil.class);
 
     /** 二维表格数据转换 */
-    public static List<Number> toTable(List sourceTable, List<AxisInfo> xAxises) {
-        List<Number> targetTable = ChartUtil.buildEmptyTable(xAxises);
+    public static <T extends Number> List<Number> toTable(List sourceTable, List<AxisInfo> xAxises, Class<T> clazz) {
+        List<Number> targetTable = ChartUtil.buildEmptyTable(xAxises, clazz);
 
         //存储x轴索引
         Map<Object, Integer> xAxisIndexs = new HashMap<Object, Integer>();
@@ -43,20 +40,36 @@ public class ChartUtil {
         return targetTable;
     }
 
+    private final static Map<Class<? extends Number>, Number> ZEROS = new HashMap<Class<? extends Number>, Number>();
+
+    static {
+        ZEROS.put(Long.class, 0l);
+        ZEROS.put(Integer.class, 0);
+        ZEROS.put(Double.class, 0d);
+        ZEROS.put(Float.class, 0f);
+    }
 
     /** 创建空的二维表格 */
-    public static List<Number> buildEmptyTable(List xAxises) {
+    public static <T extends Number> List<Number> buildEmptyTable(List xAxises, Class<T> clazz) {
         List<Number> emptyTable = new ArrayList<Number>(xAxises.size());
         for (int i = 0; i < xAxises.size(); i++) {
-            emptyTable.add(0);
+            emptyTable.add(ZEROS.get(clazz));
         }
         return emptyTable;
     }
 
-    /** 三维表格数据转换 */
-    public static List<List<Number>> toTable(List sourceTable, List<AxisInfo> xAxises, List<AxisInfo> zAxises) {
-        List<List<Number>> targetTable = ChartUtil.buildEmptyTable(xAxises, zAxises);
+    /** 收集所有数值 */
+    public static List<Number> collect(List<List<Number>> table) {
+        Set<Number> numbers = new HashSet<Number>();
+        for (int i = 0; i < table.size(); i++) {
+            numbers.addAll(table.get(i));
+        }
+        return new ArrayList<Number>(numbers);
+    }
 
+    /** 三维表格数据转换 */
+    public static <T extends Number> List<List<Number>> toTable(List sourceTable, List<AxisInfo> xAxises, List<AxisInfo> zAxises, Class<T> clazz) {
+        List<List<Number>> targetTable = ChartUtil.buildEmptyTable(xAxises, zAxises, clazz);
 
         //存储x轴索引
         Map<Object, Integer> xAxisIndexs = new HashMap<Object, Integer>();
@@ -91,11 +104,11 @@ public class ChartUtil {
     }
 
     /** 构建空的三维表格 */
-    public static List<List<Number>> buildEmptyTable(List xAxises, List zAxises) {
+    public static <T extends Number> List<List<Number>> buildEmptyTable(List xAxises, List zAxises, Class<T> clazz) {
         List<List<Number>> emptyTable = new ArrayList<List<Number>>();
         int ySize = zAxises.size();
         for (int i = 0; i < ySize; i++) {
-            emptyTable.add(buildEmptyTable(xAxises));
+            emptyTable.add(buildEmptyTable(xAxises, clazz));
         }
         return emptyTable;
     }

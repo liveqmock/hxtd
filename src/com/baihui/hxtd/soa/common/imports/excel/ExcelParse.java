@@ -4,6 +4,7 @@ import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
 import java.math.BigDecimal;
+import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -38,8 +39,9 @@ public abstract class ExcelParse<T> {
 	 * 读取excel文件
 	 * @param fileItem
 	 * @return
+	 * @throws ParseException 
 	 */
-	public List<T> parse(MultipartFile fileItem, List<String> typeList){
+	public List<T> parse(MultipartFile fileItem, List<String> typeList) throws ParseException{
 		if(fileItem == null){
 			return null;
 		}
@@ -70,8 +72,9 @@ public abstract class ExcelParse<T> {
 	 * @return
 	 * @throws FileNotFoundException
 	 * @throws IOException
+	 * @throws ParseException 
 	 */
-	public Map<Integer, T> readExcel(MultipartFile fileItem) throws FileNotFoundException, IOException {
+	public Map<Integer, T> readExcel(MultipartFile fileItem) throws FileNotFoundException, IOException, ParseException {
 		logger.info("开始解析excel文件");
 		String msg = null;
 		if(fileItem == null){
@@ -369,8 +372,9 @@ public abstract class ExcelParse<T> {
 	 * @param rowNumOfSheet
 	 * @param sheetList
 	 * @return
+	 * @throws ParseException 
 	 */
-	public abstract T checkDataBySheetList(int rowNumOfSheet, List<String> sheetList);
+	public abstract T checkDataBySheetList(int rowNumOfSheet, List<String> sheetList) throws ParseException;
 	
 	/**
 	 * 获取excel导入文件的列数

@@ -16,6 +16,9 @@ public class ReportData {
     /** y轴数值区间 */
     private YAxisRange<Number> yAxisRange;
 
+    /** 数值类型 */
+    private Class<? extends Number> numberType;
+
     /** z轴值 */
     private List<AxisInfo> zAxis;
 
@@ -56,5 +59,13 @@ public class ReportData {
 
     public void setRows(List<Object[]> rows) {
         this.rows = rows;
+    }
+
+    public Class<? extends Number> getNumberType() {
+        return numberType;
+    }
+
+    public void setNumberType(Class<? extends Number> numberType) {
+        this.numberType = numberType;
     }
 }

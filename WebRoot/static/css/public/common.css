@@ -99,7 +99,7 @@ i{font-style:normal}
 .back_btn{ background-position:-413px -114px; width:78px; height:27px;}
 .edit_btn{ background-position:-413px -143px; width:78px; height:27px;}
 .s_detail_btn,.s_edit_btn,.s_dump_btn,.s_download,
-.s_preview,.s_inquiry,.s_reply,.s_change,.s_todown,.s_toup,.s_print,.s_statistics,.s_approve,.s_contract,.s_onapprove,.s_goapprove,.s_rshenpi,.s_xshenpi,.s_nowshenpi,.s_noshenpi,.s_copy,.s_buy{ width:17px; height:17px;}
+.s_preview,.s_inquiry,.s_reply,.s_change,.s_todown,.s_toup,.s_print,.s_statistics,.s_approve,.s_contract,.s_onapprove,.s_goapprove,.s_rshenpi,.s_xshenpi,.s_nowshenpi,.s_noshenpi,.s_copy,.s_buy,.s_open,.s_putaway{ width:17px; height:17px;}
 .s_detail_btn{ background-position:-482px -30px;}
 .s_dump_btn{ background-position:-439px -30px;}
 .s_edit_btn{ background-position:-461px -31px;}
@@ -120,6 +120,8 @@ i{font-style:normal}
 .s_noshenpi{ background-position:-395px -227px;}
 .s_copy{ background-position:-374px -251px;}
 .s_buy{ background-position:-397px -251px;}
+.s_open{ background-position:-374px -273px;}
+.s_putaway{ background-position:-400px -273px;}
 
 .have_read{ background-position:-454px -202px; width:14px; height:12px;}
 .no_read{ background-position:-468px -202px; width:14px; height:12px;}

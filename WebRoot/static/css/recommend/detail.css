@@ -17,6 +17,23 @@
 .id_table2 tr td a{ color:#222222; text-decoration:underline;}
 .id_table2 tr{ text-align:center;}
 .id_table2 tr td{ padding-left:2px; padding-right:2px;}
+
+
+.id_ul4{ height:40px;}
+.id_ul4:hover{ color:#e28d1f;}
+.id_ul4:hover th{ color:#222;}
+.id_ul4:hover a{ color:#e28d1f;}
+.id_ul4 li a{ color:#222222; text-decoration:underline;}
+.id_ul4{ text-align:center;}
+.id_ul4 li{ padding-left:2px; padding-right:2px; float:left; line-height:40px;}
+
+.id_ul5{ height:40px;}
+.id_ul5 li a{ color:#222222; text-decoration:underline;}
+.id_ul5{ text-align:center;}
+.id_ul5 li{ padding-left:2px; padding-right:2px; float:left; line-height:40px; font-weight:bold}
+
+
+
 .id_ul1 li{ float:left; margin-right:10px;}
 .id_table3 tr{ background-color:#fff; height:40px;}
 .id_table4 tr{ background-color:#fff; height:200px;}

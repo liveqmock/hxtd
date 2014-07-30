@@ -75,15 +75,11 @@ public class AuditLogService {
 		return result;
 		 
 	 }
-    /**
-     * 根据属性isDeleted删除
-     * @param id
-     */
-	public void delete(Long... id) {
-		auditLogDao.logicalDelete(id);
-		
-	}
-	
+
+	 /**
+	  * 保存
+	  * @param auditLog
+	  */
 	public void save(AuditLog auditLog){
 		
 		//如果备注为null，设置默认的备注

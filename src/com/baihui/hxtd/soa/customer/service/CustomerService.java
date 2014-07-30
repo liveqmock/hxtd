@@ -42,7 +42,7 @@ import com.baihui.hxtd.soa.system.service.DataShift;
 @Transactional
 public class CustomerService {
 
-	private Logger logger = LoggerFactory.getLogger(LeadService.class);
+	private Logger logger = LoggerFactory.getLogger(CustomerService.class);
 
 	@Resource
 	private CustomerDao customerDao;
@@ -182,7 +182,7 @@ public class CustomerService {
 
 
 	public List<Customer>  find(Map<String, Object> searchParams) throws NoSuchFieldException {
-		logger.info("分页查找用户");
+		logger.info("分页查找客户");
         DetachedCriteria detachedCriteria = DetachedCriteria.forClass(Customer.class);
         detachedCriteria.setFetchMode("owner", FetchMode.JOIN);
         detachedCriteria.setFetchMode("creator", FetchMode.JOIN);

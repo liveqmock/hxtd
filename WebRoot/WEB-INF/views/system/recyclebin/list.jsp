@@ -9,52 +9,54 @@
 <%@ taglib prefix="tags" tagdir="/WEB-INF/tags"%>
 <c:set var="ctx" value="${pageContext.request.contextPath}" />
 <html>
-	<head>
-		<title>回收站</title>
-		<link href="${ctx}/static/css/application.css?v=1" rel="stylesheet" type="text/css" />
-		<link href="${ctx}/static/css/stressing/empower.css" rel="stylesheet" type="text/css" />
-		<link href="${ctx}/static/css/recommend/detail.css?v=1" rel="stylesheet" type="text/css" />
-		<script type="text/javascript" src="${ctx}/static/js/jquery-jtemplates.js?v=1"></script>
-		<script type="text/javascript" src="${ctx}/static/js/js-util.common.js?v=1"></script>
-		<script type="text/javascript" src="${ctx}/static/js/scrollTitle.js?v=1"></script>
-		<script type="text/javascript">
-			$(function() {
-				jsUtil.datepicker(".time");//加载时间控件
-				grid = new Grid().init();
-				
-				//绑定还原按钮
-				$("#recoveryData").click(function(){
-					if($(":checkbox:checked").length == 0){
-						jsUtil.alert("请选择要恢复的数据");
-						return false;
-					}
-					jsUtil.confirm("确定要恢复数据吗?",function(){
-						var ckAry = [];
-						$("#tbody :checkbox:checked").each(function(){
-							ckAry.push(this.value);
-						});
-			            RcmsAjax.ajax("${ctx}/system/recyclebin/recovery.do",onLoad, null, $.param({id: ckAry }, true));
-					});
-				});
+<head>
+<title>回收站</title>
+<link href="${ctx}/static/css/application.css?v=1" rel="stylesheet" type="text/css" />
+<link href="${ctx}/static/css/stressing/empower.css" rel="stylesheet" type="text/css" />
+<link href="${ctx}/static/css/recommend/detail.css?v=1" rel="stylesheet" type="text/css" />
+<script type="text/javascript" src="${ctx}/static/js/api/api.date.js"></script>
+<script type="text/javascript" src="${ctx}/static/js/jquery-json.2.4.js"></script>
+<script type="text/javascript" src="${ctx}/static/js/jquery-jtemplates.js"></script>
+<script type="text/javascript" src="${ctx}/static/js/js-util.common.js"></script>
+<script type="text/javascript" src="${ctx}/static/js/scrollTitle.js?v=1"></script>
+<script type="text/javascript">
+$(function() {
+	jsUtil.datepicker(".time");//加载时间控件
+	grid = new Grid().init().bindExport();
+	
+	//绑定还原按钮
+	$("#recoveryData").click(function(){
+		if($(":checkbox:checked").length == 0){
+			jsUtil.alert("请选择要恢复的数据");
+			return false;
+		}
+		jsUtil.confirm("确定要恢复数据吗?",function(){
+			var ckAry = [];
+			$("#tbody :checkbox:checked").each(function(){
+				ckAry.push(this.value);
 			});
-			function onLoad(){
-				setTimeout(function () {grid.loadGrid();}, 500);
-			}
-			function formReSet(){
-				$("#form")[0].reset();
-			}
-			function searchData(action){//搜索条件-操作人
-				jsUtil.dialogIframe("${ctx}/system/user/toQueryPage.comp", "操作人", 800, 465, function(){// 确定回调
-					var $ckObj = $(".bor_e28d1f", window.frames["dialogIframe"].document);
-					if($ckObj.length > 0){
-						$("#txt_" + action).val($ckObj.find("td:eq(0)").text());
-						$("#hide_" + action +"_id").val($ckObj.attr("id"));
-					}
-				});
-			}
-			
-		</script>
-	</head>
+            RcmsAjax.ajax("${ctx}/system/recyclebin/recovery.do",onLoad, null, $.param({id: ckAry }, true));
+		});
+	});
+});
+function onLoad(){
+	setTimeout(function () {grid.loadGrid();}, 500);
+}
+function formReSet(){
+	$("#form")[0].reset();
+}
+function searchData(action){//搜索条件-操作人
+	jsUtil.dialogIframe("${ctx}/system/user/toQueryPage.comp", "操作人", 800, 465, function(){// 确定回调
+		var $ckObj = $(".bor_e28d1f", window.frames["dialogIframe"].document);
+		if($ckObj.length > 0){
+			$("#txt_" + action).val($ckObj.find("td:eq(0)").text());
+			$("#hide_" + action +"_id").val($ckObj.attr("id"));
+		}
+	});
+}
+
+</script>
+</head>
 	<body style="min-width: 1100px;">
 		<div style="ml35 mr35 mt10 block cb cb">
 		<b class="b1"></b>
@@ -143,6 +145,20 @@
 		                		</c:if>
 		                		</li>
 		                	</ul>
+			   				<ul class="fr id_table1 mt10 ml10">
+								<c:if test="${VS_HAS_FUNCTIONS.recycleImport}">
+									<li>
+										<a href="${ctx}/recyclebin/imports/toImportPage.do?module=recycleBin"
+											class="leading_in globle_img block_inline mr10" title="导入"></a>
+									</li>
+								</c:if>
+								<c:if test="${VS_HAS_FUNCTIONS.recycleExport}">
+									<li>
+										<a href="javascript:;" uri="${ctx}/system/recyclebin/export.do?TYPE=selected" 
+											class="leading_out globle_img block_inline mr10 export" title="导出"></a>
+									</li>
+								</c:if>
+							</ul>
 	                	</div>
                 	</div>
 					<div class="cb"></div>

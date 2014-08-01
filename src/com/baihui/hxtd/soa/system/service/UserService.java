@@ -4,6 +4,7 @@ import com.baihui.hxtd.soa.base.Constant;
 import com.baihui.hxtd.soa.base.ServiceException;
 import com.baihui.hxtd.soa.base.orm.hibernate.HibernatePage;
 import com.baihui.hxtd.soa.base.utils.MD5;
+import com.baihui.hxtd.soa.base.utils.ReflectionUtils;
 import com.baihui.hxtd.soa.base.utils.Search;
 import com.baihui.hxtd.soa.base.utils.serial.TierSerial;
 import com.baihui.hxtd.soa.base.utils.serial.TierSerials;
@@ -12,10 +13,10 @@ import com.baihui.hxtd.soa.system.dao.DictionaryDao;
 import com.baihui.hxtd.soa.system.dao.OrganizationDao;
 import com.baihui.hxtd.soa.system.dao.UserDao;
 import com.baihui.hxtd.soa.system.entity.*;
+import com.baihui.hxtd.soa.system.entity.Dictionary;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import org.apache.commons.lang3.Range;
 import org.hibernate.FetchMode;
-import org.hibernate.criterion.CriteriaSpecification;
 import org.hibernate.criterion.DetachedCriteria;
 import org.hibernate.criterion.Order;
 import org.hibernate.criterion.Restrictions;
@@ -26,9 +27,7 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springside.modules.persistence.SearchFilter;
 
 import javax.annotation.Resource;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 /**
  * 用户服务类
@@ -41,15 +40,15 @@ public class UserService {
 
     private Logger logger = LoggerFactory.getLogger(UserService.class);
 
-    //    @Value("${export.counts}")
+    @Resource
+	private OrganizationDao organizationDao;
+
+	//    @Value("${export.counts}")
     private Integer exportCounts = 3000;
 
 
     @Resource
     private UserDao userDao;
-
-    @Resource
-    private OrganizationDao organizationDao;
 
     @Resource
     private DictionaryDao dictionaryDao;
@@ -133,16 +132,16 @@ public class UserService {
      * 分页查找
      */
     @Transactional(readOnly = true)
-    public HibernatePage<User> findPage(Map<String, Object> searchParams, HibernatePage<User> page, User user, Long organizationId) throws NoSuchFieldException {
+    public HibernatePage<User> findPage(Map<String, Object> searchParams, HibernatePage<User> page, Long organizationId) throws NoSuchFieldException {
         logger.info("分页查找用户");
         DetachedCriteria detachedCriteria = DetachedCriteria.forClass(User.class);
-        detachedCriteria.setResultTransformer(CriteriaSpecification.DISTINCT_ROOT_ENTITY);
+//        detachedCriteria.setResultTransformer(CriteriaSpecification.DISTINCT_ROOT_ENTITY);
 
         detachedCriteria.setFetchMode("sex", FetchMode.JOIN);
         detachedCriteria.setFetchMode("type", FetchMode.JOIN);
         detachedCriteria.setFetchMode("jobSituation", FetchMode.JOIN);
         detachedCriteria.setFetchMode("organization", FetchMode.JOIN);
-        detachedCriteria.setFetchMode("roles", FetchMode.JOIN);
+//        detachedCriteria.setFetchMode("roles", FetchMode.JOIN);
 
         detachedCriteria.createAlias("organization", "org");
         Long order = organizationDao.getOrderById(organizationId);
@@ -152,7 +151,32 @@ public class UserService {
 
         Map<String, SearchFilter> filters = Search.parse(searchParams);
         Search.buildCriteria(filters, detachedCriteria, User.class);
-        return userDao.findPage(page, detachedCriteria);
+        userDao.findPage(page, detachedCriteria);
+
+        if (page.getResult().size() == 0) {
+            return page;
+        }
+
+        List<Long> userIds = ReflectionUtils.invokeGetterMethod(page.getResult(), "id");
+        String hql = "select user.id,role from User user inner join user.roles role where user.id in(:id) order by user.id,role";
+        List roles = userDao.createQuery(hql).setParameterList("id", userIds).list();
+        Map<Long, Set<Role>> roleMap = new HashMap<Long, Set<Role>>();
+        for (int i = 0; i < roles.size(); i++) {
+            Object[] userRole = (Object[]) roles.get(i);
+            Long userId = (Long) userRole[0];
+            Role role = (Role) userRole[1];
+            if (!roleMap.containsKey(userId)) {
+                roleMap.put(userId, new LinkedHashSet<Role>());
+            }
+            roleMap.get(userId).add(role);
+        }
+
+        for (int i = 0; i < page.getResult().size(); i++) {
+            User user = page.getResult().get(i);
+            user.setRoles(roleMap.get(user.getId()));
+        }
+
+        return page;
     }
 
     /**

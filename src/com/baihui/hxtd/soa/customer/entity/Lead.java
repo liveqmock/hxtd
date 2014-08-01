@@ -206,6 +206,7 @@ public class Lead {
 	@FieldInfo(desc="修改时间")
 	private Date modifiedTime;
 
+	@FieldInfo(desc="删除标志")
 	@Column(name = "IS_DELETED", nullable = false, updatable = false)
 	private Boolean isDeleted = false;
 	

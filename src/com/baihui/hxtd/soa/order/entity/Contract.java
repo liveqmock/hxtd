@@ -16,6 +16,7 @@ import javax.persistence.Table;
 import org.hibernate.annotations.NotFound;
 import org.hibernate.annotations.NotFoundAction;
 
+import com.baihui.hxtd.soa.base.FieldInfo;
 import com.baihui.hxtd.soa.customer.entity.Customer;
 import com.baihui.hxtd.soa.system.entity.Dictionary;
 import com.baihui.hxtd.soa.system.entity.User;
@@ -42,6 +43,7 @@ public class Contract {
 	private static final long serialVersionUID = 1L;
 
 	/**ID */
+	@FieldInfo(desc = "主键ID")
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	@Column(name = "ID")
@@ -50,89 +52,107 @@ public class Contract {
 	/**
 	 * 合同名称
 	 */
+	@FieldInfo(desc = "合同名称")
 	@Column(name = "NAME")
 	private String name;
 	
 	/**
 	 * 合同编号
 	 */
+	@FieldInfo(desc = "合同编号")
 	@Column(name = "CODE")
 	private String code;
 	
 	/**
 	 * 合同金额
 	 */
+	@FieldInfo(desc = "合同金额")
 	@Column(name = "PURCHASE_MONEY")
 	private BigDecimal purchaseMoney;
 	
 	/** 合同类型 */
+	@FieldInfo(desc = "合同类型")
 	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "TYPE_DIC")
 	private Dictionary type;
 	
-	/** 合同类内容*/
+	/** 合同内容*/
+	@FieldInfo(desc = "合同内容")
 	@Column(name = "CONTENT")
 	private String content;
 	
 	/** 关联订单 */
+	@FieldInfo(desc = "关联订单")
 	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "ORDER_ID")
 	@NotFound(action = NotFoundAction.IGNORE)
 	private Order order;
 	
 	/** 关联客户 */
+	@FieldInfo(desc = "关联客户")
 	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "ACCOUNT_ID")
 	@NotFound(action = NotFoundAction.IGNORE)
 	private Customer customer;
 	
 	/** 赎回方式 */
+	@FieldInfo(desc = "赎回方式")
 	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "REDEEM_TYPE_DIC")
 	@NotFound(action = NotFoundAction.IGNORE)
 	private Dictionary redeemType;
 	
 	/** 签订时间 */
+	@FieldInfo(desc = "签订时间")
 	@JsonFormat(pattern = "yyyy-MM-dd", timezone = "GMT+08:00")
 	@Column(name = "SIGN_TIME")
 	private Date signTime;
 	
 	/** 生效时间 */
+	@FieldInfo(desc = "生效时间")
 	@JsonFormat(pattern = "yyyy-MM-dd", timezone = "GMT+08:00")
 	@Column(name = "EFFECT_TIME")
 	private Date effectTime;
 	
 	/** 失效时间 */
+	@FieldInfo(desc = "失效时间")
 	@JsonFormat(pattern = "yyyy-MM-dd", timezone = "GMT+08:00")
 	@Column(name = "BEREFT_TIME")
 	private Date bereftTime;
+	
 	/** 备注 */
+	@FieldInfo(desc = "备注")
 	@Column(name = "REMARK", length = 512)
 	private String remark;
 	
 	/** 创建者 */
+	@FieldInfo(desc = "创建者")
 	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "CREATOR_ID", updatable = false)
 	@NotFound(action = NotFoundAction.IGNORE)
 	private User creator;
 
 	/** 创建时间 */
+	@FieldInfo(desc = "创建时间")
 	@JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss", timezone = "GMT+08:00")
 	@Column(name = "CREATED_TIME",updatable = false)
 	private Date createdTime;
 	
 	/** 修改者 */
+	@FieldInfo(desc = "修改者")
 	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "MODIFIER_ID")
 	@NotFound(action = NotFoundAction.IGNORE)
 	private User modifier;
 	
 	/** 最终修改时间 */
+	@FieldInfo(desc = "最终修改时间")
 	@JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss", timezone = "GMT+08:00")
 	@Column(name = "MODIFIED_TIME")
 	private Date modifiedTime;
 	
 	/**删除标识*/
+	@FieldInfo(desc = "删除标识")
 	@Column(name = "IS_DELETED", nullable = false)
 	private Boolean isDeleted = false;
 

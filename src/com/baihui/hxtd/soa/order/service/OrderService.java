@@ -1,23 +1,12 @@
 package com.baihui.hxtd.soa.order.service;
 
-import java.util.Date;
-import java.util.List;
-import java.util.Map;
-
-import javax.annotation.Resource;
-
-import org.hibernate.FetchMode;
-import org.hibernate.criterion.DetachedCriteria;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
-import org.springside.modules.persistence.SearchFilter;
-
 import com.baihui.hxtd.soa.base.Constant;
 import com.baihui.hxtd.soa.base.orm.hibernate.HibernatePage;
+import com.baihui.hxtd.soa.base.utils.ReflectionUtils;
 import com.baihui.hxtd.soa.base.utils.Search;
+import com.baihui.hxtd.soa.base.utils.report.*;
 import com.baihui.hxtd.soa.common.dao.FlowNodeDao;
+import com.baihui.hxtd.soa.common.service.ReportService;
 import com.baihui.hxtd.soa.financial.dao.PaymentsDao;
 import com.baihui.hxtd.soa.financial.dao.ReceivablesDao;
 import com.baihui.hxtd.soa.financial.entity.Payments;
@@ -31,6 +20,17 @@ import com.baihui.hxtd.soa.system.dao.UserDao;
 import com.baihui.hxtd.soa.system.entity.AuditLog;
 import com.baihui.hxtd.soa.system.entity.User;
 import com.baihui.hxtd.soa.system.service.DataShift;
+import org.apache.commons.lang3.Range;
+import org.hibernate.FetchMode;
+import org.hibernate.criterion.DetachedCriteria;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+import org.springside.modules.persistence.SearchFilter;
+
+import javax.annotation.Resource;
+import java.util.*;
 
 /**
  * 功能描述：order表service层
@@ -59,13 +59,13 @@ public class OrderService {
 
     @Resource
     private FlowNodeDao flowNodeDao;
-    
+
     @Resource
     private PaymentsDao paymentsDao;
-    
+
     @Resource
     private ReceivablesDao receivablesDao;
-    
+
     @Resource
     private DictionaryDao dictionaryDao;
 
@@ -177,126 +177,221 @@ public class OrderService {
         page.setResult(orders);
         return page;
     }
-    
-    
-    public Long getSumMoneyByTime(Date beginTime,Date endTime){
-    	String hql = "select sum(order.purchaseMoney) from Order order " +
-    					"where order.isDeleted = false " +
-    					"and order.payStatus=true " +
-    					"and order.modifiedTime between ? and ?";
-    	return orderDao.findUnique(hql,beginTime,endTime);
+
+
+    public Long getSumMoneyByTime(Date beginTime, Date endTime) {
+        String hql = "select sum(order.purchaseMoney) from Order order " +
+                "where order.isDeleted = false " +
+                "and order.payStatus=true " +
+                "and order.modifiedTime between ? and ?";
+        return orderDao.findUnique(hql, beginTime, endTime);
     }
-    
+
     /**
-     * 订单审批中 
-	 * @Title: modifyOrderNoteing
-	 * @param @param id
-	 * @param @param user
-	 * @param @param auditLog
-	 * @return void
-	 * @throws
-    */
-    @Transactional(readOnly = false)
-    public void modifyOrderNoteing(Long id){
-    	String hql = "update Order o set o.orderStatus = ? where o.id=?";
-    	orderDao.createQuery(hql, dictionaryDao.getByValue(DictionaryConstant.ORDER_STATUS_NODEING), id).executeUpdate();
-    }
-    
-    /**
-     * 订单审批完成
-	 * @Title: modifyOrderNoteFinish
-	 * @param @param id
-	 * @param @param user
-	 * @param @param auditLog
-	 * @return void
-	 * @throws
-    */
-    @Transactional(readOnly = false)
-    public void modifyOrderNoteFinish(Long id, User user, AuditLog auditLog){
-    	String hql = "update Order o set o.orderStatus = ? where o.id=?";
-    	orderDao.createQuery(hql, dictionaryDao.getByValue(DictionaryConstant.ORDER_STATUS_NODE_FINIAL), id).executeUpdate();
-    	// 创建收款单
-    	Order order = orderDao.get(id);
-    	if ( order != null ){
-    		receivablesDao.save(constructReceivablesByOrder(order, user));
-    	}
-    }
-    
-    /**
-     * 提前赎回 
-	 * @Title: advanceRedemptionOrder
-	 * @param @param id
-	 * @param @param user
-	 * @param @param auditLog
-	 * @return void
-	 * @throws
+     * 订单审批中
+     *
+     * @param @param id
+     * @param @param user
+     * @param @param auditLog
+     * @return void
+     * @throws
+     * @Title: modifyOrderNoteing
      */
     @Transactional(readOnly = false)
-    public void advanceRedemptionOrder(Long id, User user, AuditLog auditLog){
-    	String hql = "update Order o set o.orderStatus = ? where o.id=?";
-    	orderDao.createQuery(hql, dictionaryDao.getByValue(DictionaryConstant.ORDER_STATUS_ADVANCE_REDEMPTION),id).executeUpdate();
-    	// 创建付款单
-    	Order order = orderDao.get(id);
-    	if ( order != null ){
-    		paymentsDao.save(constructPaymentsByOrderUser(order, user));
-    	}
+    public void modifyOrderNoteing(Long id) {
+        String hql = "update Order o set o.orderStatus = ? where o.id=?";
+        orderDao.createQuery(hql, dictionaryDao.getByValue(DictionaryConstant.ORDER_STATUS_NODEING), id).executeUpdate();
+    }
+
+    /**
+     * 订单审批完成
+     *
+     * @param @param id
+     * @param @param user
+     * @param @param auditLog
+     * @return void
+     * @throws
+     * @Title: modifyOrderNoteFinish
+     */
+    @Transactional(readOnly = false)
+    public void modifyOrderNoteFinish(Long id, User user, AuditLog auditLog) {
+        String hql = "update Order o set o.orderStatus = ? where o.id=?";
+        orderDao.createQuery(hql, dictionaryDao.getByValue(DictionaryConstant.ORDER_STATUS_NODE_FINIAL), id).executeUpdate();
+        // 创建收款单
+        Order order = orderDao.get(id);
+        if (order != null) {
+            receivablesDao.save(constructReceivablesByOrder(order, user));
+        }
+    }
+
+    /**
+     * 提前赎回
+     *
+     * @param @param id
+     * @param @param user
+     * @param @param auditLog
+     * @return void
+     * @throws
+     * @Title: advanceRedemptionOrder
+     */
+    @Transactional(readOnly = false)
+    public void advanceRedemptionOrder(Long id, User user, AuditLog auditLog) {
+        String hql = "update Order o set o.orderStatus = ? where o.id=?";
+        orderDao.createQuery(hql, dictionaryDao.getByValue(DictionaryConstant.ORDER_STATUS_ADVANCE_REDEMPTION), id).executeUpdate();
+        // 创建付款单
+        Order order = orderDao.get(id);
+        if (order != null) {
+            paymentsDao.save(constructPaymentsByOrderUser(order, user));
+        }
     }
 
     /**
      * 客户主动作废订单
-	 * @Title: modifyInvalidOrderbyCustomer
-	 * @param @param id
-	 * @param @param auditLog
-	 * @return void
-	 * @throws
+     *
+     * @param @param id
+     * @param @param auditLog
+     * @return void
+     * @throws
+     * @Title: modifyInvalidOrderbyCustomer
      */
     @Transactional(readOnly = false)
-    public void modifyInvalidOrderbyCustomer(Long id, User user, AuditLog auditLog){
-    	String hql = "update Order o set o.orderStatus = ? where o.id=?";
-    	orderDao.createQuery(hql, dictionaryDao.getByValue(DictionaryConstant.ORDER_STATUS_INVALID_CUSTOMER),id).executeUpdate();
+    public void modifyInvalidOrderbyCustomer(Long id, User user, AuditLog auditLog) {
+        String hql = "update Order o set o.orderStatus = ? where o.id=?";
+        orderDao.createQuery(hql, dictionaryDao.getByValue(DictionaryConstant.ORDER_STATUS_INVALID_CUSTOMER), id).executeUpdate();
     }
-    
+
     /**
-     * 公司主动作废订单 
-	 * @Title: advanceRedemptionOrder
-	 * @param @param id
-	 * @param @param auditLog
-	 * @return void
-	 * @throws
+     * 公司主动作废订单
+     *
+     * @param @param id
+     * @param @param auditLog
+     * @return void
+     * @throws
+     * @Title: advanceRedemptionOrder
      */
     @Transactional(readOnly = false)
-    public void modifyInvalidOrderbyOwner(Long id, AuditLog auditLog){
-    	String hql = "update Order o set o.orderStatus = ? where o.id=?";
-    	orderDao.createQuery(hql, dictionaryDao.getByValue(DictionaryConstant.ORDER_STATUS_INVALID_OWNER),id).executeUpdate();
+    public void modifyInvalidOrderbyOwner(Long id, AuditLog auditLog) {
+        String hql = "update Order o set o.orderStatus = ? where o.id=?";
+        orderDao.createQuery(hql, dictionaryDao.getByValue(DictionaryConstant.ORDER_STATUS_INVALID_OWNER), id).executeUpdate();
     }
-    
+
     private Payments constructPaymentsByOrderUser(Order order, User user) {
-		String name = Constant.FINANCIAL_PAYMENTS_BEFORE + order.getCode();
-		Date now = paymentsDao.getDBNow();
-		Payments payments = new Payments(name, order.getCustomer(), order, order
-				.getPurchaseMoney(), Constant.FINANCIAL_AUTH_REMARK, now);
-		payments.setOwner(user);
-		payments.setCreator(user);
-		payments.setModifier(user);
-		payments.setCreatedTime(now);
-		payments.setModifiedTime(now);
-		return payments;
-	}
-    
+        String name = Constant.FINANCIAL_PAYMENTS_BEFORE + order.getCode();
+        Date now = paymentsDao.getDBNow();
+        Payments payments = new Payments(name, order.getCustomer(), order, order
+                .getPurchaseMoney(), Constant.FINANCIAL_AUTH_REMARK, now);
+        payments.setOwner(user);
+        payments.setCreator(user);
+        payments.setModifier(user);
+        payments.setCreatedTime(now);
+        payments.setModifiedTime(now);
+        return payments;
+    }
+
     private Receivables constructReceivablesByOrder(Order order, User user) {
-		String name = Constant.FINANCIAL_RECEIVABLES_BEFORE + order.getCode();
-		Date now = receivablesDao.getDBNow();
-		Receivables receivables = new Receivables(name, order.getCustomer(), order,
-				order.getPurchaseMoney(), Constant.FINANCIAL_AUTH_REMARK,
-				now);
-		receivables.setOwner(user);
-		receivables.setCreator(user);
-		receivables.setModifier(user);
-		receivables.setCreatedTime(now);
-		receivables.setModifiedTime(now);
-		return receivables;
-	}
-    
-    
-    
+        String name = Constant.FINANCIAL_RECEIVABLES_BEFORE + order.getCode();
+        Date now = receivablesDao.getDBNow();
+        Receivables receivables = new Receivables(name, order.getCustomer(), order,
+                order.getPurchaseMoney(), Constant.FINANCIAL_AUTH_REMARK,
+                now);
+        receivables.setOwner(user);
+        receivables.setCreator(user);
+        receivables.setModifier(user);
+        receivables.setCreatedTime(now);
+        receivables.setModifiedTime(now);
+        return receivables;
+    }
+
+    /**
+     * 查找已完成的订单
+     * 已完成的含义：
+     * 1.财务状态为“已收款”
+     * 2.订单状态为“审核通过”
+     * 3.时间范围通过“生效时间”筛选
+     *
+     * @param page
+     * @param timeRange 时间范围
+     * @return 订单列表
+     */
+    public HibernatePage<Order> findFinished(HibernatePage<Order> page, Range<Date> timeRange) {
+        String hql = "select entity from Order entity" +
+                " where entity.payStatus.value=?" +
+                " and entity.orderStatus.value=?" +
+                " and entity.effectiveTime between ? and ?";
+        orderDao.findPage(page, hql, DictionaryConstant.ORDER_PAYSTATUS, DictionaryConstant.ORDER_STATUS, timeRange.getMinimum(), timeRange.getMaximum());
+        return page;
+    }
+
+    @Resource
+    private ChartGenerate chartGenerate;
+
+    /**
+     * 统计每天或每月已完成的订单数
+     * 1.时间范围为一个月时，按天统计；为多个月时，按月统计
+     *
+     * @param timeRange 时间范围
+     * @return json字符串
+     * @see #findFinished(com.baihui.hxtd.soa.base.orm.hibernate.HibernatePage, org.apache.commons.lang3.Range) 已完成的含义
+     */
+    public String statisFinished(Range<Date> timeRange) {
+        List<AxisInfo> axisInfos;
+        String function;
+
+        //根据时间范围确定按天或者按月统计
+        Calendar calendar = Calendar.getInstance();
+        calendar.setTime(timeRange.getMinimum());
+        int monthMin = calendar.get(Calendar.MONTH);
+        calendar.setTime(timeRange.getMaximum());
+        int monthMax = calendar.get(Calendar.MONTH);
+
+        //一个月，按天统计
+        if (monthMin == monthMax) {
+            function = "DAY";
+            axisInfos = ReportService.dateValues(timeRange.getMinimum(), timeRange.getMaximum(), Calendar.DATE);
+        }
+        //多个月，按月统计
+        else {
+            function = "MONTH";
+            axisInfos = ReportService.dateValues(timeRange.getMinimum(), timeRange.getMaximum(), Calendar.MONTH);
+        }
+
+        String hql = "select %s(order.affectiveTime),count(order.id) from Order order" +
+                " where order.payStatus.value=?" +
+                " and order.orderStatus.value=?" +
+                " and order.effectiveTime between ? and ?" +
+                " group by %s(order.affectiveTime)";
+        hql = String.format(hql, function, function);
+        List rows = orderDao.find(hql, DictionaryConstant.ORDER_PAYSTATUS, DictionaryConstant.ORDER_STATUS, timeRange.getMinimum(), timeRange.getMaximum());
+        List<Number> numbers = ChartUtil.toTable(rows, axisInfos, Long.class);
+
+        ReportChart reportChart = new ReportChart();
+        reportChart.setTitle("订单完成数目");
+        reportChart.setChartType(ChartType.bar);
+        reportChart.setDimensionality(ReportChart.Dimensionality.two);
+        reportChart.setxAxisTitle(monthMin == monthMax ? "天数" : "月份");
+        List<String> descs = ReflectionUtils.invokeGetterMethod(axisInfos, "desc");
+        reportChart.setxAxisLabels(descs);
+        reportChart.setData(new ArrayList<List<Number>>());
+        reportChart.getData().add(numbers);
+
+        return chartGenerate.generateChart(reportChart);
+    }
+
+    /**
+     * 统计已完成的订单数目和总金额
+     *
+     * @param timeRange
+     * @return
+     * @see #findFinished(com.baihui.hxtd.soa.base.orm.hibernate.HibernatePage, org.apache.commons.lang3.Range) 已完成的含义
+     */
+    public Object[] statisFinishedCountMoney(Range<Date> timeRange) {
+        String hql = "select count(order.id),sum(order.purchaseMoney) from Order order" +
+                " where order.payStatus.value=?" +
+                " and order.orderStatus.value=?" +
+                " and order.effectiveTime between ? and ?";
+        Object[] cells = orderDao.findUnique(hql, DictionaryConstant.ORDER_PAYSTATUS, DictionaryConstant.ORDER_STATUS, timeRange.getMinimum(), timeRange.getMaximum());
+        return cells;
+    }
+
+
 }

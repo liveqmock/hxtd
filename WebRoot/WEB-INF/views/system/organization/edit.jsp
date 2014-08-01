@@ -12,7 +12,7 @@
 <head>
     <title>组织编辑</title>
     <link rel="stylesheet" href="${ctx}/static/css/application.css" type="text/css"/>
-    <link href="${ctx}/static/css/recommend/detail.css" rel="stylesheet" type="text/css"/>
+    <link href="${ctx}/static/css/recommend/list1.css" rel="stylesheet" type="text/css"/>
     <script type="text/javascript" src="${ctx}/static/js/js-util.common.js"></script>
     <link rel="stylesheet" href="${ctx}/static/component/zTree_v3/css/zTreeStyle.css" type="text/css"/>
     <script type="text/javascript" src="${ctx}/static/component/zTree_v3/js/jquery.ztree.core-3.5.js"></script>

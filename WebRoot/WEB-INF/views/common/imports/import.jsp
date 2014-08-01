@@ -42,6 +42,14 @@
 			buttonAdd = "${ctx}/static/images/tan_btn1.png";
 			buttonNoneAdd = "${ctx}/static/images/tan_btn1none.png";
 			$(function() {
+				//将模板的四个div设置为不可见
+				$("#leadTemplate").css("display","none");
+				$("#customerTemplate").css("display","none");
+				$("#contactTemplate").css("display","none");
+				$("#supplierTemplate").css("display","none");
+				$("#recyclebinTemplate").css("display","none");
+				
+				
 				//设置模块默认值
 				var module = "${moduleName}";
 				if(module!="" && module!=null){
@@ -49,21 +57,30 @@
 					if("${moduleName}" == "lead"){//导入线索
 						$("#moduleInput").text("线索");
 						$("#moduleName").attr("value","${moduleName}");
+						$("#leadTemplate").show();
 					}else if("${moduleName}" == "contact"){//导入联系人
 						$("#moduleInput").text("联系人");
 						$("#moduleName").attr("value","${moduleName}");
+						$("#contactTemplate").css("display","block");
 					}else if("${moduleName}" == "customer"){//导入客户
 						$("#moduleInput").text("客户");
 						$("#moduleName").attr("value","${moduleName}");
+						$("#customerTemplate").css("display","block");
 					}else if("${moduleName}" == "supplier"){//导入供应商
 						$("#moduleInput").text("供应商");
 						$("#moduleName").attr("value","${moduleName}");
+						$("#supplierTemplate").css("display","block");
 					}else if("${moduleName}" == "recyclebin"){//导入回收站
 						$("#moduleInput").text("回收站");
 						$("#moduleName").attr("value","${moduleName}");
-					}
-					else{
+						$("#recyclebinTemplate").css("display","block");
+					}else{
 						$("#moduleName").css("display","block");//从设置导入
+						$("#leadTemplate").css("display","block");
+						$("#customerTemplate").css("display","block");
+						$("#contactTemplate").css("display","block");
+						$("#supplierTemplate").css("display","block");
+						$("#recyclebinTemplate").css("display","block");
 					}
 				}
 				
@@ -384,14 +401,34 @@
 						</div>
 						<div class=" cb" style="height:60px; ">
 							<p class="f14" style="font-weight:bold;">
-								模板：
-								<a href="${ctx}/static/template/import/${templateLead}">${templateLead}</a>&nbsp;&nbsp;
-								<a href="${ctx}/static/template/import/${templateCustomer}">${templateCustomer}</a>&nbsp;&nbsp;
-								<a href="${ctx}/static/template/import/${templateContact}">${templateContact}</a>&nbsp;&nbsp;
-								<a href="${ctx}/static/template/import/${templateSupplier}">${templateSupplier}</a>&nbsp;&nbsp;
-								<a href="${ctx}/static/template/import/${templateRecycleBin}">${templateRecycleBin}</a>&nbsp;&nbsp;
+								<p class="fl">模板：</p>
+								<label id="leadTemplate" class="fl">
+									<c:if test="${VS_HAS_FUNCTIONS.leadAdd}">
+										<a href="${ctx}/static/template/import/${templateLead}">${templateLead}</a>&nbsp;&nbsp;
+									</c:if>
+								</label>
+								<label id="customerTemplate" class="fl">
+									<c:if test="${VS_HAS_FUNCTIONS.customerAdd}">
+										<a href="${ctx}/static/template/import/${templateCustomer}">${templateCustomer}</a>&nbsp;&nbsp;
+									</c:if>
+								</label>
+								<label id="contactTemplate" class="fl">
+									<c:if test="${VS_HAS_FUNCTIONS.contactAdd}">
+										<a href="${ctx}/static/template/import/${templateContact}">${templateContact}</a>&nbsp;&nbsp;
+									</c:if>
+								</label>
+								<label id="supplierTemplate" class="fl">
+									<c:if test="${VS_HAS_FUNCTIONS.supplierAdd}">
+										<a href="${ctx}/static/template/import/${templateSupplier}">${templateSupplier}</a>&nbsp;&nbsp;
+									</c:if>
+								</label>
+								<label id="recyclebinTemplate" class="fl">
+									<c:if test="${VS_HAS_FUNCTIONS.recycleAdd}">
+										<a href="${ctx}/static/template/import/${templateRecycleBin}">${templateRecycleBin}</a>&nbsp;&nbsp;
+									</c:if>
+								</label>
 							</p>
-							<p style="color: red;font-weight:bold;" class="f14">
+							<p style="color: red;font-weight:bold;" class="f14 cb">
 								1.请先下载模板，并在此基础上进行修改。<br />
 								2.下载方式,单击右键,选择"目标另存为"即可保存文件。<br />
 							</p>

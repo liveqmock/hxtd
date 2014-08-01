@@ -67,7 +67,8 @@ public class CommonController<T> {
      * 1.在分页列表上导出选中的数据行
      */
     @RequestMapping(value = "/export.do", params = "TYPE=selected")
-    public void exportSelected(HttpServletRequest request, Long[] id, HttpServletResponse response) throws NoSuchFieldException, IOException {
+    public void exportSelected(HttpServletRequest request, Long[] id, 
+    		HttpServletResponse response, ModelMap modelMap) throws NoSuchFieldException, IOException {
         logger.info("导出excel文件");
         logger.debug("id={}", StringUtils.join(id, ","));
 
@@ -88,7 +89,7 @@ public class CommonController<T> {
         response.setHeader("Content-Disposition", "attachment; filename=" + name + ".xls");
         workbook.write(response.getOutputStream());
 
-        User user = (User) request.getSession().getAttribute(Constant.VS_USER);
+        User user = (User)modelMap.get(Constant.VS_USER);
         saveAuditlog(name, user, size);
 //        } catch (Exception e) {
 //            e.printStackTrace();
@@ -135,7 +136,7 @@ public class CommonController<T> {
         response.setContentType("application/octet-stream; charset=utf-8");
         response.setHeader("Content-Disposition", "attachment; filename=" + name + ".xls");
         workbook.write(response.getOutputStream());
-        User user = (User) request.getSession().getAttribute(Constant.VS_USER);
+        User user = (User)modelMap.get(Constant.VS_USER);
         saveAuditlog(name, user, size);
 //        } catch (Exception e) {
 //            e.printStackTrace();

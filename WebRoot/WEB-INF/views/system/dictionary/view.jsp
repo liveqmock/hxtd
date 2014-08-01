@@ -5,7 +5,7 @@
 <html>
 <head>
 <title>字典管理</title>
-<link rel="stylesheet" href="${ctx}/static/css/recommend/detail.css" type="text/css"></link>
+<link rel="stylesheet" href="${ctx}/static/css/recommend/list1.css" type="text/css"></link>
 </head>
 <body>
 <div class="ml35 mr35 mt20 block cb cb">
@@ -43,14 +43,8 @@
 			<td align="left">${dictionary.value}</td>
 		</tr>
 		<tr>
-			<td align="right">所属字典：</td>
-			<td align="left">${dictionary.parent.name}</td>
 			<td align="right">字典类型：</td>
 			<td align="left">${dictionary.type}</td>
-		</tr>
-		<tr>
-			<td align="right">是否启用：</td>
-			<td align="left">${dictionary.isActive==1?'是':'否'}</td>
 			<td align="right">排序：</td>
 			<td align="left">${dictionary.order}</td>
 		</tr>

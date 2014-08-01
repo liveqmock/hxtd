@@ -31,16 +31,17 @@ public class OFC2ChartGenerate implements ChartGenerate {
         chart.setXAxis(new XAxis());
         chart.getXAxis().addLabels(reportChart.getxAxisLabels().toArray(new String[]{}));
 
-        chart.setYAxis(new YAxis());
-        generateStep(reportChart.getyAxisRange());
-        chart.getYAxis().setRange(reportChart.getyAxisRange().getMin(), reportChart.getyAxisRange().getMax(), reportChart.getyAxisRange().getStep());
 
         Collection<Element> elements = new ArrayList<Element>();
         List<List<Number>> rows = reportChart.getData();
-        List zAxisLabels = reportChart.getzAxisLabels();
-        List<String> colours = getColours(zAxisLabels);
         switch (reportChart.getChartType()) {
-            case bar:
+            case bar: {
+                chart.setYAxis(new YAxis());
+                generateStep(reportChart.getyAxisRange());
+                chart.getYAxis().setRange(reportChart.getyAxisRange().getMin(), reportChart.getyAxisRange().getMax(), reportChart.getyAxisRange().getStep());
+
+                List zAxisLabels = reportChart.getzAxisLabels();
+                List<String> colours = getColours(zAxisLabels);
                 for (int i = 0; i < rows.size(); i++) {
                     BarChart barChart = new BarChart(BarChart.Style.THREED);
                     barChart.setText(String.valueOf(zAxisLabels.get(i)));
@@ -49,7 +50,8 @@ public class OFC2ChartGenerate implements ChartGenerate {
                     elements.add(barChart);
                 }
                 break;
-            case pie:
+            }
+            case pie: {
                 PieChart pieChart = new PieChart();
                 List<String> labels = reportChart.getxAxisLabels();
                 List<Number> values = rows.get(0);
@@ -61,7 +63,14 @@ public class OFC2ChartGenerate implements ChartGenerate {
                 pieChart.setTooltip("#val#  /  #total#<br> 占百分之 #percent#");
                 elements.add(pieChart);
                 break;
-            case line:
+            }
+            case line: {
+                chart.setYAxis(new YAxis());
+                generateStep(reportChart.getyAxisRange());
+                chart.getYAxis().setRange(reportChart.getyAxisRange().getMin(), reportChart.getyAxisRange().getMax(), reportChart.getyAxisRange().getStep());
+
+                List zAxisLabels = reportChart.getzAxisLabels();
+                List<String> colours = getColours(zAxisLabels);
                 for (int i = 0; i < rows.size(); i++) {
                     LineChart lineChart = new LineChart();
                     lineChart.setText(String.valueOf(zAxisLabels.get(i)));
@@ -70,6 +79,7 @@ public class OFC2ChartGenerate implements ChartGenerate {
                     elements.add(lineChart);
                 }
                 break;
+            }
         }
         chart.addElements(elements);
 

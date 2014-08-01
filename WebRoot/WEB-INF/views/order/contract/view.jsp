@@ -12,7 +12,7 @@
 <html>
 <head>
 	<title>合同详情</title>
-	<link rel="stylesheet" href="${ctx}/static/css/recommend/detail.css" type="text/css"/>
+	<link rel="stylesheet" href="${ctx}/static/css/recommend/list1.css" type="text/css"/>
 	<link rel="stylesheet" href="${ctx}/static/css/recommend/detail_a.css" type="text/css"/>
 	<link rel="stylesheet" href="${ctx}/static/css/application.css" type="text/css"/>
 	<script type="text/javascript" src="${ctx}/static/js/jquery-jtemplates.js"></script>

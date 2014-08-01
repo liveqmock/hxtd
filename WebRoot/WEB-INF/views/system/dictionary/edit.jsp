@@ -5,32 +5,16 @@
 <html>
 <head>
 <title>字典管理</title>
-<link rel="stylesheet" href="${ctx}/static/css/recommend/detail.css" type="text/css"></link>
+<link rel="stylesheet" href="${ctx}/static/css/recommend/list1.css" type="text/css"></link>
 <script type="text/javascript" src="${ctx}/static/js/jquery.validate.js"></script>
 <script type="text/javascript" src="${ctx}/static/js/jquery.metadata.js?v=1"></script>
 <script type="text/javascript" src="${ctx}/static/js/validator.js?v=1"></script>
+<script type="text/javascript" src="${ctx}/static/js/js-util.common.js?v=1"></script>
 <script type="text/javascript">
 $(function(){
-	$(".add").click(function(){ // 表单验证
-		if($("#form").valid()){
-			form.action = form.action + "?redirectUri=" + encodeURI($(this).attr("redirecturi"));
-			form.submit();
-		}
-		return false;
-	});
-	$("#pName").focus(function(){ // 所属字典名称
-		jsUtil.easyTree.show('#pName');
-	});;
-	jsUtil.easyTree.init(${dict}, function(node){ // 字典树形下拉
-		$("#pName").val(node.name);
-		$("#pId").val(node.id);
-		$("#dicType").val(node.typename);
-		jsUtil.easyTree.hide();
-	});
-	$("#dicType").change(function(){ // 改变字典类型
-		if(this.value == '0'){
-			$("#pName").val('');
-			$("#pId").val('');
+	jsUtil.bindSave(".add", "form"); //提交表单
+	$("#dicType").change(function(){ //改变字典类型
+		if(this.value == ''){
 			$("#typeName").val('');
 		}else{
 			$("#typeName").val($(this).find("option:selected").text());
@@ -56,44 +40,36 @@ $(function(){
 	<table class="cb id_table3 w95b bg_c_white margin0 mt10">
 		<tr>
 			<td width="15%" align="right"><span class="w_red">*&nbsp;</span>字典名称：</td>
-			<td align="left"><input type="text" name="key" value="${dictionary.key}" class="text_input3 required"/></td>
+			<td align="left">
+				<input type="text" name="key" value="${dictionary.key}" 
+					class="text_input3 required {unique:['Dictionary','${dictionary.key}']}" maxlength="30"/>
+			</td>
 			<td width="15%" align="right"><span class="w_red">*&nbsp;</span>字典值：</td>
-			<td align="left"><input type="text" name="value" value="${dictionary.value}" class="text_input3 required"/></td>
+			<td align="left">
+				<input type="text" name="value" value="${dictionary.value}" 
+					class="text_input3 required {unique:['Dictionary','${dictionary.value}']}" maxlength="30"/>
+			</td>
 		</tr>
 		<tr>
-			<td align="right">所属字典：</td>
-			<td align="left">
-				<input type="text" name="parent.name" id="pName" value="${dictionary.parent.name}" readonly="readonly" class="text_input3"/>
-				<input type="hidden" name="parent.id" id="pId" value="${dictionary.parent.id}"/>
-			</td>
 			<td align="right">字典类型：</td>
 			<td align="left">
-				<select name="type" id="dicType" class="select1 pr">
-                		<option value="0">--无--</option>
-                		<c:forEach var="item" items="${types}">
-                			<option value="${item}">${item}</option>
-                		</c:forEach>
-                	</select>
-				<input type="hidden" id="typeName" name="typename" value="${dictionary.type}"/>
-			</td>
-		</tr>
-		<tr>
-			<td align="right">是否启用：</td>
-			<td align="left">
-				<select name="isActive" class="select1 pr">
-               		<option value="1" ${dictionary.isActive==1?'selected':''}>是</option>
-               		<option value="0" ${dictionary.isActive==0?'selected':''}>否</option>
+				<select name="parent.id" id="dicType" class="select1 pr">
+               		<option value="">--无--</option>
+               		<c:forEach var="item" items="${types}">
+               			<option value="${item.id}" <c:if test="${item.key==dictionary.type}">selected</c:if>>${item.key}</option>
+               		</c:forEach>
                	</select>
+				<input type="hidden" id="typeName" name="type" value="${dictionary.type}"/>
 			</td>
 			<td align="right">排序：</td>
-			<td align="left"><input type="text" name="order" value="${dictionary.order}" class="text_input3 digits"/></td>
+			<td align="left"><input type="text" name="order" value="${dictionary.order}" class="text_input3 digits" maxlength="10"/></td>
 		</tr>
 	</table>
 	<h1 class="f14 fbnone ml40 pt10">描述信息</h1>
 	<table class="cb id_table4 w95b bg_c_white margin0 mt10">
 		<tr>
 			<td align="right" width="15%" valign="top">备注：</td>
-			<td align="left" width="85%" valign="top"><textarea name="remark" class="remarks_input1" style="resize: none;">${dictionary.remark}</textarea></td>
+			<td align="left" width="85%" valign="top"><textarea name="remark" class="remarks_input1" maxlength="500">${dictionary.remark}</textarea></td>
 		</tr>
 	</table>
 	<div class="h40"></div>

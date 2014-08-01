@@ -1,8 +1,3 @@
-<%--
-  功能描述：编辑工作台
-  User: xiaoli.luo
-  Date:2014/5/6
---%>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
@@ -20,7 +15,7 @@
 <!--
 <link rel="stylesheet" type="text/css" href="styles.css">
 -->
-<link rel="stylesheet" href="${ctx}/static/css/recommend/detail.css" type="text/css"/>
+<link rel="stylesheet" href="${ctx}/static/css/recommend/list1.css" type="text/css"/>
 <link rel="stylesheet" href="${ctx}/static/css/recommend/detail_a.css" type="text/css"/>
 <script type="text/javascript" src="${ctx}/static/js/jquery.validate.js"></script>
 <script type="text/javascript" src="${ctx}/static/js/jquery.metadata.js"></script>
@@ -34,6 +29,8 @@ urlMap['supplier']='/project/supplier/query.do';
 urlMap['project']='/project/project/query.do';
 urlMap['product']='/project/product/query.do';
 urlMap['order']='/order/order/query.do';
+urlMap['notice']='/system/notice/query.do';
+urlMap['message']='/system/message/query.do';
 urlMap['report']='/common/report/reportWorkbanch.comp';
 $(function(){
 	$("#saveAndAdd").click(function(){
@@ -67,7 +64,12 @@ $(function(){
 		var module = $this.val();
 		$(".param").hide();
 		if(module!=""){
-			$("#param").show();
+			if ( module == "message" || module == "notice" ){
+				$("#param").hide();
+				$(".createrTimeTd").hide();
+			}else{
+				$("#param").show();
+			}
 			$("#url").val(urlMap[module]);
 			$("#type").val("list");
 			$("#report").hide();
@@ -189,13 +191,15 @@ function getParam(){
 						<c:if test="${VS_HAS_FUNCTIONS.projectQuery}"><option value="project">项目</option></c:if>
 						<c:if test="${VS_HAS_FUNCTIONS.productQuery}"><option value="product">产品</option></c:if>
 						<c:if test="${VS_HAS_FUNCTIONS.orderQuery}"><option value="order">订单</option></c:if>
+						<c:if test="${VS_HAS_FUNCTIONS.noticeQuery}"><option value="notice">系统公告</option></c:if>
+						<c:if test="${VS_HAS_FUNCTIONS.messageView}"><option value="message">系统消息</option></c:if>
 						<c:if test="${VS_HAS_FUNCTIONS.reportQuery}"><option value="report">统计图表</option></c:if>
 					</select>
 					<input type="hidden" name="url" id="url"/>
 					<input type="hidden" name="type" id="type"/>
 				</td>
-				<td align="right" id="paramText">创建时间：</td>
-				<td align="left">
+				<td align="right" id="paramText" class="createrTimeTd">创建时间：</td>
+				<td align="left" class="createrTimeTd">
 					<select class="select1" class="select1" id="params" name="timeParam">
 						<option value="">请选择</option>
 						<option value="today">今日</option>
@@ -203,7 +207,6 @@ function getParam(){
 						<option value="month">一月内</option>
 					</select>
 				</td>
-				
 			</tr>
 		</table>
 		<h1 class="f14 fbnone ml40 pt10 " id="param" style="display: none">

@@ -5,7 +5,7 @@
 <html>
 <head>
 <title>产品</title>
-<link href="${ctx}/static/css/recommend/detail.css?v=1" rel="stylesheet" type="text/css"/>
+<link href="${ctx}/static/css/recommend/list1.css?v=1" rel="stylesheet" type="text/css"/>
 <link href="${ctx}/static/css/application.css?v=1" rel="stylesheet" type="text/css"/>
 <script type="text/javascript" src="${ctx}/static/js/jquery-jtemplates.js?v=1"></script>
 <script type="text/javascript" src="${ctx}/static/js/js-util.common.js?v=1"></script>
@@ -17,7 +17,7 @@ $(function(){
 	new Grid().init().bindExport(); // 生成Grid
 });
 function getProject(id){
-	jsUtil.dialogIframe("${ctx}/project/project/toViewPage.comp?id="+id, "供应商信息", 800, 480);
+	jsUtil.dialogIframe("${ctx}/project/project/toViewPage.comp?id="+id, "供应商信息", 800, 440);
 }
 </script>
 </head>

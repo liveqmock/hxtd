@@ -25,7 +25,7 @@ import com.fasterxml.jackson.annotation.JsonFormat;
  */
 @SuppressWarnings("serial")
 @Entity
-@Table(name = "SYSMESSAGE")
+@Table(name = "sm_message")
 public class Message implements Serializable{
 
 	/**

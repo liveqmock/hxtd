@@ -5,7 +5,7 @@
 <html>
 <head>
 <title>产品</title>
-<link href="${ctx}/static/css/recommend/detail.css?v=1" rel="stylesheet" type="text/css"></link>
+<link href="${ctx}/static/css/recommend/list1.css?v=1" rel="stylesheet" type="text/css"></link>
 <script type="text/javascript" src="${ctx}/static/js/jquery.validate.js?v=1"></script>
 <script type="text/javascript" src="${ctx}/static/js/jquery.metadata.js?v=1"></script>
 <script type="text/javascript" src="${ctx}/static/js/validator.js?v=1"></script>

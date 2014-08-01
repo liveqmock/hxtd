@@ -10,29 +10,29 @@
 <c:set var="ctx" value="${pageContext.request.contextPath}"/>
 <html>
 <head>
-    <title>系统消息列表</title>
-    <link href="${ctx}/static/css/stressing/empower.css" rel="stylesheet" type="text/css"/>
-    <link href="${ctx}/static/css/application.css" rel="stylesheet" type="text/css"/>
-    <script type="text/javascript" src="${ctx}/static/js/jquery-json.2.4.js"></script>
-    <script type="text/javascript" src="${ctx}/static/js/jquery-jtemplates.js?v=1"></script>
-    <script type="text/javascript" src="${ctx}/static/js/js-util.common.js?v=1"></script>
-    <script type="text/javascript" src="${ctx}/static/js/scrollTitle.js?v=1"></script>
-    <script type="text/javascript">
-        $(function () {
-	        //加载时间控件
-	        jsUtil.datepicker(".time");
-	        
-            //var grid = new Grid().init().bindExport();
-            new Grid().init({gridName: "send", gridSelector: ".send", resultTemplateId: "send-template"});
-            new Grid().init({gridName: "accept", gridSelector: ".accept", resultTemplateId: "accept-template"});
-            $C.tab({onSelected: function (event, title, panel) {
-                         $("[name=hibernatePageNo]").val(1);
-                    },
-                    defaultSelected: window.location.href.indexOf("send") > -1 ? 1 : 0
-                }
-            );
-        });
-    </script>
+<title>系统消息列表</title>
+<link href="${ctx}/static/css/stressing/empower.css" rel="stylesheet" type="text/css"/>
+<link href="${ctx}/static/css/application.css" rel="stylesheet" type="text/css"/>
+<script type="text/javascript" src="${ctx}/static/js/jquery-json.2.4.js"></script>
+<script type="text/javascript" src="${ctx}/static/js/jquery-jtemplates.js?v=1"></script>
+<script type="text/javascript" src="${ctx}/static/js/js-util.common.js?v=1"></script>
+<script type="text/javascript" src="${ctx}/static/js/scrollTitle.js?v=1"></script>
+<script type="text/javascript">
+$(function () {
+	//加载时间控件
+	jsUtil.datepicker(".time");
+ 
+    //var grid = new Grid().init().bindExport();
+    new Grid().init({gridName: "send", gridSelector: ".send", resultTemplateId: "send-template"});
+    new Grid().init({gridName: "accept", gridSelector: ".accept", resultTemplateId: "accept-template"});
+    $C.tab({onSelected: function (event, title, panel) {
+                 $("[name=hibernatePageNo]").val(1);
+            },
+            defaultSelected: window.location.href.indexOf("send") > -1 ? 1 : 0
+        }
+    );
+});
+</script>
 </head>
 <body>
 <div class=" listcontainer">

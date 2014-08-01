@@ -1,16 +1,30 @@
 package com.baihui.hxtd.soa.system.entity;
 
+import java.io.Serializable;
+import java.util.Date;
+import java.util.HashSet;
+import java.util.Set;
+
+import javax.persistence.CascadeType;
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.FetchType;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
+import javax.persistence.OneToMany;
+import javax.persistence.Table;
+
+import org.hibernate.annotations.NotFound;
+import org.hibernate.annotations.NotFoundAction;
+
 import com.baihui.hxtd.soa.common.entity.Initialized;
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
-
-import javax.persistence.*;
-import java.io.Serializable;
-import java.util.Date;
-import java.util.HashSet;
-import java.util.Set;
 
 /**
  * 字典实体类
@@ -23,8 +37,7 @@ import java.util.Set;
 @SuppressWarnings("serial")
 public class Dictionary implements Serializable, Initialized {
 
-    public Dictionary() {
-    }
+    public Dictionary() {}
 
     public Dictionary(Long id) {
         this.id = id;
@@ -81,6 +94,22 @@ public class Dictionary implements Serializable, Initialized {
      */
     @Column(name = "TYPE")
     private String type;
+    
+    /**
+     * 父级字典
+     */
+    @JsonBackReference
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "PARENT_ID")
+    @NotFound(action = NotFoundAction.IGNORE)
+    private Dictionary parent;
+
+    /**
+     * 子级字典
+     */
+    @JsonManagedReference
+    @OneToMany(mappedBy = "parent", cascade = CascadeType.REMOVE)
+    private Set<Dictionary> children = new HashSet<Dictionary>();
 
     /**
      * 是否启用 默认为1：启用
@@ -132,21 +161,6 @@ public class Dictionary implements Serializable, Initialized {
     @JsonFormat(pattern = "yyyy-MM-dd", timezone = "GMT+08:00")
     @Column(name = "MODIFIED_TIME")
     private Date modifiedTime;
-
-    /**
-     * 父级字典
-     */
-    @JsonBackReference
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "PARENT_ID")
-    private Dictionary parent;
-
-    /**
-     * 子级字典
-     */
-    @JsonManagedReference
-    @OneToMany(mappedBy = "parent", cascade = CascadeType.REMOVE)
-    private Set<Dictionary> children = new HashSet<Dictionary>();
 
     public Long getId() {
         return id;

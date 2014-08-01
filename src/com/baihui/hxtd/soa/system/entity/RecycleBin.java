@@ -14,6 +14,7 @@ import javax.persistence.Table;
 import org.hibernate.annotations.NotFound;
 import org.hibernate.annotations.NotFoundAction;
 
+import com.baihui.hxtd.soa.base.FieldInfo;
 import com.fasterxml.jackson.annotation.JsonFormat;
 
 /**
@@ -36,34 +37,41 @@ import com.fasterxml.jackson.annotation.JsonFormat;
 public class RecycleBin {
 	
 	/** 回收站id */
+	@FieldInfo(desc = "主键ID")
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	@Column(name = "ID")
 	private Long id;
 	
 	/** 操作模块的名称 */
+	@FieldInfo(desc = "模块名称 ")
 	@Column(name = "MODULE_NAME")
 	private String moduleName;
 	
 	/** 操作记录的id */
+	@FieldInfo(desc = "记录id")
 	@Column(name = "RECORD_ID")
 	private Long recordId;
 	
 	/** 操作记录的名称 */
+	@FieldInfo(desc = "记录名称")
 	@Column(name = "RECORD_NAME")
 	private String recordName;
 	
 	/** 备注 */
+	@FieldInfo(desc = "备注 ")
 	@JoinColumn(name = "REMARK")
 	private String remark;
 	
 	/** 操作者 */
+	@FieldInfo(desc = "操作者")
 	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "CREATOR_ID", updatable = false)
 	@NotFound(action = NotFoundAction.IGNORE)
 	private User creator;
 
 	/** 操作时间 */
+	@FieldInfo(desc = "操作时间")
 	@JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss", timezone = "GMT+08:00")
 	@Column(name = "CREATED_TIME", insertable = false, updatable=false)
 	private Date createdTime;

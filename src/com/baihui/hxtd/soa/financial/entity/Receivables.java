@@ -16,12 +16,13 @@ import javax.persistence.Table;
 import org.hibernate.annotations.NotFound;
 import org.hibernate.annotations.NotFoundAction;
 
+import com.baihui.hxtd.soa.base.FieldInfo;
 import com.baihui.hxtd.soa.customer.entity.Customer;
 import com.baihui.hxtd.soa.order.entity.Order;
 import com.baihui.hxtd.soa.system.entity.User;
 import com.fasterxml.jackson.annotation.JsonFormat;
 /**
- * 应收/应付款项
+ * 应收款项
  * @author huizijing
  *
  */
@@ -29,76 +30,92 @@ import com.fasterxml.jackson.annotation.JsonFormat;
 @Table(name = "receivables")
 public class Receivables {
 	/**ID */
+	@FieldInfo(desc = "主键ID")
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	@Column(name = "ID")
 	private Long id;
 	
+	/** 应收款名称 */
+	@FieldInfo(desc = "应收款名称")
 	@Column(name = "NAME")
 	private String name;
 	
 	/** 关联客户 */
+	@FieldInfo(desc = "关联客户")
 	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "CUSTOMER_ID")
 	@NotFound(action = NotFoundAction.IGNORE)
 	private Customer customer;
 	
 	/** 关联订单 */
+	@FieldInfo(desc = "关联订单")
 	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "ORDER_ID")
 	@NotFound(action = NotFoundAction.IGNORE)
 	private Order order;
 	
 	/** 账款 */
+	@FieldInfo(desc = "账款")
 	@Column(name = "FUND")
 	private BigDecimal fund; 
 	
-	/** 实际款项（收款、付款） */
+	/** 实际收款 */
+	@FieldInfo(desc = "实际收款")
 	@Column(name = "ACTUAL")
 	private BigDecimal actual; 
 	
 	/** 是否打款 */
+	@FieldInfo(desc = "是否打款")
 	@Column(name = "STATUS")
 	private boolean status=false;
 	
 	/** 备注 */
+	@FieldInfo(desc = "备注")
 	@Column(name = "REMARK")
 	private String remark;
 	
 	/** 操作时间 */
+	@FieldInfo(desc = "操作时间")
 	@JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss", timezone = "GMT+08:00")
 	@Column(name = "OPERATE_TIME")
 	private Date operateTime;
 	
 	/** 操作者 */
+	@FieldInfo(desc = "操作者 ")
 	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "OWNER_ID",updatable = false)
 	@NotFound(action = NotFoundAction.IGNORE)
 	private User owner;
 
 	/** 创建者 */
+	@FieldInfo(desc = "创建者")
 	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "CREATOR_ID", updatable = false)
 	@NotFound(action = NotFoundAction.IGNORE)
 	private User creator;
 
 	/** 创建时间 */
+	@FieldInfo(desc = "创建时间")
 	@JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss", timezone = "GMT+08:00")
 	@Column(name = "CREATED_TIME",updatable = false)
 	private Date createdTime;
 	
 	/** 修改者 */
+	@FieldInfo(desc = "修改者")
 	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "MODIFIER_ID")
 	@NotFound(action = NotFoundAction.IGNORE)
 	private User modifier;
 	
 	/** 最终修改时间 */
+	@FieldInfo(desc = "最终修改时间 ")
 	@JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss", timezone = "GMT+08:00")
 	@Column(name = "MODIFIED_TIME")
 	private Date modifiedTime;
 	
 	/**删除标识*/
+	@FieldInfo(desc = "删除标识")
 	@Column(name = "IS_DELETED", nullable = false)
 	private Boolean isDeleted = false;
 

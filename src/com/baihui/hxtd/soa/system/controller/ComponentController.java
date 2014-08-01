@@ -190,19 +190,19 @@ public class ComponentController {
     @RequestMapping(value = "/modify.do")
     public String modify(Component component,
                          HttpServletRequest request,
-                         String type) {
+                         String type, ModelMap modelMap) {
         logger.info("ComponentController.modify修改组件信息");
 
         if (commonService.isInitialized(Component.class, component.getId())) {
             return new JsonDto("系统初始化数据不允许修改！").toString();
         }
 
-        User u = (User) request.getSession().getAttribute(Constant.VS_USER);
-        logger.info("获得当前操作用户{}", u.getName());
-        component.setModifier(u);
+        User user = (User)modelMap.get(Constant.VS_USER);
+        logger.info("获得当前操作用户{}", user.getName());
+        component.setModifier(user);
         
         AuditLog auditLog = new AuditLog(EnumModule.COMPONENT.getModuleName(), 
-        		component.getId(), component.getName(), EnumOperationType.MODIFY.getOperationType(), u,"修改组件");
+        		component.getId(), component.getName(), EnumOperationType.MODIFY.getOperationType(), user,"修改组件");
         componentService.modify(component, auditLog);
         JsonDto json = new JsonDto(component.getId(), "保存成功!");
         return json.toString();
@@ -218,17 +218,17 @@ public class ComponentController {
      */
     @ResponseBody
     @RequestMapping(value = "/add.do")
-    public String add(Component component, HttpServletRequest request, String type) {
+    public String add(Component component, HttpServletRequest request, String type, ModelMap modelMap) {
         logger.info("ComponentController.query查询组件列表");
 
         //临时代码，时间类型应从数据库中取
-        User u = (User) request.getSession().getAttribute(Constant.VS_USER);
-        logger.info("ComponentController.query 获得当前操作的用户{}", u.getName());
-        component.setCreator(u);
-        component.setModifier(u);
+        User user = (User)modelMap.get(Constant.VS_USER);
+        logger.info("ComponentController.query 获得当前操作的用户{}", user.getName());
+        component.setCreator(user);
+        component.setModifier(user);
         
         AuditLog auditLog = new AuditLog(EnumModule.COMPONENT.getModuleName(), 
-        		component.getId(), component.getName(), EnumOperationType.ADD.getOperationType(), u,"增加组件");
+        		component.getId(), component.getName(), EnumOperationType.ADD.getOperationType(), user,"增加组件");
         componentService.add(component,auditLog);
         JsonDto json = new JsonDto(component.getId(), "保存成功!");
         return json.toString();
@@ -250,11 +250,11 @@ public class ComponentController {
         if (commonService.isInitialized(Component.class, id)) {
             return new JsonDto("系统初始化数据不允许删除！").toString();
         }
-        User u = (User)model.get(Constant.VS_USER);
+        User user = (User)model.get(Constant.VS_USER);
         AuditLog [] auditLogArr = new AuditLog [id.length];
 		for(int i=0; i<id.length; i++){
 			auditLogArr[i] = new AuditLog(EnumModule.COMPONENT.getModuleName(), 
-					id[i], componentService.getNameById(id[i]), EnumOperationType.DELETE.getOperationType(), u);
+					id[i], componentService.getNameById(id[i]), EnumOperationType.DELETE.getOperationType(), user);
 		}
         componentService.delete(id,auditLogArr);
         JsonDto json = new JsonDto();

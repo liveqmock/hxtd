@@ -10,7 +10,7 @@
 <html>
 <head>
 <title>系统消息详细信息</title>
-<link href="${ctx}/static/css/stressing/detail.css" rel="stylesheet" type="text/css" />
+<link href="${ctx}/static/css/stressing/list1.css" rel="stylesheet" type="text/css" />
 </head>
 <body>
 	<div class="cb"></div>

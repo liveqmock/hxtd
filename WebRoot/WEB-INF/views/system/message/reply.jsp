@@ -10,7 +10,7 @@
 <html>
 <head>
 	<title>系统消息回复</title>
-	<link href="${ctx}/static/css/stressing/detail.css" rel="stylesheet" type="text/css" />
+	<link href="${ctx}/static/css/stressing/list1.css" rel="stylesheet" type="text/css" />
 	<link rel="stylesheet" href="${ctx}/static/css/application.css" type="text/css"/>
 	<script type="text/javascript" src="${ctx}/static/js/jquery.validate.js"></script>
 	<script type="text/javascript" src="${ctx}/static/js/jquery.metadata.js"></script>

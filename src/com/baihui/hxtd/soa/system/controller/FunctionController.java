@@ -184,17 +184,17 @@ public class FunctionController {
      */
     @ResponseBody
     @RequestMapping(value = "/modify.do", produces = "text/text;charset=UTF-8")
-    public String modify(Function function, String type, HttpServletRequest request) {
+    public String modify(Function function, String type, HttpServletRequest request, ModelMap modelMap) {
         logger.info("FunctionController.modify修改组件信息");
         if (commonService.isInitialized(Function.class, function.getId())) {
             return new JsonDto("系统初始化数据不允许修改！").toString();
         }
-        User u = (User) request.getSession().getAttribute(Constant.VS_USER);
-        logger.info("获得当前操作用户{}", u.getName());
-        function.setModifier(u);
+        User user = (User)modelMap.get(Constant.VS_USER);
+        logger.info("获得当前操作用户{}", user.getName());
+        function.setModifier(user);
         /************ 修改 *****************************/
 		AuditLog auditLog = new AuditLog(EnumModule.FUNCTION.getModuleName(), 
-				function.getId(), function.getName(), EnumOperationType.MODIFY.getOperationType(), u);
+				function.getId(), function.getName(), EnumOperationType.MODIFY.getOperationType(), user);
         functionService.modify(function,auditLog);
         JsonDto json = JsonDto.modify(function.getId());
         return json.toString();
@@ -212,15 +212,15 @@ public class FunctionController {
     @RequestMapping(value = "/add.do", produces = "text/text;charset=UTF-8")
     public String add(Function function,
                       String type,
-                      HttpServletRequest request) {
+                      HttpServletRequest request, ModelMap modelMap) {
         logger.info("FunctionController.query查询组件列表");
         //临时代码，时间类型应从数据库中取
-        User u = (User) request.getSession().getAttribute(Constant.VS_USER);
-        logger.info("FunctionController.query 获得当前操作的用户{}", u.getName());
-        function.setCreator(u);
-        function.setModifier(u);
+        User user = (User)modelMap.get(Constant.VS_USER);
+        logger.info("FunctionController.query 获得当前操作的用户{}", user.getName());
+        function.setCreator(user);
+        function.setModifier(user);
         AuditLog auditLog = new AuditLog(EnumModule.FUNCTION.getModuleName(), 
-				function.getId(), function.getName(), EnumOperationType.ADD.getOperationType(), u);
+				function.getId(), function.getName(), EnumOperationType.ADD.getOperationType(), user);
         functionService.add(function,auditLog);
         JsonDto json = JsonDto.add(function.getId());
         return json.toString();

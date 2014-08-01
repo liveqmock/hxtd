@@ -1,5 +1,6 @@
 @charset "utf-8";
 /* CSS Document */
+/*公共属性*/
 .footposition{ position:fixed; bottom:0;}
 .block{ display:block;}
 .block_inline{ display:inline-block;}
@@ -12,9 +13,10 @@
 .bdnone{ border:none;}
 .bgnone{ background:none;}
 .a_underline{ text-decoration:underline;}
-.br5{ border-radius:5px 5px 0px 0px;behavior:url(../../images/iecss3.htc); position:relative; z-index:0; }
-.brall5{ border-radius:5px;behavior:url(../../images/iecss3.htc); position:relative; z-index:0; }
+.br5{ border-radius:5px 5px 0px 0px; position:relative; z-index:0; }
+.brall5{ border-radius:5px; position:relative; z-index:0; }
 .margin0{ margin:0px auto;}
+/*文字样式*/
 .tc{ text-align:center;}
 .tr{ text-align:right}
 .tl{ text-align:left;}
@@ -29,14 +31,18 @@
 .lh32{ line-height:32px;}
 .lh40{ line-height:40px;}
 .lh50{ line-height:50px;}
+/*列表百分比*/
 .namewidth1{ width:11%}
 .namewidth2{ width:18%}
 .namewidth3{ width:13%}
 .zfjq{width:95px; overflow:hidden; text-overflow:ellipsis; white-space:nowrap;}
 
+
+/*元素优先级*/
 .z-1{ z-index:-1;}
 .z1{ z-index:1;}
 
+/*颜色*/
 .c_white{ color:#fff;}
 .c_orange{ color:#e28d1f;}
 .c_bebebe{ color:#bebebe;}
@@ -53,10 +59,11 @@
 .bor_e9e9e9{ border:1px solid #e9e9e9;}
 .bor_636363{ border:1px solid #636363;}
 .bor_336699{ border:1px solid #336699;}
+
 .bor_999notop{border-left:2px solid #f5f5f6;border-right:2px solid #f5f5f6;border-bottom:2px solid #f5f5f6;}
-
-
 .w_blue{ color:#336699;}
+
+/*浮动与长宽*/
 .fl{ float:left;}
 .fr{ float:right;}
 .w_auto{ width:auto;}
@@ -78,8 +85,6 @@
 .w500{ width:500px;}
 .w980{ width:980px;}
 
-
-
 .h20{ height:20px;}
 .h30{ height:30px;}
 .h40{ height:40px;}
@@ -88,6 +93,8 @@
 .h100{ height:100px;}
 .h590{ height:590px;}
 
+
+/*外边距*/
 .ml3{ margin-left:3px;}
 .ml5{ margin-left:5px;}
 .ml10{ margin-left:10px;}
@@ -132,6 +139,8 @@
 .mb10{ margin-bottom:10px;}
 .mb20{ margin-bottom:20px;}
 
+
+/*内边距*/
 .p10{ padding:10px;}
 .p20{ padding:20px;}
 .pt3{ padding-top:3px;}
@@ -146,15 +155,15 @@
 .pl5{ padding-left:5px;}
 .pl10{ padding-left:10px;}
 .pl35{ padding-left:35px;}
-
 .pb20{ padding-bottom:20px;}
-
 .at-20{ top:-20px;}
 
+
+/*清除浮动*/
 .clearfix:after/*跟随其后的内容*/ { content:"."; display:block; height:0; clear:both; visibility:hidden;}/*必须有内容，否则浏览器不认*/
 
 .clearfix { display:inline-block;}
 
 .clear { clear:both; height:0px; font-size:0px; line-height:0px;} 
+/*优先级调整*/
 .bor_e28d1f{ border:1px solid #e28d1f;}
-

@@ -347,13 +347,13 @@ public class OrganizationController {
      */
     @ResponseBody
     @RequestMapping(value = "/authorization.do")
-    public String authorization(Long id, @RequestParam(value = "roleId", required = false) Long[] roleIds, HttpServletRequest request) {
+    public String authorization(Long id, @RequestParam(value = "roleId", required = false) Long[] roleIds, HttpServletRequest request, ModelMap modelMap) {
         logger.info("授权");
-        User u = (User) request.getSession().getAttribute(Constant.VS_USER);
+        User user = (User)modelMap.get(Constant.VS_USER);
 
         /**组织授权*/
         AuditLog auditLog = new AuditLog(EnumModule.ORGANIZATION.getModuleName(),
-                id, organizationService.getById(id).getName(), EnumOperationType.AUTHORIZATION.getOperationType(), u, "组织授权");
+                id, organizationService.getById(id).getName(), EnumOperationType.AUTHORIZATION.getOperationType(), user, "组织授权");
         organizationService.authorization(id, roleIds, auditLog);
         return new JsonDto(id, "授权成功").toString();
     }

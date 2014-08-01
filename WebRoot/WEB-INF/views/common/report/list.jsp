@@ -14,7 +14,7 @@
     <title>${VR_LAST_MENU.name}</title>
 
     <link rel="stylesheet" href="${ctx}/static/css/application.css" type="text/css"/>
-    <link rel="stylesheet" href="${ctx}/static/css/recommend/detail.css" type="text/css"/>
+    <link rel="stylesheet" href="${ctx}/static/css/recommend/list1.css" type="text/css"/>
     <script type="text/javascript" src="${ctx}/static/js/jquery-jtemplates.js"></script>
     <script type="text/javascript" src="${ctx}/static/js/scrollTitle.js?v=1"></script>
     <script type="text/javascript" src="${ctx}/static/js/js-util.common.js"></script>

@@ -193,7 +193,9 @@ Grid.prototype = {
         $(document).keydown(function (e) {
             var key = (e.keyCode) || (e.which) || (e.charCode);
             if (key == 13) {
-                if (_this.pageNo && _this.pageNo[0] == e.srcElement) {
+                if ("dialogCancel" == $(e.target).attr("id")){
+                	return;	
+                }else if(_this.pageNo && _this.pageNo[0] == e.srcElement ) {
                     _this.pageAnyOne.trigger("click");
                 } else {
                     _this.btnQuery.trigger("click");
@@ -249,7 +251,7 @@ Grid.prototype = {
                     _this.options.onDelete.call(_this, (values));
                     setTimeout(function () {_this.loadGrid();}, 500);
                 }, function () {_this.enableButton($this)}, $.param({id: values }, true));
-            });
+            }, "警告");
         };
 
         this.btnDeleteSome.click(click).data(this.gridName + "click", click);
@@ -498,7 +500,7 @@ Grid.prototype = {
                     _this.options.onDelete.call(this, [$.URL.jsonParamsByUrl(url).id]);
                     setTimeout(function () {_this.loadGrid();}, 500);
                 });
-            });
+            }, "警告");
         });
         return this;
     },

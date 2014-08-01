@@ -12,17 +12,17 @@
 .gbin1-list{list-style:none;padding:0;margin:0;}
 .gbin1-list li{float:left;text-align:center;margin:5px;font-family: arial;padding:0px;}
 </style>
-<link rel="stylesheet" href="${ctx}/static/css/recommend/detail.css" type="text/css" />
+<link rel="stylesheet" href="${ctx}/static/css/recommend/list1.css" type="text/css" />
 <link rel="stylesheet" href="${ctx}/static/css/recommend/empower.css" type="text/css" />
-<link rel="stylesheet" href="${ctx}/static/css/recommend/detail.css" type="text/css"/>
-<script src="${ctx}/static/js/workbanch.js" type="text/javascript"></script>
+<link rel="stylesheet" href="${ctx}/static/css/recommend/list1.css" type="text/css"/>
 <script type="text/javascript" src="${ctx}/static/js/jquery.form.js"></script>
 <script type="text/javascript" src="${ctx}/static/js/jquery.validate.js"></script>
 <script type="text/javascript" src="${ctx}/static/js/jquery.metadata.js"></script>
 <script type="text/javascript" src="${ctx}/static/js/validator.js"></script>
 <script type="text/javascript" src="${ctx}/static/component/open-flash-chart-2/js/json/json2.js"></script>
 <script type="text/javascript" src="${ctx}/static/component/open-flash-chart-2/js/swfobject.js"></script>
-<script>
+<script type="text/javascript" src="${ctx}/static/js/workbanch.js?d=2"></script>
+<script type="text/javascript">
 $(function(){
 	$('.gbin1-list').sortable({
 		opacity: 0.5,//拖动的透明度
@@ -31,14 +31,14 @@ $(function(){
 		connectWith: ".column",
 		scroll: false,
 		update:function() {
-			workbanch.modifyOrder();
+			HXTD_CRM_WB.workbanch.modifyOrder();
 		}
 	});
 	$("#add").click(function(){
-		workbanch.addWorkbanch();
+		HXTD_CRM_WB.workbanch.addWorkbanch();
 	});
-   	workbanch.initList();
-   	workbanch.initReport();
+   	HXTD_CRM_WB.workbanch.initList();
+   	HXTD_CRM_WB.workbanch.initReport();
 });
 </script>
 </head>

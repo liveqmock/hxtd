@@ -846,46 +846,6 @@ public class HibernateDAOImpl<T, PK extends Serializable> implements
     }
 
     /**
-     * 根据时间格式返回系统时间
-     *
-     * @param timeStyle
-     * @return
-     */
-    public Date getSysTime(TimeStyle timeStyle) {
-        SQLQuery query = getSession().createSQLQuery(getDialect().getCurrentTimestampSelectString());
-        Date timeStamp = (Date) query.uniqueResult();
-        Calendar calendar = Calendar.getInstance();
-        calendar.setTime(timeStamp);
-        switch (timeStyle) {
-            case DATE:
-                calendar.set(Calendar.HOUR, 0);
-                calendar.set(Calendar.MINUTE, 0);
-                calendar.set(Calendar.SECOND, 0);
-                calendar.set(Calendar.MILLISECOND, 0);
-                calendar.set(Calendar.AM_PM, Calendar.AM);
-                return calendar.getTime();
-            case TIME:
-                calendar.set(Calendar.MILLISECOND, 0);
-                return calendar.getTime();
-            case TIMESTAMP:
-                return timeStamp;
-            default:
-                return timeStamp;
-        }
-    }
-
-    /**
-     * 时间格式
-     *
-     * @author Li Rui
-     */
-    public enum TimeStyle {
-        DATE,
-        TIME,
-        TIMESTAMP;
-    }
-
-    /**
      * 获取数据库方言
      */
     public Dialect getDialect() {

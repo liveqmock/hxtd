@@ -8,7 +8,7 @@
 <title>用户组件列表</title>
 <link rel="stylesheet" href="${ctx}/static/css/public/common.css" type="text/css"/>
 <link rel="stylesheet" href="${ctx}/static/css/public/reset.css" type="text/css"/>
-<link rel="stylesheet" href="${ctx}/static/css/recommend/detail.css" type="text/css"/>
+<link rel="stylesheet" href="${ctx}/static/css/recommend/list1.css" type="text/css"/>
 <link href="${ctx}/static/css/application.css" rel="stylesheet" type="text/css"/>
 <script type="text/javascript" src="${ctx}/static/js/jquery.min.js"></script>
 <script type="text/javascript" src="${ctx}/static/js/jquery.custom.js"></script>
@@ -34,7 +34,7 @@ $(function(){
 		},
 		dblclick: function(){
 			$(this).addClass("bor_e28d1f");
-			$(".ui-button", parent.document).eq(1).trigger("click");
+			$("#dialogConfirm", parent.document).trigger("click");
 		}
 	});
 });
@@ -44,7 +44,7 @@ $(function(){
 <div class="listcontainer">
 	<div class="margin0">
 		<form action="${ctx}/project/product/query.do" onsubmit="return false;">
-    	<input type="hidden" name="organizationId" value="${orgId}"/>
+    	<input type="hidden" name="search_GT_saleEndTime" value="${saleEndTime}"/>
 		<div>
 			<table class="w pr10 pl10">
 				<tr>
@@ -73,16 +73,16 @@ $(function(){
 					<div class="module1" id="{$T.row.id}">
 						<table class="w">
 							<tr>
-								<td>{$T.row.code}</td>
-							</tr>
-							<tr>
 								<td>{$T.row.name}</td>
 							</tr>
 							<tr>
-								<td>{$T.row.rate}%</td>
+								<td>起售金额（万）:{$T.row.sellMoney}</td>
 							</tr>
 							<tr>
-								<td>{$T.row.redeemFormula}</td>
+								<td>利率:{$T.row.rate}%</td>
+							</tr>
+							<tr>
+								<td>赎回公式:{$T.row.redeemFormula}</td>
 							</tr>
 						</table>
 					</div>

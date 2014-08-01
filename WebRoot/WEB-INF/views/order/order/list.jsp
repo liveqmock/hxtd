@@ -1,7 +1,3 @@
-<%--
-  功能描述：线索管理列表页
-  Date:2014/5/17
---%>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ taglib prefix="tags" tagdir="/WEB-INF/tags" %>
@@ -9,28 +5,28 @@
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
 <html>
 <head>
-    <title>订单列表</title>
-    <link rel="stylesheet" href="${ctx}/static/css/application.css" type="text/css"/>
-    <link rel="stylesheet" href="${ctx}/static/css/recommend/detail.css" type="text/css"/>
-    <script type="text/javascript" src="${ctx}/static/js/jquery-jtemplates.js"></script>
-    <script type="text/javascript" src="${ctx}/static/js/js-util.common.js"></script>
-    <script type="text/javascript" src="${ctx}/static/js/scrollTitle.js?v=1"></script>
-    <script type="text/javascript" src="${ctx}/static/js/pacs.js"></script>
-    <script type="text/javascript">${applicationScope.VC_PCAS}</script>
-    <script type="text/javascript">
-        $(function () {
-            jsUtil.datepicker(".time");//加载时间控件
-            jsUtil.datepickerNotNow(".time1");
-            window.grid = new Grid().init().bindExport();
-        });
+<title>订单列表</title>
+<link rel="stylesheet" href="${ctx}/static/css/application.css" type="text/css"/>
+<link rel="stylesheet" href="${ctx}/static/css/recommend/list1.css" type="text/css"/>
+<script type="text/javascript" src="${ctx}/static/js/jquery-jtemplates.js"></script>
+<script type="text/javascript" src="${ctx}/static/js/js-util.common.js"></script>
+<script type="text/javascript" src="${ctx}/static/js/scrollTitle.js?v=1"></script>
+<script type="text/javascript" src="${ctx}/static/js/pacs.js"></script>
+<script type="text/javascript">${applicationScope.VC_PCAS}</script>
+<script type="text/javascript">
+$(function () {
+    jsUtil.datepicker(".time");//加载时间控件
+    jsUtil.datepickerNotNow(".time1");
+    window.grid = new Grid().init().bindExport();
+});
 
-        function getProduct(id) {
-            jsUtil.dialogIframe("${ctx}/project/product/toViewPage.comp?id=" + id, "产品信息", 800, 470);
-        }
-        function getCustomer(id) {
-            jsUtil.dialogIframe("${ctx}/customer/customer/toViewPage.comp?id=" + id, "客户信息", 800, 700);
-        }
-    </script>
+function getProduct(id) {
+    jsUtil.dialogIframe("${ctx}/project/product/toViewPage.comp?id=" + id, "产品信息", 800, 440);
+}
+function getCustomer(id) {
+    jsUtil.dialogIframe("${ctx}/customer/customer/toViewPage.comp?id=" + id, "客户信息", 800, 650);
+}
+</script>
 </head>
 <body>
 <div class="listcontainer">
@@ -103,13 +99,11 @@
     </form>
     <!--查询条件结束-->
     <div class="cb"></div>
-
     <div class="ml35 mr35 mt20 block cb cb">
         <b class="b1"></b>
         <b class="b2"></b>
         <b class="b3"></b>
         <b class="b4"></b>
-
         <div class="ie_head">
             <ul class="fl id_table1 mt10 ml10">
                 <c:if test="${VS_HAS_FUNCTIONS.orderDelete}">
@@ -127,24 +121,19 @@
             </ul>
         </div>
     </div>
-
     <div class="ml35 mr35 content">
-        <table class="cb id_table2 w   tablesorter" id="table">
+        <table class="cb id_table2 w tablesorter" id="table">
             <tr id="recordDiv">
-                <th>
-                    <input type="checkbox" name="" class="checkall" id="id"/>
-                </th>
+                <th width="4%"><input type="checkbox" class="checkall" id="id"/></th>
                 <th>订单编号</th>
-                <th>客户</th>
-                <th>金额（万）</th>
-                <th>产品</th>
+                <th width="7%">客户</th>
+                <th width="7%">金额（万）</th>
+                <th width="15%">产品</th>
                 <th width="6%">审批环节</th>
                 <th width="5%">状态</th>
-                <th>所有者</th>
-                <th width="4%">创建者</th>
-                <th width="12%" class="sortable orderby" orderby="createdTime">创建时间</th>
-                <th width="4%">修改者</th>
-                <th width="12%" class="sortable orderby" orderby="modifiedTime">最后修改时间</th>
+                <th width="7%">所有者</th>
+                <th width="11%" class="sortable orderby" orderby="createdTime">创建时间</th>
+                <th width="11%" class="sortable orderby" orderby="modifiedTime">最后修改时间</th>
                 <th width="15%" align="center">操作</th>
             </tr>
             <tbody class="list"></tbody>
@@ -182,9 +171,7 @@
                 <td>{$T.row.flowNode.type==${endNodeType}?"":"待"}{$T.row.flowNode.name}</td>
                 <td>{$T.row.orderStatus.key}</td>
                 <td>{$T.row.owner.realName}</td>
-                <td>{$T.row.creator.realName}</td>
                 <td>{$T.row.createdTime}</td>
-                <td>{$T.row.modifier.realName}</td>
                 <td>{$T.row.modifiedTime}</td>
                 <td align="left">
                     <c:if test="${VS_HAS_FUNCTIONS.orderView}">

@@ -10,7 +10,7 @@
 <html>
 <head>
 <title>线索编辑页</title>
-<link rel="stylesheet" href="${ctx}/static/css/recommend/detail.css" type="text/css"/>
+<link rel="stylesheet" href="${ctx}/static/css/recommend/list1.css" type="text/css"/>
 <link rel="stylesheet" href="${ctx}/static/css/recommend/detail_a.css" type="text/css"/>
 <script type="text/javascript" src="${ctx}/static/js/jquery.validate.js"></script>
 <script type="text/javascript" src="${ctx}/static/js/jquery.metadata.js"></script>

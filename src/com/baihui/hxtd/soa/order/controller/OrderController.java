@@ -198,14 +198,14 @@ public class OrderController extends CommonController<Order> {
     @ResponseBody
     @RequestMapping(value = "/modify.do", produces = "text/text;charset=UTF-8")
     public String modify(Order order,
-                         HttpServletRequest request) {
+                         HttpServletRequest request, ModelMap modelMap) {
         logger.info("OrderController.modify修改订单信息");
-        User u = (User) request.getSession().getAttribute(Constant.VS_USER);
-        logger.info("获得当前操作用户{}", u.getName());
-        order.setModifier(u);
-        order.setCreator(u);
+        User user = (User)modelMap.get(Constant.VS_USER);
+        logger.info("获得当前操作用户{}", user.getName());
+        order.setModifier(user);
+        order.setCreator(user);
         AuditLog auditLog = new AuditLog(EnumModule.ORDER.getModuleName(),
-                order.getId(), order.getCode(), EnumOperationType.MODIFY.getOperationType(), u);
+                order.getId(), order.getCode(), EnumOperationType.MODIFY.getOperationType(), user);
         orderService.modify(order, auditLog);
         JsonDto json = JsonDto.modify(order.getId());
         return json.toString();

@@ -26,7 +26,7 @@ public class DictionaryConstant {
     /** 角色类型 */
     public final static String VC_ROLETYPE = "角色类型";
     /** 权限级别 */
-    public final static String VC_AUTHLEVEL = "权限级别"; 
+    public final static String VC_AUTHLEVEL = "权限级别";
     /** 活动类型 */
     public final static String VC_ACTIVITYTYPE = "活动类型";
     /** 活动类型 */
@@ -86,6 +86,21 @@ public class DictionaryConstant {
     /** 报表 */
     public final static String MODULE_TYPE_REPORT = "99010101";
 
+    /*关联模块类型*/
+    /**关联模块*/
+    public final static String RELATIVE_MODULE = "110101";
+    /** 供应商 */
+    public final static String RELATIVE_MODULE_SUPPLIER = "11010101";
+    /** 客户 */
+    public final static String RELATIVE_MODULE_CUSTOMER = "11010102";
+    /** 线索 */
+    public final static String RELATIVE_MODULE_LEAD = "11010103"; 
+    /** 联系人 */
+    public final static String RELATIVE_MODULE_CONTACT = "11010104";
+    /** 项目 */
+    public final static String RELATIVE_MODULE_PROJECT = "11010105";
+    /** 合同 */
+    public final static String RELATIVE_MODULE_CONTRACT = "11010106";
 
      /*报表*/
     /** 报表分组类型 */
@@ -144,6 +159,16 @@ public class DictionaryConstant {
     /** 显示位置 */
     public final static String MENU_SHOWLOCATION = "010404";
 
+    /*组织*/
+    /** 类型 */
+    public final static String ORGANIZATION_TYPE = "010301";
+    /** 公司 */
+    public final static String ORGANIZATION_TYPE_COMPANY = "01030101";
+    /** 部门 */
+    public final static String ORGANIZATION_TYPE_DEPARTMENT = "01030102";
+    /** 组 */
+    public final static String ORGANIZATION_TYPE_GROUP = "01030103";
+
     /*用户*/
     /** 用户在岗情况 */
     public final static String USER_JOBSITUATION = "010403";
@@ -181,91 +206,92 @@ public class DictionaryConstant {
 
     
     /* 线索*/
-    /**来源 */
+    /** 来源 */
     public final static String LEAD_SOURCE = "040101";
-    /**状态 */
+    /** 状态 */
     public final static String LEAD_STATUS = "040102";
-    /**卡类型 */
+    /** 卡类型 */
     public final static String LEAD_CARD_TYPE = "040103";
-    /** 行业*/
+    /** 行业 */
     public final static String INDUSTRY = "040305";
     
     /* 客户*/
-    /**类型 */
+    /** 类型 */
     public final static String CUSTOMER_TYPE = "040301";
-    /**客户来源*/
+    /** 客户来源 */
     public final static String CUSTOMER_SOURCE = "040302";
-    /**证件类型*/
+    /** 证件类型 */
     public final static String CUSTOMER_CARD_TYPE = "040303";
-    /**风险等级*/
+    /** 风险等级 */
     public final static String CUSTOMER_RISK_TYPE = "040304";
-    /**行业*/
+    /** 行业 */
     public final static String CUSTOMER_INDUSTRY = "040305";
-    /**所有权*/
+    /** 所有权 */
     public final static String CUSTOMER_OWNERSHIP = "040306";
-    /**开户行*/
+    /** 开户行 */
     public final static String CUSTOMER_OPENBANK = "040307";
     
     
     /*订单 */
-    /** 支付方式*/
-    public final static String INVESTMENT_WAY = "060101";
-    /** 订单状态 */
-    public final static String ORDER_STATUS = "070101";
-    /** 支付状态 */
-    public final static String ORDER_PAY_STATUS = "070102";
-    
-    /*订单支付状态*/
+    /** 投资方式 */
+    public final static String ORDER_INVESTMENTWAY = "060101";
+
+    /** 财务状态 */
+    public final static String ORDER_PAYSTATUS = "060103";
+
     /** (订单)hxtd未收款 */
     public final static String ORDER_PAY_2_HXTD_STATUS_NONE = "06010301";
-    
+
     /** (订单)hxtd部分收款 */
     public final static String ORDER_PAY_2_HXTD_STATUS_SOME = "06010303";
-    
+
     /** (订单)hxtd全部收款 */
     public final static String ORDER_PAY_2_HXTD_STATUS_ALL = "06010302";
-    
+
     /** (订单)hxtd未打款给客户 */
     public final static String ORDER_PAY_2_CUSTOMER_STATUS_NONE = "06010304";
-    
+
     /** (订单)hxtd已经打款给客户 */
     public final static String ORDER_PAY_CUSTOMER_HXTD_STATUS_ALL = "06010305";
     
     
     /*订单状态*/
+    /** 订单状态 */
+    public final static String ORDER_STATUS = "070101";
+
     /** 订单开始时默认状态(待审核) */
     public final static String ORDER_STATUS_START = "07010101";
-    
+
     /** 订单审核中 */
     public final static String ORDER_STATUS_NODEING = "07010102";
-    
+
     /** 订单审核通过 */
     public final static String ORDER_STATUS_NODE_FINIAL = "07010103";
-    
+
     /** 订单提前赎回 */
     public final static String ORDER_STATUS_ADVANCE_REDEMPTION = "07010106";
-    
+
     /** 订单到期赎回 */
     public final static String ORDER_STATUS_FINISH_REDEMPTION = "07010107";
-    
+
     /** 订单客户主动作废 */
     public final static String ORDER_STATUS_INVALID_CUSTOMER = "07010104";
-    
+
     /** 订单公司作废 */
     public final static String ORDER_STATUS_INVALID_OWNER = "07010105";
-    
-    /**合同*/
+
+    /** 合同 */
     public final static String CONTRACT_REDEEM_TYPE = "080101";
     
     /*供应商 */
-    /** 供应商类型*/
+    /** 供应商类型 */
     public final static String SUPPLIER_TYPE = "050101";
-     /**卡类型 */
+    /** 卡类型 */
     public final static String SUPPLIER_CARD_TYPE = "040303";
     
     /*项目 */
-    /** 支付类型*/
+    /** 支付类型 */
     public final static String PROJECT_PAY_TYPE = "040201";
-    
-     
+
+
 }

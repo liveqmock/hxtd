@@ -125,10 +125,10 @@ public class PaymentsController {
 	
 	@ResponseBody
 	@RequestMapping(value = "/modify.do", produces = "text/text;charset=UTF-8")
-	public String modify(Payments payments, 
+	public String modify(Payments payments, ModelMap modelMap,
 						HttpServletRequest request) {
 		logger.info("PaymentsController.modify修改应付款信息");
-		User user = (User) request.getSession().getAttribute(Constant.VS_USER);
+		User user = (User) modelMap.get(Constant.VS_USER);
 		logger.info("获得当前操作用户{}", user.getName());
 		payments.setModifier(user);
 		setPropertyNull(payments);
@@ -197,10 +197,10 @@ public class PaymentsController {
 	 */
 	@ResponseBody
 	@RequestMapping(value = "/add.do", produces = "text/text;charset=UTF-8")
-	public String add(Payments payments,HttpServletRequest request){
+	public String add(Payments payments,HttpServletRequest request,ModelMap modelMap){
 		logger.info("PaymentController.query查询组件列表");
 		//临时代码，时间类型应从数据库中取
-		User user = (User) request.getSession().getAttribute(Constant.VS_USER);
+		User user = (User) modelMap.get(Constant.VS_USER);
 		logger.info("PaymentController.query 获得当前操作的用户{}",user.getName());
 		payments.setOwner(user);
 		payments.setCreator(user);

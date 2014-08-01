@@ -1,6 +1,7 @@
 package com.baihui.hxtd.soa.system.entity;
 
 
+import com.baihui.hxtd.soa.base.FieldInfo;
 import com.baihui.hxtd.soa.common.entity.Initialized;
 import com.baihui.hxtd.soa.common.entity.Orderable;
 import com.baihui.hxtd.soa.common.entity.TreeNode;
@@ -43,72 +44,92 @@ public class Menu implements Serializable, Cloneable, TreeNode<Menu>, Initialize
         ROOT.setParent(null);
     }
 
+    @FieldInfo(desc = "主键编号")
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "ID")
     private Long id;
 
+    @FieldInfo(desc = "名称")
     @Column(name = "NAME", length = 32, nullable = false, unique = true)
     private String name;
 
+    @FieldInfo(desc = "链接")
     @Column(name = "URL", length = 32)
     private String url;
 
+    @FieldInfo(desc = "级别")
     @Column(name = "LEVEL", nullable = false)
     private Integer level;
 
+    @FieldInfo(desc = "叶子节点")
     @Column(name = "IS_LEAF", nullable = false)
     private Boolean isLeaf;
 
+    @FieldInfo(desc = "显示位置")
     @Column(name = "SHOW_LOCATION_TYPE")
     private Integer showLocationType;
 
-	@Column(name = "IS_INITIALIZED", nullable = false, updatable = false)
+    @FieldInfo(desc = "初始化的")
+    @Column(name = "IS_INITIALIZED", nullable = false, updatable = false)
     private Boolean isInitialized;
 
+    @FieldInfo(desc = "备注")
     @Column(name = "REMARK", length = 512)
     private String remark;
 
+    @FieldInfo(desc = "序号")
     @Column(name = "`ORDER`", nullable = false, unique = true)
     private Long order;
 
+    @FieldInfo(desc = "默认显示")
     @Column(name = "DEFAULT_SHOW", nullable = false)
     private Boolean defaultShow;
 
+    @FieldInfo(desc = "启用")
     @Column(name = "IS_ACTIVE", nullable = false)
     private Boolean isActive;
 
+    @FieldInfo(desc = "已被删除")
     @Column(name = "IS_DELETED", nullable = false, updatable = false)
     private Boolean isDeleted;
 
+    @FieldInfo(desc = "创建者")
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "CREATOR_ID", updatable = false)
     private User creator;
 
+    @FieldInfo(desc = "创建时间")
     @Column(name = "CREATED_TIME", nullable = false, updatable = false)
     private Date createdTime;
 
+    @FieldInfo(desc = "修改者")
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "MODIFIER_ID")
     private User modifier;
 
+    @FieldInfo(desc = "修改时间")
     @Column(name = "MODIFIED_TIME", nullable = false)
     private Date modifiedTime;
 
+    @FieldInfo(desc = "上级菜单")
     @JsonManagedReference
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "PARENT_MENU_ID")
     private Menu parent;
 
+    @FieldInfo(desc = "下级菜单")
     @JsonBackReference
     @OneToMany(mappedBy = "parent", cascade = CascadeType.REMOVE)
     private List<Menu> children = new ArrayList<Menu>();
 
+    @FieldInfo(desc = "执行功能")
     @JsonIgnore
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "TRIGGER_ID")
     private Function trigger;
 
+    @FieldInfo(desc = "包含功能")
     @JsonManagedReference
     @OneToMany(mappedBy = "menu")
     private List<Function> functions = new ArrayList<Function>();

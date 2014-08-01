@@ -274,11 +274,11 @@ public class RoleController {
     public String authorization(Long id,
                                 @RequestParam(value = "functionId", required = false) Long[] functionIds,
                                 @RequestParam(value = "componentId", required = false) Long[] componentIds,
-                                HttpServletRequest request) {
+                                HttpServletRequest request, ModelMap modelMap) {
         logger.info("授权");
-        User u = (User) request.getSession().getAttribute(Constant.VS_USER);
+        User user = (User)modelMap.get(Constant.VS_USER);
         AuditLog auditLog = new AuditLog(EnumModule.ROLE.getModuleName(),
-                id, roleService.getById(id).getName(), EnumOperationType.AUTHORIZATION.getOperationType(), u, "角色授权");
+                id, roleService.getById(id).getName(), EnumOperationType.AUTHORIZATION.getOperationType(), user, "角色授权");
         roleService.authorization(id, functionIds, componentIds, auditLog);
         return new JsonDto(id, "授权成功").toString();
     }

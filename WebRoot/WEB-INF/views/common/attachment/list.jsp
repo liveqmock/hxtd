@@ -11,7 +11,7 @@
 <html>
 <head>
 	<title>附件列表</title>
-    <link href="${ctx}/static/css/stressing/detail.css" rel="stylesheet" type="text/css" />
+    <link href="${ctx}/static/css/stressing/list1.css" rel="stylesheet" type="text/css" />
     <link href="${ctx}/static/css/application.css" rel="stylesheet" type="text/css"/>
     <script type="text/javascript">${VS_JS_GLOBALINFO}${VR_JS_GLOBALINFO}</script>
     <script type="text/javascript" src="${ctx}/static/js/jquery-jtemplates.js"></script>

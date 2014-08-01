@@ -140,10 +140,10 @@ public class ContractController extends CommonController<Contract> {
 	
 	@ResponseBody
 	@RequestMapping(value = "/modify.do", produces = "text/text;charset=UTF-8")
-	public String modify(Contract contract, 
+	public String modify(Contract contract, ModelMap modelMap,
 						HttpServletRequest request) {
 		logger.info("ContractController.modify修改合同信息");
-		User user = (User) request.getSession().getAttribute(Constant.VS_USER);
+		User user = (User) modelMap.get(Constant.VS_USER);
 		logger.info("获得当前操作用户{}", user.getName());
 		contract.setModifier(user);
 //		if(null==contract.getType().getId()){
@@ -218,10 +218,10 @@ public class ContractController extends CommonController<Contract> {
 	 */
 	@ResponseBody
 	@RequestMapping(value = "/add.do", produces = "text/text;charset=UTF-8")
-	public String add(Contract contract,HttpServletRequest request){
+	public String add(Contract contract,HttpServletRequest request, ModelMap modelMap){
 		logger.info("ContractController.query查询组件列表");
 		//临时代码，时间类型应从数据库中取
-		User user = (User) request.getSession().getAttribute(Constant.VS_USER);
+		User user = (User) modelMap.get(Constant.VS_USER);
 		logger.info("ContractController.query 获得当前操作的用户{}",user.getName());
 		contract.setCreator(user);
 		contract.setModifier(user);

@@ -14,7 +14,7 @@
 <meta http-equiv="description" content="This is my page">
 <link rel="stylesheet" href="${ctx}/static/css/public/common.css?v=${now}" type="text/css"/>
 <link rel="stylesheet" href="${ctx}/static/css/public/reset.css?v=${now}" type="text/css"/>
-<link rel="stylesheet" href="${ctx}/static/css/recommend/detail.css" type="text/css"/>
+<link rel="stylesheet" href="${ctx}/static/css/recommend/list1.css" type="text/css"/>
 <link rel="stylesheet" href="${ctx}/static/css/recommend/detail_a.css" type="text/css"/>
 <link rel="stylesheet" href="${ctx}/static/css/application.css" type="text/css"/>
 <script type="text/javascript" src="${ctx}/static/js/jquery.min.js"></script>
@@ -38,7 +38,7 @@ $(function () {
 		},
 		dblclick: function(){
 			$(this).addClass("bor_e28d1f");
-			$(".ui-button", parent.document).eq(1).trigger("click");
+			$("#dialogConfirm", parent.document).trigger("click");
 		}
 	});
 });

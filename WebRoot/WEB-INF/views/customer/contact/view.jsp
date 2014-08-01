@@ -5,7 +5,7 @@
 <html>
 <head>
 <title>联系人详情</title>
-<link href="${ctx}/static/css/recommend/detail.css?v=1" type="text/css" rel="stylesheet"></link>
+<link href="${ctx}/static/css/recommend/list1.css?v=1" type="text/css" rel="stylesheet"></link>
 </head>
 <body>
 <div class="ml35 mr35 mt20 block cb cb">

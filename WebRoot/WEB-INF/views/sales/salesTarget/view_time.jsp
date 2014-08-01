@@ -8,7 +8,7 @@
 <title>时间区域组件</title>
 <link rel="stylesheet" href="${ctx}/static/css/public/common.css" type="text/css"/>
 <link rel="stylesheet" href="${ctx}/static/css/public/reset.css" type="text/css"/>
-<link rel="stylesheet" href="${ctx}/static/css/recommend/detail.css" type="text/css"/>
+<link rel="stylesheet" href="${ctx}/static/css/recommend/list1.css" type="text/css"/>
 <link href="${ctx}/static/css/recommend/empower.css" rel="stylesheet" type="text/css">
 <script type="text/javascript" src="${ctx}/static/js/jquery.min.js"></script>
 <script type="text/javascript" src="${ctx}/static/js/jquery.custom.js"></script>

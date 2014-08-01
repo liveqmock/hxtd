@@ -7,7 +7,7 @@
 <title>订单审批</title>
 <link rel="stylesheet" href="${ctx}/static/css/public/common.css?v=1" type="text/css"/>
 <link rel="stylesheet" href="${ctx}/static/css/public/reset.css?v=1" type="text/css"/>
-<link rel="stylesheet" href="${ctx}/static/css/recommend/detail.css?v=1" type="text/css"/>
+<link rel="stylesheet" href="${ctx}/static/css/recommend/list1.css?v=1" type="text/css"/>
 </head>
 <body>
 <form action="${ctx}${VR_FUNCTION.url}" method="post">

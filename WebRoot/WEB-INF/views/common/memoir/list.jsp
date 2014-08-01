@@ -2,7 +2,7 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ taglib prefix="tags" tagdir="/WEB-INF/tags" %>
 <c:set var="ctx" value="${pageContext.request.contextPath}"/>
-<link rel="stylesheet" href="${ctx}/static/css/recommend/detail.css" type="text/css"/>
+<link rel="stylesheet" href="${ctx}/static/css/recommend/list1.css" type="text/css"/>
 <link rel="stylesheet" href="${ctx}/static/css/application.css" type="text/css"/>
 <script type="text/javascript" src="${ctx}/static/js/jquery-json.2.4.js"></script>
 <script type="text/javascript" src="${ctx}/static/js/jquery-jtemplates.js"></script>

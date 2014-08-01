@@ -125,15 +125,15 @@ public class LeadController extends CommonController<Lead>{
 
 	@ResponseBody
 	@RequestMapping(value = "/modify.do", produces = "text/text;charset=UTF-8")
-	public String modify(Lead lead,
+	public String modify(Lead lead, ModelMap modelMap,
 						HttpServletRequest request) {
 		logger.info("LeadController.modify修改线索信息");
-		User u = (User) request.getSession().getAttribute(Constant.VS_USER);
-		logger.info("获得当前操作用户{}", u.getName());
-		lead.setModifier(u);
-		lead.setCreator(u);
+		User user = (User)modelMap.get(Constant.VS_USER);
+		logger.info("获得当前操作用户{}", user.getName());
+		lead.setModifier(user);
+		lead.setCreator(user);
 		AuditLog auditLog = new AuditLog(EnumModule.LEAD.getModuleName(), 
-				lead.getId(), lead.getName(), EnumOperationType.MODIFY.getOperationType(), u);
+				lead.getId(), lead.getName(), EnumOperationType.MODIFY.getOperationType(), user);
 		leadService.modify(lead,auditLog);
 		JsonDto json = JsonDto.modify(lead.getId());
 		return json.toString();
@@ -223,10 +223,10 @@ public class LeadController extends CommonController<Lead>{
 	 */
 	@ResponseBody
 	@RequestMapping(value = "/add.do", produces = "text/text;charset=UTF-8")
-	public String add(Lead lead,HttpServletRequest request){
+	public String add(Lead lead,HttpServletRequest request, ModelMap modelMap){
 		logger.info("leadController.add添加线索");
 		//临时代码，时间类型应从数据库中取
-		User u = (User) request.getSession().getAttribute(Constant.VS_USER);
+		User u = (User) modelMap.get(Constant.VS_USER);
 		logger.info("leadController.query 获得当前操作的用户{}",u.getName());
 		lead.setCreator(u);
 		lead.setModifier(u);

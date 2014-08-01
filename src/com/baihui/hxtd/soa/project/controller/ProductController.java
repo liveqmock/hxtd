@@ -286,6 +286,7 @@ public class ProductController extends CommonController<Product> {
 	public String toOwnerLstPage(HibernatePage<Product> page, ModelMap model) {
 		page.setHibernatePageSize(12);// 设置每页显示12个用户
 		model.addAttribute("page", page);
+		model.addAttribute("saleEndTime", productService.getDBNowDate());
 		return "/project/product/listcomp";
 	}
 }

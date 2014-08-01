@@ -1,11 +1,15 @@
 @charset "utf-8";
 /* CSS Document */
+/*带有时间的输入框*/
 .time_close1{ top:-22px; left:80px;}
 .time_close2{ top:-22px; left:210px;}
 .h_pr1{width:1px; height:1px; position:relative; display:block;}
+/*与列表页相关的页面所用到的长度*/
 .w99b{ width:99%;}
 .w95b{ width:95%;}
+/*按钮盒子*/
 .id_table1 li{float:left;}
+/*大列表盒子*/
 .id_table2{border-collapse: collapse;
     border-spacing: 0;}
 .id_table2 th{ font-size:14px;}
@@ -18,7 +22,7 @@
 .id_table2 tr{ text-align:center;}
 .id_table2 tr td{ padding-left:2px; padding-right:2px;}
 
-
+/*列表页点击弹出详情盒子*/
 .id_ul4{ height:40px;}
 .id_ul4:hover{ color:#e28d1f;}
 .id_ul4:hover th{ color:#222;}
@@ -27,25 +31,27 @@
 .id_ul4{ text-align:center;}
 .id_ul4 li{ padding-left:2px; padding-right:2px; float:left; line-height:40px;}
 
+/*列表页带有弹出详情的表头*/
 .id_ul5{ height:40px;}
 .id_ul5 li a{ color:#222222; text-decoration:underline;}
 .id_ul5{ text-align:center;}
 .id_ul5 li{ padding-left:2px; padding-right:2px; float:left; line-height:40px; font-weight:bold}
 
 
-
+/*分页盒子*/
 .id_ul1 li{ float:left; margin-right:10px;}
 .id_table3 tr{ background-color:#fff; height:40px;}
 .id_table4 tr{ background-color:#fff; height:200px;}
 .id_table6 tr{ background-color:#fff; height:50px;}
 
+
+/*弹出框table样式*/
 .id_tantable2 tr{ height:40px;}
-
-.id_tantable3{ border-collapse:collapse;}
+/*.id_tantable3{ border-collapse:collapse;}
 .id_tantable3 tr{ height:40px; border:1px solid #666;}
-.id_tantable3 tr td{ border:1px solid #666; text-align:center; }
+.id_tantable3 tr td{ border:1px solid #666; text-align:center; }*/
 
-
+/*审批列表盒子*/
 .id_table5{border-collapse: collapse;
     border-spacing: 0;}
 .id_table5 th{ font-size:14px;}
@@ -57,7 +63,7 @@
 .id_table5 tr{ text-align:center;}
 .id_table5 tr td{ padding-left:2px; padding-right:2px;}
 
-
+/*人员列表盒子*/
 .id_ul2 li{ float:left; position:relative; border:1px solid #336699; padding:10px; border-radius:5px; margin-left:10px; margin-right:10px; margin-top:10px; margin-bottom:10px;}
 .id_ul2 li:hover a{ display:block; position:absolute; right:-10px; top:-10px;}
 .id_ul2 li:hover a img{ width:18px; height:18px;}

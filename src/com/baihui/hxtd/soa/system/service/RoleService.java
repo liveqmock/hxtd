@@ -19,6 +19,7 @@ import javax.annotation.Resource;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 /**
  * 角色服务类
@@ -256,6 +257,33 @@ public class RoleService {
         return roleDao.get(id).getName();
     }
 
+    /**
+     * 根据角色ID找到功能
+     * @param roleId
+     * @return
+     */
+    @Transactional
+	public Set<Function> findFunByRoleId(Long roleId) {
+    	String hql = "select role from Role role" +
+        " left join fetch role.functions" +
+        " where role.id=?";
+    	Role role=roleDao.findUnique(hql, roleId);
+    	return role.getFunctions();
+	}
+    
+    /**
+     * 根据角色ID找到功能
+     * @param roleId
+     * @return
+     */
+    @Transactional
+	public Set<Component> findComByRoleId(Long roleId) {
+    	String hql = "select role from Role role" +
+        " left join fetch role.components" +
+        " where role.id=?";
+    	Role role=roleDao.findUnique(hql, roleId);
+    	return role.getComponents();
+	}
 	
 
 }

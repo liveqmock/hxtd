@@ -7,7 +7,7 @@
 <title>联系纪要</title>
 <link rel="stylesheet" href="${ctx}/static/css/public/common.css?v=1" type="text/css"/>
 <link rel="stylesheet" href="${ctx}/static/css/public/reset.css?v=1" type="text/css"/>
-<link rel="stylesheet" href="${ctx}/static/css/recommend/detail.css?v=1" type="text/css"/>
+<link rel="stylesheet" href="${ctx}/static/css/recommend/list1.css?v=1" type="text/css"/>
 <link rel="stylesheet" href="${ctx}/static/css/themes/base/jquery.ui.all.css?v=1" type="text/css"/>
 <script type="text/javascript" src="${ctx}/static/js/jquery.min.js?v=1"></script>
 <script type="text/javascript" src="${ctx}/static/js/ui/jquery.ui.core.js?v=1"></script>

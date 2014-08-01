@@ -73,7 +73,7 @@ public class ExcelParse4Contact extends ExcelParse<ContactDTO> {
 		//手机号码格式
 		String mobile =  sheetList.get(4);
 		if(!Tools.isEmpty(mobile)&&!isMobile(mobile)){
-			msg += "<br />第"+rowNumOfSheet+"条数据,手机号码内容无效!";
+			msg += "<br />第"+rowNumOfSheet+"条数据,手机号码格式不正确!";
 			//向无效数据集合中添加一条数据
 			ImportMessage.invalidFormatRowNumMap.put(rowNumOfSheet, msg);
 			return null;
@@ -81,7 +81,7 @@ public class ExcelParse4Contact extends ExcelParse<ContactDTO> {
 		//电话号码，符合电话号码格式
 		String phone =  sheetList.get(5);
 		if (!Tools.isEmpty(phone) && !isPhone(phone) ) {
-			msg += "<br />第"+rowNumOfSheet+"条数据,电话号码内容无效!";
+			msg += "<br />第"+rowNumOfSheet+"条数据,电话号码格式不正确!";
 			logger.warn(msg);
 			//向无效数据集合中添加一条数据
 			ImportMessage.invalidFormatRowNumMap.put(rowNumOfSheet, msg);
@@ -90,7 +90,7 @@ public class ExcelParse4Contact extends ExcelParse<ContactDTO> {
 		//传真格式，与电话号码相同
 		String fax = sheetList.get(7);
 		if(!Tools.isEmpty(fax) && !isPhone(fax)){
-			msg += "<br />第"+rowNumOfSheet+"条数据,传真内容无效!";
+			msg += "<br />第"+rowNumOfSheet+"条数据,传真格式不正确!";
 			//向无效数据集合中添加一条数据
 			ImportMessage.invalidFormatRowNumMap.put(rowNumOfSheet, msg);
 			return null;
@@ -98,7 +98,7 @@ public class ExcelParse4Contact extends ExcelParse<ContactDTO> {
 		//邮箱格式
 		String email = sheetList.get(6);
 		if(!Tools.isEmpty(email)&&!checkEmail(email)){
-			msg += "<br />第"+rowNumOfSheet+"条数据,邮箱内容无效!";
+			msg += "<br />第"+rowNumOfSheet+"条数据,邮箱格式不正确!";
 			//向无效数据集合中添加一条数据
 			ImportMessage.invalidFormatRowNumMap.put(rowNumOfSheet, msg);
 			return null;
@@ -106,7 +106,7 @@ public class ExcelParse4Contact extends ExcelParse<ContactDTO> {
 		//邮编格式
 		String postCode = sheetList.get(12);
 		if(!Tools.isEmpty(postCode)&&!checkPostCode(postCode)){
-			msg += "<br />第"+rowNumOfSheet+"条数据,邮编内容无效!";
+			msg += "<br />第"+rowNumOfSheet+"条数据,邮编格式不正确!";
 			//向无效数据集合中添加一条数据
 			ImportMessage.invalidFormatRowNumMap.put(rowNumOfSheet, msg);
 			return null;
@@ -141,7 +141,7 @@ public class ExcelParse4Contact extends ExcelParse<ContactDTO> {
 		Dictionary source = null;
 		if ( !Tools.isEmpty(contactSource.trim()) ) {
 			//根据id查询线索来源(40101)
-			source = dictionaryService.getValue(contactSource.trim(), 40101L);
+			source = dictionaryService.getValue(contactSource.trim(), ExcelParse.directoryColumn.get("联系人来源"));
 			if(source==null){
 				msg += "<br />第"+rowNumOfSheet+"条数据,联系人来源无效!";
 				logger.warn(msg);

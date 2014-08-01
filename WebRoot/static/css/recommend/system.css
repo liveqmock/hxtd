@@ -1,8 +1,9 @@
 @charset "utf-8";
 /* CSS Document */
-
+/*设置页面整体布局列表样式*/
 .id_table1{margin: 20px 40px;width: 95%;}
 .id_table1 tr td{ width:30%;}
+/*设置页面单个模块盒子*/
 .id_table1 tr td .module{background:url(../../images/System_bg.png) repeat-x scroll 0 0 rgba(0, 0, 0, 0); border: 1px solid #F2F2F2;height: 98px;margin: 20px 20px 0 0; padding: 20px 12px;}
 .id_dl1 dd{float: left;height: 25px;line-height: 25px;padding: 0 3px;}
 .id_dl1 dd a{ color:#222;}

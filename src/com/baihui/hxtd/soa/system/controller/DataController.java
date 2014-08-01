@@ -291,11 +291,11 @@ public class DataController {
                                 @RequestParam(value = "functionId", required = true, defaultValue = "") Long[] functionIds,
                                 @RequestParam(value = "componentId", required = true, defaultValue = "") Long[] componentIds,
                                 @RequestParam(defaultValue = "/system/role/toAuthorizationPage.do?id=%s") String redirectUri,
-                                RedirectAttributes model,HttpServletRequest request) {
+                                RedirectAttributes model,HttpServletRequest request, ModelMap modelMap) {
         logger.info("授权");
-        User u = (User) request.getSession().getAttribute(Constant.VS_USER);
+        User user = (User)modelMap.get(Constant.VS_USER);
         AuditLog auditLog = new AuditLog(EnumModule.ROLE.getModuleName(), 
-        		id, roleService.getById(id).getName(), EnumOperationType.AUTHORIZATION.getOperationType(), u,"角色授权");
+        		id, roleService.getById(id).getName(), EnumOperationType.AUTHORIZATION.getOperationType(), user,"角色授权");
         roleService.authorization(id, functionIds, componentIds,auditLog);
 
         logger.info("添加操作提示");

@@ -1,13 +1,19 @@
 @charset "utf-8";
 /* CSS Document */
+
+/*带有时间的输入框*/
 .time_close1{ top:-22px; left:80px;}
 .time_close2{ top:-22px; left:210px;}
 .h_pr1{width:1px; height:1px; position:relative; display:block;}
+/*授权相关页面所用宽度*/
 .w99b{ width:99%;}
 .w95b{ width:95%}
 .w96b{ width:96%}
 .w90b{ width:90%}
+
+/*图表信息按钮盒子*/
 .id_table1 li{float:left;}
+/*带有鼠标移动弹出详情信息的列表盒子*/
 .id_table2{border-collapse: collapse;
     border-spacing: 0;}
 .id_table2 th{ font-size:14px;}
@@ -19,24 +25,30 @@
 .id_table2 tr td a:hover div{ display:block; position:absolute; z-index:1; right:-130px; top:-20px; color:#222; text-align:left;}
 .id_table2 tr td{ text-align:center;}
 .id_ul1 li{ float:left; margin-right:10px;}
+/*详情页列表盒子*/
 .id_table3 li{ float:left; margin-right:10px;}
-
-.id_ul2 li{ float:left; line-height:30px; margin-right:15px; margin-top:10px; position:relative;}
+/*授权相关页面列表样式2*/
+/*.id_ul2 li{ float:left; line-height:30px; margin-right:15px; margin-top:10px; position:relative;}
 .id_ul2 li a{ display:block; color:#222; line-height:28px;border:2px solid #E28D1F; padding-left:10px; padding-right:10px; text-align:center; height:30px;}
-.id_ul2 li:hover span{ background-position:-49px -19px; width:15px; height:14px; display:block; top:-5px; right:-5px; position:absolute; cursor:pointer;}
+.id_ul2 li:hover span{ background-position:-49px -19px; width:15px; height:14px; display:block; top:-5px; right:-5px; position:absolute; cursor:pointer;}*/
 
-.id_ul3 li{ float:left; line-height:30px; margin-right:15px; margin-top:10px; position:relative;}
+/*.id_ul3 li{ float:left; line-height:30px; margin-right:15px; margin-top:10px; position:relative;}
 .id_ul3 li a{ display:block; color:#222; line-height:28px;border:1px solid #336699; padding-left:10px; padding-right:10px; text-align:center; height:30px;}
-.id_ul3 li:hover span{ background-position:-49px -19px; width:15px; height:14px; display:block; top:-5px; right:-5px; position:absolute; cursor:pointer;}
-.id_ul4 li{ float:left; width:16%; margin-top:5px; margin-bottom:5px;}
+.id_ul3 li:hover span{ background-position:-49px -19px; width:15px; height:14px; display:block; top:-5px; right:-5px; position:absolute; cursor:pointer;}*/
+/*角色功能管理复选框列表盒子*/
+.id_ul4 li{ float:left; width:12%; margin-top:5px; margin-bottom:5px;}
 .id_ul4 li a{ height:25px;line-height:25px; color:#222; text-align:center; padding-left:10px; padding-right:10px;}
 .id_ul4{ width:86.2%;}
+
+/*角色功能管理复选框列表盒子全选样式*/
 .allnoright{ background:url(../../images/allnoright.png) no-repeat; width:35px; height:35px; }
 .allright{ background:url(../../images/allright.png) no-repeat; width:35px; height:35px; }
 
 .allnoright2{ background:url(../../images/allnoright_2.png) no-repeat; width:20px; height:20px; }
 .allright2{ background:url(../../images/allright_2.png) no-repeat; width:20px; height:20px; }
 
+
+/*角色管理页面定位*/
 .right_fbg{ position:fixed; top:0;}
 .right_fbg ul li{ float:left; margin-left:20px; margin-top:10px;}
 

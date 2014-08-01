@@ -97,7 +97,7 @@ public class ExcelParse4Customer extends ExcelParse<CustomerDTO> {
 			return null;
 		}
 		if(!isMobile(mobile)){
-			msg += "<br />第"+rowNumOfSheet+"条数据,手机号码内容无效!";
+			msg += "<br />第"+rowNumOfSheet+"条数据,手机号码格式不正确!";
 			//向无效数据集合中添加一条数据
 			ImportMessage.invalidFormatRowNumMap.put(rowNumOfSheet, msg);
 			return null;
@@ -114,7 +114,7 @@ public class ExcelParse4Customer extends ExcelParse<CustomerDTO> {
 			return null;
 		}
 		if(!isPhone(phone)){
-			msg += "<br />第"+rowNumOfSheet+"条数据,电话号码内容无效!";
+			msg += "<br />第"+rowNumOfSheet+"条数据,电话号码格式不正确!";
 			//向无效数据集合中添加一条数据
 			ImportMessage.invalidFormatRowNumMap.put(rowNumOfSheet, msg);
 			return null;
@@ -124,7 +124,7 @@ public class ExcelParse4Customer extends ExcelParse<CustomerDTO> {
 		//传真格式，与电话号码相同
 		String fax = sheetList.get(6);
 		if(!Tools.isEmpty(fax) && !isPhone(fax)){
-			msg += "<br />第"+rowNumOfSheet+"条数据,传真内容无效!";
+			msg += "<br />第"+rowNumOfSheet+"条数据,传真格式不正确!";
 			//向无效数据集合中添加一条数据
 			ImportMessage.invalidFormatRowNumMap.put(rowNumOfSheet, msg);
 			return null;
@@ -134,7 +134,7 @@ public class ExcelParse4Customer extends ExcelParse<CustomerDTO> {
 		//邮箱格式
 		String email = sheetList.get(5);
 		if(!Tools.isEmpty(email)&&!checkEmail(email)){
-			msg += "<br />第"+rowNumOfSheet+"条数据,邮箱内容无效!";
+			msg += "<br />第"+rowNumOfSheet+"条数据,邮箱格式不正确!";
 			//向无效数据集合中添加一条数据
 			ImportMessage.invalidFormatRowNumMap.put(rowNumOfSheet, msg);
 			return null;
@@ -142,7 +142,7 @@ public class ExcelParse4Customer extends ExcelParse<CustomerDTO> {
 		//邮编格式
 		String postCode = sheetList.get(15);
 		if(!Tools.isEmpty(postCode)&&!checkPostCode(postCode)){
-			msg += "<br />第"+rowNumOfSheet+"条数据,邮编内容无效!";
+			msg += "<br />第"+rowNumOfSheet+"条数据,邮编格式不正确!";
 			//向无效数据集合中添加一条数据
 			ImportMessage.invalidFormatRowNumMap.put(rowNumOfSheet, msg);
 			return null;
@@ -191,7 +191,7 @@ public class ExcelParse4Customer extends ExcelParse<CustomerDTO> {
 		Dictionary source = null;
 		if ( !Tools.isEmpty(customerSource.trim()) ) {
 			//根据id查询线索来源(40101)
-			source = dictionaryService.getValue(customerSource.trim(), 40302L);
+			source = dictionaryService.getValue(customerSource.trim(), ExcelParse.directoryColumn.get("客户来源"));
 			if(source==null){
 				msg += "<br />第"+rowNumOfSheet+"条数据,客户来源无效!";
 				logger.warn(msg);
@@ -218,7 +218,7 @@ public class ExcelParse4Customer extends ExcelParse<CustomerDTO> {
 		Dictionary industry = null;
 		if ( !Tools.isEmpty(customerIndustry.trim()) ) {
 			//根据id查询线索状态(40305)
-			industry = dictionaryService.getValue(customerIndustry.trim(), 40305L);
+			industry = dictionaryService.getValue(customerIndustry.trim(), ExcelParse.directoryColumn.get("客户行业"));
 			if(industry==null){
 				msg += "<br />第"+rowNumOfSheet+"条数据,行业无效!";
 				logger.warn(msg);
@@ -235,7 +235,7 @@ public class ExcelParse4Customer extends ExcelParse<CustomerDTO> {
 		Dictionary type = null;
 		if ( !Tools.isEmpty(customerType.trim()) ) {
 			//根据id查询线索状态(40102)
-			type = dictionaryService.getValue(customerType.trim(), 40301L);
+			type = dictionaryService.getValue(customerType.trim(), ExcelParse.directoryColumn.get("客户类型"));
 			//根据customerType没有查询到,返回null
 			if(type==null){
 				msg += "<br />第"+rowNumOfSheet+"条数据,客户类型无效!";
@@ -253,7 +253,7 @@ public class ExcelParse4Customer extends ExcelParse<CustomerDTO> {
 		Dictionary riskGrade = null;
 		if ( !Tools.isEmpty(customerRiskGrade.trim()) ) {
 			//根据id查询线索状态(40102)
-			riskGrade = dictionaryService.getValue(customerRiskGrade.trim(), 40304L);
+			riskGrade = dictionaryService.getValue(customerRiskGrade.trim(), ExcelParse.directoryColumn.get("风险等级"));
 			//根据customerType没有查询到,返回null
 			if(riskGrade==null){
 				msg += "<br />第"+rowNumOfSheet+"条数据,风险等级无效!";
@@ -272,7 +272,7 @@ public class ExcelParse4Customer extends ExcelParse<CustomerDTO> {
 		Dictionary cardType = null;
 		if ( !Tools.isEmpty(customerCardType.trim()) ) {
 			//根据id查询线索状态(40103)
-			cardType = dictionaryService.getValue(customerCardType.trim(), 40303L);
+			cardType = dictionaryService.getValue(customerCardType.trim(), ExcelParse.directoryColumn.get("证件类型"));
 			if(cardType==null){
 				msg += "<br />第"+rowNumOfSheet+"条数据,证件类型无效!";
 				logger.warn(msg);
@@ -354,7 +354,7 @@ public class ExcelParse4Customer extends ExcelParse<CustomerDTO> {
 		Dictionary ownerShip = new Dictionary();
 		if (! Tools.isEmpty(customerOwnerShip.trim()) ) {
 			//根据id查询线索状态(40103)
-			ownerShip = dictionaryService.getValue(customerOwnerShip.trim(), 40306L);
+			ownerShip = dictionaryService.getValue(customerOwnerShip.trim(), ExcelParse.directoryColumn.get("所有权"));
 			if(ownerShip==null){
 				msg += "<br />第"+rowNumOfSheet+"条数据,所有权无效!";
 				logger.warn(msg);
@@ -371,7 +371,7 @@ public class ExcelParse4Customer extends ExcelParse<CustomerDTO> {
 		Dictionary openBank = new Dictionary();
 		if ( !Tools.isEmpty(customerOpenBank.trim()) ) {
 			//根据id查询线索状态(40103)
-			openBank = dictionaryService.getValue(customerOpenBank.trim(), 40307L);
+			openBank = dictionaryService.getValue(customerOpenBank.trim(), ExcelParse.directoryColumn.get("开户行"));
 			if(openBank==null){
 				msg += "<br />第"+rowNumOfSheet+"条数据,开户银行无效!";
 				logger.warn(msg);

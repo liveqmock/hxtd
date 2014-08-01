@@ -5,7 +5,7 @@
 <html>
 <head>
 <title>市场活动</title>
-<link href="${ctx}/static/css/recommend/detail.css?v=1" rel="stylesheet" type="text/css"/>
+<link href="${ctx}/static/css/recommend/list1.css?v=1" rel="stylesheet" type="text/css"/>
 <link href="${ctx}/static/css/application.css?v=1" rel="stylesheet" type="text/css"/>
 <script type="text/javascript" src="${ctx}/static/js/jquery-jtemplates.js?v=1"></script>
 <script type="text/javascript" src="${ctx}/static/js/js-util.common.js?v=1"></script>

@@ -18,7 +18,7 @@
 <!--
 <link rel="stylesheet" type="text/css" href="styles.css">
 -->
-<link rel="stylesheet" href="${ctx}/static/css/recommend/detail.css" type="text/css"/>
+<link rel="stylesheet" href="${ctx}/static/css/recommend/list1.css" type="text/css"/>
 </head>
   
   <body>

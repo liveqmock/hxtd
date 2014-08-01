@@ -1,10 +1,13 @@
 @charset "utf-8";
 /* CSS Document */
 
+/*大背景*/
 .big_bg{ background:url(../../images/big_gb.jpg) fixed center center; background-size: cover; width: 100%; height:100%;}
+/*左侧白色背景*/
 .slogin_white{ background:url(../../images/login_leftbg.png) repeat-x; width:342px; height:164px;}
+/*右侧白色背景*/
 .big_whtie{ background:url(../../images/login_white.png) no-repeat; width:454px; height:511px;}
-
+/*输入框、按钮样式*/
 .user_bg{ background-position:-1px -310px; width:267px; height:40px;}
 .password_bg{ background-position:-1px -262px; width:267px; height:40px;}
 .id_table1 tr{ line-height:75px;}

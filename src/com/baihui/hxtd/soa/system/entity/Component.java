@@ -1,24 +1,15 @@
 package com.baihui.hxtd.soa.system.entity;
 
+import com.baihui.hxtd.soa.base.FieldInfo;
+import com.baihui.hxtd.soa.common.entity.Initialized;
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonFormat;
+
+import javax.persistence.*;
 import java.io.Serializable;
 import java.util.Date;
 import java.util.HashSet;
 import java.util.Set;
-
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.FetchType;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.JoinColumn;
-import javax.persistence.ManyToMany;
-import javax.persistence.ManyToOne;
-import javax.persistence.Table;
-
-import com.baihui.hxtd.soa.common.entity.Initialized;
-import com.fasterxml.jackson.annotation.JsonBackReference;
-import com.fasterxml.jackson.annotation.JsonFormat;
 
 /**
  * 功能描述：组件表实体类
@@ -39,6 +30,7 @@ public class Component implements Serializable, Comparable<Component>, Initializ
     /**
      * 主键ID
      */
+    @FieldInfo(desc = "主键编号")
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "ID")
@@ -47,21 +39,25 @@ public class Component implements Serializable, Comparable<Component>, Initializ
     /**
      * 组件编号
      */
+    @FieldInfo(desc = "编号")
     @Column(name = "CODE", length = 32, nullable = false, unique = true)
     private String code;
 
     /**
      * 组件名称
      */
+    @FieldInfo(desc = "名称")
     @Column(name = "NAME", length = 64, nullable = false)
     private String name;
 
     /**
      * 组件调用入口
      */
+    @FieldInfo(desc = "链接")
     @Column(name = "URL", length = 64, nullable = false)
     private String url;
 
+    @FieldInfo(desc = "权限级别")
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "PRIVILEGE_LEVEL_ID")
     private Dictionary privilegeLevel;
@@ -69,15 +65,18 @@ public class Component implements Serializable, Comparable<Component>, Initializ
     /**
      * 备注
      */
+    @FieldInfo(desc = "备注")
     @Column(name = "REMARK", length = 512)
     private String remark;
 
+    @FieldInfo(desc = "初始化的")
     @Column(name = "IS_INITIALIZED", nullable = false, updatable = false)
     private Boolean isInitialized;
 
     /**
      * 创建者
      */
+    @FieldInfo(desc = "创建者")
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "CREATOR_ID", updatable = false)
     private User creator;
@@ -85,6 +84,7 @@ public class Component implements Serializable, Comparable<Component>, Initializ
     /**
      * 创建时间
      */
+    @FieldInfo(desc = "创建时间")
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss", timezone = "GMT+08:00")
     @Column(name = "CREATED_TIME")
     private Date createdTime;
@@ -92,6 +92,7 @@ public class Component implements Serializable, Comparable<Component>, Initializ
     /**
      * 最后修改者
      */
+    @FieldInfo(desc = "最后修改者")
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "MODIFIER_ID")
     private User modifier;
@@ -99,18 +100,22 @@ public class Component implements Serializable, Comparable<Component>, Initializ
     /**
      * 最后修改时间
      */
+    @FieldInfo(desc = "最后修改时间")
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss", timezone = "GMT+08:00")
     @Column(name = "MODIFIED_TIME", nullable = false)
     private Date modifiedTime;
 
+    @FieldInfo(desc = "所属用户")
     @JsonBackReference
     @ManyToMany(mappedBy = "components")
     private Set<User> owners = new HashSet<User>();
 
+    @FieldInfo(desc = "所属角色")
     @JsonBackReference
     @ManyToMany(mappedBy = "components")
     private Set<Role> roles = new HashSet<Role>();
 
+    @FieldInfo(desc = "已被删除")
     @Column(name = "IS_DELETED", nullable = false, updatable = false)
     private Boolean isDeleted = false;
 

@@ -111,9 +111,9 @@ public class NoticeController {
             @RequestParam(value = "pageSize", defaultValue = "10") int pageSize,
             @RequestParam(value = "pageOrderBy", defaultValue = "sentTime") String orderBy,
             @RequestParam(value = "pageOrder", defaultValue = "desc") String order,
-            Model model,HttpServletRequest request) {
+            ModelMap model,HttpServletRequest request) {
 		logger.info("NoticeController.toQueryPage跳转公告列表页");
-		User user = (User) request.getSession().getAttribute(Constant.VS_USER);
+		User user = (User) model.get(Constant.VS_USER);
 		HibernatePage<Notice> page = new HibernatePage<Notice>(pageNumber, pageSize);
         page.setHibernateOrderBy(orderBy);
         page.setHibernateOrder(order);
@@ -163,15 +163,15 @@ public class NoticeController {
 	 */
 	@ResponseBody
 	@RequestMapping(value = "/modify.do")
-	public String modify(Notice notice, HttpServletRequest request,String type) {
+	public String modify(Notice notice, HttpServletRequest request,String type, ModelMap modelMap) {
 		logger.info("NoticeController.modify修改公告信息");
-		User u = (User) request.getSession().getAttribute(Constant.VS_USER);
-		logger.info("获得当前操作用户{}", u.getName());
-		notice.setModifier(u);
-		notice.setCreator(u);
+		User user = (User) modelMap.get(Constant.VS_USER);
+		logger.info("获得当前操作用户{}", user.getName());
+		notice.setModifier(user);
+		notice.setCreator(user);
 		AuditLog auditLog = new AuditLog(EnumModule.NOTICE.getModuleName(), 
-				notice.getId(), notice.getTitle(), EnumOperationType.MODIFY.getOperationType(), u);
-		noticeService.modify(notice, u, auditLog);
+				notice.getId(), notice.getTitle(), EnumOperationType.MODIFY.getOperationType(), user);
+		noticeService.modify(notice, user, auditLog);
 		JsonDto json = JsonDto.modify(notice.getId());
 		return json.toString();
 	}
@@ -199,10 +199,10 @@ public class NoticeController {
 	 */
 	@ResponseBody
 	@RequestMapping(value = "/add.do")
-	public String add(Notice notice,HttpServletRequest request,String type){
+	public String add(Notice notice,HttpServletRequest request,String type, ModelMap modelMap){
 		logger.info("ComponentController.query查询组件列表");
 		//临时代码，时间类型应从数据库中取
-		User u = (User) request.getSession().getAttribute(Constant.VS_USER);
+		User u = (User) modelMap.get(Constant.VS_USER);
 		logger.info("NoticeController.query 获得当前操作的用户{}",u.getName());
 		notice.setCreator(u);
 		notice.setModifier(u);

@@ -3,7 +3,7 @@
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
 <%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions" %>
 <c:set var="ctx" value="${pageContext.request.contextPath}"/>
-<link href="${ctx}/static/css/stressing/detail.css" rel="stylesheet" type="text/css"/>
+<link href="${ctx}/static/css/stressing/list1.css" rel="stylesheet" type="text/css"/>
 <script type="text/javascript" src="${ctx}/static/js/message.js"></script>
 
 <!--菜单开始-->
@@ -161,7 +161,7 @@
                         <b class="bb5"></b>
 		        <span class="block">
 		        <ul id="notices" class=" block">
-                    <li>暂无系统消息</li>
+                    <li>暂无系统公告</li>
                 </ul>
 		        </span>
                         <b class="bb6"></b>

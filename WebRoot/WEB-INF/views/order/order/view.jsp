@@ -1,8 +1,3 @@
-<%--
-  功能描述：订单详情
-  User: xiaoli.luo
-  Date:2014/5/19
---%>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
@@ -11,41 +6,42 @@
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
 <html>
 <head>
-    <title>${VR_FUNCTION.name}</title>
-    <link rel="stylesheet" href="${ctx}/static/css/recommend/detail.css" type="text/css"/>
-    <link rel="stylesheet" href="${ctx}/static/css/recommend/detail_a.css" type="text/css"/>
-    <link rel="stylesheet" href="${ctx}/static/css/application.css" type="text/css"/>
-    <script type="text/javascript" src="${ctx}/static/js/jquery-jtemplates.js"></script>
-    <script type="text/javascript" src="${ctx}/static/js/js-util.common.js"></script>
-    <c:set var="orderApprove" value="${orderStartApprove||orderExecuteApprove}"/>
-    <script type="text/javascript">
-        $(function () {
-            <c:if test="${orderApprove}">
-            //审批后重定向至详情页
-            var redirectURI = "${ctx}/order/order/toViewPage.do?id=${entity.id}";
-            if ("${param.returnURI}") {redirectURI += "&returnURI=${param.returnURI}";}
-            window.flow = new jsUtil.Flow().init({operateType: "${orderStartApprove?"start":"execute"}", redirectURI: redirectURI});
-            </c:if>
-
+<title>${VR_FUNCTION.name}</title>
+<link rel="stylesheet" href="${ctx}/static/css/recommend/list1.css" type="text/css"/>
+<link rel="stylesheet" href="${ctx}/static/css/recommend/detail_a.css" type="text/css"/>
+<link rel="stylesheet" href="${ctx}/static/css/application.css" type="text/css"/>
+<script type="text/javascript" src="${ctx}/static/js/jquery-jtemplates.js"></script>
+<script type="text/javascript" src="${ctx}/static/js/js-util.common.js"></script>
+<c:set var="orderApprove" value="${orderStartApprove||orderExecuteApprove}"/>
+<script type="text/javascript">
+$(function () {
+    <c:if test="${orderApprove}">
+    //审批后重定向至详情页
+    var redirectURI = "${ctx}/order/order/toViewPage.do?id=${entity.id}";
+    if ("${param.returnURI}") {redirectURI += "&returnURI=${param.returnURI}";}
+    window.flow = new jsUtil.Flow().init({operateType: "${orderStartApprove?"start":"execute"}", redirectURI: redirectURI});
+    </c:if>
+});
+function printDIV(printarea) {
+    var head = "<html><head><title></title></head><body>";//先生成头部
+    var foot = "</body></html>";//生成尾部
+    var newstr = document.all.item(printarea).innerHTML;//获取指定打印区域
+    var oldstr = document.body.innerHTML;//获得原本页面的代码
+    document.body.innerHTML = newstr;//购建新的网页
+    window.print();//打印刚才新建的网页
+    document.body.innerHTML = oldstr;//将网页还原
+    return false;
+}
+function redemption(id) {
+    jsUtil.dialogIframe("${ctx}/order/order/redemption.comp?id=" + id, "赎回信息", 600, 240, function () {
+        RcmsAjax.ajax("${ctx}/order/order/redemption.do?id=" + id, function () {
         });
-        function printDIV(printarea) {
-            var head = "<html><head><title></title></head><body>";//先生成头部
-            var foot = "</body></html>";//生成尾部
-            var newstr = document.all.item(printarea).innerHTML;//获取指定打印区域
-            var oldstr = document.body.innerHTML;//获得原本页面的代码
-            document.body.innerHTML = newstr;//购建新的网页
-            window.print();//打印刚才新建的网页
-            document.body.innerHTML = oldstr;//将网页还原
-            return false;
-        }
-        function redemption(id) {
-            jsUtil.dialogIframe("${ctx}/order/order/redemption.comp?id=" + id, "赎回信息", 600, 240, function () {
-                RcmsAjax.ajax("${ctx}/order/order/redemption.do?id=" + id, function () {
-
-                });
-            });
-        }
-    </script>
+    });
+}
+function normalRedemption(id){
+	
+}
+</script>
 </head>
 <body>
 <div>
@@ -55,7 +51,6 @@
         <b class="b2"></b>
         <b class="b3"></b>
         <b class="b4"></b>
-
         <div class="ie_head">
             <h1 class="f14 fbnone mt10 ml10 fl">${orderView?"订单详情信息":(orderApprove?"订单审核信息":"？？？？（未预计的功能）")}</h1>
             <ul class="fr id_table1 mt10 ml10">
@@ -65,12 +60,22 @@
                         <b class="allbtn_r pr13 block fl w_auto f14">打&nbsp;&nbsp;印</b>
                     </a>
                 </li>
+                <c:if test="${orderView&&VS_HAS_FUNCTIONS.orderRedemption}">
                 <li>
                     <a class="pl10 c_white f14 lh25 cp block fr" href="javascript:;" onclick="redemption(${order.id})">
                         <b class="allbtn_l block fl"></b>
                         <b class="allbtn_r pr13 block fl w_auto f14">提前赎回</b>
                     </a>
                 </li>
+                </c:if>
+                <c:if test="${orderView&&VS_HAS_FUNCTIONS.orderRedemption}">
+                <li>
+                    <a class="pl10 c_white f14 lh25 cp block fr" href="javascript:;" onclick="normalRedemption(${order.id})">
+                        <b class="allbtn_l block fl"></b>
+                        <b class="allbtn_r pr13 block fl w_auto f14">到期赎回</b>
+                    </a>
+                </li>
+                </c:if>
                 <c:if test="${orderView&&VS_HAS_FUNCTIONS.orderModify&&order.flowNode.type==startNodeType}">
                     <li>
                         <a class="pl10 c_white f14 lh25 cp block fr" href="${ctx }/order/order/toModifyPage.do?id=${order.id}">
@@ -121,15 +126,15 @@
                     <td align="left">${order.earningRate}%</td>
                 </tr>
                 <tr>
-                    <td align="right">赎回率：</td>
+                    <td align="right">赎回赔率：</td>
                     <td align="left">${order.arr }%</td>
                     <td align="right">赎回公式：</td>
                     <td align="left">${order.redeemFormula }</td>
                 </tr>
                 <tr>
-                    <td align="right" width="15%">销售主管：</td>
+                    <td align="right" width="15%">投资经理：</td>
                     <td align="left">${order.salesManager.name }</td>
-                    <td align="right" width="15%">销售总监：</td>
+                    <td align="right" width="15%">投资总监：</td>
                     <td align="left">${order.salesMajordomo.name }</td>
                 </tr>
                 <tr>

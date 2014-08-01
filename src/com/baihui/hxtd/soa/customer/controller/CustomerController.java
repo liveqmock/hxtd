@@ -183,20 +183,20 @@ public class CustomerController extends CommonController<Customer>{
 	 */
 	@ResponseBody
 	@RequestMapping(value = "/modify.do")
-	public String modify(Customer customer,HttpServletRequest request,String type) {
+	public String modify(Customer customer,HttpServletRequest request,String type,ModelMap modelMap) {
 		logger.info("CustomerController.modify修改客户信息");
-		User u = (User) request.getSession().getAttribute(Constant.VS_USER);
-		logger.info("获得当前操作用户{}", u.getName());
+		User user = (User)modelMap.get(Constant.VS_USER);
+		logger.info("获得当前操作用户{}", user.getName());
 		//customer.setModifiedTime(new Date(new java.util.Date().getTime()));
-		customer.setModifier(u);
+		customer.setModifier(user);
 		customer.setIsDeleted(false);
 		
 		//如果所传属性的id为空就设置属性为空
 		setPropertyNull(customer);
 		/************ 修改 *****************************/
 		AuditLog auditLog = new AuditLog(EnumModule.CUSTOMER.getModuleName(), 
-				customer.getId(), customer.getName(), EnumOperationType.MODIFY.getOperationType(), u);
-		customerService.modify(customer, u, auditLog);
+				customer.getId(), customer.getName(), EnumOperationType.MODIFY.getOperationType(), user);
+		customerService.modify(customer, user, auditLog);
 		JsonDto json = JsonDto.modify(customer.getId());
 		return json.toString();
 	}
@@ -245,18 +245,18 @@ public class CustomerController extends CommonController<Customer>{
 	 */
 	@ResponseBody
 	@RequestMapping(value = "/add.do")
-	public String add(Customer customer,HttpServletRequest request,String type){
+	public String add(Customer customer,HttpServletRequest request,String type, ModelMap modelMap){
 		logger.info("ComponentController.query查询组件列表");
-		User u = (User) request.getSession().getAttribute(Constant.VS_USER);
-		logger.info("ComponentController.query 获得当前操作的用户{}",u.getName());
-		customer.setCreator(u);
-		customer.setModifier(u);
+		User user = (User)modelMap.get(Constant.VS_USER);
+		logger.info("ComponentController.query 获得当前操作的用户{}",user.getName());
+		customer.setCreator(user);
+		customer.setModifier(user);
 		//如果所传属性的id为空就设置属性为空
 		setPropertyNull(customer);
 		/************ 新增 *****************************/
 		AuditLog auditLog = new AuditLog(EnumModule.CUSTOMER.getModuleName(), 
-				customer.getId(), customer.getName(), EnumOperationType.ADD.getOperationType(), u);
-		customerService.add(customer, u, auditLog);
+				customer.getId(), customer.getName(), EnumOperationType.ADD.getOperationType(), user);
+		customerService.add(customer, user, auditLog);
 		JsonDto json = JsonDto.add(customer.getId());
 		return json.toString();
 	}

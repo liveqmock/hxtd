@@ -47,20 +47,31 @@ var jsUtil = {
 		DIALOG.dialog(config);
 		DIALOG.dialog("open");
 	},
-	confirm: function(msg, yesFun, title, width, height){ //确认提示框
+	confirm: function(msg, yesFun, title, width, height){ //确认、取消提示框
 		DIALOG.text(msg);
 		var config = jsUtil.getDialogConfig(title, width, height);
-		config.buttons = {
-			"确定": function(){
-				DIALOG.dialog("close");
-				yesFun();
+		config.buttons = [
+			{
+				text: "取消",
+				id:"dialogCancel",
+				click: function(){
+					DIALOG.dialog("close");
+				},
+				focus: function(){}()
 			},
-			"取消": function(){
-				DIALOG.dialog("close");
+			{
+				text: "确定",
+				id:"dialogConfirm",
+				click: function(){
+					DIALOG.dialog("close");
+					yesFun();
+				}
 			}
-		};
+		];
 		DIALOG.dialog(config);
 		DIALOG.dialog("open");
+		$("#dialogCancel").focus();
+		return false;
 	},
 	dialogIframe: function(url, title, width, height, yesFun){ //jquery-dialog提示框
 		DIALOG.html("<div style='padding:0px;'>" +
@@ -69,17 +80,26 @@ var jsUtil = {
 		" scrolling='no' src='" + url + "'></iframe></div>");
 		var config = jsUtil.getDialogConfig(title, width, height);
 		if(yesFun){
-			config.buttons = {
-				"确定": function() {
-					var flag =yesFun();
+			config.buttons = [
+			{
+				text: "取消",
+				id:"dialogCancel",
+				click: function(){
+					DIALOG.dialog("close");
+				},
+				focus: function(){}()
+			},
+			{
+				text: "确定",
+				id:"dialogConfirm",
+				click: function(){
+					var flag = yesFun();
 					if (flag!=false) {
 						DIALOG.dialog("close");
 					}
-				},
-				"关闭": function() {
-					DIALOG.dialog("close");
 				}
-			};
+			}
+		]
 		}else{
 			/*config.buttons = {
 				"关闭": function() {

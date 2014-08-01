@@ -161,6 +161,7 @@
             <th style="width:5%">性别</th>
             <th style="width:10%">联系电话</th>
             <th style="width:10%">职位</th>
+            <th style="width:15%">角色</th>
             <th style="width:20%">操作</th>
         </tr>
         <%@include file="/WEB-INF/template/sort.jsp" %>
@@ -184,6 +185,7 @@
                 <td>{$T.row.sex.key}</td>
                 <td>{$T.row.phone}</td>
                 <td>{$T.row.jobName}</td>
+                <td style="text-align: left">{$C.findArrayAttr($T.row.roles,"name").join("|".fontcolor("red"))}</td>
                 <td style="text-align: left">
                     <c:if test="${VS_HAS_FUNCTIONS.userView}">
                         <a href="${ctx}/system/user/toViewPage.do?id={$T.row.id}" class=" block_inline s_detail_btn  globle_img ml10" title="详情"></a>
@@ -253,7 +255,6 @@
         <table class="cb id_table2 w pr35 org" forform="form" formaction="${ctx}/system/organization/query.do" forpagination="#tabs-org .pagination">
             <tr class="header">
                 <th style="width: 4%"><input type="checkbox" class="checkall"/></th>
-                <th style="width: 5%">ID</th>
                 <th style="width: 10%">名称</th>
                 <th style="width: 6%">类型</th>
                 <th style="width: 6%" class="sortable orderby" orderby="level">级别</th>
@@ -270,7 +271,6 @@
                 {#foreach $T.result as row}
                 <tr class="row {#cycle values=['bg_c_blue','']}">
                     <td><input type="checkbox" class="checkitem" value="{$T.row.id}"/></td>
-                    <td>{$T.row.id}</td>
                     <td>
                         <c:choose>
                             <c:when test="${VS_HAS_FUNCTIONS.organizationView}"><a href="${ctx}/system/organization/toViewPage.do?id={$T.row.id}&index=_1" class="toviewpage">{$T.row.name}</a></c:when>

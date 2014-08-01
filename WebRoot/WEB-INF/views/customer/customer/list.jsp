@@ -11,7 +11,7 @@
 <html>
 <head>
 <title>客户列表</title>
-<link href="${ctx}/static/css/stressing/detail.css" rel="stylesheet" type="text/css" />
+<link href="${ctx}/static/css/stressing/list1.css" rel="stylesheet" type="text/css" />
 <link href="${ctx}/static/css/application.css" rel="stylesheet" type="text/css"/>
 <script type="text/javascript" src="${ctx}/static/js/api/api.date.js"></script>
 <script type="text/javascript" src="${ctx}/static/js/jquery-json.2.4.js"></script>
@@ -38,17 +38,17 @@ $(function () {
 		jsUtil.dialogIframe(url, title, 800, 465, convOwner);
 	});
  	$("#delete").click(function () { // 给删除按钮绑定时间
-			var boxs = $("input(name=id):checked");
-			var param = $.param(boxs);
-			if (boxs.length == 0) {
-				jsUtil.alert("请选择数据");
-				return false;
-			}
-			jsUtil.confirm('危险操作，确定要批量删除？', function () {
-				RcmsAjax.ajax("${ctx}/customer/customer/delete.do",load,null,param);
-			}, '警告');
-		});
+		var boxs = $("input(name=id):checked");
+		var param = $.param(boxs);
+		if (boxs.length == 0) {
+			jsUtil.alert("请选择数据");
+			return false;
+		}
+		jsUtil.confirm('危险操作，确定要批量删除？', function () {
+			RcmsAjax.ajax("${ctx}/customer/customer/delete.do",load,null,param);
+		}, '警告');
 	});
+});
 	function convOwner(){
 		var $userObj = $(".bor_e28d1f", window.frames["dialogIframe"].document);
 		if($userObj.length > 0){

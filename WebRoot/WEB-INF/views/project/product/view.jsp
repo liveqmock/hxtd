@@ -5,7 +5,7 @@
 <html>
 <head>
 <title>产品详情</title>
-<link href="${ctx}/static/css/recommend/detail.css?v=1" rel="stylesheet" type="text/css"></link>
+<link href="${ctx}/static/css/recommend/list1.css?v=1" rel="stylesheet" type="text/css"></link>
 </head>
 <body>
 <div class="ml35 mr35 mt20 block cb cb">

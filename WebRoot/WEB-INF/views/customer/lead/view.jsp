@@ -16,7 +16,7 @@
 <meta http-equiv="expires" content="0">    
 <meta http-equiv="keywords" content="keyword1,keyword2,keyword3">
 <meta http-equiv="description" content="This is my page">
-<link rel="stylesheet" href="${ctx}/static/css/recommend/detail.css" type="text/css"/>
+<link rel="stylesheet" href="${ctx}/static/css/recommend/list1.css" type="text/css"/>
 <link rel="stylesheet" href="${ctx}/static/css/recommend/detail_a.css" type="text/css"/>
 </head>
 <body>
@@ -164,19 +164,24 @@
 					${lead.postCode }
 				</td>
 				<td align="right">
-					地区：
 				</td>
 				<td align="left">
-					${lead.province.name}&nbsp;${lead.city.name}&nbsp;${lead.county.name}&nbsp;
 				</td>
 			</tr>
+		</table>
+		<h1 class="f14 fbnone ml40 pt10">地址信息</h1>
+		<table class="cb id_table3 w95b bg_c_white margin0 mt10">
 			<tr>
-				<td align="right">
-					详细地址：
-				</td>
-				<td align="left">
-					${lead.address }
-				</td>
+			    <td align="right"  width="15%">省份：</td>
+				<td align="left">${lead.province.name}</td>
+				<td align="right" width="15%">城市：</td>
+				<td align="left">${lead.city.name}</td>
+			</tr>
+			<tr>
+				<td align="right">区县：</td>
+				<td align="left">${lead.county.name}</td>
+				<td align="right">详细地址：</td>
+				<td align="left">${lead.address }</td>
 			</tr>
 		</table>
 		<h1 class="f14 fbnone ml40 pt10">

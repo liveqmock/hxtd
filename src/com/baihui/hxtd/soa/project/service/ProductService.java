@@ -1,5 +1,6 @@
 package com.baihui.hxtd.soa.project.service;
 
+import java.util.Date;
 import java.util.List;
 import java.util.Map;
 
@@ -173,5 +174,13 @@ public class ProductService {
   		criteria.add(Restrictions.eq("project", project));
 		return productDao.find(criteria);
 	}
+
+
+   public Date getDBNow(){
+	   return productDao.getDBNow();
+   }
    
+   public Date getDBNowDate(){
+	   return productDao.getDBNowDate();
+   }
 }

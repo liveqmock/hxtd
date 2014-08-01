@@ -84,35 +84,34 @@ public class MessageController {
 	 */
 	@ResponseBody
 	@RequestMapping(value = "/query.do", produces = "text/text;charset=UTF-8")
-	public void query(HttpServletRequest request,HibernatePage<UserMessage> page,ModelMap model,String type, PrintWriter out)
-	throws NoSuchFieldException, JsonGenerationException, JsonMappingException, IOException {
+	public void query(HttpServletRequest request,HibernatePage<UserMessage> page,ModelMap model,String type, PrintWriter out , ModelMap modelMap) 
+	 	throws NoSuchFieldException, JsonGenerationException, JsonMappingException, IOException {
 		logger.info("查询信息");
 
         logger.info("解析页面查询条件");
-        User user = (User) request.getSession().getAttribute(Constant.VS_USER);
+        User user = (User)modelMap.get(Constant.VS_USER);
         Map<String, Object> searchParams = Servlets.getParametersStartingWith(request, "search_");
         Search.clearBlankValue(searchParams);
         Search.toRangeDate(searchParams, "createdTime");
         logger.debug("查询条件数目“{}”", searchParams.size());
         logger.info("添加默认的查询条件");
         logger.info("获取分页数据");
-        
-         if("recived".contains(type)){
-        	page.setHibernateOrderBy("status");
-         	page.setHibernateOrder("asc");
-            page = messageService.findRecivePage(searchParams, page,user);
-        }else{
-        	page.setHibernateOrderBy("createdTime");
-        	page.setHibernateOrder("desc");
-        	page = messageService.findSendPage(searchParams, page,user);
-        }
         logger.info("以DTO格式返回");
-        JsonDto jsonDto = new JsonDto();
-        jsonDto.setSuccessFlag(true);
-        jsonDto.setMessage("请求数据成功！");
-        jsonDto.setResult(page);
-        HibernateAwareObjectMapper.DEFAULT.writeValue(out, jsonDto);
-        
+        // 查询发送是特殊情况
+    	if( type != null && "send".equals(type)){
+    		page.setHibernateOrderBy("createdTime");
+    		page.setHibernateOrder("desc");
+    		page = messageService.findSendPage(searchParams, page,user);
+    	}else{
+    		page.setHibernateOrderBy("status");
+    		page.setHibernateOrder("asc");
+    		page = messageService.findRecivePage(searchParams, page,user);
+    	}
+    	JsonDto jsonDto = new JsonDto();
+    	jsonDto.setSuccessFlag(true);
+    	jsonDto.setMessage("请求数据成功！");
+    	jsonDto.setResult(page);
+    	HibernateAwareObjectMapper.DEFAULT.writeValue(out, jsonDto);
 	}
 
 	/**
@@ -175,20 +174,20 @@ public class MessageController {
 	 */
 	@ResponseBody
 	@RequestMapping(value = "/modify.do")
-	public String modify(Message message,long userId, HttpServletRequest request,String type) {
+	public String modify(Message message,long userId, HttpServletRequest request,String type, ModelMap modelMap) {
 		logger.info("MessageController.modify修改系统消息回复信息");
-		User u = (User) request.getSession().getAttribute(Constant.VS_USER);
-		logger.info("获得当前操作用户{}", u.getName());
+		User user = (User)modelMap.get(Constant.VS_USER);
+		logger.info("获得当前操作用户{}", user.getName());
 		message.setCreatedTime(new Date());
-		message.setModifier(u);
+		message.setModifier(user);
 		message.setModifiedTime(new Date());
-		message.setCreator(u);
+		message.setCreator(user);
 		message=messageService.addMessage(message);
-		User user=userService.getById(userId);
+		User users=userService.getById(userId);
 		/************ 回复 *****************************/
 		AuditLog auditLog = new AuditLog(EnumModule.USERMESSAGE.getModuleName(), 
-				message.getId(), message.getTitle(), EnumOperationType.ADD.getOperationType(), u);
-		messageService.add(message, user, auditLog);
+				message.getId(), message.getTitle(), EnumOperationType.ADD.getOperationType(), user);
+		messageService.add(message, users, auditLog);
 		JsonDto json = JsonDto.modify(message.getId());
 		return json.toString();
 	}
@@ -217,21 +216,22 @@ public class MessageController {
 	 */
 	@ResponseBody
 	@RequestMapping(value = "/add.do")
-	public String add(Message message,HttpServletRequest request,String type,String userId){
+	public String add(Message message,HttpServletRequest request,String type,String userId, ModelMap modelMap){
 		logger.info("ComponentController.query查询组件列表");
-		User u = (User) request.getSession().getAttribute(Constant.VS_USER);
-		logger.info("ComponentController.query 获得当前操作的用户{}",u.getName());
-		message.setCreator(u);
-		message.setModifier(u);
+		User user = (User)modelMap.get(Constant.VS_USER);
+
+		logger.info("ComponentController.query 获得当前操作的用户{}",user.getName());
+		message.setCreator(user);
+		message.setModifier(user);
 		message=messageService.addMessage(message);
 		//批量发送消息
 		String[] userstr=userId.split(",");
 		for(int i=0;i<userstr.length;i++){
-			User user=userService.getById(Long.parseLong(userstr[i]));
+			User users=userService.getById(Long.parseLong(userstr[i]));
 			/************ 新增 *****************************/
 			AuditLog auditLog = new AuditLog(EnumModule.USERMESSAGE.getModuleName(), 
-					message.getId(), message.getTitle(), EnumOperationType.ADD.getOperationType(), u);
-			messageService.add(message, user, auditLog);
+					message.getId(), message.getTitle(), EnumOperationType.ADD.getOperationType(), user);
+			messageService.add(message, users, auditLog);
 		}
 		JsonDto json = JsonDto.add(message.getId());
 		return json.toString();
@@ -268,7 +268,7 @@ public class MessageController {
         logger.info("导出excel文件");
 
         logger.info("解析页面查询条件");
-        User user = (User) request.getSession().getAttribute(Constant.VS_USER);
+        User user = (User) modelMap.get(Constant.VS_USER);
         Map<String, Object> searchParams = Servlets.getParametersStartingWith(request, "search_");
         Search.clearBlankValue(searchParams);
         Search.decodeValue(searchParams);

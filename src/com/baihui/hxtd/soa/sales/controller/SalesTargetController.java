@@ -191,16 +191,16 @@ public class SalesTargetController extends CommonController<SalesTarget> {
 	 */
 	@ResponseBody
 	@RequestMapping(value = "/modify.do", produces = "text/text;charset=UTF-8")
-	public String modify(SalesTarget salesTarget,String type,HttpServletRequest request){
+	public String modify(SalesTarget salesTarget,String type,HttpServletRequest request, ModelMap modelMap) {
 		logger.info("SalesTargetController.modify修改销售目标信息");
-		User u = (User) request.getSession().getAttribute(Constant.VS_USER);
-		logger.info("获得当前操作用户{}",u.getRealName());
-		salesTarget.setModifier(u);
+		User user = (User)modelMap.get(Constant.VS_USER);
+		logger.info("获得当前操作用户{}",user.getRealName());
+		salesTarget.setModifier(user);
 		AuditLog auditLog = new AuditLog(EnumModule.SALESTARGET.getModuleName(), 
-				salesTarget.getId(), salesTarget.getTitle(), EnumOperationType.MODIFY.getOperationType(), u);
+				salesTarget.getId(), salesTarget.getTitle(), EnumOperationType.MODIFY.getOperationType(), user);
 		salesTargetService.modify(salesTarget,auditLog);
 		JsonDto json = JsonDto.modify(salesTarget.getId());
-		salesTarget.setModifier(u);
+		salesTarget.setModifier(user);
 		return json.toString();
 	}
 	/**
@@ -214,18 +214,18 @@ public class SalesTargetController extends CommonController<SalesTarget> {
 	 */
 	@ResponseBody
 	@RequestMapping(value = "/add.do", produces = "text/text;charset=UTF-8")
-	public String add(SalesTarget salesTarget,String ownerIds,HttpServletRequest request){
+	public String add(SalesTarget salesTarget,String ownerIds,HttpServletRequest request, ModelMap modelMap) {
 		logger.info("SalesTargetController.query查询销售目标列表");
 		//临时代码，时间类型应从数据库中取
-		User u = (User) request.getSession().getAttribute(Constant.VS_USER);
-		logger.info("SalesTargetController.query 获得当前操作的用户{}",u.getRealName());
-		salesTarget.setCreator(u);
-		salesTarget.setModifier(u);
+		User user = (User)modelMap.get(Constant.VS_USER);
+		logger.info("SalesTargetController.query 获得当前操作的用户{}",user.getRealName());
+		salesTarget.setCreator(user);
+		salesTarget.setModifier(user);
 		String[] owners = ownerIds.split(",");
 		AuditLog [] auditLogArr = new AuditLog [owners.length];
 		for(int i=0; i<owners.length; i++){
 			auditLogArr[i] = new AuditLog(EnumModule.SALESTARGET.getModuleName(), 
-					null, salesTarget.getTitle(), EnumOperationType.ADD.getOperationType(), u);
+					null, salesTarget.getTitle(), EnumOperationType.ADD.getOperationType(), user);
 		}
 		salesTargetService.add(salesTarget,owners, auditLogArr);
 		JsonDto json = JsonDto.add(salesTarget.getId());

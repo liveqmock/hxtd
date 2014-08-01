@@ -172,9 +172,9 @@ public class ProjectController extends CommonController<Project> {
 	 */
 	@ResponseBody
 	@RequestMapping(value="/modify.do", produces = "text/text;charset=UTF-8")
-	public String modify(Project project,String type,HttpServletRequest request){
+	public String modify(Project project, String type, ModelMap modelMap){
 		logger.info("SupplierController.modify修改项目信息");
-		User u = (User) request.getSession().getAttribute(Constant.VS_USER);
+		User u = (User) modelMap.get(Constant.VS_USER);
 		logger.info("获得当前操作用户{}",u.getName());
 		project.setModifier(u);
 		AuditLog auditLog = new AuditLog(EnumModule.PROJECT.getModuleName(), 
@@ -214,9 +214,9 @@ public class ProjectController extends CommonController<Project> {
 	 */
 	@ResponseBody
 	@RequestMapping(value="/add.do", produces = "text/text;charset=UTF-8")
-	public String add(Project project,String type,HttpServletRequest request){
+	public String add(Project project,String type, ModelMap modelMap){
 		logger.info("projectController.modify修改项目信息");
-		User u = (User) request.getSession().getAttribute(Constant.VS_USER);
+		User u = (User) modelMap.get(Constant.VS_USER);
 		logger.info("获得当前操作用户{}",u.getName());
 		project.setModifier(u);
 		project.setCreator(u);

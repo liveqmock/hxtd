@@ -27,7 +27,6 @@ import com.baihui.hxtd.soa.base.Constant;
 import com.baihui.hxtd.soa.base.orm.hibernate.HibernatePage;
 import com.baihui.hxtd.soa.base.utils.Search;
 import com.baihui.hxtd.soa.base.utils.mapper.HibernateAwareObjectMapper;
-import com.baihui.hxtd.soa.common.service.CommonService;
 import com.baihui.hxtd.soa.system.entity.AuditLog;
 import com.baihui.hxtd.soa.system.entity.Dictionary;
 import com.baihui.hxtd.soa.system.entity.User;
@@ -39,226 +38,190 @@ import com.baihui.hxtd.soa.util.JsonDto;
 
 @Controller
 @RequestMapping(value = "/system/dictionary")
-@SessionAttributes(value = {Constant.VS_USER_ID, Constant.VS_USER})
+@SessionAttributes(value = { Constant.VS_USER_ID, Constant.VS_USER })
 public class DictionaryController {
-    // private Logger logger = LoggerFactory.getLogger(this.getClass());
+	@Resource
+	private DictionaryService dicService;
+	@InitBinder
+	public void initBinder(WebDataBinder binder) {
+		SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
+		binder.registerCustomEditor(Date.class, new CustomDateEditor(format, true));
+	}
+	/**
+	  * toQueryPage(请求查看字典列表)
+	  * @Title: toQueryPage
+	  * @Description: 请求查看字典列表
+	  * @param page 分页
+	  * @param model Model
+	  * @return String 字典列表页地址
+	 */
+	@RequestMapping(value = "/toQueryPage.do")
+	public String toQueryPage(HibernatePage<Dictionary> page, Model model) {
+		model.addAttribute("types", dicService.getDicTypes()); //字典分类
 
-    @Resource
-    private DictionaryService dicService;
+		/*****************分页设置******************/
+		page.setHibernateOrderBy("modifiedTime"); //修改时间倒序
+		page.setHibernateOrder(HibernatePage.DESC);
+		model.addAttribute("page", page);
 
-    @Resource
-    private CommonService commonService;
+		return "/system/dictionary/list";
+	}
+	/**
+	  * anscyQuery(异步加载数据列表)
+	  * @Title: anscyQuery
+	  * @Description: 分页异步加载数据
+	  * @param request HTTP请求
+	  * @param page 分页
+	  * @param out PrintWriter
+	  * @throws NoSuchFieldException,IOException
+	 */
+	@RequestMapping(value = "/query.do")
+	public void anscyQuery(HttpServletRequest request, HibernatePage<Dictionary> page, PrintWriter out) throws NoSuchFieldException, IOException {
+		/*************获取查询条件 **************/
+		Map<String, Object> searchParams = Servlets.getParametersStartingWith(request, "search_");
+		Search.clearBlankValue(searchParams);
 
-    @InitBinder
-    public void initBinder(WebDataBinder binder) {
-        SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
-        binder.registerCustomEditor(Date.class, new CustomDateEditor(format, true));
-    }
+		/*************分页查询 *****************/
+		dicService.findPage(searchParams, page);
 
-    /**
-     * toQueryPage(跳转字典列表页)
-     *
-     * @param page  分页
-     * @param model Model
-     * @return String 字典列表页地址
-     * @Description: 请求查看字典列表
-     */
-    @RequestMapping(value = "/toQueryPage.do")
-    public String toQueryPage(HibernatePage<Dictionary> page, Model model) {
-        model.addAttribute("types", dicService.getDicTypes());//字典类型
-        model.addAttribute("page", page);
+		/*************JSON转换 ****************/
+		JsonDto json = new JsonDto();
+		json.setResult(page);
 
-        return "/system/dictionary/list";
-    }
+		HibernateAwareObjectMapper.DEFAULT.writeValue(out, json);
+	}
+	/**
+	  * anscyQuery(异步加载子类字典数据列表)
+	  * @Title: anscyQuery
+	  * @Description: 加载子类字典数据
+	  * @param request HTTP请求
+	  * @param parentId 父ID
+	  * @param out PrintWriter
+	  * @throws IOException
+	 */
+	@RequestMapping(value = "/query.do", params = { "TYPE=childlst" })
+	public void anscyQuery(HttpServletRequest request, Long parentId, PrintWriter out) throws IOException {
+		/************JSON转换 ****************/
+		JsonDto json = new JsonDto();
+		json.setResult(new BusinessResult<List<Dictionary>>(dicService.findChildDicLst(parentId)));
 
-    /**
-     * anscyQuery(异步加载数据列表)
-     *
-     * @param request HttpServletRequest
-     * @param page    分页
-     * @throws NoSuchFieldException, IOException
-     * @Description: 分页异步加载数据
-     */
-    @RequestMapping(value = "/query.do")
-    public void anscyQuery(HttpServletRequest request,
-                           HibernatePage<Dictionary> page, PrintWriter out)
-            throws NoSuchFieldException, IOException {
-        /************ 获取查询条件 **************/
-        Map<String, Object> searchParams = Servlets.getParametersStartingWith(request, "search_");
-        Search.clearBlankValue(searchParams);
+		HibernateAwareObjectMapper.DEFAULT.writeValue(out, json);
+	}
+	/**
+	  * toAddPage(请求跳转至新增字典页)
+	  * @Title: toAddPage
+	  * @Description: 请求跳转至新增字典页
+	  * @param model Model
+	  * @return String 字典视图页
+	 */
+	@RequestMapping(value = "/toAddPage.do")
+	public String toAddPage(Model model) {
+		Dictionary dic = new Dictionary();
+		dic.setOrder(Long.parseLong("1"));
+		model.addAttribute("dictionary", dic); //初始化字典
+		model.addAttribute("types", dicService.getDicTypes()); //字典分类
 
-        /************ 分页查询 *****************/
-        dicService.findPage(searchParams, page);
+		return "/system/dictionary/edit";
+	}
+	/**
+	  * add(新增字典)
+	  * @Title: add
+	  * @Description: 异步请求新增字典
+	  * @param dictionary 字典实体
+	  * @param userId 当前操作用户
+	  * @return String 新增消息
+	 */
+	@ResponseBody
+	@RequestMapping(value = "/add.do", method = RequestMethod.POST)
+	public String add(Dictionary dictionary, @ModelAttribute(Constant.VS_USER_ID) Long userId) {
+		User user = new User(userId);
+		dictionary.setCreator(user);
+		dictionary.setModifier(user);
+		dictionary.setCreatedTime(new Date());
+		
+		/****************审计日志**********************/
+		AuditLog auditLog = new AuditLog(EnumModule.DICTIONARY.getModuleName(),
+				dictionary.getId(), dictionary.getKey(), EnumOperationType.ADD.getOperationType(), user, "字典增加");
+		dicService.add(dictionary, auditLog);
 
-        /************ json转换 ****************/
-        JsonDto json = new JsonDto();
-        json.setResult(page);
+		return JsonDto.add(dictionary.getId()).toString();
+	}
+	/**
+	  * toModifyPage(请求跳转至修改页面)
+	  * @Title: toModifyPage
+	  * @Description: 请求跳转至修改页面
+	  * @param id 字典主键ID
+	  * @param model Model
+	  * @return String 返回编辑视图地址
+	 */
+	@RequestMapping(value = "/toModifyPage.do")
+	public String toModifyPage(Long id, Model model) {
+		model.addAttribute("dictionary", dicService.get(id));
+		model.addAttribute("types", dicService.getDicTypes());// 字典类型
 
-        HibernateAwareObjectMapper.DEFAULT.writeValue(out, json);
-    }
-    /**
-     * anscyQuery(异步加载数据列表)
-     *
-     * @param request HttpServletRequest
-     * @param page    分页
-     * @throws NoSuchFieldException, IOException
-     * @Description: 分页异步加载数据
-     */
-    @RequestMapping(value = "/query.do", params = { "TYPE=childlst" })
-    public void anscyQuery(HttpServletRequest request, Long parentId, PrintWriter out) throws IOException {
-        /************JSON转换 ****************/
-        JsonDto json = new JsonDto();
-        json.setResult(new BusinessResult<List<Dictionary>>(dicService.findChildDicLst(parentId)));
+		return "/system/dictionary/edit";
+	}
+	/**
+	  * modify(修改字典信息)
+	  * @Title: modify
+	  * @Description: 异步请求修改字典信息
+	  * @param dict 字典实体
+	  * @param userId 当前操作用户
+	  * @return String 修改信息
+	 */
+	@ResponseBody
+	@RequestMapping(value = "/modify.do")
+	public String modify(Dictionary dictionary, @ModelAttribute(Constant.VS_USER_ID) Long userId) {
+		User user = new User(userId);
+		dictionary.setModifier(user);
 
-        HibernateAwareObjectMapper.DEFAULT.writeValue(out, json);
-    }
+		/****************审计日志**********************/
+		AuditLog auditLog = new AuditLog(EnumModule.DICTIONARY.getModuleName(),
+				dictionary.getId(), dictionary.getKey(), EnumOperationType.MODIFY.getOperationType(), user, "字典修改");
+		dicService.modify(dictionary, auditLog);
 
-    /**
-     * toAddPage(跳转至新增字典页)
-     *
-     * @param model Model
-     * @return String 字典视图页
-     * @Description: 请求新增字典
-     */
-    @RequestMapping(value = "/toAddPage.do")
-    public String toAddPage(Model model) {
-        Dictionary dic = new Dictionary();
-        dic.setOrder(Long.parseLong("1"));
-        model.addAttribute("dictionary", dic);// 初始化字典
-        model.addAttribute("types", dicService.getDicTypes());//字典类型
-        model.addAttribute("dict", dicService.getDictJsonData());//字典层级树形(不包含字典类型)
+		return JsonDto.modify(dictionary.getId()).toString();
+	}
+	/**
+	  * toViewPage(请求查看字典信息)
+	  * @Title: toViewPage
+	  * @Description: 请求查看字典信息
+	  * @param id 字典主键ID
+	  * @param model Model
+	  * @return String 返回字典视图地址
+	  * @throws
+	 */
+	@RequestMapping(value = "/toViewPage.do")
+	public String toViewPage(Long id, Model model) {
+		model.addAttribute("dictionary", dicService.get(id));// 获取字典
 
-        return "/system/dictionary/edit";
-    }
-
-    /**
-     * add(新增字典)
-     *
-     * @param dict        字典实体
-     * @param typename    分类
-     * @param redirectUri 重定向视图
-     * @param userId      操作用户id
-     * @Description: 新增一条字典数据
-     */
-    @RequestMapping(value = "/add.do", method = RequestMethod.POST)
-    public String add(Dictionary dict, String typename, String redirectUri, 
-    		@ModelAttribute(Constant.VS_USER_ID) Long userId) {
-        if (dict.getParent().getId() == null) {
-            dict.setParent(null);
-        }
-        if (!dict.getType().equals("0")) {//非字典类型
-            dict.setType(typename);
-        } else {
-            dict.setType(null);
-        }
-        User user = new User(userId);
-        dict.setCreator(user);
-        dict.setModifier(user);
-        dict.setCreatedTime(new Date());
-
-        AuditLog auditLog = new AuditLog(EnumModule.DICTIONARY.getModuleName(), 
-        		dict.getId(), dict.getKey(), EnumOperationType.ADD.getOperationType(), user,"字典增加");
-        dicService.add(dict, auditLog);
-
-        return "redirect:" + String.format(redirectUri, dict.getId());
-    }
-
-    /**
-     * toModifyPage(跳转至修改页面)
-     *
-     * @param id    字典主键ID
-     * @param model Model
-     * @return String 返回编辑视图地址
-     * @throws
-     * @Description: 请求修改字典
-     */
-    @RequestMapping(value = "/toModifyPage.do")
-    public String toModifyPage(Long id, Model model) {
-        model.addAttribute("dictionary", dicService.get(id));
-        model.addAttribute("types", dicService.getDicTypes());//字典类型
-        model.addAttribute("dict", dicService.getDictJsonData());//字典层级树形(不包含字典类型)
-
-        return "/system/dictionary/edit";
-    }
-
-    /**
-     * modify(修改字典)
-     *
-     * @param dict        字典实体
-     * @param typename    分类
-     * @param redirectUri 重定向视图
-     * @param userId      操作用户id
-     * @Description: 保存修改后的字典信息
-     */
-    @RequestMapping(value = "/modify.do")
-    public String modify(Dictionary dict, 
-    		String typename,
-    		String redirectUri,
-    		@ModelAttribute(Constant.VS_USER_ID) Long userId) {
-        /*if (commonService.isInitialized(Dictionary.class, dict.getId())) {
-            return new JsonDto("系统初始化数据不允许修改！").toString();
-        }*/
-
-        if (dict.getParent().getId() == null) {
-            dict.setParent(null);
-        }
-        if (!dict.getType().equals("0")) {//非字典类型
-            dict.setType(typename);
-        } else {
-            dict.setType(null);
-        }
-        
-        User user = new User(userId);
-        dict.setModifier(user);
-
-        AuditLog auditLog = new AuditLog(EnumModule.DICTIONARY.getModuleName(), 
-        		dict.getId(), dict.getKey(), EnumOperationType.MODIFY.getOperationType(), user,"字典修改");
-        dicService.modify(dict,auditLog);
-
-        return "redirect:" + String.format(redirectUri, dict.getId());
-    }
-
-    /**
-     * toViewPage(查看字典信息)
-     *
-     * @param id    字典主键ID
-     * @param model Model
-     * @return String 返回字典视图地址
-     * @Description: 请求查看字典
-     */
-    @RequestMapping(value = "/toViewPage.do")
-    public String toViewPage(Long id, Model model) {
-        model.addAttribute("dictionary", dicService.get(id));//获取字典
-
-        return "/system/dictionary/view";
-    }
-
-    /**
-     * delete(删除字典)
-     *
-     * @param id 字典主键IDS
-     * @return String 返回json串
-     * @Description: 请求删除字典，支持批量删除
-     */
-    @ResponseBody
-    @RequestMapping(value = "/delete.do")
-    public String delete(ModelMap modelMap, Long[] id) {
-
-        if (commonService.isInitialized(Dictionary.class, id)) {
-            return new JsonDto("系统初始化数据不允许删除！").toString();
-        }
-
-        User user = (User)modelMap.get(Constant.VS_USER);
-        AuditLog [] auditLogArr = new AuditLog [id.length];
-		for(int i=0; i<id.length; i++){
+		return "/system/dictionary/view";
+	}
+	/**
+	  * delete(删除字典信息)
+	  * @Title: delete
+	  * @Description: 删除字典信息
+	  * @param modelMap ModelMap
+	  * @param id 字典主键IDS
+	  * @return String 删除信息
+	 */
+	@ResponseBody
+	@RequestMapping(value = "/delete.do")
+	public String delete(ModelMap modelMap, Long[] id) {
+		User user = (User) modelMap.get(Constant.VS_USER);
+		
+		AuditLog[] auditLogArr = new AuditLog[id.length];
+		for (int i = 0; i < id.length; i++) {
 			auditLogArr[i] = new AuditLog(EnumModule.DICTIONARY.getModuleName(), 
-					id[i], dicService.getNameById(id[i]), EnumOperationType.DELETE.getOperationType(), user,"字典删除");
+				id[i], 
+				dicService.getNameById(id[i]), 
+				EnumOperationType.DELETE.getOperationType(), 
+				user, 
+				"字典删除"
+			);
 		}
-        dicService.delete(id,auditLogArr);
+		dicService.delete(id, auditLogArr);
 
-        JsonDto json = new JsonDto("删除成功");
-        json.setSuccessFlag(true);
-
-        return json.toString();
-    }
+		return JsonDto.delete(id).toString();
+	}
 }

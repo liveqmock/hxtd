@@ -12,7 +12,7 @@
 <head>
     <title>报表详情</title>
     <link rel="stylesheet" href="${ctx}/static/css/application.css" type="text/css"/>
-    <link href="${ctx}/static/css/recommend/detail.css" rel="stylesheet" type="text/css"/>
+    <link href="${ctx}/static/css/recommend/list1.css" rel="stylesheet" type="text/css"/>
     <script type="text/javascript" src="${ctx}/static/js/jquery.validate.js"></script>
     <script type="text/javascript" src="${ctx}/static/js/jquery.metadata.js"></script>
     <script type="text/javascript" src="${ctx}/static/js/jquery-json.2.4.js"></script>

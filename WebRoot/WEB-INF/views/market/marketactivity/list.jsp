@@ -4,19 +4,19 @@
 <c:set var="ctx" value="${pageContext.request.contextPath}"/>
 <html>
 <head>
-    <title>市场活动</title>
-    <link href="${ctx}/static/css/recommend/detail.css?v=1" rel="stylesheet" type="text/css"/>
-    <link href="${ctx}/static/css/application.css?v=1" rel="stylesheet" type="text/css"/>
-    <script type="text/javascript" src="${ctx}/static/js/jquery-jtemplates.js?v=1"></script>
-    <script type="text/javascript" src="${ctx}/static/js/js-util.common.js?v=1"></script>
-    <script type="text/javascript" src="${ctx}/static/js/scrollTitle.js?v=1"></script>
-    <script type="text/javascript">
-        $(function () {
-            jsUtil.twoOrMoreRestrictDate('.time', 'max', 0); //创建、修改时间
-            jsUtil.twoOrMoreRestrictDate('.untime', 'min', null); //举办时间
-            new Grid().init(); //生成Gird
-        });
-    </script>
+<title>市场活动</title>
+<link href="${ctx}/static/css/recommend/list1.css?v=1" rel="stylesheet" type="text/css"/>
+<link href="${ctx}/static/css/application.css?v=1" rel="stylesheet" type="text/css"/>
+<script type="text/javascript" src="${ctx}/static/js/jquery-jtemplates.js?v=1"></script>
+<script type="text/javascript" src="${ctx}/static/js/js-util.common.js?v=1"></script>
+<script type="text/javascript" src="${ctx}/static/js/scrollTitle.js?v=1"></script>
+<script type="text/javascript">
+$(function () {
+    jsUtil.twoOrMoreRestrictDate('.time', 'max', 0); //创建、修改时间
+    jsUtil.twoOrMoreRestrictDate('.untime', 'min', null); //举办时间
+    new Grid().init(); //生成Gird
+});
+</script>
 </head>
 <body>
 <div class="listcontainer">
@@ -85,7 +85,6 @@
         <b class="b2"></b>
         <b class="b3"></b>
         <b class="b4"></b>
-
         <div class="ie_head">
             <ul class="fl id_table1 mt10 ml10">
                 <c:if test="${VS_HAS_FUNCTIONS.marketactivityDelete}">
@@ -171,7 +170,7 @@
                     </c:if>
                     <%--${VS_HAS_FUNCTIONS.marketactivityStartApprove}|{$T.row.flowNode.type}|${startNodeType}|{$T.row.bossHead.id}|${VS_USER.id}--%>
                     <%--<c:if test="${VS_HAS_FUNCTIONS.marketactivityStartApprove}">--%>
-                    {#if $T.row.flowNode.type==${startNodeType}&&$T.row.bossHead.id==${VS_USER.id}}
+                    {#if $T.row.flowNode.type==${startNodeType}&&($T.row.bossHead.id==${VS_USER.id}||$T.row.creator.id==${VS_USER.id})}
                     <a href="${ctx}/market/marketactivity/toStartApprovePage.do?id={$T.row.id}" title="启动审批" class="block_inline s_onapprove globle_img ml10"></a>
                     {#/if}
                     <%--</c:if>--%>

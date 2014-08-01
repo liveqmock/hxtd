@@ -16,7 +16,7 @@
 <link rel="stylesheet" href="${ctx}/static/css/foder.css" type="text/css"/>
 --%>
 <script type="text/javascript" src="${ctx}/static/js/jquery-json.2.4.js"></script>
-<link rel="stylesheet" href="${ctx}/static/css/recommend/detail.css" type="text/css" />
+<link rel="stylesheet" href="${ctx}/static/css/recommend/list1.css" type="text/css" />
 <link rel="stylesheet" href="${ctx}/static/css/recommend/empower.css" type="text/css" />
 <link rel="stylesheet" href="${ctx}/static/component/zTree_v3/css/zTreeStyle.css" type="text/css" />
 <script type="text/javascript" src="${ctx}/static/js/jquery-jtemplates.js"></script>

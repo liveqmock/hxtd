@@ -1,9 +1,11 @@
 package com.baihui.hxtd.soa.order.entity;
 
+import com.baihui.hxtd.soa.base.FieldInfo;
 import com.baihui.hxtd.soa.common.entity.FlowNode;
 import com.baihui.hxtd.soa.common.entity.IdFlowable;
 import com.baihui.hxtd.soa.customer.entity.Customer;
 import com.baihui.hxtd.soa.project.entity.Product;
+import com.baihui.hxtd.soa.system.DictionaryConstant;
 import com.baihui.hxtd.soa.system.entity.Dictionary;
 import com.baihui.hxtd.soa.system.entity.User;
 import com.fasterxml.jackson.annotation.JsonFormat;
@@ -27,12 +29,9 @@ import java.util.Date;
 @Table(name = "`ORDER`")
 public class Order implements IdFlowable {
 
-    /**
-     * 序列化
-     */
-    private static final long serialVersionUID = 1L;
 
     /** 线索ID */
+    @FieldInfo(desc = "主键编号")
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "ID")
@@ -41,108 +40,124 @@ public class Order implements IdFlowable {
     /**
      * 订单编号（自动生成,不可修改）
      */
+    @FieldInfo(desc = "编号")
     @Column(name = "CODE")
     private String code;
 
     /** 产品 */
+    @FieldInfo(desc = "产品")
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "PRODUCT_ID")
     private Product product;
 
     /** 客户 */
+    @FieldInfo(desc = "客户")
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "CUSTOMER_ID")
     private Customer customer;
 
-    /** 状态 */
+    /** 流程环节 */
+    @FieldInfo(desc = "流程环节")
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "STATUS", updatable = false)
     private FlowNode flowNode;
 
     /** 投资方式 */
+    @FieldInfo(desc = "投资方式", dictionary = DictionaryConstant.ORDER_INVESTMENTWAY)
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "INVESTMENT_WAY")
     private Dictionary investmentWay;
 
     /** 购买金额 */
+    @FieldInfo(desc = "购买金额")
     @Column(name = "PURCHASE_MONEY")
     private BigDecimal purchaseMoney;
 
     /** 收益率 */
+    @FieldInfo(desc = "收益率")
     @Column(name = "EARNING_RATE")
     private Float earningRate;
 
     /** 提前赎回率 */
+    @FieldInfo(desc = "提前赎回率")
     @Column(name = "ADVANCE_REDEEM_RATE")
     private Float arr;
 
     /** 赎回公式 */
+    @FieldInfo(desc = "赎回公式")
     @Column(name = "REDEEM_FORMULA")
     private String redeemFormula;
 
     /** 订单所有者 */
+    @FieldInfo(desc = "所有者")
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "OWNER")
     private User owner;
 
     /** 销售主管 */
+    @FieldInfo(desc = "销售主管")
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "SALES_MANAGER_ID")
     private User salesManager;
 
     /** 销售总监 */
+    @FieldInfo(desc = "销售总监")
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "SALES_MAJORDOMO_ID")
     private User salesMajordomo;
 
+    @FieldInfo(desc = "生效时间")
+    @Column(name = "EFFECTIVE_TIME")
+    private Date effectiveTime;
+
+    @FieldInfo(desc = "终止时间")
     @Column(name = "ORDER_END_TIME")
     private Date orderEndTime;
-    
+
+    @FieldInfo(desc = "订单状态")
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "ORDER_STATUS")
     private Dictionary orderStatus;
-    
+
     /** 备注 */
+    @FieldInfo(desc = "备注")
     @Column(name = "REMARK", length = 512)
     private String remark;
 
     /** 创建者 */
+    @FieldInfo(desc = "创建者")
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "CREATOR_ID", updatable = false)
     private User creator;
 
     /** 创建时间 */
+    @FieldInfo(desc = "创建时间")
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss", timezone = "GMT+08:00")
     @Column(name = "CREATED_TIME")
     private Date createdTime;
 
     /** 修改者 */
+    @FieldInfo(desc = "修改者")
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "MODIFIER_ID")
     private User modifier;
 
     /** 最终修改时间 */
+    @FieldInfo(desc = "最终修改时间")
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss", timezone = "GMT+08:00")
     @Column(name = "MODIFIED_TIME")
     private Date modifiedTime;
 
     /** 删除标识 */
+    @FieldInfo(desc = "已被删除")
     @Column(name = "IS_DELETED", nullable = false, updatable = false)
     private Boolean isDeleted = false;
 
     /** 财务状态(已付款、未付款、已收款、未收款、部分收款) */
+    @FieldInfo(desc = "财务状态", dictionary = DictionaryConstant.ORDER_PAYSTATUS)
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "PAY_STATUS")
     private Dictionary payStatus;
-
-//    @Override
-//    public FlowNode getFlowNode() {
-//        return getStatus();
-//    }
-//
-//    public String toString() {
-//        return String.format("订单编号：%s", getId());
-//    }
 
     public Long getId() {
         return id;
@@ -256,6 +271,14 @@ public class Order implements IdFlowable {
         this.orderEndTime = orderEndTime;
     }
 
+    public Date getEffectiveTime() {
+        return effectiveTime;
+    }
+
+    public void setEffectiveTime(Date effectiveTime) {
+        this.effectiveTime = effectiveTime;
+    }
+
     public String getRemark() {
         return remark;
     }
@@ -312,13 +335,13 @@ public class Order implements IdFlowable {
         this.payStatus = payStatus;
     }
 
-	public Dictionary getOrderStatus() {
-		return orderStatus;
-	}
+    public Dictionary getOrderStatus() {
+        return orderStatus;
+    }
 
-	public void setOrderStatus(Dictionary orderStatus) {
-		this.orderStatus = orderStatus;
-	}
+    public void setOrderStatus(Dictionary orderStatus) {
+        this.orderStatus = orderStatus;
+    }
 
 
 }

@@ -4,7 +4,7 @@
 <html>
 <head>
 <title>联系人编辑</title>
-<link href="${ctx}/static/css/recommend/detail.css?v=1" type="text/css" rel="stylesheet"></link>
+<link href="${ctx}/static/css/recommend/list1.css?v=1" type="text/css" rel="stylesheet"></link>
 <script type="text/javascript" src="${ctx}/static/js/jquery.validate.js?v=1"></script>
 <script type="text/javascript" src="${ctx}/static/js/jquery.metadata.js?v=1"></script>
 <script type="text/javascript" src="${ctx}/static/js/validator.js?v=1"></script>

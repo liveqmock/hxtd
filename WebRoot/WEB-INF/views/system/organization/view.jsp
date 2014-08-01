@@ -11,7 +11,7 @@
 <html>
 <head>
     <title>组织详情</title>
-    <link href="${ctx}/static/css/recommend/detail.css" rel="stylesheet" type="text/css"/>
+    <link href="${ctx}/static/css/recommend/list1.css" rel="stylesheet" type="text/css"/>
 </head>
 <body>
 <div>

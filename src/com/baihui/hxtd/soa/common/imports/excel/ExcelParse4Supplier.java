@@ -156,7 +156,7 @@ public class ExcelParse4Supplier extends ExcelParse<SupplierDTO> {
 		Dictionary type = null;
 		if ( !Tools.isEmpty(supplierType.trim()) ) {
 			//根据id查询供应商类型(50101)
-			type = dictionaryService.getValue(supplierType.trim(), 50101L);
+			type = dictionaryService.getValue(supplierType.trim(), ExcelParse.directoryColumn.get("供应商类型"));
 			if(type==null){
 				msg += "<br />第"+rowNumOfSheet+"条数据,供应商类型无效!";
 				logger.warn(msg);
@@ -198,7 +198,7 @@ public class ExcelParse4Supplier extends ExcelParse<SupplierDTO> {
 		Dictionary cardType = null;
 		if ( !Tools.isEmpty(supplierCardType.trim()) ) {
 			//根据id查询供应商证件类型(50101)
-			cardType = dictionaryService.getValue(supplierCardType.trim(), 40303L);
+			cardType = dictionaryService.getValue(supplierCardType.trim(), ExcelParse.directoryColumn.get("供应商证件类型"));
 			if(cardType==null){
 				msg += "<br />第"+rowNumOfSheet+"条数据,证件类型无效!";
 				logger.warn(msg);

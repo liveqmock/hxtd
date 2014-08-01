@@ -111,7 +111,7 @@ public class RecycleBinController extends CommonController<RecycleBin>{
      */
 	@ResponseBody
     @RequestMapping(value = "/delete.do", produces = "text/text;charset=UTF-8")
-    public String delete(Long[] id,HttpServletRequest request) {
+    public String delete(Long[] id,HttpServletRequest request, ModelMap modelMap) {
 		logger.info("RecycleBinController.delete删除回收站数据id={}", StringUtils.join(id,","));
 		List<Long> recordIds = new ArrayList<Long>();
 		List<Long> ids = new ArrayList<Long>();
@@ -122,7 +122,7 @@ public class RecycleBinController extends CommonController<RecycleBin>{
 	    	ids.add(recycleBinList.get(i).getId());
 	    	entityName.add(recycleBinList.get(i).getModuleName());
 	    }
-	    User user = (User) request.getSession().getAttribute(Constant.VS_USER);
+	    User user = (User)modelMap.get(Constant.VS_USER);
 	    //得到RecycleBin.id
 	    Long[] idArr=(Long[]) ids.toArray(new Long[0]);
 	    for(int i=0;i<entityName.size();i++){
@@ -142,7 +142,7 @@ public class RecycleBinController extends CommonController<RecycleBin>{
      */
 	@ResponseBody
     @RequestMapping(value = "/recovery.do", produces = "text/text;charset=UTF-8")
-    public String recovery(Long[] id,HttpServletRequest request) {
+    public String recovery(Long[] id,HttpServletRequest request, ModelMap modelMap) {
 		logger.info("RecycleBinController.recovery还原回收站数据id={}", StringUtils.join(id,","));
 		List<Long> recordIds = new ArrayList<Long>();
 		List<Long> ids = new ArrayList<Long>();
@@ -153,7 +153,7 @@ public class RecycleBinController extends CommonController<RecycleBin>{
 	    	ids.add(recycleBinList.get(i).getId());
 	    	entityName.add(recycleBinList.get(i).getModuleName());
 	    }
-	    User user = (User) request.getSession().getAttribute(Constant.VS_USER);
+	    User user = (User)modelMap.get(Constant.VS_USER);
 	    //得到RecycleBin.id
 	    Long[] idArr=(Long[]) ids.toArray(new Long[0]);
 	    for(int i=0;i<entityName.size();i++){

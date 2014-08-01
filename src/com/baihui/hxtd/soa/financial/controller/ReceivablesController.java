@@ -115,10 +115,10 @@ public class ReceivablesController {
 	
 	@ResponseBody
 	@RequestMapping(value = "/modify.do", produces = "text/text;charset=UTF-8")
-	public String modify(Receivables receivables, 
+	public String modify(Receivables receivables, ModelMap modelMap,
 						HttpServletRequest request) {
 		logger.info("ReceviablesController.modify修改收款信息");
-		User user = (User) request.getSession().getAttribute(Constant.VS_USER);
+		User user = (User) modelMap.get(Constant.VS_USER);
 		logger.info("获得当前操作用户{}", user.getName());
 		receivables.setModifier(user);
 		AuditLog auditLog = new AuditLog(EnumModule.RECEIVABLES.getModuleName(), 
@@ -184,10 +184,10 @@ public class ReceivablesController {
 	 */
 	@ResponseBody
 	@RequestMapping(value = "/add.do", produces = "text/text;charset=UTF-8")
-	public String add(Receivables receivables,HttpServletRequest request){
+	public String add(Receivables receivables,HttpServletRequest request, ModelMap modelMap){
 		logger.info("ReceviablesController.query查询组件列表");
 		//临时代码，时间类型应从数据库中取
-		User user = (User) request.getSession().getAttribute(Constant.VS_USER);
+		User user = (User) modelMap.get(Constant.VS_USER);
 		logger.info("ReceviablesController.query 获得当前操作的用户{}",user.getName());
 		receivables.setOwner(user);
 		receivables.setCreator(user);

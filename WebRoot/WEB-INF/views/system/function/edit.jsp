@@ -19,7 +19,7 @@
 <link rel="stylesheet" type="text/css" href="styles.css">
 -->
 <script type="text/javascript" src="${ctx}/static/js/jquery.validate.js"></script>
-<link rel="stylesheet" href="${ctx}/static/css/recommend/detail.css" type="text/css"/>
+<link rel="stylesheet" href="${ctx}/static/css/recommend/list1.css" type="text/css"/>
 <script type="text/javascript" src="${ctx}/static/js/jquery.metadata.js"></script>
 <script type="text/javascript" src="${ctx}/static/js/validator.js"></script>
 <script type="text/javascript" src="${ctx}/static/js/js-util.common.js"></script>

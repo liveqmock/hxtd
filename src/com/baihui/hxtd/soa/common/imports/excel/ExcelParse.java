@@ -14,6 +14,8 @@ import java.util.TreeSet;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import javax.annotation.Resource;
+
 import org.apache.poi.hssf.usermodel.HSSFCell;
 import org.apache.poi.hssf.usermodel.HSSFDateUtil;
 import org.apache.poi.ss.usermodel.Cell;
@@ -24,16 +26,51 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.web.multipart.MultipartFile;
 
+import com.baihui.hxtd.soa.base.ContextLoaderListenerAware;
 import com.baihui.hxtd.soa.base.utils.ImportExport;
 import com.baihui.hxtd.soa.common.imports.ImportMessage;
+import com.baihui.hxtd.soa.system.DictionaryConstant;
+import com.baihui.hxtd.soa.system.service.DictionaryService;
 import com.baihui.hxtd.soa.util.Tools;
 
 
-
+//@Component
 public abstract class ExcelParse<T> {
 	
 	private Logger logger = LoggerFactory.getLogger(ExcelParse.class);
-	 
+	
+	@Resource
+	private static DictionaryService dictionaryService = (DictionaryService)ContextLoaderListenerAware.ctx.getBean("dictionaryService");
+	/**
+	 * 定义一个map集合.map集合中存储各个模块要查询的字段
+	 * key="线索来源"  value="91"  根据常量线索来源的value查询
+	 */
+	public static Map<String, Long> directoryColumn = new HashMap<String, Long>();
+	static{
+		//线索模块
+		directoryColumn.put("线索来源",dictionaryService.getIdByValue(DictionaryConstant.LEAD_SOURCE));
+		directoryColumn.put("线索状态",dictionaryService.getIdByValue(DictionaryConstant.LEAD_STATUS));
+		directoryColumn.put("线索行业",dictionaryService.getIdByValue(DictionaryConstant.INDUSTRY));
+		directoryColumn.put("线索卡类型",dictionaryService.getIdByValue(DictionaryConstant.LEAD_CARD_TYPE));
+		
+		//客户模块
+		directoryColumn.put("客户类型",dictionaryService.getIdByValue(DictionaryConstant.CUSTOMER_TYPE));
+		directoryColumn.put("客户来源",dictionaryService.getIdByValue(DictionaryConstant.CUSTOMER_SOURCE));
+		directoryColumn.put("证件类型",dictionaryService.getIdByValue(DictionaryConstant.CUSTOMER_CARD_TYPE));
+		directoryColumn.put("风险等级",dictionaryService.getIdByValue(DictionaryConstant.CUSTOMER_RISK_TYPE));
+		directoryColumn.put("客户行业",dictionaryService.getIdByValue(DictionaryConstant.CUSTOMER_INDUSTRY));
+		directoryColumn.put("所有权",dictionaryService.getIdByValue(DictionaryConstant.CUSTOMER_OWNERSHIP));
+		directoryColumn.put("开户行",dictionaryService.getIdByValue(DictionaryConstant.CUSTOMER_OPENBANK));
+		
+		//联系人
+		directoryColumn.put("联系人来源",dictionaryService.getIdByValue(DictionaryConstant.LEAD_SOURCE));
+		
+		//供应商
+		directoryColumn.put("供应商类型",dictionaryService.getIdByValue(DictionaryConstant.SUPPLIER_TYPE));
+		directoryColumn.put("供应商证件类型",dictionaryService.getIdByValue(DictionaryConstant.SUPPLIER_CARD_TYPE));
+		
+		
+	}
 	
 	/**
 	 * 读取excel文件

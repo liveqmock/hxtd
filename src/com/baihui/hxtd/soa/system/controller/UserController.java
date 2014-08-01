@@ -1,5 +1,35 @@
 package com.baihui.hxtd.soa.system.controller;
 
+import java.io.IOException;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
+
+import javax.annotation.Resource;
+import javax.servlet.ServletContext;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
+
+import org.apache.commons.collections.BidiMap;
+import org.apache.commons.io.FilenameUtils;
+import org.apache.commons.lang3.ArrayUtils;
+import org.apache.poi.openxml4j.exceptions.InvalidFormatException;
+import org.apache.poi.ss.usermodel.Workbook;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.stereotype.Controller;
+import org.springframework.ui.ModelMap;
+import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.SessionAttributes;
+import org.springframework.web.multipart.MultipartFile;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
+import org.springside.modules.web.Servlets;
+
 import com.baihui.hxtd.soa.base.Constant;
 import com.baihui.hxtd.soa.base.orm.hibernate.HibernatePage;
 import com.baihui.hxtd.soa.base.utils.ImportExport;
@@ -11,34 +41,22 @@ import com.baihui.hxtd.soa.base.utils.ztree.TreeNodeConverter;
 import com.baihui.hxtd.soa.common.controller.CommonController;
 import com.baihui.hxtd.soa.common.service.CommonService;
 import com.baihui.hxtd.soa.system.DictionaryConstant;
-import com.baihui.hxtd.soa.system.entity.*;
-import com.baihui.hxtd.soa.system.service.*;
+import com.baihui.hxtd.soa.system.entity.AuditLog;
+import com.baihui.hxtd.soa.system.entity.Component;
+import com.baihui.hxtd.soa.system.entity.Dictionary;
+import com.baihui.hxtd.soa.system.entity.Function;
+import com.baihui.hxtd.soa.system.entity.Organization;
+import com.baihui.hxtd.soa.system.entity.User;
+import com.baihui.hxtd.soa.system.service.ComponentService;
+import com.baihui.hxtd.soa.system.service.DictionaryService;
+import com.baihui.hxtd.soa.system.service.FunctionService;
+import com.baihui.hxtd.soa.system.service.OrganizationService;
+import com.baihui.hxtd.soa.system.service.RoleService;
+import com.baihui.hxtd.soa.system.service.UserService;
 import com.baihui.hxtd.soa.util.EnumModule;
 import com.baihui.hxtd.soa.util.EnumOperationType;
 import com.baihui.hxtd.soa.util.JsonDto;
 import com.fasterxml.jackson.core.JsonProcessingException;
-import org.apache.commons.collections.BidiMap;
-import org.apache.commons.io.FilenameUtils;
-import org.apache.commons.lang3.ArrayUtils;
-import org.apache.poi.openxml4j.exceptions.InvalidFormatException;
-import org.apache.poi.ss.usermodel.Workbook;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import org.springframework.stereotype.Controller;
-import org.springframework.ui.ModelMap;
-import org.springframework.web.bind.annotation.*;
-import org.springframework.web.multipart.MultipartFile;
-import org.springframework.web.servlet.mvc.support.RedirectAttributes;
-import org.springside.modules.web.Servlets;
-
-import javax.annotation.Resource;
-import javax.servlet.ServletContext;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-import javax.servlet.http.HttpSession;
-import java.io.IOException;
-import java.util.List;
-import java.util.Map;
 
 /**
  * 用户控制器
@@ -118,7 +136,7 @@ public class UserController extends CommonController<User> {
         logger.debug("查询条件数目“{}”", searchParams.size());
 
         logger.info("查询分页列表信息");
-        page = userService.findPage(searchParams, page, (User) modelMap.get(Constant.VS_USER), organizationId);
+        page = userService.findPage(searchParams, page, organizationId);
         logger.debug("列表信息数目“{}”", page.getResult().size());
 
         logger.info("转换为TDO格式");
@@ -126,7 +144,7 @@ public class UserController extends CommonController<User> {
         jsonDto.setSuccessFlag(true);
         jsonDto.setResult(page);
 
-        return HibernateAwareObjectMapper.DEFAULT.writeValueAsString(jsonDto);
+        return jsonDto.toString();
     }
 
     /**
@@ -328,7 +346,8 @@ public class UserController extends CommonController<User> {
         logger.info("存储表单默认值");
         model.addAttribute("organizationInheritRoles", roleService.findOrganizationInherit(id));
         model.addAttribute("authorizationRoles", roleService.findAuthorization(id));
-        model.addAttribute("allAuthorizationFunctions", functionService.findReferAuthorization(id));
+        List<Function> functionList=functionService.findReferAuthorization(id);
+        model.addAttribute("allAuthorizationFunctions", functionList);
         model.addAttribute("authorizationFunctions", functionService.findUserAuthorization(id));
         model.addAttribute("allAuthorizationComponents", componentService.findReferAuthorization(id));
         model.addAttribute("authorizationComponents", componentService.findUserAuthorization(id));
@@ -336,6 +355,25 @@ public class UserController extends CommonController<User> {
         return "/system/user/authorization";
     }
 
+    @ResponseBody
+    @RequestMapping(value = "/toAuthorizationPage.do",params = "TYPE=show")
+    public String toAuthorization(Long roleId) {
+        roleService.findFunByRoleId(roleId);
+        Set<Component> comIds=roleService.findComByRoleId(roleId);
+//        StringBuffer sb = new StringBuffer("");
+//        StringBuffer comsb = new StringBuffer("");
+//        for (Function function : funIds) {
+//            sb.append(function.getId()+",");
+//        }
+//        for (Component component : comIds) {
+//        	comsb.append(component.getId()+",");
+//        }
+//        JsonDto jsonDto = new JsonDto();
+//        jsonDto.setSuccessFlag(true);
+//        jsonDto.setMessage(sb.toString()+"|"+comsb.toString());
+//        return jsonDto.toString();
+        return "";
+    }
 
     /**
      * 授权
@@ -543,7 +581,6 @@ public class UserController extends CommonController<User> {
      * 弹出组织结构树，只显示下级组织
      *
      * @param model
-     * @param request
      * @return json
      * @throws NoSuchFieldException
      * @author huizijing
@@ -593,7 +630,6 @@ public class UserController extends CommonController<User> {
      * 弹出组织结构树,所有的用户
      *
      * @param model
-     * @param request
      * @return json
      * @throws NoSuchFieldException
      * @author huizijing

@@ -65,7 +65,7 @@ public class ExcelParse4Lead extends ExcelParse<LeadDTO> {
 		//线索名必填项
 		String contactName = sheetList.get(1);
 		if (Tools.isEmpty(contactName.trim())) {
-			msg += "<br />第"+rowNumOfSheet+"条数据,客户姓名不能为空!";
+			msg += "<br />第"+rowNumOfSheet+"条数据,线索名称不能为空!";
 			logger.warn(msg);
 			//向无效数据集合中添加一条数据
 			ImportMessage.invalidFormatRowNumMap.put(rowNumOfSheet, msg);
@@ -78,7 +78,7 @@ public class ExcelParse4Lead extends ExcelParse<LeadDTO> {
 		//手机号码格式
 		String mobile =  sheetList.get(5);
 		if(!Tools.isEmpty(mobile)&&!isMobile(mobile)){
-			msg += "<br />第"+rowNumOfSheet+"条数据,手机号码内容无效!";
+			msg += "<br />第"+rowNumOfSheet+"条数据,手机号码格式不正确!";
 			//向无效数据集合中添加一条数据
 			ImportMessage.invalidFormatRowNumMap.put(rowNumOfSheet, msg);
 			return null;
@@ -86,7 +86,7 @@ public class ExcelParse4Lead extends ExcelParse<LeadDTO> {
 		//电话号码，符合电话号码格式
 		String phone =  sheetList.get(6);
 		if ( !Tools.isEmpty(phone)&&!isPhone(phone.trim()) ) {
-			msg += "<br />第"+rowNumOfSheet+"条数据,电话号码无效!";
+			msg += "<br />第"+rowNumOfSheet+"条数据,电话号码格式不正确!";
 			logger.warn(msg);
 			//向无效数据集合中添加一条数据
 			ImportMessage.invalidFormatRowNumMap.put(rowNumOfSheet, msg);
@@ -95,7 +95,7 @@ public class ExcelParse4Lead extends ExcelParse<LeadDTO> {
 		//传真格式，与电话号码相同
 		String fax = sheetList.get(8);
 		if(!Tools.isEmpty(fax)&&!isPhone(fax)){
-			msg += "<br />第"+rowNumOfSheet+"条数据,传真内容无效!";
+			msg += "<br />第"+rowNumOfSheet+"条数据,传真格式不正确!";
 			//向无效数据集合中添加一条数据
 			ImportMessage.invalidFormatRowNumMap.put(rowNumOfSheet, msg);
 			return null;
@@ -103,7 +103,7 @@ public class ExcelParse4Lead extends ExcelParse<LeadDTO> {
 		//邮箱格式
 		String email = sheetList.get(7);
 		if(!Tools.isEmpty(email)&&!checkEmail(email)){
-			msg += "<br />第"+rowNumOfSheet+"条数据,邮箱内容无效!";
+			msg += "<br />第"+rowNumOfSheet+"条数据,邮箱格式不正确!";
 			//向无效数据集合中添加一条数据
 			ImportMessage.invalidFormatRowNumMap.put(rowNumOfSheet, msg);
 			return null;
@@ -111,7 +111,7 @@ public class ExcelParse4Lead extends ExcelParse<LeadDTO> {
 		//邮编格式
 		String postCode = sheetList.get(17);
 		if(!Tools.isEmpty(postCode)&&!checkPostCode(postCode)){
-			msg += "<br />第"+rowNumOfSheet+"条数据,邮编内容无效!";
+			msg += "<br />第"+rowNumOfSheet+"条数据,邮编格式不正确!";
 			//向无效数据集合中添加一条数据
 			ImportMessage.invalidFormatRowNumMap.put(rowNumOfSheet, msg);
 			return null;
@@ -158,7 +158,7 @@ public class ExcelParse4Lead extends ExcelParse<LeadDTO> {
 		Dictionary source = null;
 		if ( !Tools.isEmpty(leadSource.trim()) ) {
 			//根据id查询线索来源(40101)
-			source = dictionaryService.getValue(leadSource.trim(), 40101L);
+			source = dictionaryService.getValue(leadSource.trim(), ExcelParse.directoryColumn.get("线索来源"));
 			if(source==null){
 				msg += "<br />第"+rowNumOfSheet+"条数据,线索来源无效!";
 				logger.warn(msg);
@@ -184,7 +184,7 @@ public class ExcelParse4Lead extends ExcelParse<LeadDTO> {
 		Dictionary status = null;
 		if (!Tools.isEmpty(leadStatus.trim()) ) {
 			//根据id查询线索状态(40102)
-			status = dictionaryService.getValue(leadStatus.trim(), 40102L);
+			status = dictionaryService.getValue(leadStatus.trim(), ExcelParse.directoryColumn.get("线索状态"));
 			//根据leadStatus没有查询到,返回null
 			if(status==null){
 				msg += "<br />第"+rowNumOfSheet+"条数据,线索状态无效!";
@@ -211,7 +211,7 @@ public class ExcelParse4Lead extends ExcelParse<LeadDTO> {
 		Dictionary industry = null;
 		if (! Tools.isEmpty(leadIndustry.trim()) ) {
 			//根据id查询线索状态(40305)
-			industry = dictionaryService.getValue(leadIndustry.trim(), 40305L);
+			industry = dictionaryService.getValue(leadIndustry.trim(), ExcelParse.directoryColumn.get("线索行业"));
 			if(industry==null){
 				msg += "<br />第"+rowNumOfSheet+"条数据,行业无效!";
 				logger.warn(msg);
@@ -237,7 +237,7 @@ public class ExcelParse4Lead extends ExcelParse<LeadDTO> {
 		Dictionary cardType = null;
 		if ( !Tools.isEmpty(leadCardType.trim()) ) {
 			//根据id查询线索状态(40103)
-			cardType = dictionaryService.getValue(leadCardType.trim(), 40103L);
+			cardType = dictionaryService.getValue(leadCardType.trim(), ExcelParse.directoryColumn.get("线索卡类型"));
 			if(cardType==null){
 				msg += "<br />第"+rowNumOfSheet+"条数据,卡类型无效!";
 				logger.warn(msg);

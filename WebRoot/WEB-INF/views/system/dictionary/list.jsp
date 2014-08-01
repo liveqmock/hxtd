@@ -6,7 +6,7 @@
 <html>
 <head>
 <title>字典维护</title>
-<link rel="stylesheet" href="${ctx}/static/css/recommend/detail.css" type="text/css"/>
+<link rel="stylesheet" href="${ctx}/static/css/recommend/list1.css" type="text/css"/>
 <link href="${ctx}/static/css/application.css" rel="stylesheet" type="text/css"/>
 <script type="text/javascript" src="${ctx}/static/js/jquery-jtemplates.js"></script>
 <script type="text/javascript" src="${ctx}/static/js/js-util.common.js"></script>
@@ -23,8 +23,8 @@ function showChildNode(obj){
    		endIndex > 0 && (url = url.substring(0, endIndex));
    		childform.action = url + "?TYPE=childlst&parentId=" + parentId;
    		new Grid().init({
-   			containerSelector: '.childcontainer',
-   			form: 'childform',
+   			containerSelector: '.childcontainer', 
+   			form: 'childform', 
    			paginationActive: false,
    			gridSelector: '.listcontainer .grid',
    			resultSelector: lstSelector,
@@ -98,23 +98,23 @@ function showChildNode(obj){
 		</div>
 	</div>
 	<div class="ml35 mr35">
-	<div>
-		<ul class="cb id_ul5 w bg_c_blue vm">
-			<li style="width:3%"><input type="checkbox" class="checkall"/></li>
+	<div class="grid">
+		<ul class="cb id_ul5 w vm header">
+			<li style="width:4%">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<input type="checkbox" class="checkall"/></li>
 			<li style="width:16%">字典名称</li>
 			<li style="width:16%">字典值</li>
 			<li style="width:16%">字典类型</li>
-			<li style="width:16%">创建时间</li>
-			<li style="width:17%">最后修改时间</li>
-			<li style="width:10%">操作</li>
+			<li style="width:16%" class="sortable orderby" orderby="createdTime">创建时间</li>
+			<li style="width:17%" class="sortable orderby" orderby="modifiedTime">最后修改时间</li>
+			<li style="width:12%">操作</li>
 		</ul>
+		<div class="list"></div>
 	</div>
-	<div class="grid"><div class="list"></div></div>
 	<div class="cb ml35 mt20 h40 pagination"></div>
 	<textarea id="template-tbody" class="template template-tbody">
 	    {#foreach $T.result as row}
 	    <ul class="cb id_ul4 w {$T.row$index%2==1?'':'bg_c_blue'} vm">
-	    	<li style="width:3%">
+	    	<li style="width:4%">
 	    		<i id="{$T.row.id}" class="s_open globle_img block_inline cp" onclick="showChildNode(this);"></i>
 	    		<input type="checkbox" class="checkitem" value="{$T.row.id}"/>
 	    	</li>
@@ -130,27 +130,27 @@ function showChildNode(obj){
 	    	<li style="width:16%">{$T.row.type==null?'&nbsp;':$T.row.type}</li>
 	    	<li style="width:16%">{$T.row.createdTime}</li>
 	    	<li style="width:17%">{$T.row.modifiedTime}</li>
-	    	<li style="width:10%">
-		    	<c:if test="${VS_HAS_FUNCTIONS.dictionaryView}">
-	                 <a href="${ctx}/system/dictionary/toViewPage.do?id={$T.row.id}"
+	    	<li style="width:12%">&nbsp;
+	    		<c:if test="${VS_HAS_FUNCTIONS.dictionaryView}">
+	                 <a href="${ctx}/system/dictionary/toViewPage.do?id={$T.row.id}" 
 	                 	class="block_inline s_detail_btn globle_img ml10" title="详情"></a>
 	             </c:if>
 	             <c:if test="${VS_HAS_FUNCTIONS.dictionaryModify}">
 	                 {#if !$T.row.isInitialized}
-	                 <a href="${ctx}/system/dictionary/toModifyPage.do?id={$T.row.id}"
+	                 <a href="${ctx}/system/dictionary/toModifyPage.do?id={$T.row.id}" 
 	                 	class="block_inline s_edit_btn globle_img ml10" title="编辑"></a>
 	                 {#/if}
 	             </c:if>
 	             <c:if test="${VS_HAS_FUNCTIONS.dictionaryDelete}">
 	                 {#if !$T.row.isInitialized}
-	                 <a href="javascript:;" class="block_inline s_dump_btn globle_img ml10 delete"
+	                 <a href="javascript:;" class="block_inline s_dump_btn globle_img ml10 delete" 
 	                 	uri="${ctx}/system/dictionary/delete.do?id={$T.row.id}" title="删除"></a>
 	                 {#/if}
 	             </c:if>
 	    	</li>
 	    </ul>
 	    <div class="div_{$T.row.id}" style="display:none"></div>
-	    {#/for}
+	    {#/for} 
 	</textarea>
 	<%@include file="/WEB-INF/template/sort.jsp" %>
 	<%@include file="/WEB-INF/template/pagination.jsp" %>
@@ -160,8 +160,8 @@ function showChildNode(obj){
 	<form id="childform" name="childform" action="${ctx}/system/dictionary/query.do" onsubmit="return false;"></form>
 	<textarea id="template-child" class="template template-tbody">
 	    {#foreach $T.result as row}
-	    <ul class="cb id_ul4 w bg_c_d3d3d3 vm brall5">
-	    	<li style="width:3%"><input type="checkbox" class="checkitem" value="{$T.row.id}"/></li>
+	    <ul class="cb id_ul4 ml40 margin0 bg_c_d3d3d3 vm">
+	    	<li style="width:4%"><input type="checkbox" class="checkitem" value="{$T.row.id}"/></li>
 	    	<li style="width:16%">
 		    	<c:choose>
 	           		<c:when test="${VS_HAS_FUNCTIONS.dictionaryView}">
@@ -174,26 +174,26 @@ function showChildNode(obj){
 	    	<li style="width:16%">{$T.row.type==null?'&nbsp;':$T.row.type}</li>
 	    	<li style="width:16%">{$T.row.createdTime}</li>
 	    	<li style="width:17%">{$T.row.modifiedTime}</li>
-	    	<li style="width:10%">
+	    	<li style="width:12%">
 		    	<c:if test="${VS_HAS_FUNCTIONS.dictionaryView}">
-	                 <a href="${ctx}/system/dictionary/toViewPage.do?id={$T.row.id}"
+	                 <a href="${ctx}/system/dictionary/toViewPage.do?id={$T.row.id}" 
 	                 	class="block_inline s_detail_btn globle_img ml10" title="详情"></a>
 	             </c:if>
 	             <c:if test="${VS_HAS_FUNCTIONS.dictionaryModify}">
 	                 {#if !$T.row.isInitialized}
-	                 <a href="${ctx}/system/dictionary/toModifyPage.do?id={$T.row.id}"
+	                 <a href="${ctx}/system/dictionary/toModifyPage.do?id={$T.row.id}" 
 	                 	class="block_inline s_edit_btn globle_img ml10" title="编辑"></a>
 	                 {#/if}
 	             </c:if>
 	             <c:if test="${VS_HAS_FUNCTIONS.dictionaryDelete}">
 	                 {#if !$T.row.isInitialized}
-	                 <a href="javascript:;" class="block_inline s_dump_btn globle_img ml10 delete"
+	                 <a href="javascript:;" class="block_inline s_dump_btn globle_img ml10 delete" 
 	                 	uri="${ctx}/system/dictionary/delete.do?id={$T.row.id}" title="删除"></a>
 	                 {#/if}
 	             </c:if>
 	    	</li>
 	    </ul>
-	    {#/for}
+	    {#/for} 
 	</textarea>
 </div>
 </body>

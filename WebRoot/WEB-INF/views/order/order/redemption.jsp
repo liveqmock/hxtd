@@ -19,7 +19,7 @@
 <meta http-equiv="description" content="This is my page">
 <link rel="stylesheet" href="${ctx}/static/css/public/common.css?v=${now}" type="text/css"/>
 <link rel="stylesheet" href="${ctx}/static/css/public/reset.css?v=${now}" type="text/css"/>
-<link rel="stylesheet" href="${ctx}/static/css/recommend/detail.css" type="text/css"/> 
+<link rel="stylesheet" href="${ctx}/static/css/recommend/list1.css" type="text/css"/> 
 <script type="text/javascript" src="${ctx}/static/js/jquery.min.js"></script>
 <script type="text/javascript">
 $(function(){

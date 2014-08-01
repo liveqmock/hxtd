@@ -6,7 +6,7 @@
 <html>
 <head>
 <title>供应商列表</title>
-<link rel="stylesheet" href="${ctx}/static/css/recommend/detail.css?v=1" type="text/css"/>
+<link rel="stylesheet" href="${ctx}/static/css/recommend/list1.css?v=1" type="text/css"/>
 <link rel="stylesheet" href="${ctx}/static/css/application.css?v=1" type="text/css"/>
 <script type="text/javascript" src="${ctx}/static/js/jquery-json.2.4.js?v=1"></script>
 <script type="text/javascript" src="${ctx}/static/js/jquery-jtemplates.js?v=1"></script>
@@ -29,22 +29,16 @@ $(function () {
         e.stopPropagation(); //jquery 阻止冒泡事件
     });
     new PCAS("province","city","county");
-    grid = new Grid().init().bindExport(); //首次加载数据
+    new Grid().init().bindExport(); //首次加载数据
 });
-function load() { //加载数据的方法
-    grid.loadGrid();
-}
-function formReset() {
-    $("#form")[0].reset();
-}
 </script>
 </head>
 <body>
-	<div class="listcontainer">
+<div class="listcontainer">
 	<form id="form" action="${ctx}/project/supplier/query.do" onsubmit="return false;">
 	<table class="fl mt5 w">
 		<tr>
-			<td class="f14 namewidth1" align="right">供应商名：</td>
+			<td class="f14 namewidth1" align="right">供应商名称：</td>
 			<td class="f14 namewidth2" align="left"><input type="text" class="text_input1" name="search_LIKE_name" maxlength="30"/></td>
 			<td class="f14 namewidth1" align="right">电话：</td>
 			<td class="f14 namewidth2" align="left"><input type="text" class="text_input1" name="search_LIKE_phone" maxlength="20"/></td>
@@ -54,8 +48,7 @@ function formReset() {
 				<a class="c_222 block cp fr ml10 globle_img mt8 mr20 more" title="展开"></a>
 				<a href="javascript:;" class="a_underline block_inline fr w_blue mt5 reset">清除</a>
 				<a href="javascript:;" class="block_inline c_white lh25 fr mr10 submit">
-					<b class="allbtn_l block fl"></b>
-					<b class="allbtn_r pr13 block fl w_auto f14">查&nbsp;&nbsp;询</b>
+					<b class="allbtn_l block fl"></b><b class="allbtn_r pr13 block fl w_auto f14">查&nbsp;&nbsp;询</b>
 				</a>
 			</td>
 		</tr>
@@ -73,28 +66,22 @@ function formReset() {
 				<select name="search_EQ_type.id" class="select2">
 					<option value="">全部</option>
 					<c:forEach items="${dict}" var="d">
-						<option value="${d.id}">
-							${d.key}
-						</option>
+						<option value="${d.id}">${d.key}</option>
 					</c:forEach>
 				</select>
 			</td>
 			<td class="f14 namewidth1" align="right">创建时间：</td>
 			<td class="f14 namewidth2" align="left">
 				<div class="pr vm">
-					<a href="javascript:;" class="pa time_closenone1"></a>
-					<a href="javascript:;" class="pa time_closenone2"></a>
-					<input name="search_GTE_createdTime" type="text" class="text_input2 input_close globle_img time" 
-						readonly/>-<input class="text_input2 input_close globle_img time" name="search_LTE_createdTime" type="text" readonly />
+					<input type="text" name="search_GTE_createdTime" class="text_input2 input_close globle_img time" 
+						readonly/>-<input type="text" name="search_LTE_createdTime" class="text_input2 input_close globle_img time" readonly/>
 				</div>
 			</td>
 			<td class="f14 namewidth1" align="right">修改时间：</td>
-			<td class="f14 namewidth2" align="left" >
+			<td class="f14 namewidth2" align="left">
 				<div class="pr vm">
-					<a href="javascript:;" class="pa time_closenone1"></a>
-					<a href="javascript:;" class="pa time_closenone2"></a>
-					<input name="search_GTE_modifiedTime" type="text"  class="text_input2 input_close globle_img time" 
-						readonly/>-<input name="search_LTE_modifiedTime" type="text" class="text_input2 input_close globle_img time" readonly/>
+					<input type="text" name="search_GTE_modifiedTime" class="text_input2 input_close globle_img time" 
+						readonly/>-<input type="text" name="search_LTE_modifiedTime" class="text_input2 input_close globle_img time" readonly/>
 				</div>
 			</td>
 		</tr>
@@ -112,23 +99,20 @@ function formReset() {
 				<c:if test="${VS_HAS_FUNCTIONS.supplierDelete}">
 				<li>
 					<a href="javascript:;" uri="${ctx}/project/supplier/delete.do" class="block c_white lh25 deletesome">
-						<b class="allbtn_l block fl"></b>
-						<b class="allbtn_r pr13 block fl w_auto f14">删&nbsp;&nbsp;除</b>
+						<b class="allbtn_l block fl"></b><b class="allbtn_r pr13 block fl w_auto f14">删&nbsp;&nbsp;除</b>
 					</a>
 				</li>
 			</c:if>
 			<c:if test="${VS_HAS_FUNCTIONS.supplierAdd}">
 				<li>
 					<a href="${ctx}/project/supplier/toAddPage.do" class="block c_white lh25 ml10">
-						<b class="allbtn_l block fl"></b>
-						<b class="allbtn_r pr13 block fl w_auto f14">新&nbsp;&nbsp;增</b>
+						<b class="allbtn_l block fl"></b><b class="allbtn_r pr13 block fl w_auto f14">新&nbsp;&nbsp;增</b>
 					</a>
 				</li>
 			</c:if>
 			<li>
 				<a href="javascript:;" class="refresh block c_white lh25 ml10">
-					<b class="allbtn_l block fl"></b>
-				 	<b class="allbtn_r pr13 block fl w_auto f14">刷&nbsp;&nbsp;新</b>
+					<b class="allbtn_l block fl"></b><b class="allbtn_r pr13 block fl w_auto f14">刷&nbsp;&nbsp;新</b>
 				</a>
 			</li>
 		</ul>
@@ -151,18 +135,17 @@ function formReset() {
 	<div id="title" style="display:none;z-index:1;background-color: #f5f5f6;" class="ml35 mr35">
 		<table class="cb id_table2 w">
 			<tr>
-				<th><input type="checkbox" id="id" class="checkall"/></th>
-				<th>供应商名</th>
-				<th>所有者</th>
-				<th>供应商类型</th>
-				<th>电话</th>
-				<th>手机</th>
+				<th width="4%"><input type="checkbox" id="id" class="checkall"/></th>
+				<th width="7%">所有者</th>
+				<th width="15%">供应商名称</th>
+				<th width="8%">供应商类型</th>
+				<th width="7%">法人代表</th>
+				<th>法人电话</th>
+				<th>法人手机</th>
 				<th>传真</th>
-				<th>创建者</th>
-				<th width="10%" class="sortable orderby" orderby="createdTime">创建时间</th>
-				<th>修改者</th>
-				<th width="10%" class="sortable orderby" orderby="modifiedTime">修改时间</th>
-				<th width="9%">操作</th>
+				<th width="11%" class="sortable orderby" orderby="createdTime">创建时间</th>
+				<th width="11%" class="sortable orderby" orderby="modifiedTime">修改时间</th>
+				<th width="10%">操作</th>
 			</tr>
 		</table>
 	</div>
@@ -170,18 +153,17 @@ function formReset() {
 		<table class="tablesorter cb id_table2 w pr35">
 			<thead>
 				<tr id="recordDiv">
-					<th><input type="checkbox" id="id" class="checkall"/></th>
-					<th>供应商名</th>
-					<th>所有者</th>
-					<th>供应商类型</th>
-					<th>电话</th>
-					<th>手机</th>
+					<th width="4%"><input type="checkbox" id="id" class="checkall"/></th>
+					<th width="7%">所有者</th>
+					<th width="15%">供应商名称</th>
+					<th width="8%">供应商类型</th>
+					<th width="7%">法人代表</th>
+					<th>法人电话</th>
+					<th>法人手机</th>
 					<th>传真</th>
-					<th>创建者</th>
-					<th width="10%" class="sortable orderby" orderby="createdTime">创建时间</th>
-					<th>修改者</th>
-					<th width="10%" class="sortable orderby" orderby="modifiedTime">修改时间</th>
-					<th width="9%">操作</th>
+					<th width="11%" class="sortable orderby" orderby="createdTime">创建时间</th>
+					<th width="11%" class="sortable orderby" orderby="modifiedTime">修改时间</th>
+					<th width="10%">操作</th>
 				</tr>
 			</thead>
 			<tbody class="list"></tbody>
@@ -190,37 +172,32 @@ function formReset() {
 		<textarea id="template-tbody" class="template template-tbody">
 	         {#foreach $T.result as row}
 	         <tr class="{$T.row$index%2==1?'':'bg_c_blue'} row w">
-	             <td><input type="checkbox" name="id" class="checkitem" value="{$T.row.id}" /></td>
+	             <td><input type="checkbox" name="id" class="checkitem" value="{$T.row.id}"/></td>
+	             <td>{$T.row.owner.realName}</td>
 	             <td>
-	                 <c:choose>
+	             	<c:choose>
 	                    <c:when test="${VS_HAS_FUNCTIONS.supplierView}">
-						<a href="${ctx}/project/supplier/toViewPage.do?id={$T.row.id}"
-							class="toviewpage">{$T.row.name}</a>
-					</c:when>
+							<a href="${ctx}/project/supplier/toViewPage.do?id={$T.row.id}" class="toviewpage">{$T.row.name}</a>
+						</c:when>
 	                    <c:otherwise>{$T.row.name}</c:otherwise>
 	                </c:choose>
 	            </td>
-	            <td>{$T.row.owner.realName}</td>
 	            <td>{$T.row.type.key}</td>
+	            <td>{$T.row.corporation}</td>
 	            <td>{$T.row.phone}</td>
 	            <td>{$T.row.mobile}</td>
 	            <td>{$T.row.fax}</td>
-	            <td>{$T.row.creator.realName}</td>
 	            <td>{$T.row.createdTime}</td>
-	            <td>{$T.row.modifier.realName}</td>
 	            <td>{$T.row.modifiedTime}</td>
 	            <td align="center">
 				<c:if test="${VS_HAS_FUNCTIONS.supplierView}">
-					<a href="${ctx}/project/supplier/toViewPage.do?id={$T.row.id}" title="详情" 
-						class=" s_detail_btn block_inline  globle_img ml10"></a>
+					<a href="${ctx}/project/supplier/toViewPage.do?id={$T.row.id}" title="详情" class="s_detail_btn block_inline globle_img ml10"></a>
 				</c:if>
 				<c:if test="${VS_HAS_FUNCTIONS.supplierModify}">
-					<a href="${ctx}/project/supplier/toModifyPage.do?id={$T.row.id}" title="编辑" 
-						class=" block_inline s_edit_btn globle_img ml10"></a>
+					<a href="${ctx}/project/supplier/toModifyPage.do?id={$T.row.id}" title="编辑" class="block_inline s_edit_btn globle_img ml10"></a>
 				</c:if>
 				<c:if test="${VS_HAS_FUNCTIONS.supplierDelete}">
-					<a href="javascript:;" uri="${ctx}/project/supplier/delete.do?id={$T.row.id}" title="删除" 
-						class=" block_inline s_dump_btn globle_img ml10 delete"></a>
+					<a href="javascript:;" uri="${ctx}/project/supplier/delete.do?id={$T.row.id}" title="删除" class="block_inline s_dump_btn globle_img ml10 delete"></a>
 				</c:if>
 	            </td>
 	        </tr>
@@ -228,8 +205,7 @@ function formReset() {
 	    </textarea>
 		<%@include file="/WEB-INF/template/sort.jsp"%>
 		<%@include file="/WEB-INF/template/pagination.jsp"%>
-		<div id="tableFoot"></div>
-		</div>
 	</div>
+</div>
 </body>
 </html>

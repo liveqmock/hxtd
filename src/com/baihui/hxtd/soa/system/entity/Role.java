@@ -45,7 +45,7 @@ public class Role implements Serializable, Comparable<Role>, Initialized {
     @Column(name = "IS_DELETED", nullable = false, updatable = false)
     private Boolean isDeleted;
 
-    @FieldInfo(desc = "初始化数据")
+    @FieldInfo(desc = "初始化的")
     @Column(name = "IS_INITIALIZED", nullable = false, updatable = false)
     private Boolean isInitialized;
 

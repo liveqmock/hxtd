@@ -143,9 +143,8 @@ public class SupplierController extends CommonController<Supplier> {
 	@ResponseBody
 	@RequestMapping(value = "/add.do", produces = "text/text;charset=UTF-8")
 	public String add(Supplier supplier, 
-			String type, 
-			HttpServletRequest request){
-		User user = (User) request.getSession().getAttribute(Constant.VS_USER);
+			String type, ModelMap modelMap){
+		User user = (User) modelMap.get(Constant.VS_USER);
 		supplier.setCreator(user);
 		supplier.setModifier(user);
 		
@@ -212,11 +211,10 @@ public class SupplierController extends CommonController<Supplier> {
 	@ResponseBody
 	@RequestMapping(value = "/modify.do", produces = "text/text;charset=UTF-8")
 	public String modify(Supplier supplier, 
-			String type, 
-			HttpServletRequest request){
+			String type, ModelMap modelMap){
 		logger.info("SupplierController.modify修改供应商信息");
 		
-		User user = (User) request.getSession().getAttribute(Constant.VS_USER);
+		User user = (User) modelMap.get(Constant.VS_USER);
 		supplier.setModifier(user);
 		AuditLog auditLog = new AuditLog(EnumModule.SUPPLIER.getModuleName(), 
 				supplier.getId(), supplier.getName(), EnumOperationType.MODIFY.getOperationType(), user);

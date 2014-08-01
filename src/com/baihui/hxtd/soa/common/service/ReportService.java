@@ -88,7 +88,7 @@ public class ReportService {
         List<SearchFilter> searchFilters = new ArrayList<SearchFilter>();
         Range<Date> range = CommonCalendar.unitRange(Calendar.getInstance(), type);
         searchFilters.add(new SearchFilter(name, SearchFilter.Operator.GTE, range.getMinimum()));
-        searchFilters.add(new SearchFilter(name, SearchFilter.Operator.LT, range.getMaximum()));
+        searchFilters.add(new SearchFilter(name, SearchFilter.Operator.LTE, range.getMaximum()));
         return searchFilters;
     }
 
@@ -185,8 +185,10 @@ public class ReportService {
 
     /** 构建时间轴 */
     private List<AxisInfo> buildTimeAxis(Module module, String fieldName, Dictionary groupType, ExtendItemSelectHql hql) {
-        Date min = (Date) hql.getConditionValues().get(Search.placeHodler(fieldName, SearchFilter.Operator.GTE));
-        Date max = (Date) hql.getConditionValues().get(Search.placeHodler(fieldName, SearchFilter.Operator.LTE));
+        String gteKey = Search.placeHodler(fieldName, SearchFilter.Operator.GTE);
+        Date min = (Date) hql.getConditionValues().get(gteKey);
+        String lteKey = Search.placeHodler(fieldName, SearchFilter.Operator.LTE);
+        Date max = (Date) hql.getConditionValues().get(lteKey);
         return dateValues(min, max, TIME_GROUP_CALENDAR_UNIT.get(groupType.getValue()));
     }
 
@@ -204,6 +206,7 @@ public class ReportService {
         PATTERNS.put(Calendar.SECOND, new String[]{"s", "秒"});
     }
 
+    /** 中文格式器 */
     public final static ChineseFormat chineseFormat = new ChineseFormat();
 
     /**

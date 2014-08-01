@@ -103,7 +103,8 @@ public class DictionaryService {
      * @return Dictionary返回类型
      */
     public Dictionary get(Long id) {
-        return dictionaryDao.findUnique("select dictionary from Dictionary dictionary where dictionary.id = ?", id);
+    	String hql = "select dictionary from Dictionary dictionary where dictionary.id = ?";
+        return dictionaryDao.findUnique(hql, id);
     }
 
     public String getDictJsonData() {
@@ -141,9 +142,9 @@ public class DictionaryService {
      *
      * @return List<Dictionary>返回类型
      */
-    public List<Object> getDicTypes() {
-        String hql = "select distinct dictionary.key from Dictionary dictionary where dictionary.type is null";
-        List<Object> lst = dictionaryDao.find(hql);
+    public List<Dictionary> getDicTypes() {
+        String hql = "select dictionary from Dictionary dictionary where dictionary.type is null";
+        List<Dictionary> lst = dictionaryDao.find(hql);
 
         return lst;
     }

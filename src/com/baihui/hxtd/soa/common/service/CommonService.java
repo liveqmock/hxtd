@@ -347,4 +347,5 @@ public class CommonService {
     public void recovery(String entityName, Long... id) {
         commonDao.recovery(entityName, id);
     }
+    
 }

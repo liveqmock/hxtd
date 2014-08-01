@@ -10,7 +10,7 @@
 
 <html>
 <head>
-<link href="${ctx}/static/css/stressing/detail.css" rel="stylesheet" type="text/css" />
+<link href="${ctx}/static/css/stressing/list1.css" rel="stylesheet" type="text/css" />
 
     <title>附件详细信息</title>
 </head>

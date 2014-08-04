@@ -17,6 +17,7 @@ import org.hibernate.annotations.DynamicInsert;
 import org.hibernate.annotations.NotFound;
 import org.hibernate.annotations.NotFoundAction;
 
+import com.baihui.hxtd.soa.base.FieldInfo;
 import com.baihui.hxtd.soa.common.entity.PCAS;
 import com.baihui.hxtd.soa.project.entity.Supplier;
 import com.baihui.hxtd.soa.system.entity.Dictionary;
@@ -49,12 +50,14 @@ public class Contact implements Serializable {
 	}
 
 	/** 联系人ID */
+	@FieldInfo(desc = "主键Id")
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	@Column(name = "ID")
 	private Long id;
 
 	/** 关联客户ID */
+	@FieldInfo(desc = "客户")
 	@JsonIgnore
 	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "ACCOUNT_ID")
@@ -62,6 +65,7 @@ public class Contact implements Serializable {
 	private Customer customer;
 	
 	/** 关联供应商ID */
+	@FieldInfo(desc = "供应商")
 	@JsonIgnore
 	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "SUPPLIER_ID")
@@ -69,6 +73,7 @@ public class Contact implements Serializable {
     private Supplier supplier;
 
 	/** 联系人所有者 */
+	@FieldInfo(desc = "联系人所有者")
 	@JsonIgnore
 	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "OWNER")
@@ -76,74 +81,90 @@ public class Contact implements Serializable {
 	private User owner;
 		
 	/** 线索来源 */
+	@FieldInfo(desc = "线索来源")
 	@JoinColumn(name = "SOURCE_DIC")
 	@ManyToOne(fetch = FetchType.LAZY)
 	@NotFound(action = NotFoundAction.IGNORE)
 	private Dictionary source;
 
 	/** 联系人名称 */
+	@FieldInfo(desc = "联系人")
 	@Column(name = "NAME")
 	private String name;
 
 	/** 联系人所在部门 */
+	@FieldInfo(desc = "联系人所在部门 ")
 	@Column(name = "DEPARTMENT")
 	private String department;
 
 	/** 联系人职位 */
+	@FieldInfo(desc = "联系人职位 ")
 	@Column(name = "POSITION")
 	private String position;
 
 	/** 联系人电话号码(固定电话) */
+	@FieldInfo(desc = "固定电话")
 	@Column(name = "PHONE")
 	private String phone;
 
 	/** 联系人手机号码 */
+	@FieldInfo(desc = "手机号码")
 	@Column(name = "MOBILE")
 	private String mobile;
 
 	/** 联系人邮箱 */
+	@FieldInfo(desc = "邮箱")
 	@Column(name = "EMAIL")
 	private String email;
 
 	/** 联系人传真 */
+	@FieldInfo(desc = "传真")
 	@Column(name = "FAX")
 	private String fax;
 
 	/** 联系人邮编 */
+	@FieldInfo(desc = "邮编")
 	@Column(name = "POST_CODE")
 	private String postCode;
 
 	/** 联系人所在省 */
+	@FieldInfo(desc = "省份")
 	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "PROVINCE")
 	@NotFound(action = NotFoundAction.IGNORE)
 	private PCAS province;
 
 	/** 联系人所在市 */
+	@FieldInfo(desc = "城市")
 	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "CITY")
 	@NotFound(action = NotFoundAction.IGNORE)
 	private PCAS city;
 
 	/** 联系人县 */
+	@FieldInfo(desc = "县区")
 	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "COUNTY")
 	@NotFound(action = NotFoundAction.IGNORE)
 	private PCAS county;
 
 	/** 联系人详细地址 */
+	@FieldInfo(desc = "详细地址")
 	@Column(name = "ADDRESS")
 	private String address;
 
 	/** 备注 */
+	@FieldInfo(desc = "备注")
 	@Column(name = "REMARK")
 	private String remark;
 	
 	/**删除标记*/
+	@FieldInfo(desc = "删除标记")
 	@Column(name = "IS_DELETED")
 	private Boolean isDeleted = false;
 
 	/** 创建者 */
+	@FieldInfo(desc = "创建者")
 	@JsonIgnore
 	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "CREATOR_ID", updatable = false)
@@ -151,17 +172,20 @@ public class Contact implements Serializable {
 	private User creator;
 
 	/** 创建时间 */
+	@FieldInfo(desc = "创建时间")
 	@JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss", timezone = "GMT+08:00")
 	@Column(name = "CREATED_TIME", updatable = false)
 	private Date createdTime;
 	
 	/** 最后修改者 */
+	@FieldInfo(desc = "最后修改者")
 	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "MODIFIER_ID")
 	@NotFound(action = NotFoundAction.IGNORE)
 	private User modifier;
 
 	/** 最后修改时间 */
+	@FieldInfo(desc = "最后修改时间")
 	@JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss", timezone = "GMT+08:00")
 	@Column(name = "MODIFIED_TIME")
 	private Date modifiedTime;

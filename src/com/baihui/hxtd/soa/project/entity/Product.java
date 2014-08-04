@@ -14,6 +14,7 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
+import com.baihui.hxtd.soa.base.FieldInfo;
 import com.baihui.hxtd.soa.system.entity.Dictionary;
 import com.baihui.hxtd.soa.system.entity.User;
 import com.fasterxml.jackson.annotation.JsonFormat;
@@ -40,6 +41,7 @@ public class Product implements Serializable{
 	/**
 	 * 主键ID
 	 */
+	@FieldInfo(desc = "主键ID")
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	@Column(name = "ID")
@@ -47,33 +49,39 @@ public class Product implements Serializable{
 	/**
 	 * 项目
 	 */
+	@FieldInfo(desc = "项目名称")
 	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "PROJECT_ID")
 	private Project project;
 	/**
 	 * 产品名称
 	 */
+	@FieldInfo(desc = "产品名称")
 	@Column(name = "NAME")
 	private String name;
 	/**
 	 * 产品编码
 	 */
+	@FieldInfo(desc = "产品编码")
 	@Column(name = "CODE")
 	private String code;
 	/**
 	 * 产品类型
 	 */
+	@FieldInfo(desc = "产品类型")
 	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "TYPE_DIC")
 	private Dictionary type;
 	/**
 	 * 出售金额
 	 */
+	@FieldInfo(desc = "出售金额")
 	@Column(name = "START_SELL_MONEY")
 	private BigDecimal sellMoney;
 	/**
 	 * 利率
 	 */
+	@FieldInfo(desc = "收益率")
 	@Column(name = "ERNING_RATE")
 	private BigDecimal rate;
 	/**
@@ -84,39 +92,46 @@ public class Product implements Serializable{
 	/**
 	 * 预期收益
 	 */
+	@FieldInfo(desc = "预期收益")
 	@Column(name = "EXPECT_PROFIT")
 	private BigDecimal expectProfit;
 	/**
 	 * 销售期限
 	 */
+	@FieldInfo(desc = "销售期限")
 	@Column(name = "SALE_LIMIT")
 	private Long saleLimit;
 	/**
 	 * 销售单位
 	 */
+	@FieldInfo(desc = "销售单位")
 	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "SALE_UNIT_DIC")
 	private Dictionary saleUnit;
 	/**
 	 * 销售开始日期
 	 */
+	@FieldInfo(desc = "销售开始日期")
 	@JsonFormat(pattern = "yyyy-MM-dd", timezone = "GMT+08:00")
 	@Column(name = "SALE_BEGIN_TIME")
 	private Date saleBeginTime;
 	/**
 	 * 销售结束日期
 	 */
+	@FieldInfo(desc = "销售结束日期")
 	@JsonFormat(pattern = "yyyy-MM-dd", timezone = "GMT+08:00")
 	@Column(name = "SALE_END_TIME")
 	private Date saleEndTime;
 	/**
 	 * 提前赎回率
 	 */
+	@FieldInfo(desc = "赎回赔率")
 	@Column(name = "ADVANCE_REDEEM_RATE")
 	private BigDecimal redeemRate;
 	/**
 	 * 提前赎回公式
 	 */
+	@FieldInfo(desc = "赎回公式")
 	@Column(name = "ADVANCE_REDEEM_FORMULA")
 	private String redeemFormula;
 	/**
@@ -127,35 +142,41 @@ public class Product implements Serializable{
 	/**
 	 * 备注
 	 */
+	@FieldInfo(desc = "备注")
 	@Column(name = "REMARK", length = 512)
 	private String remark;
 	/**
 	 * 标记删除
 	 */
+	@FieldInfo(desc = "标记删除")
 	@Column(name = "IS_DELETED")
 	private Boolean isDeleted = false;
 
 	/**
 	 * 创建者
 	 */
+	@FieldInfo(desc = "创建者")
 	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "CREATOR_ID", updatable = false)
 	private User creator;
 	/**
 	 * 创建时间
 	 */
+	@FieldInfo(desc = "创建时间")
 	@JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss", timezone = "GMT+08:00")
 	@Column(name = "CREATED_TIME", updatable = false)
 	private Date createdTime;
 	/**
 	 * 最后修改者
 	 */
+	@FieldInfo(desc = "最后修改者")
 	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "MODIFIER_ID")
 	private User modifier;
 	/**
 	 * 最后修改时间
 	 */
+	@FieldInfo(desc = "最后修改时间")
 	@JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss", timezone = "GMT+08:00")
 	@Column(name = "MODIFIED_TIME")
 	private Date modifiedTime;

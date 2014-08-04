@@ -263,12 +263,11 @@ public class RoleService {
      * @return
      */
     @Transactional
-	public Set<Function> findFunByRoleId(Long roleId) {
-    	String hql = "select role from Role role" +
-        " left join fetch role.functions" +
-        " where role.id=?";
-    	Role role=roleDao.findUnique(hql, roleId);
-    	return role.getFunctions();
+	public List<Long> findFunByRoleId(Long roleId) {
+    	 String hql = "select function.id from Function function inner join function.roles role where role.id=?";
+         List<Long> functionIds = roleDao.find(hql, roleId);
+         return functionIds;
+
 	}
     
     /**
@@ -277,12 +276,10 @@ public class RoleService {
      * @return
      */
     @Transactional
-	public Set<Component> findComByRoleId(Long roleId) {
-    	String hql = "select role from Role role" +
-        " left join fetch role.components" +
-        " where role.id=?";
-    	Role role=roleDao.findUnique(hql, roleId);
-    	return role.getComponents();
+	public List<Long> findComByRoleId(Long roleId) {
+    	String hql = "select component.id from Component component inner join component.roles role where role.id=?";
+        List<Long> componentIds = roleDao.find(hql, roleId);
+        return componentIds;
 	}
 	
 

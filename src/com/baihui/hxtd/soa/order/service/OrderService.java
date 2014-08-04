@@ -305,20 +305,24 @@ public class OrderService {
     /**
      * 查找已完成的订单
      * 已完成的含义：
-     * 1.财务状态为“已收款”
-     * 2.订单状态为“审核通过”
+     * 1.财务状态为“已收款/未打款/已打款”
+     * 2.订单状态为“审核通过/提前赎回/到期赎回”
      * 3.时间范围通过“生效时间”筛选
      *
-     * @param page
+     * @param page      分页参数
+     * @param user      订单所有者
      * @param timeRange 时间范围
      * @return 订单列表
      */
-    public HibernatePage<Order> findFinished(HibernatePage<Order> page, Range<Date> timeRange) {
+    public HibernatePage<Order> findFinished(HibernatePage<Order> page, User user, Range<Date> timeRange) {
         String hql = "select entity from Order entity" +
-                " where entity.payStatus.value=?" +
-                " and entity.orderStatus.value=?" +
+                " where entity.orderStatus.value in ('%s','%s','%s')" +
+                " and entity.payStatus.value in ('%s','%s','%s')" +
+                " and entity.owner=?" +
                 " and entity.effectiveTime between ? and ?";
-        orderDao.findPage(page, hql, DictionaryConstant.ORDER_PAYSTATUS, DictionaryConstant.ORDER_STATUS, timeRange.getMinimum(), timeRange.getMaximum());
+        hql = String.format(hql, DictionaryConstant.ORDER_STATUS_NODE_FINIAL, DictionaryConstant.ORDER_STATUS_ADVANCE_REDEMPTION, DictionaryConstant.ORDER_STATUS_FINISH_REDEMPTION,
+                DictionaryConstant.ORDER_PAY_2_HXTD_STATUS_ALL, DictionaryConstant.ORDER_PAY_2_CUSTOMER_STATUS_NONE, DictionaryConstant.ORDER_PAY_CUSTOMER_HXTD_STATUS_ALL);
+        orderDao.findPage(page, hql, user, timeRange.getMinimum(), timeRange.getMaximum());
         return page;
     }
 
@@ -329,11 +333,13 @@ public class OrderService {
      * 统计每天或每月已完成的订单数
      * 1.时间范围为一个月时，按天统计；为多个月时，按月统计
      *
+     * @param user      订单所有者
      * @param timeRange 时间范围
      * @return json字符串
-     * @see #findFinished(com.baihui.hxtd.soa.base.orm.hibernate.HibernatePage, org.apache.commons.lang3.Range) 已完成的含义
+     * @see #findFinished(com.baihui.hxtd.soa.base.orm.hibernate.HibernatePage, com.baihui.hxtd.soa.system.entity.User, org.apache.commons.lang3.Range) 已完成的含义
      */
-    public String statisFinished(Range<Date> timeRange) {
+    @SuppressWarnings("unchecked")
+    public String statisFinished(User user, Range<Date> timeRange) {
         List<AxisInfo> axisInfos;
         String function;
 
@@ -355,14 +361,16 @@ public class OrderService {
             axisInfos = ReportService.dateValues(timeRange.getMinimum(), timeRange.getMaximum(), Calendar.MONTH);
         }
 
-        String hql = "select %s(order.affectiveTime),count(order.id) from Order order" +
-                " where order.payStatus.value=?" +
-                " and order.orderStatus.value=?" +
-                " and order.effectiveTime between ? and ?" +
-                " group by %s(order.affectiveTime)";
-        hql = String.format(hql, function, function);
-        List rows = orderDao.find(hql, DictionaryConstant.ORDER_PAYSTATUS, DictionaryConstant.ORDER_STATUS, timeRange.getMinimum(), timeRange.getMaximum());
-        List<Number> numbers = ChartUtil.toTable(rows, axisInfos, Long.class);
+        String hql = "select %s(entity.effectiveTime),count(entity.id) from Order entity" +
+                " where entity.orderStatus.value in ('%s','%s','%s')" +
+                " and entity.payStatus.value in ('%s','%s','%s')" +
+                " and entity.owner=?" +
+                " and entity.effectiveTime between ? and ?" +
+                " group by %s(entity.effectiveTime)";
+        hql = String.format(hql, function, DictionaryConstant.ORDER_STATUS_NODE_FINIAL, DictionaryConstant.ORDER_STATUS_ADVANCE_REDEMPTION, DictionaryConstant.ORDER_STATUS_FINISH_REDEMPTION,
+                DictionaryConstant.ORDER_PAY_2_HXTD_STATUS_ALL, DictionaryConstant.ORDER_PAY_2_CUSTOMER_STATUS_NONE, DictionaryConstant.ORDER_PAY_CUSTOMER_HXTD_STATUS_ALL, function);
+        List rows = orderDao.find(hql, user, timeRange.getMinimum(), timeRange.getMaximum());
+        List numbers = ChartUtil.toTable(rows, axisInfos, Long.class);
 
         ReportChart reportChart = new ReportChart();
         reportChart.setTitle("订单完成数目");
@@ -373,6 +381,13 @@ public class OrderService {
         reportChart.setxAxisLabels(descs);
         reportChart.setData(new ArrayList<List<Number>>());
         reportChart.getData().add(numbers);
+        numbers = new ArrayList(numbers);
+        Collections.sort(numbers);
+        reportChart.getyAxisRange().setMin((Number) numbers.get(0));
+        reportChart.getyAxisRange().setMax((Number) numbers.get(numbers.size() - 1));
+        reportChart.setyAxisTitle("总计");
+        reportChart.setzAxisLabels(new ArrayList<String>());
+        reportChart.getzAxisLabels().add("数值");
 
         return chartGenerate.generateChart(reportChart);
     }
@@ -380,16 +395,20 @@ public class OrderService {
     /**
      * 统计已完成的订单数目和总金额
      *
-     * @param timeRange
-     * @return
-     * @see #findFinished(com.baihui.hxtd.soa.base.orm.hibernate.HibernatePage, org.apache.commons.lang3.Range) 已完成的含义
+     * @param user      订单所有者
+     * @param timeRange 时间范围
+     * @return 订单数目和总金额，二维数组
+     * @see #findFinished(com.baihui.hxtd.soa.base.orm.hibernate.HibernatePage, com.baihui.hxtd.soa.system.entity.User, org.apache.commons.lang3.Range) 已完成的含义
      */
-    public Object[] statisFinishedCountMoney(Range<Date> timeRange) {
-        String hql = "select count(order.id),sum(order.purchaseMoney) from Order order" +
-                " where order.payStatus.value=?" +
-                " and order.orderStatus.value=?" +
-                " and order.effectiveTime between ? and ?";
-        Object[] cells = orderDao.findUnique(hql, DictionaryConstant.ORDER_PAYSTATUS, DictionaryConstant.ORDER_STATUS, timeRange.getMinimum(), timeRange.getMaximum());
+    public Object[] statisFinishedCountMoney(User user, Range<Date> timeRange) {
+        String hql = "select count(entity.id),sum(entity.purchaseMoney) from Order entity" +
+                " where entity.orderStatus.value in ('%s','%s','%s')" +
+                " and entity.payStatus.value in ('%s','%s','%s')" +
+                " and entity.owner=?" +
+                " and entity.effectiveTime between ? and ?";
+        hql = String.format(hql, DictionaryConstant.ORDER_STATUS_NODE_FINIAL, DictionaryConstant.ORDER_STATUS_ADVANCE_REDEMPTION, DictionaryConstant.ORDER_STATUS_FINISH_REDEMPTION,
+                DictionaryConstant.ORDER_PAY_2_HXTD_STATUS_ALL, DictionaryConstant.ORDER_PAY_2_CUSTOMER_STATUS_NONE, DictionaryConstant.ORDER_PAY_CUSTOMER_HXTD_STATUS_ALL);
+        Object[] cells = orderDao.findUnique(hql, user, timeRange.getMinimum(), timeRange.getMaximum());
         return cells;
     }
 

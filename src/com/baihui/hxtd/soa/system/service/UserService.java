@@ -41,9 +41,9 @@ public class UserService {
     private Logger logger = LoggerFactory.getLogger(UserService.class);
 
     @Resource
-	private OrganizationDao organizationDao;
+    private OrganizationDao organizationDao;
 
-	//    @Value("${export.counts}")
+    //    @Value("${export.counts}")
     private Integer exportCounts = 3000;
 
 
@@ -158,17 +158,18 @@ public class UserService {
         }
 
         List<Long> userIds = ReflectionUtils.invokeGetterMethod(page.getResult(), "id");
-        String hql = "select user.id,role from User user inner join user.roles role where user.id in(:id) order by user.id,role";
+        String hql = "select user.id,role.name from User user inner join user.roles role where user.id in(:id) order by user.id,role";
         List roles = userDao.createQuery(hql).setParameterList("id", userIds).list();
         Map<Long, Set<Role>> roleMap = new HashMap<Long, Set<Role>>();
         for (int i = 0; i < roles.size(); i++) {
             Object[] userRole = (Object[]) roles.get(i);
             Long userId = (Long) userRole[0];
-            Role role = (Role) userRole[1];
+            String role = (String) userRole[1];
             if (!roleMap.containsKey(userId)) {
                 roleMap.put(userId, new LinkedHashSet<Role>());
             }
-            roleMap.get(userId).add(role);
+
+            roleMap.get(userId).add(new Role(role));
         }
 
         for (int i = 0; i < page.getResult().size(); i++) {

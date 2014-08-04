@@ -99,6 +99,10 @@ public class Role implements Serializable, Comparable<Role>, Initialized {
         this.id = id;
     }
 
+    public Role(String name) {
+        this.name = name;
+    }
+
     @Override
     public boolean equals(Object obj) {
         return obj == null ? false : (getId().equals(((Role) obj).getId()));

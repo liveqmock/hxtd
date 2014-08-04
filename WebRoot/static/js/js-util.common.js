@@ -141,8 +141,7 @@ Grid.prototype = {
         this.btnExport = this.operatebar.find(options.exportSelector);
 
         this.grid = this.container.find(options.gridSelector);
-    	options.gridSelector == ".listcontainer .grid" && (this.grid = $(options.gridSelector)); //lihua
-    	this.grid.length == 0 && (this.grid = this.container.find("table:last"));
+        this.grid.length == 0 && (this.grid = this.container.find("table:last"));
 
         var forform = this.grid.attr(options.gridForForm);
         forform && (this.form = this.container.find(forform));
@@ -193,9 +192,9 @@ Grid.prototype = {
         $(document).keydown(function (e) {
             var key = (e.keyCode) || (e.which) || (e.charCode);
             if (key == 13) {
-                if ("dialogCancel" == $(e.target).attr("id")){
-                	return;	
-                }else if(_this.pageNo && _this.pageNo[0] == e.srcElement ) {
+                if ("dialogCancel" == $(e.target).attr("id")) {
+                    return;
+                } else if (_this.pageNo && _this.pageNo[0] == e.srcElement) {
                     _this.pageAnyOne.trigger("click");
                 } else {
                     _this.btnQuery.trigger("click");
@@ -621,7 +620,7 @@ Grid.prototype = {
                 var page = result.result;
                 _this.resetCheckAll();
                 _this.renderList(page);
-                $(_this.grid).trigger("pagination", [page]);
+                _this.options.paginationActive && $(_this.grid).trigger("pagination", [page]);
             }, null, params]
         }, options);
         RcmsAjax.ajax.apply(RcmsAjax, options.ajaxArgs);
@@ -679,7 +678,10 @@ Grid.prototype = {
     renderList: function (data) {
         var options = this.options;
         if (!this.hasData(data)) {
-            var resultTemplate = "<tr><td colspan='{$T.colspan}' align='center'><div class='allnone'></div></td></tr>";
+            var resultTemplate = "<div class='allnone'></div>";
+            if (this.result.is("tbody")) {
+                resultTemplate = "<tr><td colspan='{$T.colspan}' align='center'><div class='allnone'></div></td></tr>";
+            }
             var data = {colspan: this.header.children().length};
             this.result.setTemplate(resultTemplate).processTemplate(data);
         } else {

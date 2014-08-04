@@ -115,7 +115,7 @@ public class ReportChart {
         this.zAxisTitle = zAxisTitle;
     }
 
-    public List getzAxisLabels() {
+    public List<String> getzAxisLabels() {
         return zAxisLabels;
     }
 

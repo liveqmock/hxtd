@@ -65,9 +65,7 @@ function showSupplier(id){ //查看供应商信息
 			<input type="text" name="search_GTE_financeCycle" 
 				class="text_input2"/>-<input type="text" name="search_LTE_financeCycle" class="text_input2"/>
 		</td>
-		<td class="f14 namewidth1" align="right">
-			收益率%：
-		</td>
+		<td class="f14 namewidth1" align="right">收益率（%）：</td>
 		<td class="f14 namewidth2" align="left">
 			<input type="text" name="search_GTE_er" class="text_input2"/>-<input type="text" name="search_LTE_er" class="text_input2"/>
 		</td>
@@ -82,7 +80,7 @@ function showSupplier(id){ //查看供应商信息
 				</c:forEach>
 			</select>
 		</td>
-		<td class="f14 namewidth1" align="right">赎回率%：</td>
+		<td class="f14 namewidth1" align="right">赎回赔率（%）：</td>
 		<td class="f14 namewidth2" align="left">
 			<input type="text" name="search_GTE_aer" class="text_input2"/>-<input class="text_input2" name="search_LTE_aer" type="text"/>
 		</td>

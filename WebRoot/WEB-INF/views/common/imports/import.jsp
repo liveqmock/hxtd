@@ -247,7 +247,10 @@
 			
 			//校验是否选择上传文件类型
 			function checkType() {
+				//模块内容不能为空校验
 				var moduleName = $("#moduleName option:selected").val();
+				//重复数据标识列不能为空校验
+				var checkWayCheckbox = $("input[name=checkWay]:checked");
 				if (moduleName == "") {
 					showMsg({successFlag:false,message:'请选择一个模块名称！'});
 					setTimeout(_hide(),RcmsAjax.global.showTime);
@@ -255,10 +258,17 @@
 					hideLoading();
 					return false;
 				} else {
-					$("#repeatData").text("");
-					return true;
+					if (checkWayCheckbox.length == 0) {
+						showMsg({successFlag:false,message:'请至少选择一个重复数据标识列！'});
+						setTimeout(_hide(),RcmsAjax.global.showTime);
+						$("#repeatData").text("请至少选择一个重复数据标识列！");
+						hideLoading();
+						return false;
+					}else {
+						$("#repeatData").text("");
+						return true;
+					}
 				}
-				
 			}
 			
 			function showLoading(){

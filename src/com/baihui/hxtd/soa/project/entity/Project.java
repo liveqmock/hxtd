@@ -13,6 +13,7 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
+import com.baihui.hxtd.soa.base.FieldInfo;
 import com.baihui.hxtd.soa.system.entity.Dictionary;
 import com.baihui.hxtd.soa.system.entity.User;
 import com.fasterxml.jackson.annotation.JsonFormat;
@@ -33,101 +34,119 @@ public class Project {
 	/**
 	 * 主键ID
 	 */
+	@FieldInfo(desc = "主键ID")
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	@Column(name = "ID")
 	private Long id;
 	/**
-	 *  供应商
+	 * 供应商
 	 */
+	@FieldInfo(desc = "供应商名称")
 	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name="SUPPLIER_ID")
 	private Supplier supplier;
 	/**
 	 * 项目编号
 	 */
+	@FieldInfo(desc = "项目编号")
 	@Column(name="CODE")
 	private String code;
 	/**
-	 *  项目名称
+	 * 项目名称
 	 */
+	@FieldInfo(desc = "项目名称")
 	@Column(name="NAME")
 	private String name;
 	/**
-	 *   融资额度
+	 * 融资额度
 	 */
+	@FieldInfo(desc = "融资额度")
 	@Column(name="FINANCE_LIMIT")
 	private Float financeLimit;
 	/**
 	 * 开始时间
 	 */
+	@FieldInfo(desc = "开始时间")
 	@JsonFormat(pattern = "yyyy-MM-dd", timezone = "GMT+08:00")
 	@Column(name="BEGIN_TIME")
 	private Date beginTime;
 	/**
 	 * 融资前周期（天）
 	 */
+	@FieldInfo(desc = "融资前周期（天）")
 	@Column(name="BEFORE_FINANCE_CYCLE")
 	private Integer beforeFinanceCycle;
 	/**
 	 * 融资周期
 	 */
+	@FieldInfo(desc = "融资周期")
 	@Column(name="FINANCE_CYCLE")
 	private Integer financeCycle;
 	/**
 	 * 开放期 
 	 */
+	@FieldInfo(desc = "开放期")
 	@Column(name="OPEN_TIME")
 	@JsonFormat(pattern = "yyyy-MM-dd", timezone = "GMT+08:00")
 	private Date openTime;
 	/**
 	 * 截止时间
 	 */
+	@FieldInfo(desc = "截止时间")
 	@JsonFormat(pattern = "yyyy-MM-dd", timezone = "GMT+08:00")
 	@Column(name="DENDLINE_TIME")
 	private Date dendlineTime;
 	/**
 	 * 收益率
 	 */
+	@FieldInfo(desc = "收益率")
 	@Column(name="EARNING_RATE")
 	private Float er;
 	/**
 	 * 提前赎回率
 	 */
+	@FieldInfo(desc = "赎回赔率")
 	@Column(name="ADVANCE_REDEEM_RATE")
 	private Float aer;
 	/**
 	 * 支付方式
 	 */
+	@FieldInfo(desc = "支付方式")
 	@ManyToOne(fetch=FetchType.LAZY)
 	@JoinColumn(name="PAY_TYPE")
 	private Dictionary payType;
 	/**
 	 * 备注
 	 */
+	@FieldInfo(desc = "备注")
 	@Column(name = "REMARK", length = 512)
 	private String remark;
 	/**
 	 * 创建者
 	 */
+	@FieldInfo(desc = "创建者")
 	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "CREATOR_ID", updatable = false)
 	private User creator;
 	/**
 	 * 创建时间
 	 */
+	@FieldInfo(desc = "创建时间")
 	@JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss", timezone = "GMT+08:00")
 	@Column(name = "CREATED_TIME")
 	private Date createdTime;
 	/**
 	 * 最后修改者
 	 */
+	@FieldInfo(desc = "最后修改者")
 	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "MODIFIER_ID")
 	private User modifier;
 	/**
 	 * 最后修改时间
 	 */
+	@FieldInfo(desc = "最后修改时间")
 	@JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss", timezone = "GMT+08:00")
 	@Column(name = "MODIFIED_TIME", nullable = false)
 	private Date modifiedTime;

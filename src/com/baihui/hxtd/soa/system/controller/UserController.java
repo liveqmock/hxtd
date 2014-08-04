@@ -358,21 +358,20 @@ public class UserController extends CommonController<User> {
     @ResponseBody
     @RequestMapping(value = "/toAuthorizationPage.do",params = "TYPE=show")
     public String toAuthorization(Long roleId) {
-        roleService.findFunByRoleId(roleId);
-        Set<Component> comIds=roleService.findComByRoleId(roleId);
-//        StringBuffer sb = new StringBuffer("");
-//        StringBuffer comsb = new StringBuffer("");
-//        for (Function function : funIds) {
-//            sb.append(function.getId()+",");
-//        }
-//        for (Component component : comIds) {
-//        	comsb.append(component.getId()+",");
-//        }
-//        JsonDto jsonDto = new JsonDto();
-//        jsonDto.setSuccessFlag(true);
-//        jsonDto.setMessage(sb.toString()+"|"+comsb.toString());
-//        return jsonDto.toString();
-        return "";
+    	List<Long> funIds=roleService.findFunByRoleId(roleId);
+    	List<Long> comIds=roleService.findComByRoleId(roleId);
+        StringBuffer sb = new StringBuffer("");
+        StringBuffer comsb = new StringBuffer("");
+        for (Long function : funIds) {
+            sb.append(function+",");
+        }
+        for (Long component : comIds) {
+        	comsb.append(component+",");
+        }
+        JsonDto jsonDto = new JsonDto();
+        jsonDto.setSuccessFlag(true);
+        jsonDto.setMessage(sb.toString()+"|"+comsb.toString());
+        return jsonDto.toString();
     }
 
     /**

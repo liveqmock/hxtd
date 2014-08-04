@@ -36,54 +36,75 @@
             $C.bindCheckAll($menu1, "div.menu1", ".function:checkbox");
             $C.bindCheckAll($menu1, "div.menus1", "a.menu2", "click");
             $C.tab();
-
-            $("#data-bind").data("data-bind",[]);
-
+            var t=$("#fixP").offset().top;
+            var w=$("#fixP").width();
+            var h=$("#fixP").height();
+            $("#fly").css('top',t);
+            $("#fly").css('width',w);
+           // $("#fly").css('height',h);
         });
+        function showAll(){
+        	//1.清空全部功能
+        	$('input[name="functionId"]').each(function(){
+        		$(this).attr("checked",false);
+        	});
+        	//2.获取所有选中的角色
+        	var checked=[];
+        	$('input[name="roleId"]:checked').each(function(){
+				var roleId = $(this).val();
+				show(roleId);
+			});
+        }
         function show(roleId){
-          	RcmsAjax.ajaxNoMsg("${ctx}/system/user/toAuthorizationPage.do?TYPE=show&roleId="+roleId, function (data) {
-          	var ids=data.message.split('|');
-          	var funIds=ids[0].split(',');
+	          	RcmsAjax.ajaxNoMsg("${ctx}/system/user/toAuthorizationPage.do?TYPE=show&roleId="+roleId, function (data) {
+        	    var ids=data.message.split('|');
+        	    selectId(ids);
+				});
+        	
+        function selectId(ids){
+        	var funIds=ids[0].split(',');
           	var comIds=ids[1].split(',');
 			$('input[name="functionId"]').each(function(){
-				for(i=0;i<funIds.length;i++){
-   					if(funIds[i]==	$(this).val()){
-   						if(roleId==$(this).attr("data-id")){
-   							$(this).attr("checked",false);
-   							$(this).removeAttr("disabled");
-   							$(this).attr("data-id","");
-   						}else{
-   							$(this).attr("checked",true);
-   							$(this).removeAttr("disabled");
-   							$(this).attr("data-id",roleId);
-   						}
-   					}
-   					}
-  					});
+				if($.inArray($(this).val(),funIds)>0){
+					    $(this).attr("checked",true);
+					}else{
+						$(this).attr("checked",false);
+					}
+  				});
 			$('input[name="componentId"]').each(function(){
-				for(i=0;i<comIds.length;i++){
-   					if(funIds[i]==	$(this).val()){
-   					if(roleId==$(this).attr("data-id")){
-   							$(this).attr("checked",false);
-   							$(this).removeAttr("disabled");
-   						}else{
-   							$(this).attr("checked",true);
-   							$(this).attr("data-id",roleId);
-   							$(this).removeAttr("disabled");
-   						}
-   					}
-   					}
+					if($.inArray($(this).val(),comIds)>0){
+						 $(this).attr("checked",true);
+					}else{
+						$(this).attr("checked",false);
+					}
   					});
-			});
-            }
+        	}  	
+        }
     </script>
 </head>
 <body>
-<div id="data-bind">data-bind</div>
 <form name="user" action="${ctx}${VR_FUNCTION.url}" method="post">
     <input type="hidden" name="id" value="${param.id}">
+    <div  class="right_fbg bg_c_f3f3f3 ml35 mr35 brall5">
+    	<h1 id="fixP" class="f14 ml20 mt20 pt10">角色列表</h1>
+            <div class="menus1">
+                <div class="clearfix w menu1">
+	                	<ul class="mb10 cb" style="overflow:hidden;">
+		                    <c:forEach items="${allRoles}" var="item" varStatus="status">
+		                        <li class="fl" style="width:16%;">
+		                            <label class="box size81 ${fn:contains(organizationInheritRoles,item)?" inherit-role":""}">
+		                                <input type="checkbox"  class="function" ${fn:contains(authorizationRoles,item)?"checked":""}/>
+		                                ${item.name}
+		                            </label>
+		                        </li>
+		                    </c:forEach>
+	                	</ul>
+                </div>
+            </div>
+            <div class="pt10"></div>
+    </div>
          <!-- 角色-->
-         <div class="right_fbg bg_c_f3f3f3 ml35 mr35 brall5">
+         <div id="fly" class="right_fbg bg_c_f3f3f3 ml35 mr35 brall5" style="position:fixed;">
          <h1 class="f14 ml20 mt20 pt10">角色列表</h1>
             <div class="menus1">
                 <div class="clearfix w menu1">
@@ -91,7 +112,7 @@
 		                    <c:forEach items="${allRoles}" var="item" varStatus="status">
 		                        <li class="fl" style="width:16%;">
 		                            <label class="box size81 ${fn:contains(organizationInheritRoles,item)?" inherit-role":""}">
-		                                <input onclick="show(${item.id});" type="checkbox" name="roleId" value="${item.id}" class="function" ${fn:contains(authorizationRoles,item)?"checked":""}/>
+		                                <input onclick="showAll();" type="checkbox" name="roleId" value="${item.id}" class="function" ${fn:contains(authorizationRoles,item)?"checked":""}/>
 		                                ${item.name}
 		                            </label>
 		                        </li>
@@ -109,21 +130,22 @@
        <b class="b2"></b>
        <b class="b3"></b>
        <b class="b4"></b>
-       <div class="ie_head" ><h1 class="f14 fbnone mt10 ml10 fl">功能</h1></div>
+       <div class="ie_head" ><h1 class="f14 fbnone mt10 ml10 fl">功能</h1></div>    
        </div>
-       <div class="bor_999notop">
+       <div class="bor_999notop"> 
                 <c:forEach items="${allMenus}" var="item" varStatus="status">
                 <c:choose>
                 <c:when test="${item.level==1}">
                     <div class="menus1">
                     <div class="clearfix bg_c_blue w menu1">
                         <a href="javascript:void(0)" class="fl mt5 mb5 ml5 allnoright block menu menu1"></a>
-                        <i class="vm block fl mt15 ml10">${item.name}</i>
+                        <i class="vm block fl mt15 ml10 tr">${item.name}</i>
                         <ul class="id_ul4 fr mt10 ">
                             <c:forEach items="${allFunctions[item.id]}" var="item">
-                                <li>
+                                <li align="left">
                                     <label class="box size51 ${fn:contains(allAuthorizationFunctions,item)?" inherit-function":""}">
-                                        <input type="checkbox" data-id="" name="functionId" value="${item.id}" class="function" ${fn:contains(authorizationFunctions,item)?"disabled='disabled' checked=checked":""}>
+                                        <input type="checkbox" name="functionId" value="${item.id}" 
+                                        class="function" ${fn:contains(authorizationFunctions,item)?" checked=checked":""}>
                                         ${item.name}
                                     </label>
                                 </li>
@@ -138,9 +160,10 @@
                     <i class="vm block fl mt5 ml10 tr">${item.name}</i>
 	                    <ul class="id_ul4 fr">
 	                        <c:forEach items="${allFunctions[item.id]}" var="item">
-	                            <li>
+	                            <li align="left">
 	                                <label class="box size51 ${fn:contains(allAuthorizationFunctions,item)?" inherit-function":""}">
-	                                    <input ${fn:contains(allAuthorizationFunctions,item)?"disabled='disabled' checked='checked'":""} type="checkbox" name="functionId" value="${item.id}" class="function funs" >${item.name}
+	                                    <input ${fn:contains(allAuthorizationFunctions,item)?" checked='checked'":""} type="checkbox" name="functionId" value="${item.id}" 
+	                                    class="function" >${item.name}
 	                                </label>
 	                            </li>
 	                        </c:forEach>
@@ -159,17 +182,18 @@
 			<b class="b4"></b>
 			<div class="ie_head" >
 			<h1 class="f14 fbnone mt10 ml10 fl">组件</h1>
+			</div>    
 			</div>
-			</div>
-			<div class="bor_999notop">
+			<div class="bor_999notop"> 
         	<div class="menus1">
                 <div class="clearfix w  menu1">
 	                <a href="javascript:void(0)" class="fl mt5 mb5 ml5 allright block menu menu1"></a>
             			<ul class="id_ul4 fl">
             			<c:forEach items="${allComponents}" var="item" varStatus="status">
-			                <li>
+			                <li align="left">
 			                    <label class="box size51 ${fn:contains(allAuthorizationComponents,item)?" inherit-component":""}">
-			                        <input ${fn:contains(allAuthorizationFunctions,item)?"disabled='disabled' checked='checked'":""} data-id="" type="checkbox" name="componentId" value="${item.id}" class="function" >${item.name}
+			                        <input ${fn:contains(allAuthorizationFunctions,item)?"checked='checked'":""} data-id="" type="checkbox" name="componentId" value="${item.id}" 
+			                        class="function" >${item.name}
 			                    </label>
 			                </li>
             			</c:forEach>

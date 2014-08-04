@@ -1,5 +1,6 @@
 package com.baihui.hxtd.soa.market.entity;
 
+import com.baihui.hxtd.soa.base.FieldInfo;
 import com.baihui.hxtd.soa.common.entity.FlowNode;
 import com.baihui.hxtd.soa.common.entity.IdFlowable;
 import com.baihui.hxtd.soa.system.entity.Dictionary;
@@ -26,63 +27,76 @@ public class MarketActivity implements Serializable, IdFlowable {
     }
 
     /** 主键Id */
+    @FieldInfo(desc = "主键Id")
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "ID")
     private Long id;
 
     /** 活动名称 */
+    @FieldInfo(desc = "活动名称")
     @Column(name = "NAME")
     private String name;
 
     /** 活动类型 */
+    @FieldInfo(desc = "活动类型")
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "TYPE_DIC")
     @NotFound(action = NotFoundAction.IGNORE)
     private Dictionary typeDic;
 
     /** 流程环节 */
+    @FieldInfo(desc = "流程环节")
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "FLOW_NODE_ID", updatable = false)
     private FlowNode flowNode;
 
     /** 活动状态 */
+    @FieldInfo(desc = "活动状态")
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "STATUS_DIC")
     @NotFound(action = NotFoundAction.IGNORE)
     private Dictionary statusDic;
 
     /** 开始日期 */
+    @FieldInfo(desc = "开始日期")
     @JsonFormat(pattern = "yyyy-MM-dd", timezone = "GMT+08:00")
     @Column(name = "BEGIN_DATE")
     private Date beginDate;
 
     /** 结束日期 */
+    @FieldInfo(desc = "结束日期")
     @JsonFormat(pattern = "yyyy-MM-dd", timezone = "GMT+08:00")
     @Column(name = "END_DATE")
     private Date endDate;
 
     /** 预计成本 */
+    @FieldInfo(desc = "预计成本")
     @Column(name = "PREDICT_COST")
     private double predictCost;
 
     /** 实际成本 */
+    @FieldInfo(desc = "实际成本")
     @Column(name = "REALITY_COST")
     private double realityCost;
 
     /** 活动次数 */
+    @FieldInfo(desc = "活动次数")
     @Column(name = "TIMES")
     private Long times;
 
     /** 预期效果 */
+    @FieldInfo(desc = "预期效果")
     @Column(name = "EXPECT_EFFECT")
     private String expectEffect;
 
     /** 期望成功率 */
+    @FieldInfo(desc = "期望成功率")
     @Column(name = "EXPECT_SUCCESS_RATE")
     private float expectSuccessRate;
 
     /** 活动发起人 */
+    @FieldInfo(desc = "活动发起人")
     @JsonIgnore
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "SPONSOR", updatable = false)
@@ -90,42 +104,50 @@ public class MarketActivity implements Serializable, IdFlowable {
     private User sponsor;
 
     /** 负责人 */
-//    @JsonIgnore
+    @FieldInfo(desc = "负责人")
+    //@JsonIgnore
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "BOSSHEAD")
     @NotFound(action = NotFoundAction.IGNORE)
     private User bossHead;
 
     /** 备注 */
+    @FieldInfo(desc = "备注")
     @Column(name = "REMARK")
     private String remark;
 
     /** 是否发送消息提醒 */
+    @FieldInfo(desc = "是否发送消息提醒")
     @Column(name = "IS_SEND", updatable = false)
     private Long isSendMsg;
 
     /** 删除标记 */
+    @FieldInfo(desc = "删除标记")
     @Column(name = "IS_DELETED")
     private Boolean isDeleted = false;
 
     /** 创建者 */
+    @FieldInfo(desc = "创建者")
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "CREATOR_ID", updatable = false)
     @NotFound(action = NotFoundAction.IGNORE)
     private User creator;
 
     /** 创建时间 */
+    @FieldInfo(desc = "创建时间")
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss", timezone = "GMT+08:00")
     @Column(name = "CREATED_TIME", updatable = false)
     private Date createdTime;
 
     /** 最后修改者 */
+    @FieldInfo(desc = "最后修改者")
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "MODIFIER_ID")
     @NotFound(action = NotFoundAction.IGNORE)
     private User modifier;
 
     /** 最后修改时间 */
+    @FieldInfo(desc = "最后修改时间")
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss", timezone = "GMT+08:00")
     @Column(name = "MODIFIED_TIME", updatable = false, insertable = false)
     private Date modifiedTime;

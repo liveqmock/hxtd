@@ -10,7 +10,7 @@ Target Server Type    : MYSQL
 Target Server Version : 50517
 File Encoding         : 65001
 
-Date: 2014-08-01 18:28:54
+Date: 2014-08-04 18:13:32
 */
 
 SET FOREIGN_KEY_CHECKS=0;
@@ -37,13 +37,27 @@ CREATE TABLE `attachment` (
   KEY `INDEX_CREATE_ID` (`CREATOR_ID`) USING BTREE,
   KEY `INDEX_MODIFIER_ID` (`MODIFIER_ID`) USING BTREE,
   KEY `INDEX_MODULE` (`MODULE_ID`) USING BTREE
-) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8 COMMENT='附件表';
+) ENGINE=InnoDB AUTO_INCREMENT=17 DEFAULT CHARSET=utf8 COMMENT='附件表';
 
 -- ----------------------------
 -- Records of attachment
 -- ----------------------------
 INSERT INTO attachment VALUES ('1', '322', '1', '303', 'adds.png', 'D:\\MyEclipse\\apache-tomcat-6.0.35\\webapps\\hxtd\\res\\20140731171015787.png', '0', '1', '2014-07-31 17:10:15', '1', '2014-07-31 17:10:15');
 INSERT INTO attachment VALUES ('2', '326', '1', '302', 'delubg.png', 'D:\\MyEclipse\\apache-tomcat-6.0.35\\webapps\\hxtd\\res\\2014073117200870.png', '0', '1', '2014-07-31 17:20:08', '1', '2014-07-31 17:20:08');
+INSERT INTO attachment VALUES ('3', '324', '1', '302', '6.jpg', 'D:\\java\\apache-tomcat-6.0.35-windows-x64\\apache-tomcat-6.0.35\\webapps\\hxtd\\res\\2014080119150017.jpg', '0', '1', '2014-08-01 19:15:00', '1', '2014-08-01 19:15:00');
+INSERT INTO attachment VALUES ('4', '323', '2', '303', '1.jpg', 'D:\\java\\apache-tomcat-6.0.35-windows-x64\\apache-tomcat-6.0.35\\webapps\\hxtd\\res\\20140801191541143.jpg', '1', '1', '2014-08-01 19:15:41', '1', '2014-08-01 19:19:47');
+INSERT INTO attachment VALUES ('5', '323', '2', '303', '6.jpg', 'D:\\java\\apache-tomcat-6.0.35-windows-x64\\apache-tomcat-6.0.35\\webapps\\hxtd\\res\\20140801192004828.jpg', '1', '1', '2014-08-01 19:20:04', '1', '2014-08-01 19:20:18');
+INSERT INTO attachment VALUES ('6', '323', '2', '303', '5.jpg', 'D:\\java\\apache-tomcat-6.0.35-windows-x64\\apache-tomcat-6.0.35\\webapps\\hxtd\\res\\2014080119202599.jpg', '1', '1', '2014-08-01 19:20:25', '1', '2014-08-01 19:20:49');
+INSERT INTO attachment VALUES ('7', '323', '2', '303', '1.jpg', 'D:\\java\\apache-tomcat-6.0.35-windows-x64\\apache-tomcat-6.0.35\\webapps\\hxtd\\res\\20140801192042882.jpg', '0', '1', '2014-08-01 19:20:42', '1', '2014-08-01 19:20:42');
+INSERT INTO attachment VALUES ('8', '323', '2', '302', '4.jpg', 'D:\\java\\apache-tomcat-6.0.35-windows-x64\\apache-tomcat-6.0.35\\webapps\\hxtd\\res\\20140801192102365.jpg', '0', '1', '2014-08-01 19:21:02', '1', '2014-08-01 19:21:02');
+INSERT INTO attachment VALUES ('9', '323', '2', '303', '1.jpg', 'D:\\java\\apache-tomcat-6.0.35-windows-x64\\apache-tomcat-6.0.35\\webapps\\hxtd\\res\\20140801192124433.jpg', '0', '1', '2014-08-01 19:21:24', '1', '2014-08-01 19:21:24');
+INSERT INTO attachment VALUES ('10', '323', '2', '303', '6.jpg', 'D:\\java\\apache-tomcat-6.0.35-windows-x64\\apache-tomcat-6.0.35\\webapps\\hxtd\\res\\20140801192137229.jpg', '0', '1', '2014-08-01 19:21:37', '1', '2014-08-01 19:21:37');
+INSERT INTO attachment VALUES ('11', '323', '2', '307', '1.jpg', 'D:\\java\\apache-tomcat-6.0.35-windows-x64\\apache-tomcat-6.0.35\\webapps\\hxtd\\res\\20140801192150421.jpg', '0', '1', '2014-08-01 19:21:50', '1', '2014-08-01 19:21:50');
+INSERT INTO attachment VALUES ('12', '323', '2', '304', '6.jpg', 'D:\\java\\apache-tomcat-6.0.35-windows-x64\\apache-tomcat-6.0.35\\webapps\\hxtd\\res\\20140801192217741.jpg', '0', '1', '2014-08-01 19:22:17', '1', '2014-08-01 19:22:17');
+INSERT INTO attachment VALUES ('13', '325', '2', '302', '1.jpg', 'D:\\java\\apache-tomcat-6.0.35-windows-x64\\apache-tomcat-6.0.35\\webapps\\hxtd\\res\\201408011922402.jpg', '0', '1', '2014-08-01 19:22:40', '1', '2014-08-01 19:22:40');
+INSERT INTO attachment VALUES ('14', '325', '2', '304', '2.jpg', 'D:\\java\\apache-tomcat-6.0.35-windows-x64\\apache-tomcat-6.0.35\\webapps\\hxtd\\res\\20140801192259972.jpg', '0', '1', '2014-08-01 19:22:59', '1', '2014-08-01 19:22:59');
+INSERT INTO attachment VALUES ('15', '322', '2', '305', '6.jpg', 'D:\\java\\apache-tomcat-6.0.35-windows-x64\\apache-tomcat-6.0.35\\webapps\\hxtd\\res\\20140801192315744.jpg', '0', '1', '2014-08-01 19:23:15', '1', '2014-08-01 19:23:15');
+INSERT INTO attachment VALUES ('16', '326', '1', '306', '4.jpg', 'D:\\java\\apache-tomcat-6.0.35-windows-x64\\apache-tomcat-6.0.35\\webapps\\hxtd\\res\\20140801192338733.jpg', '0', '1', '2014-08-01 19:23:38', '1', '2014-08-01 19:23:38');
 
 -- ----------------------------
 -- Table structure for `contact`
@@ -256,8 +270,8 @@ CREATE TABLE `lead` (
 -- ----------------------------
 -- Records of lead
 -- ----------------------------
-INSERT INTO lead VALUES ('1', '1', '百会8', '罗晓丽6', '研发中心8', '', '362350061@qq.com', '18600884611', '18600884611', '18600884611', '92', '102', null, '224', '1011400250354140', '142', '100001', '110000', '110100', '110108', '花园北路14号环星大厦D座二楼1', '无2', '0', '1', '2014-07-31 15:49:34', '1', '2014-07-31 15:49:34');
-INSERT INTO lead VALUES ('2', '1', '百会7', '罗晓丽4', '研发中心9', '', '362350061@qq.com', '18600884611', '18600884611', '18600884613', '92', '102', null, '224', '1011400250354140', '142', '100001', '110000', '110100', '110108', '花园北路14号环星大厦D座二楼1', '无2', '0', '1', '2014-07-31 15:49:33', '1', '2014-07-31 15:49:34');
+INSERT INTO lead VALUES ('1', '1', '百会8', '罗晓丽6', '研发中心8', '', '362350061@qq.com', '010-82147300', '010-82147300', '18600884611', '92', '102', null, '224', '1011400250354140', '142', '100001', '110000', '110100', '110108', '花园北路14号环星大厦D座二楼1', '无2', '1', '1', '2014-08-04 16:49:16', '1', '2014-08-04 16:49:41');
+INSERT INTO lead VALUES ('2', '1', '百会7', '罗晓丽4', '研发中心9', '', '362350061@qq.com', '010-82147300', '010-82147300', '18600884613', '92', '102', null, '224', '1011400250354140', '142', '100001', '110000', '110100', '110108', '花园北路14号环星大厦D座二楼1', '无2', '0', '1', '2014-08-04 16:03:06', '1', '2014-08-04 16:03:06');
 
 -- ----------------------------
 -- Table structure for `market_activity`
@@ -390,7 +404,7 @@ CREATE TABLE `order` (
   `PAY_MONEY` decimal(10,0) DEFAULT '0' COMMENT '支付金额',
   `PAY_STATUS` int(4) DEFAULT '0' COMMENT '付款状态',
   `ORDER_STATUS` int(4) DEFAULT NULL COMMENT '订单状态',
-  `EFFECTIVE_TIME` date DEFAULT NULL,
+  `EFFECTIVE_TIME` datetime DEFAULT NULL,
   PRIMARY KEY (`ID`),
   UNIQUE KEY `INDEX_CODE` (`CODE`) USING BTREE,
   KEY `INDEX_PRODUCT_ID` (`PRODUCT_ID`) USING BTREE,
@@ -406,12 +420,12 @@ CREATE TABLE `order` (
 -- ----------------------------
 -- Records of order
 -- ----------------------------
-INSERT INTO order VALUES ('9', '1', '1', '2014072704', '8', '263', '130.0000', '2', '15', 'a*2-2000', '10', '7', '10', '2014-09-07 00:00:00', '130w购买理财产品', '0', '7', '2014-07-27 23:18:08', '7', '2014-07-27 23:18:08', '0', '26', '34', null);
-INSERT INTO order VALUES ('10', '3', '1', '20140725001', '8', '262', '160.0000', '20', '36', 'a*(1-0.1)+1000', '10', '7', '8', '2014-10-12 00:00:00', '160w购买理财产品', '0', '10', '2014-07-27 23:37:46', '10', '2014-07-27 23:37:46', '0', '26', '35', null);
-INSERT INTO order VALUES ('11', '4', '1', '2014072701', '8', '262', '100.0000', '0', '1', 'a*0.5', '10', '7', '9', '2014-10-31 00:00:00', '', '0', '10', '2014-07-28 00:03:26', '10', '2014-07-28 00:03:26', '0', '26', '35', null);
-INSERT INTO order VALUES ('12', '1', '1', '20140727005', '8', '263', '200.0000', '2', '2', 'a*2-2000', '10', '8', '10', '2014-07-31 00:00:00', '', '0', '10', '2014-07-28 16:52:11', '10', '2014-07-28 16:52:11', '0', null, '346', null);
-INSERT INTO order VALUES ('13', '1', '1', '2014072503', '8', '263', '199.0000', '2', '2', 'a*2-2000', '10', '8', '10', '2014-07-31 00:00:00', '', '0', '10', '2014-07-28 00:12:01', '10', '2014-07-28 00:12:01', '0', '26', '37', null);
-INSERT INTO order VALUES ('14', '2', '1', '20140730001', '1', '262', '100.0000', '10', '12', 'a*0.1+1000', '1', '2', '3', '2014-07-31 00:00:00', '', '0', '1', '2014-07-30 16:43:12', '1', '2014-07-30 16:43:12', '0', '26', '37', null);
+INSERT INTO order VALUES ('9', '1', '1', '2014072704', '8', '263', '130.0000', '2', '15', 'a*2-2000', '1', '7', '10', '2014-09-07 00:00:00', '130w购买理财产品', '0', '7', '2014-07-27 23:18:08', '7', '2014-07-27 23:18:08', '0', '27', '34', '2014-08-04 00:00:00');
+INSERT INTO order VALUES ('10', '3', '1', '20140725001', '8', '262', '160.0000', '20', '36', 'a*(1-0.1)+1000', '1', '7', '8', '2014-10-12 00:00:00', '160w购买理财产品', '0', '10', '2014-07-27 23:37:46', '10', '2014-07-27 23:37:46', '0', '27', '35', '2014-08-04 00:00:00');
+INSERT INTO order VALUES ('11', '4', '1', '2014072701', '8', '262', '100.0000', '0', '1', 'a*0.5', '1', '7', '9', '2014-10-31 00:00:00', '', '0', '10', '2014-07-28 00:03:26', '10', '2014-07-28 00:03:26', '0', '27', '35', '2014-08-04 00:00:00');
+INSERT INTO order VALUES ('12', '1', '1', '20140727005', '8', '263', '200.0000', '2', '2', 'a*2-2000', '1', '8', '10', '2014-07-31 00:00:00', '', '0', '10', '2014-07-28 16:52:11', '10', '2014-07-28 16:52:11', '0', null, '346', '2014-08-04 00:00:00');
+INSERT INTO order VALUES ('13', '1', '1', '2014072503', '8', '263', '199.0000', '2', '2', 'a*2-2000', '1', '8', '10', '2014-07-31 00:00:00', '', '0', '10', '2014-07-28 00:12:01', '10', '2014-07-28 00:12:01', '0', '27', '37', '2014-08-04 00:00:00');
+INSERT INTO order VALUES ('14', '2', '1', '20140730001', '1', '262', '100.0000', '10', '12', 'a*0.1+1000', '1', '2', '3', '2014-07-31 00:00:00', '', '0', '1', '2014-07-30 16:43:12', '1', '2014-07-30 16:43:12', '0', '27', '37', '2014-08-04 00:00:00');
 
 -- ----------------------------
 -- Table structure for `payments`
@@ -4159,9 +4173,9 @@ CREATE TABLE `sales_target` (
 -- ----------------------------
 -- Records of sales_target
 -- ----------------------------
-INSERT INTO sales_target VALUES ('1', '3', '10.0000', '8月份销售目标', '1', '2014-07-31 17:36:47', '1', '2014-07-31 17:36:47', '2014-08-01 00:00:00', '2014-08-31 23:59:59', '0', '2014年 8月', '8月份销售目标');
-INSERT INTO sales_target VALUES ('2', '4', '10.0000', '8月份销售目标', '1', '2014-07-31 17:36:47', '1', '2014-07-31 17:36:47', '2014-08-01 00:00:00', '2014-08-31 23:59:59', '0', '2014年 8月', '8月份销售目标');
-INSERT INTO sales_target VALUES ('3', '2', '10.0000', '8月份销售目标', '1', '2014-07-31 17:36:47', '1', '2014-07-31 17:36:47', '2014-08-01 00:00:00', '2014-08-31 23:59:59', '0', '2014年 8月', '8月份销售目标');
+INSERT INTO sales_target VALUES ('1', '1', '10.0000', '8月份销售目标8月份销售目标8月份销售目标8月份销售目标8月份销售目标8月份销售目标8月份销售目标8月份销售目标8月份销售目标8月份销售目标8月份销售目标8月份销售目标8月份销售目标8月份销售目标8月份销售目标8月份销售目标8月份销售目标8月份销售目标8月份销售目标8月份销售目标8月份销售目标8月份销售目标8月份销售目标8月份销售目标8月份销售目标8月份销售目标8月份销售目标8月份销售目标8月份销售目标8月份销售目标8月份销售目标8月份销售目标8月份销售目标8月份销售目标8月份销售目标8月份销售目标8月份销售目标8月份销售目标8月份销售目标8月份销售目标8月份销售目标8月份销售目标8月份销售目标8月份销售目标8月份销售目标8月份销售目标8月份销售目标8月份销售目标8月份销售目标8月份销售目标8月份销售目标8月份销售目标8月份销售目标8月份销售目标8月份销售目标8月份销售目标8月份', '1', '2014-08-04 14:56:43', '1', '2014-08-04 14:56:43', '2014-01-01 00:00:00', '2014-12-31 23:59:59', '0', '2014年 1-12月', '8月份销售目标');
+INSERT INTO sales_target VALUES ('2', '2', '10.0000', '8月份销售目标\n8月份销售目标\n8月份销售目标\n8月份销售目标\n8月份销售目标8月份销售目标8月份销售目标8月份销售目标8月份销售目标8月份销售目标8月份销售目标8月份销售目标8月份销售目标8月份销售目标8月份销售目标8月份销售目标8月份销售目标\n8月份销售目标8月份销售目标8月份销售目标\n\n8月份销售目标8月份销售目标\n\n8月份销售目标8月份销售目标\n\n8月份销售目标8月份销售目标\n\n8月份销售目标8月份销售目标', '1', '2014-08-04 14:56:13', '1', '2014-08-04 14:56:13', '2014-08-01 00:00:00', '2014-08-31 23:59:59', '0', '2014年 8月', '8月份销售目标');
+INSERT INTO sales_target VALUES ('3', '2', '10.0000', '8月份销售目标', '1', '2014-07-31 17:36:47', '1', '2014-08-04 13:16:23', '2014-08-01 00:00:00', '2014-08-31 23:59:59', '0', '2014年 8月', '8月份销售目标');
 
 -- ----------------------------
 -- Table structure for `sm_audit_log`
@@ -4181,7 +4195,7 @@ CREATE TABLE `sm_audit_log` (
   KEY `INDEX_MODULE_NAME` (`MODULE_NAME`) USING BTREE,
   KEY `INDEX_TYPE` (`TYPE`) USING BTREE,
   KEY `INDEX_CREATED_TIME` (`CREATED_TIME`) USING BTREE
-) ENGINE=InnoDB AUTO_INCREMENT=208 DEFAULT CHARSET=utf8 COMMENT='审计日志表';
+) ENGINE=InnoDB AUTO_INCREMENT=225 DEFAULT CHARSET=utf8 COMMENT='审计日志表';
 
 -- ----------------------------
 -- Records of sm_audit_log
@@ -4388,6 +4402,23 @@ INSERT INTO sm_audit_log VALUES ('204', 'dictionary', '347', '测试字典', '4'
 INSERT INTO sm_audit_log VALUES ('205', 'role', '1', '系统管理员', '7', '角色授权', '1', '2014-08-01 14:18:56');
 INSERT INTO sm_audit_log VALUES ('206', 'role', '1', '系统管理员', '7', '角色授权', '1', '2014-08-01 14:19:05');
 INSERT INTO sm_audit_log VALUES ('207', 'user', '1', '管理员', '7', '用户授权', '1', '2014-08-01 16:23:28');
+INSERT INTO sm_audit_log VALUES ('208', 'salesTarget', '1', '8月份销售目标', '2', '修改销售目标', '1', '2014-08-04 10:50:13');
+INSERT INTO sm_audit_log VALUES ('209', 'user', '1', '管理员', '7', '用户授权', '1', '2014-08-04 11:02:08');
+INSERT INTO sm_audit_log VALUES ('210', 'user', '1', '管理员', '7', '用户授权', '1', '2014-08-04 11:02:19');
+INSERT INTO sm_audit_log VALUES ('211', 'user', '1', '管理员', '7', '用户授权', '1', '2014-08-04 11:03:03');
+INSERT INTO sm_audit_log VALUES ('212', 'user', '1', '管理员', '7', '用户授权', '1', '2014-08-04 11:03:38');
+INSERT INTO sm_audit_log VALUES ('213', 'user', '1', '管理员', '7', '用户授权', '1', '2014-08-04 11:04:21');
+INSERT INTO sm_audit_log VALUES ('214', 'user', '1', '管理员', '7', '用户授权', '1', '2014-08-04 11:04:45');
+INSERT INTO sm_audit_log VALUES ('215', 'user', '1', '管理员', '7', '用户授权', '1', '2014-08-04 11:18:28');
+INSERT INTO sm_audit_log VALUES ('216', 'user', '12', '唐飞', '1', '增加用户', '1', '2014-08-04 11:20:59');
+INSERT INTO sm_audit_log VALUES ('217', 'user', '12', '唐飞', '7', '用户授权', '1', '2014-08-04 11:24:11');
+INSERT INTO sm_audit_log VALUES ('218', 'user', '12', '唐飞', '7', '用户授权', '1', '2014-08-04 11:25:08');
+INSERT INTO sm_audit_log VALUES ('219', 'user', '12', '唐飞', '7', '用户授权', '1', '2014-08-04 11:26:09');
+INSERT INTO sm_audit_log VALUES ('220', 'user', '12', '唐飞', '7', '用户授权', '1', '2014-08-04 11:27:00');
+INSERT INTO sm_audit_log VALUES ('221', 'salesTarget', '2', '8月份销售目标', '2', '修改销售目标', '1', '2014-08-04 14:56:13');
+INSERT INTO sm_audit_log VALUES ('222', 'salesTarget', '1', '8月份销售目标', '2', '修改销售目标', '1', '2014-08-04 14:56:43');
+INSERT INTO sm_audit_log VALUES ('223', 'lead', '1', '罗晓丽6', '2', '修改线索', '1', '2014-08-04 16:49:17');
+INSERT INTO sm_audit_log VALUES ('224', 'lead', '1', '罗晓丽6', '4', '删除线索', '1', '2014-08-04 16:49:28');
 
 -- ----------------------------
 -- Table structure for `sm_component`
@@ -5263,7 +5294,7 @@ CREATE TABLE `sm_recyclebin` (
   KEY `INDEX_USER_ID` (`CREATOR_ID`) USING BTREE,
   KEY `INDEX_MODULE_NAME` (`MODULE_NAME`) USING BTREE,
   KEY `INDEX_CREATED_TIME` (`CREATED_TIME`) USING BTREE
-) ENGINE=InnoDB AUTO_INCREMENT=27 DEFAULT CHARSET=utf8 COMMENT='回收站表';
+) ENGINE=InnoDB AUTO_INCREMENT=28 DEFAULT CHARSET=utf8 COMMENT='回收站表';
 
 -- ----------------------------
 -- Records of sm_recyclebin
@@ -5279,6 +5310,7 @@ INSERT INTO sm_recyclebin VALUES ('23', 'marketActivity', '3', '测试市场活�
 INSERT INTO sm_recyclebin VALUES ('24', 'marketActivity', '4', '活动测试002', '删除市场活动', '1', '2014-07-30 17:45:56');
 INSERT INTO sm_recyclebin VALUES ('25', 'marketActivity', '5', '活动测试0034', '删除市场活动', '1', '2014-07-30 17:48:12');
 INSERT INTO sm_recyclebin VALUES ('26', 'dictionary', '347', '测试字典', '字典删除', '1', '2014-08-01 11:12:37');
+INSERT INTO sm_recyclebin VALUES ('27', 'lead', '1', '罗晓丽6', '删除线索', '1', '2014-08-04 16:49:28');
 
 -- ----------------------------
 -- Table structure for `sm_role`
@@ -5769,7 +5801,7 @@ CREATE TABLE `sm_user` (
   UNIQUE KEY `INDEX_LOGIN_NAME` (`LOGIN_NAME`) USING BTREE,
   KEY `INDEX_CREATOR_ID` (`CREATOR_ID`) USING BTREE,
   KEY `INDEX_MODIFIER_ID` (`MODIFIER_ID`) USING BTREE
-) ENGINE=InnoDB AUTO_INCREMENT=12 DEFAULT CHARSET=utf8 COMMENT='用户表';
+) ENGINE=InnoDB AUTO_INCREMENT=13 DEFAULT CHARSET=utf8 COMMENT='用户表';
 
 -- ----------------------------
 -- Records of sm_user
@@ -5785,6 +5817,7 @@ INSERT INTO sm_user VALUES ('8', 'lijinghan', 'e10adc3949ba59abbe56e057f20f883e'
 INSERT INTO sm_user VALUES ('9', 'renliqun', 'e10adc3949ba59abbe56e057f20f883e', '任莉群', '2', '18620088324', '0000000000', '00000000@gmail.com', '000000000', '工程师', '9', '0', '1', '78', '订单审批流程 理财经理', '12', '0', '1', '1', '2014-05-26 00:00:00', '1', '2014-07-27 21:29:38');
 INSERT INTO sm_user VALUES ('10', 'haohongqin', 'e10adc3949ba59abbe56e057f20f883e', '郝红卿', '2', '18620088324', '0000000000', '00000000@gmail.com', '000000000', '工程师', '9', '0', '1', '78', '订单审批流程 销售人员', '12', '0', '1', '1', '2014-05-26 00:00:00', '1', '2014-07-27 21:32:50');
 INSERT INTO sm_user VALUES ('11', 'huizijing1', 'e10adc3949ba59abbe56e057f20f883e', '惠子', '2', null, null, null, null, null, '9', '0', '1', '1', null, '12', '0', '0', '1', '2014-07-30 09:48:35', '1', '2014-07-30 09:48:35');
+INSERT INTO sm_user VALUES ('12', 'tangfei', 'e10adc3949ba59abbe56e057f20f883e', '唐飞', '3', null, null, null, null, null, '9', '0', '1', '2', null, '12', '0', '0', '1', '2014-08-04 11:20:59', '1', '2014-08-04 11:20:59');
 
 -- ----------------------------
 -- Table structure for `sm_user_com`
@@ -5912,11 +5945,6 @@ INSERT INTO sm_user_func VALUES ('1', '97');
 INSERT INTO sm_user_func VALUES ('1', '98');
 INSERT INTO sm_user_func VALUES ('1', '99');
 INSERT INTO sm_user_func VALUES ('1', '100');
-INSERT INTO sm_user_func VALUES ('1', '101');
-INSERT INTO sm_user_func VALUES ('1', '102');
-INSERT INTO sm_user_func VALUES ('1', '103');
-INSERT INTO sm_user_func VALUES ('1', '104');
-INSERT INTO sm_user_func VALUES ('1', '105');
 INSERT INTO sm_user_func VALUES ('1', '134');
 INSERT INTO sm_user_func VALUES ('1', '135');
 INSERT INTO sm_user_func VALUES ('1', '136');
@@ -5960,7 +5988,6 @@ INSERT INTO sm_user_func VALUES ('1', '200');
 INSERT INTO sm_user_func VALUES ('1', '202');
 INSERT INTO sm_user_func VALUES ('1', '203');
 INSERT INTO sm_user_func VALUES ('1', '204');
-INSERT INTO sm_user_func VALUES ('1', '205');
 INSERT INTO sm_user_func VALUES ('1', '206');
 INSERT INTO sm_user_func VALUES ('1', '207');
 INSERT INTO sm_user_func VALUES ('1', '208');
@@ -6007,6 +6034,14 @@ INSERT INTO sm_user_func VALUES ('10', '200');
 INSERT INTO sm_user_func VALUES ('10', '202');
 INSERT INTO sm_user_func VALUES ('10', '203');
 INSERT INTO sm_user_func VALUES ('10', '204');
+INSERT INTO sm_user_func VALUES ('12', '20');
+INSERT INTO sm_user_func VALUES ('12', '21');
+INSERT INTO sm_user_func VALUES ('12', '22');
+INSERT INTO sm_user_func VALUES ('12', '23');
+INSERT INTO sm_user_func VALUES ('12', '24');
+INSERT INTO sm_user_func VALUES ('12', '25');
+INSERT INTO sm_user_func VALUES ('12', '238');
+INSERT INTO sm_user_func VALUES ('12', '239');
 
 -- ----------------------------
 -- Table structure for `sm_user_org`

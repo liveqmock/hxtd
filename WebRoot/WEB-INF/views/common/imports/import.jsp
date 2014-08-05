@@ -163,7 +163,6 @@
 							}
 						)
 					},
-					
 					'onQueueComplete': function(){
 						//文件上传完成记录时间
 						//文件上传完成以后，将"浏览"按钮恢复颜色（注意：这个浏览按钮的id是自动生成的，通过页面查看元素就可得到）
@@ -172,10 +171,6 @@
 			           	 //上传完成以后关闭蒙版
 						hideLoading();
 		            },	
-		            'onUploadError':function(file,errorCode,errorMsg,errorString){//上传文件失败触发
-		            	//tomcat挂了,或者服务器断了
-		            	showMsg({successFlag:false,message:errorString});
-		            },
 					'onUploadSuccess' : function(file, data, response) {//在每一个文件上传成功后触发
 						//data:从服务器返回回来
 						//response:响应成功true,响应失败false
@@ -279,6 +274,9 @@
 			function hideLoading(){
 				$('#over').hide();
 				$('#layout').hide();
+			}
+			function stop(){
+				$att.uploadify('stop');
 			}
 		</script>
 	</head>

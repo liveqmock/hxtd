@@ -3,6 +3,10 @@ var attachment = {};
 attachment.init=function(setting){
 	if(setting){
 		attachment.setting = setting;
+		/*
+		 * 作用是给子页面传递公用参数.
+		 * @return {TypeName} 
+		 */
 		window.uploadURL = jsUtil.getRootPath()+"/"+attachment.setting.module+"/attachment/upload.do";
 	}
 };
@@ -12,11 +16,19 @@ attachment.query=function(){
 		RcmsAjax.ajaxNoMsg(url,attachment.array2Html,function(){return;},'id='+attachment.setting.id);
 };
 
+/**
+ * 预览--预览具体某一个附件的详细内容
+ * @param {Object} id
+ */
 attachment.view=function(id){
 		var url = jsUtil.getRootPath()+"/"+attachment.setting.module+"/attachment/view.comp";
 		jsUtil.dialogIframe(url+"?id="+id,"预览",500,600,null);
 };
-
+/**
+ * 搜open和href的区别
+ * todo  herf 改 open
+ * @param {Object} id
+ */
 attachment.download=function(id){
 	var url = jsUtil.getRootPath()+"/"+attachment.setting.module+"/attachment/download.do";
 	window.location.href= url+"?id="+id;
@@ -28,6 +40,11 @@ attachment.deleteAtt=function(id){
 		RcmsAjax.ajax(url,attachment.query,function(){return;},'id='+id);
 	},"警告")
 };
+/**
+ * 生成附件列表
+ * @param {Object} result
+ * @return {TypeName} 
+ */
 attachment.array2Html=function(result){
 	var list = result.result.list;
 	if(!list||list.length==0){

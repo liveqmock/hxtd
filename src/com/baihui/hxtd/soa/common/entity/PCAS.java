@@ -8,6 +8,8 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Table;
 
+import com.baihui.hxtd.soa.base.FieldInfo;
+
 /**
  * 
  * 功能描述： 省市县三级联动实体类
@@ -26,6 +28,7 @@ public class PCAS {
 	/**
 	 * 主键ID
 	 */
+	@FieldInfo(desc = "主键ID")
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	@Column(name = "ID")
@@ -33,13 +36,17 @@ public class PCAS {
 	/**
 	 * 显示名称
 	 */
+	@FieldInfo(desc = "显示名称")
 	@Column(name = "NAME")
 	private String name;
 	/**
 	 * 父级ID
 	 */
+	@FieldInfo(desc = "父级ID")
 	@Column(name = "PID")
 	private Long pid;
+	
+	
 	
 	public Long getId() {
 		return id;

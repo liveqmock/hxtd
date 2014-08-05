@@ -97,7 +97,7 @@
 			<tr>
 				<td align="right" width="15%" valign="top"></td>
 				<td align="left" width="85%" valign="top">
-					<div style="overflow-y:auto; white-space:nowrap; height:200px;" class="w85b">${contract.content}</div>
+					<div style="overflow-y:auto;word-break:break-all; width:1047px;height:200px;" class="w85b">${contract.content}</div>
 				</td>
 			</tr>
 		</table>

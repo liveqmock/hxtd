@@ -17,6 +17,7 @@
     <script type="text/javascript" src="${ctx}/static/js/js-util.common.js"></script>
     <style type="text/css">
     	.id_ul4{ height: auto !important;}
+    	.id_ul4:hover{ color:#000000 !important;}
     	.id_ul4 li{ float:left; width:16%; margin-top:5px; margin-bottom:5px;}
 		.id_ul4 li a{ height:25px;line-height:25px; color:#222; text-align:center; padding-left:10px; padding-right:10px;}
 		.id_ul4{ width:86.2%;}
@@ -36,8 +37,12 @@
             $C.toggleBoolean($menu1, "checked");
             $C.bindCheckAll($menu1, "div.menus1", "a.menu2", "click");
             $C.bindCheckAll($menu1, "div.menu1", ".function:checkbox");
-
             $C.tab();
+            $(".orange").mouseenter(function(){
+            	$(this).addClass("c_orange fb");
+            }).mouseleave(function(){
+            	$(this).removeClass("c_orange fb");
+            });
         });
     </script>
 </head>
@@ -65,10 +70,9 @@
                         <i class="vm block fl mt15 ml10">${item.name}</i>
                         <ul class="id_ul4 fr mt10 ">
                             <c:forEach items="${allFunctions[item.id]}" var="item">
-                                <li>
-                                    <label class="box size51 ${fn:contains(allAuthorizationFunctions,item)?" inherit-function":""}">
-                                        <input type="checkbox" data-id="" name="functionId" value="${item.id}" class="function" ${fn:contains(authorizationFunctions,item)?"checked=checked":""}>
-                                        ${item.name}
+                                <li align="left" style="line-height:20px;">
+                                    <label class="orange">
+                                        <input type="checkbox" name="functionId" value="${item.id}" class="function" ${fn:contains(authorizationFunctions,item)?"checked='checked'":""}>${item.name}
                                     </label>
                                 </li>
                             </c:forEach>
@@ -82,10 +86,11 @@
                     <i class="vm block fl mt5 ml10 tr">${item.name}</i>
 	                    <ul class="id_ul4 fr">
 	                        <c:forEach items="${allFunctions[item.id]}" var="item">
-	                            <li>
-	                                <label class="box size51 ${fn:contains(allAuthorizationFunctions,item)?" inherit-function":""}">
-	                                    <input ${fn:contains(allAuthorizationFunctions,item)?"checked='checked'":""} type="checkbox" name="functionId" value="${item.id}" class="function funs" >${item.name}
-	                                </label>
+	                            <li align="left" style="line-height:20px;">
+	                                <label class="orange">
+                                    <input type="checkbox" name="functionId" value="${item.id}" class="function" ${fn:contains(authorizationFunctions,item)?"checked='checked'":""}>
+                                    ${item.name}
+                                	</label>
 	                            </li>
 	                        </c:forEach>
 	                    </ul>
@@ -111,10 +116,10 @@
                 <a href="javascript:void(0)" class="fl mt5 mb5 ml5 allright block menu menu1"></a>
            			<ul class="id_ul4 fl">
            			<c:forEach items="${allComponents}" var="item" varStatus="status">
-		                <li>
-		                    <label class="box size51 ${fn:contains(allAuthorizationComponents,item)?" inherit-component":""}">
-		                        <input ${fn:contains(allAuthorizationFunctions,item)?"checked='checked'":""} data-id="" type="checkbox" name="componentId" value="${item.id}" class="function" >${item.name}
-		                    </label>
+		                <li align="left" style="line-height:20px;">
+		                    <label class="box size81 orange">
+			                        <input type="checkbox" name="componentId" value="${item.id}" class="function" ${fn:contains(authorizationComponents,item)?"checked=checked":""}>${item.name}
+			                </label>
 		                </li>
            			</c:forEach>
            			</ul>

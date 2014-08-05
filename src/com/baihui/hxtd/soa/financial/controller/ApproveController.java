@@ -1,19 +1,5 @@
 package com.baihui.hxtd.soa.financial.controller;
 
-import java.util.Map;
-
-import javax.annotation.Resource;
-import javax.servlet.http.HttpServletRequest;
-
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import org.springframework.stereotype.Controller;
-import org.springframework.ui.ModelMap;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.ResponseBody;
-import org.springframework.web.bind.annotation.SessionAttributes;
-import org.springside.modules.web.Servlets;
-
 import com.baihui.hxtd.soa.base.Constant;
 import com.baihui.hxtd.soa.base.InitApplicationConstant;
 import com.baihui.hxtd.soa.base.orm.hibernate.HibernatePage;
@@ -24,6 +10,18 @@ import com.baihui.hxtd.soa.system.DictionaryConstant;
 import com.baihui.hxtd.soa.system.service.DictionaryService;
 import com.baihui.hxtd.soa.util.JsonDto;
 import com.fasterxml.jackson.core.JsonProcessingException;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.stereotype.Controller;
+import org.springframework.ui.ModelMap;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.SessionAttributes;
+import org.springside.modules.web.Servlets;
+
+import javax.annotation.Resource;
+import javax.servlet.http.HttpServletRequest;
+import java.util.Map;
 
 /**
  * 财务审批控制器
@@ -74,6 +72,7 @@ public class ApproveController {
         Map<String, Object> searchParams = Servlets.getParametersStartingWith(request, "search_");
         Search.clearBlankValue(searchParams);
         searchParams.put("roleCode", Constant.ROLE_FINANCER);
+        searchParams.put("user", modelMap.get(Constant.VS_USER));
 
         page = flowInstanceService.findExecutablePagination(searchParams, page);
         flowInstanceService.fullFlowBusiness(page.getResult());

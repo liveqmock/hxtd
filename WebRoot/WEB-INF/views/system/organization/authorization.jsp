@@ -48,10 +48,10 @@
 	                	<ul class="mb10 cb" style="overflow:hidden;">
 		                    <c:forEach items="${allRoles}" var="item" varStatus="status">
 		                        <li class="fl" style="width:16%;">
-		                            <label class="box size81 ${fn:contains(organizationInheritRoles,item)?" inherit-role":""}">
-		                                <input onclick="show(${item.id});" type="checkbox" name="roleId" value="${item.id}" class="function" ${fn:contains(authorizationRoles,item)?"checked":""}/>
-		                                ${item.name}
-		                            </label>
+		                            <label class="box size81">
+								        <input type="checkbox" name="roleId" value="${item.id}" class="role" 
+								        ${fn:contains(authorizationRoles,item)?"checked=checked":""}>${item.name}
+								    </label>
 		                        </li>
 		                    </c:forEach>
 	                	</ul>

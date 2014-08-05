@@ -84,6 +84,9 @@ public class ImportController {
 		return "/common/imports/import";
 	}
 	
+	/**
+	 * 单击导入按钮,执行导入功能
+	 */
 	@SuppressWarnings("unchecked")
 	@ResponseBody
 	@RequestMapping(value = "/{module}/imports/import.do", produces = "text/text;charset=UTF-8", method=RequestMethod.POST)

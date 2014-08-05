@@ -250,13 +250,8 @@ public class ImportLeadService extends ImportServiceAbstract<LeadDTO,Lead> {
 		if(lead.getRemark()== null || "".equals(lead.getRemark())){
 			lead.setRemark(leadByDB.getRemark());
 		}
-		
-		
-		
 		return lead;
 	}
-
-	
 	
 	public static void main(String[] args){
 		//集合的主键

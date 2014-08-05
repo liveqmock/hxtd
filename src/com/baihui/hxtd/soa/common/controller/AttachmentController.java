@@ -78,6 +78,13 @@ public class AttachmentController {
 	@Resource
 	private DictionaryService dictionaryService;
 	
+	/**
+	 * 跳转到附件上传页面
+	 * 拦截符合/{module}/attachment/query.do规则的所有请求
+	 * @param module  :  @PathVariable String module 获取路径中的参数变量
+	 * @param id
+	 * @return
+	 */
 	@ResponseBody
 	@RequestMapping(value="/{module}/attachment/query.do",produces = "text/text;charset=UTF-8")
 	public String query(@PathVariable String module,Long id){
@@ -92,7 +99,13 @@ public class AttachmentController {
 		json.setResult(model);
 		return json.toString();
 	}
-	
+	/**
+	 * view.comp拦截的是一个组件.什么是组件呢?正常的页面有header和footer部分,
+	 * 如果一个页面你不想让他有header和footer,我们就将其看做一个组件
+	 * @param model
+	 * @param id
+	 * @return
+	 */
 	@RequestMapping(value="/{module}/attachment/view.comp")
 	public String view(Model model,Long id){
 		Attachment att = attachmentService.view(id);

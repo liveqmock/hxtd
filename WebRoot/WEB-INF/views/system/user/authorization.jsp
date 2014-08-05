@@ -17,12 +17,65 @@
     <script type="text/javascript" src="${ctx}/static/js/js-util.common.js"></script>
     <style type="text/css">
     	.id_ul4{ height: auto !important;}
-    	.id_ul4 li{ float:left; width:16%; margin-top:5px; margin-bottom:5px;}
+    	.id_ul4:hover{ color:#000000 !important;}
+    	.id_ul4 li{ float:left; width:16%; margin-top:5px; margin-bottom:5px;line-height:20px;}
 		.id_ul4 li a{ height:25px;line-height:25px; color:#222; text-align:center; padding-left:10px; padding-right:10px;}
 		.id_ul4{ width:86.2%;}
     </style>
     <script type="text/javascript">
         $(function () {
+    	   //初始化的时候请求勾选的角色，并绑定角色的功能
+    	   $('input[name="roleId"]:checked').each(function(){
+    		    var $this = $(this);
+				var roleId = $this.val();
+				RcmsAjax.ajaxNoMsg("${ctx}/system/user/toAuthorizationPage.do?TYPE=show&roleId="+roleId, function (result) {
+        	    $this.data("functionIds",result.message);
+				});
+			});
+    	  // $(".role").attr("data-id",result.message);
+    	    //ajax请求，返回每个被选中的角色的功能
+    	    $(".role").click(function(){
+    	    	var $this = $(this);
+    	    	var flag = $this.attr("checked");
+    	    	var functionIds = $this.data("functionIds");
+    	    	if(!functionIds){
+    	    		//ajax
+    	    		RcmsAjax.ajaxNoMsg("${ctx}/system/user/toAuthorizationPage.do?TYPE=show&roleId="+$this.val(),function(result){
+    	    			$this.data("functionIds",result.message);
+    	    			var ids=result.message;
+        	    		selectId(ids,flag,$this.val());
+    	    			});
+    	    	}else{
+    	    		selectId(functionIds,flag,$this.val());
+    	    	}
+      		});
+    	    
+    	    function selectId(ids,flag,roleId){
+        		var funIds=ids.split(',');
+				if(flag){
+					$('input[name="functionId"]').each(function(){
+						if($.inArray($(this).val(),funIds)>0){
+							if(!$(this).attr("checked")){
+							    $(this).attr("checked",true);
+							    }
+							}
+		  				});
+	        	}
+				else{
+	        		var checkeds=""
+	        		$('input[name="roleId"]:checked').each(function(){
+	        			checkeds=$(this).data("functionIds")+checkeds;
+					});
+					$('input[name="functionId"]').each(function(){
+							if($.inArray($(this).val(),checkeds.split(','))<0){
+								$(this).attr("checked",false);
+							}
+		  			});
+	        	}
+    	    }
+    	    
+    	    
+    	    
             jsUtil.bindSave();
             //选中/反选
             var $menu2 = $("a.menu2");
@@ -36,64 +89,45 @@
             $C.bindCheckAll($menu1, "div.menu1", ".function:checkbox");
             $C.bindCheckAll($menu1, "div.menus1", "a.menu2", "click");
             $C.tab();
-            var t=$("#fixP").offset().top;
-            var w=$("#fixP").width();
-            var h=$("#fixP").height();
-            $("#fly").css('top',t);
-            $("#fly").css('width',w);
-           // $("#fly").css('height',h);
-        });
-        function showAll(){
-        	//1.清空全部功能
-        	$('input[name="functionId"]').each(function(){
-        		$(this).attr("checked",false);
+          
+            //鼠标移近效果
+            $(".orange").mouseenter(function(){
+            	$(this).addClass("c_orange fb");
+            }).mouseleave(function(){
+            	$(this).removeClass("c_orange fb");
+            });
+            
+            //角色列表浮动
+            var t=$("#fly").offset().top;
+            var w=$(".roleUl").width();
+            $(window).scroll(function () {
+            	if($(document).scrollTop()==0){
+            		$("#fly").css('top',t);
+            		$("#fly").css('width',w);
+            		$("#fly").css('position','static');
+            	}else{
+            		$("#fly").css('position','fixed');
+            		$("#fly").css('left','top');
+            		$("#fly").css('top',0);
+            		$("#fly").css('width',w);
+            	}
         	});
-        	//2.获取所有选中的角色
-        	var checked=[];
-        	$('input[name="roleId"]:checked').each(function(){
-				var roleId = $(this).val();
-				show(roleId);
-			});
-        }
-        function show(roleId){
-	          	RcmsAjax.ajaxNoMsg("${ctx}/system/user/toAuthorizationPage.do?TYPE=show&roleId="+roleId, function (data) {
-        	    var ids=data.message.split('|');
-        	    selectId(ids);
-				});
-        	
-        function selectId(ids){
-        	var funIds=ids[0].split(',');
-          	var comIds=ids[1].split(',');
-			$('input[name="functionId"]').each(function(){
-				if($.inArray($(this).val(),funIds)>0){
-					    $(this).attr("checked",true);
-					}else{
-						$(this).attr("checked",false);
-					}
-  				});
-			$('input[name="componentId"]').each(function(){
-					if($.inArray($(this).val(),comIds)>0){
-						 $(this).attr("checked",true);
-					}else{
-						$(this).attr("checked",false);
-					}
-  					});
-        	}  	
-        }
+        });
+      
     </script>
 </head>
 <body>
 <form name="user" action="${ctx}${VR_FUNCTION.url}" method="post">
     <input type="hidden" name="id" value="${param.id}">
-    <div  class="right_fbg bg_c_f3f3f3 ml35 mr35 brall5">
-    	<h1 id="fixP" class="f14 ml20 mt20 pt10">角色列表</h1>
+    <div  id="fly" class="right_fbg bg_c_f3f3f3 ml35 mr35 brall5">
+    	<h1 class="f14 ml20 mt20 pt10">角色列表</h1>
             <div class="menus1">
                 <div class="clearfix w menu1">
-	                	<ul class="mb10 cb" style="overflow:hidden;">
+	                	<ul class="mb10 cb roleUl" style="overflow:hidden;">
 		                    <c:forEach items="${allRoles}" var="item" varStatus="status">
 		                        <li class="fl" style="width:16%;">
-		                            <label class="box size81 ${fn:contains(organizationInheritRoles,item)?" inherit-role":""}">
-		                                <input type="checkbox"  class="function" ${fn:contains(authorizationRoles,item)?"checked":""}/>
+		                            <label class="box size51 ${fn:contains(organizationInheritRoles,item)?" inherit-role":""}">
+		                                <input data-id="" type="checkbox" name="roleId" value="${item.id}" class="role" ${fn:contains(authorizationRoles,item)?"checked":""}/>
 		                                ${item.name}
 		                            </label>
 		                        </li>
@@ -101,27 +135,8 @@
 	                	</ul>
                 </div>
             </div>
-            <div class="pt10"></div>
     </div>
-         <!-- 角色-->
-         <div id="fly" class="right_fbg bg_c_f3f3f3 ml35 mr35 brall5" style="position:fixed;">
-         <h1 class="f14 ml20 mt20 pt10">角色列表</h1>
-            <div class="menus1">
-                <div class="clearfix w menu1">
-	                	<ul class="mb10 cb" style="overflow:hidden;">
-		                    <c:forEach items="${allRoles}" var="item" varStatus="status">
-		                        <li class="fl" style="width:16%;">
-		                            <label class="box size81 ${fn:contains(organizationInheritRoles,item)?" inherit-role":""}">
-		                                <input onclick="showAll();" type="checkbox" name="roleId" value="${item.id}" class="function" ${fn:contains(authorizationRoles,item)?"checked":""}/>
-		                                ${item.name}
-		                            </label>
-		                        </li>
-		                    </c:forEach>
-	                	</ul>
-                </div>
-            </div>
-            <div class="pt10"></div>
-		</div>
+         
     <div class="margin0 ml35 mr35">
     <div class="w">
     <!-- 功能 -->
@@ -140,11 +155,11 @@
                     <div class="clearfix bg_c_blue w menu1">
                         <a href="javascript:void(0)" class="fl mt5 mb5 ml5 allnoright block menu menu1"></a>
                         <i class="vm block fl mt15 ml10 tr">${item.name}</i>
-                        <ul class="id_ul4 fr mt10 ">
+                        <ul class="id_ul4 fr  ">
                             <c:forEach items="${allFunctions[item.id]}" var="item">
-                                <li align="left">
-                                    <label class="box size51 ${fn:contains(allAuthorizationFunctions,item)?" inherit-function":""}">
-                                        <input type="checkbox" name="functionId" value="${item.id}" 
+                                <li align="left" style="line-height:20px;">
+                                    <label class="box size51 orange ${fn:contains(allAuthorizationFunctions,item)?" inherit-function":""}">
+                                        <input type="checkbox" name="functionId" value="${item.id}" data-id=""
                                         class="function" ${fn:contains(authorizationFunctions,item)?" checked=checked":""}>
                                         ${item.name}
                                     </label>
@@ -160,10 +175,11 @@
                     <i class="vm block fl mt5 ml10 tr">${item.name}</i>
 	                    <ul class="id_ul4 fr">
 	                        <c:forEach items="${allFunctions[item.id]}" var="item">
-	                            <li align="left">
-	                                <label class="box size51 ${fn:contains(allAuthorizationFunctions,item)?" inherit-function":""}">
+	                            <li align="left" style="line-height:20px;">
+	                                <label class="box size51 orange ${fn:contains(allAuthorizationFunctions,item)?" inherit-function":""}">
 	                                    <input ${fn:contains(allAuthorizationFunctions,item)?" checked='checked'":""} type="checkbox" name="functionId" value="${item.id}" 
-	                                    class="function" >${item.name}
+	                                    class="function" data-id="">
+	                                    <i>${item.name}</i>
 	                                </label>
 	                            </li>
 	                        </c:forEach>
@@ -190,8 +206,8 @@
 	                <a href="javascript:void(0)" class="fl mt5 mb5 ml5 allright block menu menu1"></a>
             			<ul class="id_ul4 fl">
             			<c:forEach items="${allComponents}" var="item" varStatus="status">
-			                <li align="left">
-			                    <label class="box size51 ${fn:contains(allAuthorizationComponents,item)?" inherit-component":""}">
+			                <li align="left" style="line-height:20px;">
+			                    <label class="box size51 orange ${fn:contains(allAuthorizationComponents,item)?" inherit-component":""}">
 			                        <input ${fn:contains(allAuthorizationFunctions,item)?"checked='checked'":""} data-id="" type="checkbox" name="componentId" value="${item.id}" 
 			                        class="function" >${item.name}
 			                    </label>

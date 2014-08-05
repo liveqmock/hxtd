@@ -225,7 +225,7 @@
 		</h1>
 		<div class="cb  w95b bg_c_white margin0 mt10">
 					<div class="margin0 w70b pt10">
-						<textarea id="ha" name="content" maxlength=10000 class="remarks_input1">${contract.content}</textarea>
+						<textarea id="ha" name="content" maxlength=10000 style="overflow-x:hidden;" class="remarks_input1">${contract.content}</textarea>
 						<script  type="text/javascript">
 							$("#ha").css("width","100%").htmlbox({
 							    toolbars:[

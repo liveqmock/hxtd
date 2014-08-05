@@ -22,7 +22,13 @@ buttonAdd="${ctx}/static/images/tan_btn1.png";
 buttonNoneAdd="${ctx}/static/images/tan_btn1none.png";
 $(function(){
 	var url = parent.uploadURL;
+	/**
+	 * 获得纪录的id.
+	 * $("#id", parent.document)分析
+	 * @param {Object} file
+	 */
 	moduleId = $("#id", parent.document).val();
+	 
 	$att=$("#att");
 	$att.uploadify({
 		auto: false,
@@ -56,6 +62,10 @@ $(function(){
 		if(num>0){
 			upload();
 		}else{
+			/**
+			 * todo
+			 * 修改没有汉化的提示信息,修改方式如下
+			 */
 			showMsg({successFlag:false,message:'上传队列中不存在文件，请检查！'});
 			setTimeout(_hide(),RcmsAjax.global.showTime);
 		}

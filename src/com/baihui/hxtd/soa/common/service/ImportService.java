@@ -41,6 +41,7 @@ public class ImportService {
 	
 	@SuppressWarnings("unchecked")
 	ImportServiceAbstract importServiceAbstract;
+	
 	//导入数据到DB
 	@SuppressWarnings("unchecked")
 	public void import2DB(List entityList, List<String> typeList,String duplicateType, String moduleName,User user) throws IllegalArgumentException, SecurityException, InstantiationException, IllegalAccessException, InvocationTargetException, NoSuchMethodException{

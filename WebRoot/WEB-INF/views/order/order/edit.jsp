@@ -195,18 +195,22 @@
     </div>
     <div class="cb block h40 margin0 mt10" style="width:350px;">
         <ul class="id_table1 cb">
-            <li>
-                <a href="javascript:;" id="save" class="block c_white lh25 mr10">
-                    <b class="allbtn_l block fl"></b>
-                    <b class="allbtn_r pr13 block fl w_auto f14">保&nbsp;&nbsp;存</b>
-                </a>
-            </li>
-            <li>
-                <a href="javascript:;" id="saveAndAdd" class="block c_white lh25 mr10">
-                    <b class="allbtn_l block fl"></b>
-                    <b class="allbtn_r pr13 block fl w_auto f14">保存并新建</b>
-                </a>
-            </li>
+            <c:if test="${VS_HAS_FUNCTIONS.orderAdd||VS_HAS_FUNCTIONS.orderModify}">
+                <li>
+                    <a href="javascript:;" id="save" class="block c_white lh25 mr10">
+                        <b class="allbtn_l block fl"></b>
+                        <b class="allbtn_r pr13 block fl w_auto f14">保&nbsp;&nbsp;存</b>
+                    </a>
+                </li>
+            </c:if>
+            <c:if test="${VS_HAS_FUNCTIONS.orderAdd}">
+                <li>
+                    <a href="javascript:;" id="saveAndAdd" class="block c_white lh25 mr10">
+                        <b class="allbtn_l block fl"></b>
+                        <b class="allbtn_r pr13 block fl w_auto f14">保存并新建</b>
+                    </a>
+                </li>
+            </c:if>
             <li>
                 <a href="${ctx}/order/order/toQueryPage.do" class="block c_white lh25">
                     <b class="allbtn_l block fl"></b>

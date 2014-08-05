@@ -55,7 +55,11 @@ public class LeadDTO {
 		this.createdTime = createdTime;//21
 		
 	} 
-	
+	/**
+	 * 将excel中每一个行数据转换成LeadDTO对象
+	 * @param list excel中,每一列数据的集合.返回的List就是一行数据
+	 * @return
+	 */
 	public static LeadDTO createEntity(List<Object> list){
 		return new LeadDTO((User)list.get(0), (String)list.get(1), (String)list.get(2), 
 				(String)list.get(3), (String)list.get(4), (String)list.get(5), (String)list.get(6), 

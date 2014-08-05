@@ -29,12 +29,18 @@ RcmsAjax.bgImage = {
 	error : 'wite_fulse.png'
 }
 
-RcmsAjax.msgDiv = {
+/* RcmsAjax.msgDiv = {
 	begin : '<img width="50" height="51" class="fl mt20 ml10" src="'+jsUtil.getRootPath()+'/static/images/',
 	middle : '" /><p class="fr mr20 mt35 w100">',
 	end : '</p>'
-}
+}*/
 
+
+RcmsAjax.msgDiv = {
+	begin : '<table class="mt10"><tr><td><img width="50" height="51" class="fl" src="'+jsUtil.getRootPath()+'/static/images/',
+	middle : '" /></td><td valign="center"><p class=" mr10 ml10 w100">',
+	end : '</p></td></tr></table>'
+}
 
 
 RcmsAjax.msg = {

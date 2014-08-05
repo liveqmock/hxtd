@@ -233,7 +233,7 @@ public class ComponentService {
      * 查找角色授权组件
      */
     @Transactional(readOnly = true)
-    public List<Function> findRoleAuthorization(Long roleId) {
+    public List<Component> findRoleAuthorization(Long roleId) {
         String hql = "select component" +
                 " from Component component" +
                 " inner join component.roles role" +

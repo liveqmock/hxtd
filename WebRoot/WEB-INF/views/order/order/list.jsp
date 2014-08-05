@@ -95,7 +95,7 @@ function getCustomer(id) {
                 </td>
             </tr>
         </table>
-        <tags:paginationparams page="${page}"></tags:paginationparams>
+        <tags:paginationparams page="${page}"/>
     </form>
     <!--查询条件结束-->
     <div class="cb"></div>

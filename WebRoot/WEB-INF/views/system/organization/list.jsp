@@ -143,7 +143,6 @@
                 </c:if>
             </ul>
             <ul class="fr id_table1 mt10 ml10">
-                
                 <c:if test="${VS_HAS_FUNCTIONS.userExport}">
                     <li><a href="javascript:void(0)" uri="${ctx}/system/user/export.do?TYPE=selected" class="leading_out globle_img block_inline mr10 export" title="导出"></a></li>
                 </c:if>
@@ -153,15 +152,15 @@
     <table class="cb id_table2 w pr35 user" forform="form" formaction="${ctx}/system/user/query.do" forpagination="#tabs-user .pagination">
         <tr class="header">
             <th style="width:4%"><input type="checkbox" class="checkall"/></th>
-            <th style="width:10%">真实姓名</th>
-            <th style="width:10%" class="sortable orderby" orderby="name">用户名</th>
-            <th style="width:5%">管理员</th>
-            <th style="width:10%" class="sortable orderby" orderby="isActive">启用</th>
-            <th style="width:10%">组织</th>
+            <th style="width:6%">真实姓名</th>
+            <th style="width:9%" class="sortable orderby" orderby="name">用户名</th>
+            <th style="width:6%">管理员</th>
+            <th style="width:6%" class="sortable orderby" orderby="isActive">启用</th>
+            <th style="width:7%">组织</th>
             <th style="width:5%">性别</th>
             <th style="width:10%">联系电话</th>
-            <th style="width:10%">职位</th>
-            <th style="width:15%">角色</th>
+            <th style="width:6%">职位</th>
+            <th style="width:17%">角色</th>
             <th style="width:20%">操作</th>
         </tr>
         <%@include file="/WEB-INF/template/sort.jsp" %>

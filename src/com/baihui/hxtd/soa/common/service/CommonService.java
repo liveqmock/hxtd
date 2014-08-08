@@ -1,6 +1,8 @@
 package com.baihui.hxtd.soa.common.service;
 
+import com.baihui.hxtd.soa.base.Constant;
 import com.baihui.hxtd.soa.base.orm.hibernate.HibernatePage;
+import com.baihui.hxtd.soa.base.utils.ImportExport;
 import com.baihui.hxtd.soa.base.utils.serial.TierSerial;
 import com.baihui.hxtd.soa.base.utils.serial.TierSerials;
 import com.baihui.hxtd.soa.common.dao.CommonDao;
@@ -8,6 +10,10 @@ import com.baihui.hxtd.soa.common.entity.Idable;
 import com.baihui.hxtd.soa.common.entity.Initialized;
 import com.baihui.hxtd.soa.common.entity.Orderable;
 import com.baihui.hxtd.soa.common.entity.TreeNode;
+import com.baihui.hxtd.soa.system.dao.AuditLogDao;
+import com.baihui.hxtd.soa.system.entity.AuditLog;
+import com.baihui.hxtd.soa.system.entity.User;
+import com.baihui.hxtd.soa.util.EnumOperationType;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.poi.ss.formula.functions.T;
 import org.slf4j.Logger;
@@ -16,6 +22,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.annotation.Resource;
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Date;
@@ -35,9 +42,12 @@ public class CommonService {
 
     @Resource
     private CommonDao commonDao;
-    
-    public Date getNow(){
-    	return commonDao.getDBNow();
+
+    @Resource
+    private AuditLogDao auditLogDao;
+
+    public Date getNow() {
+        return commonDao.getDBNow();
     }
 
     /**
@@ -132,7 +142,7 @@ public class CommonService {
      */
     @Transactional(readOnly = true)
     public <T> List<T> findExport(String hql) {
-        return (List<T>) commonDao.getSession().createQuery(hql).setMaxResults(10000).list();
+        return (List<T>) commonDao.getSession().createQuery(hql).setMaxResults(Constant.EXPORT_MAX_COUNT).list();
     }
 
     /**
@@ -143,6 +153,22 @@ public class CommonService {
         String hql = String.format("select entity.id from %s entity where entity.%s=?", entityName, fieldName);
         Object object = commonDao.findUnique(hql, fieldValue);
         return object == null;
+    }
+
+    /**
+     * 产品总和不能超过项目金额
+     */
+    @Transactional(readOnly = true)
+    public boolean checkMoney(Long projectId, BigDecimal saleMoney) {
+        String hql = "select financeLimit from Project where id=?";
+        BigDecimal projectMoney = commonDao.findUnique(hql, projectId);
+
+        String strHql = "select sum(sellMoney) from Product where project.id=?";
+        BigDecimal productMoney = commonDao.findUnique(strHql, projectId);
+
+        productMoney = productMoney.add(saleMoney);
+
+        return projectMoney.compareTo(productMoney) >= 0;
     }
 
     private int orgTierLength = 2;
@@ -347,5 +373,22 @@ public class CommonService {
     public void recovery(String entityName, Long... id) {
         commonDao.recovery(entityName, id);
     }
-    
+
+    /**
+     * 保存审计日志
+     * 1.EnumModule的moduleName必须和实体类类名首字母小写相匹配，暂时没有建立相关映射
+     */
+    @Transactional
+    public void saveAuditlog(ImportExport.Type type, String name, User user, int size) {
+        AuditLog auditLog = new AuditLog();
+        auditLog.setModuleName(name);
+        auditLog.setRecordId(null);
+        auditLog.setRecordName(type.equals(ImportExport.Type.selected) ? "导出列表选中的数据" : String.format("导出前%s条数据", Constant.EXPORT_MAX_COUNT));
+        auditLog.setType(EnumOperationType.EXPORT.getOperationType());
+        auditLog.setCreator(user);
+        auditLog.setCreatedTime(new Date());
+        auditLog.setRemark(String.format("共导出%s条数据", size));
+        auditLogDao.save(auditLog);
+    }
+
 }

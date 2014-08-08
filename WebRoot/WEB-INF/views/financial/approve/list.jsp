@@ -23,11 +23,7 @@
         $(function () {
             window.approvingGrid = new Grid().init({gridName: "approving", gridSelector: ".approving", resultTemplateId: "template-tbody"});
             window.approvedGrid = new Grid().init({gridName: "approved", gridSelector: ".approved", resultTemplateId: "template-tbody"});
-            $C.tab({
-                onSelected: function (event, title, panel) {
-
-                }
-            });
+            $C.tab();
         });
     </script>
 </head>
@@ -90,12 +86,13 @@
 
         <div class="w cb tab-panels">
             <div id="tabs-approving" class="tab-panel ">
-                <table class="cb id_table2 w pr35 approving" forform="form" formaction="${ctx}/financial/approve/query.do?search_type=approving" forpagination="#tabs-approving .pagination">
+                <table class="cb id_table2 w pr35 approving" forform="form" formaction="${ctx}/financial/approve/query.do?type=approving" forpagination="#tabs-approving .pagination">
                     <tr>
                         <th style="width:2%"><input type="checkbox" class="checkall"/></th>
                         <th style="width:10%">流程</th>
                         <th style="width:10%">所属模块</th>
                         <th style="width:10%">记录描述</th>
+                        <th style="width:10%">涉及金额</th>
                         <th style="width:10%">创建时间</th>
                         <th style="width:15%">操作</th>
                     </tr>
@@ -105,12 +102,13 @@
             </div>
 
             <div id="tabs-approved" class="tab-panel ">
-                <table class="cb id_table2 w pr35 approved" forform="form" formaction="${ctx}/financial/approve/query.do?search_type=approved" forpagination="#tabs-approved .pagination">
+                <table class="cb id_table2 w pr35 approved" forform="form" formaction="${ctx}/financial/approve/query.do?type=approved" forpagination="#tabs-approved .pagination">
                     <tr>
                         <th style="width:2%"><input type="checkbox" class="checkall"/></th>
                         <th style="width:10%">流程</th>
                         <th style="width:10%">所属模块</th>
                         <th style="width:10%">记录描述</th>
+                        <th style="width:10%">金额</th>
                         <th style="width:10%">创建时间</th>
                         <th style="width:15%">操作</th>
                     </tr>
@@ -126,6 +124,7 @@
                     <td>{$T.row.flowNode.flow.key}</td>
                     <td>{$T.row.module.desc}</td>
                     <td>{$T.row.flowBusiness.code||$T.row.flowBusiness.name}</td>
+                    <td>{$T.row.flowBusiness.purchaseMoney||$T.row.flowBusiness.predictCost}</td>
                     <td>{$T.row.flowBusiness.createdTime}</td>
                     <td align="center">
                         <a href="${ctx}{$T.row.module.url}/toViewPage.do?id={$T.row.recordId}&returnURI=/financial/approve/toQueryPage.do" class=" block_inline s_detail_btn  globle_img ml10" title="详情"></a>

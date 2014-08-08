@@ -1,6 +1,7 @@
 
 package com.baihui.hxtd.soa.project.entity;
 
+import java.math.BigDecimal;
 import java.util.Date;
 
 import javax.persistence.Column;
@@ -63,7 +64,7 @@ public class Project {
 	 */
 	@FieldInfo(desc = "融资额度")
 	@Column(name="FINANCE_LIMIT")
-	private Float financeLimit;
+	private BigDecimal financeLimit;
 	/**
 	 * 开始时间
 	 */
@@ -196,12 +197,12 @@ public class Project {
 	}
 
 
-	public Float getFinanceLimit() {
+	public BigDecimal getFinanceLimit() {
 		return financeLimit;
 	}
 
 
-	public void setFinanceLimit(Float financeLimit) {
+	public void setFinanceLimit(BigDecimal financeLimit) {
 		this.financeLimit = financeLimit;
 	}
 

@@ -69,12 +69,16 @@ public class ApproveController {
     @RequestMapping(value = "/query.do")
     public String query(HttpServletRequest request, HibernatePage<FlowInstance> page, ModelMap modelMap) throws NoSuchFieldException, JsonProcessingException {
 
+        String type = request.getParameter("type");
         Map<String, Object> searchParams = Servlets.getParametersStartingWith(request, "search_");
         Search.clearBlankValue(searchParams);
-        searchParams.put("roleCode", Constant.ROLE_FINANCER);
         searchParams.put("user", modelMap.get(Constant.VS_USER));
-
-        page = flowInstanceService.findExecutablePagination(searchParams, page);
+        if ("approving".equals(type)) {
+            searchParams.put("roleCode", Constant.ROLE_FINANCER);
+            page = flowInstanceService.findExecutablePagination(page, searchParams);
+        } else if ("approved".equals(type)) {
+            page = flowInstanceService.findParticipantPagination(page, searchParams);
+        }
         flowInstanceService.fullFlowBusiness(page.getResult());
 
         logger.info("转换为TDO格式");

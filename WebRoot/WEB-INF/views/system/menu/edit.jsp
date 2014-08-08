@@ -90,13 +90,33 @@
             }
 
             new Menu().init();
+            
+            //验证重复的function的URl
+			  function validUnique(value, element, entityName){
+		    	var flag = false;
+		    	$.ajax({
+					url: "${ctx}/common/common/unique.docomp",
+					type: 'post',
+					async: false,
+					dataType: "json",
+					data: {entityName: entityName, fieldName: 'url', fieldValue: value},
+					success: function(data){
+						flag = data;
+					}
+				});
+				return flag;
+		    }
+		    jQuery.validator.addMethod("uniqueUrl", function(value, element, param){
+				return validUnique(value, element, param[0])&&validUnique(value, element, param[1]);
+			},"访问地址URL不允许重复");
+
+		
         })
         ;
     </script>
 
 </head>
 <body>
-<div>
     <div class="cb"></div>
     <div class="ml35 mr35">
         <div class="fl" style="width:20%">
@@ -148,7 +168,7 @@
                             <td align="right" width="15%">菜单名称：</td>
                             <td align="left"><input type="text" name="name" class="{required:true,unique:['Menu','${menu.name}']} text_input3" value="${menu.name}"/></td>
                             <td align="right" width="15%" class="required">调用入口：</td>
-                            <td align="left"><input type="text" name="url" class="{required:true,ruleUrl:true,unique:['Function','${menu.url}'],unique:['Menu','${menu.url}']} text_input3" value="${menu.url}"/></td>
+                            <td align="left"><input type="text" name="url" class="text_input3 required ruleUrl {uniqueUrl:['Menu','Function']}" value="${menu.url}"/></td>
                         </tr>
                         <tr>
                             <td align="right" width="15%" class="required">启用：</td>

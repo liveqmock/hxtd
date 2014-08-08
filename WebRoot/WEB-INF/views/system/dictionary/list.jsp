@@ -5,32 +5,32 @@
 <c:set var="ctx" value="${pageContext.request.contextPath}"/>
 <html>
 <head>
-    <title>字典维护</title>
-    <link rel="stylesheet" href="${ctx}/static/css/recommend/list1.css" type="text/css"/>
-    <link href="${ctx}/static/css/application.css" rel="stylesheet" type="text/css"/>
-    <script type="text/javascript" src="${ctx}/static/js/jquery-jtemplates.js"></script>
-    <script type="text/javascript" src="${ctx}/static/js/js-util.common.js"></script>
-    <script type="text/javascript" src="${ctx}/static/js/scrollTitle.js?v=1"></script>
-    <script type="text/javascript">
-        $(function () {
-            new Grid().init({gridName: "parent"}); //生成Gird
+<title>字典维护</title>
+<link rel="stylesheet" href="${ctx}/static/css/recommend/list1.css" type="text/css"/>
+<link href="${ctx}/static/css/application.css" rel="stylesheet" type="text/css"/>
+<script type="text/javascript" src="${ctx}/static/js/jquery-jtemplates.js"></script>
+<script type="text/javascript" src="${ctx}/static/js/js-util.common.js"></script>
+<script type="text/javascript" src="${ctx}/static/js/scrollTitle.js?v=1"></script>
+<script type="text/javascript">
+$(function () {
+    new Grid().init({LayoutBy: false, gridName: "parent"}); //生成Gird
+});
+function showChildNode(obj) {
+    var parentId = obj.id, lstSelector = ".div_" + parentId, $childLst = $(lstSelector);
+    $childLst.toggle();
+    if ($childLst.is(":visible") && $childLst.find("li").length == 0) {
+        new Grid().init({
+            containerSelector: lstSelector,
+            activeFlowHeader: false,
+            paginationActive: false,
+            gridName: "child",
+            gridSelector: '.children-grid',
+            resultTemplateId: 'template-child'
         });
-        function showChildNode(obj) {
-            var parentId = obj.id, lstSelector = ".div_" + parentId, $childLst = $(lstSelector);
-            $childLst.toggle();
-            if ($childLst.is(":visible") && $childLst.find("li").length == 0) {
-                new Grid().init({
-                    containerSelector: lstSelector,
-                    activeFlowHeader: false,
-                    paginationActive: false,
-                    gridName: "child",
-                    gridSelector: '.children-grid',
-                    resultTemplateId: 'template-child'
-                });
-            }
-            $(obj).toggleClass("s_putaway");
-        }
-    </script>
+    }
+    $(obj).toggleClass("s_putaway");
+}
+</script>
 </head>
 <body>
 <div class="listcontainer">
@@ -39,10 +39,10 @@
             <tr>
                 <td class="f14 namewidth1" align="right">字典类型：</td>
                 <td class="f14 namewidth2" align="left">
-                    <select name="search_EQ_type" class="select2">
+                    <select name="search_EQ_parent.id" class="select2">
                         <option value="">全部</option>
                         <c:forEach var="item" items="${types}">
-                            <option value="${item}">${item}</option>
+                            <option value="${item.id}">${item.key}</option>
                         </c:forEach>
                     </select>
                 </td>
@@ -67,7 +67,6 @@
         <b class="b2"></b>
         <b class="b3"></b>
         <b class="b4"></b>
-
         <div class="ie_head">
             <ul class="fl id_table1 mt10 ml10">
                 <c:if test="${VS_HAS_FUNCTIONS.dictionaryDelete}">
@@ -96,7 +95,7 @@
         </div>
     </div>
     <div class="ml35 mr35">
-        <div class="grid">
+        <div class="grid w">
             <ul class="cb id_ul5 w vm header">
                 <li style="width:4%">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<input type="checkbox" class="checkall"/></li>
                 <li style="width:16%">字典名称</li>

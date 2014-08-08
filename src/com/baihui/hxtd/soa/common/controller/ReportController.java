@@ -130,6 +130,8 @@ public class ReportController {
     public void detail(ModelMap modelMap) {
         logger.info("存储表单初始化数据");
 
+        modelMap.addAttribute("");
+
         //查询并存储所属模块
         Long moduleTypeId = dictionaryService.getIdByValue(DictionaryConstant.MODULE_TYPE_REPORT);
         List<Long> moduleId = moduleTypeService.findModuleIdByTypeId(moduleTypeId);

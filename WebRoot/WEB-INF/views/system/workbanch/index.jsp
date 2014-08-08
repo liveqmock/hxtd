@@ -10,7 +10,7 @@
 <title>工作台</title>
 <style>
 .gbin1-list{list-style:none;padding:0;margin:0;}
-.gbin1-list li{float:left;text-align:center;margin:5px;font-family: arial;padding:0px;}
+.gbin1-list li{float:left;text-align:center;margin:0 5px;font-family: arial;padding:0px;}
 </style>
 <link rel="stylesheet" href="${ctx}/static/css/recommend/list1.css" type="text/css" />
 <link rel="stylesheet" href="${ctx}/static/css/recommend/empower.css" type="text/css" />
@@ -46,7 +46,7 @@ $(function(){
 <div style="margin:20px;overflow:hidden">
 	<ul class="gbin1-list">
 		<c:forEach items="${list }" var="work" varStatus="s">
-			<li id="${work.id }" style="width: ${work.width}"
+			<li id="${work.id }" style="width: ${work.width}; min-height:155px"
 			uri="${ctx}${work.url}" module="${work.module}"
 			type="${work.type}" params="${work.params}"
 			timeParam="${work.timeParam}">
@@ -79,7 +79,7 @@ $(function(){
 		</c:forEach>
 	</ul>
 	<ul>
-		<li style="width: 49%;float:left;" id="add">
+		<li style="width: 48.5%;float:left;margin:0 5px;" id="add">
 			<a class="tc vm w h_add_workbanch block cp">+</a>
 		</li>
 	</ul>

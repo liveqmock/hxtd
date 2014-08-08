@@ -337,82 +337,43 @@ public class CustomerController extends CommonController<Customer>{
 	 * @param customer
 	 */
 	private void setPropertyNull(Customer customer){
-		if(null==customer.getType().getId()){
+		if(customer.getType().getId()==null){
 			customer.setType(null);
 		}
-		if(null==customer.getRiskGrade().getId()){
+		if(customer.getRiskGrade().getId()==null){
 			customer.setRiskGrade(null);
 		}
-		if(null==customer.getCardType().getId()){
+		if(customer.getCardType().getId()==null){
 			customer.setCardType(null);
 		}
-		if(null==customer.getOwnerShip().getId()){
+		if(customer.getOwnerShip().getId()==null){
 			customer.setOwnerShip(null);
 		}
-		if(null==customer.getOpenBank().getId()){
+		if(customer.getOpenBank().getId()==null){
 			customer.setOpenBank(null);
 		}
-		if(null==customer.getProvince().getId()){
+		if(customer.getProvince().getId()==null){
 			customer.setProvince(null);
 		}
-		if(null==customer.getCity().getId()){
+		if(customer.getCity().getId()==null){
 			customer.setCity(null);
 		}
-		if(null==customer.getCounty().getId()){
+		if(customer.getCounty().getId()==null){
 			customer.setCounty(null);
 		}
-		if(customer.getAppointment().getId()==null||customer.getAppointment()==null){
+		if(customer.getAppointment().getId()==null){
 			customer.setAppointment(null);
 		}
-		if(customer.getFinancialAdvisor().getId()==null||customer.getFinancialAdvisor()==null){
+		if(customer.getFinancialAdvisor().getId()==null){
 			customer.setFinancialAdvisor(null);
 		}
-		if(customer.getFinancialDirector().getId()==null||customer.getFinancialDirector()==null){
+		if(customer.getFinancialDirector().getId()==null){
 			customer.setFinancialDirector(null);
 		}
-		if(customer.getFinancialManager().getId()==null||customer.getFinancialManager()==null){
+		if(customer.getFinancialManager().getId()==null){
 			customer.setFinancialManager(null);
 		}
 	}
-	  /**
-     * 导出分页数据
-     * 1.在分页列表上根据当前条件进行导出
-     */
-    @RequestMapping(value = "/export.do", params = "TYPE=pagination")
-    public void exportPagination(HttpServletRequest request, Long organizationId, HibernatePage<Customer> page, ModelMap modelMap, HttpServletResponse response) throws NoSuchFieldException, IOException {
-        logger.info("导出excel文件");
-
-        logger.info("解析页面查询条件");
-        Map<String, Object> searchParams = Servlets.getParametersStartingWith(request, "search_");
-        Search.clearBlankValue(searchParams);
-        Search.decodeValue(searchParams);
-        Search.toRangeDate(searchParams, "modifiedTime");
-		Search.toRangeDate(searchParams, "createdTime");
-        logger.debug("查询条件数目“{}”", searchParams.size());
-
-        List<Customer> customers= customerService.find(searchParams);
-        logger.debug("列表信息数目“{}”", customers.size());
-
-        logger.info("转换成excel文件并输出");
-        ServletContext servletContext = request.getSession().getServletContext();
-        ImportExport.exportExcel(response, servletContext, "customer", customers).write(response.getOutputStream());
-    }
-
-    /**
-     * 导出限制数据
-     * 1.指定最大条数的
-     */
-    @RequestMapping(value = "/export.do", params = "TYPE=limit")
-    public void exportLimit(HttpServletRequest request, ModelMap modelMap, HttpServletResponse response) throws IOException {
-        logger.info("导出excel文件");
-
-        List<Customer> customers = customerService.find();
-        logger.debug("列表信息数目“{}”", customers.size());
-
-        logger.info("转换成excel文件并输出");
-        ServletContext servletContext = request.getSession().getServletContext();
-        ImportExport.exportExcel(response, servletContext, "customer", customers).write(response.getOutputStream());
-    }
 
 
 }

@@ -28,7 +28,8 @@
     	   $('input[name="roleId"]:checked').each(function(){
     		    var $this = $(this);
 				var roleId = $this.val();
-				RcmsAjax.ajaxNoMsg("${ctx}/system/user/toAuthorizationPage.do?TYPE=show&roleId="+roleId, function (result) {
+				RcmsAjax.ajaxNoMsg("${ctx}/system/user/toAuthorizationPage.do?TYPE=show&roleId="+roleId, 
+				function (result) {
         	    $this.data("functionIds",result.message);
 				});
 			});
@@ -51,7 +52,9 @@
       		});
     	    
     	    function selectId(ids,flag,roleId){
-        		var funIds=ids.split(',');
+        		var allId=ids.split('|');
+    	    	var funIds=allId[0].split(',');
+    	    	var comIds=allId[1].split(',');
 				if(flag){
 					$('input[name="functionId"]').each(function(){
 						if($.inArray($(this).val(),funIds)>0){
@@ -60,14 +63,33 @@
 							    }
 							}
 		  				});
+					$('input[name="componentId"]').each(function(){
+						if($.inArray($(this).val(),comIds)>0){
+							if(!$(this).attr("checked")){
+							    $(this).attr("checked",true);
+							    }
+							}
+		  				});
 	        	}
 				else{
-	        		var checkeds=""
+	        		var checkeds="";
+	        		var funs="";
+	        		var coms="";
 	        		$('input[name="roleId"]:checked').each(function(){
 	        			checkeds=$(this).data("functionIds")+checkeds;
 					});
+	        		var all=checkeds.split('|');
+	        		for(i=0;i<all.length;i++){
+	        			if(i%2==0){funs=funs+all[i]}
+	        			else{coms=coms+all[i]}
+	        		}
 					$('input[name="functionId"]').each(function(){
-							if($.inArray($(this).val(),checkeds.split(','))<0){
+							if($.inArray($(this).val(),funs.split(','))<0){
+								$(this).attr("checked",false);
+							}
+		  			});
+					$('input[name="componentId"]').each(function(){
+							if($.inArray($(this).val(),coms.split(','))<0){
 								$(this).attr("checked",false);
 							}
 		  			});
@@ -92,9 +114,9 @@
           
             //鼠标移近效果
             $(".orange").mouseenter(function(){
-            	$(this).addClass("c_orange fb");
+            	$(this).addClass("c_orange");
             }).mouseleave(function(){
-            	$(this).removeClass("c_orange fb");
+            	$(this).removeClass("c_orange");
             });
             
             //角色列表浮动
@@ -207,10 +229,9 @@
             			<ul class="id_ul4 fl">
             			<c:forEach items="${allComponents}" var="item" varStatus="status">
 			                <li align="left" style="line-height:20px;">
-			                    <label class="box size51 orange ${fn:contains(allAuthorizationComponents,item)?" inherit-component":""}">
-			                        <input ${fn:contains(allAuthorizationFunctions,item)?"checked='checked'":""} data-id="" type="checkbox" name="componentId" value="${item.id}" 
-			                        class="function" >${item.name}
-			                    </label>
+			                <label class="box size81 orange ${fn:contains(allAuthorizationComponents,item)?" inherit-component":""}">
+                        	<input type="checkbox" name="componentId" value="${item.id}" ${fn:contains(authorizationComponents,item)?" checked='checked'":""}>${item.name}
+                   			</label>
 			                </li>
             			</c:forEach>
             			</ul>

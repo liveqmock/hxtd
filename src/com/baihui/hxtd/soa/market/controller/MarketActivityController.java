@@ -6,6 +6,7 @@ import com.baihui.hxtd.soa.base.orm.hibernate.HibernatePage;
 import com.baihui.hxtd.soa.base.utils.ImportExport;
 import com.baihui.hxtd.soa.base.utils.ReflectionUtils;
 import com.baihui.hxtd.soa.base.utils.Search;
+import com.baihui.hxtd.soa.common.controller.CommonController;
 import com.baihui.hxtd.soa.common.controller.model.FlowModel;
 import com.baihui.hxtd.soa.common.entity.FlowInstance;
 import com.baihui.hxtd.soa.common.entity.FlowNode;
@@ -56,7 +57,7 @@ import java.util.Map;
 @Controller
 @RequestMapping(value = "/market/marketactivity")
 @SessionAttributes(value = {Constant.VS_USER_ID, Constant.VS_USER, Constant.VS_DATASHIFT})
-public class MarketActivityController {
+public class MarketActivityController extends CommonController<MarketActivity> {
 
     //IOC注入
     @Resource
@@ -498,5 +499,12 @@ public class MarketActivityController {
         return jsonDto.toString();
     }
 
+
+    @RequestMapping(value = "/export.do", params = "TYPE=limit")
+    public void exportLimit(HttpServletRequest request, ModelMap modelMap, HttpServletResponse response) throws IOException {
+        DataShift dataShift = (DataShift) modelMap.get(Constant.VS_DATASHIFT);
+        dataShift = dataShift.renameUserFieldName("bossHead");
+        exportLimit(request, modelMap, response, dataShift);
+    }
 
 }

@@ -44,17 +44,20 @@ public class OrderDao extends HibernateDAOImpl<Order, Long> {
 		return super.save(order);
 	}
 	
+	
 	/**
-     * 更新订单财务状态
-	 * @Title: setOrderPayStatusById
-	 * @param @param dictionary
-	 * @param @param id
-	 * @return void
-	 * @throws
-     */
-	public void modifyOrderPayStatusByIdStatus(Dictionary dictionary, Long id){
-		String hql = "update Order o set o.orderStatus = ? where o.id=?";
-    	this.createQuery(hql, dictionary, id).executeUpdate();
+	 * 
+	  * effectOrderPayStatusById(这里用一句话描述这个方法的作用)
+	  * @Title: effectOrderPayStatusById
+	  * @Description: TODO
+	  * @param @param dictionary
+	  * @param @param id    参数类型
+	  * @return void    返回类型
+	  * @throws
+	 */
+	public void modifyEffectOrderPayStatusById(Dictionary dictionary, Long id){
+		String hql = "update Order o set o.orderStatus = ? effectiveTime=? where o.id=?";
+    	this.createQuery(hql, dictionary, this.getDBNow(), id).executeUpdate();
 	}
 	
 	

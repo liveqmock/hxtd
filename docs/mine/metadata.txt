@@ -268,7 +268,8 @@ ALTER TABLE hxtd.sm_function ADD PRIVILEGE_LEVEL_ID int NOT NULL;
 ----新增
 ------销售主管
 
---07-30--
+--08-07--
+--线索、客户、联系人、项目，供应商、产品、订单、应收、应付 都可以导出来啊
 
 
 

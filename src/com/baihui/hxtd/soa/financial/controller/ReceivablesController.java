@@ -3,10 +3,13 @@ package com.baihui.hxtd.soa.financial.controller;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.text.ParseException;
+import java.util.List;
 import java.util.Map;
 
 import javax.annotation.Resource;
+import javax.servlet.ServletContext;
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -21,8 +24,10 @@ import org.springside.modules.web.Servlets;
 
 import com.baihui.hxtd.soa.base.Constant;
 import com.baihui.hxtd.soa.base.orm.hibernate.HibernatePage;
+import com.baihui.hxtd.soa.base.utils.ImportExport;
 import com.baihui.hxtd.soa.base.utils.Search;
 import com.baihui.hxtd.soa.base.utils.mapper.HibernateAwareObjectMapper;
+import com.baihui.hxtd.soa.common.controller.CommonController;
 import com.baihui.hxtd.soa.financial.entity.Receivables;
 import com.baihui.hxtd.soa.financial.service.ReceivablesService;
 import com.baihui.hxtd.soa.system.entity.AuditLog;
@@ -47,7 +52,7 @@ import com.fasterxml.jackson.databind.JsonMappingException;
 @Controller
 @RequestMapping("/financial/receivables")
 @SessionAttributes(value = {Constant.VS_USER, Constant.VS_USER_ID, Constant.VS_ORG})
-public class ReceivablesController {
+public class ReceivablesController extends CommonController<Receivables>{
 
     private Logger logger = LoggerFactory.getLogger(this.getClass());
 
@@ -112,10 +117,20 @@ public class ReceivablesController {
 	}
 
 	
-	
+	/**
+	  * 收款完成
+	  * @Title: modify
+	  * @Description: 收款完成,将订单状态修改为已收款，同时订单正式生效
+	  * @param @param receivables
+	  * @param @param modelMap
+	  * @param @param request
+	  * @param @return    参数类型
+	  * @return String    返回类型
+	  * @throws
+	 */
 	@ResponseBody
-	@RequestMapping(value = "/modify.do", produces = "text/text;charset=UTF-8")
-	public String modify(Receivables receivables, ModelMap modelMap,
+	@RequestMapping(value = "/modifyFinish.do", produces = "text/text;charset=UTF-8")
+	public String modifyFinish(Receivables receivables, ModelMap modelMap,
 						HttpServletRequest request) {
 		logger.info("ReceviablesController.modify修改收款信息");
 		User user = (User) modelMap.get(Constant.VS_USER);
@@ -123,14 +138,14 @@ public class ReceivablesController {
 		receivables.setModifier(user);
 		AuditLog auditLog = new AuditLog(EnumModule.RECEIVABLES.getModuleName(), 
 				receivables.getId(), receivables.getName(), EnumOperationType.MODIFY.getOperationType(), user);
-		receivablesService.modify(receivables,auditLog);
+		receivablesService.modifyFinish(receivables,auditLog);
 		JsonDto json = JsonDto.modify(receivables.getId());
 		return json.toString();
 	}
 	
 	
-	@RequestMapping(value = "/toModifyPage.do")
-	public String toModifyPage(Model model,Long id) throws ParseException {
+	@RequestMapping(value = "/toModifyFinishPage.do")
+	public String toModifyFinishPage(Model model,Long id) throws ParseException {
 		logger.info("ReceviablesController.toModifyPage修改 应收信息");
 		String funcUrl="/financial/receivables/modify.do";
 		model.addAttribute("funcUrl",funcUrl);
@@ -199,4 +214,45 @@ public class ReceivablesController {
 		return json.toString();
 	}
 	
+	
+	 /**
+     * 导出分页数据
+     * 1.在分页列表上根据当前条件进行导出
+     */
+    @RequestMapping(value = "/export.do", params = "TYPE=pagination")
+    public void exportPagination(HttpServletRequest request, Long organizationId, HibernatePage<Receivables> page, ModelMap modelMap, HttpServletResponse response) throws NoSuchFieldException, IOException {
+        logger.info("导出excel文件");
+
+        logger.info("解析页面查询条件");
+        Map<String, Object> searchParams = Servlets.getParametersStartingWith(request, "search_");
+        Search.clearBlankValue(searchParams);
+        Search.decodeValue(searchParams);
+        Search.toRangeDate(searchParams, "modifiedTime");
+		Search.toRangeDate(searchParams, "createdTime");
+        logger.debug("查询条件数目“{}”", searchParams.size());
+
+        List<Receivables> receivables= receivablesService.find(searchParams);
+        logger.debug("列表信息数目“{}”", receivables.size());
+
+        logger.info("转换成excel文件并输出");
+        ServletContext servletContext = request.getSession().getServletContext();
+        ImportExport.exportExcel(response, servletContext, "receivables", receivables).write(response.getOutputStream());
+    }
+
+    /**
+     * 导出限制数据
+     * 1.指定最大条数的
+     */
+    @RequestMapping(value = "/export.do", params = "TYPE=limit")
+    public void exportLimit(HttpServletRequest request, ModelMap modelMap, HttpServletResponse response) throws IOException {
+        logger.info("导出excel文件");
+
+        List<Receivables> receivabless = receivablesService.find();
+        logger.debug("列表信息数目“{}”", receivabless.size());
+
+        logger.info("转换成excel文件并输出");
+        ServletContext servletContext = request.getSession().getServletContext();
+        ImportExport.exportExcel(response, servletContext, "receivables", receivabless).write(response.getOutputStream());
+    }
+
 }

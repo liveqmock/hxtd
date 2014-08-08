@@ -120,22 +120,22 @@ function normalRedemption(id){
                     <td align="left">${order.investmentWay.key}</td>
                 </tr>
                 <tr>
-                    <td align="right">购买金额：</td>
+                    <td align="right">购买金额（万）：</td>
                     <td align="left">${order.purchaseMoney}</td>
-                    <td align="right">收益率：</td>
+                    <td align="right">收益率（%）：</td>
                     <td align="left">${order.earningRate}%</td>
                 </tr>
                 <tr>
-                    <td align="right">赎回赔率：</td>
+                    <td align="right">赎回赔率（%）：</td>
                     <td align="left">${order.arr }%</td>
                     <td align="right">赎回公式：</td>
                     <td align="left">${order.redeemFormula }</td>
                 </tr>
                 <tr>
                     <td align="right" width="15%">投资经理：</td>
-                    <td align="left">${order.salesManager.name }</td>
+                    <td align="left">${order.salesManager.realName }</td>
                     <td align="right" width="15%">投资总监：</td>
-                    <td align="left">${order.salesMajordomo.name }</td>
+                    <td align="left">${order.salesMajordomo.realName }</td>
                 </tr>
                 <tr>
                     <td align="right">结束时间：</td>

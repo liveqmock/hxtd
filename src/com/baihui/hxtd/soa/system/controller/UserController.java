@@ -1,35 +1,5 @@
 package com.baihui.hxtd.soa.system.controller;
 
-import java.io.IOException;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
-
-import javax.annotation.Resource;
-import javax.servlet.ServletContext;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-import javax.servlet.http.HttpSession;
-
-import org.apache.commons.collections.BidiMap;
-import org.apache.commons.io.FilenameUtils;
-import org.apache.commons.lang3.ArrayUtils;
-import org.apache.poi.openxml4j.exceptions.InvalidFormatException;
-import org.apache.poi.ss.usermodel.Workbook;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import org.springframework.stereotype.Controller;
-import org.springframework.ui.ModelMap;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.ResponseBody;
-import org.springframework.web.bind.annotation.SessionAttributes;
-import org.springframework.web.multipart.MultipartFile;
-import org.springframework.web.servlet.mvc.support.RedirectAttributes;
-import org.springside.modules.web.Servlets;
-
 import com.baihui.hxtd.soa.base.Constant;
 import com.baihui.hxtd.soa.base.orm.hibernate.HibernatePage;
 import com.baihui.hxtd.soa.base.utils.ImportExport;
@@ -41,22 +11,34 @@ import com.baihui.hxtd.soa.base.utils.ztree.TreeNodeConverter;
 import com.baihui.hxtd.soa.common.controller.CommonController;
 import com.baihui.hxtd.soa.common.service.CommonService;
 import com.baihui.hxtd.soa.system.DictionaryConstant;
-import com.baihui.hxtd.soa.system.entity.AuditLog;
-import com.baihui.hxtd.soa.system.entity.Component;
-import com.baihui.hxtd.soa.system.entity.Dictionary;
-import com.baihui.hxtd.soa.system.entity.Function;
-import com.baihui.hxtd.soa.system.entity.Organization;
-import com.baihui.hxtd.soa.system.entity.User;
-import com.baihui.hxtd.soa.system.service.ComponentService;
-import com.baihui.hxtd.soa.system.service.DictionaryService;
-import com.baihui.hxtd.soa.system.service.FunctionService;
-import com.baihui.hxtd.soa.system.service.OrganizationService;
-import com.baihui.hxtd.soa.system.service.RoleService;
-import com.baihui.hxtd.soa.system.service.UserService;
+import com.baihui.hxtd.soa.system.entity.*;
+import com.baihui.hxtd.soa.system.service.*;
 import com.baihui.hxtd.soa.util.EnumModule;
 import com.baihui.hxtd.soa.util.EnumOperationType;
 import com.baihui.hxtd.soa.util.JsonDto;
 import com.fasterxml.jackson.core.JsonProcessingException;
+import org.apache.commons.collections.BidiMap;
+import org.apache.commons.io.FilenameUtils;
+import org.apache.commons.lang3.ArrayUtils;
+import org.apache.poi.openxml4j.exceptions.InvalidFormatException;
+import org.apache.poi.ss.usermodel.Workbook;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.stereotype.Controller;
+import org.springframework.ui.ModelMap;
+import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
+import org.springside.modules.web.Servlets;
+
+import javax.annotation.Resource;
+import javax.servlet.ServletContext;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
+import java.io.IOException;
+import java.util.List;
+import java.util.Map;
 
 /**
  * 用户控制器
@@ -346,7 +328,7 @@ public class UserController extends CommonController<User> {
         logger.info("存储表单默认值");
         model.addAttribute("organizationInheritRoles", roleService.findOrganizationInherit(id));
         model.addAttribute("authorizationRoles", roleService.findAuthorization(id));
-        List<Function> functionList=functionService.findReferAuthorization(id);
+        List<Function> functionList = functionService.findReferAuthorization(id);
         model.addAttribute("allAuthorizationFunctions", functionList);
         model.addAttribute("authorizationFunctions", functionService.findUserAuthorization(id));
         model.addAttribute("allAuthorizationComponents", componentService.findReferAuthorization(id));
@@ -356,21 +338,21 @@ public class UserController extends CommonController<User> {
     }
 
     @ResponseBody
-    @RequestMapping(value = "/toAuthorizationPage.do",params = "TYPE=show")
+    @RequestMapping(value = "/toAuthorizationPage.do", params = "TYPE=show")
     public String toAuthorization(Long roleId) {
-    	List<Long> funIds=roleService.findFunByRoleId(roleId);
-    	List<Long> comIds=roleService.findComByRoleId(roleId);
-        StringBuffer sb = new StringBuffer("");
-        StringBuffer comsb = new StringBuffer("");
+        List<Long> funIds = roleService.findFunByRoleId(roleId);
+        List<Long> comIds = roleService.findComByRoleId(roleId);
+        StringBuffer sb = new StringBuffer(",");
+        StringBuffer comsb = new StringBuffer(",");
         for (Long function : funIds) {
-            sb.append(function+",");
+            sb.append(function + ",");
         }
         for (Long component : comIds) {
-        	comsb.append(component+",");
+            comsb.append(component + ",");
         }
         JsonDto jsonDto = new JsonDto();
         jsonDto.setSuccessFlag(true);
-        jsonDto.setMessage(sb.toString()+"|"+comsb.toString());
+        jsonDto.setMessage(sb.toString() + "|" + comsb.toString());
         return jsonDto.toString();
     }
 
@@ -515,32 +497,6 @@ public class UserController extends CommonController<User> {
     }
 
     /**
-     * 带条件导出
-     * 1.在分页列表上根据当前条件进行导出
-     */
-    @RequestMapping(value = "/export.do", params = "TYPE=pagination")
-    public void exportCondition(HttpServletRequest request, Long organizationId, ModelMap modelMap, HttpServletResponse response) throws NoSuchFieldException, IOException {
-        logger.info("导出excel文件");
-
-        logger.info("解析页面查询条件");
-        Map<String, Object> searchParams = Servlets.getParametersStartingWith(request, "search_");
-        Search.clearBlankValue(searchParams);
-        Search.decodeValue(searchParams);
-        logger.debug("查询条件数目“{}”", searchParams.size());
-
-        logger.info("获取对象集合");
-        if (organizationId == null) {
-            organizationId = (Long) modelMap.get(Constant.VS_ORG_ID);
-        }
-        List<User> users = userService.find(searchParams, organizationId);
-        logger.debug("列表信息数目“{}”", users.size());
-
-        logger.info("转换成excel文件并输出");
-        ServletContext servletContext = request.getSession().getServletContext();
-        ImportExport.exportExcel(response, servletContext, "user", users).write(response.getOutputStream());
-    }
-
-    /**
      * 导出限制数据
      * 1.指定最大条数的
      */
@@ -553,7 +509,13 @@ public class UserController extends CommonController<User> {
 
         logger.info("转换成excel文件并输出");
         ServletContext servletContext = request.getSession().getServletContext();
-        ImportExport.exportExcel(response, servletContext, "user", users).write(response.getOutputStream());
+        String name = "user";
+        Workbook workbook = ImportExport.exportExcel(response, servletContext, name, users);
+        response.setContentType("application/octet-stream; charset=utf-8");
+        response.setHeader("Content-Disposition", "attachment; filename=" + name + ".xls");
+        workbook.write(response.getOutputStream());
+        User user = (User) modelMap.get(Constant.VS_USER);
+        commonService.saveAuditlog(ImportExport.Type.limit, name, user, users.size());
     }
 
 

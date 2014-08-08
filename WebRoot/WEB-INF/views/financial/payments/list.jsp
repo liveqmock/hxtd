@@ -131,7 +131,14 @@
 						class="allbtn_r pr13 block fl w_auto f14">刷&nbsp;&nbsp;新</b> </a>
 				</li>
 			</ul>
-
+			<ul class="fr id_table1 mt10 ml10">
+				<c:if test="${VS_HAS_FUNCTIONS.financialPaymentsExport}">
+					<li>
+						<a href="javascript:;" uri="${ctx}/financial/payments/export.do?TYPE=selected" 
+							class="leading_out globle_img block_inline mr10 export" title="导出"></a>
+					</li>
+				</c:if>
+			</ul>
 				</div>
 	</div>
 	<div id="title" style="display: none;z-index: 1; background-color: #f5f5f6;"

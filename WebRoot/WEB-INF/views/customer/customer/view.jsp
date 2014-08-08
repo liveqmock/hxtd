@@ -103,7 +103,7 @@
 				<td align="left">${customer.appointment.realName}</td>
 			</tr>
 			<tr>
-				<td align="right">理财总监：</td>
+				<td align="right">投资总监：</td>
 				<td align="left">${customer.financialDirector.realName}</td>
 				<td align="right"></td>
 				<td align="left"></td>

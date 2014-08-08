@@ -124,7 +124,7 @@
                 var titleContainer = $(options.tabTitlesSelector, $this);
                 titleContainer.length == 0 && (titleContainer = $this);
                 var panelContainerSelector = titleContainer.attr(options.extfortabpanels);
-                panelContainerSelector == "" && (panelContainerSelector = options.tabPanelsSelector);
+                !panelContainerSelector && (panelContainerSelector = options.tabPanelsSelector);
                 var panelContainer = $(panelContainerSelector);
                 panelContainer.length == 0 && (panelContainer = $(options.tabPanelsSelector, $this));
                 var titles = titleContainer.find(options.tabTitleSelector);

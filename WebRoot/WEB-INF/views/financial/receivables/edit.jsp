@@ -10,72 +10,72 @@
 <c:set var="ctx" value="${pageContext.request.contextPath}"/>
 <html>
 <head>
-	<title>应收款编辑</title>
-	<meta http-equiv="pragma" content="no-cache">
-	<meta http-equiv="cache-control" content="no-cache">
-	<meta http-equiv="expires" content="0">    
-	<meta http-equiv="keywords" content="keyword1,keyword2,keyword3">
-	<meta http-equiv="description" content="This is my page">
-	<link rel="stylesheet" href="${ctx}/static/css/recommend/list1.css" type="text/css"/>
-	<link rel="stylesheet" href="${ctx}/static/css/recommend/detail_a.css" type="text/css"/>
-	<script type="text/javascript" src="${ctx}/static/js/jquery.validate.js"></script>
-	<script type="text/javascript" src="${ctx}/static/js/jquery.metadata.js"></script>
-	<script type="text/javascript" src="${ctx}/static/js/validator.js"></script>
-	<script type="text/javascript" src="${ctx}/static/js/htmlbox/htmlbox.colors.js"></script>
-	<script type="text/javascript" src="${ctx}/static/js/htmlbox/htmlbox.styles.js"></script>
-	<script type="text/javascript" src="${ctx}/static/js/htmlbox/htmlbox.syntax.js"></script>
-	<script type="text/javascript" src="${ctx}/static/js/htmlbox/xhtml.js"></script>
-	<script type="text/javascript" src="${ctx}/static/js/htmlbox/htmlbox.min.js"></script>
-	<script type="text/javascript">
-		$(function(){
-			$("#saveAndAdd").click(function(){
-				var $form = $("#form");
-				if($form.valid()){
-					RcmsAjax.ajax($form.attr("action"),function(result){
-						setTimeout(function(){
-							window.location.replace("${ctx}/financial/receivables/toAddPage.do")
-						},500);
-					},null,$form.formSerialize());
-				}
-				return false;
-			});
-			$("#save").click(function(){
-				var $form = $("#form");
-				if($form.valid()){
-					RcmsAjax.ajax($form.attr("action"),function(result){
-						//redirect
-						var id = result.result.result;
-						setTimeout(function(){
-							window.location.replace("${ctx}/financial/receivables/toViewPage.do?id="+id)
-						},500);
-					},null,$form.formSerialize());
-				}
-				return false;
-			});
-			jsUtil.datepickerNotNow(".time");
-		});
-		function searchData(action){//搜索弹出框
-			var url, title;
-			if(action == "order"){
-				url = "${ctx}/order/order/toQueryPage.comp";
-				title = "订单";
+<title>应收款编辑</title>
+<meta http-equiv="pragma" content="no-cache">
+<meta http-equiv="cache-control" content="no-cache">
+<meta http-equiv="expires" content="0">    
+<meta http-equiv="keywords" content="keyword1,keyword2,keyword3">
+<meta http-equiv="description" content="This is my page">
+<link rel="stylesheet" href="${ctx}/static/css/recommend/list1.css" type="text/css"/>
+<link rel="stylesheet" href="${ctx}/static/css/recommend/detail_a.css" type="text/css"/>
+<script type="text/javascript" src="${ctx}/static/js/jquery.validate.js"></script>
+<script type="text/javascript" src="${ctx}/static/js/jquery.metadata.js"></script>
+<script type="text/javascript" src="${ctx}/static/js/validator.js"></script>
+<script type="text/javascript" src="${ctx}/static/js/htmlbox/htmlbox.colors.js"></script>
+<script type="text/javascript" src="${ctx}/static/js/htmlbox/htmlbox.styles.js"></script>
+<script type="text/javascript" src="${ctx}/static/js/htmlbox/htmlbox.syntax.js"></script>
+<script type="text/javascript" src="${ctx}/static/js/htmlbox/xhtml.js"></script>
+<script type="text/javascript" src="${ctx}/static/js/htmlbox/htmlbox.min.js"></script>
+<script type="text/javascript">
+$(function(){
+	$("#saveAndAdd").click(function(){
+		var $form = $("#form");
+		if($form.valid()){
+			RcmsAjax.ajax($form.attr("action"),function(result){
+				setTimeout(function(){
+					window.location.replace("${ctx}/financial/receivables/toAddPage.do")
+				},500);
+			},null,$form.formSerialize());
+		}
+		return false;
+	});
+	$("#save").click(function(){
+		var $form = $("#form");
+		if($form.valid()){
+			RcmsAjax.ajax($form.attr("action"),function(result){
+				//redirect
+				var id = result.result.result;
+				setTimeout(function(){
+					window.location.replace("${ctx}/financial/receivables/toViewPage.do?id="+id)
+				},500);
+			},null,$form.formSerialize());
+		}
+		return false;
+	});
+	jsUtil.datepickerNotNow(".time");
+});
+function searchData(action){//搜索弹出框
+	var url, title;
+	if(action == "order"){
+		url = "${ctx}/order/order/toQueryPage.comp";
+		title = "订单";
+	}
+	jsUtil.dialogIframe(url, title, 800, 465, function(){//确定回调
+		var $userObj = $(".bor_e28d1f", window.frames["dialogIframe"].document);
+			if($userObj.length > 0){
+				$("#txt_" + action).val($userObj.find("td:eq(0)").text());
+				$("#hide_" + action +"_id").val($userObj.attr("id"));
+				$("#txt_customerName").val($userObj.find("td:eq(1)").text());//客户名称默认是订单的客户名称
+				$("#txt_customerId").val($userObj.find("td:eq(2)").text());
+				$("#txt_fund").val($userObj.find("td:eq(3)").text());
 			}
-			jsUtil.dialogIframe(url, title, 800, 465, function(){//确定回调
-				var $userObj = $(".bor_e28d1f", window.frames["dialogIframe"].document);
-					if($userObj.length > 0){
-						$("#txt_" + action).val($userObj.find("td:eq(0)").text());
-						$("#hide_" + action +"_id").val($userObj.attr("id"));
-						$("#txt_customerName").val($userObj.find("td:eq(1)").text());//客户名称默认是订单的客户名称
-						$("#txt_customerId").val($userObj.find("td:eq(2)").text());
-						$("#txt_fund").val($userObj.find("td:eq(3)").text());
-					}
-				$("#txt_receivables").val($("#txt_order").val());//收款编号默认为订单编号
-			});
-		}
-		function clearInputVal(obj){//清除
-			$(obj).prevAll("input").val('');
-		}
-	</script>
+		$("#txt_receivables").val($("#txt_order").val());//收款编号默认为订单编号
+	});
+}
+function clearInputVal(obj){//清除
+	$(obj).prevAll("input").val('');
+}
+</script>
 </head>
 <body>
 <form id="form" action="${ctx }${funcUrl}" method="post">

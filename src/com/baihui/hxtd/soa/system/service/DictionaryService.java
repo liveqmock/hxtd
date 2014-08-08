@@ -56,7 +56,9 @@ public class DictionaryService {
     public HibernatePage<Dictionary> findPage(Map<String, Object> searchParams, HibernatePage<Dictionary> page) throws NoSuchFieldException {
         DetachedCriteria criteria = DetachedCriteria.forClass(Dictionary.class);
         criteria.add(Restrictions.eq("isDeleted", false));// 过滤已删除
-        criteria.add(Restrictions.isNull("type"));
+        if(0 == searchParams.size()){ //查询所有
+        	criteria.add(Restrictions.isNull("type"));
+        }
 
         Map<String, SearchFilter> filters = Search.parse(searchParams);
         Search.buildCriteria(filters, criteria, Dictionary.class);

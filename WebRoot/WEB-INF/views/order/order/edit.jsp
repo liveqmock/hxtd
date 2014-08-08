@@ -168,7 +168,7 @@
             <tr>
                 <td align="right" width="15%"><span class="w_red">*&nbsp;</span>投资经理：</td>
                 <td align="left">
-                    <input type="text" id="txt_salesManager" value="${order.salesManager.name}" name="name_salesManager"
+                    <input type="text" id="txt_salesManager" value="${order.salesManager.realName}" name="name_salesManager"
                            class="text_input3 cp required" onclick="searchData('salesManager');" readonly/>
                     <input type="hidden" id="hide_salesManager_id" name="salesManager.id" value="${order.salesManager.id}"/>
                     <i class="s_inquiry globle_img block_inline ml5 vm cp" title="搜索所有者" onclick="searchData('salesManager');"></i>
@@ -176,7 +176,7 @@
                 </td>
                 <td align="right" width="15%"><span class="w_red">*&nbsp;</span>投资总监：</td>
                 <td align="left">
-                    <input type="text" id="txt_salesMajordomo" value="${order.salesMajordomo.name}" name="name_salesMajordomo"
+                    <input type="text" id="txt_salesMajordomo" value="${order.salesMajordomo.realName}" name="name_salesMajordomo"
                            class="text_input3 cp required" onclick="searchData('salesMajordomo');" readonly/>
                     <input type="hidden" id="hide_salesMajordomo_id" name="salesMajordomo.id" value="${order.owner.id}"/>
                     <i class="s_inquiry globle_img block_inline ml5 vm cp" title="搜索所有者" onclick="searchData('salesMajordomo');"></i>

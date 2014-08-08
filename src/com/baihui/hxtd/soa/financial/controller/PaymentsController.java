@@ -7,7 +7,9 @@ import java.util.List;
 import java.util.Map;
 
 import javax.annotation.Resource;
+import javax.servlet.ServletContext;
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -21,8 +23,10 @@ import org.springside.modules.web.Servlets;
 
 import com.baihui.hxtd.soa.base.Constant;
 import com.baihui.hxtd.soa.base.orm.hibernate.HibernatePage;
+import com.baihui.hxtd.soa.base.utils.ImportExport;
 import com.baihui.hxtd.soa.base.utils.Search;
 import com.baihui.hxtd.soa.base.utils.mapper.HibernateAwareObjectMapper;
+import com.baihui.hxtd.soa.common.controller.CommonController;
 import com.baihui.hxtd.soa.financial.entity.Payments;
 import com.baihui.hxtd.soa.financial.service.PaymentsService;
 import com.baihui.hxtd.soa.system.DictionaryConstant;
@@ -50,7 +54,7 @@ import com.fasterxml.jackson.databind.JsonMappingException;
 @Controller
 @RequestMapping("/financial/payments")
 @SessionAttributes(value = {Constant.VS_USER, Constant.VS_USER_ID, Constant.VS_ORG})
-public class PaymentsController {
+public class PaymentsController extends CommonController<Payments>{
 
     private Logger logger = LoggerFactory.getLogger(this.getClass());
 
@@ -239,4 +243,44 @@ public class PaymentsController {
 			payments.setPayType(null);
 		}
 	}
+	
+	 /**
+     * 导出分页数据
+     * 1.在分页列表上根据当前条件进行导出
+     */
+    @RequestMapping(value = "/export.do", params = "TYPE=pagination")
+    public void exportPagination(HttpServletRequest request, Long organizationId, HibernatePage<Payments> page, ModelMap modelMap, HttpServletResponse response) throws NoSuchFieldException, IOException {
+        logger.info("导出excel文件");
+
+        logger.info("解析页面查询条件");
+        Map<String, Object> searchParams = Servlets.getParametersStartingWith(request, "search_");
+        Search.clearBlankValue(searchParams);
+        Search.decodeValue(searchParams);
+        Search.toRangeDate(searchParams, "modifiedTime");
+		Search.toRangeDate(searchParams, "createdTime");
+        logger.debug("查询条件数目“{}”", searchParams.size());
+
+        List<Payments> payments= paymentsService.find(searchParams);
+        logger.debug("列表信息数目“{}”", payments.size());
+
+        logger.info("转换成excel文件并输出");
+        ServletContext servletContext = request.getSession().getServletContext();
+        ImportExport.exportExcel(response, servletContext, "payments", payments).write(response.getOutputStream());
+    }
+
+    /**
+     * 导出限制数据
+     * 1.指定最大条数的
+     */
+    @RequestMapping(value = "/export.do", params = "TYPE=limit")
+    public void exportLimit(HttpServletRequest request, ModelMap modelMap, HttpServletResponse response) throws IOException {
+        logger.info("导出excel文件");
+
+        List<Payments> paymentss = paymentsService.find();
+        logger.debug("列表信息数目“{}”", paymentss.size());
+
+        logger.info("转换成excel文件并输出");
+        ServletContext servletContext = request.getSession().getServletContext();
+        ImportExport.exportExcel(response, servletContext, "payments", paymentss).write(response.getOutputStream());
+    }
 }

@@ -31,6 +31,7 @@ function Grid() {}
 Grid.defaults = {
     containerSelector: ".listcontainer",
     activeFlowHeader: true,//启用浮动表头
+    LayoutBy: true, //列表布局方式 默认table
     //表单
     formSelector: "form",
     formPageNoSelector: "[name=hibernatePageNo]",
@@ -399,6 +400,7 @@ Grid.prototype = {
      */
     cloneFloatHeader: function () {
         this.floatHeader = $('<div style="display: none;background-color: #f5f5f6;" class="mr35 z1"></div>');
+        !this.options.LayoutBy && ($(this.floatHeader).css({ width: "96%"})) //div布局
         this.grid.before(this.floatHeader);
         var emptyTable = this.grid.clone().empty();
         this.floatHeader.append(emptyTable);

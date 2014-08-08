@@ -170,6 +170,46 @@ public class OrderController extends CommonController<Order> {
     }
 
     /**
+     * 查看或编辑订单
+     */
+    @RequestMapping(value = "/toViewPage.do", params = {"TYPE=code"})
+    public String viewByCode(String code, ModelMap modelMap) {
+        logger.info("OrderController.view查询组件");
+        User user = (User) modelMap.get(Constant.VS_USER);
+
+        Order order = orderService.getByCode(code);
+        modelMap.addAttribute("order", order);
+        modelMap.addAttribute("entity", order);
+
+
+        //存储历史记录
+        List<FlowInstance> historys = flowInstanceService.findExecuted(Constant.MODULE_ORDER, order.getId(), DictionaryConstant.NODE_TYPE_ORDERAPPROVE);
+        modelMap.addAttribute("historyRecords", historys);
+
+        //存储当前流程
+        FlowNode currentFlowNode = order.getFlowNode();
+        if (currentFlowNode != null) {
+            if (currentFlowNode.getType().equals(NodeType.start.getValue())) {
+                currentFlowNode.setApprover(user);
+            } else {
+                flowNodeService.fullReserveExecutor(Constant.MODULE_ORDER, order.getId(), currentFlowNode);
+            }
+            modelMap.addAttribute("currentFlowNode", order.getFlowNode());
+
+            //存储预定审批环节
+            List<FlowNode> flowNodes = flowNodeService.findAllOfFlow(DictionaryConstant.NODE_TYPE_ORDERAPPROVE);
+            List<FlowNode> reserveFlowNodes = FlowNodeService.findAfter(flowNodes, currentFlowNode);
+            if (!currentFlowNode.getType().equals(NodeType.start.getValue())) {
+                flowNodeService.fullReserveExecutor(Constant.MODULE_ORDER, order.getId(), reserveFlowNodes);
+            }
+            modelMap.addAttribute("reserveFlowNodes", reserveFlowNodes);
+        }
+        modelMap.addAttribute("endFlowNode", NodeType.end.getValue());
+
+        return "/order/order/view";
+    }
+
+    /**
      * 赎回组件
      */
     @RequestMapping(value = "/redemption.comp")
@@ -200,7 +240,7 @@ public class OrderController extends CommonController<Order> {
     public String modify(Order order,
                          HttpServletRequest request, ModelMap modelMap) {
         logger.info("OrderController.modify修改订单信息");
-        User user = (User)modelMap.get(Constant.VS_USER);
+        User user = (User) modelMap.get(Constant.VS_USER);
         logger.info("获得当前操作用户{}", user.getName());
         order.setModifier(user);
         order.setCreator(user);
@@ -513,12 +553,12 @@ public class OrderController extends CommonController<Order> {
         flowInstanceService.execute(flowModel);
         // 审批通过
         if (executeRecord.getIsPassed() && flowModel.getNextFlowNode().getType().equals(NodeType.end.getValue())) {
-        	// 修改对应订单的订单状态
-        	Long id = flowModel.getExecuteRecord().getRecordId();
-        	AuditLog auditLog = new AuditLog(EnumModule.ORDER.getModuleName(),
+            // 修改对应订单的订单状态
+            Long id = flowModel.getExecuteRecord().getRecordId();
+            AuditLog auditLog = new AuditLog(EnumModule.ORDER.getModuleName(),
                     id, orderService.get(id).getCode(), EnumOperationType.MODIFY.getOperationType(), user);
-        	auditLog.setRemark("审批完成自动生成收款单");
-        	orderService.modifyOrderNoteFinish(id, user, auditLog);
+            auditLog.setRemark("审批完成自动生成收款单");
+            orderService.modifyOrderNoteFinish(id, user, auditLog);
         }
         JsonDto jsonDto = new JsonDto(executeRecord.getRecordId(), "执行审批成功！");
         return jsonDto.toString();

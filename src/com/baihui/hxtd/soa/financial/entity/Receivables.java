@@ -244,7 +244,7 @@ public class Receivables {
 		this.owner = owner;
 	}
 
-	public boolean isStatus() {
+	public boolean getStatus() {
 		return status;
 	}
 

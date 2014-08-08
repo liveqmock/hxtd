@@ -39,9 +39,9 @@
             $C.bindCheckAll($menu1, "div.menu1", ".function:checkbox");
             $C.tab();
             $(".orange").mouseenter(function(){
-            	$(this).addClass("c_orange fb");
+            	$(this).addClass("c_orange");
             }).mouseleave(function(){
-            	$(this).removeClass("c_orange fb");
+            	$(this).removeClass("c_orange");
             });
         });
     </script>

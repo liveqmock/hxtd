@@ -47,7 +47,19 @@ $(function(){
 	});
 }); 
 function searchData(action){ // 搜索
-	jsUtil.dialogIframe("${ctx}/system/user/toQueryPage.comp", "负责人", 800, 420, 
+	var title="";
+	if(action=="owner"){
+		title="所有者";
+	}else if(action=="financialAdvisor"){
+		title="理财顾问";
+	}else if(action=="financialManager"){
+		title="理财经理";
+	}else if(action=="financialDirector"){
+		title="理财总监";
+	}else if(action=="appointment"){
+		title="邀约人";
+	}
+	jsUtil.dialogIframe("${ctx}/system/user/toQueryPage.comp", title, 800, 420, 
 		function(){ // 确定回调
 			var $userObj = $(".bor_e28d1f", window.frames["dialogIframe"].document);
 			if($userObj.length > 0){
@@ -203,7 +215,7 @@ function searchData(action){ // 搜索
 					<input id="txt_financialAdvisor" type="text" value="${customer.financialAdvisor.realName}" readonly 
 						class="text_input3 cp" onclick="searchData('financialAdvisor');"/>
 					<input id="hide_financialAdvisor_id" type="hidden" name="financialAdvisor.id" value="${customer.financialAdvisor.id}"/>
-					<i class="s_inquiry globle_img block_inline ml5 vm cp" title="搜索所有者" onclick="searchData('financialAdvisor');"></i>
+					<i class="s_inquiry globle_img block_inline ml5 vm cp" title="搜索理财顾问" onclick="searchData('financialAdvisor');"></i>
 					<i class="dump_btn globle_img block_inline ml5 vm cp empty" title="清除"></i>
 				</td>
 				<td align="right" width="15%">邮编：</td>
@@ -215,7 +227,7 @@ function searchData(action){ // 搜索
 					<input id="txt_financialManager" type="text" value="${customer.financialManager.realName}" readonly 
 						class="text_input3 cp" onclick="searchData('financialManager');"/>
 					<input id="hide_financialManager_id" type="hidden" name="financialManager.id" value="${customer.financialManager.id}"/>
-					<i class="s_inquiry globle_img block_inline ml5 vm cp" title="搜索所有者" onclick="searchData('financialManager');"></i>
+					<i class="s_inquiry globle_img block_inline ml5 vm cp" title="搜索理财经理" onclick="searchData('financialManager');"></i>
 					<i class="dump_btn globle_img block_inline ml5 vm cp empty" title="清除"></i>
 				</td>
 				<td align="right" width="15%">邀约人：</td>
@@ -223,7 +235,7 @@ function searchData(action){ // 搜索
 					<input id="txt_appointment" type="text" value="${customer.appointment.realName}" readonly 
 						class="text_input3 cp" onclick="searchData('appointment');"/>
 					<input id="hide_appointment_id" type="hidden" name="appointment.id" value="${customer.appointment.id}"/>
-					<i class="s_inquiry globle_img block_inline ml5 vm cp" title="搜索所有者" onclick="searchData('appointment');"></i>
+					<i class="s_inquiry globle_img block_inline ml5 vm cp" title="搜索邀约人" onclick="searchData('appointment');"></i>
 					<i class="dump_btn globle_img block_inline ml5 vm cp empty" title="清除"></i>
 			    </td>
 			</tr>
@@ -233,7 +245,7 @@ function searchData(action){ // 搜索
 					<input id="txt_financialDirector" type="text" value="${customer.financialDirector.realName}" readonly 
 						class="text_input3 cp" onclick="searchData('financialDirector');"/>
 					<input id="hide_financialDirector_id" type="hidden" name="financialDirector.id" value="${customer.financialDirector.id}"/>
-					<i class="s_inquiry globle_img block_inline ml5 vm cp" title="搜索所有者" onclick="searchData('financialDirector');"></i>
+					<i class="s_inquiry globle_img block_inline ml5 vm cp" title="搜索理财总监" onclick="searchData('financialDirector');"></i>
 					<i class="dump_btn globle_img block_inline ml5 vm cp empty" title="清除"></i>
 				</td>
 				<td align="right" width="15%"></td>

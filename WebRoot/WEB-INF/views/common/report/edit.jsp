@@ -35,6 +35,11 @@
                 }, null, $.param({id: this.value}));
             });
 
+            var chartType = form.find("[name=chart\\.id]");
+            chartType.change(function () {
+
+            });
+
             var groupTypeChange = function (groupType) {
                 return function () {
                     var $this = $(this);
@@ -191,7 +196,7 @@
                         </div>
                     </td>
                 </tr>
-                <tr>
+                <tr class="zAxis">
                     <td align="right" width="15%">Z轴字段名：</td>
                     <td align="left">
                         <div class="pr">

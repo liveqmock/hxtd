@@ -56,6 +56,7 @@ public class Customer implements Serializable {
 	/** 客户类型 */
 	@FieldInfo(desc = "客户类型")
 	@ManyToOne(fetch = FetchType.LAZY)
+	@NotFound(action = NotFoundAction.IGNORE)
 	@JoinColumn(name = "TYPE_DIC")
 	private Dictionary type;
 
@@ -68,12 +69,14 @@ public class Customer implements Serializable {
 	/** 风险等级 */
 	@FieldInfo(desc = "风险等级")
 	@ManyToOne(fetch = FetchType.LAZY)
+	@NotFound(action = NotFoundAction.IGNORE)
 	@JoinColumn(name = "RISK_GRADE_DIC")
 	private Dictionary riskGrade;
 
 	/** 证件类型 */
 	@FieldInfo(desc = "证件类型 ")
 	@ManyToOne(fetch = FetchType.LAZY)
+	@NotFound(action = NotFoundAction.IGNORE)
 	@JoinColumn(name = "CARD_TYPE_DIC")
 	private Dictionary cardType;
 
@@ -126,12 +129,14 @@ public class Customer implements Serializable {
 	/** 所有权 */
 	@FieldInfo(desc = "所有权 ")
 	@ManyToOne(fetch = FetchType.LAZY)
+	@NotFound(action = NotFoundAction.IGNORE)
 	@JoinColumn(name = "OWNERSHIP_DIC")
 	private Dictionary ownerShip;
 
 	/** 客户所在行业 */
 	@FieldInfo(desc = "客户所在行业")
 	@ManyToOne(fetch = FetchType.LAZY)
+	@NotFound(action = NotFoundAction.IGNORE)
 	@JoinColumn(name = "INDUSTRY_DIC")
 	private Dictionary industry;
 

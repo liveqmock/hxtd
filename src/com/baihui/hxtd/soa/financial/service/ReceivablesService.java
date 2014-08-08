@@ -1,12 +1,15 @@
 package com.baihui.hxtd.soa.financial.service;
 
 import java.text.ParseException;
+import java.util.List;
 import java.util.Map;
 
 import javax.annotation.Resource;
 
+import org.hibernate.Criteria;
 import org.hibernate.FetchMode;
 import org.hibernate.criterion.DetachedCriteria;
+import org.hibernate.criterion.Restrictions;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
@@ -50,6 +53,7 @@ public class ReceivablesService {
 	@Resource
 	private DictionaryDao dictionaryDao;
 
+	private Integer exportCounts = 5000;
 	/**
 	 * 分页查询
 	 * 
@@ -104,8 +108,7 @@ public class ReceivablesService {
 	}
 
 	/**
-	 *根据ID获取收款管理实体类
-	 * 
+	 * 根据ID获取收款管理实体类
 	 * @param id
 	 * @return
 	 * @throws ParseException
@@ -125,12 +128,11 @@ public class ReceivablesService {
 
 	/**
 	 * 修改收款单
-	 * 
 	 * @param receivables
 	 * @param auditLog
 	 */
 	@Transactional(readOnly = false)
-	public void modify(Receivables receivables, AuditLog auditLog) {
+	public void modifyFinish(Receivables receivables, AuditLog auditLog) {
 		if (receivables.getActual() == null) {
 			receivables.setStatus(false);
 		} else {
@@ -139,8 +141,9 @@ public class ReceivablesService {
 		receivables.setModifiedTime(receivablesDao.getDBNow());
 		receivables.setOperateTime(receivables.getModifiedTime());
 		receivablesDao.save(receivables);
+		// 订单状态变更为已收款，同时写入订单正式生效
 		if (receivables.getOrder() != null && receivables.getOrder().getId() != null ){
-			orderDao.modifyOrderPayStatusByIdStatus(dictionaryDao
+			orderDao.modifyEffectOrderPayStatusById(dictionaryDao
 					.getByValue(DictionaryConstant.ORDER_PAY_2_HXTD_STATUS_ALL),
 					receivables.getOrder().getId());
 		}
@@ -155,6 +158,44 @@ public class ReceivablesService {
 	@Transactional(readOnly = false)
 	public void delete(Long[] id, AuditLog[] auditLogArr) {
 		receivablesDao.logicalDelete(id);
+	}
+
+	/**
+	 * 查找所有应收款
+	 * @return
+	 */
+	@SuppressWarnings("unchecked")
+	public List<Receivables> find() {
+		logger.info("查找");
+        DetachedCriteria detachedCriteria = DetachedCriteria.forClass(Receivables.class);
+        detachedCriteria.setFetchMode("customer", FetchMode.JOIN);
+        detachedCriteria.setFetchMode("order", FetchMode.JOIN);
+        detachedCriteria.setFetchMode("owner", FetchMode.JOIN);
+        detachedCriteria.setFetchMode("creator", FetchMode.JOIN);
+        detachedCriteria.setFetchMode("modifier", FetchMode.JOIN);
+        detachedCriteria.add(Restrictions.eq("isDeleted", false));
+        Criteria criteria = detachedCriteria.getExecutableCriteria(receivablesDao.getSession());
+        criteria.setMaxResults(exportCounts);
+        return (List<Receivables>) criteria.list();
+	}
+
+
+	/**
+	 * 分页导出查找所有应收款
+	 * @return
+	 */
+	public List<Receivables>  find(Map<String, Object> searchParams) throws NoSuchFieldException {
+		logger.info("分页查找");
+        DetachedCriteria detachedCriteria = DetachedCriteria.forClass(Receivables.class);
+        detachedCriteria.setFetchMode("customer", FetchMode.JOIN);
+        detachedCriteria.setFetchMode("order", FetchMode.JOIN);
+        detachedCriteria.setFetchMode("owner", FetchMode.JOIN);
+        detachedCriteria.setFetchMode("creator", FetchMode.JOIN);
+        detachedCriteria.setFetchMode("modifier", FetchMode.JOIN);
+        detachedCriteria.add(Restrictions.eq("isDeleted", false));
+        Map<String, SearchFilter> filters = Search.parse(searchParams);
+        Search.buildCriteria(filters, detachedCriteria, Receivables.class);
+        return receivablesDao.find(detachedCriteria, exportCounts);
 	}
 
 }

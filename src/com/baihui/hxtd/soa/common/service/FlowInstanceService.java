@@ -10,10 +10,10 @@ import com.baihui.hxtd.soa.system.dao.MessageDao;
 import com.baihui.hxtd.soa.system.dao.OrganizationDao;
 import com.baihui.hxtd.soa.system.dao.UserDao;
 import com.baihui.hxtd.soa.system.dao.UserMessageDao;
-import com.baihui.hxtd.soa.system.entity.*;
-import org.apache.commons.lang3.ArrayUtils;
+import com.baihui.hxtd.soa.system.entity.Organization;
+import com.baihui.hxtd.soa.system.entity.Role;
+import com.baihui.hxtd.soa.system.entity.User;
 import org.apache.commons.lang3.StringUtils;
-import org.apache.commons.lang3.Validate;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
@@ -174,7 +174,9 @@ public class FlowInstanceService {
     public <T extends IdFlowable> List<T> fullExecutable(String moduleName, FlowNode flowNode, List<T> businesses) {
         for (int i = 0; i < businesses.size(); i++) {
             T business = businesses.get(i);
-            boolean isExecutable = flowInstanceDao.isExecutable(moduleName, flowNode, business);
+            //排除财务
+            boolean isExecutable = !flowNode.getRole().getCode().equals(Constant.ROLE_FINANCER);
+            isExecutable = isExecutable && flowInstanceDao.isExecutable(moduleName, flowNode, business);
             if (isExecutable) {
                 business.getFlowNode().setExecuteFlowNode(flowNode);
             }
@@ -183,18 +185,51 @@ public class FlowInstanceService {
     }
 
     /**
-     * 查找可执行的流程实例
-     * 1.流程实例行进至当前流程环节的上一个流程环节
+     * 查找已执行的流程实例
+     * 1.自己参与过的
+     * 2.不考虑重复参与的情况
      */
-    public HibernatePage<FlowInstance> findExecutablePagination(Map<String, Object> conditions, HibernatePage<FlowInstance> page) {
-        String type = (String) conditions.get("type");
-        Validate.notNull(type, "类型不能为null");
-        String[] types = {"approving", "approved"};
-        Validate.validIndex(types, ArrayUtils.indexOf(types, type), "type“%s”必须是“%s”中的一个值", type, StringUtils.join(types, ","));
+    public HibernatePage<FlowInstance> findParticipantPagination(HibernatePage<FlowInstance> page, Map<String, Object> conditions) {
+        //固定的条件数目，user=1
+        int fixConditionLength = 1;
+        List<String> conditionExps = new ArrayList<String>();
 
-        //固定的条件数目，type&&roleCode=2
+        String lastHql = "select max(instance.id) from FlowInstance instance where instance.approver=:user and instance.isPassed is not null"
+                + StringUtils.repeat(" %s", conditions.size() - fixConditionLength)
+                + " group by instance.module,instance.recordId,instance.flowNode.flow";
+
+        if (conditions.containsKey("moduleId")) {
+            conditionExps.add("and instance.module.id=:moduleId");
+            conditions.put("moduleId", Long.parseLong(conditions.get("moduleId").toString()));
+        }
+        if (conditions.containsKey("flowId")) {
+            conditionExps.add("and instance.flowNode.flow.id=:flowId");
+            conditions.put("flowId", Long.parseLong(conditions.get("flowId").toString()));
+        }
+        lastHql = String.format(lastHql, conditionExps.toArray());
+
+        String hql = "select instance from FlowInstance instance" +
+                " where instance.id in (%s)";
+        hql = String.format(hql, lastHql);
+        flowInstanceDao.findPage(page, hql, conditions);
+        logger.info("数目={}", page.getResult().size());
+        return page;
+    }
+
+    /**
+     * 查找可执行的流程实例
+     * 1.待审核
+     * 轮到自己参与流程中某个流程实例
+     * --查找最近执行的流程实例
+     * --查找流程实例的下一个流程环节
+     * --查找预定的流程执行者
+     * 2.已审核
+     * 自己参与了流程中某个流程实例
+     */
+    public HibernatePage<FlowInstance> findExecutablePagination(HibernatePage<FlowInstance> page, Map<String, Object> conditions) {
+
+        //固定的条件数目，roleCode&&user=2
         int fixConditionLength = 2;
-
         List<String> conditionExps = new ArrayList<String>();
         String lastInstanceHql = "select max(lastInstance.id) from FlowInstance lastInstance" +
                 " where lastInstance.isPassed is not null" +
@@ -211,16 +246,19 @@ public class FlowInstanceService {
         }
         lastInstanceHql = String.format(lastInstanceHql, conditionExps.toArray());
 
+
         String hql = "select instance from FlowInstance instance" +
                 " where instance.id in (%s)" +
-                " and exists(select flowNode from FlowNode flowNode where flowNode.flow=instance.flowNode.flow and flowNode.order=instance.flowNode.order+1 %s)";
-        if (type.equals(types[0])) {
-            hql = String.format(hql, lastInstanceHql, "and flowNode.role.code=:roleCode");
-        } else if (type.equals(types[1])) {
-            hql = String.format(hql, lastInstanceHql, "and flowNode.type=" + NodeType.end.getValue());
-        }
+                " and exists(%s)";
+        //预定的实例
+        String reserveInstanceHql = "select reserve from FlowInstance reserve" +
+                " where reserve.flowNode.flow=instance.flowNode.flow" +
+                " and reserve.flowNode.order=instance.flowNode.order+1" +
+                " and reserve.approver=:user";
+        hql = String.format(hql, lastInstanceHql, reserveInstanceHql);
+
         flowInstanceDao.findPage(page, hql, conditions);
-        logger.info("{}数目={}", type, page.getResult().size());
+        logger.info("数目={}", page.getResult().size());
         return page;
     }
 

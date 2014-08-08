@@ -76,18 +76,18 @@
                     <td align="left">
                         <fmt:formatDate value="${activity.endDate}" pattern="yyyy-MM-dd" var="endDate"/>${endDate}
                     </td>
-                    <td align="right">预计成本：</td>
+                    <td align="right">预计成本（元）：</td>
                     <td align="left"><fmt:formatNumber value="${activity.predictCost}" pattern="###,##0.00" var="predictCost"/>${predictCost}</td>
                 </tr>
                 <tr>
                     <td align="right">预期效果：</td>
                     <td align="left">${activity.expectEffect}</td>
-                    <td align="right">实际成本：</td>
+                    <td align="right">实际成本（元）：</td>
                     <td align="left"><fmt:formatNumber value="${activity.realityCost}" pattern="###,##0.00" var="realityCost"/>${realityCost}</td>
                 </tr>
                 <tr>
-                    <td align="right">期望成功率%：</td>
-                    <td align="left">${activity.expectSuccessRate}</td>
+                    <td align="right">期望成功率（%）：</td>
+                    <td align="left">${activity.expectSuccessRate}%</td>
                     <td align="right">活动次数：</td>
                     <td align="left">${activity.times}</td>
                 </tr>

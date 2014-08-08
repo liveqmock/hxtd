@@ -139,32 +139,16 @@ function reset() {
 						class="allbtn_l block fl"></b><b
 						class="allbtn_r pr13 block fl w_auto f14">刷&nbsp;&nbsp;新</b> </a>
 				</li>
-				<c:if test="${VS_HAS_FUNCTIONS.financialReceivablesModifyOwner}">
-				<li>
-					<a href="javascript:void(0)" id="modifyOwner"
-						class="block c_white lh25 ml10"><b class="allbtn_l block fl"></b><b
-						class="allbtn_r pr13 block fl w_auto f14">更改所有者</b> </a>
-				</li>
+			</ul>
+			<ul class="fr id_table1 mt10 ml10">
+				<c:if test="${VS_HAS_FUNCTIONS.financialReceivablesExport}">
+					<li>
+						<a href="javascript:;" uri="${ctx}/financial/receivables/export.do?TYPE=selected" 
+							class="leading_out globle_img block_inline mr10 export" title="导出"></a>
+					</li>
 				</c:if>
 			</ul>
-
-					<ul class="fr id_table1 mt10 ml10">
-						<c:if test="${VS_HAS_FUNCTIONS.financialReceivablesImport}">
-							<li>
-								<a href="${ctx}/receivables/imports/toImportPage.do?module=receivables"
-									class="receivablesing_in globle_img block_inline mr10" title="导入"></a>
-							</li>
-						</c:if>
-						<c:if test="${VS_HAS_FUNCTIONS.financialReceivablesExport}">
-							<li>
-								<a href="javascript:void(0)"
-									uri="${ctx}/financial/receivables/export.do?TYPE=selected"
-									class="receivablesing_out globle_img block_inline mr10 export"
-									title="导出"></a>
-							</li>
-						</c:if>
-					</ul>
-				</div>
+		</div>
 	</div>
 	<div id="title" style="display: none;z-index: 1; background-color: #f5f5f6;"
 		class=" ml35 mr35">
@@ -292,9 +276,9 @@ function reset() {
 				href="${ctx}/financial/receivables/toViewPage.do?id={$T.row.id}"
 				title="详情" class=" block_inline s_detail_btn globle_img ml10"></a>
 				               </c:if>
-				<c:if test="${VS_HAS_FUNCTIONS.financialReceivablesModify}">
+				<c:if test="${VS_HAS_FUNCTIONS.financialReceivablesModifyFinish}">
 				                   <a
-				href="${ctx}/financial/receivables/toModifyPage.do?id={$T.row.id}"
+				href="${ctx}/financial/receivables/toModifyFinishPage.do?id={$T.row.id}"
 				title="编辑" class=" block_inline s_edit_btn globle_img ml10"></a>
 				               </c:if>
 				<c:if test="${VS_HAS_FUNCTIONS.financialReceivablesDelete}">

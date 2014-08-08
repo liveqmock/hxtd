@@ -1,25 +1,26 @@
 package com.baihui.hxtd.soa.financial.service;
 
 import java.text.ParseException;
+import java.util.List;
 import java.util.Map;
 
 import javax.annotation.Resource;
 
+import org.hibernate.Criteria;
 import org.hibernate.FetchMode;
 import org.hibernate.criterion.DetachedCriteria;
+import org.hibernate.criterion.Restrictions;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springside.modules.persistence.SearchFilter;
 
-import com.baihui.hxtd.soa.base.Constant;
 import com.baihui.hxtd.soa.base.orm.hibernate.HibernatePage;
 import com.baihui.hxtd.soa.base.utils.Search;
 import com.baihui.hxtd.soa.financial.dao.PaymentsDao;
 import com.baihui.hxtd.soa.financial.entity.Payments;
 import com.baihui.hxtd.soa.order.dao.OrderDao;
-import com.baihui.hxtd.soa.order.entity.Order;
 import com.baihui.hxtd.soa.system.DictionaryConstant;
 import com.baihui.hxtd.soa.system.dao.DictionaryDao;
 import com.baihui.hxtd.soa.system.entity.AuditLog;
@@ -52,13 +53,15 @@ public class PaymentsService {
 	@Resource
 	private DictionaryDao dictionaryDao;
 
+	
+	private Integer exportCounts = 5000;
 	/**
 	 * 分页查询
 	 * 
 	 * @param searchParams
 	 * @param dataShift
 	 * @param page
-	 * @return HibernatePage<Receivables>
+	 * @return HibernatePage<Payments>
 	 * @throws NoSuchFieldException
 	 */
 	public HibernatePage<Payments> findPage(Map<String, Object> searchParams,
@@ -137,7 +140,7 @@ public class PaymentsService {
 		payments.setOperateTime(payments.getModifiedTime());
 		paymentsDao.save(payments);
 		if (payments.getOrder() != null && payments.getOrder().getId() != null ){
-			orderDao.modifyOrderPayStatusByIdStatus(dictionaryDao
+			orderDao.modifyEffectOrderPayStatusById(dictionaryDao
 					.getByValue(DictionaryConstant.ORDER_PAY_CUSTOMER_HXTD_STATUS_ALL),
 					payments.getOrder().getId());
 		}
@@ -154,5 +157,46 @@ public class PaymentsService {
 		paymentsDao.logicalDelete(id);
 	}
 
+	/**
+	 * 查找所有应收款
+	 * @return
+	 */
+	@SuppressWarnings("unchecked")
+	public List<Payments> find() {
+		logger.info("查找");
+        DetachedCriteria detachedCriteria = DetachedCriteria.forClass(Payments.class);
+        detachedCriteria.setFetchMode("customer", FetchMode.JOIN);
+        detachedCriteria.setFetchMode("order", FetchMode.JOIN);
+        detachedCriteria.setFetchMode("owner", FetchMode.JOIN);
+        detachedCriteria.setFetchMode("creator", FetchMode.JOIN);
+        detachedCriteria.setFetchMode("modifier", FetchMode.JOIN);
+        detachedCriteria.setFetchMode("openBank", FetchMode.JOIN);
+        detachedCriteria.setFetchMode("payType", FetchMode.JOIN);
+        detachedCriteria.add(Restrictions.eq("isDeleted", false));
+        Criteria criteria = detachedCriteria.getExecutableCriteria(paymentsDao.getSession());
+        criteria.setMaxResults(exportCounts);
+        return (List<Payments>) criteria.list();
+	}
+
+
+	/**
+	 * 分页导出查找所有应收款
+	 * @return
+	 */
+	public List<Payments>  find(Map<String, Object> searchParams) throws NoSuchFieldException {
+		logger.info("分页查找");
+        DetachedCriteria detachedCriteria = DetachedCriteria.forClass(Payments.class);
+        detachedCriteria.setFetchMode("customer", FetchMode.JOIN);
+        detachedCriteria.setFetchMode("order", FetchMode.JOIN);
+        detachedCriteria.setFetchMode("owner", FetchMode.JOIN);
+        detachedCriteria.setFetchMode("creator", FetchMode.JOIN);
+        detachedCriteria.setFetchMode("modifier", FetchMode.JOIN);
+        detachedCriteria.setFetchMode("openBank", FetchMode.JOIN);
+        detachedCriteria.setFetchMode("payType", FetchMode.JOIN);
+        detachedCriteria.add(Restrictions.eq("isDeleted", false));
+        Map<String, SearchFilter> filters = Search.parse(searchParams);
+        Search.buildCriteria(filters, detachedCriteria, Payments.class);
+        return paymentsDao.find(detachedCriteria, exportCounts);
+	}
 	
 }

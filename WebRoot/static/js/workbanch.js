@@ -81,7 +81,7 @@ HXTD_CRM_WB.workbanch.result2Html = function(result, moduleName) {
 				if (i % 2 == 0) {
 					table.push(" bg_c_blue");
 				}
-				table.push("' onclick='workbanch.href(this,",list[i].id,")'>");
+				table.push("' onclick='HXTD_CRM_WB.workbanch.href(this,",list[i].id,")'>");
 				for ( var j = 0; j < fields.length; j++) {
 					table.push("<td>");
 					table.push(showObj[fields[j]]);
@@ -96,7 +96,7 @@ HXTD_CRM_WB.workbanch.result2Html = function(result, moduleName) {
 				if (i % 2 == 0) {
 					table.push(" bg_c_blue");
 				}
-				table.push("' onclick='workbanch.href(this,",list[i].id,")'>");
+				table.push("' onclick='HXTD_CRM_WB.workbanch.href(this,",list[i].id,")'>");
 				for ( var j = 0; j < fields.length; j++) {
 					table.push("<td>");
 					table.push(showObj[fields[j]]);

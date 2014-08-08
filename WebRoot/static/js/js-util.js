@@ -350,7 +350,7 @@ var jsUtil = {
 				if(val.length == 0){
 					val = "0";
 				}
-				$(this).next().val(parseFloat(val.split(',').join(""))); //千分位转换成Float
+				$(this).siblings("input").eq(0).val(parseFloat(val.split(',').join(""))); //千分位转换成Float
 				this.value = jsUtil.formatDiff(val, 2);
 			}
 		});

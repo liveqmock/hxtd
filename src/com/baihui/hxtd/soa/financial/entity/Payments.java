@@ -209,7 +209,7 @@ public class Payments {
 		this.actual = actual;
 	}
 
-	public boolean isStatus() {
+	public boolean getStatus() {
 		return status;
 	}
 

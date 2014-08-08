@@ -121,6 +121,19 @@ public class OrderService {
         return orderDao.findUnique(hql, id);
     }
 
+    public Order getByCode(String code) {
+        String hql = " select ord from Order ord "
+                + " left join fetch ord.flowNode "
+                + " left join fetch ord.product "
+                + " left join fetch ord.customer "
+                + " left join fetch ord.investmentWay "
+                + " left join fetch ord.owner "
+                + " left join fetch ord.salesManager "
+                + " left join fetch ord.salesMajordomo "
+                + " where ord.code=?";
+        return orderDao.findUnique(hql, code);
+    }
+
     @Transactional(readOnly = false)
     public void add(Order order, AuditLog auditLog) {
         Date now = orderDao.getDBNow();
@@ -172,6 +185,7 @@ public class OrderService {
             Long[] id = {orders.get(i).getId()};
             if (contractDao.getCount(id, "order") > 0) {
                 orders.remove(i);
+                page.setTotalCount(page.getTotalCount() - 1);
             }
         }
         page.setResult(orders);

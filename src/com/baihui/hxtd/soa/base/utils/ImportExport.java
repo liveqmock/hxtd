@@ -33,6 +33,10 @@ import java.util.*;
 @SuppressWarnings("unchecked")
 public class ImportExport {
 
+    public enum Type {
+        selected, limit
+    }
+
     private static Logger logger = LoggerFactory.getLogger(ImportExport.class);
     private static Mapper mapper;
     //    @Value("${import.counts}")

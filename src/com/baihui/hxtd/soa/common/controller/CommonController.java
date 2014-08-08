@@ -4,11 +4,8 @@ import com.baihui.hxtd.soa.base.Constant;
 import com.baihui.hxtd.soa.base.utils.ImportExport;
 import com.baihui.hxtd.soa.base.utils.ReflectionUtils;
 import com.baihui.hxtd.soa.common.service.CommonService;
-import com.baihui.hxtd.soa.system.entity.AuditLog;
 import com.baihui.hxtd.soa.system.entity.User;
-import com.baihui.hxtd.soa.system.service.AuditLogService;
 import com.baihui.hxtd.soa.system.service.DataShift;
-import com.baihui.hxtd.soa.util.EnumOperationType;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.poi.ss.usermodel.Workbook;
 import org.slf4j.Logger;
@@ -17,13 +14,14 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.SessionAttributes;
 
 import javax.annotation.Resource;
 import javax.servlet.ServletContext;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
-import java.util.Date;
+import java.math.BigDecimal;
 import java.util.List;
 import java.util.Map;
 
@@ -34,6 +32,7 @@ import java.util.Map;
  */
 @Controller
 @RequestMapping("/common/common")
+@SessionAttributes({Constant.VS_DATASHIFT})
 public class CommonController<T> {
 
     private Logger logger = LoggerFactory.getLogger(this.getClass());
@@ -46,9 +45,6 @@ public class CommonController<T> {
 
     @Resource
     private CommonService commonService;
-
-    @Resource
-    private AuditLogService auditLogService;
 
     /**
      * 唯一性验证
@@ -67,33 +63,28 @@ public class CommonController<T> {
      * 1.在分页列表上导出选中的数据行
      */
     @RequestMapping(value = "/export.do", params = "TYPE=selected")
-    public void exportSelected(HttpServletRequest request, Long[] id, 
-    		HttpServletResponse response, ModelMap modelMap) throws NoSuchFieldException, IOException {
+    public void exportSelected(HttpServletRequest request, Long[] id, HttpServletResponse response, ModelMap modelMap) throws NoSuchFieldException, IOException {
         logger.info("导出excel文件");
         logger.debug("id={}", StringUtils.join(id, ","));
 
         logger.info("获取对象集合");
         String name = StringUtils.uncapitalize(entityClass.getSimpleName());
         ServletContext servletContext = request.getSession().getServletContext();
-        Map<String, String> export = (Map<String, String>) servletContext.getAttribute(Constant.VC_IMPORTEXPORTS);
-        String fetch = export.get(name + ".export.hql.fetch");
+        Map export = (Map) servletContext.getAttribute(Constant.VC_IMPORTEXPORTS);
+        String fetch = (String) export.get(name + ".export.hql.fetch");
         String[] fetchs = StringUtils.isBlank(fetch) ? null : fetch.split(",");
         List<?> entities = commonService.findById(entityClass, fetchs, id);
         int size = entities.size();
         logger.debug("列表信息数目“{}”", size);
 
         logger.info("转换成excel文件并输出");
-//        try {
         Workbook workbook = ImportExport.exportExcel(response, servletContext, name, entities);
         response.setContentType("application/octet-stream; charset=utf-8");
         response.setHeader("Content-Disposition", "attachment; filename=" + name + ".xls");
         workbook.write(response.getOutputStream());
 
-        User user = (User)modelMap.get(Constant.VS_USER);
-        saveAuditlog(name, user, size);
-//        } catch (Exception e) {
-//            e.printStackTrace();
-//        }
+        User user = (User) modelMap.get(Constant.VS_USER);
+        commonService.saveAuditlog(ImportExport.Type.selected, name, user, size);
     }
 
     /**
@@ -110,11 +101,11 @@ public class CommonController<T> {
 
         String name = StringUtils.uncapitalize(entityClass.getSimpleName());
         ServletContext servletContext = request.getSession().getServletContext();
-        Map<String, String> export = (Map<String, String>) servletContext.getAttribute(Constant.VC_IMPORTEXPORTS);
-        String hql = export.get(name + ".export.hql");
+        Map export = (Map) servletContext.getAttribute(Constant.VC_IMPORTEXPORTS);
+        String hql = (String) export.get(name + ".export.hql");
         List<T> entities;
         if (StringUtils.isBlank(hql)) {
-            String fetchNames = export.get(name + ".export.hql.fetch");
+            String fetchNames = (String) export.get(name + ".export.hql.fetch");
             String fetchHql = "";
             if (StringUtils.isNotBlank(fetchNames)) {
                 String join = String.format(" left join fetch %s.", name);
@@ -131,34 +122,58 @@ public class CommonController<T> {
         logger.debug("列表信息数目“{}”", size);
 
         logger.info("转换成excel文件并输出");
-//        try {
         Workbook workbook = ImportExport.exportExcel(response, servletContext, name, entities);
         response.setContentType("application/octet-stream; charset=utf-8");
         response.setHeader("Content-Disposition", "attachment; filename=" + name + ".xls");
         workbook.write(response.getOutputStream());
-        User user = (User)modelMap.get(Constant.VS_USER);
-        saveAuditlog(name, user, size);
-//        } catch (Exception e) {
-//            e.printStackTrace();
-//        }
+        User user = (User) modelMap.get(Constant.VS_USER);
+        commonService.saveAuditlog(ImportExport.Type.limit, name, user, size);
+    }
+
+    public void exportLimit(HttpServletRequest request, ModelMap modelMap, HttpServletResponse response, DataShift dataShift) throws IOException {
+        logger.info("导出excel文件");
+
+        String name = StringUtils.uncapitalize(entityClass.getSimpleName());
+        ServletContext servletContext = request.getSession().getServletContext();
+        Map export = (Map) servletContext.getAttribute(Constant.VC_IMPORTEXPORTS);
+        String hql = (String) export.get(name + ".export.hql");
+        List<T> entities;
+        if (StringUtils.isBlank(hql)) {
+            String fetchNames = (String) export.get(name + ".export.hql.fetch");
+            String fetchHql = "";
+            if (StringUtils.isNotBlank(fetchNames)) {
+                String join = String.format(" left join fetch %s.", name);
+                fetchHql = join + StringUtils.join(fetchNames.split(","), join);
+            }
+            fetchHql += dataShift.toHql(name);
+            hql = String.format("select %s from %s %s", name, entityClass.getSimpleName(), name);
+            hql += fetchHql;
+        } else {
+            hql += dataShift.toHql(name);
+        }
+        entities = commonService.findExport(hql);
+        int size = entities.size();
+        logger.debug("列表信息数目“{}”", size);
+
+        logger.info("转换成excel文件并输出");
+        Workbook workbook = ImportExport.exportExcel(response, servletContext, name, entities);
+        response.setContentType("application/octet-stream; charset=utf-8");
+        response.setHeader("Content-Disposition", "attachment; filename=" + name + ".xls");
+        workbook.write(response.getOutputStream());
+        User user = (User) modelMap.get(Constant.VS_USER);
+        commonService.saveAuditlog(ImportExport.Type.limit, name, user, size);
     }
 
 
     /**
-     * 保存审计日志
-     * 1.EnumModule的moduleName必须和实体类类名首字母小写相匹配，暂时没有建立相关映射
+     * 项目拆分产品，产品总和不能超过项目金额
      */
-    private void saveAuditlog(String name, User user, int size) {
-        AuditLog auditLog = new AuditLog();
-        auditLog.setModuleName(name);
-        auditLog.setRecordId(null);
-        auditLog.setRecordName("导出列表选中的数据");
-        auditLog.setType(EnumOperationType.EXPORT.getOperationType());
-        auditLog.setCreator(user);
-        auditLog.setCreatedTime(new Date());
-        auditLog.setRemark(String.format("共导出%s条数据", size));
-        auditLogService.save(auditLog);
+    @ResponseBody
+    @RequestMapping("/limitMoney.docomp")
+    public Boolean checkMoney(Long projectId, BigDecimal saleMoney) {
+        return commonService.checkMoney(projectId, saleMoney);
     }
+
 
     public Class<T> getEntityClass() {
         return entityClass;

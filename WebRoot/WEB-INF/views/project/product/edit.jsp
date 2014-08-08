@@ -13,9 +13,9 @@
 <script type="text/javascript" src="${ctx}/static/js/js-util.common.js?v=1"></script>
 <script type="text/javascript">
 $(function(){
-	jsUtil.bindSave(".add", "form"); // 提交表单
+	jsUtil.bindSave(".add", "form"); //提交表单
 	jsUtil.formatMoney(".money"); //设置千分位
-	var $dates = $("#start,#end"); // 日历设置
+	var $dates = $("#start,#end"); //日历设置
 	$dates.datepicker({
 		closeText : '关闭',
 		minDate: 0,
@@ -24,13 +24,32 @@ $(function(){
 	       $dates.not(this).datepicker("option", option, selectedDate);
 	    }
 	});
-	$(".empty").click(function(){ // 清除
+	$(".empty").click(function(){ //清除
 		$(this).prevAll("input").val('');
 	});
+	jQuery.validator.addMethod("limitMoney", function (value, element) {
+		var projectId = $("#hide_project_id").val(),
+			sellMoney = parseFloat(value.split(',').join(""));
+		if(projectId == "" || sellMoney == "0.00" || sellMoney == ""){
+			return true;
+		}
+		var result = false;
+		$.ajax({
+			url: '${ctx}/common/common/limitMoney.docomp',
+			type: 'post',
+			async: false,
+			dataType: "json",
+			data: {projectId: projectId, saleMoney: sellMoney-${product.sellMoney}},
+			success: function(obj){
+				result = obj;
+			}
+		});
+		return result;
+	}, "产品金额总和已超过项目总金额");
 });
 function searchData(action){ // 搜索
 	jsUtil.dialogIframe("${ctx}/project/project/toQueryPage.comp", "项目列表", 800, 465, 
-		function(){ // 确定回调
+		function(){ //确定回调
 			var $userObj = $(".bor_e28d1f", window.frames["dialogIframe"].document);
 			if($userObj.length > 0){
 				$("#txt_" + action).val($userObj.find("td:eq(0)").text());
@@ -88,8 +107,8 @@ function searchData(action){ // 搜索
 			<td align="right"><span class="w_red">*&nbsp;</span>出售金额（万）：</td>
 			<td align="left">
 				<fmt:formatNumber value="${product.sellMoney}" pattern="###,##0.00" var="sellMoney"/>
-				<input type="text" value="${sellMoney}" class="text_input3 right required money" style="ime-mode:disabled" maxlength="13"/>
-				<input type="hidden" name="sellMoney" value="${product.sellMoney}"/>
+				<input type="text" value="${sellMoney}" class="text_input3 right money required limitMoney" style="ime-mode:disabled" maxlength="13"/>
+				<input type="hidden" name="sellMoney" id="hide_sellMoney" value="${product.sellMoney}"/>
 			</td>
 			<td align="right"><span class="w_red">*&nbsp;</span>收益率（%）：</td>
 			<td align="left">

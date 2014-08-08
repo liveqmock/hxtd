@@ -168,7 +168,7 @@ public class CustomerService {
 	@SuppressWarnings("unchecked")
 	public List<Customer> find() {
 		logger.info("查找");
-        DetachedCriteria detachedCriteria = DetachedCriteria.forClass(Notice.class);
+        DetachedCriteria detachedCriteria = DetachedCriteria.forClass(Customer.class);
         detachedCriteria.setFetchMode("owner", FetchMode.JOIN);
         detachedCriteria.setFetchMode("creator", FetchMode.JOIN);
         detachedCriteria.setFetchMode("type", FetchMode.JOIN);

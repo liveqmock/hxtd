@@ -33,6 +33,7 @@
 				收款详情信息
 			</h1>
 			<ul class="fr id_table1 mt10 ml10">
+				<c:if test="${VS_HAS_FUNCTIONS.financialReceivablesView&&VS_HAS_FUNCTIONS.financialReceivablesModifyFinish}">
 				<li>
 					<a class=" pl35 c_white f14 lh25 cp block fr"
 						href="${ctx }/financial/receivables/toModifyPage.do?id=${receivables.id}"><b
@@ -40,6 +41,7 @@
 						class="allbtn_r pr13 block fl w_auto f14">编&nbsp;&nbsp;辑</b>
 					</a>
 				</li>
+				</c:if>
 				<li>
 					<a class=" pl10 c_white f14 lh25 cp block fr mr10"
 						href="${ctx }/financial/receivables/toQueryPage.do"><b

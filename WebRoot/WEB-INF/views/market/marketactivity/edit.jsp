@@ -107,7 +107,7 @@ function searchData(action){ //搜索
 				<fmt:formatDate value="${activity.endDate}" pattern="yyyy-MM-dd" var="endDate"/>
 				<input type="text" id="end" name="endDate" value="${endDate}" readonly class="text_input3 input_close1"/>
 			</td>
-			<td align="right">预计成本：</td>
+			<td align="right">预计成本（元）：</td>
 			<td align="left">
 				<fmt:formatNumber value="${activity.predictCost}" pattern="###,##0.00" var="predictCost"/>
 				<input type="text" value="${predictCost}" class="text_input3 money" maxlength="13" style="ime-mode:disabled"/>
@@ -117,7 +117,7 @@ function searchData(action){ //搜索
 		<tr>
 			<td align="right">预期效果：</td>
 			<td align="left"><input name="expectEffect" type="text" value="${activity.expectEffect}" class="text_input3" maxlength="30"/></td>
-			<td align="right">实际成本：</td>
+			<td align="right">实际成本（元）：</td>
 			<td align="left">
 				<fmt:formatNumber value="${activity.realityCost}" pattern="###,##0.00" var="realityCost"/>
 				<input type="text" value="${realityCost}" class="text_input3 money" maxlength="13" style="ime-mode:disabled"/>

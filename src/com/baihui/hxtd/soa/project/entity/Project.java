@@ -14,6 +14,9 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
+import org.hibernate.annotations.NotFound;
+import org.hibernate.annotations.NotFoundAction;
+
 import com.baihui.hxtd.soa.base.FieldInfo;
 import com.baihui.hxtd.soa.system.entity.Dictionary;
 import com.baihui.hxtd.soa.system.entity.User;
@@ -116,6 +119,7 @@ public class Project {
 	@FieldInfo(desc = "支付方式")
 	@ManyToOne(fetch=FetchType.LAZY)
 	@JoinColumn(name="PAY_TYPE")
+	@NotFound(action = NotFoundAction.IGNORE)
 	private Dictionary payType;
 	/**
 	 * 备注

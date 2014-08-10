@@ -86,6 +86,11 @@ public enum EnumModule {
     /** 销售目标*/
     SALESTARGET("salesTarget","销售目标"),
     
+    /** 联系人纪要*/
+    MEMOIR("memoir","联系人纪要"),
+    
+    /** 联系人纪要*/
+    ATTACHMENT("attachment","附件")
 	;
 	
 	

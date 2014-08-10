@@ -166,7 +166,7 @@ public class ImportController {
 		//记录导入结束时间
 		Date endTime = importService.getDBNow();
 		//导入记录时间
-		int spendTime = (int) ((endTime.getTime() - beginTime.getTime()) /(1000*60));
+		//int spendTime = (int) ((endTime.getTime() - beginTime.getTime()) /(1000*60));
 		int spendTime2 = (int) ((endTime.getTime() - beginTime.getTime()) %(1000*60));
 
         logger.info("导入完成");
@@ -181,7 +181,7 @@ public class ImportController {
         importResult += ImportMessage.databaseRepeatMessage("merge".equals(duplicateType) ? "合并":("jump".equals(duplicateType)?"跳过":("cover".equals(duplicateType)?"覆盖":"合并"))) + ";";
         //新增数据的记录数
         importResult += ImportMessage.databaseNewMessage()+";";
-        importResult += String.valueOf(spendTime);
+        importResult += String.valueOf(spendTime2);
         
         /**
 		 * 初始化静态变量,导入完成后清空集合

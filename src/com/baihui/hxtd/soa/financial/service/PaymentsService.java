@@ -23,7 +23,9 @@ import com.baihui.hxtd.soa.financial.entity.Payments;
 import com.baihui.hxtd.soa.order.dao.OrderDao;
 import com.baihui.hxtd.soa.system.DictionaryConstant;
 import com.baihui.hxtd.soa.system.dao.DictionaryDao;
+import com.baihui.hxtd.soa.system.dao.UserDao;
 import com.baihui.hxtd.soa.system.entity.AuditLog;
+import com.baihui.hxtd.soa.system.service.DataShift;
 
 /**
  * 
@@ -49,6 +51,9 @@ public class PaymentsService {
 	
 	@Resource
 	private OrderDao orderDao;
+	
+	@Resource
+	private UserDao userDao;
 
 	@Resource
 	private DictionaryDao dictionaryDao;
@@ -65,10 +70,11 @@ public class PaymentsService {
 	 * @throws NoSuchFieldException
 	 */
 	public HibernatePage<Payments> findPage(Map<String, Object> searchParams,
-			HibernatePage<Payments> page) throws NoSuchFieldException {
+			HibernatePage<Payments> page, DataShift dataShift) throws NoSuchFieldException {
 		logger.info("分页查找");
 		searchParams.put("EQ_isDeleted", false);
 		DetachedCriteria criteria = biuldQuery(searchParams, Payments.class);
+		userDao.visibleData(criteria, dataShift);
 		return paymentsDao.findPage(page, criteria);
 	}
 

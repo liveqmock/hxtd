@@ -181,6 +181,23 @@ public class UserService {
     }
 
     /**
+     * 
+     * @param searchParams
+     * @param page
+     * @param organizationId
+     * @return
+     * @throws NoSuchFieldException
+     */
+    @Transactional(readOnly = true)
+    public HibernatePage<User> findPageByRoleCode(HibernatePage<User> page, String roleCode) throws NoSuchFieldException {
+        logger.info("根据角色查找用户");
+        List<User> users= userDao.findByRoleCode(roleCode);
+        page.setResult(users);
+        return page;
+    }
+    
+
+    /**
      * 查找
      */
     @Transactional(readOnly = true)
@@ -363,4 +380,17 @@ public class UserService {
     public String getNameById(Long id) {
         return userDao.get(id).getRealName();
     }
+    
+    /**
+     * 根据组织ID找到用户
+     * @param orgId
+     * @return
+     */
+    @Transactional
+	public List<User> findUserByOrgId(Long orgId) {
+    	 String hql = "select user from User user inner join user.organization org where org.id=?";
+         List<User> users = userDao.find(hql, orgId);
+         return users;
+
+	}
 }

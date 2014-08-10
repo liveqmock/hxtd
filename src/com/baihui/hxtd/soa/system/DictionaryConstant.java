@@ -230,6 +230,8 @@ public class DictionaryConstant {
     public final static String CUSTOMER_OWNERSHIP = "040306";
     /** 开户行 */
     public final static String CUSTOMER_OPENBANK = "040307";
+    /** 线索转换 */
+    public final static String CUSTOMER_SOURCE_CONVER = "04030208";
     
     
     /*订单 */

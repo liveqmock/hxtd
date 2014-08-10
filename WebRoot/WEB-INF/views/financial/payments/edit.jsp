@@ -110,6 +110,7 @@ function clearInputVal(){//清除
 				</td>
 				<td align="left">
 				<input type="text" name="name"
+				<c:if test="${payments.id!=null}">readonly</c:if>
 						value="${payments.name}" class="text_input3" />
 				</td>
 				<td align="right" width="15%">
@@ -119,11 +120,13 @@ function clearInputVal(){//清除
 				<input type="text" id="txt_order"
 					value="${payments.order.code }" 
 					class="text_input3 cp required" readonly
-					 onclick="searchData('order');"/>
+					<c:if test="${payments.id==null}">onclick="searchData('order');"</c:if>
+					 />
 				<input type="hidden" value="${payments.order.id}"
 					id="hide_order_id" name="order.id" />
 				<i class="s_inquiry globle_img block_inline ml5 vm cp"
-					title="搜索订单" onclick="searchData('order');"></i>
+					title="搜索订单" <c:if test="${payments.id==null}">onclick="searchData('order');"</c:if>
+				></i>
 				<i class="dump_btn globle_img block_inline ml5 vm cp empty"
 					onclick="clearInputVal();" title="清除"></i>
 				</td>

@@ -271,7 +271,7 @@ public class RoleService {
 	}
     
     /**
-     * 根据角色ID找到功能
+     * 根据角色ID找到
      * @param roleId
      * @return
      */

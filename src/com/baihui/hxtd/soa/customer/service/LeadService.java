@@ -25,10 +25,12 @@ import com.baihui.hxtd.soa.customer.dao.LeadDao;
 import com.baihui.hxtd.soa.customer.entity.Contact;
 import com.baihui.hxtd.soa.customer.entity.Customer;
 import com.baihui.hxtd.soa.customer.entity.Lead;
+import com.baihui.hxtd.soa.system.DictionaryConstant;
 import com.baihui.hxtd.soa.system.dao.UserDao;
 import com.baihui.hxtd.soa.system.entity.AuditLog;
 import com.baihui.hxtd.soa.system.entity.Dictionary;
 import com.baihui.hxtd.soa.system.service.DataShift;
+import com.baihui.hxtd.soa.system.service.DictionaryService;
 
 /**
  * 
@@ -61,7 +63,10 @@ public class LeadService {
 	
 	@Resource
 	private CustomerDao customerDao;
-
+	
+	@Resource
+	private DictionaryService dictionaryService;
+	
 	@Resource
 	private MemoirDao memoirDao;
 	/**
@@ -188,7 +193,7 @@ public class LeadService {
 		Customer cus = new Customer();
 		BeanUtils.copyProperties(lead, cus);
 		logger.debug("客户来源指定为线索转换");
-		cus.setSource(new Dictionary(4030206L));
+		cus.setSource(dictionaryService.getByValue(DictionaryConstant.CUSTOMER_SOURCE_CONVER));
 		cus.setId(null);
 		cus.setModifiedTime(new Date());
 		customerDao.save(cus);

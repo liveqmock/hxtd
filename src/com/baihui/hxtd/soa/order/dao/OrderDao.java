@@ -56,7 +56,7 @@ public class OrderDao extends HibernateDAOImpl<Order, Long> {
 	  * @throws
 	 */
 	public void modifyEffectOrderPayStatusById(Dictionary dictionary, Long id){
-		String hql = "update Order o set o.orderStatus = ? effectiveTime=? where o.id=?";
+		String hql = "update Order o set o.orderStatus = ? ,effectiveTime=? where o.id=?";
     	this.createQuery(hql, dictionary, this.getDBNow(), id).executeUpdate();
 	}
 	

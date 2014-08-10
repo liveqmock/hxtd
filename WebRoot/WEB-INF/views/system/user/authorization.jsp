@@ -199,7 +199,7 @@
 	                        <c:forEach items="${allFunctions[item.id]}" var="item">
 	                            <li align="left" style="line-height:20px;">
 	                                <label class="box size51 orange ${fn:contains(allAuthorizationFunctions,item)?" inherit-function":""}">
-	                                    <input ${fn:contains(allAuthorizationFunctions,item)?" checked='checked'":""} type="checkbox" name="functionId" value="${item.id}" 
+	                                    <input ${fn:contains(authorizationFunctions,item)?" checked='checked'":""} type="checkbox" name="functionId" value="${item.id}" 
 	                                    class="function" data-id="">
 	                                    <i>${item.name}</i>
 	                                </label>
@@ -225,12 +225,12 @@
 			<div class="bor_999notop"> 
         	<div class="menus1">
                 <div class="clearfix w  menu1">
-	                <a href="javascript:void(0)" class="fl mt5 mb5 ml5 allright block menu menu1"></a>
+	                <a href="javascript:void(0)" class="fl mt5 mb5 ml5 allnoright block menu menu1"></a>
             			<ul class="id_ul4 fl">
             			<c:forEach items="${allComponents}" var="item" varStatus="status">
 			                <li align="left" style="line-height:20px;">
 			                <label class="box size81 orange ${fn:contains(allAuthorizationComponents,item)?" inherit-component":""}">
-                        	<input type="checkbox" name="componentId" value="${item.id}" ${fn:contains(authorizationComponents,item)?" checked='checked'":""}>${item.name}
+                        	<input type="checkbox" name="componentId" class="function" value="${item.id}" ${fn:contains(authorizationComponents,item)?" checked='checked'":""}>${item.name}
                    			</label>
 			                </li>
             			</c:forEach>

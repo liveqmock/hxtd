@@ -108,7 +108,7 @@
                         <th style="width:10%">流程</th>
                         <th style="width:10%">所属模块</th>
                         <th style="width:10%">记录描述</th>
-                        <th style="width:10%">金额</th>
+                        <th style="width:10%">涉及金额</th>
                         <th style="width:10%">创建时间</th>
                         <th style="width:15%">操作</th>
                     </tr>

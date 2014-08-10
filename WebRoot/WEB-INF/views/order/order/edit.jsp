@@ -42,10 +42,20 @@
         productFlag = false;
         function searchData(action) {//搜索弹出框
             var url, title;
-            if (action == "owner" || action == "salesManager" || action == "salesMajordomo") {
+       		var roleCode="";
+            if (action == "owner"){
                 url = "${ctx}/system/user/toQueryPage.comp";
                 title = "所有者";
-            } else if (action == "customer") {
+            }else if(action == "salesManager"){
+                title = "投资经理";
+                roleCode="ORG_00005";
+            	url = "${ctx}/system/user/toQueryPage.comp?roleCode="+roleCode;
+            }else if(action == "salesMajordomo"){
+                title = "投资总监";
+                roleCode="ORG_00004";
+            	url = "${ctx}/system/user/toQueryPage.comp?roleCode="+roleCode;
+            }
+            else if (action == "customer") {
                 url = "${ctx}/customer/customer/toQueryPage.comp";
                 title = "客户";
             } else if (action == "product") {

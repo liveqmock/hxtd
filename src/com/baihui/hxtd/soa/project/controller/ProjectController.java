@@ -13,6 +13,7 @@ import javax.servlet.ServletContext;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import org.apache.poi.ss.usermodel.Workbook;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.propertyeditors.CustomDateEditor;
@@ -32,13 +33,13 @@ import com.baihui.hxtd.soa.base.utils.ImportExport;
 import com.baihui.hxtd.soa.base.utils.Search;
 import com.baihui.hxtd.soa.base.utils.mapper.HibernateAwareObjectMapper;
 import com.baihui.hxtd.soa.common.controller.CommonController;
+import com.baihui.hxtd.soa.common.service.CommonService;
 import com.baihui.hxtd.soa.project.entity.Project;
 import com.baihui.hxtd.soa.project.service.ProductService;
 import com.baihui.hxtd.soa.project.service.ProjectService;
 import com.baihui.hxtd.soa.system.DictionaryConstant;
 import com.baihui.hxtd.soa.system.entity.AuditLog;
 import com.baihui.hxtd.soa.system.entity.User;
-import com.baihui.hxtd.soa.system.service.DataShift;
 import com.baihui.hxtd.soa.system.service.DictionaryService;
 import com.baihui.hxtd.soa.util.EnumModule;
 import com.baihui.hxtd.soa.util.EnumOperationType;
@@ -58,7 +59,7 @@ import com.fasterxml.jackson.databind.JsonMappingException;
  */
 @RequestMapping(value="/project/project")
 @Controller
-@SessionAttributes(value = {Constant.VS_USER})
+@SessionAttributes(value = {Constant.VS_DATASHIFT, Constant.VS_USER})
 public class ProjectController extends CommonController<Project> {
 	
 	private Logger logger = LoggerFactory.getLogger(this.getClass());
@@ -78,6 +79,9 @@ public class ProjectController extends CommonController<Project> {
 	
 	@Resource
 	private ProductService productService;
+	
+	@Resource
+    private CommonService commonService;
 	
 	@RequestMapping(value="/toQueryPage.do")
 	public String toQueryPage(ModelMap model){
@@ -268,29 +272,26 @@ public class ProjectController extends CommonController<Project> {
         
 		return "/project/project/listcomp";
 	}
-
-	
-	/**
-     * 导出分页数据
-     * 1.在分页列表上根据当前条件进行导出
+    
+    /**
+     * 导出限制数据
+     * 1.指定最大条数的
+	 * @throws NoSuchFieldException 
      */
-    @RequestMapping(value = "/export.do", params = "TYPE=pagination")
-    public void exportPagination(HttpServletRequest request,  ModelMap model, HttpServletResponse response) throws NoSuchFieldException, IOException {
-        logger.info("导出excel文件");
-
-        logger.info("解析页面查询条件");
-        Map<String, Object> searchParams = Servlets.getParametersStartingWith(request, "search_");
-        Search.clearBlankValue(searchParams);
-        Search.decodeValue(searchParams);
-        Search.toRangeDate(searchParams, "createdTime");
-        Search.toRangeDate(searchParams, "modifiedTime");
-        logger.debug("查询条件数目“{}”", searchParams.size());
-        DataShift dataShift = (DataShift) model.get(Constant.VS_DATASHIFT);		
-        List<Project> project = projectService.export(searchParams,dataShift);
-        logger.debug("列表信息数目“{}”", project.size());
-
-        logger.info("转换成excel文件并输出");
+    @RequestMapping(value = "/export.do", params = "TYPE=limit")
+    public void exportLimit(HttpServletRequest request, 
+    		ModelMap modelMap, 
+    		HttpServletResponse response) throws IOException {
+    	List<Project> projects = projectService.export();
         ServletContext servletContext = request.getSession().getServletContext();
-        ImportExport.exportExcel(response, servletContext, "project", project).write(response.getOutputStream());
+        String name = "project";
+        
+        Workbook workbook = ImportExport.exportExcel(response, servletContext, name, projects);
+        response.setContentType("application/octet-stream; charset=utf-8");
+        response.setHeader("Content-Disposition", "attachment; filename=" + name + ".xls");
+        workbook.write(response.getOutputStream());
+        
+        User user = (User) modelMap.get(Constant.VS_USER);
+        commonService.saveAuditlog(ImportExport.Type.limit, name, user, projects.size());
     }
 }

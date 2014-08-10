@@ -23,7 +23,6 @@ import com.baihui.hxtd.soa.project.dao.ProjectDao;
 import com.baihui.hxtd.soa.project.entity.Project;
 import com.baihui.hxtd.soa.project.entity.Supplier;
 import com.baihui.hxtd.soa.system.entity.AuditLog;
-import com.baihui.hxtd.soa.system.service.DataShift;
 /**
  * 
  * 功能描述：项目模块业务层
@@ -125,14 +124,13 @@ public class ProjectService {
 	}
 	
 	
-	public List<Project> export(Map<String, Object> searchParams,DataShift dataShift) throws NoSuchFieldException{
+	public List<Project> export(){
 		DetachedCriteria criteria = DetachedCriteria.forClass(Project.class);
         criteria.add(Restrictions.eq("isDeleted", false));
         criteria.setFetchMode("creator", FetchMode.JOIN);
         criteria.setFetchMode("modifier", FetchMode.JOIN);
         criteria.setFetchMode("supplier", FetchMode.JOIN);
-        Map<String, SearchFilter> filters = Search.parse(searchParams);
-        Search.buildCriteria(filters, criteria, Project.class);
+        
         return projectDao.find(criteria,3000);
 	}
 	

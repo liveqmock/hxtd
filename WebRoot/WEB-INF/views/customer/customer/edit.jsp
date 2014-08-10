@@ -48,18 +48,21 @@ $(function(){
 }); 
 function searchData(action){ // 搜索
 	var title="";
+	var roleCode="";
 	if(action=="owner"){
 		title="所有者";
 	}else if(action=="financialAdvisor"){
 		title="理财顾问";
 	}else if(action=="financialManager"){
 		title="理财经理";
+		roleCode="ORG_00006";
 	}else if(action=="financialDirector"){
-		title="理财总监";
+		title="投资总监";
+		roleCode="ORG_00004";
 	}else if(action=="appointment"){
 		title="邀约人";
 	}
-	jsUtil.dialogIframe("${ctx}/system/user/toQueryPage.comp", title, 800, 420, 
+	jsUtil.dialogIframe("${ctx}/system/user/toQueryPage.comp?roleCode="+roleCode, title, 800, 420, 
 		function(){ // 确定回调
 			var $userObj = $(".bor_e28d1f", window.frames["dialogIframe"].document);
 			if($userObj.length > 0){
@@ -240,12 +243,12 @@ function searchData(action){ // 搜索
 			    </td>
 			</tr>
 			<tr>
-				<td align="right" width="15%">理财总监：</td>
+				<td align="right" width="15%">投资总监：</td>
 				<td align="left">
 					<input id="txt_financialDirector" type="text" value="${customer.financialDirector.realName}" readonly 
 						class="text_input3 cp" onclick="searchData('financialDirector');"/>
 					<input id="hide_financialDirector_id" type="hidden" name="financialDirector.id" value="${customer.financialDirector.id}"/>
-					<i class="s_inquiry globle_img block_inline ml5 vm cp" title="搜索理财总监" onclick="searchData('financialDirector');"></i>
+					<i class="s_inquiry globle_img block_inline ml5 vm cp" title="搜索投资总监" onclick="searchData('financialDirector');"></i>
 					<i class="dump_btn globle_img block_inline ml5 vm cp empty" title="清除"></i>
 				</td>
 				<td align="right" width="15%"></td>

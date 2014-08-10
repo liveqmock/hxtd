@@ -13,6 +13,7 @@ import javax.servlet.ServletContext;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import org.apache.poi.ss.usermodel.Workbook;
 import org.springframework.beans.propertyeditors.CustomDateEditor;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -32,12 +33,12 @@ import com.baihui.hxtd.soa.base.utils.ImportExport;
 import com.baihui.hxtd.soa.base.utils.Search;
 import com.baihui.hxtd.soa.base.utils.mapper.HibernateAwareObjectMapper;
 import com.baihui.hxtd.soa.common.controller.CommonController;
+import com.baihui.hxtd.soa.common.service.CommonService;
 import com.baihui.hxtd.soa.project.entity.Product;
 import com.baihui.hxtd.soa.project.service.ProductService;
 import com.baihui.hxtd.soa.system.DictionaryConstant;
 import com.baihui.hxtd.soa.system.entity.AuditLog;
 import com.baihui.hxtd.soa.system.entity.User;
-import com.baihui.hxtd.soa.system.service.DataShift;
 import com.baihui.hxtd.soa.system.service.DictionaryService;
 import com.baihui.hxtd.soa.util.EnumModule;
 import com.baihui.hxtd.soa.util.EnumOperationType;
@@ -65,6 +66,10 @@ public class ProductController extends CommonController<Product> {
     private ProductService productService;
 	@Resource
 	private DictionaryService dicService;
+	
+    @Resource
+    private CommonService commonService;
+
 	
 	@InitBinder
     public void initBinder(WebDataBinder binder) {
@@ -244,26 +249,26 @@ public class ProductController extends CommonController<Product> {
 	}
 	
 	/**
-	  * exportPagination(列表页导出数据)
-	  * @Description: 导出3000条产品记录
-	  * @param request HttpServletRequest
-	  * @param response HttpServletResponse
-	  * @param modelMap ModelMap
-	  * @throws NoSuchFieldException,IOException
-	 */
-	@RequestMapping(value = "/export.do", params = "TYPE=pagination")
-	public void exportPagination(HttpServletRequest request,
-			HttpServletResponse response,
-			ModelMap modelMap) throws NoSuchFieldException, IOException{
-		Map<String, Object> searchParams = Servlets.getParametersStartingWith(request, "search_");
-		Search.clearBlankValue(searchParams);
-      
-		DataShift dataShift = (DataShift) modelMap.get(Constant.VS_DATASHIFT);
-		List<Product> productLst = productService.export(searchParams, dataShift);
-      
-		ServletContext servletContext = request.getSession().getServletContext();
-		ImportExport.exportExcel(response, servletContext, "product", productLst).write(response.getOutputStream());
-	}
+     * 导出限制数据
+     * 1.指定最大条数的
+	 * @throws NoSuchFieldException 
+     */
+    @RequestMapping(value = "/export.do", params = "TYPE=limit")
+    public void exportLimit(HttpServletRequest request, 
+    		ModelMap modelMap, 
+    		HttpServletResponse response) throws IOException {
+    	List<Product> products = productService.export();
+        ServletContext servletContext = request.getSession().getServletContext();
+        String name = "product";
+        
+        Workbook workbook = ImportExport.exportExcel(response, servletContext, name, products);
+        response.setContentType("application/octet-stream; charset=utf-8");
+        response.setHeader("Content-Disposition", "attachment; filename=" + name + ".xls");
+        workbook.write(response.getOutputStream());
+        
+        User user = (User) modelMap.get(Constant.VS_USER);
+        commonService.saveAuditlog(ImportExport.Type.limit, name, user, products.size());
+    }
 	
 	/**
 	  * initPageDic(初始化页面字典)

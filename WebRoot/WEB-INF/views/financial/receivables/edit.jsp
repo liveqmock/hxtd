@@ -105,8 +105,9 @@ function clearInputVal(obj){//清除
 					<span class="w_red">*&nbsp;</span>收款名称：
 				</td>
 				<td align="left">
-				<input type="text" name="name"
-						value="${receivables.name}" class="text_input3" />
+				<input type="text" name="name" 
+				<c:if test="${receivables.id!=null}">readonly</c:if>
+					value="${receivables.name}" class="text_input3" />
 				</td>
 				<td align="right" width="15%">
 					<span class="w_red">*&nbsp;</span>订单编号：
@@ -115,11 +116,14 @@ function clearInputVal(obj){//清除
 				<input type="text" id="txt_order"
 					value="${receivables.order.code }" 
 					class="text_input3 cp required" readonly
-					 onclick="searchData('order');"/>
+					<c:if test="${receivables.id==null}">onclick="searchData('order');"</c:if>
+					 />
 				<input type="hidden" value="${receivables.order.id}"
 					id="hide_order_id" name="order.id" />
 				<i class="s_inquiry globle_img block_inline ml5 vm cp"
-					title="搜索订单" onclick="searchData('order');"></i>
+					title="搜索订单" 
+					<c:if test="${receivables.id==null}">onclick="searchData('order');"</c:if>
+					></i>
 				<i class="dump_btn globle_img block_inline ml5 vm cp empty"
 					title="清除"></i>
 				</td>
@@ -129,18 +133,18 @@ function clearInputVal(obj){//清除
 					<span class="w_red">*&nbsp;</span>客户：
 				</td>
 				<td align="left">
-					<input type="text" id="txt_customerName"
+					<input type="text" id="txt_customerName" readonly
 						value="${receivables.customer.name }" 
-						class="text_input3 cp required" readonly/>
+						class="text_input3 cp required" />
 					<input type="hidden" id="txt_customerId" name="customer.id"
 					value="${receivables.customer.id }" 
-					class="text_input3 cp required" readonly/>
+					class="text_input3 cp required" />
 				</td>
 				<td align="right">
 					<span class="w_red">*&nbsp;</span>应收款金额（万）：
 				</td>
 				<td align="left">
-					<input type="text" id="txt_fund" name="fund" value="${receivables.fund}" class="text_input3 number required" />
+					<input type="text" readonly id="txt_fund" name="fund" value="${receivables.fund}" class="text_input3 number required" />
 				</td>
 			</tr>
 			<tr>

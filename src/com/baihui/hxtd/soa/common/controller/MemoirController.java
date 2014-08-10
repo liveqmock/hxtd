@@ -28,10 +28,13 @@ import com.baihui.hxtd.soa.base.orm.hibernate.HibernatePage;
 import com.baihui.hxtd.soa.base.utils.mapper.HibernateAwareObjectMapper;
 import com.baihui.hxtd.soa.common.entity.Memoir;
 import com.baihui.hxtd.soa.common.service.MemoirService;
+import com.baihui.hxtd.soa.system.entity.AuditLog;
 import com.baihui.hxtd.soa.system.entity.Dictionary;
 import com.baihui.hxtd.soa.system.entity.Organization;
 import com.baihui.hxtd.soa.system.entity.User;
 import com.baihui.hxtd.soa.system.service.DictionaryService;
+import com.baihui.hxtd.soa.util.EnumModule;
+import com.baihui.hxtd.soa.util.EnumOperationType;
 import com.baihui.hxtd.soa.util.JsonDto;
 /**
  * 
@@ -140,7 +143,9 @@ public class MemoirController {
 		memoir.setModifiedTime(new Date());
 		memoir.setEmployee(user);
 		
-		memoirService.add(memoir, user);
+		AuditLog auditLog = new AuditLog(EnumModule.MEMOIR.getModuleName(), 
+				memoir.getId(), memoir.getSummary(), EnumOperationType.ADD.getOperationType(), user);
+		memoirService.add(memoir, user, auditLog);
 		
 		return JsonDto.add(memoir.getId()).toString();
 	}
@@ -187,7 +192,9 @@ public class MemoirController {
 		memoir.setModifier(user);
 		memoir.setEmployee(user);
 		
-		memoirService.modify(memoir, user);
+		AuditLog auditLog = new AuditLog(EnumModule.MEMOIR.getModuleName(), 
+				memoir.getId(), memoir.getSummary(), EnumOperationType.MODIFY.getOperationType(), user);
+		memoirService.modify(memoir, user, auditLog);
 		
 		return JsonDto.modify(memoir.getId()).toString();
 	}
@@ -217,11 +224,14 @@ public class MemoirController {
 	@RequestMapping(value = "/delete.do")
 	public String delete(ModelMap modelMap, Long[] id) {
 		User user = (User)modelMap.get(Constant.VS_USER);
+		
+		AuditLog [] auditLogArr = new AuditLog [id.length];
+		for(int i=0; i<id.length; i++){
+			auditLogArr[i] = new AuditLog(EnumModule.MEMOIR.getModuleName(), 
+					id[i], memoirService.getSummaryById(id[i]), EnumOperationType.DELETE.getOperationType(), user);
+		}
 		memoirService.delete(user, id);
 		
-		JsonDto json = new JsonDto("删除成功");
-		json.setSuccessFlag(true);
-		
-		return json.toString();
+		return JsonDto.delete(id).toString();
 	}	
 }

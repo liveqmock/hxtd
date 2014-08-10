@@ -63,6 +63,7 @@ public class Customer implements Serializable {
 	/** 客户来源 */
 	@FieldInfo(desc = "客户来源 ")
 	@ManyToOne(fetch = FetchType.LAZY)
+	@NotFound(action = NotFoundAction.IGNORE)
 	@JoinColumn(name = "SOURCE_DIC")
 	private Dictionary source;
 
@@ -114,6 +115,7 @@ public class Customer implements Serializable {
 	@FieldInfo(desc = "开户行 ")
 	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "OPEN_BANK_DIC")
+	@NotFound(action = NotFoundAction.IGNORE)
 	private Dictionary openBank;
 
 	/** 银行户名 */
@@ -143,6 +145,7 @@ public class Customer implements Serializable {
 	@FieldInfo(desc = "省")
 	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "PROVINCE")
+	@NotFound(action = NotFoundAction.IGNORE)
 	private PCAS province;
 	/**
 	 * 市
@@ -150,6 +153,7 @@ public class Customer implements Serializable {
 	@FieldInfo(desc = "市")
 	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "CITY")
+	@NotFound(action = NotFoundAction.IGNORE)
 	private PCAS city;
 	/**
 	 * 区/县
@@ -157,6 +161,7 @@ public class Customer implements Serializable {
 	@FieldInfo(desc = "区/县")
 	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "COUNTY")
+	@NotFound(action = NotFoundAction.IGNORE)
 	private PCAS county;
 
 	/** 客户所在地址 */
@@ -173,6 +178,7 @@ public class Customer implements Serializable {
 	@FieldInfo(desc = "创建者")
 	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "CREATOR_ID",updatable=false)
+	@NotFound(action = NotFoundAction.IGNORE)
 	private User creator;
 
 	/** 创建时间 */
@@ -185,6 +191,7 @@ public class Customer implements Serializable {
 	@FieldInfo(desc = "最后修改者")
 	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "MODIFIER_ID")
+	@NotFound(action = NotFoundAction.IGNORE)
 	private User modifier;
 
 	/** 最后修改时间 */

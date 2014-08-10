@@ -23,7 +23,9 @@ import com.baihui.hxtd.soa.financial.entity.Receivables;
 import com.baihui.hxtd.soa.order.dao.OrderDao;
 import com.baihui.hxtd.soa.system.DictionaryConstant;
 import com.baihui.hxtd.soa.system.dao.DictionaryDao;
+import com.baihui.hxtd.soa.system.dao.UserDao;
 import com.baihui.hxtd.soa.system.entity.AuditLog;
+import com.baihui.hxtd.soa.system.service.DataShift;
 
 /**
  * 
@@ -51,6 +53,9 @@ public class ReceivablesService {
 	private OrderDao orderDao;
 
 	@Resource
+	private UserDao userDao;
+	
+	@Resource
 	private DictionaryDao dictionaryDao;
 
 	private Integer exportCounts = 5000;
@@ -65,11 +70,12 @@ public class ReceivablesService {
 	 */
 	@Transactional(readOnly = true)
 	public HibernatePage<Receivables> findPage(
-			Map<String, Object> searchParams, HibernatePage<Receivables> page)
+			Map<String, Object> searchParams, HibernatePage<Receivables> page, DataShift dataShift)
 			throws NoSuchFieldException {
 		logger.info("分页查找");
 		searchParams.put("EQ_isDeleted", false);
 		DetachedCriteria criteria = biuldQuery(searchParams, Receivables.class);
+		userDao.visibleData(criteria, dataShift);
 		return receivablesDao.findPage(page, criteria);
 	}
 

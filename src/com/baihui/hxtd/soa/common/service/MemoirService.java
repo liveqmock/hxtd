@@ -12,6 +12,7 @@ import org.springframework.transaction.annotation.Transactional;
 import com.baihui.hxtd.soa.base.orm.hibernate.HibernatePage;
 import com.baihui.hxtd.soa.common.dao.MemoirDao;
 import com.baihui.hxtd.soa.common.entity.Memoir;
+import com.baihui.hxtd.soa.system.entity.AuditLog;
 import com.baihui.hxtd.soa.system.entity.User;
 /**
  * 
@@ -54,12 +55,14 @@ public class MemoirService {
         memoirDao.findPage(page, criteria);
 	}
 	
-	public void add(Memoir att, User user){
-		memoirDao.save(att);
+	public void add(Memoir memoir, User user, AuditLog auditLog){
+		memoirDao.save(memoir);
+		auditLog.setRecordId(memoir.getId());
 	}
 	
-	public void modify(Memoir att, User user){
-		memoirDao.save(att);
+	public void modify(Memoir memoir, User user, AuditLog auditLog){
+		memoirDao.save(memoir);
+		auditLog.setRecordId(memoir.getId());
 	}
 	/**
      * get(根据ID查询联系纪要)
@@ -69,6 +72,10 @@ public class MemoirService {
     public Memoir get(Long id) {
     	String hql = "select memoir from Memoir memoir where memoir.id = ?";
         return memoirDao.findUnique(hql, id);
+    }
+    
+    public String getSummaryById(Long id){
+ 	   return memoirDao.get(id).getSummary();
     }
 	/**
      * delete(删除联系纪要)

@@ -39,7 +39,7 @@ $(function(){
 			type: 'post',
 			async: false,
 			dataType: "json",
-			data: {projectId: projectId, saleMoney: sellMoney-${product.sellMoney}},
+			data: {projectId: projectId, saleMoney: sellMoney-${product.sellMoney == null ? 0 : product.sellMoney}},
 			success: function(obj){
 				result = obj;
 			}
@@ -139,7 +139,6 @@ function searchData(action){ // 搜索
 		<tr>
 			<td align="right"><span class="w_red">*&nbsp;</span>销售开始日期：</td>
 			<td align="left">
-				<a href="javascript:;" class="pa time_closenone1"></a>
 				<fmt:formatDate value="${product.saleBeginTime}" pattern="yyyy-MM-dd" var="saleBeginTime"/>
 				<input id="start" name="saleBeginTime" type="text" value="${saleBeginTime}" 
 					class="text_input3 input_close1 required" readonly/>
@@ -150,7 +149,6 @@ function searchData(action){ // 搜索
 		<tr>
 			<td align="right"><span class="w_red">*&nbsp;</span>销售结束日期：</td>
 			<td align="left">
-				<a href="javascript:;" class="pa time_closenone1"></a>
 				<fmt:formatDate value="${product.saleEndTime}" pattern="yyyy-MM-dd" var="saleEndTime"/>
 				<input id="end" name="saleEndTime" type="text" value="${saleEndTime}" readonly 
 					class="text_input3 input_close1 required"/>

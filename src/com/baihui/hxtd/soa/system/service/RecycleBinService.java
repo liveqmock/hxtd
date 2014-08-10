@@ -10,7 +10,6 @@ import javax.annotation.Resource;
 
 import org.hibernate.FetchMode;
 import org.hibernate.criterion.DetachedCriteria;
-import org.hibernate.criterion.Restrictions;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
@@ -20,8 +19,6 @@ import org.springside.modules.persistence.SearchFilter;
 import com.baihui.hxtd.soa.base.orm.hibernate.HibernatePage;
 import com.baihui.hxtd.soa.base.utils.Search;
 import com.baihui.hxtd.soa.common.dao.CommonDao;
-import com.baihui.hxtd.soa.customer.entity.Customer;
-import com.baihui.hxtd.soa.customer.service.LeadService;
 import com.baihui.hxtd.soa.system.dao.RecycleBinDao;
 import com.baihui.hxtd.soa.system.dao.UserDao;
 import com.baihui.hxtd.soa.system.entity.AuditLog;

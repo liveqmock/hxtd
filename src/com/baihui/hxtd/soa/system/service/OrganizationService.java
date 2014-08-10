@@ -420,12 +420,12 @@ public class OrganizationService {
     @Transactional
     public List<Organization> getAllOrgAndUsers() {
         DetachedCriteria criteria = DetachedCriteria.forClass(Organization.class);
-        criteria.setFetchMode("owners", FetchMode.JOIN);
+        //criteria.setFetchMode("owners", FetchMode.JOIN);
         criteria.add(Restrictions.eq("isDeleted", false));
         return organizationDao.find(criteria);
     }
 
-
+   
     /**
      * getNameById
      *

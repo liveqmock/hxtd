@@ -128,6 +128,19 @@ public class UserController extends CommonController<User> {
 
         return jsonDto.toString();
     }
+    
+    @ResponseBody
+    @RequestMapping(value = "/query.do", params = "TYPE=role")
+    public String queryByRoleCode(HibernatePage<User> page,String roleCode) throws NoSuchFieldException, JsonProcessingException {
+        logger.info("查询用户信息");
+        page = userService.findPageByRoleCode(page,roleCode);
+        logger.debug("列表信息数目“{}”", page.getResult().size());
+        logger.info("转换为TDO格式");
+        JsonDto jsonDto = new JsonDto();
+        jsonDto.setSuccessFlag(true);
+        jsonDto.setResult(page);
+        return jsonDto.toString();
+    }
 
     /**
      * 存储表单初始化数据
@@ -528,12 +541,12 @@ public class UserController extends CommonController<User> {
      */
     @RequestMapping(value = "/toQueryPage.comp")
     public String toOwnerLstPage(
-            HibernatePage<User> page,
+            HibernatePage<User> page,String roleCode,
             ModelMap model) {
         page.setHibernatePageSize(12);// 设置每页显示12个用户
         model.addAttribute("page", page);
         model.addAttribute("orgId", model.get(Constant.VS_ORG_ID));
-
+        model.addAttribute("roleCode", roleCode);
         return "/system/user/listcomp";
     }
 
@@ -613,7 +626,8 @@ public class UserController extends CommonController<User> {
                     org.getParent() == null ? "0" : org.getParent().getId(),
                     "org"
             }));
-            for (User user : org.getOwners()) {//用户
+            List<User> users=userService.findUserByOrgId(org.getId());
+            for (User user : users) {//用户
                 sb.append(String.format("{id:%s, name:\"%s\", pId:-%s, type:\"%s\",chkDisabled:%s},", new Object[]{
                         user.getId(),
                         user.getRealName(),

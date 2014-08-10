@@ -32,7 +32,7 @@ $(function(){
 	$att=$("#att");
 	$att.uploadify({
 		auto: false,
-		fileTypeExts: '*.jpg;*.png;*.gif',
+		fileTypeExts: '*.jpg;*.png;*.gif;*.pdf;*.doc;*.docx;*.xls;*.xlsx;*.ppt;*.pptx',
 		fileObjName: 'file',
 		fileTypeDesc: '文件格式',
 		fileSizeLimit: "5MB",

@@ -20,6 +20,7 @@ import com.baihui.hxtd.soa.base.orm.hibernate.HibernatePage;
 import com.baihui.hxtd.soa.base.utils.Search;
 import com.baihui.hxtd.soa.common.dao.AttachmentDao;
 import com.baihui.hxtd.soa.common.entity.Attachment;
+import com.baihui.hxtd.soa.system.entity.AuditLog;
 import com.baihui.hxtd.soa.system.entity.User;
 /**
  * 
@@ -80,7 +81,7 @@ public class AttachmentService {
 	  * @return void    返回类型
 	  * @throws
 	 */
-	public void add(Attachment att,User user){
+	public void add(Attachment att,User user, AuditLog auditLog){
 		attachementDao.save(att);
 	}
 	
@@ -123,7 +124,7 @@ public class AttachmentService {
 	  * @return void    返回类型
 	  * @throws
 	 */
-	public void delete(User user, Long[] id){
+	public void delete(User user, Long[] id, AuditLog[] auditLog){
 		for(int i=0;i<id.length;i++){
 			Attachment att = this.getById(id[i]);
 			File f = new File(att.getAddress());

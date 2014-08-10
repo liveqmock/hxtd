@@ -32,6 +32,7 @@ import com.baihui.hxtd.soa.financial.entity.Receivables;
 import com.baihui.hxtd.soa.financial.service.ReceivablesService;
 import com.baihui.hxtd.soa.system.entity.AuditLog;
 import com.baihui.hxtd.soa.system.entity.User;
+import com.baihui.hxtd.soa.system.service.DataShift;
 import com.baihui.hxtd.soa.util.EnumModule;
 import com.baihui.hxtd.soa.util.EnumOperationType;
 import com.baihui.hxtd.soa.util.JsonDto;
@@ -51,7 +52,7 @@ import com.fasterxml.jackson.databind.JsonMappingException;
  */
 @Controller
 @RequestMapping("/financial/receivables")
-@SessionAttributes(value = {Constant.VS_USER, Constant.VS_USER_ID, Constant.VS_ORG})
+@SessionAttributes(value = {Constant.VS_USER, Constant.VS_USER_ID, Constant.VS_ORG, Constant.VS_DATASHIFT})
 public class ReceivablesController extends CommonController<Receivables>{
 
     private Logger logger = LoggerFactory.getLogger(this.getClass());
@@ -88,7 +89,8 @@ public class ReceivablesController extends CommonController<Receivables>{
 		Search.toRangeDate(searchParams, "modifiedTime");
 		Search.toRangeDate(searchParams, "createdTime");
 		logger.info("添加默认的查询条件");
-		page = receivablesService.findPage(searchParams, page);
+		DataShift dataShift = (DataShift) model.get(Constant.VS_DATASHIFT);
+		page = receivablesService.findPage(searchParams, page, dataShift);
 		JsonDto json = new JsonDto();
 		json.setResult(page);
 		HibernateAwareObjectMapper.DEFAULT.writeValue(out, json);
@@ -147,7 +149,7 @@ public class ReceivablesController extends CommonController<Receivables>{
 	@RequestMapping(value = "/toModifyFinishPage.do")
 	public String toModifyFinishPage(Model model,Long id) throws ParseException {
 		logger.info("ReceviablesController.toModifyPage修改 应收信息");
-		String funcUrl="/financial/receivables/modify.do";
+		String funcUrl="/financial/receivables/modifyFinish.do";
 		model.addAttribute("funcUrl",funcUrl);
 		Receivables receivables = receivablesService.getById(id);
 		model.addAttribute("receivables",receivables);
@@ -213,46 +215,4 @@ public class ReceivablesController extends CommonController<Receivables>{
 		JsonDto json = JsonDto.add(receivables.getId());
 		return json.toString();
 	}
-	
-	
-	 /**
-     * 导出分页数据
-     * 1.在分页列表上根据当前条件进行导出
-     */
-    @RequestMapping(value = "/export.do", params = "TYPE=pagination")
-    public void exportPagination(HttpServletRequest request, Long organizationId, HibernatePage<Receivables> page, ModelMap modelMap, HttpServletResponse response) throws NoSuchFieldException, IOException {
-        logger.info("导出excel文件");
-
-        logger.info("解析页面查询条件");
-        Map<String, Object> searchParams = Servlets.getParametersStartingWith(request, "search_");
-        Search.clearBlankValue(searchParams);
-        Search.decodeValue(searchParams);
-        Search.toRangeDate(searchParams, "modifiedTime");
-		Search.toRangeDate(searchParams, "createdTime");
-        logger.debug("查询条件数目“{}”", searchParams.size());
-
-        List<Receivables> receivables= receivablesService.find(searchParams);
-        logger.debug("列表信息数目“{}”", receivables.size());
-
-        logger.info("转换成excel文件并输出");
-        ServletContext servletContext = request.getSession().getServletContext();
-        ImportExport.exportExcel(response, servletContext, "receivables", receivables).write(response.getOutputStream());
-    }
-
-    /**
-     * 导出限制数据
-     * 1.指定最大条数的
-     */
-    @RequestMapping(value = "/export.do", params = "TYPE=limit")
-    public void exportLimit(HttpServletRequest request, ModelMap modelMap, HttpServletResponse response) throws IOException {
-        logger.info("导出excel文件");
-
-        List<Receivables> receivabless = receivablesService.find();
-        logger.debug("列表信息数目“{}”", receivabless.size());
-
-        logger.info("转换成excel文件并输出");
-        ServletContext servletContext = request.getSession().getServletContext();
-        ImportExport.exportExcel(response, servletContext, "receivables", receivabless).write(response.getOutputStream());
-    }
-
 }

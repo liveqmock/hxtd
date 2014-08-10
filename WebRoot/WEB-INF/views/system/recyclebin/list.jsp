@@ -146,12 +146,6 @@ function searchData(action){//搜索条件-操作人
 		                		</li>
 		                	</ul>
 			   				<ul class="fr id_table1 mt10 ml10">
-								<c:if test="${VS_HAS_FUNCTIONS.recycleImport}">
-									<li>
-										<a href="${ctx}/recyclebin/imports/toImportPage.do?module=recycleBin"
-											class="leading_in globle_img block_inline mr10" title="导入"></a>
-									</li>
-								</c:if>
 								<c:if test="${VS_HAS_FUNCTIONS.recycleExport}">
 									<li>
 										<a href="javascript:;" uri="${ctx}/system/recyclebin/export.do?TYPE=selected" 

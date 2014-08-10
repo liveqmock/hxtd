@@ -20,7 +20,6 @@ import com.baihui.hxtd.soa.project.entity.Product;
 import com.baihui.hxtd.soa.project.entity.Project;
 import com.baihui.hxtd.soa.system.entity.AuditLog;
 import com.baihui.hxtd.soa.system.entity.User;
-import com.baihui.hxtd.soa.system.service.DataShift;
 
 /**
  * 功能描述：产品(基金)模块service层
@@ -74,10 +73,8 @@ public class ProductService {
      * @param searchParams 过滤条件
      * @param dataShift 数据筛选
      * @return List<Product> 返回数据
-     * @throws NoSuchFieldException
     */
-   public List<Product> export(Map<String, Object> searchParams,
-   		DataShift dataShift) throws NoSuchFieldException {
+   public List<Product> export() {
    		DetachedCriteria criteria = DetachedCriteria.forClass(Product.class);
    		criteria.add(Restrictions.eq("isDeleted", false));
    		criteria.setFetchMode("type", FetchMode.JOIN);//产品分类
@@ -86,8 +83,8 @@ public class ProductService {
         criteria.setFetchMode("creator", FetchMode.JOIN);//创建者
        
    		//DataAuthFliter(criteria, searchParams, dataShift);
-        Map<String, SearchFilter> filters = Search.parse(searchParams);
-        Search.buildCriteria(filters, criteria, Product.class);
+        //Map<String, SearchFilter> filters = Search.parse(searchParams);
+        //Search.buildCriteria(filters, criteria, Product.class);
        
        	return productDao.find(criteria, 3000);
    }

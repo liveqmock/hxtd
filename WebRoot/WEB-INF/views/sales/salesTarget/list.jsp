@@ -23,10 +23,6 @@
 $(function() {
 	jsUtil.datepicker(".time");//加载时间控件
 	jsUtil.datepickerNotNow(".time1");
-	/**
-	 * table中的复选框全选/全不选
-	 * @memberOf {TypeName} 
-	 */
 	$("#id").click(function() {
 		if (this.checked) {
 			$("input:checkbox").attr("checked", true);
@@ -83,7 +79,7 @@ function reset() {
 							目标人员：
 						</td>
 						<td class="f14 namewidth2" align="left" >
-							<input type="text" class="text_input1" name="search_LIKE_owner.name"
+							<input type="text" class="text_input1" name="search_LIKE_owner.realName"
 								id="name" value="" />
 						</td>
 						<td class="f14 namewidth1" align="right" >
@@ -207,13 +203,13 @@ function reset() {
 						<th width="4%">
 							创建者
 						</th>
-						<th width="12%" class="sortable salesTargetby" salesTargetby="createdTime">
+						<th width="12%" class="sortable orderby" orderby="createdTime">
 							创建时间
 						</th>
 						<th width="4%">
 							修改者
 						</th>
-						<th width="12%" class="sortable salesTargetby" salesTargetby="modifiedTime">
+						<th width="12%" class="sortable orderby" orderby="modifiedTime">
 							最后修改时间
 						</th>
 						<th width="12%" align="center">
@@ -240,13 +236,13 @@ function reset() {
 						<th width="4%">
 							创建者
 						</th>
-						<th width="12%" class="sortable salesTargetby" salesTargetby="createdTime">
+						<th width="12%" class="sortable orderby" orderby="createdTime">
 							创建时间
 						</th>
 						<th width="4%">
 							修改者
 						</th>
-						<th width="12%" class="sortable salesTargetby" salesTargetby="modifiedTime">
+						<th width="12%" class="sortable orderby" orderby="modifiedTime">
 							最后修改时间
 						</th>
 						<th width="12%" align="center">

@@ -39,7 +39,15 @@ $(function(){
 <body>
 <div class="listcontainer">
 	<div class="margin0">
-		<form action="${ctx}/system/user/query.do" onsubmit="return false;">
+	<c:choose>
+	<c:when test="${roleCode==''||roleCode==null}">
+	<form action="${ctx}/system/user/query.do" onsubmit="return false;">
+	</c:when>
+	<c:otherwise>
+	<form action="${ctx}/system/user/query.do?TYPE=role" onsubmit="return false;">
+	</c:otherwise>
+	</c:choose>
+		
     	<input type="hidden" name="organizationId" value="${orgId}"/>
 		<div>
 			<table class="w pr10 pl10">
@@ -47,6 +55,7 @@ $(function(){
 				  <td class="f14" align="right" width="10%">用户名称：</td>
 				  <td class="f14" align="left" width="16%"><input type="text" class="text_input1" name="search_LIKE_realName" /></td>
 				  <td>
+				  <input type="hidden" name="roleCode" value="${roleCode}" />
 				  	<a href="javascript:;" class="reset block dump_btn globle_img fr mr10"></a>
 				  	<a href="javascript:;" class="block c_white lh25 fr mr10 submit">
 				  		<b class="allbtn_l block fl"></b>

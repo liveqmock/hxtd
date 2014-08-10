@@ -110,6 +110,7 @@ public class UserDao extends HibernateDAOImpl<User, Long> {
     public List<User> findByRoleCode(String roleCode) {
         String hql = "select user from User user" +
                 " inner join user.roles role" +
+                " inner join fetch user.organization organization" +
                 " where role.code=?";
         return find(hql, roleCode);
     }

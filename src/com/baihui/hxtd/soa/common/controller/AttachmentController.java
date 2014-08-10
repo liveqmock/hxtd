@@ -33,9 +33,12 @@ import com.baihui.hxtd.soa.common.controller.model.ListModel;
 import com.baihui.hxtd.soa.common.entity.Attachment;
 import com.baihui.hxtd.soa.common.service.AttachmentService;
 import com.baihui.hxtd.soa.system.DictionaryConstant;
+import com.baihui.hxtd.soa.system.entity.AuditLog;
 import com.baihui.hxtd.soa.system.entity.Dictionary;
 import com.baihui.hxtd.soa.system.entity.User;
 import com.baihui.hxtd.soa.system.service.DictionaryService;
+import com.baihui.hxtd.soa.util.EnumModule;
+import com.baihui.hxtd.soa.util.EnumOperationType;
 import com.baihui.hxtd.soa.util.JsonDto;
 import com.baihui.hxtd.soa.util.Tools;
 /**
@@ -175,7 +178,11 @@ public class AttachmentController {
             fileOS =new FileOutputStream(fName);
             fileOS.write(file.getBytes());
             fileOS.close();
-            attachmentService.add(att, user);
+            /************ 新增 *****************************/
+    		AuditLog auditLog = new AuditLog(EnumModule.ATTACHMENT.getModuleName(), 
+    				att.getId(), att.getName(), EnumOperationType.ADD.getOperationType(), user);
+    		attachmentService.add(att, user, auditLog);
+            
         }
         JsonDto json = new JsonDto(); 
         json.setMessage("上传成功");
@@ -188,7 +195,13 @@ public class AttachmentController {
 	@RequestMapping(value="/{module}/attachment/delete.do",produces = "text/text;charset=UTF-8")
 	public String query(ModelMap modelMap, Long[] id){
 		User user = (User)modelMap.get(Constant.VS_USER); 
-		attachmentService.delete(user, id);
+		
+		AuditLog [] auditLogArr = new AuditLog [id.length];
+		for(int i=0; i<id.length; i++){
+			auditLogArr[i] = new AuditLog(EnumModule.ATTACHMENT.getModuleName(), 
+					id[i], attachmentService.getById(id[i]).getName(), EnumOperationType.DELETE.getOperationType(), user);
+		}
+		attachmentService.delete(user, id, auditLogArr);
 		JsonDto json = JsonDto.delete(id);
 		return json.toString();
 	}

@@ -36,8 +36,15 @@
             });
 
             var chartType = form.find("[name=chart\\.id]");
+            var zAxis = form.find(".zAxis");
             chartType.change(function () {
-
+                var option = $(this).children(":selected");
+                var value = option.attr("data-value");
+                if (value == "${CHART_PIE}") {
+                    zAxis.hide();
+                } else {
+                    zAxis.show();
+                }
             });
 
             var groupTypeChange = function (groupType) {
@@ -135,7 +142,7 @@
                             <select name="chart.id" class="{required:true} select1 pr">
                                 <option value="">--无--</option>
                                 <c:forEach items="${charts}" var="item">
-                                    <option value="${item.id}" ${item.id==report.chart.id?"selected":""}>${item.key}</option>
+                                    <option value="${item.id}" ${item.id==report.chart.id?"selected":""} data-value="${item.value}">${item.key}</option>
                                 </c:forEach>
                             </select>
                     </td>

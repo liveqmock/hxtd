@@ -39,6 +39,8 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.util.Date;
+import java.util.GregorianCalendar;
 import java.util.List;
 import java.util.Map;
 
@@ -165,7 +167,10 @@ public class OrderController extends CommonController<Order> {
             modelMap.addAttribute("reserveFlowNodes", reserveFlowNodes);
         }
         modelMap.addAttribute("endFlowNode", NodeType.end.getValue());
-
+        GregorianCalendar gc=new GregorianCalendar(); 
+        gc.setTime(order.getOrderEndTime()); 
+        gc.add(3, -1);//结束时间减去一周
+        modelMap.addAttribute("flag", (gc.getTime().getTime()-new Date().getTime()>0));
         return "/order/order/view";
     }
 

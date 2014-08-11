@@ -11,18 +11,11 @@
 <html>
 <head>
 <title>收款详情</title>
-<meta http-equiv="pragma" content="no-cache">
-<meta http-equiv="cache-control" content="no-cache">
-<meta http-equiv="expires" content="0">    
-<meta http-equiv="keywords" content="keyword1,keyword2,keyword3">
-<meta http-equiv="description" content="This is my page">
 <link rel="stylesheet" href="${ctx}/static/css/recommend/list1.css" type="text/css"/>
-<link rel="stylesheet" href="${ctx}/static/css/recommend/detail_a.css" type="text/css"/>
 </head>
 <body>
 <div>
 	<div class="cb"></div>
-	<!--列表开始-->
 	<div class="ml35 mr35 mt20 block cb cb">
 		<b class="b1"></b>
 		<b class="b2"></b>
@@ -36,7 +29,7 @@
 				<c:if test="${VS_HAS_FUNCTIONS.financialReceivablesView&&VS_HAS_FUNCTIONS.financialReceivablesModifyFinish}">
 				<li>
 					<a class=" pl35 c_white f14 lh25 cp block fr"
-						href="${ctx }/financial/receivables/toModifyPage.do?id=${receivables.id}"><b
+						href="${ctx }/financial/receivables/toModifyFinishPage.do?id=${receivables.id}"><b
 						class="allbtn_l block fl"></b><b
 						class="allbtn_r pr13 block fl w_auto f14">编&nbsp;&nbsp;辑</b>
 					</a>

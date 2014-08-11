@@ -54,6 +54,9 @@ attachment.array2Html=function(result){
 	var table = new Array();
 	for(var i=0;i<list.length;i++){
 		var att = list[i];
+		var fileName = att.name;//文件名
+		//获取文件的扩展名
+		var extName = fileName.substr((fileName.lastIndexOf(".")+1));
 		table.push('<tr><td  align="center">'+att.name+'</td>');
 		table.push('<td align="center">'+att.type.key+'</td>');
 		table.push('<td align="center">'+att.createdTime+'</td>');
@@ -62,11 +65,15 @@ attachment.array2Html=function(result){
 			table.push('<a href="javascript:attachment.download('+att.id+');" class=" block_inline s_download globle_img""></a>' );
 		}
 		table.push('&nbsp');
-		if(attachment.setting.view){
-			table.push('<a href="javascript:attachment.view('+att.id+');" class="block_inline block s_preview globle_img ml10"></a>');
-		}
 		if(attachment.setting.deleteF){
 			table.push('<a href="javascript:attachment.deleteAtt('+att.id+');" class="block_inline s_dump_btn globle_img ml10"></a>');
+		}
+		if(attachment.setting.view){
+			if("jpg,png,fig".indexOf(extName)!=-1){
+				table.push('<a href="javascript:attachment.view('+att.id+');" class="block_inline block s_preview globle_img ml10"></a>');
+			}else{
+				table.push('<div class="block_inline block s_preview ml10" style="cursor:default;"></div>');
+			}
 		}
 		table.push('</td></tr>')
 	}	

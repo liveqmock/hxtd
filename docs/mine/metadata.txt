@@ -273,6 +273,12 @@ ALTER TABLE hxtd.sm_function ADD PRIVILEGE_LEVEL_ID int NOT NULL;
 
 
 
+--08-11--
+分页、数据级权限、导出、顺序工作流
+订单（到期赎回）、财务审批、自定义报表、预警管理
+
+
+
 
 
 

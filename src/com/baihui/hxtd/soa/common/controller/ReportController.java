@@ -8,6 +8,7 @@ import com.baihui.hxtd.soa.base.utils.ReflectionUtils;
 import com.baihui.hxtd.soa.base.utils.Search;
 import com.baihui.hxtd.soa.base.utils.mapper.HibernateAwareObjectMapper;
 import com.baihui.hxtd.soa.base.utils.report.ChartModel;
+import com.baihui.hxtd.soa.base.utils.report.ChartType;
 import com.baihui.hxtd.soa.common.entity.Module;
 import com.baihui.hxtd.soa.common.entity.ModuleField;
 import com.baihui.hxtd.soa.common.entity.Report;
@@ -130,7 +131,6 @@ public class ReportController {
     public void detail(ModelMap modelMap) {
         logger.info("存储表单初始化数据");
 
-        modelMap.addAttribute("");
 
         //查询并存储所属模块
         Long moduleTypeId = dictionaryService.getIdByValue(DictionaryConstant.MODULE_TYPE_REPORT);
@@ -143,6 +143,7 @@ public class ReportController {
         List<Dictionary> charts = dictionaryService.findChildren(DictionaryConstant.REPORT_CHART);
         modelMap.addAttribute("charts", charts);
         logger.debug("图表类型数目“{}”", charts.size());
+        modelMap.addAttribute("CHART_PIE", DictionaryConstant.REPORT_CHART_PIE);
 
         //查询并存储聚合类型
         List<Dictionary> aggregates = dictionaryService.findChildren(DictionaryConstant.REPORT_AGGREGATE);

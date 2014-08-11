@@ -21,6 +21,7 @@ $(function () {
     if ("${param.returnURI}") {redirectURI += "&returnURI=${param.returnURI}";}
     window.flow = new jsUtil.Flow().init({operateType: "${orderStartApprove?"start":"execute"}", redirectURI: redirectURI});
     </c:if>
+    
 });
 function printDIV(printarea) {
     var head = "<html><head><title></title></head><body>";//先生成头部
@@ -62,10 +63,12 @@ function normalRedemption(id){
                 </li>
                 <c:if test="${orderView&&VS_HAS_FUNCTIONS.orderRedemption}">
                 <li>
+                <c:if test="${flag}">
                     <a class="pl10 c_white f14 lh25 cp block fr" href="javascript:;" onclick="redemption(${order.id})">
                         <b class="allbtn_l block fl"></b>
                         <b class="allbtn_r pr13 block fl w_auto f14">提前赎回</b>
                     </a>
+                </c:if>
                 </li>
                 </c:if>
                 <c:if test="${orderView&&VS_HAS_FUNCTIONS.orderRedemption}">
@@ -139,7 +142,7 @@ function normalRedemption(id){
                 </tr>
                 <tr>
                     <td align="right">结束时间：</td>
-                    <td align="left"><fmt:formatDate value="${order.orderEndTime }" pattern="yyyy-MM-dd" var="endTime"/>${endTime }</td>
+                    <td align="left"><fmt:formatDate value="${order.orderEndTime }" pattern="yyyy-MM-dd" var="endTime"/><span id="endTime">${endTime }</span></td>
                 </tr>
             </table>
             <h1 class="f14 fbnone ml40 pt10">描述信息</h1>

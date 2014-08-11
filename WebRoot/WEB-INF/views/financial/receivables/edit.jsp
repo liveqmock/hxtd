@@ -11,21 +11,9 @@
 <html>
 <head>
 <title>应收款编辑</title>
-<meta http-equiv="pragma" content="no-cache">
-<meta http-equiv="cache-control" content="no-cache">
-<meta http-equiv="expires" content="0">    
-<meta http-equiv="keywords" content="keyword1,keyword2,keyword3">
-<meta http-equiv="description" content="This is my page">
-<link rel="stylesheet" href="${ctx}/static/css/recommend/list1.css" type="text/css"/>
-<link rel="stylesheet" href="${ctx}/static/css/recommend/detail_a.css" type="text/css"/>
 <script type="text/javascript" src="${ctx}/static/js/jquery.validate.js"></script>
 <script type="text/javascript" src="${ctx}/static/js/jquery.metadata.js"></script>
 <script type="text/javascript" src="${ctx}/static/js/validator.js"></script>
-<script type="text/javascript" src="${ctx}/static/js/htmlbox/htmlbox.colors.js"></script>
-<script type="text/javascript" src="${ctx}/static/js/htmlbox/htmlbox.styles.js"></script>
-<script type="text/javascript" src="${ctx}/static/js/htmlbox/htmlbox.syntax.js"></script>
-<script type="text/javascript" src="${ctx}/static/js/htmlbox/xhtml.js"></script>
-<script type="text/javascript" src="${ctx}/static/js/htmlbox/htmlbox.min.js"></script>
 <script type="text/javascript">
 $(function(){
 	$("#saveAndAdd").click(function(){
@@ -52,7 +40,12 @@ $(function(){
 		}
 		return false;
 	});
-	jsUtil.datepickerNotNow(".time");
+	
+	//更改文本框属性
+	if($("#id").val()!=null){
+		$(".required").css("background-color","#f5f5f6");
+		$(".required").attr("readonly","readonly"); //添加readonly属性
+	}
 });
 function searchData(action){//搜索弹出框
 	var url, title;
@@ -79,9 +72,8 @@ function clearInputVal(obj){//清除
 </head>
 <body>
 <form id="form" action="${ctx }${funcUrl}" method="post">
-	<input type="hidden" name="id" value="${receivables.id}"/>
+	<input type="hidden" id="id" name="id" value="${receivables.id}"/>
 	<div class="cb"></div>
-	<!--列表开始-->
 	<div class="ml35 mr35 mt20 block cb cb">
 		<b class="b1"></b>
 		<b class="b2"></b>
@@ -107,7 +99,7 @@ function clearInputVal(obj){//清除
 				<td align="left">
 				<input type="text" name="name" 
 				<c:if test="${receivables.id!=null}">readonly</c:if>
-					value="${receivables.name}" class="text_input3" />
+					value="${receivables.name}" class="text_input3 required" />
 				</td>
 				<td align="right" width="15%">
 					<span class="w_red">*&nbsp;</span>订单编号：
@@ -120,12 +112,13 @@ function clearInputVal(obj){//清除
 					 />
 				<input type="hidden" value="${receivables.order.id}"
 					id="hide_order_id" name="order.id" />
+				<c:if test="${receivables.id==null}">
 				<i class="s_inquiry globle_img block_inline ml5 vm cp"
 					title="搜索订单" 
-					<c:if test="${receivables.id==null}">onclick="searchData('order');"</c:if>
 					></i>
 				<i class="dump_btn globle_img block_inline ml5 vm cp empty"
 					title="清除"></i>
+				</c:if>
 				</td>
 			</tr>
 			<tr>
@@ -168,7 +161,6 @@ function clearInputVal(obj){//清除
 					<textarea name="remark" class="remarks_input1">${receivables.remark}</textarea>
 				</td>
 			</tr>
-
 		</table>
 		<div class=" h40"></div>
 	</div>

@@ -91,6 +91,7 @@ public class WarningService {
      */
     @Transactional(readOnly = true)
     public ChartModel countOrderPaymentInWeek() {
+        logger.info("计算完成时间在一周内的订单支付金额");
         Calendar calendar = Calendar.getInstance();
         calendar = DateUtils.truncate(calendar, Calendar.DATE);
         Date weekMin = calendar.getTime();
@@ -110,6 +111,8 @@ public class WarningService {
      */
     @Transactional(readOnly = true)
     public ChartModel countOrderPaymentInMonth() {
+        logger.info("计算完成时间在一周内的订单支付金额");
+
         Calendar calendar = Calendar.getInstance();
         calendar = DateUtils.truncate(calendar, Calendar.DATE);
         Date weekMin = calendar.getTime();

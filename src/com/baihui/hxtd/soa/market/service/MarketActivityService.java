@@ -2,8 +2,11 @@ package com.baihui.hxtd.soa.market.service;
 
 import com.baihui.hxtd.soa.base.orm.hibernate.HibernatePage;
 import com.baihui.hxtd.soa.base.utils.Search;
+import com.baihui.hxtd.soa.common.dao.FlowNodeDao;
+import com.baihui.hxtd.soa.common.service.FlowNodeService;
 import com.baihui.hxtd.soa.market.dao.MarketActivityDao;
 import com.baihui.hxtd.soa.market.entity.MarketActivity;
+import com.baihui.hxtd.soa.system.DictionaryConstant;
 import com.baihui.hxtd.soa.system.dao.UserDao;
 import com.baihui.hxtd.soa.system.entity.AuditLog;
 import com.baihui.hxtd.soa.system.entity.User;
@@ -39,6 +42,9 @@ public class MarketActivityService {
     private MarketActivityDao marketActivityDao;
     @Resource
     private UserDao userDao;
+
+    @Resource
+    private FlowNodeDao flowNodeDao;
 
     /**
      * get(根据ID查询市场活动)
@@ -101,6 +107,8 @@ public class MarketActivityService {
      * @param entity 市场活动实体
      */
     public void add(MarketActivity entity, User user, AuditLog auditLog) {
+        String flowValue = entity.getPredictCost() == 0d ? DictionaryConstant.NODE_TYPE_MARKETACTIVITY_NOMONEY : DictionaryConstant.NODE_TYPE_MARKETACTIVITY_MONEY;
+        entity.setFlowNode(flowNodeDao.findStartOfFlow(flowValue));
         marketActivityDao.save(entity);
         auditLog.setRecordId(entity.getId());
     }
@@ -112,6 +120,8 @@ public class MarketActivityService {
      * @param sessionId
      */
     public void modify(MarketActivity entity, User user, AuditLog auditLog) {
+        String flowValue = entity.getPredictCost() == 0d ? DictionaryConstant.NODE_TYPE_MARKETACTIVITY_NOMONEY : DictionaryConstant.NODE_TYPE_MARKETACTIVITY_MONEY;
+        entity.setFlowNode(flowNodeDao.findStartOfFlow(flowValue));
         marketActivityDao.save(entity);
     }
 

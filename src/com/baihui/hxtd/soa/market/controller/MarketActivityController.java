@@ -200,21 +200,17 @@ public class MarketActivityController extends CommonController<MarketActivity> {
      */
     @ResponseBody
     @RequestMapping(value = "/add.do", method = RequestMethod.POST)
-    public String add(MarketActivity activity,
-                      @ModelAttribute(Constant.VS_USER_ID) Long userId) {
+    public String add(MarketActivity activity, @ModelAttribute(Constant.VS_USER_ID) Long userId) {
         /************设置修改者、创建者****************/
         User user = new User(userId);
         Date date = new Date();
-        String flowValue = activity.getPredictCost() == 0d ? DictionaryConstant.NODE_TYPE_MARKETACTIVITY_NOMONEY : DictionaryConstant.NODE_TYPE_MARKETACTIVITY_MONEY;
-        activity.setFlowNode(flowNodeService.findStartOfFlow(flowValue));
         activity.setSponsor(user);
         activity.setCreator(user);
         activity.setCreatedTime(date);
         activity.setModifier(user);
 
         /************ 新增 *****************************/
-        AuditLog auditLog = new AuditLog(EnumModule.MARKETACTIVITY.getModuleName(),
-                activity.getId(), activity.getName(), EnumOperationType.ADD.getOperationType(), user);
+        AuditLog auditLog = new AuditLog(EnumModule.MARKETACTIVITY.getModuleName(), activity.getId(), activity.getName(), EnumOperationType.ADD.getOperationType(), user);
         marketActivityService.add(activity, user, auditLog);
         return JsonDto.add(activity.getId()).toString();
     }
@@ -247,10 +243,14 @@ public class MarketActivityController extends CommonController<MarketActivity> {
     @ResponseBody
     @RequestMapping(value = "/modify.do")
     public String modify(MarketActivity activity, @ModelAttribute(Constant.VS_USER_ID) Long userId) {
+
+        Integer type = activity.getFlowNode().getType();
+        if (type == NodeType.start.getValue()) {
+            return new JsonDto("已开始审批流程，不能修改！").toString();
+        }
+
         User user = new User(userId);
         activity.setModifier(user);
-        String flowValue = activity.getPredictCost() == 0d ? DictionaryConstant.NODE_TYPE_MARKETACTIVITY_NOMONEY : DictionaryConstant.NODE_TYPE_MARKETACTIVITY_MONEY;
-        activity.setFlowNode(flowNodeService.findStartOfFlow(flowValue));
 
         AuditLog auditLog = new AuditLog(EnumModule.MARKETACTIVITY.getModuleName(), activity.getId(), activity.getName(), EnumOperationType.MODIFY.getOperationType(), user);
         marketActivityService.modify(activity, user, auditLog);

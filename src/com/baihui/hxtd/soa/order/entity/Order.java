@@ -159,6 +159,10 @@ public class Order implements IdFlowable {
     @JoinColumn(name = "PAY_STATUS")
     private Dictionary payStatus;
 
+    public String toString() {
+        return "订单编号：" + getCode();
+    }
+
     public Long getId() {
         return id;
     }

@@ -48,7 +48,7 @@ public class MarketActivity implements Serializable, IdFlowable {
     /** 流程环节 */
     @FieldInfo(desc = "流程环节")
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "FLOW_NODE_ID", updatable = false)
+    @JoinColumn(name = "FLOW_NODE_ID")
     private FlowNode flowNode;
 
     /** 活动状态 */

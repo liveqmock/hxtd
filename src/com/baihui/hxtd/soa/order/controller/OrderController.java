@@ -167,10 +167,10 @@ public class OrderController extends CommonController<Order> {
             modelMap.addAttribute("reserveFlowNodes", reserveFlowNodes);
         }
         modelMap.addAttribute("endFlowNode", NodeType.end.getValue());
-        GregorianCalendar gc=new GregorianCalendar(); 
-        gc.setTime(order.getOrderEndTime()); 
+        GregorianCalendar gc = new GregorianCalendar();
+        gc.setTime(order.getOrderEndTime());
         gc.add(3, -1);//结束时间减去一周
-        modelMap.addAttribute("flag", (gc.getTime().getTime()-new Date().getTime()>0));
+        modelMap.addAttribute("flag", (gc.getTime().getTime() - new Date().getTime() > 0));
         return "/order/order/view";
     }
 
@@ -242,15 +242,18 @@ public class OrderController extends CommonController<Order> {
 
     @ResponseBody
     @RequestMapping(value = "/modify.do", produces = "text/text;charset=UTF-8")
-    public String modify(Order order,
-                         HttpServletRequest request, ModelMap modelMap) {
-        logger.info("OrderController.modify修改订单信息");
+    public String modify(Order order, HttpServletRequest request, ModelMap modelMap) {
+
+        Integer type = order.getFlowNode().getType();
+        if (type == NodeType.start.getValue()) {
+            return new JsonDto("已开始审批流程，不能修改！").toString();
+        }
+
         User user = (User) modelMap.get(Constant.VS_USER);
         logger.info("获得当前操作用户{}", user.getName());
         order.setModifier(user);
         order.setCreator(user);
-        AuditLog auditLog = new AuditLog(EnumModule.ORDER.getModuleName(),
-                order.getId(), order.getCode(), EnumOperationType.MODIFY.getOperationType(), user);
+        AuditLog auditLog = new AuditLog(EnumModule.ORDER.getModuleName(), order.getId(), order.getCode(), EnumOperationType.MODIFY.getOperationType(), user);
         orderService.modify(order, auditLog);
         JsonDto json = JsonDto.modify(order.getId());
         return json.toString();

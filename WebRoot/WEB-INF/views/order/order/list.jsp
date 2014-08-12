@@ -130,7 +130,7 @@ function getCustomer(id) {
                 <th width="7%">金额（万）</th>
                 <th width="15%">产品</th>
                 <th width="6%">审批环节</th>
-                <th width="5%">状态</th>
+                <th width="5%">订单状态</th>
                 <th width="7%">所有者</th>
                 <th width="11%" class="sortable orderby" orderby="createdTime">创建时间</th>
                 <th width="11%" class="sortable orderby" orderby="modifiedTime">最后修改时间</th>

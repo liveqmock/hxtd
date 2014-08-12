@@ -169,16 +169,16 @@ $(function () {
                         <a href="javascript:void(0);" class="block_inline s_dump_btn globle_img ml10 delete" uri="${ctx}/market/marketactivity/delete.do?id={$T.row.id}" title="删除"></a>
                     </c:if>
                     <%--${VS_HAS_FUNCTIONS.marketactivityStartApprove}|{$T.row.flowNode.type}|${startNodeType}|{$T.row.bossHead.id}|${VS_USER.id}--%>
-                    <%--<c:if test="${VS_HAS_FUNCTIONS.marketactivityStartApprove}">--%>
+                    <c:if test="${VS_HAS_FUNCTIONS.marketactivityStartApprove}">
                     {#if $T.row.flowNode.type==${startNodeType}&&($T.row.bossHead.id==${VS_USER.id}||$T.row.creator.id==${VS_USER.id})}
                     <a href="${ctx}/market/marketactivity/toStartApprovePage.do?id={$T.row.id}" title="启动审批" class="block_inline s_onapprove globle_img ml10"></a>
                     {#/if}
-                    <%--</c:if>--%>
-                    <%--<c:if test="${VS_HAS_FUNCTIONS.marketactivityExecuteApprove}">--%>
+                    </c:if>
+                    <c:if test="${VS_HAS_FUNCTIONS.marketactivityExecuteApprove}">
                     {#if $T.row.flowNode.type==${businessNodeType}&&$T.row.flowNode.executeFlowNode}
                     <a href="${ctx}/market/marketactivity/toExecuteApprovePage.do?id={$T.row.id}&flowNodeId={$T.row.flowNode.executeFlowNode.id}" title="进行审批" class="block_inline s_goapprove globle_img ml10"></a>
                     {#/if}
-                    <%--</c:if>--%>
+                    </c:if>
                 </td>
             </tr>
             {#/for}

@@ -42,18 +42,18 @@
         productFlag = false;
         function searchData(action) {//搜索弹出框
             var url, title;
-       		var roleCode="";
-            if (action == "owner"){
+            var roleCode = "";
+            if (action == "owner") {
                 url = "${ctx}/system/user/toQueryPage.comp";
                 title = "所有者";
-            }else if(action == "salesManager"){
+            } else if (action == "salesManager") {
                 title = "投资经理";
-                roleCode="ORG_00005";
-            	url = "${ctx}/system/user/toQueryPage.comp?roleCode="+roleCode;
-            }else if(action == "salesMajordomo"){
+                roleCode = "ORG_00005";
+                url = "${ctx}/system/user/toQueryPage.comp?roleCode=" + roleCode;
+            } else if (action == "salesMajordomo") {
                 title = "投资总监";
-                roleCode="ORG_00004";
-            	url = "${ctx}/system/user/toQueryPage.comp?roleCode="+roleCode;
+                roleCode = "ORG_00004";
+                url = "${ctx}/system/user/toQueryPage.comp?roleCode=" + roleCode;
             }
             else if (action == "customer") {
                 url = "${ctx}/customer/customer/toQueryPage.comp";
@@ -96,6 +96,8 @@
 </head>
 <body>
 <form id="form" action="${ctx }${funcUrl}" method="post">
+    <input type="hidden" name="flowNode.id" value="${order.flowNode.id}">
+    <input type="hidden" name="flowNode.type" value="${order.flowNode.type}">
 
     <div class="ml35 mr35 mt20 block cb cb">
         <b class="b1"></b>

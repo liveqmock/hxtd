@@ -2,7 +2,6 @@
 package com.baihui.hxtd.soa.project.controller;
 
 import java.io.IOException;
-import java.io.PrintWriter;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
@@ -31,7 +30,6 @@ import com.baihui.hxtd.soa.base.Constant;
 import com.baihui.hxtd.soa.base.orm.hibernate.HibernatePage;
 import com.baihui.hxtd.soa.base.utils.ImportExport;
 import com.baihui.hxtd.soa.base.utils.Search;
-import com.baihui.hxtd.soa.base.utils.mapper.HibernateAwareObjectMapper;
 import com.baihui.hxtd.soa.common.controller.CommonController;
 import com.baihui.hxtd.soa.common.service.CommonService;
 import com.baihui.hxtd.soa.project.entity.Project;
@@ -44,8 +42,6 @@ import com.baihui.hxtd.soa.system.service.DictionaryService;
 import com.baihui.hxtd.soa.util.EnumModule;
 import com.baihui.hxtd.soa.util.EnumOperationType;
 import com.baihui.hxtd.soa.util.JsonDto;
-import com.fasterxml.jackson.core.JsonGenerationException;
-import com.fasterxml.jackson.databind.JsonMappingException;
 /**
  * 
  * 功能描述：项目模块控制器
@@ -93,23 +89,21 @@ public class ProjectController extends CommonController<Project> {
 		return "/project/project/list";
 	}
 	
-	
-	@RequestMapping(value = "/query.do",produces = "text/text;charset=UTF-8")
 	@ResponseBody
-	public void query(HibernatePage<Project> page,
-								HttpServletRequest request,PrintWriter out) throws NoSuchFieldException, JsonGenerationException, JsonMappingException, IOException{
-		logger.info("SupplierController.query查询项目列表");
-		Map<String, Object> searchParams = Servlets.getParametersStartingWith(
-				request, "search_");
+	@RequestMapping(value = "/query.do")
+	public String query(HibernatePage<Project> page,
+			HttpServletRequest request) throws NoSuchFieldException{
+		Map<String, Object> searchParams = Servlets.getParametersStartingWith(request, "search_");
 		Search.clearBlankValue(searchParams);
 		Search.trimValue(searchParams);
 		Search.toRangeDate(searchParams, "modifiedTime");
 		Search.toRangeDate(searchParams, "createdTime");
-		logger.info("添加默认的查询条件");
+		
 		page = projectService.findPage(searchParams, page);
 		JsonDto json = new JsonDto();
 		json.setResult(page);
-		HibernateAwareObjectMapper.DEFAULT.writeValue(out, json);
+		
+		return json.toString();
 	}
 	/**
 	 * 
@@ -230,16 +224,6 @@ public class ProjectController extends CommonController<Project> {
 		JsonDto json = new JsonDto(project.getId(),"保存成功!");
 		return json.toString();
 	}
-
-	/**
-	 * 
-	  * delete()
-	  * @Title: delete
-	  * @param  Supplier项目实体类对象
-	  * @return  view  
-	  * @return String    返回类型
-	  * @throws
-	 */
 	@ResponseBody
 	@RequestMapping(value = "/delete.do",produces = "text/text;charset=UTF-8")
 	public String delete(ModelMap modelMap, Long[] id){
@@ -258,19 +242,27 @@ public class ProjectController extends CommonController<Project> {
 		}
 	}
 	
-	/**
-	  * toProjectLstCompPage(跳转至项目列表项目页)
-	  * @Author: lihua
-	  * @Description: 请求跳转至项目列表项目页
-	  * @param model ModelMap
-	  * @return String 项目列表项目视图页
-	 */
-	@RequestMapping(value = "/toQueryPage.comp")
-	public String toProjectLstCompPage(ModelMap model){
-		HibernatePage<Project> page = new HibernatePage<Project>();
+	
+	@RequestMapping(value = "/toSearchProjectPage.docomp")
+	public String toProjectLstCompPage(HibernatePage<Project> page, ModelMap model){
+		page.setHibernatePageSize(12);
         model.addAttribute("page", page);
         
 		return "/project/project/listcomp";
+	}
+	@ResponseBody
+	@RequestMapping(value = "/searchProject.docomp")
+	public String searchProject(HibernatePage<Project> page, 
+			HttpServletRequest request) throws NoSuchFieldException {
+		Map<String, Object> searchParams = Servlets.getParametersStartingWith(request, "search_");
+		Search.clearBlankValue(searchParams);
+		Search.trimValue(searchParams);
+		
+		page = projectService.findPage(searchParams, page);
+		JsonDto json = new JsonDto();
+		json.setResult(page);
+		
+		return json.toString();
 	}
     
     /**

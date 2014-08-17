@@ -1,8 +1,3 @@
-<%--
-  功能描述：编辑收款
-  User: huizijing
-  Date:2014/7/15
---%>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
@@ -42,7 +37,7 @@ $(function(){
 	});
 	
 	//更改文本框属性
-	if($("#id").val()!=null){
+	if($("#id").val()!=''&&$("#id").val()!=null){
 		$(".required").css("background-color","#f5f5f6");
 		$(".required").attr("readonly","readonly"); //添加readonly属性
 	}
@@ -50,10 +45,10 @@ $(function(){
 function searchData(action){//搜索弹出框
 	var url, title;
 	if(action == "order"){
-		url = "${ctx}/order/order/toQueryPage.comp";
+		url = "${ctx}/order/order/toSearchOrderPage.docomp";
 		title = "订单";
 	}
-	jsUtil.dialogIframe(url, title, 800, 465, function(){//确定回调
+	jsUtil.dialogIframe(url, title, 800, 500, function(){//确定回调
 		var $userObj = $(".bor_e28d1f", window.frames["dialogIframe"].document);
 			if($userObj.length > 0){
 				$("#txt_" + action).val($userObj.find("td:eq(0)").text());
@@ -97,7 +92,7 @@ function clearInputVal(obj){//清除
 					<span class="w_red">*&nbsp;</span>收款名称：
 				</td>
 				<td align="left">
-				<input type="text" name="name" 
+				<input type="text" name="name" id="txt_receivables"
 				<c:if test="${receivables.id!=null}">readonly</c:if>
 					value="${receivables.name}" class="text_input3 required" />
 				</td>
@@ -122,9 +117,7 @@ function clearInputVal(obj){//清除
 				</td>
 			</tr>
 			<tr>
-				<td align="right">
-					<span class="w_red">*&nbsp;</span>客户：
-				</td>
+				<td align="right"><span class="w_red">*&nbsp;</span>客户名称：</td>
 				<td align="left">
 					<input type="text" id="txt_customerName" readonly
 						value="${receivables.customer.name }" 
@@ -142,10 +135,10 @@ function clearInputVal(obj){//清除
 			</tr>
 			<tr>
 				<td align="right">
-					实际收款金额（万）：
+					<span class="w_red">*&nbsp;</span>实际收款金额（万）：
 				</td>
 				<td align="left">
-					<input  type="text" name="actual" value="${receivables.actual}" class="text_input3 number " />
+					<input  type="text" name="actual" value="${receivables.actual}" class="text_input3 required number " />
 				</td>
 			</tr>
 		</table>
@@ -157,7 +150,7 @@ function clearInputVal(obj){//清除
 				<td align="right" width="15%" valign="top">
 					备注：
 				</td>
-				<td align="left" width="85%">
+				<td align="left" width="85%" valign="top">
 					<textarea name="remark" class="remarks_input1">${receivables.remark}</textarea>
 				</td>
 			</tr>

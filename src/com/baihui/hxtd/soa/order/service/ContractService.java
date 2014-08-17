@@ -19,7 +19,6 @@ import com.baihui.hxtd.soa.base.orm.hibernate.HibernatePage;
 import com.baihui.hxtd.soa.base.utils.Search;
 import com.baihui.hxtd.soa.order.dao.ContractDao;
 import com.baihui.hxtd.soa.order.entity.Contract;
-import com.baihui.hxtd.soa.order.entity.Order;
 import com.baihui.hxtd.soa.system.dao.UserDao;
 import com.baihui.hxtd.soa.system.entity.AuditLog;
 import com.baihui.hxtd.soa.system.service.DataShift;

@@ -281,17 +281,29 @@ public class ProductController extends CommonController<Product> {
 	}
 	
 	
-	/**
-     * toOwnerLstPage(跳转至所有者组件列表界面)
-     * @param page 分页设置
-     * @param model ModelMap
-     * @return String 用户组件视图
-    */
-	@RequestMapping(value = "/toQueryPage.comp")
+	@RequestMapping(value = "/toSearchProductPage.docomp")
 	public String toOwnerLstPage(HibernatePage<Product> page, ModelMap model) {
-		page.setHibernatePageSize(12);// 设置每页显示12个用户
+		model.addAttribute("saleEndTime", productService.getDBNowDate()); //未过期的产品
+		page.setHibernatePageSize(12);
 		model.addAttribute("page", page);
-		model.addAttribute("saleEndTime", productService.getDBNowDate());
+		
 		return "/project/product/listcomp";
+	}
+	@ResponseBody
+	@RequestMapping(value = "/searchProduct.docomp")
+    public String anscyQuery(HttpServletRequest request,
+    		HibernatePage<Product> page) throws NoSuchFieldException {
+		/************获取查询条件**************/
+		Map<String, Object> searchParams = Servlets.getParametersStartingWith(request, "search_");
+        Search.clearBlankValue(searchParams);
+        
+        /************分页查询*****************/
+        productService.findPage(searchParams, page);
+        
+        /************json转换****************/
+        JsonDto json = new JsonDto();
+		json.setResult(page);
+        
+		return json.toString();
 	}
 }

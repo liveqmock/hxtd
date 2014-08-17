@@ -7,9 +7,7 @@ import java.util.List;
 import java.util.Map;
 
 import javax.annotation.Resource;
-import javax.servlet.ServletContext;
 import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -23,7 +21,6 @@ import org.springside.modules.web.Servlets;
 
 import com.baihui.hxtd.soa.base.Constant;
 import com.baihui.hxtd.soa.base.orm.hibernate.HibernatePage;
-import com.baihui.hxtd.soa.base.utils.ImportExport;
 import com.baihui.hxtd.soa.base.utils.Search;
 import com.baihui.hxtd.soa.base.utils.mapper.HibernateAwareObjectMapper;
 import com.baihui.hxtd.soa.common.controller.CommonController;
@@ -238,10 +235,10 @@ public class PaymentsController extends CommonController<Payments>{
 	 * @param customer
 	 */
 	private void setPropertyNull(Payments payments) {
-		if(null==payments.getOpenBank().getId()){
+		if(null==payments.getOpenBank()){
 			payments.setOpenBank(null);
 		}
-		if(null==payments.getPayType().getId()){
+		if(null==payments.getPayType().getId()||null==payments.getPayType()){
 			payments.setPayType(null);
 		}
 	}

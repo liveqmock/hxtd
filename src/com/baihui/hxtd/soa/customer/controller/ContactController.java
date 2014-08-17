@@ -18,6 +18,7 @@ import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.SessionAttributes;
 import org.springside.modules.web.Servlets;
@@ -213,6 +214,26 @@ public class ContactController extends CommonController<Contact> {
 		model.addAttribute("contact", contactService.get(id));//获取联系人
 		
 		return "/customer/contact/view";
+	}
+	
+	/**
+	 * 
+	  * viewComp(弹出框显示联系人信息)
+	  * @Title: viewComp
+	  * @Description: TODO
+	  * @param @param type
+	  * @param @param id
+	  * @param @param model
+	  * @param @return    参数类型
+	  * @return String    返回类型
+	  * @throws
+	 */
+	@RequestMapping(value = "/toViewPage.comp")
+	public String viewComp(@RequestParam(required = false) String type,
+			@RequestParam(required = false) Long id, ModelMap model) {
+		Contact contact  = contactService.get(id);
+		model.addAttribute("contact",contact);
+		return "/customer/contact/viewcomp";
 	}
 
 	/**

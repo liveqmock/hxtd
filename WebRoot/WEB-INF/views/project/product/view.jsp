@@ -1,6 +1,7 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
+<%@taglib prefix="tag" tagdir="/WEB-INF/tags" %>
 <c:set var="ctx" value="${pageContext.request.contextPath}"/>
 <html>
 <head>
@@ -80,7 +81,10 @@
 				<td align="left" valign="top"><div class="w85b">${product.remark}</div></td>
 			</tr>
 		</table>
-	<div class="h40"></div>
+		<tag:attachment id="${product.id}" view="${VS_HAS_FUNCTIONS.productAttView}" query="${VS_HAS_FUNCTIONS.productAttQuery}" 
+			upload="${VS_HAS_FUNCTIONS.productUpload}" down="${VS_HAS_FUNCTIONS.productDown}" 
+			deleteFlag="${VS_HAS_FUNCTIONS.productAttDelete}" module="product"></tag:attachment>
+		<div class="h40"></div>
 </div>
 </body>
 </html>

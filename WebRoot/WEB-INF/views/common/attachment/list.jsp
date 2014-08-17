@@ -20,7 +20,7 @@
 	<script type="text/javascript" src="${ctx}/static/js/scrollTitle.js?v=1"></script>
     <script type="text/javascript">
         $(function () {
-            var grid = new Grid().init();
+            new Grid().init();
         });
          //加载时间控件
          jsUtil.datepicker(".time");

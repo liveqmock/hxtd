@@ -22,13 +22,13 @@ window.onload = function(){
 function iframeRemoir(act, id){
 	var url, title;
 	if(act == "add"){
-		url = '${ctx}/common/memoir/toAddPage.doself';
+		url = '${ctx}/${moduleType}/memoir/toAddPage.doself';
 		title = '新增联系纪要';
 	} else if(act == "edit"){
-		url = '${ctx}/common/memoir/toModifyPage.doself?id=' + id;
+		url = '${ctx}/${moduleType}/memoir/toModifyPage.doself?id=' + id;
 		title = '编辑联系纪要';
 	} else {
-		url = '${ctx}/common/memoir/toViewPage.doself?id=' + id;
+		url = '${ctx}/${moduleType}/memoir/toViewPage.doself?id=' + id;
 		title = '查看联系纪要';
 	}
 	jsUtil.dialogIframe(url, title, 600, 400);
@@ -48,7 +48,7 @@ function iframeRemoir(act, id){
 </script>
 <h1 class="f14 fbnone ml40 mt10">联系纪要</h1>
 <div class="memoircontainer w95b bg_c_white margin0 mt10">
-	<form action="${ctx}/common/memoir/query.do" onsubmit="return false;">
+	<form action="${ctx}/${moduleType}/memoir/query.do" onsubmit="return false;">
 		<input type="hidden" id="moduleId" name="moduleId" value="${moduleId}"/>
 		<input type="hidden" id="moduleType" name="moduleType" value="${moduleType}"/>
 		<c:choose>
@@ -91,7 +91,7 @@ function iframeRemoir(act, id){
            <td>{$T.row.nextContactPoints}</td>
            <td>{$T.row.employee.name}</td>
            <td align="center">
-             <c:if test="${query}">
+             <c:if test="${view}">
                  <a href="javascript:;" class="block_inline s_detail_btn globle_img ml10" onclick="iframeRemoir('view',{$T.row.id});" title="详情"></a>
              </c:if>
              <c:if test="${edit}">

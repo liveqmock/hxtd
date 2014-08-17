@@ -68,7 +68,7 @@ public class UserService {
         logger.debug("用户名“{}”", user.getName());
 
         if (persistUser == null) {
-            throw new ServiceException(ServiceException.PERMISSION_ERROR, "用户名不存在");
+            throw new ServiceException(ServiceException.PERMISSION_ERROR, "请输入用户名或密码");
         }
 
         String password = md5.getMD5ofStr(user.getPassword());
@@ -319,7 +319,6 @@ public class UserService {
         logger.info("添加默认属性值");
         user.setModifiedTime(userDao.getDBNow());
         logger.debug("修改时间为当前时间“{}”", user.getModifiedTime());
-
         userDao.update(user);
     }
 

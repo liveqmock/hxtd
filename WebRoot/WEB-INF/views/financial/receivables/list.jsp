@@ -38,7 +38,7 @@ function reset() {
 <body>
 	<div class="listcontainer">
 		<form id="form" action="${ctx}/financial/receivables/query.do" onsubmit="return false;">
-		<table class="fl mt5 w">
+		<table class="fl mt10 w">
 			<tr>
 				<td class="f14 namewidth1" align="right" >
 					订单编号：
@@ -57,9 +57,7 @@ function reset() {
 				</td>
 				<td class="f14 namewidth2" align="left" >
 					<select name="search_EQ_status" class="select2">
-						<option value="">
-							--全部--
-						</option>
+						<option value="">全部</option>
 						<option value="0">未收款</option>
 						<option value="1">已收款</option>
 					</select>
@@ -76,14 +74,14 @@ function reset() {
 				</td>
 			</tr>
 			<tr class="more-content">
-				<td class="f14 namewidth1" align="right">应收款金额（万）：</td>
+				<td class="f14 namewidth1" align="right">应收款（万）：</td>
 	    		<td class="f14 namewidth2" align="left">
 	    			<div class="pr vm">
 		    			<input class="text_input2 number" name="search_GTE_fund" type="text"/>-<input class="number text_input2" 
 		    				name="search_LTE_fund" type="text"/>
 	    			</div>
 	    		</td>
-	    		<td class="f14 namewidth1" align="right">实际收款金额（万）：</td>
+	    		<td class="f14 namewidth1" align="right">实际收款（万）：</td>
 	    		<td class="f14 namewidth2" align="left">
 	    			<div class="pr vm">
 		    			<input class="text_input2 number" name="search_GTE_actual" type="text"/>-<input class="text_input2 number" 
@@ -111,7 +109,7 @@ function reset() {
 	<!--查询条件结束-->
 	<div class="cb"></div>
 
-	<div class="ml35 mr35 mt20 block cb cb">
+	<div class="ml35 mr35 mt10 block cb cb">
 		<b class="b1"></b>
 		<b class="b2"></b>
 		<b class="b3"></b>
@@ -166,7 +164,7 @@ function reset() {
 				<th width="9%">
 					应收款金额（万）
 				</th>
-				<th width="9%">
+				<th width="10%">
 					实际收款金额（万）
 				</th>
 				<th width="5%">
@@ -211,7 +209,7 @@ function reset() {
 				<th width="9%">
 					应收款金额（万）
 				</th>
-				<th width="9%">
+				<th width="10%">
 					实际收款金额（万）
 				</th>
 				<th width="5%">
@@ -261,7 +259,7 @@ function reset() {
 				<td>{$T.row.customer.name}</td>
 				<td >{$T.row.fund}</td>
 				<td >{$T.row.actual}</td>
-				<td>
+				<td {#if !$T.row.status} style="color:red;"{#/if}>
 				{$T.row.status?'已收款':'未收款'}
 				</td>
 				 <td>{$T.row.owner.realName}</td>

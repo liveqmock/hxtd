@@ -10,14 +10,6 @@
 <html>
 <head>
 <title>组件详情</title>
-<meta http-equiv="pragma" content="no-cache">
-<meta http-equiv="cache-control" content="no-cache">
-<meta http-equiv="expires" content="0">    
-<meta http-equiv="keywords" content="keyword1,keyword2,keyword3">
-<meta http-equiv="description" content="This is my page">
-<!--
-<link rel="stylesheet" type="text/css" href="styles.css">
--->
 <link rel="stylesheet" href="${ctx}/static/css/recommend/list1.css" type="text/css"/>
 <script type="text/javascript" src="${ctx}/static/js/jquery.validate.js"></script>
 <script type="text/javascript" src="${ctx}/static/js/jquery.metadata.js"></script>
@@ -105,7 +97,7 @@ $(function(){
         <table class="cb id_table4 w95b bg_c_white margin0 mt10">
             <tr>
                 <td align="right" width="15%" valign="top">备注：</td>
-                <td align="left" width="85%"><textarea name="remark"  class="remarks_input1">${com.remark}</textarea></td>
+                <td align="left" width="85%" valign="top"><textarea name="remark" class="remarks_input1">${com.remark}</textarea></td>
 
             </tr>
 

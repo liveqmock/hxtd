@@ -147,7 +147,7 @@ public class ReceivablesService {
 		receivables.setModifiedTime(receivablesDao.getDBNow());
 		receivables.setOperateTime(receivables.getModifiedTime());
 		receivablesDao.save(receivables);
-		// 订单状态变更为已收款，同时写入订单正式生效
+		// 订单财务状态变更为已收款，同时写入订单正式生效
 		if (receivables.getOrder() != null && receivables.getOrder().getId() != null ){
 			orderDao.modifyEffectOrderPayStatusById(dictionaryDao
 					.getByValue(DictionaryConstant.ORDER_PAY_2_HXTD_STATUS_ALL),

@@ -49,7 +49,6 @@ import com.baihui.hxtd.soa.util.JsonDto;
  * @date 2014-5-26 上午11:17:53
  */
 @Controller
-@RequestMapping(value = "/common/memoir")
 @SessionAttributes(value = {Constant.VS_USER, Constant.VS_USER_ID, Constant.VS_ORG})
 public class MemoirController {
 
@@ -83,7 +82,7 @@ public class MemoirController {
 	  * @param out PrintWriter
 	  * @throws IOException 
 	 */
-	@RequestMapping(value = "/query.do")
+	@RequestMapping(value = "/{moduleType}/memoir/query.do")
 	public void query(HttpServletRequest request,
 			HibernatePage<Memoir> page,
 			@RequestParam(value = "moduleId") Long moduleId,
@@ -106,7 +105,7 @@ public class MemoirController {
 	  * @param model ModelMap
 	  * @return String 新增联系纪要地址页
 	 */
-	@RequestMapping(value = "/toAddPage.doself")
+	@RequestMapping(value = "/{moduleType}/memoir/toAddPage.doself")
 	public String toAddPage(ModelMap model){
 		model.addAttribute("memoir", new Memoir());
 		
@@ -123,7 +122,7 @@ public class MemoirController {
 	  * @return String 返回修改页视图地址
 	 */
 	@ResponseBody
-	@RequestMapping(value = "/add.do", method = RequestMethod.POST)
+	@RequestMapping(value = "/{moduleType}/memoir/add.do", method = RequestMethod.POST)
 	public String add(Memoir memoir,
 			@RequestParam(value = "moduleId") Long moduleId,
 			@RequestParam(value = "moduleType") String moduleType,
@@ -157,7 +156,7 @@ public class MemoirController {
 	  * @param model Model
 	  * @return String 编辑页地址信息
 	 */
-	@RequestMapping(value = "/toModifyPage.doself")
+	@RequestMapping(value = "/{moduleType}/memoir/toModifyPage.doself")
 	public String toModifyPage(Long id, ModelMap model) {
 		model.addAttribute("memoir", memoirService.get(id));
 		
@@ -175,7 +174,7 @@ public class MemoirController {
 	  * @return String 编辑页地址信息
 	 */
 	@ResponseBody
-	@RequestMapping(value = "/modify.do")
+	@RequestMapping(value = "/{moduleType}/memoir/modify.do")
 	public String modify(Memoir memoir,
 			@RequestParam(value = "moduleId") Long moduleId,
 			@RequestParam(value = "moduleType") String moduleType,
@@ -206,7 +205,7 @@ public class MemoirController {
 	  * @param model Model
 	  * @return String 查看页地址
 	 */
-	@RequestMapping(value = "/toViewPage.doself")
+	@RequestMapping(value = "/{moduleType}/memoir/toViewPage.doself")
 	public String toViewPage(Long id, Model model) {
 		model.addAttribute("memoir", memoirService.get(id));
 		
@@ -221,7 +220,7 @@ public class MemoirController {
 	  * @throws
 	 */
 	@ResponseBody
-	@RequestMapping(value = "/delete.do")
+	@RequestMapping(value = "/{moduleType}/memoir/delete.do")
 	public String delete(ModelMap modelMap, Long[] id) {
 		User user = (User)modelMap.get(Constant.VS_USER);
 		

@@ -64,7 +64,7 @@
 			</tr>
 			<tr>
 				<td align="right">
-					客户：
+					客户名称：
 				</td>
 				<td align="left">
 					${payments.customer.name }
@@ -84,10 +84,11 @@
 					${payments.actual}
 				</td>
 				<td align="right">
-					
+					付款状态：
 				</td>
-				<td align="left">
-					
+				<td align="left" <c:if test="${!payments.status }">style="color:red;"</c:if>
+				>
+					${payments.status?'已付款':'未付款'}
 				</td>
 			</tr>
 		</table>
@@ -95,13 +96,13 @@
 		<table class="cb id_table3 w95b bg_c_white margin0 mt10">
 			<tr>
 			    <td align="right"  width="15%">开户银行：</td>
-				<td align="left">${payments.openBank.key}</td>
+				<td align="left">${payments.customer.openBank.key}</td>
 				<td align="right"  width="15%">银行户名：</td>
-				<td align="left">${payments.bankName}</td>
+				<td align="left">${payments.customer.bankName}</td>
 			</tr>
 			<tr>
 				<td align="right">银行账号：</td>
-				<td align="left">${payments.bankAccount}</td>
+				<td align="left">${payments.customer.bankAccount}</td>
 				<td align="right">支付方式：</td>
 				<td align="left">${payments.payType.key}</td>
 			</tr>

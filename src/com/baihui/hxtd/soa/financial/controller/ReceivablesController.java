@@ -7,9 +7,7 @@ import java.util.List;
 import java.util.Map;
 
 import javax.annotation.Resource;
-import javax.servlet.ServletContext;
 import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -24,15 +22,17 @@ import org.springside.modules.web.Servlets;
 
 import com.baihui.hxtd.soa.base.Constant;
 import com.baihui.hxtd.soa.base.orm.hibernate.HibernatePage;
-import com.baihui.hxtd.soa.base.utils.ImportExport;
 import com.baihui.hxtd.soa.base.utils.Search;
 import com.baihui.hxtd.soa.base.utils.mapper.HibernateAwareObjectMapper;
 import com.baihui.hxtd.soa.common.controller.CommonController;
 import com.baihui.hxtd.soa.financial.entity.Receivables;
 import com.baihui.hxtd.soa.financial.service.ReceivablesService;
+import com.baihui.hxtd.soa.system.DictionaryConstant;
 import com.baihui.hxtd.soa.system.entity.AuditLog;
+import com.baihui.hxtd.soa.system.entity.Dictionary;
 import com.baihui.hxtd.soa.system.entity.User;
 import com.baihui.hxtd.soa.system.service.DataShift;
+import com.baihui.hxtd.soa.system.service.DictionaryService;
 import com.baihui.hxtd.soa.util.EnumModule;
 import com.baihui.hxtd.soa.util.EnumOperationType;
 import com.baihui.hxtd.soa.util.JsonDto;
@@ -59,7 +59,9 @@ public class ReceivablesController extends CommonController<Receivables>{
 
     @Resource
     private ReceivablesService receivablesService;
-
+    
+    @Resource
+    private DictionaryService dictionaryService;
     /**
      * 跳转至列表页
      */
@@ -115,6 +117,7 @@ public class ReceivablesController extends CommonController<Receivables>{
 		}
 		Receivables receivables = receivablesService.getById(id);
 		model.addAttribute("receivables",receivables);
+		getDictionary(model);
 		return returnStr;
 	}
 
@@ -156,6 +159,18 @@ public class ReceivablesController extends CommonController<Receivables>{
 		return "/financial/receivables/edit";
 	}
 	
+	
+	 /**
+     * 获取所有数据字典类型
+     * @author huizijing
+     */
+	public void getDictionary(Model model){
+		//设置开户行
+		List<Dictionary> openBank = dictionaryService.findChildren(DictionaryConstant.VC_OPENBANK, true);
+		model.addAttribute("openBank", openBank);
+		}
+	
+	
 	/**
 	 *  delete(删除)
 	 * @param id
@@ -186,6 +201,7 @@ public class ReceivablesController extends CommonController<Receivables>{
 	public String toAddPage( Model model){
 		logger.info("ReceviablesController.toAddPage新建合同");
 		String funcUrl="/financial/receivables/add.do";
+		getDictionary(model);
 		model.addAttribute("funcUrl", funcUrl);
 		return "/financial/receivables/edit";
 	}

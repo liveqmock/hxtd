@@ -24,7 +24,7 @@
 </style>
 <script type="text/javascript">
 $(function(){
-	new Grid().init({ paginationSizeShow:false, paginationCountLimit:13 });
+	new Grid().init();
 	$(".list .module1").live({
 		click: function(){
 			$(".module1").removeAttr("style");
@@ -43,7 +43,7 @@ $(function(){
 <body>
 <div class="listcontainer">
 	<div class="margin0">
-		<form action="${ctx}/project/product/query.do" onsubmit="return false;">
+		<form action="${ctx}/project/product/searchProduct.docomp" onsubmit="return false;">
     	<input type="hidden" name="search_GT_saleEndTime" value="${saleEndTime}"/>
 		<div>
 			<table class="w pr10 pl10">

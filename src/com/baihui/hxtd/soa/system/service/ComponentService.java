@@ -75,6 +75,7 @@ public class ComponentService {
     public List<Component> findInit() {
         logger.info("查找系统初始化时的菜单");
         String hql = "select component from Component component" +
+        		" inner join fetch component.privilegeLevel" +
                 " where component.isDeleted=false";
         return componentDao.find(hql);
     }

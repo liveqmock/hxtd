@@ -10,14 +10,6 @@
 <html>
 <head>
 <title>功能详情</title>
-<meta http-equiv="pragma" content="no-cache">
-<meta http-equiv="cache-control" content="no-cache">
-<meta http-equiv="expires" content="0">    
-<meta http-equiv="keywords" content="keyword1,keyword2,keyword3">
-<meta http-equiv="description" content="This is my page">
-<!--
-<link rel="stylesheet" type="text/css" href="styles.css">
--->
 <script type="text/javascript" src="${ctx}/static/js/jquery.validate.js"></script>
 <link rel="stylesheet" href="${ctx}/static/css/recommend/list1.css" type="text/css"/>
 <script type="text/javascript" src="${ctx}/static/js/jquery.metadata.js"></script>
@@ -71,12 +63,8 @@ function clearInputVal(obj){ //清除
   
 <body>
 <form id="form" action="${ctx }${funcUrl}" method="post">
-<div><!--请在此处使用iframe--->
-    <!--查询条件开始-->
-
-    <!--查询条件结束-->
+<div>
     <div class="cb"></div>
-    <!--列表开始-->
     <div class="ml35 mr35 mt20 block cb cb">
        <b class="b1"></b>
        <b class="b2"></b>
@@ -140,10 +128,10 @@ function clearInputVal(obj){ //清除
         <table class="cb id_table4 w95b bg_c_white margin0 mt10">
             <tr>
                 <td align="right" width="15%" valign="top">备注：</td>
-                <td align="left" width="85%"><textarea name="remark"  class="remarks_input1 {maxlength:300}">${func.remark}</textarea></td>
+                <td align="left" width="85%" valign="top"><textarea name="remark"  class="remarks_input1 {maxlength:300}">${func.remark}</textarea></td>
             </tr>
         </table>
-        <div class=" h40"></div>
+        <div class="h40"></div>
     </div>
     <div class="cb block h40 margin0 mt10" style="width:350px;">
         <ul class="id_table1 cb">

@@ -30,7 +30,7 @@
 <body>
 <div class=" listcontainer">
     <form id="form" action="${ctx}/order/contract/query.do" onsubmit="return false;">
-      <table class="fl mt5 w">
+      <table class="fl mt10 w">
        <tr>   
 			<td class="f14 namewidth1" align="right">合同编号：</td>
 			<td class="f14 namewidth2" align="left">
@@ -80,7 +80,7 @@
     <!--查询条件结束-->
 <div class="cb"></div>
 <!--列表开始-->
-<div class="ml35 mr35 mt20 block cb cb">
+<div class="ml35 mr35 mt10 block cb cb">
 <b class="table_headl globle_img block fl"></b>
 	<div class="fl table_headc fl w99b">
 		<div class="ie_head">

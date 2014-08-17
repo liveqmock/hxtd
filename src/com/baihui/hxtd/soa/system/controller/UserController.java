@@ -1,5 +1,36 @@
 package com.baihui.hxtd.soa.system.controller;
 
+import java.io.IOException;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
+
+import javax.annotation.Resource;
+import javax.servlet.ServletContext;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
+
+import org.apache.commons.collections.BidiMap;
+import org.apache.commons.io.FilenameUtils;
+import org.apache.commons.lang3.ArrayUtils;
+import org.apache.poi.openxml4j.exceptions.InvalidFormatException;
+import org.apache.poi.ss.usermodel.Workbook;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.stereotype.Controller;
+import org.springframework.ui.ModelMap;
+import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.SessionAttributes;
+import org.springframework.web.multipart.MultipartFile;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
+import org.springside.modules.web.Servlets;
+
 import com.baihui.hxtd.soa.base.Constant;
 import com.baihui.hxtd.soa.base.orm.hibernate.HibernatePage;
 import com.baihui.hxtd.soa.base.utils.ImportExport;
@@ -11,34 +42,23 @@ import com.baihui.hxtd.soa.base.utils.ztree.TreeNodeConverter;
 import com.baihui.hxtd.soa.common.controller.CommonController;
 import com.baihui.hxtd.soa.common.service.CommonService;
 import com.baihui.hxtd.soa.system.DictionaryConstant;
-import com.baihui.hxtd.soa.system.entity.*;
-import com.baihui.hxtd.soa.system.service.*;
+import com.baihui.hxtd.soa.system.entity.AuditLog;
+import com.baihui.hxtd.soa.system.entity.Component;
+import com.baihui.hxtd.soa.system.entity.Dictionary;
+import com.baihui.hxtd.soa.system.entity.Function;
+import com.baihui.hxtd.soa.system.entity.Organization;
+import com.baihui.hxtd.soa.system.entity.Role;
+import com.baihui.hxtd.soa.system.entity.User;
+import com.baihui.hxtd.soa.system.service.ComponentService;
+import com.baihui.hxtd.soa.system.service.DictionaryService;
+import com.baihui.hxtd.soa.system.service.FunctionService;
+import com.baihui.hxtd.soa.system.service.OrganizationService;
+import com.baihui.hxtd.soa.system.service.RoleService;
+import com.baihui.hxtd.soa.system.service.UserService;
 import com.baihui.hxtd.soa.util.EnumModule;
 import com.baihui.hxtd.soa.util.EnumOperationType;
 import com.baihui.hxtd.soa.util.JsonDto;
 import com.fasterxml.jackson.core.JsonProcessingException;
-import org.apache.commons.collections.BidiMap;
-import org.apache.commons.io.FilenameUtils;
-import org.apache.commons.lang3.ArrayUtils;
-import org.apache.poi.openxml4j.exceptions.InvalidFormatException;
-import org.apache.poi.ss.usermodel.Workbook;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import org.springframework.stereotype.Controller;
-import org.springframework.ui.ModelMap;
-import org.springframework.web.bind.annotation.*;
-import org.springframework.web.multipart.MultipartFile;
-import org.springframework.web.servlet.mvc.support.RedirectAttributes;
-import org.springside.modules.web.Servlets;
-
-import javax.annotation.Resource;
-import javax.servlet.ServletContext;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-import javax.servlet.http.HttpSession;
-import java.io.IOException;
-import java.util.List;
-import java.util.Map;
 
 /**
  * 用户控制器
@@ -96,6 +116,8 @@ public class UserController extends CommonController<User> {
         logger.info("存储表单默认值");
         model.addAttribute("organizationId", organization.getId());
         model.addAttribute("organizationOrder", organization.getOrder());
+        User user = (User) model.get(Constant.VS_USER);
+        model.addAttribute("userId", user.getId());
         logger.debug("组织主键编号“{}”", organization.getId());
 
         page.setHibernateOrderBy("modifiedTime");
@@ -129,19 +151,6 @@ public class UserController extends CommonController<User> {
         return jsonDto.toString();
     }
     
-    @ResponseBody
-    @RequestMapping(value = "/query.do", params = "TYPE=role")
-    public String queryByRoleCode(HibernatePage<User> page,String roleCode) throws NoSuchFieldException, JsonProcessingException {
-        logger.info("查询用户信息");
-        page = userService.findPageByRoleCode(page,roleCode);
-        logger.debug("列表信息数目“{}”", page.getResult().size());
-        logger.info("转换为TDO格式");
-        JsonDto jsonDto = new JsonDto();
-        jsonDto.setSuccessFlag(true);
-        jsonDto.setResult(page);
-        return jsonDto.toString();
-    }
-
     /**
      * 存储表单初始化数据
      */
@@ -167,7 +176,7 @@ public class UserController extends CommonController<User> {
      * 转至新增用户页面
      */
     @RequestMapping(value = "/toAddPage.do", method = RequestMethod.GET)
-    public String toAddPage(Long organizationId, ModelMap model) {
+    public String toAddPage(Long organizationId, ModelMap model, String type) {
         logger.info("转至新增用户页面");
 
         detail(model);
@@ -179,6 +188,7 @@ public class UserController extends CommonController<User> {
         defaultUser.setIsActive(true);
         defaultUser.setOrganization(organizationService.getByOrder(organizationId));
         model.addAttribute("user", defaultUser);
+        model.addAttribute("type", type);
         logger.debug("用户“{}”", defaultUser);
 
         return "/system/user/edit";
@@ -213,7 +223,7 @@ public class UserController extends CommonController<User> {
      */
     @RequestMapping("/toViewSelfPage.do")
     public String toViewSelfPage(ModelMap model) {
-        return toViewPage(((User) model.get(Constant.VS_USER)).getId(), model);
+        return toViewPage(((User) model.get(Constant.VS_USER)).getId(), model,"");
     }
 
     /**
@@ -222,7 +232,7 @@ public class UserController extends CommonController<User> {
      * 2.从个人设置->账号信息点击进入，此时id=session.user.id
      */
     @RequestMapping(value = "/toViewPage.do", method = RequestMethod.GET)
-    public String toViewPage(Long id, ModelMap model) {
+    public String toViewPage(Long id, ModelMap model, String type) {
         logger.info("转至查看用户页面");
 
         //默认为当前用户主键编号
@@ -238,7 +248,7 @@ public class UserController extends CommonController<User> {
 
         logger.info("存储表单初默认值");
         model.addAttribute("user", user);
-
+        model.addAttribute("type", type);
         return "/system/user/view";
     }
 
@@ -246,15 +256,14 @@ public class UserController extends CommonController<User> {
      * 转至修改用户页面
      */
     @RequestMapping(value = "/toModifyPage.do", method = RequestMethod.GET)
-    public String toModifyPage(Long id, ModelMap model) {
+    public String toModifyPage(Long id, ModelMap model, String type) {
         logger.info("转至修改用户页面");
         logger.debug("用户主键编号“{}”", id);
         User user = userService.getById(id);
-
         detail(model);
-
         logger.info("存储表单默认值");
         model.addAttribute("user", user);
+        model.addAttribute("type", type);
         logger.debug("用户“{}”", user.getName());
 
         return "/system/user/edit";
@@ -275,8 +284,18 @@ public class UserController extends CommonController<User> {
         logger.info("添加服务端属性值");
         User sessionUser = (User) modelMap.get(Constant.VS_USER);
         user.setModifier(sessionUser);
-        logger.debug("修改用户为当前用户“{}”", sessionUser.getName());
-
+        //获取用户的角色
+        Set<Role> roles=new HashSet<Role>();
+        roles.addAll(roleService.findAuthorization(user.getId()));
+        user.setRoles(roles);
+        //获取用户的功能
+        Set<Function> functions=new HashSet<Function>();
+        functions.addAll(functionService.findUserAuthorization(user.getId()));
+        user.setFunctions(functions);
+        //获取用户的组件
+        Set<Component> components=new HashSet<Component>();
+        components.addAll(componentService.findUserAuthorization(user.getId()));
+        user.setComponents(components);
         AuditLog auditLog = new AuditLog(EnumModule.USER.getModuleName(),
                 user.getId(), user.getRealName(), EnumOperationType.MODIFY.getOperationType(), sessionUser);
         userService.modify(user, auditLog);
@@ -384,9 +403,12 @@ public class UserController extends CommonController<User> {
                                 ModelMap model) {
         logger.info("授权");
         User user = (User) model.get(Constant.VS_USER);
+        if(user.getId()==id||id==null){
+        	return new JsonDto(id, "用户不能给自己授权").toString();
+        }
         AuditLog auditLog = new AuditLog(EnumModule.USER.getModuleName(),
-                null == id ? user.getId() : id, null == id ? user.getRealName() : userService.getById(id).getRealName(), EnumOperationType.AUTHORIZATION.getOperationType(), user, "用户授权");
-        userService.authorization(null == id ? user.getId() : id, roleIds, functionIds, componentIds, auditLog);
+                 id, userService.getById(id).getRealName(), EnumOperationType.AUTHORIZATION.getOperationType(), user, "用户授权");
+        userService.authorization( id, roleIds, functionIds, componentIds, auditLog);
         return new JsonDto(id, "授权成功").toString();
     }
 
@@ -531,26 +553,6 @@ public class UserController extends CommonController<User> {
         commonService.saveAuditlog(ImportExport.Type.limit, name, user, users.size());
     }
 
-
-    /**
-     * toOwnerLstPage(跳转至所有者组件列表界面)
-     *
-     * @param page  分页设置
-     * @param model ModelMap
-     * @return String 用户组件视图
-     */
-    @RequestMapping(value = "/toQueryPage.comp")
-    public String toOwnerLstPage(
-            HibernatePage<User> page,String roleCode,
-            ModelMap model) {
-        page.setHibernatePageSize(12);// 设置每页显示12个用户
-        model.addAttribute("page", page);
-        model.addAttribute("orgId", model.get(Constant.VS_ORG_ID));
-        model.addAttribute("roleCode", roleCode);
-        return "/system/user/listcomp";
-    }
-
-
     /**
      * 弹出组织结构树，只显示下级组织
      *
@@ -660,7 +662,6 @@ public class UserController extends CommonController<User> {
         logger.debug("用户“{}”", user.getName());
         return "/system/user/password";
     }
-
     /**
      * 修改密码
      *
@@ -694,4 +695,62 @@ public class UserController extends CommonController<User> {
         return jsonDto.toString();
     }
 
+    /**
+      * toSearchUserLst(请求搜索用户信息列表组件页)
+      * @Title: toSearchUserLst
+      * @Description: 请求搜索用户信息列表组件页
+      * @param page 分页设置
+      * @param roleCode 角色代码
+      * @param model 模型
+      * @return String 用户组件地址
+     */
+    @RequestMapping(value = "/toSearchUserPage.docomp")
+    public String toSearchUserLst(HibernatePage<User> page, String roleCode, ModelMap model) {
+        page.setHibernatePageSize(12);// 设置每页显示12个用户
+        model.addAttribute("page", page);
+        model.addAttribute("orgId", model.get(Constant.VS_ORG_ID));
+        model.addAttribute("roleCode", roleCode);
+        
+        return "/system/user/listcomp";
+    }
+    /**
+      * searchUser(搜索用户信息列表)
+      * @Title: searchUser
+      * @Description: 搜索用户信息列表，比如：负责人、所有者等
+      * @param request HttpServlet请求
+      * @param organizationId 组织ID
+      * @param page 分页设置
+      * @param modelMap 模型
+      * @return String Json
+      * @throws NoSuchFieldException
+     */
+    @ResponseBody
+    @RequestMapping(value = "/searchUser.docomp")
+    public String searchUser(HttpServletRequest request, 
+    		Long organizationId, 
+    		HibernatePage<User> page, 
+    		ModelMap modelMap) throws NoSuchFieldException {
+        Map<String, Object> searchParams = Servlets.getParametersStartingWith(request, "search_");
+        Search.clearBlankValue(searchParams);
+        Search.trimValue(searchParams);
+        
+        page = userService.findPage(searchParams, page, organizationId);
+
+        JsonDto jsonDto = new JsonDto();
+        jsonDto.setSuccessFlag(true);
+        jsonDto.setResult(page);
+
+        return jsonDto.toString();
+    }
+    @ResponseBody
+    @RequestMapping(value = "/searchUser.docomp", params = "TYPE=role")
+    public String queryByRoleCode(HibernatePage<User> page,String roleCode) throws NoSuchFieldException {
+        page = userService.findPageByRoleCode(page, roleCode);
+        
+        JsonDto jsonDto = new JsonDto();
+        jsonDto.setSuccessFlag(true);
+        jsonDto.setResult(page);
+        
+        return jsonDto.toString();
+    }
 }

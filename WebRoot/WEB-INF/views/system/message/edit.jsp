@@ -99,7 +99,7 @@
 		</td>
     </tr>
     </table>
-	<div class=" h40"></div>
+	<div class="h40"></div>
 	</div>
 	<div class="cb block h40 margin0 mt10" style="width:350px;">
 		<ul class="id_table1 cb">

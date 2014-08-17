@@ -41,19 +41,6 @@ ${VR_JS_GLOBALINFO};</script>
 
 <script type="text/javascript" src="${ctx}/static/js/js-util.js?v=1"></script>
 <script type="text/javascript" src="${ctx}/static/js/commonAjax.js?v=${now}"></script>
-<script>
-$(function () {//table tr 双击查看
-    $(".list tr").live({
-        click: function () {
-            var $ck = $(this).find(":checkbox"), ck = $ck.get(0);
-            if (undefined != ck) {
-                $ck.attr("checked", !ck.checked);
-                $(".checkall").attr("checked", $(".list :checkbox:not(:checked)").length == 0);
-            }
-        }
-    });
-});
-</script>
 <sitemesh:head/>
 </head>
 <body style="min-width: 1100px;">

@@ -1,8 +1,3 @@
-<%--
-  功能描述：客户详情
-  User: huizijing
-  Date:2014/5/24
---%>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@taglib prefix="tag" tagdir="/WEB-INF/tags" %>
@@ -11,6 +6,16 @@
 <head>
 <title>客户详情</title>
 <link href="${ctx}/static/css/stressing/list1.css" rel="stylesheet" type="text/css"/>
+<script type="text/javascript" src="${ctx}/static/js/js-util.common.js"></script>
+<script type="text/javascript">
+$(function(){
+})
+	function getContact(id) {
+    jsUtil.dialogIframe("${ctx}/customer/contact/toViewPage.comp?id=" + id, "联系人信息", 800, 600);
+}
+
+
+</script>
 </head>
 <body>
 	<div class="cb"></div>
@@ -149,9 +154,7 @@
 		<table class="cb id_table6 w95b bg_c_white margin0 mt10">
 			<tr>
 				<td align="right" width="15%" valign="top">备注：</td>
-				<td align="left" width="85%" valign="top">
-				<div class="w85b">${customer.remark}</div>
-				</td>
+				<td align="left" width="85%" valign="top"><div class="w85b">${customer.remark}</div></td>
 			</tr>
 		</table>
 		<h1 class="f14 fbnone ml40 pt10">联系人</h1>
@@ -166,7 +169,14 @@
 			</tr>
 			<c:forEach items="${contacts}" varStatus="i" var="item" >
 			<tr>
-				<td>${item.name}</td>
+				<td>
+				<c:choose>
+           		<c:when test="${VS_HAS_FUNCTIONS.contactView}">
+           			<a href="javascript:getContact(${item.id})" class="toviewpage">${item.name}</a>
+           		</c:when>
+           		<c:otherwise>${item.name}</c:otherwise>
+           		</c:choose>
+           		</td>
 				<td>${item.position}</td>
 				<td>${item.phone}</td>
 				<td>${item.mobile}</td>
@@ -175,7 +185,11 @@
 			</c:forEach>
 		</table> 
 		</div>
-		<tag:memoir view="true" edit="true" query="true" delete="true" moduleType="customer" moduleId="${customer.id}"></tag:memoir>
+		<c:if test="${VS_HAS_FUNCTIONS.customerMemoirQuery}">
+		<tag:memoir moduleType="customer" moduleId="${customer.id}" view="${VS_HAS_FUNCTIONS.customerMemoirView}" 
+			edit="${VS_HAS_FUNCTIONS.customerMemoirModify}" query="${VS_HAS_FUNCTIONS.customerMemoirQuery}" 
+			delete="${VS_HAS_FUNCTIONS.customerMemoirDelete}"></tag:memoir>
+		</c:if>
 		<tag:attachment view="${VS_HAS_FUNCTIONS.customerAttView}" upload="${VS_HAS_FUNCTIONS.customerUpload}" 
 			module="customer" query="${VS_HAS_FUNCTIONS.customerAttQuery}" down="${VS_HAS_FUNCTIONS.customerDown}" 
 			deleteFlag="true" id="${customer.id}"></tag:attachment>

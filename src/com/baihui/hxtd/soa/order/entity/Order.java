@@ -106,14 +106,19 @@ public class Order implements IdFlowable {
     @JoinColumn(name = "SALES_MAJORDOMO_ID")
     private User salesMajordomo;
 
+    /** 生效时间 */
     @FieldInfo(desc = "生效时间")
+    @JsonFormat(pattern = "yyyy-MM-dd", timezone = "GMT+08:00")
     @Column(name = "EFFECTIVE_TIME")
     private Date effectiveTime;
 
+    /** 终止时间 */
     @FieldInfo(desc = "终止时间")
+    @JsonFormat(pattern = "yyyy-MM-dd", timezone = "GMT+08:00")
     @Column(name = "ORDER_END_TIME")
     private Date orderEndTime;
 
+    /** 订单状态 */
     @FieldInfo(desc = "订单状态")
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "ORDER_STATUS")
@@ -159,10 +164,6 @@ public class Order implements IdFlowable {
     @JoinColumn(name = "PAY_STATUS")
     private Dictionary payStatus;
 
-    public String toString() {
-        return "订单编号：" + getCode();
-    }
-
     public Long getId() {
         return id;
     }
@@ -197,6 +198,11 @@ public class Order implements IdFlowable {
 
     public FlowNode getFlowNode() {
         return flowNode;
+    }
+
+    @Override
+    public String getSketch() {
+        return "订单编号：" + getCode();
     }
 
     public void setFlowNode(FlowNode flowNode) {

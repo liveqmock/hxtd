@@ -128,7 +128,7 @@
 		<tag:attachment id="${project.id}" view="${VS_HAS_FUNCTIONS.projectAttView}" query="${VS_HAS_FUNCTIONS.projectAttQuery}" 
 			upload="${VS_HAS_FUNCTIONS.projectUpload}" down="${VS_HAS_FUNCTIONS.projectDown}" 
 			deleteFlag="${VS_HAS_FUNCTIONS.projectAttDelete}" module="project"></tag:attachment>
-		<div class=" h40"></div>
+		<div class="h40"></div>
 	</div>
 </div>
 </body>

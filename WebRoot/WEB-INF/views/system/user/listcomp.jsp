@@ -40,14 +40,13 @@ $(function(){
 <div class="listcontainer">
 	<div class="margin0">
 	<c:choose>
-	<c:when test="${roleCode==''||roleCode==null}">
-	<form action="${ctx}/system/user/query.do" onsubmit="return false;">
-	</c:when>
-	<c:otherwise>
-	<form action="${ctx}/system/user/query.do?TYPE=role" onsubmit="return false;">
-	</c:otherwise>
+		<c:when test="${roleCode==''||roleCode==null}">
+		<form action="${ctx}/system/user/searchUser.docomp" onsubmit="return false;">
+		</c:when>
+		<c:otherwise>
+		<form action="${ctx}/system/user/searchUser.docomp?TYPE=role" onsubmit="return false;">
+		</c:otherwise>
 	</c:choose>
-		
     	<input type="hidden" name="organizationId" value="${orgId}"/>
 		<div>
 			<table class="w pr10 pl10">

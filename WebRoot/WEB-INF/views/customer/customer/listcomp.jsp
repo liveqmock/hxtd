@@ -39,7 +39,7 @@ $(function(){
 <body>
 <div class="listcontainer">
 	<div class="margin0">
-		<form action="${ctx}/customer/customer/query.do" onsubmit="return false;">
+		<form action="${ctx}/customer/customer/searchCustomer.docomp" onsubmit="return false;">
     	<input type="hidden" name="organizationId" value="${orgId}"/>
 		<div>
 			<table class="w pr10 pl10">
@@ -60,7 +60,7 @@ $(function(){
 		</div>
     	<tags:paginationparams page="${page}"></tags:paginationparams>
 		</form>
-		<div style="height: 300px; overflow: hidden; overflow-y:auto;" class="grid">
+		<div style="height:300px;overflow:hidden;overflow-y:auto;" class="grid">
 			<ul class="id_tantable1 w list"></ul>
 			<div class="cb ml35 pt20 h40 pagination"></div>
 			<textarea id="template-tbody" class="template template-tbody">

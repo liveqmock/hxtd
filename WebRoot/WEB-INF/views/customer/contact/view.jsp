@@ -97,11 +97,13 @@
 			<td align="left" valign="top"><div class="w85b">${contact.remark}</div></td>
 		</tr>
 	</table>
-	<tag:attachment view="${VS_HAS_FUNCTIONS.leadAttView}" upload="${VS_HAS_FUNCTIONS.leadUpload}" module="contact"
-			query="${VS_HAS_FUNCTIONS.leadAttQuery}" down="${VS_HAS_FUNCTIONS.leadDown}" 
-			deleteFlag="${VS_HAS_FUNCTIONS.leadAttDelete}" id="${contact.id}"></tag:attachment>
-	<tag:memoir view="true" edit="true" query="true" delete="true" 
-		moduleType="contact" moduleId="${contact.id}"></tag:memoir>
+	<c:if test="${VS_HAS_FUNCTIONS.contactMemoirQuery}">
+	<tag:memoir moduleType="contact" moduleId="${contact.id}" view="${VS_HAS_FUNCTIONS.contactMemoirView}" edit="${VS_HAS_FUNCTIONS.contactMemoirModify}" 
+		query="${VS_HAS_FUNCTIONS.contactMemoirQuery}" delete="${VS_HAS_FUNCTIONS.contactMemoirDelete}"></tag:memoir>
+	</c:if>
+	<tag:attachment id="${contact.id}" module="contact" view="${VS_HAS_FUNCTIONS.contactAttView}" upload="${VS_HAS_FUNCTIONS.contactAttUpload}" 
+		query="${VS_HAS_FUNCTIONS.contactAttQuery}" down="${VS_HAS_FUNCTIONS.contactAttDown}" 
+		deleteFlag="${VS_HAS_FUNCTIONS.contactAttDelete}"></tag:attachment>
 	<div class="h40"></div>
 </div>
 </body>

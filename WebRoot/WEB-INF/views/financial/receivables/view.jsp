@@ -31,7 +31,7 @@
 					<a class=" pl35 c_white f14 lh25 cp block fr"
 						href="${ctx }/financial/receivables/toModifyFinishPage.do?id=${receivables.id}"><b
 						class="allbtn_l block fl"></b><b
-						class="allbtn_r pr13 block fl w_auto f14">编&nbsp;&nbsp;辑</b>
+						class="allbtn_r pr13 block fl w_auto f14">收&nbsp;&nbsp;款</b>
 					</a>
 				</li>
 				</c:if>
@@ -66,7 +66,7 @@
 			</tr>
 			<tr>
 				<td align="right">
-					客户：
+					客户名称：
 				</td>
 				<td align="left">
 					${receivables.customer.name }
@@ -86,10 +86,10 @@
 					${receivables.actual}
 				</td>
 				<td align="right">
-					
+					收款状态：
 				</td>
-				<td align="left">
-					
+				<td align="left" <c:if test="${!receivables.status }">style="color:red;"</c:if>>
+					${receivables.status?'已收款':'未收款'}
 				</td>
 			</tr>
 		</table>

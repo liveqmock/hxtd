@@ -69,7 +69,7 @@
             <table class="cb id_table4 w95b bg_c_white margin0 mt10">
                 <tr>
                     <td align="right" width="15%" valign="top">备注：</td>
-                    <td align="left" width="85%">
+                    <td align="left" width="85%" valign="top">
                         <textarea name="remark" class="{maxlength:255} remarks_input1">${role.remark }</textarea>
                     </td>
                 </tr>
@@ -88,7 +88,7 @@
                     <td class="bghb pl10">${modifyTime}</td>
                 </tr>
             </table>
-            <div class=" h40"></div>
+            <div class="h40"></div>
         </div>
         <div class="cb block h40 margin0 mt10" style="width:350px;">
             <ul class="id_table1 cb">

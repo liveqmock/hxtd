@@ -64,7 +64,7 @@
 # INSERT INTO sm_user_role (USER_ID, ROLE_ID) VALUES ((select id from sm_user where login_name='xiayouxue'),  (select id from sm_role where `code`='2'));
 # INSERT INTO sm_user_role (USER_ID, ROLE_ID) VALUES ((select id from sm_user where login_name='luoxiaoli'),  (select id from sm_role where `code`='2'));
 # INSERT INTO sm_user_role (USER_ID, ROLE_ID) VALUES ((select id from sm_user where login_name='lihong'),  (select id from sm_role where `code`='2'));
-
+#
 #
 # INSERT INTO sm_user_role (USER_ID, ROLE_ID) VALUES ((select id from sm_user where login_name='majingliang'), (select id from sm_role where `code`='test'));
 # INSERT INTO sm_user_role (USER_ID, ROLE_ID) VALUES ((select id from sm_user where login_name='lihua'),  (select id from sm_role where `code`='test'));
@@ -133,3 +133,4 @@
 # 初始化模块数据
 
 # update `order` set status =1;
+

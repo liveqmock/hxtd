@@ -48,14 +48,15 @@ $(function(){
 	}, "产品金额总和已超过项目总金额");
 });
 function searchData(action){ // 搜索
-	jsUtil.dialogIframe("${ctx}/project/project/toQueryPage.comp", "项目列表", 800, 465, 
+	jsUtil.dialogIframe("${ctx}/project/project/toSearchProjectPage.docomp", "项目列表", 800, 465, 
 		function(){ //确定回调
 			var $userObj = $(".bor_e28d1f", window.frames["dialogIframe"].document);
 			if($userObj.length > 0){
 				$("#txt_" + action).val($userObj.find("td:eq(0)").text());
 				$("#hide_" + action +"_id").val($userObj.attr("id"));
 			}
-	});
+		}
+	);
 }
 </script>
 </head>

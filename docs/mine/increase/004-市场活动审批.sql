@@ -33,15 +33,39 @@
 # ALTER TABLE hxtd.market_activity ADD FLOW_NODE_ID int NOT NULL;
 
 # 初始化市场活动数据
-UPDATE hxtd.market_activity
-SET flow_node_id = 16
+UPDATE market_activity
+SET flow_node_id = (SELECT
+                      id
+                    FROM wf_node
+                    WHERE code = '030101')
 WHERE PREDICT_COST > 0;
-UPDATE hxtd.market_activity
-SET flow_node_id = 21
+
+UPDATE market_activity
+SET flow_node_id = (SELECT
+                      id
+                    FROM wf_node
+                    WHERE code = '030111')
 WHERE PREDICT_COST = 0;
 
-# 初始化订单数据
-UPDATE hxtd.`order`
-SET status = 1;
+DELETE FROM wf_task;
 
-delete from wf_task;
+DELETE FROM wf_task
+WHERE (SELECT
+         node.FLOW_ID
+       FROM wf_node node
+       WHERE node.id = node_id) = (SELECT
+                                     id
+                                   FROM sm_dictionary
+                                   WHERE `value` = '030100');
+
+DELETE FROM wf_task
+WHERE (SELECT
+         node.FLOW_ID
+       FROM wf_node node
+       WHERE node.id = node_id) = (SELECT
+                                     id
+                                   FROM sm_dictionary
+                                   WHERE `value` = '030110');
+
+DELETE FROM user_message;
+DELETE FROM sm_message;

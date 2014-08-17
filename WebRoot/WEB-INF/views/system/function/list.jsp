@@ -12,9 +12,6 @@
 <head>
 <title>功能列表</title>
 <link rel="stylesheet" href="${ctx}/static/css/application.css" type="text/css" />
-		<%--<link rel="stylesheet" href="${ctx}/static/css/admin_style.css" type="text/css"/>
-<link rel="stylesheet" href="${ctx}/static/css/foder.css" type="text/css"/>
---%>
 <script type="text/javascript" src="${ctx}/static/js/jquery-json.2.4.js"></script>
 <link rel="stylesheet" href="${ctx}/static/css/recommend/list1.css" type="text/css" />
 <link rel="stylesheet" href="${ctx}/static/css/recommend/empower.css" type="text/css" />
@@ -96,7 +93,7 @@ function formReset(){
 			<div class="listcontainer fr" style="width: 80%;">
 				<form id="form" action="${ctx}/system/function/query.do"
 					onsubmit="return false;">
-					<table class="fl mt5 w">
+					<table class="fl mt10 w">
 						<tr>
 							<td class="f14" align="right" width="6%">
 								功能编号：
@@ -136,7 +133,7 @@ function formReset(){
 				<!--查询条件结束-->
 				<div class="cb"></div>
 
-				<div class="mt20 block cb cb">
+				<div class="mt10 block cb cb">
 					<b class="b1"></b>
 					<b class="b2"></b>
 					<b class="b3"></b>

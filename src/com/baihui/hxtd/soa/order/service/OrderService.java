@@ -30,6 +30,8 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springside.modules.persistence.SearchFilter;
 
 import javax.annotation.Resource;
+
+import java.math.BigDecimal;
 import java.util.*;
 
 /**
@@ -82,6 +84,7 @@ public class OrderService {
         criteria.setFetchMode("creator", FetchMode.JOIN);
         criteria.setFetchMode("modifier", FetchMode.JOIN);
         criteria.setFetchMode("orderStatus", FetchMode.JOIN);
+        criteria.setFetchMode("payStatus", FetchMode.JOIN);
         Map<String, SearchFilter> filters = Search.parse(searchParams);
         userDao.visibleData(criteria, dataShift);
         Search.buildCriteria(filters, criteria, entityClass);
@@ -117,6 +120,8 @@ public class OrderService {
                 + " left join fetch ord.owner "
                 + " left join fetch ord.salesManager "
                 + " left join fetch ord.salesMajordomo "
+                + " left join fetch ord.payStatus "
+                + " left join fetch ord.orderStatus "
                 + " where ord.id=?";
         return orderDao.findUnique(hql, id);
     }
@@ -249,15 +254,37 @@ public class OrderService {
      * @Title: advanceRedemptionOrder
      */
     @Transactional(readOnly = false)
-    public void advanceRedemptionOrder(Long id, User user, AuditLog auditLog) {
+    public void advanceRedemptionOrder(Long id, User user, BigDecimal fund, AuditLog auditLog) {
         String hql = "update Order o set o.orderStatus = ? where o.id=?";
         orderDao.createQuery(hql, dictionaryDao.getByValue(DictionaryConstant.ORDER_STATUS_ADVANCE_REDEMPTION), id).executeUpdate();
         // 创建付款单
         Order order = orderDao.get(id);
         if (order != null) {
-            paymentsDao.save(constructPaymentsByOrderUser(order, user));
+            paymentsDao.save(constructPaymentsByOrderUser(order,fund, user));
         }
     }
+    
+    /**
+     * 到期赎回
+     *
+     * @param @param id
+     * @param @param user
+     * @param @param auditLog
+     * @return void
+     * @throws
+     * @Title: normalRedemptionOrder
+     */
+    @Transactional(readOnly = false)
+    public void normalRedemptionOrder(Long id, User user, BigDecimal fund, AuditLog auditLog) {
+        String hql = "update Order o set o.orderStatus = ? where o.id=?";
+        orderDao.createQuery(hql, dictionaryDao.getByValue(DictionaryConstant.ORDER_STATUS_FINISH_REDEMPTION), id).executeUpdate();
+        // 创建付款单
+        Order order = orderDao.get(id);
+        if (order != null) {
+            paymentsDao.save(constructPaymentsByOrderUser(order,fund, user));
+        }
+    }
+
 
     /**
      * 客户主动作废订单
@@ -269,7 +296,7 @@ public class OrderService {
      * @Title: modifyInvalidOrderbyCustomer
      */
     @Transactional(readOnly = false)
-    public void modifyInvalidOrderbyCustomer(Long id, User user, AuditLog auditLog) {
+    public void modifyInvalidOrderbyCustomer(Long id, AuditLog auditLog) {
         String hql = "update Order o set o.orderStatus = ? where o.id=?";
         orderDao.createQuery(hql, dictionaryDao.getByValue(DictionaryConstant.ORDER_STATUS_INVALID_CUSTOMER), id).executeUpdate();
     }
@@ -289,11 +316,10 @@ public class OrderService {
         orderDao.createQuery(hql, dictionaryDao.getByValue(DictionaryConstant.ORDER_STATUS_INVALID_OWNER), id).executeUpdate();
     }
 
-    private Payments constructPaymentsByOrderUser(Order order, User user) {
+    private Payments constructPaymentsByOrderUser(Order order, BigDecimal fund, User user) {
         String name = Constant.FINANCIAL_PAYMENTS_BEFORE + order.getCode();
         Date now = paymentsDao.getDBNow();
-        Payments payments = new Payments(name, order.getCustomer(), order, order
-                .getPurchaseMoney(), Constant.FINANCIAL_AUTH_REMARK, now);
+        Payments payments = new Payments(name, order.getCustomer(), order, fund, Constant.FINANCIAL_AUTH_REMARK, now);
         payments.setOwner(user);
         payments.setCreator(user);
         payments.setModifier(user);

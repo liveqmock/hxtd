@@ -65,7 +65,7 @@ public class SupplierService {
      * @Title: getAll
      */
     @Transactional(readOnly = true)
-    public HibernatePage<Supplier> findPage(Map<String, Object> searchParams,DataShift dataShift, HibernatePage<Supplier> page) throws NoSuchFieldException {
+    public HibernatePage<Supplier> findPage(Map<String, Object> searchParams, DataShift dataShift, HibernatePage<Supplier> page) throws NoSuchFieldException {
         DetachedCriteria criteria = DetachedCriteria.forClass(Supplier.class);
         criteria.add(Restrictions.eq("isDeleted", false));
         criteria.setFetchMode("creator", FetchMode.JOIN);

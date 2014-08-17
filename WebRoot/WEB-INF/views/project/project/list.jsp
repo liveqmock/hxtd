@@ -38,7 +38,7 @@ function showSupplier(id){ //查看供应商信息
 <body>
 <div class="listcontainer">
 <form id="form" action="${ctx}/project/project/query.do" onsubmit="return false;">
-<table class="fl mt5 w">
+<table class="fl mt10 w">
 	<tr>
 		<td class="f14 namewidth1" align="right">项目名称：</td>
 		<td class="f14 namewidth2" align="left"><input type="text" name="search_LIKE_name" class="text_input1"/></td>
@@ -106,7 +106,7 @@ function showSupplier(id){ //查看供应商信息
 <tags:paginationparams page="${page}"></tags:paginationparams>
 </form>
 <div class="cb"></div>
-<div class="ml35 mr35 mt20 block cb cb">
+<div class="ml35 mr35 mt10 block cb cb">
 	<b class="b1"></b>
 	<b class="b2"></b>
 	<b class="b3"></b>

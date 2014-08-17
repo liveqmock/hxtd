@@ -74,6 +74,7 @@ public class AttachmentController {
 		moduleMap.put("lead", DictionaryConstant.RELATIVE_MODULE_LEAD);
 		moduleMap.put("contact", DictionaryConstant.RELATIVE_MODULE_CONTACT);
 		moduleMap.put("project", DictionaryConstant.RELATIVE_MODULE_PROJECT);
+		moduleMap.put("product", DictionaryConstant.RELATIVE_MODULE_PRODUCT);
 		moduleMap.put("contract", DictionaryConstant.RELATIVE_MODULE_CONTRACT);
 	}
 	@Resource

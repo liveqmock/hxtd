@@ -163,7 +163,7 @@
                     <table class="cb id_table4 w95b bg_c_white margin0 mt10">
                         <tr>
                             <td align="right" width="15%" valign="top">备注：</td>
-                            <td align="left" width="85%"><textarea class="{maxlength:512} remarks_input1" name="remark">${user.remark}</textarea></td>
+                            <td align="left" width="85%" valign="top"><textarea class="{maxlength:512} remarks_input1" name="remark">${user.remark}</textarea></td>
                         </tr>
                         <tr style="display: none">
                             <td class="tar bghui pr10">创建人：</td>
@@ -185,9 +185,9 @@
                 <div class="cb block h40 margin0 mt10" style="width:350px;">
                     <ul class="id_table1 cb">
                         <c:if test="${VS_HAS_FUNCTIONS.userModify}">
-                            <li><a href="javascript:void(0)" redirecturi="/system/user/toViewPage.do?id=%s" class="block c_white lh25 submit mr10"><b class="allbtn_l block fl"></b><b class="allbtn_r pr13 block fl w_auto f14">保&nbsp;&nbsp;存</b></a></li>
+                            <li><a href="javascript:void(0)" redirecturi="/system/user/toViewPage.do?id=%s&type=${type}" class="block c_white lh25 submit mr10"><b class="allbtn_l block fl"></b><b class="allbtn_r pr13 block fl w_auto f14">保&nbsp;&nbsp;存</b></a></li>
                             <c:if test="${VS_HAS_FUNCTIONS.userAdd}">
-                                <li><a href="javascript:void(0)" redirecturi="/system/user/toAddPage.do" class="block c_white lh25 submit mr10"><b class="allbtn_l block fl"></b><b class="allbtn_r pr13 block fl w_auto f14">保存并新增</b></a></li>
+                                <li><a href="javascript:void(0)" redirecturi="/system/user/toAddPage.do?type=${type}" class="block c_white lh25 submit mr10"><b class="allbtn_l block fl"></b><b class="allbtn_r pr13 block fl w_auto f14">保存并新增</b></a></li>
                             </c:if>
                         </c:if>
                         <li><a href="${ctx}/system/organization/toQueryPage.do" class="block c_white lh25 mr10"><b class="allbtn_l block fl"></b><b class="allbtn_r pr13 block fl w_auto f14">取消</b></a></li>

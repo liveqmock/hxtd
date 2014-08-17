@@ -19,7 +19,7 @@
 <script type="text/javascript" src="${ctx}/static/js/js-util.common.js"></script>
 <script type="text/javascript">
 $(function(){
-	new Grid().init({ paginationSizeShow:false, paginationCountLimit:13 });
+	new Grid().init();
 	$(".list .module").live({
 		click: function(){
 			$(".module").removeAttr("style");
@@ -37,7 +37,7 @@ $(function(){
 </head>
 <body>
 <div class="listcontainer">
-	<form name="user" action="${ctx}/project/supplier/query.do" onsubmit="return false;">
+	<form name="user" action="${ctx}/project/supplier/searchSupplier.docomp" onsubmit="return false;">
 	<table class="fl mt5 w">
     	<tr>
     		<td class="f14" align="right" width="12%">供应商名称：</td>
@@ -45,8 +45,7 @@ $(function(){
     		<td>
     			<a href="javascript:;" class="reset block dump_btn globle_img fr mr10"></a>
     			<a href="javascript:;" class="block c_white lh25 fr mr10 submit">
-    				<b class="allbtn_l block fl"></b>
-    				<b class="allbtn_r pr13 block fl w_auto f14">查&nbsp;&nbsp;询</b>
+    				<b class="allbtn_l block fl"></b><b class="allbtn_r pr13 block fl w_auto f14">查&nbsp;&nbsp;询</b>
     			</a>
     		</td>
     		<td class="f14"></td>

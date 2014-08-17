@@ -41,7 +41,7 @@ $(function(){
 	new PCAS("province", "city", "county", '${com.province.id}', '${com.city.id}', '${com.county.id}'); //获得省市县代码，加载三级联动
 });
 function searchData(action){ //搜索弹出框
-	jsUtil.dialogIframe("${ctx}/system/user/toQueryPage.comp", "所有者", 800, 465, function(){
+	jsUtil.dialogIframe("${ctx}/system/user/toSearchUserPage.docomp", "所有者", 800, 465, function(){
 		var $userObj = $(".bor_e28d1f", window.frames["dialogIframe"].document);
 			if($userObj.length > 0){
 				$("#txt_" + action).val($userObj.find("td:eq(1)").text());
@@ -138,7 +138,7 @@ function clearInputVal(obj){ //清除
 		<table class="cb id_table4 w95b bg_c_white margin0 mt10">
 			<tr>
 				<td align="right" width="15%" valign="top">备注：</td>
-				<td align="left" width="85%"><textarea name="remark" class="remarks_input1">${com.remark}</textarea></td>
+				<td align="left" width="85%" valign="top"><textarea name="remark" class="remarks_input1">${com.remark}</textarea></td>
 			</tr>
 		</table>
 		<div class="h40"></div>

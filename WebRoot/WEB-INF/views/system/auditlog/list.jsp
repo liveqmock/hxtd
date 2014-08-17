@@ -53,7 +53,7 @@
 			<div class="listcontainer">
 			<!--查询条件开始-->
 			<form id="form" action="${ctx}/system/auditlog/query.do" onsubmit="return false;">
-				<table class="fl mt5 w">
+				<table class="fl mt10 w">
 					<tr>
 						<td class="f14 namewidth1" align="right">操作人：</td>
 						<td class="f14 namewidth2" align="left">

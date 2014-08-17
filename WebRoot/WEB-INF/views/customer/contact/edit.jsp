@@ -40,13 +40,13 @@ $(function(){
 function searchData(action){ //搜索弹出框
 	var url, title;
 	if(action == "owner"){
-		url = "${ctx}/system/user/toQueryPage.comp";
+		url = "${ctx}/system/user/toSearchUserPage.docomp";
 		title = "所有者";
 	}else if(action == "customer"){
-		url = "${ctx}/customer/customer/toQueryPage.comp";
+		url = "${ctx}/customer/customer/toSearchCustomerPage.docomp";
 		title = "客户";
 	}else if(action == "supplier"){
-		url = "${ctx}/project/supplier/toQueryPage.comp";
+		url = "${ctx}/project/supplier/toSearchSupplierPage.docomp";
 		title = "供应商";
 	}
 	jsUtil.dialogIframe(url, title, 800, 465, 
@@ -78,8 +78,8 @@ function searchData(action){ //搜索弹出框
 		<tr>
 			<td width="15%" align="right"><span class="w_red">*&nbsp;</span>联系人所有者：</td>
 			<td align="left">
-				<input id="txt_owner" type="text" value="${contact.owner.realName}" class="text_input3 cp" readonly 
-					onclick="searchData('owner');"/>
+				<input id="txt_owner" type="text" value="${contact.owner.realName}" class="text_input3 cp" 
+					onclick="searchData('owner');" readonly/>
 				<input id="hide_owner_id" type="hidden" name="owner.id" value="${contact.owner.id}"/>
 				<i class="s_inquiry globle_img block_inline ml5 vm cp" title="搜索所有者" onclick="searchData('owner');"></i>
 				<i class="dump_btn globle_img block_inline ml5 vm cp empty" title="清除"></i>
@@ -108,18 +108,18 @@ function searchData(action){ //搜索弹出框
 		<tr>
 			<td align="right">电话：</td>
 			<td align="left"><input name="phone" type="text" value="${contact.phone}" class="text_input3 isPhone check"/></td>
-			<td align="right" class="customer"><span class="w_red">*&nbsp;</span>客户名：</td>
+			<td align="right" class="customer"><span class="w_red">*&nbsp;</span>客户名称：</td>
 			<td align="left" class="customer">
-				<input id="txt_customer" type="text" value="${contact.customer.name}" readonly class="text_input3 cp required" 
-					onclick="searchData('customer');"/>
+				<input id="txt_customer" type="text" value="${contact.customer.name}" class="text_input3 cp required" 
+					onclick="searchData('customer');" readonly/>
 				<input id="hide_customer_id" name="customer.id" type="hidden" value="${contact.customer.id}"/>
 				<i class="s_inquiry globle_img block_inline ml5 vm cp" title="搜索客户" onclick="searchData('customer');"></i>
 				<i class="dump_btn globle_img block_inline ml5 vm cp empty" title="清除"></i>
 			</td>
 			<td align="right" class="supplier" style="display:none;"><span class="w_red">*&nbsp;</span>供应商名：</td>
 			<td align="left" class="supplier" style="display:none;">
-				<input id="txt_supplier" type="text" value="${contact.supplier.name}" readonly class="text_input3 cp required" 
-					onclick="searchData('supplier');"/>
+				<input id="txt_supplier" type="text" value="${contact.supplier.name}" class="text_input3 cp required" 
+					onclick="searchData('supplier');" readonly/>
 				<input id="hide_supplier_id" name="supplier.id" type="hidden" value="${contact.supplier.id}"/>
 				<i class="s_inquiry globle_img block_inline ml5 vm cp" title="搜索供应商" onclick="searchData('supplier');"></i>
 				<i class="dump_btn globle_img block_inline ml5 vm cp empty" title="清除"></i>

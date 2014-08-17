@@ -33,9 +33,9 @@ $(function () {
 			return false;
 		}
 		var url, title;
-		url = "${ctx}/system/user/toQueryPage.comp";
+		url = "${ctx}/system/user/toSearchUserPage.docomp";
 		title = "所有者";
-		jsUtil.dialogIframe(url, title, 800, 465, convOwner);
+		jsUtil.dialogIframe(url, title, 800, 420, convOwner);
 	});
  	$("#delete").click(function () { // 给删除按钮绑定时间
 		var boxs = $("input(name=id):checked");
@@ -72,7 +72,7 @@ $(function () {
 <div class=" listcontainer">
 	<!--查询条件开始-->
 	<form id="form" action="${ctx}/customer/customer/query.do" onsubmit="return false;">
-	<table class="fl mt5 w">
+	<table class="fl mt10 w">
 		<tr>
 			<td class="f14 namewidth1" align="right">客户名称：</td>
 			<td class="f14 namewidth2" align="left">
@@ -163,7 +163,7 @@ $(function () {
 	<!--查询条件结束-->
 	<div class="cb"></div>
 	<!--列表开始-->
-	<div class="ml35 mr35 mt20 block cb cb">
+	<div class="ml35 mr35 mt10 block cb cb">
 		<b class="table_headl globle_img block fl"></b>
 		<div class="fl table_headc fl w99b">
 			<div class="ie_head">

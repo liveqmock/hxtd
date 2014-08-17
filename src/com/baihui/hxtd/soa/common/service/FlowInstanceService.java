@@ -10,6 +10,7 @@ import com.baihui.hxtd.soa.system.dao.DictionaryDao;
 import com.baihui.hxtd.soa.system.dao.MessageDao;
 import com.baihui.hxtd.soa.system.dao.UserMessageDao;
 import com.baihui.hxtd.soa.system.entity.Message;
+import com.baihui.hxtd.soa.system.entity.User;
 import com.baihui.hxtd.soa.system.entity.UserMessage;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
@@ -162,11 +163,9 @@ public class FlowInstanceService {
 
     /** 填充流程业务实体 */
     public List<FlowInstance> fullFlowBusiness(List<FlowInstance> flowInstances) {
-        String hql = "select entity from %s entity inner join fetch entity.flowNode where entity.id=?";
         for (int i = 0; i < flowInstances.size(); i++) {
             FlowInstance flowInstance = flowInstances.get(i);
-            String hqlInstance = String.format(hql, flowInstance.getModule().getEntityClass());
-            flowInstance.setFlowBusiness((IdFlowable) flowInstanceDao.findUnique(hqlInstance, flowInstance.getRecordId()));
+            flowInstance.setFlowBusiness((IdFlowable) findBusiness(flowInstance));
         }
         return flowInstances;
     }
@@ -176,7 +175,7 @@ public class FlowInstanceService {
     public <T> T findBusiness(FlowInstance flowInstance) {
         String hql = "select entity from %s entity inner join fetch entity.flowNode where entity.id=?";
         hql = String.format(hql, flowInstance.getModule().getEntityClass());
-        return (T) flowInstanceDao.findUnique(hql, flowInstance.getRecordId());
+        return (T) (Object) flowInstanceDao.findUnique(hql, flowInstance.getRecordId());
     }
 
 
@@ -217,14 +216,13 @@ public class FlowInstanceService {
 
         //保存系统消息
         Message message = new Message();
-        flowInstance.getFlowNode().setFlow(dictionaryDao.get(flowInstance.getFlowNode().getFlow().getId()));
-        String flowValue = flowInstance.getFlowNode().getFlow().getKey();
         IdFlowable idFlowable = findBusiness(flowInstance);
-        String title = String.format("%s(%s)", flowValue, idFlowable.toString());
-//        title = String.format("<a href='/hxtd/%s/toExecuteApprovePage.do?id=%s'>%s</a>", flowInstance.getModule().getUrl(), flowInstance.getRecordId(), title);
+        String flowValue = idFlowable.getFlowNode().getFlow().getKey();
+        String title = String.format("%s-%s(%s)", flowValue, idFlowable.getFlowNode().getName(), idFlowable.getSketch());
         message.setTitle(title);
+        String url = String.format("<a href='../..%s/toStartApprovePage.do?id=%s'>审批链接</a>", flowInstance.getModule().getUrl(), flowInstance.getRecordId());
         String personName = flowInstance.getApprover().getRealName();
-        message.setContent(String.format("%s于%s启动%s，特发此系统消息提醒您及时进行审批！", personName, format.format(flowInstance.getApproveTime()), message.getTitle()));
+        message.setContent(String.format("%s于%s启动%s，特发此系统消息提醒您及时进行审批！%s", personName, format.format(flowInstance.getApproveTime()), message.getTitle(), url));
         message.setCreator(flowInstance.getApprover());
         message.setCreatedTime(flowInstance.getApproveTime());
         message.setModifier(flowInstance.getApprover());
@@ -305,27 +303,38 @@ public class FlowInstanceService {
             }
         }
 
-        //保存系统消息
-        Message message = new Message();
-        flowInstance.getFlowNode().setFlow(dictionaryDao.get(flowInstance.getFlowNode().getFlow().getId()));
-        String flowValue = flowInstance.getFlowNode().getFlow().getKey();
-        message.setTitle(String.format("%s(%s-%s)", flowValue, flowInstance.getModule().getName(), flowInstance.getRecordId()));
-        String personName = flowInstance.getApprover().getRealName();
-        message.setContent(String.format("%s于%s启动%s，特发此系统消息提醒您及时进行审批！", personName, format.format(flowInstance.getApproveTime()), message.getTitle()));
-        message.setCreator(flowInstance.getApprover());
-        message.setCreatedTime(flowInstance.getApproveTime());
-        message.setModifier(flowInstance.getApprover());
-        message.setIsDeleted(false);
-        messageDao.save(message);
+        //保存系统消息，如果不是结束节点
+        if (!updateFlowNode.getType().equals(NodeType.end.getValue())) {
 
-        UserMessage userMessage = new UserMessage();
-        userMessage.setMessage(message);
-        userMessage.setUser(flowModel.getNextFlowNode().getApprover());
-        userMessage.setCreatedTime(flowInstance.getApproveTime());
-        userMessage.setType(false);
-        userMessage.setStatus(false);
-        userMessage.setIsDeleted(false);
-        userMessageDao.saveUserMessage(userMessage);
+            Message message = new Message();
+            IdFlowable idFlowable = findBusiness(flowInstance);
+            message.setTitle(String.format("%s-%s(%s)", updateFlowNode.getFlow().getKey(), idFlowable.getFlowNode().getName(), idFlowable.getSketch()));
+            String personName = flowInstance.getApprover().getRealName();
+            String timeStr = format.format(flowInstance.getApproveTime());
+            String isPassed = flowInstance.getIsPassed() ? "审核通过" : "审核未通过";
+            String url = String.format("<a href='../..%s/toExecuteApprovePage.do?id=%s'>审批链接</a>", flowInstance.getModule().getUrl(), flowInstance.getRecordId());
+            message.setContent(String.format("%s于%s执行%s，%s，特发此系统消息提醒您及时进行审批！%s", personName, timeStr, message.getTitle(), isPassed, url));
+            message.setCreator(flowInstance.getApprover());
+            message.setCreatedTime(flowInstance.getApproveTime());
+            message.setModifier(flowInstance.getApprover());
+            message.setIsDeleted(false);
+            messageDao.save(message);
+
+            UserMessage userMessage = new UserMessage();
+            userMessage.setMessage(message);
+            User reserveExecutor;
+            if (flowInstance.getIsPassed()) {
+                reserveExecutor = flowInstanceDao.findReserveExecutor(flowInstance.getModule().getName(), flowInstance.getRecordId(), updateFlowNode);
+            } else {
+                reserveExecutor = flowInstanceDao.findLastExecutedExecutor(flowInstance.getModule().getName(), flowInstance.getRecordId(), updateFlowNode);
+            }
+            userMessage.setUser(reserveExecutor);
+            userMessage.setCreatedTime(flowInstance.getApproveTime());
+            userMessage.setType(false);
+            userMessage.setStatus(false);
+            userMessage.setIsDeleted(false);
+            userMessageDao.saveUserMessage(userMessage);
+        }
 
     }
 

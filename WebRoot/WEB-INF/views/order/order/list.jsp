@@ -31,7 +31,7 @@ function getCustomer(id) {
 <body>
 <div class="listcontainer">
     <form id="form" action="${ctx}/order/order/query.do" onsubmit="return false;">
-        <table class="fl mt5 w">
+        <table class="fl mt10 w">
             <tr>
                 <td class="f14 namewidth1" align="right">订单编号：</td>
                 <td class="f14 namewidth2" align="left">
@@ -61,7 +61,7 @@ function getCustomer(id) {
                         <input class="text_input2" name="search_GTE_earningRate" type="text" readonly/>-<input class="text_input2" name="search_LTE_earningRate" type="text" readonly/>
                     </div>
                 </td>
-                <td class="f14 namewidth1" align="right">赎回率（%）：</td>
+                <td class="f14 namewidth1" align="right">赎回赔率（%）：</td>
                 <td class="f14 namewidth2" align="left">
                     <div class="pr vm">
                         <input class="text_input2" name="search_GTE_arr" type="text" readonly/>-<input class="text_input2" name="search_LTE_arr" type="text" readonly/>
@@ -99,7 +99,7 @@ function getCustomer(id) {
     </form>
     <!--查询条件结束-->
     <div class="cb"></div>
-    <div class="ml35 mr35 mt20 block cb cb">
+    <div class="ml35 mr35 mt10 block cb cb">
         <b class="b1"></b>
         <b class="b2"></b>
         <b class="b3"></b>
@@ -124,17 +124,19 @@ function getCustomer(id) {
     <div class="ml35 mr35 content">
         <table class="cb id_table2 w tablesorter" id="table">
             <tr id="recordDiv">
-                <th width="4%"><input type="checkbox" class="checkall" id="id"/></th>
-                <th>订单编号</th>
-                <th width="7%">客户</th>
-                <th width="7%">金额（万）</th>
-                <th width="15%">产品</th>
-                <th width="6%">审批环节</th>
-                <th width="5%">订单状态</th>
-                <th width="7%">所有者</th>
-                <th width="11%" class="sortable orderby" orderby="createdTime">创建时间</th>
-                <th width="11%" class="sortable orderby" orderby="modifiedTime">最后修改时间</th>
-                <th width="15%" align="center">操作</th>
+                <th width="3%"><input type="checkbox" class="checkall" id="id"/></th>
+                <th width="8%">订单编号</th>
+                <th width="4%">客户</th>
+                <th width="6%">金额（万）</th>
+                <th width="7%">产品</th>
+                <th width="8%">审批环节</th>
+                <th width="7%">订单状态</th>
+                <th width="5%">财务状态</th>
+                <th width="4%">所有者</th>
+                <th width="7%" class="sortable orderby" orderby="effectiveTime">生效时间</th>
+                <th width="7%" class="sortable orderby" orderby="orderEndTime">结束时间</th>
+                <th width="10%" class="sortable orderby" orderby="modifiedTime">最后修改时间</th>
+                <th width="13%" align="center">操作</th>
             </tr>
             <tbody class="list"></tbody>
         </table>
@@ -170,8 +172,12 @@ function getCustomer(id) {
                 </td>
                 <td>{$T.row.flowNode.type==${endNodeType}?"":"待"}{$T.row.flowNode.name}</td>
                 <td>{$T.row.orderStatus.key}</td>
+                <td 
+                 {#if $T.row.payStatus.key=='未收款'} style="color:red;"{#/if}
+                >{$T.row.payStatus.key}</td>
                 <td>{$T.row.owner.realName}</td>
-                <td>{$T.row.createdTime}</td>
+                <td>{$T.row.effectiveTime}</td>
+                <td>{$T.row.orderEndTime}</td>
                 <td>{$T.row.modifiedTime}</td>
                 <td align="left">
                     <c:if test="${VS_HAS_FUNCTIONS.orderView}">
@@ -198,6 +204,12 @@ function getCustomer(id) {
                         <a href="${ctx}/order/order/toExecuteApprovePage.do?id={$T.row.id}&flowNodeId={$T.row.flowNode.executeFlowNode.id}" title="进行审批" class="block_inline s_goapprove globle_img ml10"></a>
                         {#/if}
                     </c:if>
+                    <c:if test="${VS_HAS_FUNCTIONS.orderInvalid}">
+                    {#if $T.row.orderStatus.value=='07010103'}
+                    	<a href="javascript:void(0);" uri="${ctx}/order/order/toInvalid.do?id={$T.row.id}&type=company" class="block_inline ml10 globle_img s_cancel block_inline disable" title="订单公司作废"></a>
+                    	<a href="javascript:void(0);" uri="${ctx}/order/order/toInvalid.do?id={$T.row.id}&type=customer" class="globle_img ml10 s_cancelorder block_inline disable" title="订单客户作废"></a>
+              		{#/if}
+              		</c:if>
                 </td>
             </tr>
             {#/for}

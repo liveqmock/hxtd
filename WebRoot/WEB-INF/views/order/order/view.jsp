@@ -34,13 +34,24 @@ function printDIV(printarea) {
     return false;
 }
 function redemption(id) {
-    jsUtil.dialogIframe("${ctx}/order/order/redemption.comp?id=" + id, "赎回信息", 600, 240, function () {
-        RcmsAjax.ajax("${ctx}/order/order/redemption.do?id=" + id, function () {
+    jsUtil.dialogIframe("${ctx}/order/order/redemption.comp?id=" + id, "赎回信息", 600, 300, function () {
+    	var $orderObj = $(".redeem", window.frames["dialogIframe"].document);
+			if($orderObj.length > 0){
+				var $payMoney=$orderObj.find("tr:eq(2)").find("td:eq(1)").find("input:eq(0)").val();
+			}
+        RcmsAjax.ajax("${ctx}/order/order/redemption.do?fund="+$payMoney+"&id=" + id, function () {
         });
     });
 }
 function normalRedemption(id){
-	
+	jsUtil.dialogIframe("${ctx}/order/order/redemption.comp?type=normal&id=" + id, "赎回信息", 600, 300, function () {
+		var $orderObj = $(".redeem", window.frames["dialogIframe"].document);
+			if($orderObj.length > 0){
+				var $payMoney=$orderObj.find("tr:eq(2)").find("td:eq(1)").find("input:eq(0)").val();
+			}
+        RcmsAjax.ajax("${ctx}/order/order/redemption.do?type=normal&fund="+$payMoney+"&id=" + id, function () {
+        });
+    });
 }
 </script>
 </head>
@@ -63,7 +74,7 @@ function normalRedemption(id){
                 </li>
                 <c:if test="${orderView&&VS_HAS_FUNCTIONS.orderRedemption}">
                 <li>
-                <c:if test="${flag}">
+                <c:if test="${advaceFlag}">
                     <a class="pl10 c_white f14 lh25 cp block fr" href="javascript:;" onclick="redemption(${order.id})">
                         <b class="allbtn_l block fl"></b>
                         <b class="allbtn_r pr13 block fl w_auto f14">提前赎回</b>
@@ -73,10 +84,12 @@ function normalRedemption(id){
                 </c:if>
                 <c:if test="${orderView&&VS_HAS_FUNCTIONS.orderRedemption}">
                 <li>
+                <c:if test="${normalFlag}">
                     <a class="pl10 c_white f14 lh25 cp block fr" href="javascript:;" onclick="normalRedemption(${order.id})">
                         <b class="allbtn_l block fl"></b>
                         <b class="allbtn_r pr13 block fl w_auto f14">到期赎回</b>
                     </a>
+                </c:if>
                 </li>
                 </c:if>
                 <c:if test="${orderView&&VS_HAS_FUNCTIONS.orderModify&&order.flowNode.type==startNodeType}">
@@ -101,48 +114,58 @@ function normalRedemption(id){
         </div>
     </div>
     <div class="ml35 mr35 bg_c_blue" style="overflow:hidden">
-        <div class="fl " style="width:78%" id="printBody">
+        <div class="fl" style="width:78%" id="printBody">
             <h1 class="f14 fbnone ml40 pt10">基本信息</h1>
             <table class="cb id_table3 w95b bg_c_white margin0 mt10">
                 <tr>
                     <td align="right" width="15%">订单编号：</td>
                     <td align="left">${order.code}</td>
                     <td align="right" width="15%">所有者：</td>
-                    <td align="left">${order.owner.name }</td>
+                    <td align="left">${order.owner.realName }</td>
                 </tr>
                 <tr>
                     <td align="right">产品：</td>
                     <td align="left">${order.product.name }</td>
-                    <td align="right">客户：</td>
-                    <td align="left">${order.customer.name }</td>
-                </tr>
-                <tr>
                     <td align="right">审批环节：</td>
                     <td align="left">${order.flowNode.type==endNodeType?"":"待"}${order.flowNode.name}</td>
+                </tr>
+                <tr>
+                	<td align="right">客户：</td>
+                    <td align="left">${order.customer.name }</td>
                     <td align="right">投资方式：</td>
                     <td align="left">${order.investmentWay.key}</td>
                 </tr>
                 <tr>
                     <td align="right">购买金额（万）：</td>
                     <td align="left">${order.purchaseMoney}</td>
-                    <td align="right">收益率（%）：</td>
+                    <td align="right">生效时间：</td>
+                    <td align="left"><fmt:formatDate value="${order.effectiveTime}" pattern="yyyy-MM-dd" var="effectiveTime"/>${effectiveTime}</td>
+                </tr>
+                <tr>
+                	<td align="right">收益率（%）：</td>
                     <td align="left">${order.earningRate}%</td>
+                    <td align="right">结束时间：</td>
+                    <td align="left"><fmt:formatDate value="${order.orderEndTime}" pattern="yyyy-MM-dd" var="endTime"/>${endTime}</td>
                 </tr>
                 <tr>
-                    <td align="right">赎回赔率（%）：</td>
-                    <td align="left">${order.arr }%</td>
-                    <td align="right">赎回公式：</td>
-                    <td align="left">${order.redeemFormula }</td>
-                </tr>
-                <tr>
+                	<td align="right">赎回赔率（%）：</td>
+                    <td align="left">${order.arr}%</td>
                     <td align="right" width="15%">投资经理：</td>
                     <td align="left">${order.salesManager.realName }</td>
+                </tr>
+                <tr>
+                    <td align="right">赎回公式：</td>
+                    <td align="left">${order.redeemFormula }</td>
                     <td align="right" width="15%">投资总监：</td>
                     <td align="left">${order.salesMajordomo.realName }</td>
                 </tr>
                 <tr>
-                    <td align="right">结束时间：</td>
-                    <td align="left"><fmt:formatDate value="${order.orderEndTime }" pattern="yyyy-MM-dd" var="endTime"/><span id="endTime">${endTime }</span></td>
+                    <td align="right" width="15%">订单状态：</td>
+                    <td align="left">${order.orderStatus.key }</td>
+                    <td align="right">财务状态：</td>
+                    <td align="left" 
+                    <c:if test="${order.payStatus.key=='未收款' }">style="color:red;"</c:if>
+                    >${order.payStatus.key }</td>
                 </tr>
             </table>
             <h1 class="f14 fbnone ml40 pt10">描述信息</h1>

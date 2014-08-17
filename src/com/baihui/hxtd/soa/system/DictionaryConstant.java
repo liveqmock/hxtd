@@ -99,6 +99,8 @@ public class DictionaryConstant {
     public final static String RELATIVE_MODULE_CONTACT = "11010104";
     /** 项目 */
     public final static String RELATIVE_MODULE_PROJECT = "11010105";
+    /** 项目 */
+    public final static String RELATIVE_MODULE_PRODUCT = "11010107";
     /** 合同 */
     public final static String RELATIVE_MODULE_CONTRACT = "11010106";
 

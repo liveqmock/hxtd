@@ -11,14 +11,6 @@
 <html>
 <head>
 <title>销售目标编辑</title>
-<meta http-equiv="pragma" content="no-cache">
-<meta http-equiv="cache-control" content="no-cache">
-<meta http-equiv="expires" content="0">    
-<meta http-equiv="keywords" content="keyword1,keyword2,keyword3">
-<meta http-equiv="description" content="This is my page">
-<!--
-<link rel="stylesheet" type="text/css" href="styles.css">
--->
 <link rel="stylesheet" href="${ctx}/static/css/recommend/list1.css" type="text/css"/>
 <link rel="stylesheet" href="${ctx}/static/css/recommend/detail_a.css" type="text/css"/>
 <script type="text/javascript" src="${ctx}/static/js/jquery.validate.js"></script>
@@ -284,7 +276,7 @@ function setPeopleIds(){
 				<td align="right" width="15%" valign="top">
 					备注：
 				</td>
-				<td align="left" width="85%">
+				<td align="left" width="85%" valign="top">
 					<textarea name="remark" class="remarks_input1 {maxlength:512}">${salesTarget.remark}</textarea>
 				</td>
 			</tr>

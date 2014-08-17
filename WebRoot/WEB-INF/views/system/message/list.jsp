@@ -37,7 +37,7 @@ $(function () {
 <body>
 <div class=" listcontainer">
 <form id="form" action="${ctx}/system/message/query.do" onsubmit="return false;">
-    <table class="fl mt5 w">
+    <table class="fl mt10 w">
         <tr>
             <td class="f14 namewidth1" align="right">消息名称：</td>
             <td class="f14 namewidth2" align="left">
@@ -213,7 +213,7 @@ $(function () {
             <tbody class="list"></tbody>
         </table>
         <div class="cb ml35 mt20 h40 pagination"></div>
-        <textarea id="send-template" class="template template-tbody">
+        <div id="send-template" class="template template-tbody">
             {#foreach $T.result as row}
             <tr class="{$T.row$index%2==1?'':'bg_c_blue'}">
                 <td align="center">
@@ -275,7 +275,7 @@ $(function () {
                 </td>
             </tr>
             {#/for}
-            　　</textarea>
+            　　</div>
         <%@include file="/WEB-INF/template/sort.jsp" %>
         <%@include file="/WEB-INF/template/pagination.jsp" %>
     </div>

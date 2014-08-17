@@ -11,7 +11,7 @@
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
 <html>
 <head>
-<title>提前赎回</title>
+<title>赎回</title>
 <meta http-equiv="pragma" content="no-cache">
 <meta http-equiv="cache-control" content="no-cache">
 <meta http-equiv="expires" content="0">    
@@ -25,16 +25,30 @@
 $(function(){
 	var money = $("#purchaseMoney").text()*10000;
 	var redeemFormula = $("#redeemFormula").text();
+	var earningRate=$("#earningRate").text();
 	if(redeemFormula.indexOf("x")<0){
-		$("#payMoney").html("赎回公式不包含本金“x”，请检查");
+		$("#payMoney").val("赎回公式不包含本金“x”，请检查");
 	}else{
 		try{
-			money = eval(redeemFormula.replace("x",money));
+			if($("#type").val()=='normal'){
+				money = money*earningRate/100+money;//到期赎回
+			}else{
+				money = eval(redeemFormula.replace("x",money));//提前赎回
+			}
 		}catch (e){
 			money = "赎回公式错误";
 		}
-		$("#payMoney").html(money/10000);
+		$("#payMoney").val(money/10000);
 	}
+	
+	$("#payMoney").blur(function(){
+		var $payMoney=$("#payMoney").val();
+		if(isNaN($payMoney)){
+			$("#error").html("输入正确的金额");
+		}else{
+			$("#error").html("");
+		}
+	});
 });
 
 </script>
@@ -44,18 +58,25 @@ $(function(){
 	<div class="cb"></div>
 	<div class="ml35 mr35 bg_c_blue cb">
 		<h1 class="f14 fbnone ml40 pt10">赎回信息</h1>
-		<table class="cb id_table3 w95b bg_c_white margin0 mt10">
+		<input type="hidden" id="type" value="${type}" />
+		<table class="cb id_table3 w95b bg_c_white margin0 mt10 redeem">
 			<tr>
 				<td width="25%" align="right">购买金额（万）：</td>
 				<td align="left" id="purchaseMoney">${order.purchaseMoney}</td>
-				<td width="25%" align="right">提前赎回率（%）：</td>
-				<td align="left">${order.arr}</td>
+				<td align="right">收益率（%）：</td>
+				<td align="left" id="earningRate">${order.earningRate}</td>
 			</tr>
 			<tr>
-				<td align="right">应付金额（万）：</td>
-				<td align="left" id="payMoney"></td>
+				<td width="25%" align="right">提前赎回率（%）：</td>
+				<td align="left">${order.arr}</td>
 				<td align="right">赎回公式：</td>
 				<td align="left" id="redeemFormula">${order.redeemFormula}</td>
+			</tr>
+			<tr>
+				<td align="right"><span class="w_red">*&nbsp;</span>应付金额（万）：</td>
+				<td align="left"> <input type="text" id="payMoney"/></td>
+				<td align="right"><span style=" color: red" id="error"></span></td>
+				<td align="left"></td>
 			</tr>
 			</table>
 		<div class="h40"></div>

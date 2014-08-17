@@ -1,16 +1,10 @@
 package com.baihui.hxtd.soa.market.service;
 
-import com.baihui.hxtd.soa.base.orm.hibernate.HibernatePage;
-import com.baihui.hxtd.soa.base.utils.Search;
-import com.baihui.hxtd.soa.common.dao.FlowNodeDao;
-import com.baihui.hxtd.soa.common.service.FlowNodeService;
-import com.baihui.hxtd.soa.market.dao.MarketActivityDao;
-import com.baihui.hxtd.soa.market.entity.MarketActivity;
-import com.baihui.hxtd.soa.system.DictionaryConstant;
-import com.baihui.hxtd.soa.system.dao.UserDao;
-import com.baihui.hxtd.soa.system.entity.AuditLog;
-import com.baihui.hxtd.soa.system.entity.User;
-import com.baihui.hxtd.soa.system.service.DataShift;
+import java.util.List;
+import java.util.Map;
+
+import javax.annotation.Resource;
+
 import org.hibernate.FetchMode;
 import org.hibernate.criterion.DetachedCriteria;
 import org.hibernate.criterion.Restrictions;
@@ -18,9 +12,16 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springside.modules.persistence.SearchFilter;
 
-import javax.annotation.Resource;
-import java.util.List;
-import java.util.Map;
+import com.baihui.hxtd.soa.base.orm.hibernate.HibernatePage;
+import com.baihui.hxtd.soa.base.utils.Search;
+import com.baihui.hxtd.soa.common.dao.FlowNodeDao;
+import com.baihui.hxtd.soa.market.dao.MarketActivityDao;
+import com.baihui.hxtd.soa.market.entity.MarketActivity;
+import com.baihui.hxtd.soa.system.DictionaryConstant;
+import com.baihui.hxtd.soa.system.dao.UserDao;
+import com.baihui.hxtd.soa.system.entity.AuditLog;
+import com.baihui.hxtd.soa.system.entity.User;
+import com.baihui.hxtd.soa.system.service.DataShift;
 
 /**
  * 功能描述：供应商模块service层

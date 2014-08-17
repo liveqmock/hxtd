@@ -66,6 +66,22 @@ public class FlowInstanceDao extends HibernateDAOImpl<FlowInstance, Long> {
         return find(hql, moduleName, idValue, flowType);
     }
 
+    /** 查找流程环节对应已执行流程实例的执行者 */
+    public User findLastExecutedExecutor(String moduleName, Long idValue, FlowNode flowNode) {
+        String lastInstanceHql = "select lastInstance.id from FlowInstance lastInstance" +
+                " where lastInstance.isPassed is not null" +
+                " and lastInstance.module.name=?" +
+                " and lastInstance.recordId=?" +
+                " and lastInstance.flowNode=?" +
+                " order by lastInstance.modifiedTime desc";
+        Object id = getSession().createQuery(lastInstanceHql).setParameter(0, moduleName).setParameter(1, idValue).setParameter(2, flowNode)
+                .setMaxResults(1).uniqueResult();
+
+        String hql = "select task.approver from FlowInstance task" +
+                " where task.id=?";
+        return findUnique(hql, id);
+    }
+
     /** 更新预定执行者 */
     public void updateReserveExecutor(Module module, Long idValue, FlowNode flowNode) {
         String hql = "update FlowInstance task set task.approver=?" +

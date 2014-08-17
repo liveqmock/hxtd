@@ -301,6 +301,7 @@ var jsUtil = {
 	},
 	formatDiff: function(s, n){ //金额千分位， 默认保留两位小数
 	    var n = n == null ? 2 : n;
+	    var s = s == null ? "0.00" : s;
 	    s = parseFloat((s + "").replace(/[^\d\.-]/g,"")).toFixed(n) + "";
 	    var l = s.split(".")[0].split("").reverse(), r = s.split(".")[1], t = "";
 	    for(i = 0;i< l.length; i++){

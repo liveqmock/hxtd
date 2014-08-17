@@ -7,14 +7,6 @@
 <html>
 <head>
 <title>工作台编辑</title>
-<meta http-equiv="pragma" content="no-cache">
-<meta http-equiv="cache-control" content="no-cache">
-<meta http-equiv="expires" content="0">    
-<meta http-equiv="keywords" content="keyword1,keyword2,keyword3">
-<meta http-equiv="description" content="This is my page">
-<!--
-<link rel="stylesheet" type="text/css" href="styles.css">
--->
 <link rel="stylesheet" href="${ctx}/static/css/recommend/list1.css" type="text/css"/>
 <link rel="stylesheet" href="${ctx}/static/css/recommend/detail_a.css" type="text/css"/>
 <script type="text/javascript" src="${ctx}/static/js/jquery.validate.js"></script>
@@ -92,7 +84,7 @@ function loadIframe(){
 }
 
 function getReportList(){
-	jsUtil.dialogIframe("${ctx}/common/report/toQueryPage.comp", "报表列表", 900, 570,
+	jsUtil.dialogIframe("${ctx}/common/report/toQueryPage.comp", "报表列表", 900, 500,
 		function(){ // 确定回调
 			var $reportObj = $(".bor_e28d1f", window.frames["dialogIframe"].document);
 			if($reportObj.length > 0){
@@ -135,12 +127,7 @@ function getParam(){
 <body>
 <form id="form" action="${ctx }${funcUrl}" method="post">
 <div>
-	<!--请在此处使用iframe--->
-	<!--查询条件开始-->
-
-	<!--查询条件结束-->
 	<div class="cb"></div>
-	<!--列表开始-->
 	<div class="ml35 mr35 mt20 block cb cb">
 		<b class="b1"></b>
 		<b class="b2"></b>
@@ -507,7 +494,7 @@ function getParam(){
 				<td align="right" valign="top" width="15%">
 					备注：
 				</td>
-				<td align="left" width="85%">
+				<td align="left" width="85%" valign="top">
 					<textarea name="remark" class="remarks_input1 {maxlength:512}">${salesTarget.remark}</textarea>
 				</td>
 			</tr>

@@ -41,7 +41,7 @@ $(function(){
 	jsUtil.renderRequiredFromInput();
 });
 function searchData(action){//搜索弹出框
-	var url = "${ctx}/project/supplier/toQueryPage.comp",
+	var url = "${ctx}/project/supplier/toSearchSupplierPage.docomp",
 		title = "供应商";
 	jsUtil.dialogIframe(url, title, 800, 465, function(){//确定回调
 		var $userObj = $(".bor_e28d1f", window.frames["dialogIframe"].document);
@@ -49,7 +49,8 @@ function searchData(action){//搜索弹出框
 				$("#txt_" + action).val($userObj.find("td:eq(0)").text());
 				$("#hide_" + action +"_id").val($userObj.attr("id"));
 			}
-	});
+		}
+	);
 }
 function clearInputVal(obj){//清除
 	$(obj).prevAll("input").val('');
@@ -133,7 +134,7 @@ function clearInputVal(obj){//清除
 		<table class="cb id_table4 w95b bg_c_white margin0 mt10">
 			<tr>
 				<td align="right" width="15%" valign="top">备注：</td>
-				<td align="left" width="85%"><textarea name="remark" class="remarks_input1 {maxlength:512}">${project.remark}</textarea></td>
+				<td align="left" width="85%" valign="top"><textarea name="remark" class="remarks_input1 {maxlength:512}">${project.remark}</textarea></td>
 			</tr>
 		</table>
 		<div class=" h40"></div>

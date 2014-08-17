@@ -17,8 +17,7 @@
 <script type="text/javascript">${applicationScope.VC_PCAS}</script>
 <script type="text/javascript">
 $(function(){
-	new PCAS("province", "city", "county", '${customer.province.id}', 
-		'${customer.city.id}', '${customer.county.id}'); // 修改为根据ID选择组件，之前用name选择组件当name中出现“.”时有问题
+	new PCAS("province", "city", "county", '${customer.province.id}', '${customer.city.id}', '${customer.county.id}');
 	$("#save").click(function(){ //保存按钮事件
 		var $form = $("#form");
 		if($("#form").valid()){
@@ -47,12 +46,12 @@ $(function(){
 	});
 }); 
 function searchData(action){ // 搜索
-	var title="";
-	var roleCode="";
+	var title="", roleCode="";
 	if(action=="owner"){
 		title="所有者";
 	}else if(action=="financialAdvisor"){
-		title="理财顾问";
+		title="投资经理";
+		roleCode="ORG_00005"
 	}else if(action=="financialManager"){
 		title="理财经理";
 		roleCode="ORG_00006";
@@ -62,14 +61,15 @@ function searchData(action){ // 搜索
 	}else if(action=="appointment"){
 		title="邀约人";
 	}
-	jsUtil.dialogIframe("${ctx}/system/user/toQueryPage.comp?roleCode="+roleCode, title, 800, 420, 
+	jsUtil.dialogIframe("${ctx}/system/user/toSearchUserPage.docomp?roleCode="+roleCode, title, 800, 420, 
 		function(){ // 确定回调
 			var $userObj = $(".bor_e28d1f", window.frames["dialogIframe"].document);
 			if($userObj.length > 0){
 				$("#txt_" + action).val($userObj.find("td:eq(0)").text());
 				$("#hide_" + action +"_id").val($userObj.attr("id"));
 			}
-	});
+		}
+	);
 }
 </script> 
 </head>
@@ -89,8 +89,8 @@ function searchData(action){ // 搜索
 			<tr>
 				<td  align="right" width="15%"><span class="w_red">*&nbsp;</span>客户所有者：</td>
 				<td align="left">
-					<input id="txt_owner" type="text" value="${customer.owner.realName}" readonly 
-						class="text_input3 required cp" onclick="searchData('owner');"/>
+					<input id="txt_owner" type="text" value="${customer.owner.realName}" class="text_input3 required cp" 
+						onclick="searchData('owner');" readonly/>
 					<input id="hide_owner_id" type="hidden" name="owner.id" value="${customer.owner.id}"/>
 					<i class="s_inquiry globle_img block_inline ml5 vm cp" title="搜索所有者" onclick="searchData('owner');"></i>
 					<i class="dump_btn globle_img block_inline ml5 vm cp empty" title="清除"></i>
@@ -100,11 +100,7 @@ function searchData(action){ // 搜索
 					<select name="source.id" class="select1 pr requiredSelect">
 						<option value="-1">--无--</option>
 						<c:forEach items="${source}" var="source">
-						<option value="${source.id}"
-								<c:if test="${customer.source.id == source.id}">
-									selected
-								</c:if>
-								>${source.key}</option>
+						<option value="${source.id}" <c:if test="${customer.source.id == source.id}">selected</c:if>>${source.key}</option>
 						</c:forEach>
 					</select>
 				</td>
@@ -146,10 +142,10 @@ function searchData(action){ // 搜索
 			<tr>
 				<td align="right" width="15%"><span class="w_red">*&nbsp;</span>手机：</td>
 				<td align="left"><input maxlength="30" class="text_input3 required isMobile" name="mobile" type="text" value="${customer.mobile}"/></td>
-				<td align="right" width="15%">证件类型：</td>
+				<td align="right" width="15%"><span class="w_red">*&nbsp;</span>证件类型：</td>
 				<td align="left">
-					<select name="cardType.id" class="select1 pr">
-						<option value="">--无--</option>
+					<select name="cardType.id" class="select1 pr requiredSelect ">
+						<option>--无--</option>
 						<c:forEach items="${cardType}" var="cardType">
 					       <option value="${cardType.id}"
 							<c:if test="${customer.cardType.id == cardType.id}">
@@ -163,8 +159,8 @@ function searchData(action){ // 搜索
 			<tr>
 				<td align="right" width="15%"><span class="w_red">*&nbsp;</span>公司：</td>
 				<td align="left"><input maxlength="30"  class="text_input3 required" name="company" type="text" value="${customer.company}"/></td>
-				<td align="right" width="15%">证件号码：</td>
-				<td align="left"><input class="text_input3" name="cardNum" type="text" value="${customer.cardNum}"/></td>
+				<td align="right" width="15%"><span class="w_red">*&nbsp;</span>证件号码：</td>
+				<td align="left"><input class="text_input3 required" name="cardNum" type="text" value="${customer.cardNum}"/></td>
 			</tr>
 			<tr>
 				<td align="right" width="15%">公司性质：</td>
@@ -213,41 +209,41 @@ function searchData(action){ // 搜索
 				<td align="left"><input class="text_input3 isTel" name="fax" type="text" value="${customer.fax}"/></td>
 			</tr>
 			<tr>
-				<td align="right" width="15%">理财顾问：</td>
+				<td align="right" width="15%"><span class="w_red">*&nbsp;</span>理财经理：</td>
 				<td align="left">
-					<input id="txt_financialAdvisor" type="text" value="${customer.financialAdvisor.realName}" readonly 
-						class="text_input3 cp" onclick="searchData('financialAdvisor');"/>
-					<input id="hide_financialAdvisor_id" type="hidden" name="financialAdvisor.id" value="${customer.financialAdvisor.id}"/>
-					<i class="s_inquiry globle_img block_inline ml5 vm cp" title="搜索理财顾问" onclick="searchData('financialAdvisor');"></i>
+					<input id="txt_financialManager" type="text" name="manager" value="${customer.financialManager.realName}" class="required text_input3 cp" 
+						onclick="searchData('financialManager');" readonly/>
+					<input id="hide_financialManager_id" class="" type="hidden" name="financialManager.id" value="${customer.financialManager.id}"/>
+					<i class="s_inquiry globle_img block_inline ml5 vm cp" title="搜索理财经理" onclick="searchData('financialManager');"></i>
 					<i class="dump_btn globle_img block_inline ml5 vm cp empty" title="清除"></i>
 				</td>
 				<td align="right" width="15%">邮编：</td>
 				<td align="left"><input maxlength="30" class="text_input3 isZipCode" name="postCode" type="text" value="${customer.postCode}"/></td>
 			</tr>
 			<tr>
-				<td align="right" width="15%">理财经理：</td>
+				<td align="right" width="15%"><span class="w_red">*&nbsp;</span>投资经理：</td>
 				<td align="left">
-					<input id="txt_financialManager" type="text" value="${customer.financialManager.realName}" readonly 
-						class="text_input3 cp" onclick="searchData('financialManager');"/>
-					<input id="hide_financialManager_id" type="hidden" name="financialManager.id" value="${customer.financialManager.id}"/>
-					<i class="s_inquiry globle_img block_inline ml5 vm cp" title="搜索理财经理" onclick="searchData('financialManager');"></i>
+					<input id="txt_financialAdvisor" type="text" name="advisor" value="${customer.financialAdvisor.realName}" class="required text_input3 cp" 
+						onclick="searchData('financialAdvisor');" readonly/>
+					<input id="hide_financialAdvisor_id" class="" type="hidden" name="financialAdvisor.id" value="${customer.financialAdvisor.id}"/>
+					<i class="s_inquiry globle_img block_inline ml5 vm cp" title="搜索理财顾问" onclick="searchData('financialAdvisor');"></i>
 					<i class="dump_btn globle_img block_inline ml5 vm cp empty" title="清除"></i>
 				</td>
 				<td align="right" width="15%">邀约人：</td>
 				<td align="left">
-					<input id="txt_appointment" type="text" value="${customer.appointment.realName}" readonly 
-						class="text_input3 cp" onclick="searchData('appointment');"/>
+					<input id="txt_appointment" type="text" value="${customer.appointment.realName}" class="text_input3 cp" 
+						onclick="searchData('appointment');" readonly/>
 					<input id="hide_appointment_id" type="hidden" name="appointment.id" value="${customer.appointment.id}"/>
 					<i class="s_inquiry globle_img block_inline ml5 vm cp" title="搜索邀约人" onclick="searchData('appointment');"></i>
 					<i class="dump_btn globle_img block_inline ml5 vm cp empty" title="清除"></i>
 			    </td>
 			</tr>
 			<tr>
-				<td align="right" width="15%">投资总监：</td>
+				<td align="right" width="15%"><span class="w_red">*&nbsp;</span>投资总监：</td>
 				<td align="left">
-					<input id="txt_financialDirector" type="text" value="${customer.financialDirector.realName}" readonly 
-						class="text_input3 cp" onclick="searchData('financialDirector');"/>
-					<input id="hide_financialDirector_id" type="hidden" name="financialDirector.id" value="${customer.financialDirector.id}"/>
+					<input id="txt_financialDirector" type="text" name="director" value="${customer.financialDirector.realName}" class="required text_input3 cp" 
+						onclick="searchData('financialDirector');" readonly/>
+					<input id="hide_financialDirector_id" class="" type="hidden" name="financialDirector.id" value="${customer.financialDirector.id}"/>
 					<i class="s_inquiry globle_img block_inline ml5 vm cp" title="搜索投资总监" onclick="searchData('financialDirector');"></i>
 					<i class="dump_btn globle_img block_inline ml5 vm cp empty" title="清除"></i>
 				</td>
@@ -258,10 +254,10 @@ function searchData(action){ // 搜索
 		<h1 class="f14 fbnone ml40 pt10">账号信息</h1>
 		<table class="cb id_table3 w95b bg_c_white margin0 mt10">
 			<tr>
-				<td align="right" width="15%">开户银行：</td>
+				<td align="right" width="15%"><span class="w_red">*&nbsp;</span>开户银行：</td>
 				<td align="left">
-					<select name="openBank.id" class="select1 pr">
-						<option value="">--无--</option>
+					<select name="openBank.id" class="select1 pr requiredSelect">
+						<option>--无--</option>
 						<c:forEach items="${openBank}" var="openBank">
 					       <option value="${openBank.id }"
 							<c:if test="${customer.openBank.id == openBank.id}">
@@ -271,12 +267,12 @@ function searchData(action){ // 搜索
 						</c:forEach>
 					</select>
 				</td>
-				<td align="right" width="15%">银行户名：</td>
-				<td align="left"><input maxlength="30" class="text_input3" name="bankName" type="text" value="${customer.bankName}"/></td>
+				<td align="right" width="15%"><span class="w_red">*&nbsp;</span>银行户名：</td>
+				<td align="left"><input maxlength="30" class="text_input3 required" name="bankName" type="text" value="${customer.bankName}"/></td>
 			</tr>
 			<tr>
-				<td align="right" width="15%">银行账号：</td>
-				<td align="left"><input maxlength="30" class="text_input3" name="bankAccount" type="text" value="${customer.bankAccount}"/></td>
+				<td align="right" width="15%"><span class="w_red">*&nbsp;</span>银行账号：</td>
+				<td align="left"><input maxlength="30" class="text_input3 required number" name="bankAccount" type="text" value="${customer.bankAccount}"/></td>
 				<td align="right"></td>
 				<td align="left"></td>
 			</tr>

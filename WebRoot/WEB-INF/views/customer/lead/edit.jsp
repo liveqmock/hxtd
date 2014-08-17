@@ -1,8 +1,3 @@
-<%--
-  功能描述：编辑线索
-  User: xiaoli.luo
-  Date:2014/5/6
---%>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <c:set var="ctx" value="${pageContext.request.contextPath}"/>
@@ -74,19 +69,11 @@ function searchData(action){ //搜索弹出框
 	var url, title;
 	switch(action){
 		case "owner":
-			url = "${ctx}/system/user/toQueryPage.comp";
+			url = "${ctx}/system/user/toSearchUserPage.docomp";
 			title = "所有者";
 			break;
-		case "customer":
-			url = "${ctx}/customer/customer/toQueryPage.comp";
-			title = "客户";
-			break;
-		case "supplier":
-			url = "${ctx}/project/supplier/toQueryPage.comp";
-			title = "供应商";
-			break;
 		case "marketActivity":
-			url = "${ctx}/market/marketactivity/toQueryPage.comp";
+			url = "${ctx}/market/marketactivity/toSearchMarketActivityPage.docomp";
 			title = "市场活动";
 			break;
 	}
@@ -97,7 +84,8 @@ function searchData(action){ //搜索弹出框
 				$("#txt_" + action).val($userObj.find("td:eq(0)").text());
 				$("#hide_" + action +"_id").val($userObj.attr("id"));
 			}
-	});
+		}
+	);
 }
 function clearInputVal(obj){ //清除
 	$(obj).prevAll("input").val('');
@@ -139,10 +127,9 @@ function clearInputVal(obj){ //清除
 					<span class="w_red">*&nbsp;</span>所有者：
 				</td>
 				<td align="left">
-					<input type="text" id="txt_owner" value="${lead.owner.realName }"
-						 class="text_input3 cp required" onclick="searchData('owner');" readonly />
-					<input type="hidden" id="hide_owner_id" name="owner.id"
-						value="${lead.owner.id }" />
+					<input type="text" id="txt_owner" value="${lead.owner.realName}" onclick="searchData('owner');" 
+						class="text_input3 cp required" readonly/>
+					<input type="hidden" id="hide_owner_id" name="owner.id" value="${lead.owner.id}"/>
 					<i class="s_inquiry globle_img block_inline ml5 vm cp" title="搜索所有者" onclick="searchData('owner');"></i>
 					<i class="dump_btn globle_img block_inline ml5 vm cp empty" title="清除" onclick="clearInputVal(this)"></i>
 				</td>
@@ -224,11 +211,10 @@ function clearInputVal(obj){ //清除
 				<td align="left"><input type="text" name="postCode" value="${lead.postCode}" class="text_input3 isZipCode"/></td>
 				<td align="right" class="marketActivity"><span class="w_red">*&nbsp;</span>市场活动</td>
 				<td align="left" class="marketActivity">
-					<input type="text" name="txt_m" id="txt_marketActivity" value="${lead.marketActivity.name }"
-						 class="text_input3 cp required" onclick="searchData('marketActivity');" readonly />
-					<input type="hidden" id="hide_marketActivity_id" name="marketActivity.id"
-						value="${lead.marketActivity.id }" />
-					<i class="s_inquiry globle_img block_inline ml5 vm cp" title="搜索所有者" onclick="searchData('owner');"></i>
+					<input type="text" name="txt_m" id="txt_marketActivity" value="${lead.marketActivity.name}" class="text_input3 cp required" 
+						onclick="searchData('marketActivity');" readonly/>
+					<input type="hidden" id="hide_marketActivity_id" name="marketActivity.id" value="${lead.marketActivity.id }"/>
+					<i class="s_inquiry globle_img block_inline ml5 vm cp" title="搜索市场活动" onclick="searchData('marketActivity');"></i>
 					<i class="dump_btn globle_img block_inline ml5 vm cp empty" title="清除" onclick="clearInputVal(this)"></i>
 				</td>
 			</tr>
@@ -275,7 +261,7 @@ function clearInputVal(obj){ //清除
 				<td align="right" width="15%" valign="top">
 					备注：
 				</td>
-				<td align="left" width="85%">
+				<td align="left" width="85%" valign="top">
 					<textarea name="remark" class="remarks_input1">${lead.remark}</textarea>
 				</td>
 			</tr>

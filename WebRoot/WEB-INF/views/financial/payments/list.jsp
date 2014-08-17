@@ -29,7 +29,7 @@
 <body>
 	<div class="listcontainer">
 		<form id="form" action="${ctx}/financial/payments/query.do" onsubmit="return false;">
-		<table class="fl mt5 w">
+		<table class="fl mt10 w">
 			<tr>
 				<td class="f14 namewidth1" align="right" >
 					订单编号：
@@ -48,9 +48,7 @@
 				</td>
 				<td class="f14 namewidth2" align="left" >
 					<select name="search_EQ_status" class="select2">
-						<option value="">
-							--全部--
-						</option>
+						<option value="">全部</option>
 						<option value="0">未付款</option>
 						<option value="1">已付款</option>
 					</select>
@@ -67,14 +65,14 @@
 				</td>
 			</tr>
 			<tr class="more-content">
-				<td class="f14 namewidth1" align="right">应付款金额（万）：</td>
+				<td class="f14 namewidth1" align="right">应付款（万）：</td>
 	    		<td class="f14 namewidth2" align="left">
 	    			<div class="pr vm">
 		    			<input class="text_input2 number" name="search_GTE_fund" type="text"/>-<input class="number text_input2" 
 		    				name="search_LTE_fund" type="text"/>
 	    			</div>
 	    		</td>
-	    		<td class="f14 namewidth1" align="right">实际付款金额（万）：</td>
+	    		<td class="f14 namewidth1" align="right">实际付款（万）：</td>
 	    		<td class="f14 namewidth2" align="left">
 	    			<div class="pr vm">
 		    			<input class="text_input2 number" name="search_GTE_actual" type="text"/>-<input class="text_input2 number" 
@@ -102,7 +100,7 @@
 	<!--查询条件结束-->
 	<div class="cb"></div>
 
-	<div class="ml35 mr35 mt20 block cb cb">
+	<div class="ml35 mr35 mt10 block cb cb">
 		<b class="b1"></b>
 		<b class="b2"></b>
 		<b class="b3"></b>
@@ -148,34 +146,34 @@
 				<th width="3%">
 					<input type="checkbox" name="" class="checkall" id="id" />
 				</th>
-				<th width="9%">
+				<th width="8%">
 					付款名称
 				</th>
-				<th width="6%">
+				<th width="5%">
 					客户名称
 				</th>
-				<th width="10%">
+				<th width="9%">
 					应付款金额（万）
 				</th>
 				<th width="10%">
 					实际付款金额（万）
 				</th>
-				<th width="6%">
+				<th width="5%">
 					付款状态
 				</th>
-				<th width="6%">
+				<th width="5%">
 					付款人
 				</th>
 				<th width="10%" class="sortable orderby" orderby="operateTime">
 					付款时间
 				</th>
-				<th width="6%">
+				<th width="5%">
 					创建者
 				</th>
 				<th width="10%" class="sortable orderby" orderby="createdTime">
 					创建时间
 				</th>
-				<th width="6%">
+				<th width="5%">
 					修改者
 				</th>
 				<th width="10%" class="sortable orderby" orderby="modifiedTime">
@@ -193,34 +191,34 @@
 				<th width="3%">
 					<input type="checkbox" name="" class="checkall" id="id" />
 				</th>
-				<th width="9%">
+				<th width="8%">
 					付款名称
 				</th>
-				<th width="6%">
+				<th width="5%">
 					客户名称
 				</th>
-				<th width="10%">
+				<th width="9%">
 					应付款金额（万）
 				</th>
 				<th width="10%">
 					实际付款金额（万）
 				</th>
-				<th width="6%">
+				<th width="5%">
 					付款状态
 				</th>
-				<th width="6%">
+				<th width="5%">
 					付款人
 				</th>
 				<th width="10%" class="sortable orderby" orderby="operateTime">
 					付款时间
 				</th>
-				<th width="6%">
+				<th width="5%">
 					创建者
 				</th>
 				<th width="10%" class="sortable orderby" orderby="createdTime">
 					创建时间
 				</th>
-				<th width="6%">
+				<th width="5%">
 					修改者
 				</th>
 				<th width="10%" class="sortable orderby" orderby="modifiedTime">
@@ -252,7 +250,7 @@
 				<td>{$T.row.customer.name}</td>
 				<td align="right">{$T.row.fund}</td>
 				<td align="right">{$T.row.actual}</td>
-				<td>
+				<td {#if !$T.row.status} style="color:red;"{#/if}>
 				{$T.row.status?'已付款':'未付款'}
 				</td>
 				<td>{$T.row.owner.realName}</td>

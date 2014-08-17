@@ -189,27 +189,16 @@
 		</h1>
 		<table class="cb id_table6 w95b bg_c_white margin0 mt10">
 			<tr>
-				<td align="right" width="15%" valign="top">
-					备注：
-				</td>
-				<td align="left" width="85%" valign="top">
-					<div class="w85b">
-						${lead.remark }
-					</div>
-				</td>
+				<td align="right" width="15%" valign="top">备注：</td>
+				<td align="left" width="85%" valign="top"><div class="w85b">${lead.remark }</div></td>
 			</tr>
 		</table>
-		<tag:attachment 
-		view="${VS_HAS_FUNCTIONS.leadAttView}" 
-		upload="${VS_HAS_FUNCTIONS.leadUpload}" 
-		query="${VS_HAS_FUNCTIONS.leadAttQuery}" 
-		down="${VS_HAS_FUNCTIONS.leadDown}" 
-		deleteFlag="${VS_HAS_FUNCTIONS.leadAttDelete}"
-		module="lead"
-		id="${lead.id}">
-		</tag:attachment>
-		<tag:memoir view="true" edit="true" query="true" delete="true" 
-		moduleType="lead" moduleId="${lead.id}"></tag:memoir>
+		<c:if test="${VS_HAS_FUNCTIONS.leadMemoirQuery}">
+		<tag:memoir moduleType="lead" moduleId="${lead.id}" view="${VS_HAS_FUNCTIONS.leadMemoirView}" edit="${VS_HAS_FUNCTIONS.leadMemoirModify}" 
+			query="${VS_HAS_FUNCTIONS.leadMemoirQuery}" delete="${VS_HAS_FUNCTIONS.leadMemoirDelete}"></tag:memoir>
+		</c:if>
+		<tag:attachment view="${VS_HAS_FUNCTIONS.leadAttView}" upload="${VS_HAS_FUNCTIONS.leadUpload}" query="${VS_HAS_FUNCTIONS.leadAttQuery}" 
+			down="${VS_HAS_FUNCTIONS.leadDown}" deleteFlag="${VS_HAS_FUNCTIONS.leadAttDelete}" module="lead" id="${lead.id}"></tag:attachment>
 		<div class=" h40"></div>
 	</div>
 </div>

@@ -90,7 +90,7 @@ public class OrganizationController {
 
         logger.info("存储查询条件表单默认值");
         model.addAttribute("id", organization.getId());
-
+        model.addAttribute("userId", user.getId()); //当期登录用户ID
 
         logger.info("存储分页数据");
         HibernatePage<User> userPage = new HibernatePage<User>();

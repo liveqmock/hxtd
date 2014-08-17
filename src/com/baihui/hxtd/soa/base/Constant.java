@@ -136,7 +136,7 @@ public class Constant {
     public final static int ORG_ORDER_TIER_LENGTH = 2;
 
     /** 线索来源为市场活动获得 */
-    public final static int SOURCE_MARKET_ACTIVITY = 4010101;
+    public final static int SOURCE_MARKET_ACTIVITY = 98;
 
     /** 导入线索的列数 */
     public final static int EXCEL_IMPORT_LEAD_COLUMNS = 20;

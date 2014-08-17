@@ -4,55 +4,54 @@
 <c:set var="ctx" value="${pageContext.request.contextPath}"/>
 <html>
 <head>
-    <title>市场活动编辑</title>
-    <link href="${ctx}/static/css/recommend/list1.css?v=1" type="text/css" rel="stylesheet"></link>
-    <script type="text/javascript" src="${ctx}/static/js/jquery.validate.js?v=1"></script>
-    <script type="text/javascript" src="${ctx}/static/js/jquery.metadata.js?v=1"></script>
-    <script type="text/javascript" src="${ctx}/static/js/validator.js?v=1"></script>
-    <script type="text/javascript" src="${ctx}/static/js/js-util.common.js?v=1"></script>
-    <script type="text/javascript">
-        $(function () {
-            jsUtil.bindSave(".add", "form"); //提交表单
-            jsUtil.formatMoney(".money"); //设置千分位
-            var dates = $("#start,#end"); //日历设置
-            dates.datepicker({
-                closeText: '清空',
-                minDate: 0,
-                onSelect: function (selectedDate) {
-                    var option = this.id == "start" ? "minDate" : "maxDate";
-                    dates.not(this).datepicker("option", option, selectedDate);
-                }
-            }).focus(function () {
-                clearDate($(this), true);
-            });
-            $(".empty").click(function () { //清除
-                $(this).prevAll("input").val('');
-            });
-        });
-        function searchData(action) { //搜索
-            jsUtil.dialogIframe("${ctx}/system/user/toQueryPage.comp", "负责人", 800, 420,
-                    function () { //确定回调
-                        var $userObj = $(".bor_e28d1f", window.frames["dialogIframe"].document);
-                        if ($userObj.length > 0) {
-                            console.warn($userObj.find("td:eq(0)").text());
-                            $("#txt_" + action).val($userObj.find("td:eq(0)").text());
-                            $("#hide_" + action + "_id").val($userObj.attr("id"));
-                        }
-                    });
+<title>市场活动编辑</title>
+<link href="${ctx}/static/css/recommend/list1.css?v=1" type="text/css" rel="stylesheet"></link>
+<script type="text/javascript" src="${ctx}/static/js/jquery.validate.js?v=1"></script>
+<script type="text/javascript" src="${ctx}/static/js/jquery.metadata.js?v=1"></script>
+<script type="text/javascript" src="${ctx}/static/js/validator.js?v=1"></script>
+<script type="text/javascript" src="${ctx}/static/js/js-util.common.js?v=1"></script>
+<script type="text/javascript">
+$(function () {
+    jsUtil.bindSave(".add", "form"); //提交表单
+    jsUtil.formatMoney(".money"); //设置千分位
+    var dates = $("#start,#end"); //日历设置
+    dates.datepicker({
+        closeText: '清空',
+        minDate: 0,
+        onSelect: function (selectedDate) {
+            var option = this.id == "start" ? "minDate" : "maxDate";
+            dates.not(this).datepicker("option", option, selectedDate);
         }
-    </script>
+    }).focus(function () {
+        clearDate($(this), true);
+    });
+    $(".empty").click(function () { //清除
+        $(this).prevAll("input").val('');
+    });
+});
+function searchData(action) { //搜索
+    jsUtil.dialogIframe("${ctx}/system/user/toSearchUserPage.docomp", "负责人", 800, 420,
+    	function () { //确定回调   
+	        var $userObj = $(".bor_e28d1f", window.frames["dialogIframe"].document);
+	        if ($userObj.length > 0) {
+	            console.warn($userObj.find("td:eq(0)").text());
+	            $("#txt_" + action).val($userObj.find("td:eq(0)").text());
+	            $("#hide_" + action + "_id").val($userObj.attr("id"));
+	        }
+    	}
+    );
+}
+</script>
 </head>
 <body>
 <form id="form" action="${ctx}${VR_FUNCTION.url}" method="post">
     <input type="hidden" name="flowNode.id" value="${activity.flowNode.id}">
     <input type="hidden" name="flowNode.type" value="${activity.flowNode.type}">
-
     <div class="ml35 mr35 mt20 block cb cb">
         <b class="b1"></b>
         <b class="b2"></b>
         <b class="b3"></b>
         <b class="b4"></b>
-
         <div class="ie_head">
             <h1 class="f14 fbnone mt10 ml10 fl">编辑市场活动</h1>
             <input type="hidden" name="id" value="${activity.id}"/>
@@ -73,8 +72,8 @@
             <tr>
                 <td align="right"><span class="w_red">*&nbsp;</span>负责人：</td>
                 <td align="left">
-                    <input type="text" id="txt_boss" name="bossname" value="${activity.bossHead.realName}" readonly
-                           class="text_input3 required cp" onclick="searchData('boss');"/>
+                    <input type="text" id="txt_boss" name="bossname" value="${activity.bossHead.realName}" readonly 
+                    	onclick="searchData('boss')" class="text_input3 required cp"/>
                     <input type="hidden" id="hide_boss_id" name="bossHead.id" value="${activity.bossHead.id}"/>
                     <i class="s_inquiry globle_img block_inline ml5 vm cp" title="搜索责任人" onclick="searchData('boss');"></i>
                     <i class="dump_btn globle_img block_inline ml5 vm cp empty" title="清除"></i>
@@ -140,8 +139,7 @@
         <table class="cb id_table4 w95b bg_c_white margin0 mt10">
             <tr>
                 <td align="right" width="15%" valign="top">备注：</td>
-                <td align="left" width="85%" valign="top"><textarea name="remark" class="remarks_input1"
-                                                                    maxlength="500">${activity.remark}</textarea></td>
+                <td align="left" width="85%" valign="top"><textarea name="remark" class="remarks_input1" maxlength="500">${activity.remark}</textarea></td>
             </tr>
         </table>
         <div class="h40"></div>

@@ -80,26 +80,33 @@
 </div>
 <div class="fr" style="width:80%;">
 <ul class="fl id_table3 w block cb mt10 tab-titles" style="border-bottom:5px solid #626262; height:32px;" fortabpanels>
+    <c:if test="${VS_HAS_FUNCTIONS.userQuery}">
     <li class="tab-title" fortabpanel="#tabs-user" id="user">
         <b class="h_tabbtn_l w25 block fl"></b>
         <b class="h_tabbtn_r pr25 w_auto f14 block fr lh32 cp id_nav pr">用户列表</b>
     </li>
+    </c:if>
+    <c:if test="${VS_HAS_FUNCTIONS.organizationQuery}">
     <li class="tab-title" fortabpanel="#tabs-org" id="org">
         <b class="h_tabbtn_l w25 block fl"></b>
         <b class="h_tabbtn_r  pr25 w_auto f14 block fr lh32 cp id_nav pr">组织列表</b>
     </li>
+    </c:if>
+    <c:if test="${VS_HAS_FUNCTIONS.organizationView}">
     <li class="tab-title" fortabpanel="#tabs-orgdetail" id="orgdetail">
         <b class="h_tabbtn_l w25 block fl"></b>
         <b class="h_tabbtn_r  pr25 w_auto f14 block fr lh32 cp id_nav pr">组织详情</b>
     </li>
+    </c:if>
 </ul>
 <div class="cb"></div>
 <div class="w cb tab-panels">
 <!-- 用户 -->
+ <c:if test="${VS_HAS_FUNCTIONS.userQuery}">
 <div id="tabs-user" class="tab-panel">
     <form action="${ctx}/system/user/query.do" onsubmit="return false;">
         <input type="hidden" name="organizationId" value="${id}"/>
-        <table class="fl mt5 w">
+        <table class="fl mt10 w">
             <tr class="header">
                 <td class="f14" align="right" width="6%">用户名：</td>
                 <td class="f14" align="left" width="16%"><input type="text" name="search_LIKE_name" value="${name}" class="text_input1"/></td>
@@ -124,7 +131,7 @@
         <tags:paginationparams page="${userPage}"/>
     </form>
     <div class="cb"></div>
-    <div class="mt20 block cb cb">
+    <div class="mt10 block cb cb">
         <b class="b1"></b>
         <b class="b2"></b>
         <b class="b3"></b>
@@ -136,7 +143,7 @@
                 <c:if test="${VS_HAS_FUNCTIONS.userDelete}">
                 </c:if>
                 <c:if test="${VS_HAS_FUNCTIONS.userAdd}">
-                    <li><a href="${ctx}/system/user/toAddPage.do?organizationId=${organizationId}" class="block c_white lh25 add mr10"><b class="allbtn_l block fl"></b><b class="allbtn_r pr13 block fl w_auto f14">新&nbsp;&nbsp;增</b></a></li>
+                    <li><a href="${ctx}/system/user/toAddPage.do?organizationId=${organizationId}&type=organization" class="block c_white lh25 add mr10"><b class="allbtn_l block fl"></b><b class="allbtn_r pr13 block fl w_auto f14">新&nbsp;&nbsp;增</b></a></li>
                 </c:if>
                 <c:if test="${VS_HAS_FUNCTIONS.userQuery}">
                     <li><a href="javascript:void(0)" class="block c_white lh25 mr10 refresh"><b class="allbtn_l block fl"></b><b class="allbtn_r pr13 block fl w_auto f14">刷&nbsp;&nbsp;新</b> </a></li>
@@ -172,7 +179,7 @@
                 <td>
                 <c:choose>
            		<c:when test="${VS_HAS_FUNCTIONS.userView}">
-           			<a class="toviewpage" href="${ctx}/system/user/toViewPage.do?id={$T.row.id}">{$T.row.realName}</a>
+           			<a class="toviewpage" href="${ctx}/system/user/toViewPage.do?id={$T.row.id}&type=organization">{$T.row.realName}</a>
            		</c:when>
            		<c:otherwise>{$T.row.realName}</c:otherwise>
            		</c:choose>
@@ -187,11 +194,11 @@
                 <td style="text-align: left">{$C.findArrayAttr($T.row.roles,"name").join("|".fontcolor("red"))}</td>
                 <td style="text-align: left">
                     <c:if test="${VS_HAS_FUNCTIONS.userView}">
-                        <a href="${ctx}/system/user/toViewPage.do?id={$T.row.id}" class=" block_inline s_detail_btn  globle_img ml10" title="详情"></a>
+                        <a href="${ctx}/system/user/toViewPage.do?id={$T.row.id}&type=organization" class=" block_inline s_detail_btn  globle_img ml10" title="详情"></a>
                     </c:if>
                     <c:if test="${VS_HAS_FUNCTIONS.userModify}">
                         {#if !$T.row.isInitialized}
-                        <a href="${ctx}/system/user/toModifyPage.do?id={$T.row.id}" class=" block_inline s_edit_btn globle_img ml10" title="编辑"></a>
+                        <a href="${ctx}/system/user/toModifyPage.do?id={$T.row.id}&type=organization" class=" block_inline s_edit_btn globle_img ml10" title="编辑"></a>
                         {#/if}
                     </c:if>
                     <c:if test="${VS_HAS_FUNCTIONS.userEnable}">
@@ -205,7 +212,9 @@
                         {#/if}
                     </c:if>
                     <c:if test="${VS_HAS_FUNCTIONS.userAuthorization}">
+                    	{#if $T.row.id!=${userId} && $T.row.id!=1}
                         <a href="${ctx}/system/user/toAuthorizationPage.do?id={$T.row.id}" class=" block_inline h_shouquan globle_img ml10 authorization" title="授权"></a>
+                    	{#/if}
                     </c:if>
                     <c:if test="${VS_HAS_FUNCTIONS.userResetPassword}">
                         <a href="javascript:void(0)" uri="${ctx}/system/user/resetPassword.do?id={$T.row.id}" class=" block_inline h_xiupass globle_img ml10 resetpassword" title="重置密码"></a>
@@ -223,6 +232,7 @@
     <div class="cb ml35 mt20 h40 pagination"></div>
     <%@include file="/WEB-INF/template/pagination.jsp" %>
 </div>
+</c:if>
 <!-- 组织 -->
 <div id="tabs-org" class="tab-panel">
     <form action="${ctx}/system/organization/query.do" onsubmit="return false;">

@@ -15,6 +15,7 @@ import org.springframework.transaction.annotation.Transactional;
 import com.baihui.hxtd.soa.base.ContextLoaderListenerAware;
 import com.baihui.hxtd.soa.common.dao.CommonDao;
 import com.baihui.hxtd.soa.common.service.imports.ImportServiceAbstract;
+import com.baihui.hxtd.soa.system.entity.AuditLog;
 import com.baihui.hxtd.soa.system.entity.User;
 /**
  * 功能描述：导入信息类
@@ -44,7 +45,7 @@ public class ImportService {
 	
 	//导入数据到DB
 	@SuppressWarnings("unchecked")
-	public void import2DB(List entityList, List<String> typeList,String duplicateType, String moduleName,User user) throws IllegalArgumentException, SecurityException, InstantiationException, IllegalAccessException, InvocationTargetException, NoSuchMethodException{
+	public void import2DB(List entityList, List<String> typeList,String duplicateType, String moduleName,User user,AuditLog auditLog) throws IllegalArgumentException, SecurityException, InstantiationException, IllegalAccessException, InvocationTargetException, NoSuchMethodException{
 		logger.info("开始导入excel数据");
 		//获取实体类
 		String serviceStr = "import"+moduleName.subSequence(0, 1).toString().toUpperCase()+moduleName.substring(1)+"Service";

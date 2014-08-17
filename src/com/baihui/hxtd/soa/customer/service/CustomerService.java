@@ -24,7 +24,6 @@ import com.baihui.hxtd.soa.order.dao.ContractDao;
 import com.baihui.hxtd.soa.order.dao.OrderDao;
 import com.baihui.hxtd.soa.system.dao.UserDao;
 import com.baihui.hxtd.soa.system.entity.AuditLog;
-import com.baihui.hxtd.soa.system.entity.Notice;
 import com.baihui.hxtd.soa.system.entity.User;
 import com.baihui.hxtd.soa.system.service.DataShift;
 

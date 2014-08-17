@@ -231,9 +231,9 @@ public class Customer implements Serializable {
 	private String familyAddr;
 	
 	/**
-	 * 理财顾问
+	 * 投资经理
 	 */
-	@FieldInfo(desc = "理财经理")
+	@FieldInfo(desc = "投资经理")
 	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "FINANCIAL_ADVISOR")
 	@NotFound(action = NotFoundAction.IGNORE)

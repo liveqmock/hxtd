@@ -1,5 +1,30 @@
 package com.baihui.hxtd.soa.market.controller;
 
+import java.io.IOException;
+import java.io.PrintWriter;
+import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.List;
+import java.util.Map;
+
+import javax.annotation.Resource;
+import javax.servlet.ServletContext;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+
+import org.springframework.beans.propertyeditors.CustomDateEditor;
+import org.springframework.stereotype.Controller;
+import org.springframework.ui.ModelMap;
+import org.springframework.web.bind.WebDataBinder;
+import org.springframework.web.bind.annotation.InitBinder;
+import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.SessionAttributes;
+import org.springside.modules.web.Servlets;
+
 import com.baihui.hxtd.soa.base.Constant;
 import com.baihui.hxtd.soa.base.InitApplicationConstant;
 import com.baihui.hxtd.soa.base.orm.hibernate.HibernatePage;
@@ -23,24 +48,6 @@ import com.baihui.hxtd.soa.system.service.DictionaryService;
 import com.baihui.hxtd.soa.util.EnumModule;
 import com.baihui.hxtd.soa.util.EnumOperationType;
 import com.baihui.hxtd.soa.util.JsonDto;
-import org.springframework.beans.propertyeditors.CustomDateEditor;
-import org.springframework.stereotype.Controller;
-import org.springframework.ui.ModelMap;
-import org.springframework.web.bind.WebDataBinder;
-import org.springframework.web.bind.annotation.*;
-import org.springside.modules.web.Servlets;
-
-import javax.annotation.Resource;
-import javax.servlet.ServletContext;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-import java.io.IOException;
-import java.io.PrintWriter;
-import java.text.SimpleDateFormat;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
-import java.util.Map;
 
 /**
  * 功能描述：市场活动控制器
@@ -87,8 +94,7 @@ public class MarketActivityController extends CommonController<MarketActivity> {
 
     /**
      * toQueryPage(跳转列表页)
-     *
-     * @param page     分页
+     * @param page  分页
      * @param modelMap Model
      * @return String 活动列表页地址
      * @Description: 请求查看活动列表
@@ -107,17 +113,7 @@ public class MarketActivityController extends CommonController<MarketActivity> {
 
         return "/market/marketactivity/list";
     }
-
-    @RequestMapping(value = "/toQueryPage.comp")
-    public String toQueryPageComp(HibernatePage<MarketActivity> page, ModelMap model) {
-        page.setHibernateOrderBy("modifiedTime");// 默认按照修改时间倒序排序
-        page.setHibernateOrder(HibernatePage.DESC);
-        page.setHibernatePageSize(12);
-        model.addAttribute("page", page);
-        initPageDic(model);
-        return "/market/marketactivity/listcomp";
-    }
-
+    
     /**
      * anscyQuery(异步加载数据列表)
      *
@@ -245,7 +241,7 @@ public class MarketActivityController extends CommonController<MarketActivity> {
     public String modify(MarketActivity activity, @ModelAttribute(Constant.VS_USER_ID) Long userId) {
 
         Integer type = activity.getFlowNode().getType();
-        if (type == NodeType.start.getValue()) {
+        if (type != NodeType.start.getValue()) {
             return new JsonDto("已开始审批流程，不能修改！").toString();
         }
 
@@ -505,6 +501,37 @@ public class MarketActivityController extends CommonController<MarketActivity> {
         DataShift dataShift = (DataShift) modelMap.get(Constant.VS_DATASHIFT);
         dataShift = dataShift.renameUserFieldName("bossHead");
         exportLimit(request, modelMap, response, dataShift);
+    }
+    
+    /************************************组件请求******************************************/
+    @RequestMapping(value = "/toSearchMarketActivityPage.docomp")
+    public String toQueryPageComp(HibernatePage<MarketActivity> page, ModelMap model) {
+        page.setHibernateOrderBy("modifiedTime");// 默认按照修改时间倒序排序
+        page.setHibernateOrder(HibernatePage.DESC);
+        page.setHibernatePageSize(12);
+        model.addAttribute("page", page);
+        initPageDic(model);
+        
+        return "/market/marketactivity/listcomp";
+    }
+    @ResponseBody
+    @RequestMapping(value = "/searchMarketActivity.docomp")
+    public String searchMarketActivity(HttpServletRequest request, 
+    		HibernatePage<MarketActivity> page, 
+    		ModelMap model) throws NoSuchFieldException {
+        /************获取查询条件**************/
+        Map<String, Object> searchParams = Servlets.getParametersStartingWith(request, "search_");
+        Search.clearBlankValue(searchParams);
+        DataShift dataShift = (DataShift) model.get(Constant.VS_DATASHIFT);
+
+        /************分页查询*****************/
+        marketActivityService.findPage(searchParams, dataShift, page);
+
+        /************json转换****************/
+        JsonDto json = new JsonDto();
+        json.setResult(page);
+
+        return json.toString();
     }
 
 }

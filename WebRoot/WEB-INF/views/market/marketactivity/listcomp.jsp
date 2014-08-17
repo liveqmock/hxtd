@@ -20,7 +20,7 @@
 <script type="text/javascript" src="${ctx}/static/js/js-util.common.js"></script>
 <script type="text/javascript">
 $(function(){
-	new Grid().init({ paginationSizeShow:false, paginationCountLimit:13 });
+	new Grid().init();
 	$(".list .module").live({
 		click: function(){
 			$(".module").removeAttr("style");
@@ -39,7 +39,7 @@ $(function(){
 <body>
 <div class="listcontainer">
 	<div class="margin0">
-		<form action="${ctx}/market/marketactivity/query.do" onsubmit="return false;">
+		<form action="${ctx}/market/marketactivity/searchMarketActivity.docomp" onsubmit="return false;">
     	<input type="hidden" name="organizationId" value="${orgId}"/>
 		<div>
 			<table class="w pr10 pl10">

@@ -8,9 +8,7 @@ import java.util.List;
 import java.util.Map;
 
 import javax.annotation.Resource;
-import javax.servlet.ServletContext;
 import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
 
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
@@ -29,7 +27,6 @@ import org.springside.modules.web.Servlets;
 
 import com.baihui.hxtd.soa.base.Constant;
 import com.baihui.hxtd.soa.base.orm.hibernate.HibernatePage;
-import com.baihui.hxtd.soa.base.utils.ImportExport;
 import com.baihui.hxtd.soa.base.utils.Search;
 import com.baihui.hxtd.soa.base.utils.mapper.HibernateAwareObjectMapper;
 import com.baihui.hxtd.soa.common.controller.CommonController;
@@ -112,20 +109,6 @@ public class CustomerController extends CommonController<Customer>{
 	 */
 	@RequestMapping("/toQueryPage.do")
 	public String toQueryPage(ModelMap  model) {
-		/*List<Dictionary> dict = dictionaryService.findChildren("040301");
-		StringBuffer sb = new StringBuffer("[");
-		for(Dictionary d:dict){
-			sb.append("{");
-			sb.append("id:"+d.getId()+",");
-			sb.append("name:'"+d.getKey()+"',");
-			sb.append("open:false");
-			sb.append("},");
-		}
-		sb.deleteCharAt(sb.length()-1); 
-		sb.append("]");*/
-		
-		/*model.addAttribute("dict",sb.toString());*/
-		
 		logger.info("CustomerController.toQueryPage跳转客户列表页");
 		HibernatePage<Customer> page=new HibernatePage<Customer>();
 		page.setHibernateOrder(HibernatePage.DESC);
@@ -285,24 +268,30 @@ public class CustomerController extends CommonController<Customer>{
 		}
 	}
 	
-	
-	/**
-     * toCustomerLstPage(跳转至客户组件列表界面)
-     * todo: lihua 2014-05-22
-     */
-    @RequestMapping(value = "/toQueryPage.comp")
-    public String toCustomerLstPage(HibernatePage<Customer> page,
-            HttpServletRequest request, Model model) throws NoSuchFieldException {
-        Map<String, Object> searchParams = Servlets.getParametersStartingWith(request, "search_");
-        Search.clearBlankValue(searchParams);
-        
-        if(page==null){
-        	page=new HibernatePage<Customer>(12);
-        }
-        //customerService.findPage(searchParams, page);
+    @RequestMapping(value = "/toSearchCustomerPage.docomp")
+    public String toCustomerLstPage(HibernatePage<Customer> page, Model model) {
+    	page.setHibernatePageSize(12);
         model.addAttribute("page", page);
+        
         return "/customer/customer/listcomp";
     }
+    @ResponseBody
+	@RequestMapping(value = "/searchCustomer.docomp")
+	public String searchCustomer(HttpServletRequest request, 
+			HibernatePage<Customer> page, 
+			ModelMap model) throws NoSuchFieldException{
+		Map<String, Object> searchParams = Servlets.getParametersStartingWith(request, "search_");
+		Search.clearBlankValue(searchParams);
+		
+		DataShift dataShift = (DataShift) model.get(Constant.VS_DATASHIFT);
+		page = customerService.findPage(searchParams, page, dataShift);
+		
+		JsonDto json = new JsonDto();
+		json.setResult(page);
+		
+		return json.toString();
+	}
+    
 
     /**
      * 获取所有数据字典类型

@@ -32,7 +32,7 @@
 
     <form action="${ctx}/financial/approve/query.do" onsubmit="return false;">
         <%--<input type="hidden" name="search_type" value="">--%>
-        <table class="fl mt5 w">
+        <table class="fl mt10 w">
             <tr>
                 <td class="f14" align="right" width="6%">所属模块：</td>
                 <td class="f14" align="left" width="16%">
@@ -123,7 +123,7 @@
                     <td><input type="checkbox" class="checkitem" value="{$T.row.id}"/></td>
                     <td>{$T.row.flowNode.flow.key}</td>
                     <td>{$T.row.module.desc}</td>
-                    <td>{$T.row.flowBusiness.code||$T.row.flowBusiness.name}</td>
+                    <td>{$T.row.flowBusiness.sketch}</td>
                     <td>{$T.row.flowBusiness.purchaseMoney||$T.row.flowBusiness.predictCost}</td>
                     <td>{$T.row.flowBusiness.createdTime}</td>
                     <td align="center">

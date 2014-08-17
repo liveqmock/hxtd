@@ -296,24 +296,35 @@ public class SupplierController extends CommonController<Supplier> {
 		
 		return "/project/supplier/viewcomp";
 	}
-	/**
-	  * toSupplierLstPage(跳转至供应商供应商列表组件页)
-	  * @Title: toSupplierLstPage
-	  * @Description: 请求供应商供应商列表组件页
-	  * @param request HTTP请求
-	  * @param page 分页设置
-	  * @param model 模型映射
-	  * @return String 供应商组件列表
-	  * @throws NoSuchFieldException
-	 */
-    @RequestMapping(value = "/toQueryPage.comp")
-    public String toSupplierLstPage(HttpServletRequest request,
-    		HibernatePage<Supplier> page,
-    		Model model) throws NoSuchFieldException {
+	
+    @RequestMapping(value = "/toSearchSupplierPage.docomp")
+    public String toSupplierLstPage(HibernatePage<Supplier> page,
+    		Model model) {
+    	page.setHibernatePageSize(12);
         model.addAttribute("page", page);
         
         return "/project/supplier/listcomp";
     }
+    @ResponseBody
+    @RequestMapping(value = "/searchSupplier.docomp")
+	public String searchSupplier(HibernatePage<Supplier> page, 
+			HttpServletRequest request, 
+			ModelMap model) throws NoSuchFieldException{
+		/***************查询条件*************/
+		Map<String, Object> searchParams = Servlets.getParametersStartingWith(request, "search_");
+		Search.clearBlankValue(searchParams);
+		Search.trimValue(searchParams);
+		
+		/**************数据级权限过滤***********/
+		DataShift dataShift = (DataShift) model.get(Constant.VS_DATASHIFT);		
+		page = supplierService.findPage(searchParams, dataShift, page);
+		
+		/*************JSON转换****************/
+		JsonDto json = new JsonDto();
+		json.setResult(page);
+		
+		return json.toString();
+	}
     
     /*************************************************获取字典*************************************************/
     /**

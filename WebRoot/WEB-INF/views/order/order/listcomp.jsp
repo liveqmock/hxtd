@@ -39,7 +39,7 @@ $(function(){
 <body>
 <div class="listcontainer">
 	<div class="margin0">
-		<form action="${ctx}/order/order/query.do?TYPE=${type}" onsubmit="return false;">
+		<form action="${ctx}/order/order/searchOrder.docomp?TYPE=${type}" onsubmit="return false;">
 		<div>
 			<table class="w pr10 pl10">
 				<tr>
@@ -59,19 +59,22 @@ $(function(){
 		</div>
     	<tags:paginationparams page="${page}"></tags:paginationparams>
 		</form>
-		<div style="height: 300px; overflow: hidden; overflow-y:auto;" class="grid">
+		<div style="height:370px;overflow:hidden;overflow-y:auto;" class="grid">
 			<ul class="id_tantable1 w list"></ul>
 			<div class="cb ml35 pt20 h40 pagination"></div>
 			<textarea id="template-tbody" class="template template-tbody">
 			    {#foreach $T.result as row}
 				<li>
 					<div class="module1" id="{$T.row.id}">
-						<table  class="w">
+						<table class="w">
 							<tr><td>{$T.row.code}</td></tr>
 							<tr><td>{$T.row.customer.name}</td></tr>
 							<tr style="display:none"><td>{$T.row.customer.id}</td></tr>
 							<tr><td>{$T.row.purchaseMoney}</td></tr>
 							<tr><td>{$T.row.product.name}</td></tr>
+							<tr style="display:none"><td>{$T.row.customer.openBank.id}</td></tr>
+							<tr style="display:none"><td>{$T.row.customer.bankName}</td></tr>
+							<tr style="display:none"><td>{$T.row.customer.bankAccount}</td></tr>
 						</table>
 					</div>
 				</li>

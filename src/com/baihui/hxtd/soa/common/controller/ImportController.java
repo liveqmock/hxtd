@@ -34,8 +34,10 @@ import com.baihui.hxtd.soa.base.Constant;
 import com.baihui.hxtd.soa.common.imports.ImportMessage;
 import com.baihui.hxtd.soa.common.imports.excel.ExcelParse;
 import com.baihui.hxtd.soa.common.service.ImportService;
+import com.baihui.hxtd.soa.system.entity.AuditLog;
 import com.baihui.hxtd.soa.system.entity.Organization;
 import com.baihui.hxtd.soa.system.entity.User;
+import com.baihui.hxtd.soa.util.EnumOperationType;
 import com.baihui.hxtd.soa.util.JsonDto;
 import com.baihui.hxtd.soa.util.PropertyManager;
 
@@ -158,8 +160,15 @@ public class ImportController {
         
         
         logger.info("导入数据到DB");
+        /**
+		 * 为导入添加审计日志
+		 */
+		/************ 新增 *****************************/
+		AuditLog auditLog = new AuditLog(EnumModule.valueOf(moduleName.toUpperCase()).getModuleName(), 
+				null, "导入数据"+ImportMessage.totalCount+"条", EnumOperationType.IMPORT.getOperationType(), sessionUser,ImportMessage.importResult());
+		//importService.import(att, user, auditLog);
         try {
-			importService.import2DB(entityList, checkWay, duplicateType, moduleName,sessionUser);
+			importService.import2DB(entityList, checkWay, duplicateType, moduleName,sessionUser,auditLog);
 		} catch (Exception e) {
 			e.printStackTrace();
 		} 
@@ -167,8 +176,8 @@ public class ImportController {
 		Date endTime = importService.getDBNow();
 		//导入记录时间
 		//int spendTime = (int) ((endTime.getTime() - beginTime.getTime()) /(1000*60));
-		int spendTime2 = (int) ((endTime.getTime() - beginTime.getTime()) %(1000*60));
-
+		int spendTime2 = (int) ((endTime.getTime() - beginTime.getTime()) /1000);
+		String st = (spendTime2/60>0?(spendTime2/60)+"分钟":(spendTime2%60)+"秒");
         logger.info("导入完成");
         //model.addFlashAttribute(ImportMessage.message, "导入成功");
         //获取导入的整体结果
@@ -181,7 +190,7 @@ public class ImportController {
         importResult += ImportMessage.databaseRepeatMessage("merge".equals(duplicateType) ? "合并":("jump".equals(duplicateType)?"跳过":("cover".equals(duplicateType)?"覆盖":"合并"))) + ";";
         //新增数据的记录数
         importResult += ImportMessage.databaseNewMessage()+";";
-        importResult += String.valueOf(spendTime2);
+        importResult += String.valueOf(st);
         
         /**
 		 * 初始化静态变量,导入完成后清空集合
@@ -194,6 +203,7 @@ public class ImportController {
 		ImportMessage.databaseNewRowNums = new ArrayList<Integer>();
 		ImportMessage.message = "";
        
+		
 		
         json = new JsonDto(importResult);
  		json.setSuccessFlag(true);

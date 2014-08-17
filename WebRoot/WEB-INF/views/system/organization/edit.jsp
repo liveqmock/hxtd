@@ -102,7 +102,7 @@
             <table class="cb id_table4 w95b bg_c_white margin0 mt10">
                 <tr>
                     <td align="right" width="15%" valign="top">备注：</td>
-                    <td align="left" width="85%">
+                    <td align="left" width="85%" valign="top">
                         <textarea name="remark" class="remarks_input1">${organization.remark}</textarea>
                     </td>
                 </tr>

@@ -27,14 +27,13 @@
 </head>
 <body>
 <div class="listcontainer">
-
     <form action="${ctx}/common/report/query.do" onsubmit="return false;">
-        <table class="fl mt5 w">
+        <table class="fl mt10 w">
             <tr>
-                <td class="f14" align="right" width="6%">报表名称：</td>
-                <td class="f14" align="left" width="16%"><input type="text" name="search_LIKE_name" value="${name}" class="text_input1"/></td>
-                <td class="f14" align="right" width="6%">所属模块：</td>
-                <td class="f14" align="left" width="16%">
+                <td class="f14 namewidth1" align="right">报表名称：</td>
+                <td class="f14 namewidth2" align="left"><input type="text" name="search_LIKE_name" value="${name}" class="text_input1"/></td>
+                <td class="f14 namewidth1" align="right">所属模块：</td>
+                <td class="f14 namewidth2" align="left">
                     <div class="pr">
                         <select name="search_EQ_module.id" class="select2 pr">
                             <option value="">全部</option>
@@ -44,8 +43,8 @@
                         </select>
                     </div>
                 </td>
-                <td class="f14" align="right" width="6%">图表类型：</td>
-                <td class="f14" align="left" width="16%">
+                <td class="f14 namewidth1" align="right">图表类型：</td>
+                <td class="f14 namewidth2" align="left">
                     <div class="pr">
                         <select name="search_EQ_chart.id" class="select2 pr">
                             <option value="">全部</option>
@@ -55,19 +54,18 @@
                         </select>
                     </div>
                 </td>
-                <td width="12%">
-                    <a href="javascript:void(0)" class="a_underline block_inline fr w_blue mt5 reset">清除</a>
-                    <a href="javascript:void(0)" class="block_inline c_white lh25 fr mr10 submit"><b class="allbtn_l block fl"></b><b class="allbtn_r pr13 block fl w_auto f14">查&nbsp;&nbsp;询</b></a>
+                <td width="namewidth3">
+                    <a href="javascript:;" class="a_underline block_inline fr w_blue mt5 mr20 reset">清除</a>
+                    <a href="javascript:;" class="block_inline c_white lh25 fr mr10 submit">
+                    	<b class="allbtn_l block fl"></b><b class="allbtn_r pr13 block fl w_auto f14">查&nbsp;&nbsp;询</b>
+                    </a>
                 </td>
-                <td class="f14" align="right" width="6%"></td>
-                <td class="f14" align="left" width="16%"></td>
             </tr>
         </table>
         <tags:paginationparams page="${page}"/>
     </form>
     <div class="cb"></div>
-
-    <div class="ml35 mr35 mt20 block cb cb">
+    <div class="ml35 mr35 mt10 block cb cb">
         <b class="b1"></b>
         <b class="b2"></b>
         <b class="b3"></b>

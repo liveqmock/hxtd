@@ -39,6 +39,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.math.BigDecimal;
 import java.util.Date;
 import java.util.GregorianCalendar;
 import java.util.List;
@@ -169,8 +170,20 @@ public class OrderController extends CommonController<Order> {
         modelMap.addAttribute("endFlowNode", NodeType.end.getValue());
         GregorianCalendar gc = new GregorianCalendar();
         gc.setTime(order.getOrderEndTime());
-        gc.add(3, -1);//结束时间减去一周
-        modelMap.addAttribute("flag", (gc.getTime().getTime() - new Date().getTime() > 0));
+        gc.add(2, -1);//结束时间减去一个月
+        boolean advaceFlag=false;
+        boolean normalFlag=false;
+        if(gc.getTime().getTime() - new Date().getTime() > 0){
+        	advaceFlag=true;
+        }else{
+        	normalFlag=true;
+        }
+        //财务状态：已打款
+        boolean payStatus=order.getPayStatus()!=null&&order.getPayStatus().getValue().equals(DictionaryConstant.ORDER_PAY_2_HXTD_STATUS_ALL);
+        //订单状态：审核通过
+        boolean orderStatus=order.getOrderStatus()!=null&&order.getOrderStatus().getValue().equals(DictionaryConstant.ORDER_STATUS_NODE_FINIAL);
+        modelMap.addAttribute("advaceFlag",advaceFlag && payStatus&& orderStatus);
+        modelMap.addAttribute("normalFlag",normalFlag && payStatus&& orderStatus);
         return "/order/order/view";
     }
 
@@ -218,10 +231,11 @@ public class OrderController extends CommonController<Order> {
      * 赎回组件
      */
     @RequestMapping(value = "/redemption.comp")
-    public String redemptionComp(@RequestParam(required = false) Long id, ModelMap modelMap) {
+    public String redemptionComp(@RequestParam(required = false) Long id, ModelMap modelMap, String type) {
         logger.info("OrderController.view查询组件");
         Order order = orderService.get(id);
         modelMap.addAttribute("order", order);
+        modelMap.addAttribute("type", type);
         return "/order/order/redemption";
     }
 
@@ -230,22 +244,28 @@ public class OrderController extends CommonController<Order> {
      */
     @ResponseBody
     @RequestMapping(value = "/redemption.do")
-    public String advanceRedemptionOrder(@RequestParam(required = false) Long id, ModelMap modelMap) {
+    public String advanceRedemptionOrder(@RequestParam(required = false) Long id, ModelMap modelMap,String type, BigDecimal fund) {
         logger.info("OrderController.view查询组件");
         User user = (User) modelMap.get(Constant.VS_USER);
         AuditLog auditLog = new AuditLog(EnumModule.ORDER.getModuleName(),
                 id, orderService.get(id).getCode(), EnumOperationType.MODIFY.getOperationType(), user);
-        auditLog.setRemark("提前赎回生成付款单");
-        orderService.advanceRedemptionOrder(id, user, auditLog);
+        
+        if("normal".equals(type)){
+        	auditLog.setRemark("到期赎回生成付款单");
+        	orderService.normalRedemptionOrder(id, user,fund, auditLog);
+        }else{
+        	auditLog.setRemark("提前赎回生成付款单");
+        	orderService.advanceRedemptionOrder(id, user,fund, auditLog);
+        }
         return JsonDto.modify(id).toString();
     }
-
+    
     @ResponseBody
     @RequestMapping(value = "/modify.do", produces = "text/text;charset=UTF-8")
     public String modify(Order order, HttpServletRequest request, ModelMap modelMap) {
 
         Integer type = order.getFlowNode().getType();
-        if (type == NodeType.start.getValue()) {
+        if (type != NodeType.start.getValue()) {
             return new JsonDto("已开始审批流程，不能修改！").toString();
         }
 
@@ -343,7 +363,6 @@ public class OrderController extends CommonController<Order> {
 
     /**
      * add(保存：新建)
-     *
      * @param order
      * @param request
      * @param type
@@ -364,7 +383,6 @@ public class OrderController extends CommonController<Order> {
         JsonDto json = JsonDto.add(order.getId());
         return json.toString();
     }
-
 
     /**
      * 导出分页数据
@@ -388,59 +406,7 @@ public class OrderController extends CommonController<Order> {
         ServletContext servletContext = request.getSession().getServletContext();
         ImportExport.exportExcel(response, servletContext, "order", orders).write(response.getOutputStream());
     }
-
-    /**
-     * toCustomerLstPage(跳转至订单组件列表界面)
-     *
-     * @author huizijing
-     */
-    @RequestMapping(value = "/toQueryPage.comp")
-    public String toCustomerLstPage(HibernatePage<Order> page, String type,
-                                    HttpServletRequest request, Model model) throws NoSuchFieldException {
-        Map<String, Object> searchParams = Servlets.getParametersStartingWith(request, "search_");
-        Search.clearBlankValue(searchParams);
-
-        page.setHibernatePageSize(12);// 设置每页显示12个
-        //如果是合同页面，要过滤掉已有合同的订单，如果是应付款页面不用过滤
-        model.addAttribute("type", type);
-        model.addAttribute("page", page);
-        return "/order/order/listcomp";
-    }
-
-    /**
-     * 查询没有被合同关联的订单
-     *
-     * @param searchParams
-     * @param dataShift
-     * @param page
-     * @return
-     * @throws NoSuchFieldException
-     * @throws IOException
-     * @throws JsonMappingException
-     * @throws JsonGenerationException
-     * @author huizijing
-     */
-    @ResponseBody
-    @RequestMapping(value = "/query.do", params = "TYPE=relation")
-    public void queryList(HibernatePage<Order> page,
-                          HttpServletRequest request, ModelMap model, PrintWriter out) throws NoSuchFieldException, JsonGenerationException, JsonMappingException, IOException {
-
-        logger.info("OrderController.query查询订单列表");
-        Map<String, Object> searchParams = Servlets.getParametersStartingWith(
-                request, "search_");
-        Search.clearBlankValue(searchParams);
-        Search.toRangeDate(searchParams, "modifiedTime");
-        Search.toRangeDate(searchParams, "createdTime");
-        logger.info("添加默认的查询条件");
-        DataShift dataShift = (DataShift) model.get(Constant.VS_DATASHIFT);
-        page = orderService.findListPage(searchParams, dataShift, page);
-        JsonDto json = new JsonDto();
-        json.setResult(page);
-        page.setHibernateOrderBy("modifiedTime");
-        page.setHibernateOrder(HibernatePage.DESC);
-        HibernateAwareObjectMapper.DEFAULT.writeValue(out, json);
-    }
-
+    
 
     /** 跳转启动审批页面 */
     @RequestMapping("/toStartApprovePage.do")
@@ -484,8 +450,13 @@ public class OrderController extends CommonController<Order> {
         executeRecord.setApprover(user);
         executeRecord.setCreator(user);
         executeRecord.setModifier(user);
-
-        flowInstanceService.start(flowModel);
+        if(flowModel.getReserveExecuteRecoreds().get(0).getApprover()!=null){
+        	flowInstanceService.start(flowModel);
+        }else{
+        	JsonDto jsonDto = new JsonDto(executeRecord.getRecordId(), "请选择审批人！");
+        	jsonDto.setSuccessFlag(false);
+        	return jsonDto.toString();
+        }
         // 修改订单状态为审批中
         orderService.modifyOrderNoteing(flowModel.getExecuteRecord().getRecordId());
         JsonDto jsonDto = new JsonDto(executeRecord.getRecordId(), "启动审批成功！");
@@ -572,4 +543,72 @@ public class OrderController extends CommonController<Order> {
         return jsonDto.toString();
     }
 
+    
+    @RequestMapping(value = "/toSearchOrderPage.docomp")
+    public String toCustomerLstPage(HibernatePage<Order> page, String type, Model model){
+        page.setHibernatePageSize(12);// 设置每页显示12个
+        model.addAttribute("type", type);//如果是合同页面，要过滤掉已有合同的订单，如果是应付款页面不用过滤
+        model.addAttribute("page", page);
+        
+        return "/order/order/listcomp";
+    }
+    @ResponseBody
+    @RequestMapping(value = "/searchOrder.docomp")
+    public String query(HibernatePage<Order> page, HttpServletRequest request, ModelMap model) throws NoSuchFieldException{
+        Map<String, Object> searchParams = Servlets.getParametersStartingWith(request, "search_");
+        Search.clearBlankValue(searchParams);
+        Search.trimValue(searchParams);
+        
+        DataShift dataShift = (DataShift) model.get(Constant.VS_DATASHIFT);
+        page = orderService.findPage(searchParams, dataShift, page);
+
+        JsonDto json = new JsonDto();
+        json.setResult(page);
+        
+        return json.toString();
+    }
+    @ResponseBody
+    @RequestMapping(value = "/searchOrder.docomp", params = "TYPE=relation")
+    public String queryList(HibernatePage<Order> page,HttpServletRequest request, ModelMap model) throws NoSuchFieldException {
+
+        logger.info("OrderController.query查询订单列表");
+        Map<String, Object> searchParams = Servlets.getParametersStartingWith(
+                request, "search_");
+        Search.clearBlankValue(searchParams);
+        logger.info("添加默认的查询条件");
+        DataShift dataShift = (DataShift) model.get(Constant.VS_DATASHIFT);
+        page = orderService.findListPage(searchParams, dataShift, page);
+        JsonDto json = new JsonDto();
+        json.setResult(page);
+        page.setHibernateOrderBy("modifiedTime");
+        page.setHibernateOrder(HibernatePage.DESC);
+        return  json.toString();
+    }
+    
+	/**
+	 * 
+	  * toInvalid订单作废
+	  * @Title: toInvalid
+	  * @Description: TODO
+	  * @param @param id
+	  * @param @return    参数类型
+	  * @return String    返回类型
+	  * @throws
+	 */
+    @ResponseBody
+    @RequestMapping(value = "/toInvalid.do")
+    public String toInvalid(Long id, ModelMap modelMap, String type){
+    	User user = (User) modelMap.get(Constant.VS_USER);
+    	 if("company".equals(type)){
+    		 AuditLog auditLog = new AuditLog(EnumModule.ORDER.getModuleName(),
+    				 id, orderService.get(id).getCode(), EnumOperationType.MODIFY.getOperationType(), user,"订单公司作废");
+    		 orderService.modifyInvalidOrderbyOwner(id,auditLog);
+    	 }else{
+    		 AuditLog auditLog = new AuditLog(EnumModule.ORDER.getModuleName(),
+    				 id, orderService.get(id).getCode(), EnumOperationType.MODIFY.getOperationType(), user,"订单客户作废");
+    		 orderService.modifyInvalidOrderbyCustomer(id, auditLog);
+    	 }
+    	JsonDto json = new JsonDto();
+    	return json.toString();
+    }
 }

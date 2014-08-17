@@ -180,6 +180,11 @@ public class MarketActivity implements Serializable, IdFlowable {
         return flowNode;
     }
 
+    @Override
+    public String getSketch() {
+        return "市场活动名称：" + getName();
+    }
+
     public void setFlowNode(FlowNode flowNode) {
         this.flowNode = flowNode;
     }

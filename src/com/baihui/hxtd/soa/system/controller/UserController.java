@@ -586,12 +586,14 @@ public class UserController extends CommonController<User> {
             }));
 
             for (User user : org.getOwners()) {//用户
+            	if(!user.getIsDeleted()){
                 sb.append(String.format("{id:%s, name:\"%s\", pId:-%s, type:\"%s\"},", new Object[]{
                         user.getId(),
                         user.getRealName(),
                         org.getId(),
                         "user",
                 }));
+            	}
             }
             oldOrgId = org.getId();
         }

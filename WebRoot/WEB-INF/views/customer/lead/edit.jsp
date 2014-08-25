@@ -120,14 +120,14 @@ function clearInputVal(obj){ //清除
 					<span class="w_red">*&nbsp;</span>线索名：
 				</td>
 				<td align="left">
-					<input type="text" name="name" value="${lead.name }"
+					<input type="text" maxlength="30" name="name" value="${lead.name }"
 						class="text_input3 required" />
 				</td>
 				<td align="right" width="15%">
 					<span class="w_red">*&nbsp;</span>所有者：
 				</td>
 				<td align="left">
-					<input type="text" id="txt_owner" value="${lead.owner.realName}" onclick="searchData('owner');" 
+					<input type="text" maxlength="30" id="txt_owner" value="${lead.owner.realName}" onclick="searchData('owner');" 
 						class="text_input3 cp required" readonly/>
 					<input type="hidden" id="hide_owner_id" name="owner.id" value="${lead.owner.id}"/>
 					<i class="s_inquiry globle_img block_inline ml5 vm cp" title="搜索所有者" onclick="searchData('owner');"></i>
@@ -136,19 +136,19 @@ function clearInputVal(obj){ //清除
 			</tr>
 			<tr>
 				<td align="right">电话：</td>
-				<td align="left"><input type="text" name="phone" value="${lead.phone}" class="text_input3 isPhone"/></td>
+				<td align="left"><input type="text" maxlength="30" name="phone" value="${lead.phone}" class="text_input3 isPhone"/></td>
 				<td align="right">传真：</td>
-				<td align="left"><input type="text" name="fax" value="${lead.fax}" class="text_input3 isTel"/></td>
+				<td align="left"><input type="text" maxlength="30" name="fax" value="${lead.fax}" class="text_input3 isTel"/></td>
 			</tr>
 			<tr>
 				<td align="right">手机：</td>
-				<td align="left"><input type="text" name="mobile" value="${lead.mobile}" class="text_input3 isMobile"/></td>
+				<td align="left"><input type="text" maxlength="30" name="mobile" value="${lead.mobile}" class="text_input3 isMobile"/></td>
 				<td align="right">邮箱：</td>
-				<td align="left"><input type="text" name="email" value="${lead.email}" class="text_input3 email"/></td>
+				<td align="left"><input type="text" maxlength="30" name="email" value="${lead.email}" class="text_input3 email"/></td>
 			</tr>
 			<tr>
 				<td align="right">公司名：</td>
-				<td align="left"><input type="text" name="company" value="${lead.company}" class="text_input3"/></td>
+				<td align="left"><input type="text" maxlength="30" name="company" value="${lead.company}" class="text_input3"/></td>
 				<td align="right"><span class="w_red">*&nbsp;</span>卡类型：</td>
 				<td align="left">
 					<select name="cardType.id" class="select1 pr requiredSelect">
@@ -174,11 +174,11 @@ function clearInputVal(obj){ //清除
 					</select>
 				</td>
 				<td align="right">卡号码：</td>
-				<td align="left"><input type="text" name="cardNum" value="${lead.cardNum}" class="text_input3 {maxlength:22}"/></td>
+				<td align="left"><input type="text" maxlength="30" name="cardNum" value="${lead.cardNum}" class="text_input3 {maxlength:22}"/></td>
 			</tr>
 			<tr>
 				<td align="right">部门：</td>
-				<td align="left"><input type="text" name="department" value="${lead.department}" class="text_input3"/></td>
+				<td align="left"><input type="text" maxlength="30" name="department" value="${lead.department}" class="text_input3"/></td>
 				<td align="right"><span class="w_red">*&nbsp;</span>线索状态：</td>
 				<td align="left">
 					<select name="status.id" class="select1 pr requiredSelect">
@@ -193,7 +193,7 @@ function clearInputVal(obj){ //清除
 			</tr>
 			<tr>
 				<td align="right">职位：</td>
-				<td align="left"><input type="text" name="position" value="${lead.position}" class="text_input3"/></td>
+				<td align="left"><input type="text" maxlength="30" name="position" value="${lead.position}" class="text_input3"/></td>
 				<td align="right"><span class="w_red">*&nbsp;</span>线索来源：</td>
 				<td align="left">
 					<select name="source.id" id="source" class="select1 pr required">
@@ -208,10 +208,10 @@ function clearInputVal(obj){ //清除
 			</tr>
 			<tr>
 				<td align="right">邮编：</td>
-				<td align="left"><input type="text" name="postCode" value="${lead.postCode}" class="text_input3 isZipCode"/></td>
+				<td align="left"><input type="text" maxlength="30" name="postCode" value="${lead.postCode}" class="text_input3 isZipCode"/></td>
 				<td align="right" class="marketActivity"><span class="w_red">*&nbsp;</span>市场活动</td>
 				<td align="left" class="marketActivity">
-					<input type="text" name="txt_m" id="txt_marketActivity" value="${lead.marketActivity.name}" class="text_input3 cp required" 
+					<input type="text" maxlength="30" name="txt_m" id="txt_marketActivity" value="${lead.marketActivity.name}" class="text_input3 cp required" 
 						onclick="searchData('marketActivity');" readonly/>
 					<input type="hidden" id="hide_marketActivity_id" name="marketActivity.id" value="${lead.marketActivity.id }"/>
 					<i class="s_inquiry globle_img block_inline ml5 vm cp" title="搜索市场活动" onclick="searchData('marketActivity');"></i>
@@ -248,7 +248,7 @@ function clearInputVal(obj){ //清除
 					详细地址：
 				</td>
 				<td align="left">
-					<input name="address" type="text" value="${lead.address}"
+					<input name="address" type="text" maxlength="200" value="${lead.address}"
 						class="text_input3" />
 				</td>
 			</tr>
@@ -262,7 +262,7 @@ function clearInputVal(obj){ //清除
 					备注：
 				</td>
 				<td align="left" width="85%" valign="top">
-					<textarea name="remark" class="remarks_input1">${lead.remark}</textarea>
+					<textarea maxlength="500" name="remark" class="remarks_input1">${lead.remark}</textarea>
 				</td>
 			</tr>
 

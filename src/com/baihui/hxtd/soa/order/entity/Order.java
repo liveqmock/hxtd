@@ -11,6 +11,10 @@ import com.baihui.hxtd.soa.system.entity.User;
 import com.fasterxml.jackson.annotation.JsonFormat;
 
 import javax.persistence.*;
+
+import org.hibernate.annotations.NotFound;
+import org.hibernate.annotations.NotFoundAction;
+
 import java.math.BigDecimal;
 import java.util.Date;
 
@@ -48,24 +52,28 @@ public class Order implements IdFlowable {
     @FieldInfo(desc = "产品")
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "PRODUCT_ID")
+    @NotFound(action = NotFoundAction.IGNORE)
     private Product product;
 
     /** 客户 */
     @FieldInfo(desc = "客户")
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "CUSTOMER_ID")
+    @NotFound(action = NotFoundAction.IGNORE)
     private Customer customer;
 
     /** 流程环节 */
     @FieldInfo(desc = "流程环节")
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "STATUS", updatable = false)
+    @NotFound(action = NotFoundAction.IGNORE)
     private FlowNode flowNode;
 
     /** 投资方式 */
     @FieldInfo(desc = "投资方式", dictionary = DictionaryConstant.ORDER_INVESTMENTWAY)
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "INVESTMENT_WAY")
+    @NotFound(action = NotFoundAction.IGNORE)
     private Dictionary investmentWay;
 
     /** 购买金额 */
@@ -76,12 +84,12 @@ public class Order implements IdFlowable {
     /** 收益率 */
     @FieldInfo(desc = "收益率")
     @Column(name = "EARNING_RATE")
-    private Float earningRate;
+    private BigDecimal earningRate;
 
     /** 提前赎回率 */
     @FieldInfo(desc = "提前赎回率")
     @Column(name = "ADVANCE_REDEEM_RATE")
-    private Float arr;
+    private BigDecimal arr;
 
     /** 赎回公式 */
     @FieldInfo(desc = "赎回公式")
@@ -92,18 +100,21 @@ public class Order implements IdFlowable {
     @FieldInfo(desc = "所有者")
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "OWNER")
+    @NotFound(action = NotFoundAction.IGNORE)
     private User owner;
 
     /** 销售主管 */
     @FieldInfo(desc = "销售主管")
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "SALES_MANAGER_ID")
+    @NotFound(action = NotFoundAction.IGNORE)
     private User salesManager;
 
     /** 销售总监 */
     @FieldInfo(desc = "销售总监")
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "SALES_MAJORDOMO_ID")
+    @NotFound(action = NotFoundAction.IGNORE)
     private User salesMajordomo;
 
     /** 生效时间 */
@@ -122,6 +133,7 @@ public class Order implements IdFlowable {
     @FieldInfo(desc = "订单状态")
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "ORDER_STATUS")
+    @NotFound(action = NotFoundAction.IGNORE)
     private Dictionary orderStatus;
 
     /** 备注 */
@@ -133,6 +145,7 @@ public class Order implements IdFlowable {
     @FieldInfo(desc = "创建者")
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "CREATOR_ID", updatable = false)
+    @NotFound(action = NotFoundAction.IGNORE)
     private User creator;
 
     /** 创建时间 */
@@ -145,6 +158,7 @@ public class Order implements IdFlowable {
     @FieldInfo(desc = "修改者")
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "MODIFIER_ID")
+    @NotFound(action = NotFoundAction.IGNORE)
     private User modifier;
 
     /** 最终修改时间 */
@@ -162,6 +176,7 @@ public class Order implements IdFlowable {
     @FieldInfo(desc = "财务状态", dictionary = DictionaryConstant.ORDER_PAYSTATUS)
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "PAY_STATUS")
+    @NotFound(action = NotFoundAction.IGNORE)
     private Dictionary payStatus;
 
     public Long getId() {
@@ -225,19 +240,19 @@ public class Order implements IdFlowable {
         this.purchaseMoney = purchaseMoney;
     }
 
-    public Float getEarningRate() {
+    public BigDecimal getEarningRate() {
         return earningRate;
     }
 
-    public void setEarningRate(Float earningRate) {
+    public void setEarningRate(BigDecimal earningRate) {
         this.earningRate = earningRate;
     }
 
-    public Float getArr() {
+    public BigDecimal getArr() {
         return arr;
     }
 
-    public void setArr(Float arr) {
+    public void setArr(BigDecimal arr) {
         this.arr = arr;
     }
 

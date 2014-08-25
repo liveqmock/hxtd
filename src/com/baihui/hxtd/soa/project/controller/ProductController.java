@@ -109,6 +109,7 @@ public class ProductController extends CommonController<Product> {
 		/************获取查询条件**************/
 		Map<String, Object> searchParams = Servlets.getParametersStartingWith(request, "search_");
         Search.clearBlankValue(searchParams);
+        Search.trimValue(searchParams);
         
         //DataShift dataShift = (DataShift) model.get(Constant.VS_DATASHIFT);
         /************分页查询*****************/
@@ -296,6 +297,7 @@ public class ProductController extends CommonController<Product> {
 		/************获取查询条件**************/
 		Map<String, Object> searchParams = Servlets.getParametersStartingWith(request, "search_");
         Search.clearBlankValue(searchParams);
+        Search.trimValue(searchParams);
         
         /************分页查询*****************/
         productService.findPage(searchParams, page);

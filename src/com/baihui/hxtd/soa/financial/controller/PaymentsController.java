@@ -90,6 +90,7 @@ public class PaymentsController extends CommonController<Payments>{
 		Map<String, Object> searchParams = Servlets.getParametersStartingWith(
 				request, "search_");
 		Search.clearBlankValue(searchParams);
+        Search.trimValue(searchParams);
 		Search.toRangeDate(searchParams, "modifiedTime");
 		Search.toRangeDate(searchParams, "createdTime");
 		logger.info("添加默认的查询条件");

@@ -5,7 +5,20 @@
 --%>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
-
+<script type="text/javascript" src="${ctx}/static/js/jquery.metadata.js"></script>
+<script type="text/javascript" src="${ctx}/static/js/jquery.validate.js"></script>
+<script type="text/javascript" src="${ctx}/static/js/validator.js"></script>
+<script type="text/javascript">
+$(function(){
+	$(".flow").each(function(i,val){
+		var $this=$(this);
+		if(i==0&&$this.val()==null){
+			$this.addClass("requiredSelect");
+			$this.append("<option>&nbsp;</option>");
+		}
+	});
+})
+</script>
 <div class="flow-dialog dialog-start hidden" title="启动流程">
     <h1 class="w90b margin0 fbnone f12 pt20 block">选择各个流程环节的审批人：</h1>
     <b class="w90b f_line2 block margin0"></b>
@@ -30,7 +43,7 @@
                     <td style="text-align: left">${flowNode.name}<input type="hidden" name="${name}.flowNode.id" value="${flowNode.id}"></td>
                     <td>
                         <c:if test="${flowNode.type!=endNodeType}">
-                            <select name="${name}.approver.id" class="select3 pr">
+                            <select id="" name="${name}.approver.id" class="select3 pr flow">
                                 <c:forEach items="${flowNode.approvers}" var="approver">
                                     <option value="${approver.id}" ${approver.id==flowNode.approver.id?"selected":""}>${approver.realName}</option>
                                 </c:forEach>

@@ -141,7 +141,7 @@ function searchData(action){ // 搜索
 			</tr>
 			<tr>
 				<td align="right" width="15%"><span class="w_red">*&nbsp;</span>手机：</td>
-				<td align="left"><input maxlength="30" class="text_input3 required isMobile" name="mobile" type="text" value="${customer.mobile}"/></td>
+				<td align="left"><input maxlength="30" class="text_input3 required isMobile" maxlength="30" name="mobile" type="text" maxlength="30" value="${customer.mobile}"/></td>
 				<td align="right" width="15%"><span class="w_red">*&nbsp;</span>证件类型：</td>
 				<td align="left">
 					<select name="cardType.id" class="select1 pr requiredSelect ">
@@ -158,9 +158,9 @@ function searchData(action){ // 搜索
 			</tr>
 			<tr>
 				<td align="right" width="15%"><span class="w_red">*&nbsp;</span>公司：</td>
-				<td align="left"><input maxlength="30"  class="text_input3 required" name="company" type="text" value="${customer.company}"/></td>
+				<td align="left"><input maxlength="30"  class="text_input3 required" name="company" type="text" maxlength="30" maxlength="30" value="${customer.company}"/></td>
 				<td align="right" width="15%"><span class="w_red">*&nbsp;</span>证件号码：</td>
-				<td align="left"><input class="text_input3 required" name="cardNum" type="text" value="${customer.cardNum}"/></td>
+				<td align="left"><input class="text_input3 required" name="cardNum" type="text" maxlength="30" value="${customer.cardNum}"/></td>
 			</tr>
 			<tr>
 				<td align="right" width="15%">公司性质：</td>
@@ -192,21 +192,21 @@ function searchData(action){ // 搜索
 			</tr>
 			<tr>
 				<td align="right" width="15%">所在部门：</td>
-				<td align="left"><input maxlength="30"  class="text_input3" name="dept" type="text" value="${customer.dept}"/></td>
+				<td align="left"><input maxlength="30"  class="text_input3" name="dept" type="text" maxlength="30" value="${customer.dept}"/></td>
 				<td align="right" width="15%">职务名称：</td>
-				<td align="left"><input maxlength="30"  class="text_input3" name="job" type="text" value="${customer.job}"/></td>
+				<td align="left"><input maxlength="30"  class="text_input3" name="job" type="text" maxlength="30" value="${customer.job}"/></td>
 			</tr>
 			<tr>
 				<td align="right" width="15%">出资方式：</td>
-				<td align="left"><input maxlength="30" name="contributionType" type="text" value="${customer.contributionType}" class="text_input3"/></td>
+				<td align="left"><input maxlength="30" name="contributionType" type="text" maxlength="30" value="${customer.contributionType}" class="text_input3"/></td>
 				<td align="right" width="15%">邮箱：</td>
-				<td align="left"><input name="email" type="text" value="${customer.email}" class="text_input3 email"/></td>
+				<td align="left"><input name="email" type="text" maxlength="30" value="${customer.email}" class="text_input3 email"/></td>
 			</tr>
 			<tr>
 				<td align="right" width="15%">出资规模：</td>
-				<td align="left"><input maxlength="30" class="text_input3" name="contributionScale" type="text" value="${customer.contributionScale}"/></td>
+				<td align="left"><input maxlength="30" class="text_input3" name="contributionScale" type="text" maxlength="30" value="${customer.contributionScale}"/></td>
 				<td align="right" width="15%">传真：</td>
-				<td align="left"><input class="text_input3 isTel" name="fax" type="text" value="${customer.fax}"/></td>
+				<td align="left"><input class="text_input3 isTel" name="fax" type="text" maxlength="30" value="${customer.fax}"/></td>
 			</tr>
 			<tr>
 				<td align="right" width="15%"><span class="w_red">*&nbsp;</span>理财经理：</td>
@@ -289,11 +289,11 @@ function searchData(action){ // 搜索
 				<td align="right">区县：</td>
 				<td align="left"><select id="county" name="county.id" class="select1"></select></td>
 				<td align="right">详细地址：</td>
-				<td align="left"><input maxlength="30"  name="address" type="text" value="${customer.address}" class="text_input3"/></td>
+				<td align="left"><input maxlength="200"  name="address" type="text" value="${customer.address}" class="text_input3"/></td>
 			</tr>
 			<tr>
 				<td align="right" width="15%">家庭地址：</td>
-				<td align="left"><input maxlength="30"  name="familyAddr" type="text" value="${customer.familyAddr}" class="text_input3"/></td>
+				<td align="left"><input maxlength="200"  name="familyAddr" type="text" value="${customer.familyAddr}" class="text_input3"/></td>
 				<td align="right"></td>
 				<td align="left"></td>
 			</tr>
@@ -302,7 +302,7 @@ function searchData(action){ // 搜索
 		<table class="cb id_table4 w95b bg_c_white margin0 mt10">
 			<tr>
 				<td align="right" width="15%" valign="top">备注：</td>
-				<td align="left" width="85%" valign="top"><textarea name="remark" class="remarks_input1" style="resize: none;">${customer.remark}</textarea></td>
+				<td align="left" width="85%" valign="top"><textarea maxlength="500" name="remark" class="remarks_input1" style="resize: none;">${customer.remark}</textarea></td>
 			</tr>
 		</table>
 		<div class=" h40"></div>

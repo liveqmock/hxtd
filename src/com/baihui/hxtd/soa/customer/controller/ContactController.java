@@ -100,6 +100,7 @@ public class ContactController extends CommonController<Contact> {
 		/************获取查询条件**************/
 		Map<String, Object> searchParams = Servlets.getParametersStartingWith(request, "search_");
         Search.clearBlankValue(searchParams);
+        Search.trimValue(searchParams);
         
         DataShift dataShift = (DataShift) model.get(Constant.VS_DATASHIFT);
         
@@ -274,6 +275,7 @@ public class ContactController extends CommonController<Contact> {
 			ModelMap modelMap) throws NoSuchFieldException, IOException{
 		Map<String, Object> searchParams = Servlets.getParametersStartingWith(request, "search_");
 		Search.clearBlankValue(searchParams);
+        Search.trimValue(searchParams);
        
 		DataShift dataShift = (DataShift) modelMap.get(Constant.VS_DATASHIFT);
 		List<Contact> contactLst = contactService.export(searchParams, dataShift);

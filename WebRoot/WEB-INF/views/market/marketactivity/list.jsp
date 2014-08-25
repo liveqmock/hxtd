@@ -24,7 +24,7 @@ $(function () {
         <table class="fl mt10 w">
             <tr>
                 <td class="f14 namewidth1" align="right">活动名称：</td>
-                <td class="f14 namewidth2" align="left"><input type="text" class="text_input1" name="search_LIKE_name"/></td>
+                <td class="f14 namewidth2" align="left"><input type="text" class="text_input1" name="search_LIKE_name" maxlength="30"/></td>
                 <td class="f14 namewidth1" align="right">活动类型：</td>
                 <td class="f14 namewidth2" align="left" width="16%">
                     <select name="search_EQ_typeDic.id" class="select2">
@@ -46,32 +46,31 @@ $(function () {
                 <td width="namewidth3">
                     <a href="javascript:;" class="c_222 block cp fr ml10 packup globle_img mt8 mr20 more" title="展开"></a>
                     <a href="javascript:;" class="a_underline block_inline fr w_blue mt5 reset">清除</a>
-                    <a href="javascript:;" class="block_inline c_white lh25 fr mr10 submit"><b class="allbtn_l block fl"></b><b class="allbtn_r pr13 block fl w_auto f14">查&nbsp;&nbsp;询</b></a>
+                    <a href="javascript:;" class="block_inline c_white lh25 fr mr10 submit">
+                    	<b class="allbtn_l block fl"></b><b class="allbtn_r pr13 block fl w_auto f14">查&nbsp;&nbsp;询</b>
+                    </a>
                 </td>
             </tr>
             <tr class="more-content">
                 <td class="f14 namewidth1" align="right">举办时间：</td>
                 <td class="f14 namewidth2" align="left" width="16%">
                     <div class="vm">
-                        <input class="text_input2 input_close globle_img untime" name="search_GTE_beginDate"
-                               type="text" readonly/>-<input class="text_input2 input_close globle_img untime" name="search_LTE_endDate"
-                                                             type="text" readonly/>
+                        <input name="search_GTE_beginDate" type="text" class="text_input2 input_close globle_img untime" readonly/>-<input 
+                        	type="text" name="search_LTE_endDate" class="text_input2 input_close globle_img untime" readonly/>
                     </div>
                 </td>
                 <td class="f14 namewidth1" align="right">创建时间：</td>
                 <td class="f14 namewidth2" align="left">
                     <div class="vm">
-                        <input class="text_input2 input_close globle_img time" name="search_GTE_createdTime"
-                               type="text" readonly/>-<input class="text_input2 input_close globle_img time" name="search_LTE_createdTime"
-                                                             type="text" readonly/>
+                        <input type="text"  name="search_GTE_createdTime" class="text_input2 input_close globle_img time" readonly/>-<input 
+                        	type="text" name="search_LTE_createdTime" class="text_input2 input_close globle_img time" readonly/>
                     </div>
                 </td>
                 <td class="f14 namewidth1" align="right">修改时间：</td>
                 <td class="namewidth2" align="left">
                     <div class="vm">
-                        <input class="text_input2 input_close globle_img time" name="search_GTE_modifiedTime"
-                               type="text" readonly/>-<input class="text_input2 input_close globle_img time" name="search_LTE_modifiedTime"
-                                                             type="text" readonly/>
+                        <input type="text" name="search_GTE_modifiedTime" class="text_input2 input_close globle_img time" readonly/>-<input 
+                        	type="text" name="search_LTE_modifiedTime" class="text_input2 input_close globle_img time" readonly/>
                     </div>
                 </td>
                 <td></td>

@@ -247,7 +247,7 @@ public class SupplierController extends CommonController<Supplier> {
 		if(supplierService.delete(id, auditLogArr)){
 			json = JsonDto.delete(id);
 		} else{
-			json.setMessage("被删除数据存在关联项目或联系人，无法删除!");
+			json = new JsonDto("被删除数据存在关联项目或联系人，无法删除!");
 		}
 		
 		return json.toString();
@@ -266,6 +266,7 @@ public class SupplierController extends CommonController<Supplier> {
         logger.info("解析页面查询条件");
         Map<String, Object> searchParams = Servlets.getParametersStartingWith(request, "search_");
         Search.clearBlankValue(searchParams);
+        Search.trimValue(searchParams);
         Search.decodeValue(searchParams);
         Search.toRangeDate(searchParams, "createdTime");
         Search.toRangeDate(searchParams, "modifiedTime");

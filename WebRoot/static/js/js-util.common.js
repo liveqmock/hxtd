@@ -247,9 +247,11 @@ Grid.prototype = {
                 var values = [];
                 ids.each(function () {values.push(this.value);});
                 _this.disableButton($this);
-                RcmsAjax.ajax($this.attr("uri"), function () {
+                RcmsAjax.ajax($this.attr("uri"), function (result) {
                     _this.options.onDelete.call(_this, (values));
-                    setTimeout(function () {_this.loadGrid();}, 500);
+                    if(result.successFlag){ //lihua modifiy
+                    	setTimeout(function () {_this.loadGrid();}, 500);
+                    }
                 }, function () {_this.enableButton($this)}, $.param({id: values }, true));
             }, "警告");
         };
@@ -497,9 +499,11 @@ Grid.prototype = {
             var $this = $(this);
             jsUtil.confirm("确定要删除吗？", function () {
                 var url = $this.attr("uri");
-                RcmsAjax.ajax(url, function () {
+                RcmsAjax.ajax(url, function (result) {
                     _this.options.onDelete.call(this, [$.URL.jsonParamsByUrl(url).id]);
-                    setTimeout(function () {_this.loadGrid();}, 500);
+                    if(result.successFlag){ //lihua modifiy
+                    	setTimeout(function () {_this.loadGrid();}, 500);
+                    }
                 });
             }, "警告");
         });
@@ -1025,17 +1029,23 @@ jsUtil.Flow.prototype = {
         this.operateButton.click(function () {_this.operateDialog.dialog("open");});
         return this;
     },
-    initStartDialog: function () {
+    initStartDialog: function (formselector) {
         var _this = this;
+        formselector = formselector || "form";
+        var $form = $(formselector);
         this.operateDialog.dialog({
             autoOpen: false,
             modal: false,
             width: 500,
             buttons: {
                 "确定": function () {
+        		if (!$form.valid || ($form.valid && $form.valid())) {
                     RcmsAjax.ajax(_this.form.attr("action"), function (result) {
                         setTimeout(function () {window.open(_this.options.redirectURI, "_self");}, 500);
                     }, null, _this.form.formSerialize());
+                    }else{
+                    	return false;
+                    }
                 },
                 "关闭": function () {$(this).dialog("close");}
             }});

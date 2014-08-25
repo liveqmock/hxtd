@@ -361,6 +361,7 @@ public class ReportController {
         //获取查询条件
         Map<String, Object> searchParams = Servlets.getParametersStartingWith(request, "search_");
         Search.clearBlankValue(searchParams);
+        Search.trimValue(searchParams);
         List<Field> dateTypeFields = ReflectionUtils.findNameValueMatcheds(Arrays.asList(module.getFields()), "type", Date.class);
         Search.toRangeDate(searchParams, ReflectionUtils.invokeGetterMethod(dateTypeFields, "name").toArray(new String[]{}));
         Map<String, SearchFilter> filters = Search.parse(searchParams);
@@ -402,6 +403,7 @@ public class ReportController {
         //获取查询条件
         Map<String, Object> searchParams = Servlets.getParametersStartingWith(request, "search_");
         Search.clearBlankValue(searchParams);
+        Search.trimValue(searchParams);
         List<Field> dateTypeFields = ReflectionUtils.findNameValueMatcheds(Arrays.asList(module.getFields()), "type", Date.class);
         Search.toRangeDate(searchParams, ReflectionUtils.invokeGetterMethod(dateTypeFields, "name").toArray(new String[]{}));
         Map<String, SearchFilter> filters = Search.parse(searchParams);

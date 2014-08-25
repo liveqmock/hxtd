@@ -41,11 +41,11 @@ function showSupplier(id){ //查看供应商信息
 <table class="fl mt10 w">
 	<tr>
 		<td class="f14 namewidth1" align="right">项目名称：</td>
-		<td class="f14 namewidth2" align="left"><input type="text" name="search_LIKE_name" class="text_input1"/></td>
+		<td class="f14 namewidth2" align="left"><input type="text" name="search_LIKE_name" class="text_input1" maxlength="30"/></td>
 		<td class="f14 namewidth1" align="right">项目编号：</td>
-		<td class="f14 namewidth2" align="left"><input type="text" name="search_LIKE_code" class="text_input1"/></td>
+		<td class="f14 namewidth2" align="left"><input type="text" name="search_LIKE_code" class="text_input1" maxlength="30"/></td>
 		<td class="f14 namewidth1" align="right">供应商：</td>
-		<td class="f14 namewidth2" align="left"><input type="text" name="search_LIKE_supplier.name" class="text_input1"/></td>
+		<td class="f14 namewidth2" align="left"><input type="text" name="search_LIKE_supplier.name" class="text_input1" maxlength="30"/></td>
 		<td class="namewidth3">
 			<a class="c_222 block cp fr ml10 globle_img mt8 mr20 more" title="展开"></a>
 			<a href="javascript:;" class="a_underline block_inline fr w_blue mt5 reset">清除</a>
@@ -57,17 +57,18 @@ function showSupplier(id){ //查看供应商信息
 	<tr class="more-content">
 		<td class="f14 namewidth1" align="right">融资额度：</td>
 		<td class="f14 namewidth2" align="left">
-			<input type="text" name="search_GTE_financeLimit" 
-				class="text_input2"/>-<input type="text" name="search_LTE_financeLimit" class="text_input2"/>
+			<input type="text" name="search_GTE_financeLimit" class="text_input2" maxlength="10"/>-<input type="text" 
+				name="search_LTE_financeLimit" class="text_input2" maxlength="10"/>
 		</td>
 		<td class="f14 namewidth1" align="right">融资周期：</td>
 		<td class="f14 namewidth2" align="left">
-			<input type="text" name="search_GTE_financeCycle" 
-				class="text_input2"/>-<input type="text" name="search_LTE_financeCycle" class="text_input2"/>
+			<input type="text" name="search_GTE_financeCycle" class="text_input2" maxlength="30"/>-<input type="text" 
+				name="search_LTE_financeCycle" class="text_input2" maxlength="30"/>
 		</td>
 		<td class="f14 namewidth1" align="right">收益率（%）：</td>
 		<td class="f14 namewidth2" align="left">
-			<input type="text" name="search_GTE_er" class="text_input2"/>-<input type="text" name="search_LTE_er" class="text_input2"/>
+			<input type="text" name="search_GTE_er" class="text_input2" maxlength="3"/>-<input type="text" 
+				name="search_LTE_er" class="text_input2" maxlength="3"/>
 		</td>
 	</tr>
 	<tr class="more-content">
@@ -82,7 +83,8 @@ function showSupplier(id){ //查看供应商信息
 		</td>
 		<td class="f14 namewidth1" align="right">赎回赔率（%）：</td>
 		<td class="f14 namewidth2" align="left">
-			<input type="text" name="search_GTE_aer" class="text_input2"/>-<input class="text_input2" name="search_LTE_aer" type="text"/>
+			<input type="text" name="search_GTE_aer" class="text_input2" maxlength="10"/>-<input 
+				type="text" name="search_LTE_aer" class="text_input2" maxlength="10"/>
 		</td>
 		<td class="f14 namewidth1" align="right">开放时间：</td>
 		<td class="f14 namewidth2" align="left" >

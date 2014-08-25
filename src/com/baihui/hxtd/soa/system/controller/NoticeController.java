@@ -86,6 +86,7 @@ public class NoticeController {
         logger.info("解析页面查询条件");
         Map<String, Object> searchParams = Servlets.getParametersStartingWith(request, "search_");
         Search.clearBlankValue(searchParams);
+        Search.trimValue(searchParams);
         Search.toRangeDate(searchParams, "sentTime");
         logger.debug("查询条件数目“{}”", searchParams.size());
         logger.info("添加默认的查询条件");
@@ -246,6 +247,7 @@ public class NoticeController {
         logger.info("解析页面查询条件");
         Map<String, Object> searchParams = Servlets.getParametersStartingWith(request, "search_");
         Search.clearBlankValue(searchParams);
+        Search.trimValue(searchParams);
         Search.decodeValue(searchParams);
         Search.toRangeDate(searchParams, "modifiedTime");
 		Search.toRangeDate(searchParams, "createdTime");

@@ -65,7 +65,7 @@
             <tr>
                 <td align="right" width="15%"><span class="w_red">*&nbsp;</span>回复标题：</td>
                 <td align="left">
-                <input type="text" maxLength="20" class="required" name="title" value=""/></td>
+                <input type="text" maxLength="30" class="required" name="title" value=""/></td>
             </tr>
             <tr>
             <td align="right" width="15%" valign="top"><span class="w_red">*&nbsp;</span>回复内容：</td>

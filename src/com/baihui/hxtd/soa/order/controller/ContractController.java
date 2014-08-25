@@ -85,6 +85,7 @@ public class ContractController extends CommonController<Contract> {
 		Map<String, Object> searchParams = Servlets.getParametersStartingWith(
 				request, "search_");
 		Search.clearBlankValue(searchParams);
+        Search.trimValue(searchParams);
 		Search.toRangeDate(searchParams, "modifiedTime");
 		Search.toRangeDate(searchParams, "createdTime");
 		Search.toRangeDate(searchParams, "signTime");
@@ -247,6 +248,7 @@ public class ContractController extends CommonController<Contract> {
         logger.info("解析页面查询条件");
         Map<String, Object> searchParams = Servlets.getParametersStartingWith(request, "search_");
         Search.clearBlankValue(searchParams);
+        Search.trimValue(searchParams);
         Search.decodeValue(searchParams);
         Search.toRangeDate(searchParams, "createdTime");
         logger.debug("查询条件数目“{}”", searchParams.size());

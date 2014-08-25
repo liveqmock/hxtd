@@ -107,7 +107,7 @@ function searchData(action){ //搜索弹出框
 		</tr>
 		<tr>
 			<td align="right">电话：</td>
-			<td align="left"><input name="phone" type="text" value="${contact.phone}" class="text_input3 isPhone check"/></td>
+			<td align="left"><input name="phone" type="text" maxlength="30" value="${contact.phone}" class="text_input3 isPhone check"/></td>
 			<td align="right" class="customer"><span class="w_red">*&nbsp;</span>客户名称：</td>
 			<td align="left" class="customer">
 				<input id="txt_customer" type="text" value="${contact.customer.name}" class="text_input3 cp required" 
@@ -127,15 +127,15 @@ function searchData(action){ //搜索弹出框
 		</tr>
 		<tr>
 			<td align="right">手机：</td>
-			<td align="left"><input name="mobile" type="text" value="${contact.mobile}" class="text_input3 isMobile check"/></td>
+			<td align="left"><input name="mobile" type="text" maxlength="30" value="${contact.mobile}" class="text_input3 isMobile check"/></td>
 			<td align="right">邮箱：</td>
-			<td align="left"><input type="text" name="email" value="${contact.email}" class="text_input3 email"/></td>
+			<td align="left"><input type="text" maxlength="30" name="email" value="${contact.email}" class="text_input3 email"/></td>
 		</tr>
 		<tr>
 			<td align="right">部门：</td>
-			<td align="left"><input name="department" type="text" value="${contact.department}" class="text_input3"/></td>
+			<td align="left"><input name="department" type="text" maxlength="30" value="${contact.department}" class="text_input3"/></td>
 			<td align="right">传真：</td>
-			<td align="left"><input type="text" name="fax" value="${contact.fax}" class="text_input3 isTel"/></td>
+			<td align="left"><input type="text" maxlength="30" name="fax" value="${contact.fax}" class="text_input3 isTel"/></td>
 		</tr>
 		<tr>
 			<td align="right">职位：</td>
@@ -156,7 +156,7 @@ function searchData(action){ //搜索弹出框
 			<td align="right">区县：</td>
 			<td align="left"><select id="county" name="county.id" class="select1"></select></td>
 			<td align="right">详细地址：</td>
-			<td align="left"><input name="address" type="text" value="${contact.address}" class="text_input3" maxlength="50"/></td>
+			<td align="left"><input name="address" type="text" value="${contact.address}" class="text_input3" maxlength="200"/></td>
 		</tr>
 	</table>
 	<h1 class="f14 fbnone ml40 pt10">描述信息</h1>

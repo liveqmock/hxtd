@@ -87,10 +87,7 @@ function clearInputVal(obj) {//清除
     <input type="hidden" name="flowNode.id" value="${order.flowNode.id}">
     <input type="hidden" name="flowNode.type" value="${order.flowNode.type}">
     <div class="ml35 mr35 mt20 block cb cb">
-        <b class="b1"></b>
-        <b class="b2"></b>
-        <b class="b3"></b>
-        <b class="b4"></b>
+        <b class="b1"></b><b class="b2"></b><b class="b3"></b><b class="b4"></b>
         <div class="ie_head"><h1 class="f14 fbnone mt10 ml10 fl">订单详情信息</h1>
             <ul class="fr id_table1 mt10 ml10"></ul>
         </div>
@@ -101,7 +98,7 @@ function clearInputVal(obj) {//清除
         <table class="cb id_table3 w95b bg_c_white margin0 mt10">
             <tr>
                 <td align="right" width="15%"><span class="w_red">*&nbsp;</span>订单编号：</td>
-                <td align="left"><input type="text" name="code" value="${order.code}" class="text_input3 required {unique:['Order','${order.code}']}"/></td>
+                <td align="left"><input type="text" name="code" value="${order.code}" class="text_input3 required {unique:['Order','${order.code}']}" maxlength="30"/></td>
                 <td align="right" width="15%"><span class="w_red">*&nbsp;</span>所有者：</td>
                 <td align="left">
                     <input type="text" id="txt_owner" name="name_owner" value="${order.owner.realName}" class="text_input3 cp required" 
@@ -172,7 +169,7 @@ function clearInputVal(obj) {//清除
             </tr>
             <tr>
             	<td align="right"><span class="w_red">*&nbsp;</span>赎回赔率（%）：</td>
-                <td align="left"><input type="text" name="arr" value="${order.arr}" class="text_input3 number required"/></td>
+                <td align="left"><input type="text" name="arr" value="${order.arr}" class="text_input3 number required" maxlength="5"/></td>
             	<td align="right"><span class="w_red">*&nbsp;</span>投资总监：</td>
                 <td align="left">
                     <input type="text" id="txt_salesMajordomo" value="${order.salesMajordomo.realName}" name="name_salesMajordomo" 

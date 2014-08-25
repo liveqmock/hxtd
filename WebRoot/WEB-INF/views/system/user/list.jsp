@@ -135,54 +135,56 @@
                     <textarea id="template-tbody" class="template template-tbody">
                         {#foreach $T.result as row}
                         <tr class="row {#cycle values=['bg_c_blue','']}">
-                            <td><input type="checkbox" class="checkitem" value="{$T.row.id}"/></td>
-                            <td>
-                                <c:choose>
-                                    <c:when test="${VS_HAS_FUNCTIONS.userView}"><a href="${ctx}/system/user/toViewPage.do?id={$T.row.id}&type=user" class="toviewpage">{$T.row.name}</a></c:when>
-                                    <c:otherwise>{$T.row.name}</c:otherwise>
-                                </c:choose>
-                            </td>
-                            <td>{$T.row.isManager?"是":"否"}</td>
-                            <td class="isactive">{$T.row.isActive?"是":"否"}</td>
-                            <td>{$T.row.organization.name}</td>
-                            <td>{$T.row.realName}</td>
-                            <td>{$T.row.sex.key}</td>
-                            <td style="text-align: right">{$T.row.phone}</td>
-                            <td>{$T.row.jobName}</td>
-                            <td style="text-align: left">{$C.findArrayAttr($T.row.roles,"name").join("|".fontcolor("red"))}</td>
-                            <td style="text-align: left">
-                                <c:if test="${VS_HAS_FUNCTIONS.userView}">
-                                    <a href="${ctx}/system/user/toViewPage.do?id={$T.row.id}&type=user" class=" block_inline s_detail_btn  globle_img ml10" title="详情"></a>
-                                </c:if>
-                                <c:if test="${VS_HAS_FUNCTIONS.userModify}">
-                                    {#if !$T.row.isInitialized}
-                                    <a href="${ctx}/system/user/toModifyPage.do?id={$T.row.id}&type=user" class=" block_inline s_edit_btn globle_img ml10" title="编辑"></a>
-                                    {#/if}
-                                </c:if>
-                                <c:if test="${VS_HAS_FUNCTIONS.userEnable}">
-                                    {#if !$T.row.isInitialized&&!$T.row.isActive}
-                                    <a href="javascript:void(0)" uri="${ctx}/system/user/enable.do?id={$T.row.id}" class="globle_img h_on block_inline enable" title="启用"></a>
-                                    {#/if}
-                                </c:if>
-                                <c:if test="${VS_HAS_FUNCTIONS.userDisable}">
-                                    {#if !$T.row.isInitialized&&$T.row.isActive}
-                                    <a href="javascript:void(0)" uri="${ctx}/system/user/disable.do?id={$T.row.id}" class="globle_img h_off block_inline disable" title="禁用"></a>
-                                    {#/if}
-                                </c:if>
-                                <c:if test="${VS_HAS_FUNCTIONS.userAuthorization}">
-                                	{#if $T.row.id!=${userId} && $T.row.id!=1}
-                                    <a href="${ctx}/system/user/toAuthorizationPage.do?id={$T.row.id}" class=" block_inline h_shouquan globle_img ml10 authorization" title="授权"></a>
-                                	{#/if}
-                                </c:if>
-                                <c:if test="${VS_HAS_FUNCTIONS.userResetPassword}">
-                                    <a href="javascript:void(0)" uri="${ctx}/system/user/resetPassword.do?id={$T.row.id}" class=" block_inline h_xiupass globle_img ml10 resetpassword" title="重置密码"></a>
-                                </c:if>
-                                <c:if test="${VS_HAS_FUNCTIONS.userDelete}">
-                                    {#if !$T.row.isInitialized}
-                                    <a href="javascript:void(0)" uri="${ctx}/system/user/delete.do?id={$T.row.id}" class=" block_inline s_dump_btn  globle_img ml10 delete" title="删除"></a>
-                                    {#/if}
-                                </c:if>
-                            </td>
+                           <td><input type="checkbox" class="checkitem" value="{$T.row.id}"/></td>
+                <td>
+                <c:choose>
+           		<c:when test="${VS_HAS_FUNCTIONS.userView}">
+           			<a class="toviewpage" href="${ctx}/system/user/toViewPage.do?id={$T.row.id}&type=user">{$T.row.realName}</a>
+           		</c:when>
+           		<c:otherwise>{$T.row.realName}</c:otherwise>
+           		</c:choose>
+                </td>
+                <td>{$T.row.name}</td>
+                <td>{$T.row.isManager?"是":"否"}</td>
+                <td class="isactive">{$T.row.isActive?"是":"否"}</td>
+                <td>{$T.row.organization.name}</td>
+                <td>{$T.row.sex.key}</td>
+                <td>{$T.row.phone}</td>
+                <td>{$T.row.jobName}</td>
+                <td style="text-align: left">{$C.findArrayAttr($T.row.roles,"name").join("|".fontcolor("red"))}</td>
+                <td style="text-align: left">
+                    <c:if test="${VS_HAS_FUNCTIONS.userView}">
+                        <a href="${ctx}/system/user/toViewPage.do?id={$T.row.id}&type=user" class=" block_inline s_detail_btn  globle_img ml10" title="详情"></a>
+                    </c:if>
+                    <c:if test="${VS_HAS_FUNCTIONS.userModify}">
+                        {#if !$T.row.isInitialized}
+                        <a href="${ctx}/system/user/toModifyPage.do?id={$T.row.id}&type=user" class=" block_inline s_edit_btn globle_img ml10" title="编辑"></a>
+                        {#/if}
+                    </c:if>
+                    <c:if test="${VS_HAS_FUNCTIONS.userEnable}">
+                        {#if !$T.row.isInitialized&&!$T.row.isActive}
+                        <a href="javascript:void(0)" uri="${ctx}/system/user/enable.do?id={$T.row.id}" class="globle_img h_on block_inline enable" title="启用"></a>
+                        {#/if}
+                    </c:if>
+                    <c:if test="${VS_HAS_FUNCTIONS.userDisable}">
+                        {#if !$T.row.isInitialized&&$T.row.isActive}
+                        <a href="javascript:void(0)" uri="${ctx}/system/user/disable.do?id={$T.row.id}" class="globle_img h_off block_inline disable" title="禁用"></a>
+                        {#/if}
+                    </c:if>
+                    <c:if test="${VS_HAS_FUNCTIONS.userAuthorization}">
+                    	{#if $T.row.id!=${userId} && $T.row.id!=1}
+                        <a href="${ctx}/system/user/toAuthorizationPage.do?id={$T.row.id}" class=" block_inline h_shouquan globle_img ml10 authorization" title="授权"></a>
+                    	{#/if}
+                    </c:if>
+                    <c:if test="${VS_HAS_FUNCTIONS.userResetPassword}">
+                        <a href="javascript:void(0)" uri="${ctx}/system/user/resetPassword.do?id={$T.row.id}" class=" block_inline h_xiupass globle_img ml10 resetpassword" title="重置密码"></a>
+                    </c:if>
+                    <c:if test="${VS_HAS_FUNCTIONS.userDelete}">
+                        {#if !$T.row.isInitialized}
+                        <a href="javascript:void(0)" uri="${ctx}/system/user/delete.do?id={$T.row.id}" class=" block_inline s_dump_btn  globle_img ml10 delete" title="删除"></a>
+                        {#/if}
+                    </c:if>
+              			 </td>
                         </tr>
                         {#/for}
                     </textarea>

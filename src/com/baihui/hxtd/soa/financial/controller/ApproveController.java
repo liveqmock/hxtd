@@ -72,6 +72,7 @@ public class ApproveController {
         String type = request.getParameter("type");
         Map<String, Object> searchParams = Servlets.getParametersStartingWith(request, "search_");
         Search.clearBlankValue(searchParams);
+        Search.trimValue(searchParams);
         searchParams.put("user", modelMap.get(Constant.VS_USER));
         if ("approving".equals(type)) {
             searchParams.put("roleCode", Constant.ROLE_FINANCER);

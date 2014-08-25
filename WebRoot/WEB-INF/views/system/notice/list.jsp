@@ -34,7 +34,7 @@
       <table class="fl mt10 w">
        <tr>   
 		<td class="f14 namewidth1" align="right">公告名称：</td>
-		<td class="f14 namewidth2" align="left"><input type="text" class="text_input1" id="typeId" name="search_LIKE_title" value="${title}"/></td>
+		<td class="f14 namewidth2" align="left"><input type="text" maxlength="30" class="text_input1" id="typeId" name="search_LIKE_title" value="${title}"/></td>
 		<td class="f14 namewidth1" align="right">有效期：</td>
 		<td class="f14 namewidth2" align="left">
 		    <select name="type" class="select2">

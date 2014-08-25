@@ -387,7 +387,7 @@ public class UserService {
      */
     @Transactional
 	public List<User> findUserByOrgId(Long orgId) {
-    	 String hql = "select user from User user inner join user.organization org where org.id=?";
+    	 String hql = "select user from User user inner join user.organization org where org.id=? and user.isDeleted=false";
          List<User> users = userDao.find(hql, orgId);
          return users;
 

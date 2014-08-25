@@ -80,7 +80,7 @@ public class DictionaryController {
 		/*************获取查询条件 **************/
 		Map<String, Object> searchParams = Servlets.getParametersStartingWith(request, "search_");
 		Search.clearBlankValue(searchParams);
-
+        Search.trimValue(searchParams);
 		/*************分页查询 *****************/
 		dicService.findPage(searchParams, page);
 

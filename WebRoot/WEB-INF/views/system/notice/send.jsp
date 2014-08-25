@@ -75,14 +75,14 @@ function clearInputVal(obj){//清除
 
             <tr>
                 <td >公告标题：</td>
-                <td ><input type="text" class="{required:true,messages:{required:'（*必填）'}}" name="title" value="${notice.title}"/></td>
+                <td ><input type="text" maxlength="30"class="{required:true,messages:{required:'（*必填）'}}" name="title" value="${notice.title}"/></td>
                 
             </tr>
             <tr>
             <td >公告内容：</td>
                 <td >
                     
-                    <textarea name="content" style="width:90%;height:300px;border:1px solid #e0e0e0; margin:5px 0px">${notice.content }</textarea>
+                    <textarea name="content" maxlength="500" style="width:90%;height:300px;border:1px solid #e0e0e0; margin:5px 0px">${notice.content }</textarea>
                    
                </td>
            </tr>

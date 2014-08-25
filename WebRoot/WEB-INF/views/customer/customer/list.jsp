@@ -107,11 +107,11 @@ $(function () {
 		<tr class="more-content">
 			<td class="f14" align="right">手机：</td>
 	    	<td class="f14" align="left">
-	    		<input class="text_input1"type="text" id="cmobile"  name="search_LIKE_mobile" value="${mobile}" />
+	    		<input class="text_input1"type="text" id="cmobile"  maxlength="30" name="search_LIKE_mobile" value="${mobile}" />
 			</td>
 			<td class="f14" align="right">邮箱：</td>
 	    	<td class="f14" align="left">
-				<input type="text" class="text_input1"id="cemail"  name="search_LIKE_email" value="${email}" />
+				<input type="text" class="text_input1"id="cemail" maxlength="30" name="search_LIKE_email" value="${email}" />
 			</td>
 			<td class="f14" align="right">行业：</td>
 			<td class="f14" align="left">

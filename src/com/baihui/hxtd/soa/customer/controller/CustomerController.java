@@ -92,6 +92,7 @@ public class CustomerController extends CommonController<Customer>{
 		Map<String, Object> searchParams = Servlets.getParametersStartingWith(
 				request, "search_");
 		Search.clearBlankValue(searchParams);
+        Search.trimValue(searchParams);
 		Search.toRangeDate(searchParams, "modifiedTime");
 		Search.toRangeDate(searchParams, "createdTime");
 		logger.info("添加默认的查询条件");
@@ -282,6 +283,7 @@ public class CustomerController extends CommonController<Customer>{
 			ModelMap model) throws NoSuchFieldException{
 		Map<String, Object> searchParams = Servlets.getParametersStartingWith(request, "search_");
 		Search.clearBlankValue(searchParams);
+        Search.trimValue(searchParams);
 		
 		DataShift dataShift = (DataShift) model.get(Constant.VS_DATASHIFT);
 		page = customerService.findPage(searchParams, page, dataShift);

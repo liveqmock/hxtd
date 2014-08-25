@@ -44,13 +44,13 @@ function reset() {
 					订单编号：
 				</td>
 				<td class="f14 namewidth2" align="left" >
-					<input type="text" class="text_input1" name="search_LIKE_order.code"/>
+					<input type="text" maxlength="30" class="text_input1" name="search_LIKE_order.code"/>
 				</td>
 				<td class="f14 namewidth1" align="right" >
 					客户名称：
 				</td>
 				<td class="f14 namewidth2" align="left" >
-					<input type="text" class="text_input1" name="search_LIKE_customer.name" />
+					<input type="text" maxlength="30" class="text_input1" name="search_LIKE_customer.name" />
 				</td>
 				<td class="f14 namewidth1" align="right" >
 					收款状态：
@@ -77,15 +77,15 @@ function reset() {
 				<td class="f14 namewidth1" align="right">应收款（万）：</td>
 	    		<td class="f14 namewidth2" align="left">
 	    			<div class="pr vm">
-		    			<input class="text_input2 number" name="search_GTE_fund" type="text"/>-<input class="number text_input2" 
-		    				name="search_LTE_fund" type="text"/>
+		    			<input class="text_input2 number" name="search_GTE_fund" type="text" maxlength="30"/>-<input class="number text_input2" 
+		    				name="search_LTE_fund" type="text" maxlength="30"/>
 	    			</div>
 	    		</td>
 	    		<td class="f14 namewidth1" align="right">实际收款（万）：</td>
 	    		<td class="f14 namewidth2" align="left">
 	    			<div class="pr vm">
-		    			<input class="text_input2 number" name="search_GTE_actual" type="text"/>-<input class="text_input2 number" 
-		    				name="search_LTE_actual" type="text"/>
+		    			<input class="text_input2 number" name="search_GTE_actual" type="text" maxlength="30"/>-<input class="text_input2 number" 
+		    				name="search_LTE_actual" type="text" maxlength="30"/>
 	    			</div>
 	    		</td>
 	    		<td class="f14 namewidth1" align="right" >

@@ -395,6 +395,7 @@ public class OrderController extends CommonController<Order> {
         logger.info("解析页面查询条件");
         Map<String, Object> searchParams = Servlets.getParametersStartingWith(request, "search_");
         Search.clearBlankValue(searchParams);
+        Search.trimValue(searchParams);
         Search.decodeValue(searchParams);
         Search.toRangeDate(searchParams, "createdTime");
         logger.debug("查询条件数目“{}”", searchParams.size());
@@ -558,6 +559,7 @@ public class OrderController extends CommonController<Order> {
         Map<String, Object> searchParams = Servlets.getParametersStartingWith(request, "search_");
         Search.clearBlankValue(searchParams);
         Search.trimValue(searchParams);
+        Search.trimValue(searchParams);
         
         DataShift dataShift = (DataShift) model.get(Constant.VS_DATASHIFT);
         page = orderService.findPage(searchParams, dataShift, page);
@@ -575,6 +577,7 @@ public class OrderController extends CommonController<Order> {
         Map<String, Object> searchParams = Servlets.getParametersStartingWith(
                 request, "search_");
         Search.clearBlankValue(searchParams);
+        Search.trimValue(searchParams);
         logger.info("添加默认的查询条件");
         DataShift dataShift = (DataShift) model.get(Constant.VS_DATASHIFT);
         page = orderService.findListPage(searchParams, dataShift, page);

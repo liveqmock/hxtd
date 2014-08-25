@@ -63,10 +63,7 @@ function searchData(action){ // 搜索
 <body>
 <form action="${ctx}${VR_FUNCTION.url}" method="post">
 <div class="ml35 mr35 mt20 block cb cb">
-	<b class="b1"></b>
-	<b class="b2"></b>
-	<b class="b3"></b>
-	<b class="b4"></b>
+	<b class="b1"></b><b class="b2"></b><b class="b3"></b><b class="b4"></b>
 	<div class="ie_head">
 		<h1 class="f14 fbnone mt10 ml10 fl">编辑产品信息</h1>
 		<input type="hidden" name="id" value="${product.id}"/>

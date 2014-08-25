@@ -117,7 +117,7 @@ function clearInputVal(obj){//清除
 					<span class="w_red">*&nbsp;</span>订单编号：
 				</td>
 				<td align="left">
-				<input type="text" name="code"
+				<input type="text" maxlength="30" name="code"
 						value="${order.code}" class="text_input3 required" />
 				</td>
 				<td align="right" width="15%">
@@ -201,7 +201,7 @@ function clearInputVal(obj){//清除
 					<span class="w_red">*&nbsp;</span>购买金额（万）：
 				</td>
 				<td align="left">
-					<input type="text" name="purchaseMoney"
+					<input type="text" maxlength="30" name="purchaseMoney"
 						value="${order.purchaseMoney}" class="text_input3 number required" />
 				</td>
 				<td align="right">
@@ -218,14 +218,14 @@ function clearInputVal(obj){//清除
 					<span class="w_red">*&nbsp;</span>赎回率（%）：
 				</td>
 				<td align="left">
-					<input type="text" name="arr" value="${order.arr }"
+					<input type="text" maxlength="30" name="arr" value="${order.arr }"
 						class="text_input3 number required" />
 				</td>
 				<td align="right">
 					<span class="w_red">*&nbsp;</span>赎回公式：
 				</td>
 				<td align="left">
-					<input type="text" name="redeemFormula" id="redeemFormula" readonly
+					<input type="text" maxlength="30" name="redeemFormula" id="redeemFormula" readonly
 						value="${order.redeemFormula }" class="text_input3 required" />
 				</td>
 			</tr>

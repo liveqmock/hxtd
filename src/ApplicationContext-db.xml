@@ -7,12 +7,22 @@
     http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx-3.0.xsd http://www.springframework.org/schema/jee http://www.springframework.org/schema/jee/spring-jee.xsd">
 
     <jee:jndi-lookup id="dataSource" jndi-name="hxtd"/>
-    <!--<bean id="dataSource" class="org.springframework.jdbc.datasource.DriverManagerDataSource">
+   <!--
+   <bean id="dataSource" class="org.springframework.jdbc.datasource.DriverManagerDataSource">
         <property name="driverClassName" value="com.mysql.jdbc.Driver"/>
         <property name="url" value="jdbc:mysql://localhost:3306/hxtd?characterEncoding=utf-8"/>
         <property name="username" value="root"/>
         <property name="password" value=""/>
-    </bean>-->
+    </bean>
+    -->
+    <!--
+    <bean id="dataSource" class="org.springframework.jdbc.datasource.DriverManagerDataSource">
+        <property name="driverClassName" value="com.mysql.jdbc.Driver"/>
+        <property name="url" value="jdbc:mysql://192.168.111.141:3306/hxtd_back0729?characterEncoding=utf-8"/>
+        <property name="username" value="bhdc001admin"/>
+        <property name="password" value="baihuizhadmin"/>
+    </bean>
+    -->
 
     <bean id="log4jdbcInterceptor" class="net.sf.log4jdbc.DataSourceSpyInterceptor"/>
     <bean id="dataSourceLog4jdbcAutoProxyCreator" class="org.springframework.aop.framework.autoproxy.BeanNameAutoProxyCreator">

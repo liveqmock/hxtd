@@ -37,7 +37,7 @@
             <td align="right" width="15%" valign="top">公告内容：</td>
             <td align="left"  width="85%" valign="top">
             <div class="w85b">
-             ${notice.content }
+            <pre> ${notice.content }</pre>
             </div>
             </td>
         </tr>

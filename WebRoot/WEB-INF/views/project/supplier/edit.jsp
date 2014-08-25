@@ -70,7 +70,7 @@ function clearInputVal(obj){ //清除
 		<table class="cb id_table3 w95b bg_c_white margin0 mt10">
 			<tr>
 				<td align="right" width="15%"><span class="w_red">*&nbsp;</span>供应商名称：</td>
-				<td align="left"><input type="text" name="name" value="${com.name}" class="text_input3 required"></td>
+				<td align="left"><input type="text" name="name" value="${com.name}" class="text_input3 required" maxlength="30"></td>
 				<td align="right" width="15%"><span class="w_red">*&nbsp;</span>所有者：</td>
 				<td align="left">
 					<input type="text" id="txt_owner" value="${com.owner.realName}" class="text_input3 required cp" onclick="searchData('owner')" readonly>
@@ -101,22 +101,22 @@ function clearInputVal(obj){ //清除
 			</tr>
 			<tr>
 				<td align="right"><span class="w_red">*&nbsp;</span>法人代表：</td>
-				<td align="left"><input type="text" name="corporation" value="${com.corporation}" class="text_input3 required"></td>
+				<td align="left"><input type="text" name="corporation" value="${com.corporation}" class="text_input3 required" maxlength="30"></td>
 				<td align="right"><span class="w_red">*&nbsp;</span>证件号码：</td>
 				<td align="left"><input type="text" name="cardNum" value="${com.cardNum}" class="text_input3 number {maxlength:20} required"></td>
 			</tr>
 			<tr>
 				<td align="right">法人电话：</td>
-				<td align="left"><input type="text" name="phone" value="${com.phone}" class="text_input3 isTel"></td>
+				<td align="left"><input type="text" name="phone" value="${com.phone}" class="text_input3 isTel" maxlength="11"></td>
 				
 				<td align="right">常用邮箱：</td>
-				<td align="left"><input type="text" name="email" value="${com.email}" class="text_input3 email"></td>
+				<td align="left"><input type="text" name="email" value="${com.email}" class="text_input3 email" maxlength="30"></td>
 			</tr>
 			<tr>
 				<td align="right">法人手机：</td>
-				<td align="left"><input type="text" name="mobile" value="${com.mobile}" class="text_input3 isMobile"></td>
+				<td align="left"><input type="text" name="mobile" value="${com.mobile}" class="text_input3 isMobile" maxlength="11"></td>
 				<td align="right">传真：</td>
-				<td align="left"><input type="text" name="fax" value="${com.fax}" class="text_input3 isTel"></td>
+				<td align="left"><input type="text" name="fax" value="${com.fax}" class="text_input3 isTel" maxlength="11"></td>
 			</tr>
 		</table>
 		<h1 class="f14 fbnone ml40 pt10">地址信息</h1>
@@ -131,14 +131,14 @@ function clearInputVal(obj){ //清除
 				<td align="right">区县：</td>
 				<td align="left"><select id="county" name="county.id" class="select1"></select></td>
 				<td align="right">详细地址：</td>
-				<td align="left"><input name="address" type="text" value="${com.address}" class="text_input3"/></td>
+				<td align="left"><input type="text" name="address" value="${com.address}" class="text_input3" maxlength="200"/></td>
 			</tr>
 		</table>
 		<h1 class="f14 fbnone ml40 pt10">描述信息</h1>
 		<table class="cb id_table4 w95b bg_c_white margin0 mt10">
 			<tr>
 				<td align="right" width="15%" valign="top">备注：</td>
-				<td align="left" width="85%" valign="top"><textarea name="remark" class="remarks_input1">${com.remark}</textarea></td>
+				<td align="left" width="85%" valign="top"><textarea name="remark" class="remarks_input1" maxlength="500">${com.remark}</textarea></td>
 			</tr>
 		</table>
 		<div class="h40"></div>

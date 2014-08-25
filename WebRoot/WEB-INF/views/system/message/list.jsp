@@ -41,7 +41,7 @@ $(function () {
         <tr>
             <td class="f14 namewidth1" align="right">消息名称：</td>
             <td class="f14 namewidth2" align="left">
-                <input type="text" id="typeId" class="text_input1" name="search_LIKE_message.title" value="${userMessage.message.title}"/>
+                <input type="text" maxlength="30" id="typeId" class="text_input1" name="search_LIKE_message.title" value="${userMessage.message.title}"/>
             </td>
             <td class="f14 namewidth1" align="right">时间：</td>
             <td class="f14 namewidth2" align="left">
@@ -213,7 +213,7 @@ $(function () {
             <tbody class="list"></tbody>
         </table>
         <div class="cb ml35 mt20 h40 pagination"></div>
-        <div id="send-template" class="template template-tbody">
+        <textarea id="send-template" class="template template-tbody">
             {#foreach $T.result as row}
             <tr class="{$T.row$index%2==1?'':'bg_c_blue'}">
                 <td align="center">
@@ -275,7 +275,7 @@ $(function () {
                 </td>
             </tr>
             {#/for}
-            　　</div>
+            　　</textarea>
         <%@include file="/WEB-INF/template/sort.jsp" %>
         <%@include file="/WEB-INF/template/pagination.jsp" %>
     </div>

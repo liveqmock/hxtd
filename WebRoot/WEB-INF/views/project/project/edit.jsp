@@ -62,10 +62,7 @@ function clearInputVal(obj){//清除
 <div>
 	<div class="cb"></div>
 	<div class="ml35 mr35 mt20 block cb cb">
-		<b class="b1"></b>
-		<b class="b2"></b>
-		<b class="b3"></b>
-		<b class="b4"></b>
+		<b class="b1"></b><b class="b2"></b><b class="b3"></b><b class="b4"></b>
 		<div class="ie_head"><h1 class="f14 fbnone mt10 ml10 fl">项目详情信息</h1><ul class="fr id_table1 mt10 ml10"></ul></div>
 	</div>
 	<div class="ml35 mr35 bg_c_blue cb">
@@ -73,13 +70,15 @@ function clearInputVal(obj){//清除
 		<table class="cb id_table3 w95b bg_c_white margin0 mt10">
 			<tr>
 				<td align="right" width="15%">项目名称：</td>
-				<td align="left"><input type="text" name="name" value="${project.name}" class="text_input3 required"></td>
+				<td align="left"><input type="text" name="name" value="${project.name}" class="text_input3 required" maxlength="30"></td>
 				<td align="right" width="15%">项目编号：</td>
-				<td align="left"><input type="text" name="code" value="${project.code}" class="text_input3 required {unique:['Project','${project.code}']}"></td>
+				<td align="left"><input type="text" name="code" value="${project.code}" maxlength="30" 
+					class="text_input3 required {unique:['Project','${project.code}']}"></td>
 			</tr>
 			<tr>
 				<td align="right">融资额度（万）：</td>
-				<td align="left"><input type="text" name="financeLimit" value="${project.financeLimit}" class="text_input3 number required"></td>
+				<td align="left"><input type="text" name="financeLimit" value="${project.financeLimit}" maxlength="10" 
+					class="text_input3 number required"></td>
 				<td align="right">开始时间：</td>
 				<td align="left">
 					<fmt:formatDate value="${project.beginTime}" pattern="yyyy-MM-dd" var="beginTime"/>
@@ -88,7 +87,8 @@ function clearInputVal(obj){//清除
 			</tr>
 			<tr>
 				<td align="right">融资前周期（天）：</td>
-				<td align="left"><input type="text" name="beforeFinanceCycle" value="${project.beforeFinanceCycle}" class="text_input3 number required"></td>
+				<td align="left"><input type="text" name="beforeFinanceCycle" value="${project.beforeFinanceCycle}" maxlength="5" 
+					class="text_input3 number required"></td>
 				<td align="right">截止时间：</td>
 				<td align="left">
 					<fmt:formatDate value="${project.dendlineTime}" pattern="yyyy-MM-dd" var="dendlineTime"/>
@@ -97,9 +97,10 @@ function clearInputVal(obj){//清除
 			</tr>
 			<tr>
 				<td align="right">融资周期（天）：</td>
-				<td align="left"><input type="text" name="financeCycle" value="${project.financeCycle}" class="text_input3 number required"></td>
+				<td align="left"><input type="text" name="financeCycle" value="${project.financeCycle}" maxlength="5" 
+					class="text_input3 number required"></td>
 				<td align="right">收益率（%）：</td>
-				<td align="left"><input type="text" name="er" value="${project.er}" class="text_input3 number required"></td>
+				<td align="left"><input type="text" name="er" value="${project.er}" maxlength="5" class="text_input3 number required"></td>
 			</tr>
 			<tr>
 				<td align="right">支付方式：</td>
@@ -112,13 +113,13 @@ function clearInputVal(obj){//清除
 					</select>
 				</td>
 				<td align="right">赎回赔率（%）：</td>
-				<td align="left"><input type="text" name="aer" value="${project.aer}" class="text_input3 number required"></td>
+				<td align="left"><input type="text" name="aer" value="${project.aer}" maxlength="5" class="text_input3 number required"></td>
 			</tr>
 			<tr>
 				<td align="right">供应商：</td>
 				<td align="left">
-					<input type="text" id="txt_supplier" value="${project.supplier.name}" 
-						class="text_input3 required" onclick="searchData('supplier')" readonly>
+					<input type="text" id="txt_supplier" value="${project.supplier.name}" class="text_input3 required" 
+						onclick="searchData('supplier')" readonly>
 					<input type="hidden" name="supplier.id" id="hide_supplier_id" value="${project.supplier.id}"/>
 					<i class="s_inquiry globle_img block_inline ml5 vm cp" title="搜索供应商" onclick="searchData('supplier');"></i>
 					<i class="dump_btn globle_img block_inline ml5 vm cp empty" title="清除" onclick="clearInputVal(this)"></i>
@@ -134,7 +135,7 @@ function clearInputVal(obj){//清除
 		<table class="cb id_table4 w95b bg_c_white margin0 mt10">
 			<tr>
 				<td align="right" width="15%" valign="top">备注：</td>
-				<td align="left" width="85%" valign="top"><textarea name="remark" class="remarks_input1 {maxlength:512}">${project.remark}</textarea></td>
+				<td align="left" width="85%" valign="top"><textarea name="remark" class="remarks_input1 {maxlength:500}">${project.remark}</textarea></td>
 			</tr>
 		</table>
 		<div class=" h40"></div>

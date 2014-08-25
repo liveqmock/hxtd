@@ -101,7 +101,7 @@ function clearInputVal(){//清除
 		<table class="cb id_table3 w95b bg_c_white margin0 mt10">
 			<tr>
 				<td align="right" width="15%"><span class="w_red">*&nbsp;</span>付款名称：</td>
-				<td align="left"><input type="text" id="txt_payments" name="name" value="${payments.name}" class="text_input3 required"/></td>
+				<td align="left"><input type="text" maxlength="30"  id="txt_payments" name="name" value="${payments.name}" class="text_input3 required"/></td>
 				<td align="right" width="15%"><span class="w_red">*&nbsp;</span>订单编号：</td>
 				<td align="left">
 					<input type="text" id="txt_order" value="${payments.order.code}" class="text_input3 cp required" 
@@ -116,15 +116,15 @@ function clearInputVal(){//清除
 			<tr>
 				<td align="right"><span class="w_red">*&nbsp;</span>客户名称：</td>
 				<td align="left">
-					<input type="text" id="txt_customerName" value="${payments.customer.name}" class="text_input3 cp required" readonly/>
+					<input type="text" maxlength="30" id="txt_customerName" value="${payments.customer.name}" class="text_input3 cp required" readonly/>
 					<input type="hidden" id="txt_customerId" name="customer.id" value="${payments.customer.id}" class="text_input3 cp required" readonly/>
 				</td>
 				<td align="right"><span class="w_red">*&nbsp;</span>应付款金额（万）：</td>
-				<td align="left"><input type="text" readonly id="txt_fund" name="fund" value="${payments.fund}" class="text_input3 number required" /></td>
+				<td align="left"><input type="text" maxlength="30" readonly id="txt_fund" name="fund" value="${payments.fund}" class="text_input3 number required" /></td>
 			</tr>
 			<tr>
 				<td align="right"><span class="w_red">*&nbsp;</span>实际付款金额（万）：</td>
-				<td align="left"><input type="text" name="actual" value="${payments.actual}" class="text_input3 required number"/></td>
+				<td align="left"><input type="text" maxlength="30" name="actual" value="${payments.actual}" class="text_input3 required number"/></td>
 			</tr>
 		</table>
 		<h1 class="f14 fbnone ml40 pt10">账号信息</h1>
@@ -160,16 +160,16 @@ function clearInputVal(){//清除
 			</tr>
 			<tr>
 				<td align="right" width="15%">银行户名：</td>
-				<td align="left"><input type="text" name="bankName" id="bankName" value="${payments.customer.bankName}" class="text_input3" maxlength="30"/></td>
+				<td align="left"><input type="text" maxlength="30" name="bankName" id="bankName" value="${payments.customer.bankName}" class="text_input3" maxlength="30"/></td>
 				<td align="right" width="15%">银行账号：</td>
-				<td align="left"><input type="text" name="bankAccount" id="bankAccount" value="${payments.customer.bankAccount}" class="text_input3 number" maxlength="30"/></td>
+				<td align="left"><input type="text" maxlength="30" name="bankAccount" id="bankAccount" value="${payments.customer.bankAccount}" class="text_input3 number" maxlength="30"/></td>
 			</tr>
 		</table>
 		<h1 class="f14 fbnone ml40 pt10">描述信息</h1>
 		<table class="cb id_table4 w95b bg_c_white margin0 mt10">
 			<tr>
 				<td align="right" width="15%" valign="top">备注：</td>
-				<td align="left" width="85%" valign="top"><textarea name="remark" class="remarks_input1">${payments.remark}</textarea></td>
+				<td align="left" width="85%" valign="top"><textarea maxlength="500" name="remark" class="remarks_input1">${payments.remark}</textarea></td>
 			</tr>
 		</table>
 		<div class="h40"></div>

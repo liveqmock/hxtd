@@ -66,9 +66,9 @@ function reset() {
 		<table class="fl mt10 w">
 			<tr>
 				<td class="f14 namewidth1" align="right">线索名称：</td>
-				<td class="f14 namewidth2" align="left"><input type="text" class="text_input1" name="search_LIKE_name" id="name"/></td>
+				<td class="f14 namewidth2" align="left"><input type="text" maxlength="30" class="text_input1" name="search_LIKE_name" id="name"/></td>
 				<td class="f14 namewidth1" align="right">邮箱：</td>
-				<td class="f14 namewidth2" align="left"><input type="text" class="text_input1" name="search_LIKE_email" id="name"/></td>
+				<td class="f14 namewidth2" align="left"><input type="text" maxlength="30" class="text_input1" name="search_LIKE_email" id="name"/></td>
 				<td class="f14 namewidth1" align="right">线索来源：</td>
 				<td class="f14 namewidth2" align="left" >
 					<select name="search_EQ_source.id" class="select2">
@@ -88,7 +88,7 @@ function reset() {
 			</tr>
 			<tr class="more-content">
 				<td class="f14 namewidth1" align="right">手机：</td>
-				<td class="f14 namewidth2" align="left"><input type="text" class="text_input1" name="search_LIKE_mobile" id="name"/></td>
+				<td class="f14 namewidth2" align="left"><input type="text" maxlength="30" class="text_input1" name="search_LIKE_mobile" id="name"/></td>
 				<td class="f14 namewidth1" align="right">线索状态：</td>
 				<td class="f14 namewidth2" align="left" >
 					<select name="search_EQ_status.id" class="select2">

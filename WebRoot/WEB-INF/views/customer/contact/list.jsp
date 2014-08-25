@@ -26,11 +26,11 @@ $(function(){
     <table class="fl mt10 w">
     	<tr>
     		<td class="f14 namewidth1" align="right">联系人：</td>
-    		<td class="f14 namewidth2" align="left"><input type="text" class="text_input1" name="search_LIKE_name"/></td>
+    		<td class="f14 namewidth2" align="left"><input type="text" maxlength="30" class="text_input1" name="search_LIKE_name"/></td>
     		<td class="f14 namewidth1" align="right">手机：</td>
-    		<td class="f14 namewidth2" align="left"><input type="text" class="text_input1" name="search_LIKE_mobile"/></td>
+    		<td class="f14 namewidth2" align="left"><input type="text" maxlength="30" maxlength="30" class="text_input1" name="search_LIKE_mobile"/></td>
     		<td class="f14 namewidth1" align="right">电话：</td>
-    		<td class="f14 namewidth2" align="left"><input type="text" class="text_input1" name="search_LIKE_phone"/></td>
+    		<td class="f14 namewidth2" align="left"><input type="text" maxlength="30" class="text_input1" name="search_LIKE_phone"/></td>
     		<td width="namewidth3">
     			<a href="javascript:;" class="c_222 block cp fr ml10 packup globle_img mt8 mr20 more" title="展开"></a>
     			<a href="javascript:;" class="reset a_underline fr w_blue mt5">清除</a>
@@ -42,7 +42,7 @@ $(function(){
     	</tr>
     	<tr class="more-content">
     		<td class="f14 namewidth1" align="right">邮箱：</td>
-    		<td class="f14 namewidth2" align="left"><input type="text" class="text_input1" name="search_LIKE_email"/></td>
+    		<td class="f14 namewidth2" align="left"><input type="text" maxlength="30" class="text_input1" name="search_LIKE_email"/></td>
     		<td class="f14 namewidth1" align="right">省份：</td>
     		<td class="f14 namewidth2" align="left"><select id="province" name="search_EQ_province.id" class="select2"></select></td>
     		<td class="f14 namewidth1" align="right">城市：</td>

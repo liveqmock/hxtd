@@ -128,6 +128,7 @@ public class MarketActivityController extends CommonController<MarketActivity> {
         /************获取查询条件**************/
         Map<String, Object> searchParams = Servlets.getParametersStartingWith(request, "search_");
         Search.clearBlankValue(searchParams);
+        Search.trimValue(searchParams);
         Search.toRangeDate(searchParams, "createdTime");
         Search.toMinDate(searchParams, "beginDate");
         Search.toMaxDate(searchParams, "endDate");
@@ -342,6 +343,7 @@ public class MarketActivityController extends CommonController<MarketActivity> {
                                  ModelMap modelMap) throws NoSuchFieldException, IOException {
         Map<String, Object> searchParams = Servlets.getParametersStartingWith(request, "search_");
         Search.clearBlankValue(searchParams);
+        Search.trimValue(searchParams);
 
         DataShift dataShift = (DataShift) modelMap.get(Constant.VS_DATASHIFT);
         List<MarketActivity> marketActivityLst = marketActivityService.export(searchParams, dataShift);
@@ -522,6 +524,7 @@ public class MarketActivityController extends CommonController<MarketActivity> {
         /************获取查询条件**************/
         Map<String, Object> searchParams = Servlets.getParametersStartingWith(request, "search_");
         Search.clearBlankValue(searchParams);
+        Search.trimValue(searchParams);
         DataShift dataShift = (DataShift) model.get(Constant.VS_DATASHIFT);
 
         /************分页查询*****************/

@@ -34,63 +34,56 @@ function getCustomer(id) {
         <table class="fl mt10 w">
             <tr>
                 <td class="f14 namewidth1" align="right">订单编号：</td>
-                <td class="f14 namewidth2" align="left">
-                    <input type="text" class="text_input1" name="search_LIKE_code"/>
-                </td>
+                <td class="f14 namewidth2" align="left"><input type="text" class="text_input1" name="search_LIKE_code" maxlength="30"/></td>
                 <td class="f14 namewidth1" align="right">产品名：</td>
-                <td class="f14 namewidth2" align="left">
-                    <input type="text" class="text_input1" name="search_LIKE_product.name"/>
-                </td>
+                <td class="f14 namewidth2" align="left"><input type="text" class="text_input1" name="search_LIKE_product.name" maxlength="30"/></td>
                 <td class="f14 namewidth1" align="right">客户名：</td>
-                <td class="f14 namewidth2" align="left">
-                    <input type="text" class="text_input1" name="search_LIKE_customer.name"/>
-                </td>
+                <td class="f14 namewidth2" align="left"><input type="text" class="text_input1" name="search_LIKE_customer.name" maxlength="30"/></td>
                 <td class="namewidth3">
                     <a class="c_222 block cp fr ml10 globle_img mt8 mr20 more" title="展开"></a>
-                    <a href="javascript:void(0)" class="a_underline block_inline fr w_blue mt5 reset">清除</a>
-                    <a href="javascript:void(0)" class="block_inline c_white lh25 fr mr10 submit"><b class="allbtn_l block fl"></b><b class="allbtn_r pr13 block fl w_auto f14">查&nbsp;&nbsp;询</b> </a>
+                    <a href="javascript:;" class="a_underline block_inline fr w_blue mt5 reset">清除</a>
+                    <a href="javascript:;" class="block_inline c_white lh25 fr mr10 submit">
+                    	<b class="allbtn_l block fl"></b><b class="allbtn_r pr13 block fl w_auto f14">查&nbsp;&nbsp;询</b>
+                    </a>
                 </td>
             </tr>
             <tr class="more-content">
                 <td class="f14 namewidth1" align="right">购买金额（万）：</td>
-                <td class="f14 namewidth2" align="left"><input type="text" class="text_input2" name="search_GTE_purchaseMoney"/>-<input type="text" class="text_input2" name="search_LTE_purchaseMoney"/>
+                <td class="f14 namewidth2" align="left">
+                	<input type="text" name="search_GTE_purchaseMoney" class="text_input2" maxlength="5"/>-<input type="text" 
+                		name="search_LTE_purchaseMoney" class="text_input2" maxlength="5"/>
                 </td>
                 <td class="f14 namewidth1" align="right">收益率（%）：</td>
                 <td class="f14 namewidth2" align="left">
-                    <div class="pr vm">
-                        <input class="text_input2" name="search_GTE_earningRate" type="text" readonly/>-<input class="text_input2" name="search_LTE_earningRate" type="text" readonly/>
-                    </div>
+                    <input type="text" name="search_GTE_earningRate" class="text_input2" maxlength="5" readonly/>-<input type="text" 
+                    	name="search_LTE_earningRate" class="text_input2" maxlength="5" readonly/>
                 </td>
                 <td class="f14 namewidth1" align="right">赎回赔率（%）：</td>
                 <td class="f14 namewidth2" align="left">
-                    <div class="pr vm">
-                        <input class="text_input2" name="search_GTE_arr" type="text" readonly/>-<input class="text_input2" name="search_LTE_arr" type="text" readonly/>
-                    </div>
+                    <input type="text" name="search_GTE_arr" class="text_input2" maxlength="5" readonly/>-<input type="text" 
+                    	name="search_LTE_arr" class="text_input2" maxlength="5" readonly/>
                 </td>
             </tr>
             <tr class="more-content">
                 <td class="f14 namewidth1" align="right">结束时间：</td>
                 <td class="f14 namewidth2" align="left">
                     <div class="pr vm">
-                        <a href="javascript:void(0)" class="pa time_closenone1"></a>
-                        <a href="javascript:void(0)" class="pa time_closenone2"></a>
-                        <input class="text_input2 input_close globle_img time1" name="search_GTE_endTime" type="text" readonly/>-<input class="text_input2 input_close globle_img time1" name="search_LTE_endTime" type="text" readonly/>
+                        <input type="text" name="search_GTE_endTime" class="text_input2 input_close globle_img time1" readonly/>-<input 
+                        	type="text" name="search_LTE_endTime" class="text_input2 input_close globle_img time1" readonly/>
                     </div>
                 </td>
                 <td class="f14 namewidth1" align="right">创建时间：</td>
                 <td class="f14 namewidth2" align="left">
                     <div class="pr vm">
-                        <a href="javascript:void(0)" class="pa time_closenone1"></a>
-                        <a href="javascript:void(0)" class="pa time_closenone2"></a>
-                        <input class="text_input2 input_close globle_img time" name="search_GTE_createdTime" type="text" readonly/>-<input class="text_input2 input_close globle_img time" name="search_LTE_createdTime" type="text" readonly/>
+                        <input class="text_input2 input_close globle_img time" name="search_GTE_createdTime" type="text" readonly/>-<input type="text" 
+                        	name="search_LTE_createdTime" class="text_input2 input_close globle_img time" readonly/>
                     </div>
                 </td>
                 <td class="f14 namewidth1" align="right">修改时间：</td>
                 <td class="f14 namewidth2" align="left">
                     <div class="pr vm">
-                        <a href="javascript:void(0)" class="pa time_closenone1"></a>
-                        <a href="javascript:void(0)" class="pa time_closenone2"></a>
-                        <input class="text_input2 input_close globle_img time" name="search_GTE_modifiedTime" type="text" readonly/>-<input class="text_input2 input_close globle_img time" name="search_LTE_modifiedTime" type="text" readonly/>
+                        <input class="text_input2 input_close globle_img time" name="search_GTE_modifiedTime" type="text" readonly/>-<input type="text" 
+                        	name="search_LTE_modifiedTime" class="text_input2 input_close globle_img time" readonly/>
                     </div>
                 </td>
             </tr>
@@ -100,10 +93,7 @@ function getCustomer(id) {
     <!--查询条件结束-->
     <div class="cb"></div>
     <div class="ml35 mr35 mt10 block cb cb">
-        <b class="b1"></b>
-        <b class="b2"></b>
-        <b class="b3"></b>
-        <b class="b4"></b>
+        <b class="b1"></b><b class="b2"></b><b class="b3"></b><b class="b4"></b>
         <div class="ie_head">
             <ul class="fl id_table1 mt10 ml10">
                 <c:if test="${VS_HAS_FUNCTIONS.orderDelete}">

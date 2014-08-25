@@ -24,7 +24,7 @@ $(function(){
     <table class="fl mt10 w">
     	<tr>
     		<td class="f14 namewidth1" align="right">活动名称：</td>
-    		<td class="f14 namewidth2" align="left"><input type="text" class="text_input1" name="search_LIKE_name"/></td>
+    		<td class="f14 namewidth2" align="left"><input type="text" maxlength="30" class="text_input1" name="search_LIKE_name"/></td>
     		<td class="f14 namewidth1" align="right">活动类型：</td>
     		<td class="f14 namewidth2" align="left" width="16%">
     			<select name="search_EQ_dic.id" class="select2">

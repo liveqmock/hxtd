@@ -92,7 +92,7 @@ function clearInputVal(obj){//清除
 					<span class="w_red">*&nbsp;</span>收款名称：
 				</td>
 				<td align="left">
-				<input type="text" name="name" id="txt_receivables"
+				<input type="text" maxlength="30" name="name" id="txt_receivables"
 				<c:if test="${receivables.id!=null}">readonly</c:if>
 					value="${receivables.name}" class="text_input3 required" />
 				</td>
@@ -130,7 +130,7 @@ function clearInputVal(obj){//清除
 					<span class="w_red">*&nbsp;</span>应收款金额（万）：
 				</td>
 				<td align="left">
-					<input type="text" readonly id="txt_fund" name="fund" value="${receivables.fund}" class="text_input3 number required" />
+					<input type="text" maxlength="30" readonly id="txt_fund" name="fund" value="${receivables.fund}" class="text_input3 number required" />
 				</td>
 			</tr>
 			<tr>
@@ -138,7 +138,7 @@ function clearInputVal(obj){//清除
 					<span class="w_red">*&nbsp;</span>实际收款金额（万）：
 				</td>
 				<td align="left">
-					<input  type="text" name="actual" value="${receivables.actual}" class="text_input3 required number " />
+					<input  type="text" maxlength="30" name="actual" value="${receivables.actual}" class="text_input3 required number " />
 				</td>
 			</tr>
 		</table>
@@ -151,7 +151,7 @@ function clearInputVal(obj){//清除
 					备注：
 				</td>
 				<td align="left" width="85%" valign="top">
-					<textarea name="remark" class="remarks_input1">${receivables.remark}</textarea>
+					<textarea name="remark" maxlength="500" class="remarks_input1">${receivables.remark}</textarea>
 				</td>
 			</tr>
 		</table>

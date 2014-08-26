@@ -1,6 +1,7 @@
 package com.baihui.hxtd.soa.common.service;
 
 import com.baihui.hxtd.soa.base.Constant;
+import com.baihui.hxtd.soa.base.DBDateServiceInjecter;
 import com.baihui.hxtd.soa.base.orm.hibernate.HibernatePage;
 import com.baihui.hxtd.soa.common.controller.model.FlowModel;
 import com.baihui.hxtd.soa.common.dao.FlowInstanceDao;
@@ -196,7 +197,7 @@ public class FlowInstanceService {
         flowInstanceDao.batchExecute(hql, FlowNodeService.findNext(flowNodes, flowInstance.getFlowNode()), flowInstance.getRecordId());
 
         //保存当前流程实例
-        Date now = new Date();
+        Date now = DBDateServiceInjecter.nowTime();
         flowInstance.setIsPassed(true);
         flowInstance.setApproveTime(now);
         flowInstance.setCreatedTime(now);
@@ -248,7 +249,7 @@ public class FlowInstanceService {
      */
     @Transactional
     public void execute(FlowModel flowModel) {
-        Date now = new Date();
+        Date now = DBDateServiceInjecter.nowTime();
         FlowInstance flowInstance = flowModel.getExecuteRecord();
         Module module = flowInstance.getModule();
 

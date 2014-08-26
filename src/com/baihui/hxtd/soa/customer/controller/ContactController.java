@@ -12,6 +12,7 @@ import javax.servlet.ServletContext;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import com.baihui.hxtd.soa.base.DBDateServiceInjecter;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.ui.ModelMap;
@@ -146,7 +147,7 @@ public class ContactController extends CommonController<Contact> {
 		User user = new User(userId);
 		contact.setCreator(user);
 		contact.setModifier(user);
-		contact.setCreatedTime(new Date());
+		contact.setCreatedTime(DBDateServiceInjecter.nowTime());
 		if(contactType.equals("customer")){
 			contact.setSupplier(null);
 		} else {

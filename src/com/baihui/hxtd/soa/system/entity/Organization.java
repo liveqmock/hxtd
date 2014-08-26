@@ -108,7 +108,7 @@ public class Organization implements Serializable, Cloneable, Initialized {
     private User modifier;
 
     @FieldInfo(desc = "修改时间")
-    @Column(name = "MODIFIED_TIME", nullable = false)
+    @Column(name = "MODIFIED_TIME", nullable = false, insertable = false, updatable = false)
     private Date modifiedTime;
 
     @FieldInfo(desc = "关联角色")

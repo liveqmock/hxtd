@@ -4,6 +4,7 @@ import java.io.Serializable;
 import java.util.Date;
 import java.util.List;
 
+import com.baihui.hxtd.soa.base.DBDateServiceInjecter;
 import com.baihui.hxtd.soa.common.entity.PCAS;
 import com.baihui.hxtd.soa.project.entity.Supplier;
 import com.baihui.hxtd.soa.system.entity.Dictionary;
@@ -53,7 +54,7 @@ public class ContactDTO implements Serializable {
 
 	public  static ContactDTO createEntity(List<Object> list){
 			ContactDTO c = new ContactDTO(list);
-			c.setCreatedTime(new Date());
+			c.setCreatedTime(DBDateServiceInjecter.nowTime());
 			return c;
 	}
 	

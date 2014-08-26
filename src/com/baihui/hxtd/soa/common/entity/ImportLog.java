@@ -73,7 +73,7 @@ public class ImportLog implements Serializable
 
     /**修改时间*/
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss", timezone = "GMT+08:00")
-	@Column(name = "MODIFIED_TIME", nullable = false)
+    @Column(name = "MODIFIED_TIME", nullable = false, insertable = false, updatable = false)
     private Date modifiedTime;
     
     /**导入的描述*/

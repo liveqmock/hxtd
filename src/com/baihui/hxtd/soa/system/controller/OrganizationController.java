@@ -1,6 +1,7 @@
 package com.baihui.hxtd.soa.system.controller;
 
 import com.baihui.hxtd.soa.base.Constant;
+import com.baihui.hxtd.soa.base.DBDateServiceInjecter;
 import com.baihui.hxtd.soa.base.orm.hibernate.HibernatePage;
 import com.baihui.hxtd.soa.base.utils.Search;
 import com.baihui.hxtd.soa.base.utils.mapper.HibernateAwareObjectMapper;
@@ -271,7 +272,7 @@ public class OrganizationController {
 
         logger.info("添加服务端属性值");
         User user = (User) modelMap.get(Constant.VS_USER);
-        organization.setModifiedTime(new Date());
+        organization.setModifiedTime(DBDateServiceInjecter.nowTime());
         logger.debug("修改时间为当前时间“{}”", organization.getModifiedTime());
         organization.setModifier(user);
         logger.debug("修改用户为当前用户“{}”", user.getName());

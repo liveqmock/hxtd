@@ -10,6 +10,7 @@ import java.util.Map;
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
 
+import com.baihui.hxtd.soa.base.DBDateServiceInjecter;
 import org.springframework.beans.propertyeditors.CustomDateEditor;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -138,8 +139,8 @@ public class MemoirController {
 		User user = new User(userId);
 		memoir.setCreator(user);
 		memoir.setModifier(user);
-		memoir.setCreatedTime(new Date());
-		memoir.setModifiedTime(new Date());
+		memoir.setCreatedTime(DBDateServiceInjecter.nowTime());
+		memoir.setModifiedTime(memoir.getCreatedTime());
 		memoir.setEmployee(user);
 		
 		AuditLog auditLog = new AuditLog(EnumModule.MEMOIR.getModuleName(), 

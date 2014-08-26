@@ -5,6 +5,8 @@ import org.apache.commons.lang3.Range;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.time.DateUtils;
 
+import com.baihui.hxtd.soa.base.DBDateServiceInjecter;
+
 import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -287,7 +289,7 @@ public class CommonCalendar {
 
     /** 生成当前日期范围 */
     public static Map<String, Range<Date>> generateDateRange() {
-        return generateDateRange(new Date());
+        return generateDateRange(DBDateServiceInjecter.nowTime());
     }
 
     /**

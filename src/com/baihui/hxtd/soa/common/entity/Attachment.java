@@ -17,14 +17,14 @@ import com.baihui.hxtd.soa.system.entity.Dictionary;
 import com.baihui.hxtd.soa.system.entity.User;
 import com.fasterxml.jackson.annotation.JsonFormat;
 /**
- * 
+ *
  * 功能描述：附件实体类
- * @author ruisong.luan 
+ * @author ruisong.luan
  * @company 北京市百会纵横科技有限公司
- * @copyright (版权)  本文件归属 北京市百会纵横科技有限公司 
- * @since (该版本支持的 JDK 版本) ： 1.5 
+ * @copyright (版权)  本文件归属 北京市百会纵横科技有限公司
+ * @since (该版本支持的 JDK 版本) ： 1.5
  * @ClassName: com.baihui.hxtd.soa.common.entity.Attachment.java
- * @version (版本)1 
+ * @version (版本)1
  * @date 2014-5-26 上午09:47:36
  */
 @Entity
@@ -86,15 +86,15 @@ public class Attachment {
 	 * 最后修改时间
 	 */
 	@JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss", timezone = "GMT+08:00")
-	@Column(name = "MODIFIED_TIME", nullable = false)
-	private Date modifiedTime;
-	
+    @Column(name = "MODIFIED_TIME", nullable = false, insertable = false, updatable = false)
+    private Date modifiedTime;
+
 	/**
 	 * 逻辑删除
 	 */
 	@Column(name = "IS_DELETED", nullable = false)
 	private Boolean isDeleted = false;
-	
+
 	public Long getId() {
 		return id;
 	}
@@ -161,7 +161,7 @@ public class Attachment {
 	public void setIsDeleted(Boolean isDeleted) {
 		this.isDeleted = isDeleted;
 	}
-	
-	
-	
+
+
+
 }

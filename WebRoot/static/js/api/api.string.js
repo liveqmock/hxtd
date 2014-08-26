@@ -66,4 +66,16 @@ String.prototype.endWith = function (suf) {
             return _args[i++];
         });
     }
+
+    String.prototype.translateTextFromHtml = function (str) {
+        str = this;
+        return  (str && str.length > 0) ? str.replace(/&3D;/g, "=").replace(/&lt;/g, "<").replace(/&gt;/g, ">").replace(/&apos;/g, "'").replace(/&quot;/g, "\"").replace(/&amp;/g, "&") : str;
+    };
+
+    String.prototype.translateTextFromJson = function (str) {
+        str = this;
+        return (str && str.length > 0) ? str.replace(/&apos;/g, "'").replace(/&quot;/g, "\"").replace(/&0D;/g, "\r").replace(/&0A;/g, "\n").replace(/&amp;/g, "&") : str;
+    };
+
+
 })();

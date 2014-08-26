@@ -5,6 +5,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import com.baihui.hxtd.soa.base.DBDateServiceInjecter;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -70,7 +71,7 @@ public class ImportRecyclebinService extends ImportServiceAbstract<RecyclebinDTO
 		
 		recycleBin.setRecordId(recyclebinDTO.getRecordId());
 		
-		recycleBin.setCreatedTime(new Date());
+		recycleBin.setCreatedTime(DBDateServiceInjecter.nowTime());
 		
 		recycleBin.setRemark(recyclebinDTO.getRemark());
 		return recycleBin;

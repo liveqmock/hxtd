@@ -85,7 +85,7 @@ public class HibernateDAOImpl<T, PK extends Serializable> implements
         return entity;
     }
 
-    
+
     /**
      * 合并对象
      */
@@ -99,15 +99,15 @@ public class HibernateDAOImpl<T, PK extends Serializable> implements
     /**
      * 批量合并对象
      */
-    public List<T> merge(final List<T>  entities) {
-    	Assert.notNull(entities, "entities不能为空");
-    	for (T t : entities){
-    		merge(t);
-    	}
-    	logger.debug("save entities: {}", entities);
-    	return entities;
+    public List<T> merge(final List<T> entities) {
+        Assert.notNull(entities, "entities不能为空");
+        for (T t : entities) {
+            merge(t);
+        }
+        logger.debug("save entities: {}", entities);
+        return entities;
     }
-    
+
     /**
      * 删除对象.
      *
@@ -124,8 +124,8 @@ public class HibernateDAOImpl<T, PK extends Serializable> implements
      */
     public void logicalDelete(final PK id) {
         Assert.notNull(id, "id不能为空");
-        String hql = String.format("update %s entity set entity.isDeleted=true, entity.modifiedTime=? where entity.id =?", entityClass.getSimpleName());
-        batchExecute(hql, new Date(), id);
+        String hql = String.format("update %s entity set entity.isDeleted=true where entity.id =?", entityClass.getSimpleName());
+        batchExecute(hql, id);
         logger.debug("delete entity {},id is {}", entityClass.getSimpleName(), id);
     }
 
@@ -134,8 +134,8 @@ public class HibernateDAOImpl<T, PK extends Serializable> implements
      */
     public void logicalDelete(final PK... ids) {
         Assert.notNull(ids, "id不能为空");
-        String hql = String.format("update %s entity set entity.isDeleted=true, entity.modifiedTime=:modifyTime where entity.id in (:id)", entityClass.getSimpleName());
-        getSession().createQuery(hql).setParameter("modifyTime", new Date()).setParameterList("id", ids).executeUpdate();
+        String hql = String.format("update %s entity set entity.isDeleted=true where entity.id in (:id)", entityClass.getSimpleName());
+        getSession().createQuery(hql).setParameterList("id", ids).executeUpdate();
         logger.debug("delete entity {},id is {}", entityClass.getSimpleName(), ids);
     }
 
@@ -158,30 +158,33 @@ public class HibernateDAOImpl<T, PK extends Serializable> implements
         }
         logger.debug("delete entity {" + entityClass.getSimpleName() + "},id is {" + ids + "}");
     }
+
     /**
-     * 
-      * getDBNow(获得数据库当前时间)
-      * @Title: getDBNow
-      * @param @return    参数类型
-      * @return Date    返回类型
-      * @throws
+     * getDBNow(获得数据库当前时间)
+     *
+     * @param @return 参数类型
+     * @return Date    返回类型
+     * @throws
+     * @Title: getDBNow
      */
-    public Date getDBNow(){
-    	String sql = "select current_timestamp";
-    	return findSQLUnique(sql);
+    public Date getDBNow() {
+        String sql = "select current_timestamp";
+        return findSQLUnique(sql);
     }
+
     /**
-     * 
-      * getDBNowDate(获得数据库当前日期)
-      * @Title: getDBNowDate
-      * @param @return    参数类型
-      * @return Date    返回类型
-      * @throws
+     * getDBNowDate(获得数据库当前日期)
+     *
+     * @param @return 参数类型
+     * @return Date    返回类型
+     * @throws
+     * @Title: getDBNowDate
      */
-    public Date getDBNowDate(){
-    	String sql = "select current_date";
-    	return findSQLUnique(sql);
+    public Date getDBNowDate() {
+        String sql = "select current_date";
+        return findSQLUnique(sql);
     }
+
     /**
      * 按id获取对象.
      */

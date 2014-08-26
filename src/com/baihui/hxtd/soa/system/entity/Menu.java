@@ -109,7 +109,7 @@ public class Menu implements Serializable, Cloneable, TreeNode<Menu>, Initialize
     private User modifier;
 
     @FieldInfo(desc = "修改时间")
-    @Column(name = "MODIFIED_TIME", nullable = false)
+    @Column(name = "MODIFIED_TIME", nullable = false, insertable = false, updatable = false)
     private Date modifiedTime;
 
     @FieldInfo(desc = "上级菜单")

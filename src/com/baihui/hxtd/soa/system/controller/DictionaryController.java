@@ -10,6 +10,7 @@ import java.util.Map;
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
 
+import com.baihui.hxtd.soa.base.DBDateServiceInjecter;
 import org.springframework.beans.propertyeditors.CustomDateEditor;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -137,7 +138,7 @@ public class DictionaryController {
 		User user = new User(userId);
 		dictionary.setCreator(user);
 		dictionary.setModifier(user);
-		dictionary.setCreatedTime(new Date());
+		dictionary.setCreatedTime(DBDateServiceInjecter.nowTime());
 		
 		/****************审计日志**********************/
 		AuditLog auditLog = new AuditLog(EnumModule.DICTIONARY.getModuleName(),

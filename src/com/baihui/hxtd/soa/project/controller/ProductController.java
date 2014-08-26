@@ -28,6 +28,7 @@ import org.springframework.web.bind.annotation.SessionAttributes;
 import org.springside.modules.web.Servlets;
 
 import com.baihui.hxtd.soa.base.Constant;
+import com.baihui.hxtd.soa.base.DBDateServiceInjecter;
 import com.baihui.hxtd.soa.base.orm.hibernate.HibernatePage;
 import com.baihui.hxtd.soa.base.utils.ImportExport;
 import com.baihui.hxtd.soa.base.utils.Search;
@@ -134,7 +135,7 @@ public class ProductController extends CommonController<Product> {
 		initPageDic(model);
 		
 		Product product = new Product();
-		product.setCode(new SimpleDateFormat("yyyyMMddHHmmssms").format(new Date()));
+		product.setCode(new SimpleDateFormat("yyyyMMddHHmmssms").format(DBDateServiceInjecter.nowTime()));
 		//product.setSaleBeginTime(new Date());
 		//product.setSaleEndTime(new Date());
 		model.addAttribute("product", product);
@@ -154,9 +155,8 @@ public class ProductController extends CommonController<Product> {
 			@ModelAttribute(Constant.VS_USER_ID) Long userId) {
 		/************设置修改者、创建者****************/
 		User user = new User(userId);
-		Date date = new Date();
 		product.setCreator(user);
-		product.setCreatedTime(date);
+		product.setCreatedTime(DBDateServiceInjecter.nowTime());
 		product.setModifier(user);
 		
 		/************ 新增 *****************************/

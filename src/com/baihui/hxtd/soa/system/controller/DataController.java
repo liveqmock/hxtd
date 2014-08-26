@@ -216,8 +216,6 @@ public class DataController {
         logger.info("修改");
 
         logger.info("添加服务端属性值");
-        role.setModifiedTime(new Date());
-        logger.debug("修改时间为当前时间“{}”", role.getModifiedTime());
         role.setModifier(new User(userId));
         logger.debug("修改用户为当前用户“{}”", userName);
 

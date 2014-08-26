@@ -1,6 +1,7 @@
 package com.baihui.hxtd.soa.order.controller;
 
 import com.baihui.hxtd.soa.base.Constant;
+import com.baihui.hxtd.soa.base.DBDateServiceInjecter;
 import com.baihui.hxtd.soa.base.InitApplicationConstant;
 import com.baihui.hxtd.soa.base.orm.hibernate.HibernatePage;
 import com.baihui.hxtd.soa.base.utils.ImportExport;
@@ -173,7 +174,7 @@ public class OrderController extends CommonController<Order> {
         gc.add(2, -1);//结束时间减去一个月
         boolean advaceFlag=false;
         boolean normalFlag=false;
-        if(gc.getTime().getTime() - new Date().getTime() > 0){
+        if(gc.getTime().getTime() - DBDateServiceInjecter.nowTime().getTime() > 0){
         	advaceFlag=true;
         }else{
         	normalFlag=true;

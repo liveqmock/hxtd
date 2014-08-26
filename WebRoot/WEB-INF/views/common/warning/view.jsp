@@ -28,13 +28,9 @@
 
         var charts = {
             <c:forEach items="${charts}" var="chart">
-            "${chart.key}": JSON.stringify(${chart.value==null?"":chart.value}),
+            "${chart.key}": JSON.stringify(${chart.value==null?"":chart.value.chart}),
             </c:forEach>
         };
-
-        function open_flash_chart_data() {
-            return charts.monthChart;
-        }
 
         function findSWF(movieName) {
             if (navigator.appName.indexOf("Microsoft") != -1) {
@@ -43,16 +39,17 @@
                 return document[movieName];
             }
         }
-        for (var attr in charts) {
-            var chart = charts[attr];
-            chart && swfobject.embedSWF("${ctx}/static/component/open-flash-chart-2/open-flash-chart.swf", attr, "100%", "200", "9.0.0");
-        }
 
         $(function () {
             $C.tab({onSelected: function (event, title, panel) {
                 var movieName = panel.attr("data-chart");
-                var object = findSWF(movieName);
-                object && setTimeout(function () {object.load(charts[movieName])}, 100);
+                var container = $("#" + movieName + "Container");
+                var data = charts[movieName];
+                if (data) {
+                    container.html("<div id='" + movieName + "'></div>");
+                    window.open_flash_chart_data = function () {return data;}
+                    swfobject.embedSWF("${ctx}/static/component/open-flash-chart-2/open-flash-chart.swf", movieName, "100%", "200", "9.0.0");
+                }
             }});
         });
     </script>
@@ -115,17 +112,17 @@
                             </c:otherwise>
                         </c:choose>
                     </table>
-
                     <h1 class="f14 fbnone tc">图表信息</h1>
 
-                    <div class="cb id_table4 w90b margin0 p10 mt10 mb10" style="text-align: center">
-                        <div id="${chartKey}">
+                    <div id="${chartKey}Container" class="cb id_table4 w90b margin0 p10 mt10 mb10" style="text-align: center">
+                        <div>
                             <div class='allnone'></div>
                         </div>
                     </div>
                 </div>
             </c:forEach>
         </div>
+
     </div>
 </div>
 </body>

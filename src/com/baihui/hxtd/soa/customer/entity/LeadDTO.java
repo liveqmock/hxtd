@@ -4,6 +4,7 @@ import java.util.Date;
 import java.util.List;
 
 
+import com.baihui.hxtd.soa.base.DBDateServiceInjecter;
 import com.baihui.hxtd.soa.common.entity.PCAS;
 import com.baihui.hxtd.soa.system.entity.Dictionary;
 import com.baihui.hxtd.soa.system.entity.User;
@@ -65,7 +66,7 @@ public class LeadDTO {
 				(String)list.get(3), (String)list.get(4), (String)list.get(5), (String)list.get(6), 
 				(String)list.get(7),(String)list.get(8), (Dictionary)list.get(9),(Dictionary) list.get(10), 
 				(Dictionary)list.get(11), (String)list.get(12), (Dictionary)list.get(13), (PCAS)list.get(14), (PCAS)list.get(15),
-				(PCAS)list.get(16), (String)list.get(17), (String)list.get(18), (String)list.get(19), (Integer)list.get(20), new Date());
+				(PCAS)list.get(16), (String)list.get(17), (String)list.get(18), (String)list.get(19), (Integer)list.get(20), DBDateServiceInjecter.nowTime());
 	}
 	/**
 	 * 序列化

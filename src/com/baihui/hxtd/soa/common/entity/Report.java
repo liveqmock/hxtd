@@ -77,7 +77,7 @@ public class Report implements Serializable, Idable, Initialized {
     @JoinColumn(name = "MODIFIER_ID", nullable = false)
     private User modifier;
 
-    @Column(name = "MODIFIED_TIME", updatable = false)
+    @Column(name = "MODIFIED_TIME", nullable = false, insertable = false, updatable = false)
     private Date modifiedTime;
 
     @Transient

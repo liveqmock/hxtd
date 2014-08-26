@@ -88,7 +88,7 @@
     </servlet>
     <servlet-mapping>
         <servlet-name>CXFServlet</servlet-name>
-        <url-pattern>*.cxf</url-pattern>
+        <url-pattern>/webservice/*</url-pattern>
     </servlet-mapping>
 
     <session-config>

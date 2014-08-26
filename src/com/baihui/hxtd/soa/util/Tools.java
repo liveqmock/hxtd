@@ -6,6 +6,8 @@ import java.util.Date;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import com.baihui.hxtd.soa.base.DBDateServiceInjecter;
+
 /**
  * 
  * 功能描述： 工具类
@@ -43,7 +45,7 @@ public class Tools {
 	  * @throws
 	 */
 	public static String fomatDate(String fomatStr){
-		return fomatDate(fomatStr,new Date());
+		return fomatDate(fomatStr, DBDateServiceInjecter.nowTime());
 	}
 	
 	/**

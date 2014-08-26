@@ -159,7 +159,7 @@ public class Dictionary implements Serializable, Initialized {
      * 修改时间
      */
     @JsonFormat(pattern = "yyyy-MM-dd", timezone = "GMT+08:00")
-    @Column(name = "MODIFIED_TIME")
+    @Column(name = "MODIFIED_TIME", nullable = false, insertable = false, updatable = false)
     private Date modifiedTime;
 
     public Long getId() {

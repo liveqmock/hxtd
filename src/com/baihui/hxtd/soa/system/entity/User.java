@@ -113,7 +113,7 @@ public class User implements Serializable, Cloneable, Initialized {
     private User modifier;
 
     @FieldInfo(desc = "修改时间")
-    @Column(name = "MODIFIED_TIME")
+    @Column(name = "MODIFIED_TIME", nullable = false, insertable = false, updatable = false)
     private Date modifiedTime;
 
     @FieldInfo(desc = "所属组织")

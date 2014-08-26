@@ -6,6 +6,7 @@ import java.util.Map;
 
 import javax.annotation.Resource;
 
+import com.baihui.hxtd.soa.base.DBDateServiceInjecter;
 import org.hibernate.FetchMode;
 import org.hibernate.criterion.DetachedCriteria;
 import org.slf4j.Logger;
@@ -194,7 +195,8 @@ public class LeadService {
 		logger.debug("客户来源指定为线索转换");
 		cus.setSource(dictionaryService.getByValue(DictionaryConstant.CUSTOMER_SOURCE_CONVER));
 		cus.setId(null);
-		cus.setModifiedTime(new Date());
+        Date modifiedTime = DBDateServiceInjecter.nowTime();
+        cus.setModifiedTime(modifiedTime);
 		customerDao.save(cus);
 		
 		logger.debug("转换联系人信息");
@@ -203,7 +205,7 @@ public class LeadService {
 		con.setSource(null);
 		con.setId(null);
 		con.setCustomer(cus);
-		con.setModifiedTime(new Date());
+		con.setModifiedTime(modifiedTime);
 		contactDao.save(con);
 		
 		logger.debug("修改线索的附件以及联系纪要给联系人");

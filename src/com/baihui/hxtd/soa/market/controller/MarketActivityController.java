@@ -13,6 +13,7 @@ import javax.servlet.ServletContext;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import com.baihui.hxtd.soa.base.DBDateServiceInjecter;
 import org.springframework.beans.propertyeditors.CustomDateEditor;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
@@ -176,7 +177,7 @@ public class MarketActivityController extends CommonController<MarketActivity> {
 
         /************初始化活动(发起者)****************/
         User user = (User) model.get(Constant.VS_USER);
-        Date date = new Date();
+        Date date = DBDateServiceInjecter.nowTime();
         MarketActivity entity = new MarketActivity();
         entity.setSponsor(user); //所有者
         entity.setBossHead(user); //负责人
@@ -200,7 +201,7 @@ public class MarketActivityController extends CommonController<MarketActivity> {
     public String add(MarketActivity activity, @ModelAttribute(Constant.VS_USER_ID) Long userId) {
         /************设置修改者、创建者****************/
         User user = new User(userId);
-        Date date = new Date();
+        Date date = DBDateServiceInjecter.nowTime();
         activity.setSponsor(user);
         activity.setCreator(user);
         activity.setCreatedTime(date);

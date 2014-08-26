@@ -91,7 +91,7 @@ public class Notice implements Serializable{
 	 */
 	@FieldInfo(desc = "修改时间")
 	@JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss", timezone = "GMT+08:00")
-	@Column(name = "MODIFIED_TIME",updatable=false, insertable=false)
+    @Column(name = "MODIFIED_TIME", nullable = false, insertable = false, updatable = false)
 	private Date modifiedTime;
    
 	/**

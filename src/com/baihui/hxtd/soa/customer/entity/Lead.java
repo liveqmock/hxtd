@@ -202,14 +202,14 @@ public class Lead {
 
 	/** 最终修改时间 */
 	@JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss", timezone = "GMT+08:00")
-	@Column(name = "MODIFIED_TIME")
 	@FieldInfo(desc="修改时间")
+    @Column(name = "MODIFIED_TIME", nullable = false, insertable = false, updatable = false)
 	private Date modifiedTime;
 
 	@FieldInfo(desc="删除标志")
 	@Column(name = "IS_DELETED", nullable = false, updatable = false)
 	private Boolean isDeleted = false;
-	
+
 
 	public Boolean getIsDeleted() {
 		return isDeleted;

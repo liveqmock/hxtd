@@ -2,6 +2,7 @@ package com.baihui.hxtd.soa.common.aspect;
 
 import javax.annotation.Resource;
 
+import com.baihui.hxtd.soa.base.DBDateServiceInjecter;
 import com.baihui.hxtd.soa.common.entity.Idable;
 import org.aspectj.lang.JoinPoint;
 import org.aspectj.lang.annotation.AfterReturning;
@@ -89,7 +90,7 @@ public class AuditLogAspect {
             Idable idable = (Idable) arg;
             if (idable.getId() != null) {
                 auditLog.setRecordId(idable.getId());
-                auditLog.setCreatedTime(new Date());
+                auditLog.setCreatedTime(DBDateServiceInjecter.nowTime());
             }
         }
         auditLogService.save(auditLog);

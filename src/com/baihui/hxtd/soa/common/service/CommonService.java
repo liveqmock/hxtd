@@ -1,6 +1,7 @@
 package com.baihui.hxtd.soa.common.service;
 
 import com.baihui.hxtd.soa.base.Constant;
+import com.baihui.hxtd.soa.base.DBDateServiceInjecter;
 import com.baihui.hxtd.soa.base.orm.hibernate.HibernatePage;
 import com.baihui.hxtd.soa.base.utils.ImportExport;
 import com.baihui.hxtd.soa.base.utils.serial.TierSerial;
@@ -386,7 +387,7 @@ public class CommonService {
         auditLog.setRecordName(type.equals(ImportExport.Type.selected) ? "导出列表选中的数据" : String.format("导出前%s条数据", Constant.EXPORT_MAX_COUNT));
         auditLog.setType(EnumOperationType.EXPORT.getOperationType());
         auditLog.setCreator(user);
-        auditLog.setCreatedTime(new Date());
+        auditLog.setCreatedTime(DBDateServiceInjecter.nowTime());
         auditLog.setRemark(String.format("共导出%s条数据", size));
         auditLogDao.save(auditLog);
     }

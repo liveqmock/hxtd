@@ -1,6 +1,7 @@
 package com.baihui.hxtd.soa.system.controller.interceptor;
 
 import com.baihui.hxtd.soa.base.Constant;
+import com.baihui.hxtd.soa.base.DBDateServiceInjecter;
 import com.baihui.hxtd.soa.base.utils.RequestUtil;
 import com.baihui.hxtd.soa.base.utils.UrlUtil;
 import com.baihui.hxtd.soa.base.utils.mapper.HibernateAwareObjectMapper;
@@ -88,7 +89,7 @@ public class DataStoreInterceptor extends HandlerInterceptorAdapter {
         if (functionName != null) {
             request.setAttribute((String) functionName, true);
         }
-        Date date = new Date();
+        Date date = DBDateServiceInjecter.nowTime();
         request.setAttribute(Constant.VR_DATE, date);
         logger.debug("当前时间“{}”", date);
         request.setAttribute(Constant.VR_PARAMS, Servlets.encodeParameterStringWithPrefix(Servlets.getParametersStartingWith(request, ""), ""));

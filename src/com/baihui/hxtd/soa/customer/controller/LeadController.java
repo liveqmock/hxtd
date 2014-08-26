@@ -27,6 +27,7 @@ import com.baihui.hxtd.soa.base.utils.ImportExport;
 import com.baihui.hxtd.soa.base.utils.Search;
 import com.baihui.hxtd.soa.base.utils.mapper.HibernateAwareObjectMapper;
 import com.baihui.hxtd.soa.common.controller.CommonController;
+import com.baihui.hxtd.soa.customer.entity.Customer;
 import com.baihui.hxtd.soa.customer.entity.Lead;
 import com.baihui.hxtd.soa.customer.service.LeadService;
 import com.baihui.hxtd.soa.system.DictionaryConstant;
@@ -96,7 +97,7 @@ public class LeadController extends CommonController<Lead>{
 	 * @return
 	 */
 	@RequestMapping(value = "/toQueryPage.do")
-	public String toQueryPage(Model model) {
+	public String toQueryPage(ModelMap model) {
 		logger.info("LeadController.toQueryPage跳转线索列表页");
 		model.addAttribute("page",new HibernatePage<Lead>(10).order(HibernatePage.DESC).orderBy("modifiedTime"));
 		setDefaultDict(model);
@@ -158,7 +159,7 @@ public class LeadController extends CommonController<Lead>{
 
 
 	@RequestMapping(value = "/toModifyPage.do")
-	public String toModifyPage(Model model,Long id) {
+	public String toModifyPage(ModelMap model,Long id) {
 		logger.info("LeadController.toModifyPage修改线索所有者信息");
 		String funcUrl="/customer/lead/modify.do";
 		model.addAttribute("funcUrl",funcUrl);
@@ -196,15 +197,19 @@ public class LeadController extends CommonController<Lead>{
 	 * @return
 	 */
 	@RequestMapping(value = "/toAddPage.do")
-	public String toAddPage( Model model){
+	public String toAddPage( ModelMap model){
 		logger.info("LeadController.toAddPage新建线索");
 		String funcUrl="/customer/lead/add.do";
 		model.addAttribute("funcUrl", funcUrl);
 		setDefaultDict(model);
+		Lead lead=new Lead();
+		User user = (User) model.get(Constant.VS_USER);
+		lead.setOwner(user);
+		model.addAttribute("lead", lead);
 		return "/customer/lead/edit";
 	}
 
-	private void setDefaultDict(Model model){
+	private void setDefaultDict(ModelMap model){
 		model.addAttribute("source",dictionaryService.findChildren(DictionaryConstant.VC_LEADSOURCE, true));
 		model.addAttribute("status",dictionaryService.findChildren(DictionaryConstant.VC_LEADSTATUS, true));
 		model.addAttribute("cardType",dictionaryService.findChildren(DictionaryConstant.VC_BANKCARDTYPE, true));

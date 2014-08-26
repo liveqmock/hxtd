@@ -66,7 +66,7 @@ public class Role implements Serializable, Comparable<Role>, Initialized {
 
     @FieldInfo(desc = "修改时间")
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss", timezone = "GMT+08:00")
-    @Column(name = "MODIFIED_TIME")
+    @Column(name = "MODIFIED_TIME", nullable = false, insertable = false, updatable = false)
     private Date modifiedTime;
 
     @FieldInfo(desc = "功能")

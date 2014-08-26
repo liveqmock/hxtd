@@ -54,24 +54,25 @@ public class NoticeService {
 	        DetachedCriteria criteria = DetachedCriteria.forClass(Notice.class);
 	        criteria.setFetchMode("creator", FetchMode.JOIN);
 	        criteria.setFetchMode("modifier", FetchMode.JOIN);
+	        Date now = noticeDao.getDBNow();
 	        if("all".equals(type)){
 	        	//查看所有信息
-	        	searchParams.put("GTE_deadTime", new Date());
+	        	searchParams.put("GTE_deadTime", now);
 	        }else if("unsend".equals(type)){
 	        	//未发送且未过期
-	        	searchParams.put("GTE_sentTime", new Date());
-	        	searchParams.put("GTE_deadTime", new Date());
+	        	searchParams.put("GTE_sentTime", now);
+	        	searchParams.put("GTE_deadTime", now);
 	        }
 	        else if("sended".equals(type)){
 	        	if(!searchParams.containsKey("GTE_sentTime")&&
 	        			!searchParams.containsKey("LTE_sentTime")){
-	        		searchParams.put("LTE_sentTime", new Date());
+	        		searchParams.put("LTE_sentTime", now);
 	        	}
 	        	//默认查未过期且已发送的公告
-        		searchParams.put("GTE_deadTime", new Date());
+        		searchParams.put("GTE_deadTime", now);
 	        }
 	        else if("dead".equals(type)){
-	        	searchParams.put("LTE_deadTime", new Date());
+	        	searchParams.put("LTE_deadTime", now);
 	        }
 	        searchParams.put("EQ_isDeleted", false);
 	        Map<String, SearchFilter> filters = Search.parse(searchParams);

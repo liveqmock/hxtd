@@ -21,7 +21,9 @@
     <script type="text/javascript" src="${ctx}/static/js/validator.js"></script>
     <script type="text/javascript">
         $(function () {
-            /*${VS_USER.id} ${user.id}*/
+            /*
+            ${VS_USER.id}
+            ${user.id}*/
             jsUtil.renderRequired();
             jsUtil.bindSave();
             jsUtil.organizationTree({
@@ -35,6 +37,9 @@
                     </c:if>
                 }
             });
+
+
+
         });
     </script>
 </head>
@@ -65,6 +70,7 @@
                 <b class="b2"></b>
                 <b class="b3"></b>
                 <b class="b4"></b>
+
                 <div class="ie_head">
                     <h1 class="f14 fbnone mt10 ml10 fl">用户详情信息</h1>
                     <c:if test="${VM_BUSINESS!=null}">
@@ -83,7 +89,7 @@
                             <td align="left">
                                 <c:choose>
                                     <c:when test="${user.id==null}">
-                                        <input type="text" maxlength="20" class="{required:true,userName:true,maxlength:30,unique:['User','${user.id}']} text_input3" name="name" value="${user.name}"/>
+                                        <input type="text" maxlength="20" class="{required:true,specialChar:true,maxlength:30,unique:['User','${user.id}']} text_input3" name="name" value="${user.name}"/>
                                     </c:when>
                                     <c:otherwise>
                                         <input readonly maxlength="20" type="text" class="text_input3" name="name" value="${user.name}"/>
@@ -92,15 +98,15 @@
                             </td>
                             <td align="right" width="15%">密码：</td>
                             <td align="left">
-                            	<c:choose>
-                                  <c:when test="${user.id==null}">
-                                  <input type="password" class="{required:true,maxlength:64} text_input3 password" name="password" value="${user.password}"/>
-                                  </c:when>
-                                  <c:otherwise>
-                                  <input type="password" readonly class="{required:true,maxlength:64} text_input3" name="password" value="${user.password}"/>
-                                  </c:otherwise>
+                                <c:choose>
+                                    <c:when test="${user.id==null}">
+                                        <input type="password" class="{required:true,maxlength:64} text_input3 password" name="password" value="${user.password}"/>
+                                    </c:when>
+                                    <c:otherwise>
+                                        <input type="password" readonly class="{required:true,maxlength:64} text_input3" name="password" value="${user.password}"/>
+                                    </c:otherwise>
                                 </c:choose>
-                             </td>
+                            </td>
                         </tr>
                         <tr>
                             <td align="right" width="15%" class="required">管理员：</td>

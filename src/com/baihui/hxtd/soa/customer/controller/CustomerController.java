@@ -215,7 +215,9 @@ public class CustomerController extends CommonController<Customer>{
 		//获取所有数据字典类型
 		getDictionary(model);
 		Customer customer=new Customer();
-		customer.setOwner((User) model.get(Constant.VS_USER));
+		User user = (User) model.get(Constant.VS_USER);
+		customer.setOwner(user);
+		model.addAttribute("customer", customer);
 		return "/customer/customer/edit";
 	}
 	

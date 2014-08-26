@@ -1,6 +1,7 @@
 package com.baihui.hxtd.soa.system.dao;
 
 
+import com.baihui.hxtd.soa.base.DBDateServiceInjecter;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Repository;
@@ -70,7 +71,7 @@ public class FunctionDao extends HibernateDAOImpl<Function, Long> {
     /**新增*/
     public void add(Function function){
         function.setCode("");
-        function.setCreatedTime(new Date());
+        function.setCreatedTime(DBDateServiceInjecter.nowTime());
         function.setModifiedTime(function.getCreatedTime());
         function.setIsDeleted(false);
         function.setIsInitialized(false);

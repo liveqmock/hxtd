@@ -1,5 +1,6 @@
 package com.baihui.hxtd.soa.common.service;
 
+import com.baihui.hxtd.soa.base.DBDateServiceInjecter;
 import com.baihui.hxtd.soa.base.FieldInfo;
 import com.baihui.hxtd.soa.base.FieldInfoParser;
 import com.baihui.hxtd.soa.base.InitApplicationConstant;
@@ -501,7 +502,7 @@ public class ReportService {
     @Transactional
     public void add(Report report, AuditLog auditLog) {
         logger.info("新增");
-        report.setCreatedTime(new Date());
+        report.setCreatedTime(DBDateServiceInjecter.nowTime());
         report.setIsDeleted(false);
         report.setIsInitialized(false);
         reportDao.save(report);

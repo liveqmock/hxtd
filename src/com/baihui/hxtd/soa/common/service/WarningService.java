@@ -6,19 +6,17 @@ import com.baihui.hxtd.soa.order.dao.OrderDao;
 import com.baihui.hxtd.soa.system.DictionaryConstant;
 import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang3.Range;
-import org.apache.commons.lang3.time.DateUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import ro.nextreports.jofc2.model.Chart;
 import ro.nextreports.jofc2.model.elements.PieChart;
-import sun.util.calendar.CalendarUtils;
 
 import javax.annotation.Resource;
+import java.math.BigDecimal;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 
@@ -83,7 +81,7 @@ public class WarningService {
         for (int i = 0; i < rows.size(); i++) {
             Object[] row = (Object[]) rows.get(i);
             chartTable.getxAxisHeader().add(String.valueOf(row[0]));
-            numbers.add((Number) row[1]);
+            numbers.add(((BigDecimal) row[1]).longValue());
         }
         chartTable.getRows().add(numbers);
         chartModel.setChartTable(chartTable);
@@ -94,11 +92,11 @@ public class WarningService {
         PieChart pieChart = new PieChart();
         for (int i = 0; i < rows.size(); i++) {
             Object[] row = (Object[]) rows.get(i);
-            pieChart.addSlice((Number) row[1], String.format("%s(%s)", row[0], String.valueOf(row[1])));
+            pieChart.addSlice(((BigDecimal) row[1]).longValue(), String.format("%s(%s)", row[0], String.valueOf(row[1])));
         }
         pieChart.setStartAngle(100);
         pieChart.setAnimate(true);
-        pieChart.setTooltip("#val#  /  #total#<br> 占百分之 #percent#  <br>");
+        pieChart.setTooltip("#val# / #total#<br> 占百分之 #percent#  <br>");
         chart.addElements(pieChart);
 
         chartModel.setChart(chart.toString());

@@ -46,7 +46,6 @@ import java.util.*;
  * @since (该版本支持的 JDK 版本) ： 1.6
  */
 @Service
-@Transactional(readOnly = true)
 public class OrderService {
 
     private Logger logger = LoggerFactory.getLogger(this.getClass());
@@ -105,12 +104,14 @@ public class OrderService {
     /**
      * 导出
      */
+    @Transactional(readOnly = true)
     public List<Order> export(Map<String, Object> searchParams, DataShift dataShift)
             throws NoSuchFieldException {
         DetachedCriteria criteria = biuldQuery(searchParams, dataShift, Order.class);
         return orderDao.find(criteria, 3000);
     }
 
+    @Transactional(readOnly = true)
     public Order get(Long id) {
         String hql = " select ord from Order ord "
                 + " left join fetch ord.flowNode "
@@ -126,6 +127,7 @@ public class OrderService {
         return orderDao.findUnique(hql, id);
     }
 
+    @Transactional(readOnly = true)
     public Order getByCode(String code) {
         String hql = " select ord from Order ord "
                 + " left join fetch ord.flowNode "
@@ -139,7 +141,7 @@ public class OrderService {
         return orderDao.findUnique(hql, code);
     }
 
-    @Transactional(readOnly = false)
+    @Transactional
     public void add(Order order, AuditLog auditLog) {
         Date now = orderDao.getDBNow();
         order.setCreatedTime(now);
@@ -152,7 +154,7 @@ public class OrderService {
         auditLog.setRecordId(order.getId());
     }
 
-    @Transactional(readOnly = false)
+    @Transactional
     public void modify(Order order, AuditLog auditLog) {
         Date now = orderDao.getDBNow();
         order.setCreatedTime(now);
@@ -160,7 +162,7 @@ public class OrderService {
         orderDao.save(order);
     }
 
-    @Transactional(readOnly = false)
+    @Transactional
     public boolean delete(Long[] ids, AuditLog[] auditLogArr) {
         if (contractDao.getCount(ids, "order") > 0) {
             return false;
@@ -180,6 +182,7 @@ public class OrderService {
      * @throws NoSuchFieldException
      * @author huizijing
      */
+    @Transactional(readOnly = true)
     public HibernatePage<Order> findListPage(Map<String, Object> searchParams,
                                              DataShift dataShift, HibernatePage<Order> page) throws NoSuchFieldException {
         searchParams.put("EQ_isDeleted", false);
@@ -196,8 +199,8 @@ public class OrderService {
         page.setResult(orders);
         return page;
     }
-
-
+    
+    @Transactional(readOnly = true)
     public Long getSumMoneyByTime(Date beginTime, Date endTime) {
         String hql = "select sum(order.purchaseMoney) from Order order " +
                 "where order.isDeleted = false " +
@@ -216,7 +219,7 @@ public class OrderService {
      * @throws
      * @Title: modifyOrderNoteing
      */
-    @Transactional(readOnly = false)
+    @Transactional
     public void modifyOrderNoteing(Long id) {
         String hql = "update Order o set o.orderStatus = ? where o.id=?";
         orderDao.createQuery(hql, dictionaryDao.getByValue(DictionaryConstant.ORDER_STATUS_NODEING), id).executeUpdate();
@@ -232,7 +235,7 @@ public class OrderService {
      * @throws
      * @Title: modifyOrderNoteFinish
      */
-    @Transactional(readOnly = false)
+    @Transactional
     public void modifyOrderNoteFinish(Long id, User user, AuditLog auditLog) {
         String hql = "update Order o set o.orderStatus = ? where o.id=?";
         orderDao.createQuery(hql, dictionaryDao.getByValue(DictionaryConstant.ORDER_STATUS_NODE_FINIAL), id).executeUpdate();
@@ -253,7 +256,7 @@ public class OrderService {
      * @throws
      * @Title: advanceRedemptionOrder
      */
-    @Transactional(readOnly = false)
+    @Transactional
     public void advanceRedemptionOrder(Long id, User user, BigDecimal fund, AuditLog auditLog) {
         String hql = "update Order o set o.orderStatus = ? where o.id=?";
         orderDao.createQuery(hql, dictionaryDao.getByValue(DictionaryConstant.ORDER_STATUS_ADVANCE_REDEMPTION), id).executeUpdate();
@@ -274,7 +277,7 @@ public class OrderService {
      * @throws
      * @Title: normalRedemptionOrder
      */
-    @Transactional(readOnly = false)
+    @Transactional
     public void normalRedemptionOrder(Long id, User user, BigDecimal fund, AuditLog auditLog) {
         String hql = "update Order o set o.orderStatus = ? where o.id=?";
         orderDao.createQuery(hql, dictionaryDao.getByValue(DictionaryConstant.ORDER_STATUS_FINISH_REDEMPTION), id).executeUpdate();
@@ -295,7 +298,7 @@ public class OrderService {
      * @throws
      * @Title: modifyInvalidOrderbyCustomer
      */
-    @Transactional(readOnly = false)
+    @Transactional
     public void modifyInvalidOrderbyCustomer(Long id, AuditLog auditLog) {
         String hql = "update Order o set o.orderStatus = ? where o.id=?";
         orderDao.createQuery(hql, dictionaryDao.getByValue(DictionaryConstant.ORDER_STATUS_INVALID_CUSTOMER), id).executeUpdate();
@@ -310,7 +313,7 @@ public class OrderService {
      * @throws
      * @Title: advanceRedemptionOrder
      */
-    @Transactional(readOnly = false)
+    @Transactional
     public void modifyInvalidOrderbyOwner(Long id, AuditLog auditLog) {
         String hql = "update Order o set o.orderStatus = ? where o.id=?";
         orderDao.createQuery(hql, dictionaryDao.getByValue(DictionaryConstant.ORDER_STATUS_INVALID_OWNER), id).executeUpdate();
@@ -354,6 +357,7 @@ public class OrderService {
      * @param timeRange 时间范围
      * @return 订单列表
      */
+    @Transactional(readOnly = true)
     public HibernatePage<Order> findFinished(HibernatePage<Order> page, User user, Range<Date> timeRange) {
         String hql = "select entity from Order entity" +
                 " where entity.orderStatus.value in ('%s','%s','%s')" +
@@ -379,6 +383,7 @@ public class OrderService {
      * @see #findFinished(com.baihui.hxtd.soa.base.orm.hibernate.HibernatePage, com.baihui.hxtd.soa.system.entity.User, org.apache.commons.lang3.Range) 已完成的含义
      */
     @SuppressWarnings("unchecked")
+    @Transactional(readOnly = true)
     public String statisFinished(User user, Range<Date> timeRange) {
         List<AxisInfo> axisInfos;
         String function;
@@ -440,6 +445,7 @@ public class OrderService {
      * @return 订单数目和总金额，二维数组
      * @see #findFinished(com.baihui.hxtd.soa.base.orm.hibernate.HibernatePage, com.baihui.hxtd.soa.system.entity.User, org.apache.commons.lang3.Range) 已完成的含义
      */
+    @Transactional(readOnly = true)
     public Object[] statisFinishedCountMoney(User user, Range<Date> timeRange) {
         String hql = "select count(entity.id),sum(entity.purchaseMoney) from Order entity" +
                 " where entity.orderStatus.value in ('%s','%s','%s')" +

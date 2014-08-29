@@ -31,7 +31,6 @@ import com.baihui.hxtd.soa.system.entity.User;
  * @date 2014/4/24
  */
 @Service
-@Transactional
 public class NoticeService {
 
 	private Logger logger = LoggerFactory.getLogger(this.getClass());
@@ -85,6 +84,7 @@ public class NoticeService {
 	 * @param id
 	 * @return
 	 */
+	@Transactional(readOnly = true)
 	public Notice getById(Long id) {
 		logger.info("getById得到公告信息{}", id);
 		return noticeDao.getById(id);
@@ -94,6 +94,7 @@ public class NoticeService {
 	 * 保存公告信息
 	 * @param notice
 	 */
+	@Transactional
 	public void add(Notice notice, User user,AuditLog auditLog) {
 		logger.info("保存公告信息{}", notice);
 		notice.setIsDeleted(false);
@@ -103,6 +104,7 @@ public class NoticeService {
 		auditLog.setRecordId(notice.getId());
 	}
 	
+	@Transactional
 	public void modify(Notice notice, User user,AuditLog auditLog) {
 		logger.info("修改公告信息{}", notice);
 		notice.setModifieTime(noticeDao.getDBNow());
@@ -116,6 +118,7 @@ public class NoticeService {
 	 * 删除公告
 	 * @param id
 	 */
+	@Transactional
 	public void delete(User user, Long[] id, AuditLog [] auditLog) {
 		noticeDao.logicalDelete(id);
 		
@@ -152,6 +155,7 @@ public class NoticeService {
      * @return
      */
 	@SuppressWarnings("unchecked")
+	@Transactional(readOnly = true)
 	public List<Notice> find(){
 	    logger.info("查找");
         DetachedCriteria detachedCriteria = DetachedCriteria.forClass(Notice.class);
@@ -170,6 +174,7 @@ public class NoticeService {
 	 * @return List<Notice>
 	 * @throws NoSuchFieldException 
 	 */
+	@Transactional(readOnly = true)
 	public List<Notice> find(Map<String, Object> searchParams) throws NoSuchFieldException {
 		logger.info("查找");
         DetachedCriteria detachedCriteria = DetachedCriteria.forClass(Notice.class);
@@ -191,6 +196,7 @@ public class NoticeService {
       * @param id
       * @return String
      */
+	@Transactional(readOnly = true)
     public String getTitleById(Long id){
     	return noticeDao.get(id).getTitle();
     }

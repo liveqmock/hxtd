@@ -6,6 +6,7 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
+<%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions" %>
 <c:set var="ctx" value="${pageContext.request.contextPath}"/>
 
 <html>
@@ -60,9 +61,9 @@
                 </tr>
                 <tr>
                     <td align="right" width="15%">编号：</td>
-                    <td align="left"><input type="text" name="code" value="${role.code}" class="{unique:['Role','${role.code}']} text_input3"/></td>
+                    <td align="left"><input type="text" name="code" value="${role.code}" class="{unique:['Role','${fn:replace(role.code,"'","\\'")}']} text_input3"/></td>
                     <td align="right" width="15%">角色名：</td>
-                    <td align="left"><input type="text" class="{required:true,maxlength:16,unique:['Role','${role.name}']} text_input3" name="name" value="${role.name}"/></td>
+                    <td align="left"><input type="text" class="{required:true,maxlength:16,unique:['Role','${fn:replace(role.name,"'","\\'")}']} text_input3" name="name" value="${role.name}"/></td>
                 </tr>
             </table>
             <h1 class="f14 fbnone ml40 pt10">描述信息</h1>

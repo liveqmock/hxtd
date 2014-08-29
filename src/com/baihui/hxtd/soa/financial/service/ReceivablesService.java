@@ -41,7 +41,6 @@ import com.baihui.hxtd.soa.system.service.DataShift;
  */
 
 @Service
-@Transactional
 public class ReceivablesService {
 
 	private Logger logger = LoggerFactory.getLogger(this.getClass());
@@ -98,7 +97,7 @@ public class ReceivablesService {
 	 * @param receivables
 	 * @param auditLog
 	 */
-	@Transactional(readOnly = false)
+	@Transactional
 	public void add(Receivables receivables, AuditLog auditLog) {
 		receivables.setCreatedTime(receivablesDao.getDBNow());
 		receivables.setModifiedTime(receivables.getCreatedTime());
@@ -137,7 +136,7 @@ public class ReceivablesService {
 	 * @param receivables
 	 * @param auditLog
 	 */
-	@Transactional(readOnly = false)
+	@Transactional
 	public void modifyFinish(Receivables receivables, AuditLog auditLog) {
 		if (receivables.getActual() == null) {
 			receivables.setStatus(false);
@@ -161,7 +160,7 @@ public class ReceivablesService {
 	 * @param id
 	 * @param auditLogArr
 	 */
-	@Transactional(readOnly = false)
+	@Transactional
 	public void delete(Long[] id, AuditLog[] auditLogArr) {
 		receivablesDao.logicalDelete(id);
 	}
@@ -171,6 +170,7 @@ public class ReceivablesService {
 	 * @return
 	 */
 	@SuppressWarnings("unchecked")
+	@Transactional(readOnly = true)
 	public List<Receivables> find() {
 		logger.info("查找");
         DetachedCriteria detachedCriteria = DetachedCriteria.forClass(Receivables.class);
@@ -190,6 +190,7 @@ public class ReceivablesService {
 	 * 分页导出查找所有应收款
 	 * @return
 	 */
+	@Transactional(readOnly = true)
 	public List<Receivables>  find(Map<String, Object> searchParams) throws NoSuchFieldException {
 		logger.info("分页查找");
         DetachedCriteria detachedCriteria = DetachedCriteria.forClass(Receivables.class);
@@ -203,5 +204,4 @@ public class ReceivablesService {
         Search.buildCriteria(filters, detachedCriteria, Receivables.class);
         return receivablesDao.find(detachedCriteria, exportCounts);
 	}
-
 }

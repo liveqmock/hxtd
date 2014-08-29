@@ -5,7 +5,6 @@
 <html>
 <head>
 <title>供应商详情</title>
-<link rel="stylesheet" href="${ctx}/static/css/recommend/detail_a.css"/>
 <link rel="stylesheet" href="${ctx}/static/css/recommend/list1.css"/>
 <script type="text/javascript" src="${ctx}/static/js/pacs.js"></script>
 <script type="text/javascript" src="${ctx}/static/js/jquery.validate.js"></script>

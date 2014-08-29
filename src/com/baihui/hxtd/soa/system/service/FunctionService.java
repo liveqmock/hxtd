@@ -285,6 +285,7 @@ public class FunctionService {
      * 按菜单主键编号分组
      * 1.以菜单主键编号为Key，功能集合为Value
      */
+    @Transactional(readOnly = true)
     public Map<Long, List<Function>> groupByMenuId(List<Function> functions) {
         logger.info("按菜单主键编号分组");
 
@@ -306,6 +307,7 @@ public class FunctionService {
     /**
      * 查找组件通过主键编号集合
      */
+    @Transactional(readOnly = true)
     public List<Function> findById(List<Function> functions, List<Long> ids) {
         List<Function> findFunctions = new ArrayList<Function>();
         for (Function function : functions) {
@@ -319,6 +321,7 @@ public class FunctionService {
     /**
      * 查找功能根据菜单编号
      */
+    @Transactional(readOnly = true)
     public List<Function> findByMenuId(List<Function> functions, Long menuId) {
         logger.info("查找功能根据菜单编号");
         List<Function> findFunctions = new ArrayList<Function>();
@@ -333,6 +336,7 @@ public class FunctionService {
     /**
      * 查找功能根据上级功能
      */
+    @Transactional(readOnly = true)
     public List<Function> findByParentId(List<Function> functions, Long parentId) {
         List<Function> findFunctions = new ArrayList<Function>();
         for (Function function : functions) {
@@ -467,7 +471,7 @@ public class FunctionService {
      * @param id
      * @return String
     */
-    @Transactional
+    @Transactional(readOnly = true)
 	public String getNameById(Long id) {
 		return functionDao.get(id).getName();
 	}

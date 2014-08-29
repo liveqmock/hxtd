@@ -8,7 +8,6 @@ import com.baihui.hxtd.soa.base.utils.ReflectionUtils;
 import com.baihui.hxtd.soa.base.utils.Search;
 import com.baihui.hxtd.soa.base.utils.mapper.HibernateAwareObjectMapper;
 import com.baihui.hxtd.soa.base.utils.report.ChartModel;
-import com.baihui.hxtd.soa.base.utils.report.ChartType;
 import com.baihui.hxtd.soa.common.entity.Module;
 import com.baihui.hxtd.soa.common.entity.ModuleField;
 import com.baihui.hxtd.soa.common.entity.Report;
@@ -410,6 +409,6 @@ public class ReportController {
 
         //生成报表
         ChartModel chart = reportService.generate(report, filters.values());
-        return chart.getChart();
+        return chart == null ? null : chart.getChart();
     }
 }

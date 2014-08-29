@@ -13,11 +13,9 @@
 <head>
     <title>销售目标详情</title>
     <link rel="stylesheet" href="${ctx}/static/css/recommend/list1.css" type="text/css"/>
-    <link rel="stylesheet" href="${ctx}/static/css/recommend/detail_a.css" type="text/css"/>
     <link rel="stylesheet" href="${ctx}/static/css/application.css" type="text/css"/>
     <script type="text/javascript" src="${ctx}/static/js/jquery-jtemplates.js"></script>
     <script type="text/javascript" src="${ctx}/static/js/js-util.common.js"></script>
-
     <script type="text/javascript" src="${ctx}/static/component/open-flash-chart-2/js/json/json2.js"></script>
     <script type="text/javascript" src="${ctx}/static/component/open-flash-chart-2/js/swfobject.js"></script>
 

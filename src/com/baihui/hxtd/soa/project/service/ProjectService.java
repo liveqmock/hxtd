@@ -35,7 +35,6 @@ import com.baihui.hxtd.soa.system.entity.AuditLog;
  * @date 2014-6-8 上午09:51:19
  */
 @Service
-@Transactional
 public class ProjectService {
 	private Logger logger = LoggerFactory.getLogger(this.getClass());
 	/**
@@ -75,6 +74,7 @@ public class ProjectService {
      * @return HibernatePage<Component>    返回类型
      * @throws
      */
+	@Transactional(readOnly = true)
     public Project get(Long id) {
         logger.info("查询单个信息{}", id);
         String hql = " select project from Project project  " +
@@ -92,6 +92,7 @@ public class ProjectService {
       * @return void    返回类型
       * @throws
      */
+	@Transactional
 	public void add(Project project,AuditLog auditLog){
 		Date now = projectDao.getDBNow();
 		project.setCreatedTime(now);
@@ -100,6 +101,7 @@ public class ProjectService {
     	auditLog.setRecordId(project.getId());
     }
 	
+	@Transactional
 	public void modify(Project project,AuditLog auditLog){
 		Date now = projectDao.getDBNow();
 		project.setCreatedTime(now);
@@ -114,6 +116,7 @@ public class ProjectService {
 	  * @return void    返回类型
 	  * @throws
 	 */
+	@Transactional
 	public boolean delete(AuditLog[] auditLogArr,Long[] id){
 		if(productDao.getCount(id)==0){
 			projectDao.logicalDelete(id);
@@ -123,7 +126,7 @@ public class ProjectService {
 		}
 	}
 	
-	
+	@Transactional(readOnly = true)
 	public List<Project> export(){
 		DetachedCriteria criteria = DetachedCriteria.forClass(Project.class);
         criteria.add(Restrictions.eq("isDeleted", false));
@@ -134,13 +137,11 @@ public class ProjectService {
         return projectDao.find(criteria,3000);
 	}
 	
-	
+	@Transactional(readOnly = true)
 	public List<Project> findProjectBySupplier(Supplier supplierr) {
 		DetachedCriteria criteria = DetachedCriteria.forClass(Project.class);
    		criteria.add(Restrictions.eq("isDeleted", false));
    		criteria.add(Restrictions.eq("supplier", supplierr));
 		return projectDao.find(criteria);
 	}
-	
-	
 }

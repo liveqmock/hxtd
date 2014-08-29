@@ -42,17 +42,17 @@ $(function(){
 <div style="margin:20px;overflow:hidden">
 	<ul class="gbin1-list">
 		<c:forEach items="${list}" var="work" varStatus="s">
-			<li id="${work.id}" style="width: ${work.width}; min-height:155px" uri="${ctx}${work.url}" module="${work.module}" 
+			<li id="${work.id}" style="width:${work.width}; min-height:155px" uri="${ctx}${work.url}" module="${work.module}" 
 				type="${work.type}" params="${work.params}" timeParam="${work.timeParam}">
 				<div class="block cb">
 					<b class="ba"></b><b class="bb"></b><b class="bc"></b><b class="bd"></b>
-					<div class="fl table_blueheadc fl w" style="height: 25px;">
+					<div class="fl table_blueheadc fl w" style="height:25px;">
 						<h1 class="f14 c_white lh25 ml10 fl">${work.title}</h1>
-						<img width="80" height="25" class="fl ml80" src="${ctx }/static/images/snowflake.png"/>
+						<img width="80" height="25" class="fl ml80" src="${ctx}/static/images/snowflake.png"/>
 						<div class="fr mr10 mt5">
-							<a href="javascript:;" class=" block_inline g_small globle_img ml10 close"></a>
-							<a href="javascript:;" class=" block_inline g_new globle_img ml10 refresh"></a>
-							<a href="javascript:;" class=" block_inline g_close globle_img ml10 delete"></a>
+							<a href="javascript:;" class="block_inline g_small globle_img ml10 close"></a>
+							<a href="javascript:;" class="block_inline g_new globle_img ml10 refresh"></a>
+							<a href="javascript:;" class="block_inline g_close globle_img ml10 delete"></a>
 						</div>
 					</div>
 				</div>

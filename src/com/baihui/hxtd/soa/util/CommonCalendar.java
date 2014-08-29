@@ -499,6 +499,12 @@ public class CommonCalendar {
 
         return null;
     }
+    
+    
+    public static void main(String [] args){
+    	 System.out.println(CommonCalendar.date2Offset(new Date(), 
+					Calendar.DATE, MODE_AHEAD, 7));
+    }
 
 
 }

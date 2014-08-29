@@ -14,17 +14,15 @@ import com.baihui.hxtd.soa.customer.entity.Contact;
 import com.baihui.hxtd.soa.customer.entity.ContactDTO;
 import com.baihui.hxtd.soa.system.entity.User;
 @Service
-@Transactional
 public class ImportContactService extends ImportServiceAbstract<ContactDTO,Contact> {
 
-	
-	
 	/**
 	 * 根据"实体类,主键列表"判断是否在数据库中有重复数据,在根据"重复类型"处理重复数据
 	 * Map<Integer,Contact>
 	 * 其中Integer有两个值1:新增,2:修改
 	 */
 	@Override
+	@Transactional
 	public Map<Integer, Contact> isAddOrUpdate(ContactDTO con, List<String> uniqueString, String duplicateType) {
 		if(uniqueString==null || uniqueString.size()==0){
 			uniqueString = new ArrayList<String>();
@@ -209,8 +207,4 @@ public class ImportContactService extends ImportServiceAbstract<ContactDTO,Conta
 		BeanUtils.copyProperties(t, c);
 		return c;
 	}
-
-
-
-	
 }

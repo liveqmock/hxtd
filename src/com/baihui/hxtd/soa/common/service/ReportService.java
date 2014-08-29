@@ -21,6 +21,7 @@ import com.baihui.hxtd.soa.system.entity.AuditLog;
 import com.baihui.hxtd.soa.system.entity.Dictionary;
 import com.baihui.hxtd.soa.system.service.DataShift;
 import com.baihui.hxtd.soa.util.CommonCalendar;
+import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang3.Range;
 import org.apache.commons.lang3.time.DateUtils;
 import org.hibernate.FetchMode;
@@ -148,6 +149,9 @@ public class ReportService {
         reportChart.setxAxisLabels(chartTable.getxAxisHeader());
         List numbers = ChartUtil.collect(chartTable.getRows());
         Collections.sort(numbers);
+        if (CollectionUtils.isEmpty(numbers)) {
+            return null;
+        }
         reportData.getyAxisRange().setMin((Number) numbers.get(0));
         reportData.getyAxisRange().setMax((Number) numbers.get(numbers.size() - 1));
         reportChart.setyAxisRange(reportData.getyAxisRange());

@@ -35,7 +35,6 @@ import com.baihui.hxtd.soa.system.service.DataShift;
  * @since (该版本支持的 JDK 版本) ： 1.6
  */
 @Service
-@Transactional
 public class MarketActivityService {
 
     //private Logger logger = LoggerFactory.getLogger(MarketActivityService.class);
@@ -53,6 +52,7 @@ public class MarketActivityService {
      * @param id 活动主键ID
      * @return MarketActivity 活动实体
      */
+    @Transactional(readOnly = true)
     public MarketActivity get(Long id) {
         String hql = "select market from MarketActivity market " +
                 "left join fetch market.typeDic " +
@@ -72,10 +72,10 @@ public class MarketActivityService {
      * @Title: getNameById
      * @Description: 通过id获取名称
      */
+    @Transactional(readOnly = true)
     public String getNameById(Long id) {
         return marketActivityDao.get(id).getName();
     }
-
 
     /**
      * findPage(分页查询市场活动列表、非全model)
@@ -107,6 +107,7 @@ public class MarketActivityService {
      *
      * @param entity 市场活动实体
      */
+    @Transactional
     public void add(MarketActivity entity, User user, AuditLog auditLog) {
         String flowValue = entity.getPredictCost() == 0d ? DictionaryConstant.NODE_TYPE_MARKETACTIVITY_NOMONEY : DictionaryConstant.NODE_TYPE_MARKETACTIVITY_MONEY;
         entity.setFlowNode(flowNodeDao.findStartOfFlow(flowValue));
@@ -120,6 +121,7 @@ public class MarketActivityService {
      * @param entity
      * @param sessionId
      */
+    @Transactional
     public void modify(MarketActivity entity, User user, AuditLog auditLog) {
         String flowValue = entity.getPredictCost() == 0d ? DictionaryConstant.NODE_TYPE_MARKETACTIVITY_NOMONEY : DictionaryConstant.NODE_TYPE_MARKETACTIVITY_MONEY;
         entity.setFlowNode(flowNodeDao.findStartOfFlow(flowValue));
@@ -134,6 +136,7 @@ public class MarketActivityService {
      * @param id 活动主键IDS
      * @Description: 根据活动主键ID删除记录，支持批量删除
      */
+    @Transactional
     public void delete(User user, Long[] id, AuditLog[] auditLog) {
         marketActivityDao.logicalDelete(id);
     }
@@ -145,8 +148,8 @@ public class MarketActivityService {
      * @return List<MarketActivity> 返回数据
      * @throws NoSuchFieldException
      */
-    public List<MarketActivity> export(Map<String, Object> searchParams,
-                                       DataShift dataShift) throws NoSuchFieldException {
+    @Transactional(readOnly = true)
+    public List<MarketActivity> export(Map<String, Object> searchParams, DataShift dataShift) throws NoSuchFieldException {
         DetachedCriteria criteria = DetachedCriteria.forClass(MarketActivity.class);
         criteria.add(Restrictions.eq("isDeleted", false));
         criteria.setFetchMode("typeDic", FetchMode.JOIN);
@@ -165,9 +168,8 @@ public class MarketActivityService {
      * @param dataShift    数据权限
      * @throws NoSuchFieldException
      */
-    private void dataAuthFliter(DetachedCriteria criteria,
-                                Map<String, Object> searchParams,
-                                DataShift dataShift) throws NoSuchFieldException {
+    private void dataAuthFliter(DetachedCriteria criteria, 
+    		Map<String, Object> searchParams, DataShift dataShift) throws NoSuchFieldException {
         Map<String, SearchFilter> filters = Search.parse(searchParams);
         userDao.visibleData(criteria, dataShift.renameUserFieldName("bossHead"));
         Search.buildCriteria(filters, criteria, MarketActivity.class);

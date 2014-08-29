@@ -51,6 +51,16 @@ public class WarningService {
                 " order by entity.orderEndTime";
         return orderDao.find(hql, range.getMinimum(), range.getMaximum(), DictionaryConstant.ORDER_PAY_2_HXTD_STATUS_ALL);
     }
+    
+    @Transactional(readOnly = true)
+    public List findNomarlOrderByEndDate(Date orderEndDate) {
+    	String hql = "select entity.id,entity.code,entity.owner,entity.salesManager,entity.salesMajordomo" +
+	        " from Order entity" +
+	        " where entity.orderEndTime=?" +
+	        " and entity.payStatus.value=?" +
+	        " order by entity.orderEndTime";
+        return orderDao.find(hql, orderEndDate, DictionaryConstant.ORDER_PAY_2_HXTD_STATUS_ALL);
+	}
 
     public List filterOrderPayment(List orders, Range<Date> range) {
         List<Object[]> filter = new ArrayList<Object[]>();

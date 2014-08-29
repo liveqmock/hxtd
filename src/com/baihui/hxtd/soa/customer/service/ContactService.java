@@ -34,7 +34,6 @@ import com.baihui.hxtd.soa.system.service.DataShift;
  * @date 2014-5-16 下午04:48:19
  */
 @Service
-@Transactional
 public class ContactService {
 	
 	//private Logger logger = LoggerFactory.getLogger(ContactService.class);
@@ -53,6 +52,7 @@ public class ContactService {
      * @param @return 参数类型
      * @return HibernatePage<Contact>返回类型
      * @throws NoSuchFieldException
+     * 
      */
     @Transactional(readOnly = true)
     public HibernatePage<Contact> findPage(Map<String, Object> searchParams,
@@ -73,6 +73,7 @@ public class ContactService {
      * @return List<Contact> 返回数据
      * @throws NoSuchFieldException
     */
+   @Transactional
    public List<Contact> export(Map<String, Object> searchParams,
    		DataShift dataShift) throws NoSuchFieldException {
    		DetachedCriteria criteria = DetachedCriteria.forClass(Contact.class);
@@ -105,6 +106,7 @@ public class ContactService {
      * @param @return 参数类型
      * @return HibernatePage<contact>返回类型
      */
+   	@Transactional(readOnly = true)
     public Contact get(long id) {
     	String hql = "select contact from Contact contact " +
     			"left join fetch contact.supplier " +
@@ -126,6 +128,7 @@ public class ContactService {
      * @param id
      * @return String
     */
+   	@Transactional(readOnly = true)
     public String getNameById(Long id){
     	return contactDao.get(id).getName();
     }
@@ -136,6 +139,7 @@ public class ContactService {
      * @return void 返回类型
      * modifier:xiaoli.luo
      */
+   	@Transactional
     public void add(Contact entity, User user, AuditLog auditLog) {
         contactDao.save(entity);
         auditLog.setRecordId(entity.getId());
@@ -145,6 +149,7 @@ public class ContactService {
      * @param entity
      * @param userId
      */
+   	@Transactional
     public void modify(Contact entity, User user, AuditLog auditLog) {
         contactDao.save(entity);
         auditLog.setRecordId(entity.getId());
@@ -155,6 +160,7 @@ public class ContactService {
      * @param id 参数类型
      * @return void 返回类型
      */
+   	@Transactional
     public void delete(User user, Long[] id, AuditLog [] auditLog) {
         contactDao.delete(id);
     }
@@ -164,6 +170,7 @@ public class ContactService {
      * @param customer
      * @return
      */
+   	@Transactional(readOnly = true)
 	public List<Contact> findContactByCustomer(Customer customer) {
 		DetachedCriteria criteria = DetachedCriteria.forClass(Contact.class);
 		criteria.setFetchMode("customer", FetchMode.JOIN);
@@ -177,6 +184,7 @@ public class ContactService {
      * @param customer
      * @return
      */
+   	@Transactional(readOnly = true)
 	public List<Contact> findContactBySupplier(Supplier supplier) {
 		DetachedCriteria criteria = DetachedCriteria.forClass(Contact.class);
    		criteria.add(Restrictions.eq("isDeleted", false));

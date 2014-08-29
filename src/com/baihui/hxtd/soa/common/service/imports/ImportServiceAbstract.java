@@ -19,7 +19,6 @@ import com.baihui.hxtd.soa.common.dao.ImportDao;
 import com.baihui.hxtd.soa.common.imports.ImportMessage;
 import com.baihui.hxtd.soa.system.entity.User;
 @Service
-@Transactional
 public abstract class ImportServiceAbstract<T,E>  {
 	
 	@Resource
@@ -39,6 +38,7 @@ public abstract class ImportServiceAbstract<T,E>  {
      * @throws SecurityException 
      * @throws IllegalArgumentException 
      */
+	@Transactional
     public void importData2DB(List<T> entityList, List<String> typeList,String duplicateType,User user) throws IllegalArgumentException, SecurityException, IllegalAccessException, InvocationTargetException, NoSuchMethodException{
     	//如果导入的内容为空,则返回null
     	if(entityList==null || entityList.size()==0){
@@ -87,6 +87,7 @@ public abstract class ImportServiceAbstract<T,E>  {
      * @throws SecurityException 
      * @throws IllegalArgumentException 
      */
+   @Transactional
    public void batchHandleData(List<E> insertList, List<E> updateList,User user) throws IllegalArgumentException, SecurityException, IllegalAccessException, InvocationTargetException, NoSuchMethodException{
 	   //新增数据
 	   if(insertList!=null && insertList.size()>0){
@@ -156,6 +157,7 @@ public abstract class ImportServiceAbstract<T,E>  {
     * @return
     */
 	@SuppressWarnings("unchecked")
+	@Transactional
 	public List<T> addOrModify(List entities) {
 		return (List<T>) importDao.saveOrUpdate(entities);
 	}
@@ -204,6 +206,7 @@ public abstract class ImportServiceAbstract<T,E>  {
      * 获取数据库时间
      * @return
      */
+    @Transactional(readOnly = true)
     public Date getDBNow(){
     	return commonDao.getDBNow();
     }

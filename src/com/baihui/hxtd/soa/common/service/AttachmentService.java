@@ -34,7 +34,6 @@ import com.baihui.hxtd.soa.system.entity.User;
  * @date 2014-5-26 上午11:16:20
  */
 @Service
-@Transactional
 public class AttachmentService {
 	
 	private Logger logger = LoggerFactory.getLogger(AttachmentService.class);
@@ -49,6 +48,7 @@ public class AttachmentService {
 	  * @return List<Attachment>    返回类型
 	  * @throws
 	 */
+	@Transactional(readOnly = true)
 	public List<Attachment> query(Long moduleId,Long recordId){
 		logger.info("附件模块列表查询moduleId={},type={}",moduleId,recordId);
 		DetachedCriteria criteria = DetachedCriteria.forClass(Attachment.class);
@@ -70,6 +70,7 @@ public class AttachmentService {
 	  * @return String    返回类型
 	  * @throws
 	 */
+	@Transactional(readOnly = true)
 	public Attachment view(Long id){
 		return attachementDao.get(id);
 	}
@@ -81,6 +82,7 @@ public class AttachmentService {
 	  * @return void    返回类型
 	  * @throws
 	 */
+	@Transactional
 	public void add(Attachment att,User user, AuditLog auditLog){
 		attachementDao.save(att);
 	}
@@ -93,6 +95,7 @@ public class AttachmentService {
 	 * @return HibernatePage<Attachment>
 	 * @throws NoSuchFieldException 
 	 */
+	@Transactional(readOnly = true)
 	public HibernatePage<Attachment> findPage(Map<String, Object> searchParams,
 			HibernatePage<Attachment> page) throws NoSuchFieldException {
 		logger.info("分页查找");
@@ -111,6 +114,7 @@ public class AttachmentService {
 	 * @param id
 	 * @return
 	 */
+	@Transactional(readOnly = true)
 	public Attachment getById(Long id) {
 		logger.info("getById得到公告信息{}", id);
 		return attachementDao.getById(id);
@@ -124,6 +128,7 @@ public class AttachmentService {
 	  * @return void    返回类型
 	  * @throws
 	 */
+	@Transactional
 	public void delete(User user, Long[] id, AuditLog[] auditLog){
 		for(int i=0;i<id.length;i++){
 			Attachment att = this.getById(id[i]);
@@ -134,6 +139,4 @@ public class AttachmentService {
 		}
 		
 	}
-	
-	
 }

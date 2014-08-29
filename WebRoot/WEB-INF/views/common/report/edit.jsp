@@ -6,6 +6,7 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
+<%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions" %>
 <c:set var="ctx" value="${pageContext.request.contextPath}"/>
 
 <html>
@@ -120,9 +121,9 @@
             <table class="cb id_table3 w95b bg_c_white margin0 mt10">
                 <tr>
                     <td align="right" width="15%">编号：</td>
-                    <td align="left"><input type="text" name="code" value="${report.code}" class="{required:true,maxlength:32,unique:['Report','${report.code}']} text_input3"/></td>
+                    <td align="left"><input type="text" name="code" value="${report.code}" class="{required:true,maxlength:32,unique:['Report','${fn:replace(report.code,"'","\\'")}']} text_input3"/></td>
                     <td align="right" width="15%">名称：</td>
-                    <td align="left"><input type="text" name="name" value="${report.name}" class="{required:true,maxlength:64,unique:['Report','${report.name}']} text_input3"/></td>
+                    <td align="left"><input type="text" name="name" value="${report.name}" class="{required:true,maxlength:64,unique:['Report','${fn:replace(report.name,"'","\\'")}']} text_input3"/></td>
                 </tr>
                 <tr>
                     <td align="right" width="15%">所属模块：</td>

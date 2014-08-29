@@ -18,7 +18,11 @@
 .id_table2 tr:hover{ color:#e28d1f;}
 .id_table2 tr:hover th{ color:#222;}
 .id_table2 tr:hover a{ color:#e28d1f;}
-.id_table2 tr td a{ color:#222222; text-decoration:underline;}
+.id_table2 tr td a{ color:#222222; text-decoration:underline;position:relative;}
+.id_table2 tr td div{}
+.id_table2 tr td div:hover span{ display:block;position:absolute; top:-40px;right:-220px;color:#222;text-align:left;}
+.id_table2 tr td div:hover span h1{padding:5px;}
+.id_table2 tr td div:hover span p{padding:5px;}
 .id_table2 tr{ text-align:center;}
 .id_table2 tr td{ padding-left:2px; padding-right:2px;}
 

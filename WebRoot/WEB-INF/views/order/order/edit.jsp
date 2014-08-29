@@ -1,6 +1,7 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
+<%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions" %>
 <c:set var="ctx" value="${pageContext.request.contextPath}"/>
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
 <html>
@@ -98,7 +99,7 @@ function clearInputVal(obj) {//清除
         <table class="cb id_table3 w95b bg_c_white margin0 mt10">
             <tr>
                 <td align="right" width="15%"><span class="w_red">*&nbsp;</span>订单编号：</td>
-                <td align="left"><input type="text" name="code" value="${order.code}" class="text_input3 required {unique:['Order','${order.code}']}" maxlength="30"/></td>
+                <td align="left"><input type="text" name="code" value="${order.code}" class="text_input3 required {unique:['Order','${fn:replace(order.code,"'","\\'")}']}" maxlength="30"/></td>
                 <td align="right" width="15%"><span class="w_red">*&nbsp;</span>所有者：</td>
                 <td align="left">
                     <input type="text" id="txt_owner" name="name_owner" value="${order.owner.realName}" class="text_input3 cp required" 

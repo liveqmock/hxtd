@@ -1,6 +1,7 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
+<%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions" %>
 <c:set var="ctx" value="${pageContext.request.contextPath}"/>
 <html>
 <head>
@@ -67,7 +68,7 @@ function searchData(action) { //搜索
                     <input type="hidden" name="sponsor.id" value="${activity.sponsor.id}"/>
                 </td>
                 <td width="15%" align="right"><span class="w_red">*&nbsp;</span>活动名称：</td>
-                <td align="left"><input name="name" type="text" value="${activity.name}" class="text_input3 required {unique:['MarketActivity','${activity.name}']}" maxlength="30"/></td>
+                <td align="left"><input name="name" type="text" value="${activity.name}" class="text_input3 required {unique:['MarketActivity','${fn:replace(activity.name,"'","\\'")}']}" maxlength="30"/></td>
             </tr>
             <tr>
                 <td align="right"><span class="w_red">*&nbsp;</span>负责人：</td>
@@ -129,7 +130,7 @@ function searchData(action) { //搜索
             </tr>
             <tr>
                 <td align="right">期望成功率（%）：</td>
-                <td align="left"><input type="text" name="expectSuccessRate" value="${activity.expectSuccessRate}" class="text_input3 amount" maxlength="3" style="ime-mode:disabled"/></td>
+                <td align="left"><input type="text" name="expectSuccessRate" value="${activity.expectSuccessRate}" class="text_input3 amount" maxlength="6" style="ime-mode:disabled"/></td>
                 <td align="right">活动次数：</td>
                 <td align="left"><input name="times" type="text" value="${activity.times}" class="text_input3 digits" maxlength="3"/></td>
             </tr>

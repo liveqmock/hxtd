@@ -1,5 +1,6 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<%@page import="java.util.Random"%>
 <c:set var="ctx" value="${pageContext.request.contextPath}"/>
 <html>
 <head>
@@ -9,7 +10,7 @@
 <link rel="stylesheet" href="${ctx}/static/css/uploadify.css" type="text/css"></link>
 <script type="text/javascript" src="${ctx}/static/js/jquery.min.js"></script>
 <script type="text/javascript" src="${ctx}/static/js/js-util.js?v=1"></script>
-<script type="text/javascript" src="${ctx}/static/js/jquery.uploadify.min.js"></script>
+<script type="text/javascript" src="${ctx}/static/js/jquery.uploadify.min.js?date=<%=new Random().nextInt()%>"></script>
 <script type="text/javascript" src="${ctx}/static/js/commonAjax.js"></script>
 <style type="text/css">
 	.uploadify-button { background-color: transparent; border: none; padding: 0;}

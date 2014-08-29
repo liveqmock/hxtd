@@ -24,7 +24,6 @@ import com.baihui.hxtd.soa.system.entity.Dictionary;
  * @date 2014/5/8
  */
 @Service
-@Transactional
 public class DictionaryService {
 
     //private Logger logger = LoggerFactory.getLogger(ComponentService.class);
@@ -38,6 +37,7 @@ public class DictionaryService {
      * @return Dictionary 字典实体
      * @Description: 根据主键获取字典实体
      */
+    @Transactional(readOnly = true)
     public Dictionary getDicEntity(Long id) {
         return dictionaryDao.get(id);
     }
@@ -66,6 +66,7 @@ public class DictionaryService {
         return dictionaryDao.findPage(page, criteria);
     }
     
+    @Transactional(readOnly = true)
     public List<Dictionary> findChildDicLst(Long parentId){
     	DetachedCriteria criteria = DetachedCriteria.forClass(Dictionary.class);
     	criteria.add(Restrictions.eq("isDeleted", false));
@@ -81,6 +82,7 @@ public class DictionaryService {
      * @param entity 参数类型
      * @return void 返回类型
      */
+    @Transactional
     public void add(Dictionary entity, AuditLog auditLog) {
         entity.setIsInitialized(false);
         dictionaryDao.save(entity);
@@ -93,6 +95,7 @@ public class DictionaryService {
      * @param entity
      * @param user
      */
+    @Transactional
     public void modify(Dictionary entity, AuditLog auditLog) {
         entity.setIsInitialized(false);
         dictionaryDao.save(entity);
@@ -104,11 +107,13 @@ public class DictionaryService {
      * @param id 主键id
      * @return Dictionary返回类型
      */
+    @Transactional(readOnly = true)
     public Dictionary get(Long id) {
     	String hql = "select dictionary from Dictionary dictionary where dictionary.id = ?";
         return dictionaryDao.findUnique(hql, id);
     }
 
+    @Transactional(readOnly = true)
     public String getDictJsonData() {
         List<Dictionary> dicLst = dictionaryDao.find("select dictionary from Dictionary dictionary where dictionary.type is not null");
         StringBuffer jsonData = new StringBuffer("[");
@@ -135,6 +140,7 @@ public class DictionaryService {
      * @param id 字典主键IDS
      * @Description: 根据字典主键ID删除，支持批量删除
      */
+    @Transactional
     public void delete(Long[] id, AuditLog[] auditLogArr) {
         dictionaryDao.logicalDelete(id);
     }
@@ -144,6 +150,7 @@ public class DictionaryService {
      *
      * @return List<Dictionary>返回类型
      */
+    @Transactional(readOnly = true)
     public List<Dictionary> getDicTypes() {
         String hql = "select dictionary from Dictionary dictionary where dictionary.type is null";
         List<Dictionary> lst = dictionaryDao.find(hql);
@@ -155,6 +162,7 @@ public class DictionaryService {
      * 获取默认的字典通过字典值
      * 1.仅查出id用于进行判断
      */
+    @Transactional(readOnly = true)
     public Long getIdByValue(String value) {
         return dictionaryDao.getIdByValue(value);
     }
@@ -192,6 +200,7 @@ public class DictionaryService {
      * @return List<Dictionary> 字典集合
      * @Description: 根据大分类获取小分类集合
      */
+    @Transactional(readOnly = true)
     public List<Dictionary> findChildren(String dicType, Boolean bool) {
         String hql = "from Dictionary dic where dic.type = ? and dic.level = 1";
         if (bool) {
@@ -208,7 +217,7 @@ public class DictionaryService {
      * @Title: getNameById
      * @Description: 通过id获取字典key值
      */
-    @Transactional
+    @Transactional(readOnly = true)
     public String getNameById(Long id) {
         return dictionaryDao.get(id).getKey();
     }
@@ -220,6 +229,7 @@ public class DictionaryService {
      * @param parentId
      * @return
      */
+    @Transactional(readOnly = true)
     public Dictionary getValue(String key, Long parentId) {
         return dictionaryDao.getValue(key, parentId);
     }
@@ -231,9 +241,8 @@ public class DictionaryService {
      * @param parentId
      * @return
      */
+    @Transactional(readOnly = true)
     public Dictionary getValueByType(String key, String type) {
         return dictionaryDao.getValueByType(key, type);
     }
-
-
 }

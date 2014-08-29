@@ -24,7 +24,6 @@ import com.baihui.hxtd.soa.system.entity.AuditLog;
 import com.baihui.hxtd.soa.system.service.DataShift;
 
 @Service
-@Transactional
 public class ContractService {
 
 	private Logger logger = LoggerFactory.getLogger(this.getClass());
@@ -44,6 +43,7 @@ public class ContractService {
 	 * @return HibernatePage<Contract>
 	 * @throws NoSuchFieldException 
 	 */
+	@Transactional(readOnly = true)
 	public HibernatePage<Contract> findPage(Map<String, Object> searchParams,
 		DataShift dataShift, HibernatePage<Contract> page) throws NoSuchFieldException {
 		logger.info("分页查找");
@@ -66,6 +66,7 @@ public class ContractService {
 		return criteria;
 	}
 
+	@Transactional
 	public void add(Contract contract,AuditLog auditLog ) {
 		contract.setCreatedTime(contractDao.getDBNow());
 		contract.setModifiedTime(contract.getCreatedTime());
@@ -80,6 +81,7 @@ public class ContractService {
 	 * @return
 	 * @throws ParseException 
 	 */
+	@Transactional(readOnly = true)
 	public Contract getById(Long id) throws ParseException {
 		String hql = "from Contract con "
 			+ " left join fetch con.order "
@@ -97,6 +99,7 @@ public class ContractService {
 		 return contract;
 	}
 
+	@Transactional
 	public void modify(Contract contract,AuditLog auditLog ) {
 		contract.setModifiedTime(contractDao.getDBNow());
 		contractDao.save(contract);
@@ -107,6 +110,7 @@ public class ContractService {
 	 * @param id
 	 * @param auditLogArr
 	 */
+	@Transactional
 	public void delete(Long[] id, AuditLog[] auditLogArr) {
 		contractDao.logicalDelete(id);
 	}
@@ -118,6 +122,7 @@ public class ContractService {
 	 * @return List<Contract>
 	 * @throws NoSuchFieldException 
 	 */
+	@Transactional(readOnly = true)
 	public List<Contract> export(Map<String, Object> searchParams,
 			DataShift dataShift) throws NoSuchFieldException {
 		DetachedCriteria criteria = biuldQuery(searchParams,dataShift,Contract.class);

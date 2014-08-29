@@ -1,11 +1,13 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
+<%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions" %>
+<%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions" %>
 <c:set var="ctx" value="${pageContext.request.contextPath}"/>
 <html>
 <head>
 <title>产品</title>
-<link href="${ctx}/static/css/recommend/list1.css?v=1" rel="stylesheet" type="text/css"></link>
+<link href="${ctx}/static/css/recommend/list1.css?v=1" rel="stylesheet" type="text/css"/>
 <script type="text/javascript" src="${ctx}/static/js/jquery.validate.js?v=1"></script>
 <script type="text/javascript" src="${ctx}/static/js/jquery.metadata.js?v=1"></script>
 <script type="text/javascript" src="${ctx}/static/js/validator.js?v=1"></script>
@@ -76,7 +78,7 @@ function searchData(action){ // 搜索
 			<td width="15%" align="right"><span class="w_red">*&nbsp;</span>产品名称：</td>
 			<td align="left"><input name="name" type="text" value="${product.name}" class="text_input3 required" maxlength="30"/></td>
 			<td width="15%" align="right"><span class="w_red">*&nbsp;</span>产品编号：</td>
-			<td align="left"><input name="code" type="text" value="${product.code}" class="text_input3 {unique:['Product','${product.code}']}" maxlength="30"/></td>
+			<td align="left"><input name="code" type="text" value="${product.code}" class="text_input3 {unique:['Product','${fn:replace(product.code,"'","\\'")}']}" maxlength="30"/></td>
 		</tr>
 		<tr>
 			<td align="right">产品类型：</td>

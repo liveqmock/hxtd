@@ -5,7 +5,6 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -13,17 +12,15 @@ import com.baihui.hxtd.soa.common.imports.ImportMessage;
 import com.baihui.hxtd.soa.customer.entity.Lead;
 import com.baihui.hxtd.soa.customer.entity.LeadDTO;
 @Service
-@Transactional
 public class ImportLeadService extends ImportServiceAbstract<LeadDTO,Lead> {
 
-	
-	
 	/**
 	 * 根据"实体类,主键列表"判断是否在数据库中有重复数据,在根据"重复类型"处理重复数据
 	 * Map<Integer,Lead>
 	 * 其中Integer有两个值1:新增,2:修改
 	 */
 	@Override
+	@Transactional
 	public Map<Integer, Lead> isAddOrUpdate(LeadDTO leadDB, List<String> uniqueString, String duplicateType) {
 		if(uniqueString==null || uniqueString.size()==0){
 			uniqueString = new ArrayList<String>();
@@ -258,7 +255,7 @@ public class ImportLeadService extends ImportServiceAbstract<LeadDTO,Lead> {
 		List<String> type=new ArrayList<String>();
 		type.add("mobile");
 		type.add("email");
-		ImportServiceAbstract<LeadDTO, Lead> import2db = new ImportLeadService();
+		//ImportServiceAbstract<LeadDTO, Lead> import2db = new ImportLeadService();
 		LeadDTO leadDB = new LeadDTO();
 		leadDB.setAddress("北京市");
 		leadDB.setCardNum("123456789");
@@ -267,7 +264,7 @@ public class ImportLeadService extends ImportServiceAbstract<LeadDTO,Lead> {
 		leadDB.setEmail("362356441@qq.com");
 		List<LeadDTO> list = new ArrayList<LeadDTO>();
 		list.add(leadDB);
-		String duplicateType = "忽略";
+		//String duplicateType = "忽略";
 		//import2db.importData2DB(list, type, duplicateType,user);
 	}
 

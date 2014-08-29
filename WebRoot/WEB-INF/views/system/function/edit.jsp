@@ -5,6 +5,7 @@
 --%>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions" %>
 <c:set var="ctx" value="${pageContext.request.contextPath}"/>
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
 <html>
@@ -84,7 +85,7 @@ function clearInputVal(obj){ //清除
                 <td align="right" width="15%">功能名：</td>
                 <td align="left"><input type="text" name="name" value="${func.name }" class="text_input3 required"/></td>
                 <td align="right" width="15%">功能编号：</td>
-                <td align="left"><input type="text" name="code" value="${func.code }" class="text_input3 required {unique:['Function','${func.code}']}"/></td>
+                <td align="left"><input type="text" name="code" value="${func.code }" class="text_input3 required {unique:['Function','${fn:replace(func.code,"'","\\'")}']}"/></td>
             </tr>
             <tr>
                 <td align="right">调用入口：</td>

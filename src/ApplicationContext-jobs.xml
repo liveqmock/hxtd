@@ -7,31 +7,43 @@
 	http://www.springframework.org/schema/beans/spring-beans-3.0.xsd
 	http://www.springframework.org/schema/context
 	http://www.springframework.org/schema/context/spring-context-3.0.xsd">
-	<!--
+	
 	<bean id="cleanRecycleBinJob" class="org.springframework.scheduling.quartz.JobDetailBean"> 
 		<property name="jobClass" value="com.baihui.hxtd.soa.job.CleanRecycleBinJob" />   
 		<property name="requestsRecovery" value="true"/>  
 	</bean>
-
 	<bean id="cleanRecycleBinJobTrigger" class="org.springframework.scheduling.quartz.CronTriggerBean">
 		<property name="jobDetail" ref="cleanRecycleBinJob" />
-		<property name="cronExpression" value="0/5 * * * * ?" />
+		<!-- 每月15号凌晨1点0分1秒触发 -->
+		<property name="cronExpression" value="0 0 1 15 * ?" />
 	</bean>
-
+ 	
+	<bean id="reminderOrderJob" class="org.springframework.scheduling.quartz.JobDetailBean"> 
+		<property name="jobClass" value="com.baihui.hxtd.soa.job.ReminderOrderJob" />   
+		<property name="requestsRecovery" value="true"/>  
+	</bean>
+	<bean id="reminderOrderJobTrigger" class="org.springframework.scheduling.quartz.CronTriggerBean">
+		<property name="jobDetail" ref="reminderOrderJob" />
+		<!-- 凌晨1点5分1秒触发 -->
+		<property name="cronExpression" value="1 5 1 * * ?" />  
+	</bean>
 
 	<bean id="springBeanJobFactory" class="org.springframework.scheduling.quartz.SpringBeanJobFactory"/>
 	
 	<bean id="schedulerFactoryForClusters" class="org.springframework.scheduling.quartz.SchedulerFactoryBean">  
 		<property name="schedulerContextAsMap">  
 			<map>
-				&lt;!&ndash; Environment Variable &ndash;&gt;
-				<entry key="test.timeout" value="5"/>
-				<entry key="commonService" value-ref="commonService"/>
-			</map>   
+				<entry key="warningService" value-ref="warningService"/>
+				<entry key="messageService" value-ref="messageService"/>
+				<entry key="userMessageService" value-ref="userMessageService"/>
+				<entry key="recycleBinService" value-ref="recycleBinService"/>
+				<entry key="userService" value-ref="userService"/>
+			</map>
 		</property>  
 		<property name="triggers">  
 			<list> 
-				<ref bean="cleanRecycleBinJobTrigger"/>
+				 <ref bean="cleanRecycleBinJobTrigger"/>
+				 <ref bean="reminderOrderJobTrigger"/>
 			</list>  
 		</property>
 		<property name="quartzProperties">
@@ -50,5 +62,4 @@
 		<property name="startupDelay" value="5"/>  
 		<property name="jobFactory" ref="springBeanJobFactory"/>
 	</bean>
-	-->
 </beans>

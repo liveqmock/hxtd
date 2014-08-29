@@ -31,12 +31,11 @@ import com.baihui.hxtd.soa.util.EnumModule;
  * @company 北京市百会纵横科技有限公司
  * @copyright (版权) 本文件归属 北京市百会纵横科技有限公司
  * @since (该版本支持的 JDK 版本) ： 1.6
- * @ClassName: com.baihui.hxtd.soa.setting.service.AuditLogService.java
+ * @ClassName: com.baihui.hxtd.soa.setting.service.RecycleBinService.java
  * @version (版本)1
  * @date 2014-7-7 上午11:41:19
  */
 @Service
-@Transactional(readOnly = true)
 public class RecycleBinService {
 	
 	private Logger logger = LoggerFactory.getLogger(RecycleBinService.class);
@@ -59,6 +58,7 @@ public class RecycleBinService {
 	 * @return HibernatePage<RecycleBin>
 	 * @throws NoSuchFieldException 
 	 */
+	@Transactional(readOnly = true)
 	public HibernatePage<RecycleBin> findPage(Map<String, Object> searchParams,
 			HibernatePage<RecycleBin> page,DataShift dataShift) throws NoSuchFieldException {
 		DetachedCriteria criteria = DetachedCriteria.forClass(RecycleBin.class);
@@ -77,6 +77,7 @@ public class RecycleBinService {
      * @param result
      * @return List<RecycleBin>
      */
+	@Transactional(readOnly = true)
 	 private List<RecycleBin> convertResult( List<RecycleBin> result){
 		 for(int i=0;i<result.size();i++){
 			 String modelName=result.get(i).getModuleName().toUpperCase();
@@ -89,7 +90,7 @@ public class RecycleBinService {
 	 * 保存方法
 	 * @param recycleBin
 	 */
-	@Transactional(readOnly = false)
+	@Transactional
 	public void save(RecycleBin recycleBin){
 		if(recycleBin.getRemark()==null||("").equals(recycleBin.getRemark())){
 			recycleBin.setRemark("删除"+EnumModule.valueOf(recycleBin.getModuleName().toUpperCase()).getModuleChineseName());
@@ -103,7 +104,7 @@ public class RecycleBinService {
 	 * @param id    参数类型
 	 * @return void    返回类型
 	 */
-	@Transactional(readOnly = false)
+	@Transactional
 	public void realDelete(String entityName, Long[] recordid, AuditLog [] auditLogArr){
 		commonDao.delete(entityName, recordid);
 	}
@@ -114,7 +115,7 @@ public class RecycleBinService {
 	 * @param days    参数类型
 	 * @return void    返回类型
 	 */
-	@Transactional(readOnly = false)
+	@Transactional
 	public void deleteRealBySetTime(int days, AuditLog auditLogArr){
 		int pageSize = 200;
 		HibernatePage<RecycleBin> page = new HibernatePage<RecycleBin>(pageSize);
@@ -163,13 +164,13 @@ public class RecycleBinService {
 	 * @param array
 	 * @param string
 	 */
-	@Transactional(readOnly = false)
+	@Transactional
 	public void recovery(Long[] id, String entityName,AuditLog [] auditLogArr) {
 		commonDao.recovery(entityName, id);
 		 
 	}
 
-	@Transactional(readOnly = false)
+	@Transactional
 	public void delete(Long[] id){
 		recycleBinDao.delete(id);
 	}
@@ -179,6 +180,7 @@ public class RecycleBinService {
 	 * @param id
 	 * @return
 	 */
+	@Transactional(readOnly = true)
 	public List<RecycleBin> getByIds(Long[] id) {
 		List<Long> ids=new ArrayList<Long>();
 		for(int i=0;i<id.length;i++){
@@ -193,6 +195,7 @@ public class RecycleBinService {
 	 * @return
 	 * @throws NoSuchFieldException 
 	 */
+	@Transactional(readOnly = true)
 	public List<RecycleBin> find(Map<String, Object> searchParams) throws NoSuchFieldException {
 		logger.info("分页查找回收站数据");
         DetachedCriteria detachedCriteria = DetachedCriteria.forClass(RecycleBin.class);
@@ -205,6 +208,12 @@ public class RecycleBinService {
         			.getModuleChineseName());
 		}
         return recycleBins;
+	}
+	
+	@Transactional(readOnly = true)
+	public Long getAccount(){
+		String hql = "select count(*) from RecycleBin";
+		return recycleBinDao.countHqlResult(hql);
 	}
 
 }

@@ -32,7 +32,6 @@ import com.baihui.hxtd.soa.system.entity.UserMessage;
  * @date 2014/4/24
  */
 @Service
-@Transactional
 public class MessageService {
 
 	private Logger logger = LoggerFactory.getLogger(this.getClass());
@@ -91,6 +90,7 @@ public class MessageService {
 	 * @param id
 	 * @return
 	 */
+	@Transactional
 	public UserMessage getById(Long id) {
 		logger.info("getById得到系统消息信息{}", id);
 		UserMessage userMessage=userMessageDao.getById(id);
@@ -105,6 +105,7 @@ public class MessageService {
 	 * @param Message
 	 * @param userId
 	 */
+	@Transactional
 	public Message addMessage(Message message) {
 		logger.info("保存系统消息信息{}", message);
 		Date now = messageDao.getDBNow();
@@ -121,6 +122,7 @@ public class MessageService {
 	 * @param id
 	 * @param auditLogArr 
 	 */
+	@Transactional
 	public void delete(User user, Long[] id, AuditLog[] auditLogArr) {
 		userMessageDao.logicalDelete(id);
 
@@ -130,7 +132,9 @@ public class MessageService {
 	 * 保存消息关系表
 	 * @param userMessage
 	 */
+	@Transactional
 	public void add(Message message,User user,AuditLog auditLog) {
+		message=addMessage(message);
 		UserMessage userMessage=new UserMessage();
 		userMessage.setMessage(message);
 		userMessage.setStatus(false);
@@ -149,6 +153,26 @@ public class MessageService {
 		userMessageDao.saveUserMessage(um);
 		auditLog.setRecordId(um.getId());
 	}
+	
+	@Transactional
+	public void add(Message message,User user) {
+		UserMessage userMessage=new UserMessage();
+		userMessage.setMessage(message);
+		userMessage.setStatus(false);
+		userMessage.setCreatedTime(userMessageDao.getDBNow());
+		userMessage.setUser(user);
+		userMessage.setType(true);
+		userMessage.setIsDeleted(false);
+		userMessageDao.saveUserMessage(userMessage);
+		UserMessage um=new UserMessage();
+		um.setMessage(message);
+		um.setStatus(false);
+		um.setCreatedTime(userMessageDao.getDBNow());
+		um.setUser(user);
+		um.setType(false);
+		um.setIsDeleted(false);
+		userMessageDao.saveUserMessage(um);
+	}
 
 	/**
 	 * 查询已发信息
@@ -158,6 +182,7 @@ public class MessageService {
 	 * @return HibernatePage<Message>
 	 * @throws NoSuchFieldException 
 	 */
+	@Transactional(readOnly = true)
 	public HibernatePage<Message> findPageSend(Map<String, Object> searchParams,
 			HibernatePage<Message> page, User user) throws NoSuchFieldException {
 		    logger.info("分页查找");
@@ -179,6 +204,7 @@ public class MessageService {
 	 * @return
 	 * @throws NoSuchFieldException 
 	 */
+	@Transactional(readOnly = true)
 	public List<UserMessage> find(Map<String, Object> searchParams, String ty,
 			User user) throws NoSuchFieldException {
 		logger.info("查找");
@@ -207,6 +233,7 @@ public class MessageService {
 	 * @return
 	 */
 	@SuppressWarnings("unchecked")
+	@Transactional(readOnly = true)
 	public List<UserMessage> find() {
 		logger.info("查找");
         DetachedCriteria detachedCriteria = DetachedCriteria.forClass(UserMessage.class);
@@ -226,6 +253,7 @@ public class MessageService {
      * @param id
      * @return String
     */
+	@Transactional(readOnly = true)
    public String getTitleById(Long id){
    	return userMessageDao.getById(id).getMessage().getTitle();
    }

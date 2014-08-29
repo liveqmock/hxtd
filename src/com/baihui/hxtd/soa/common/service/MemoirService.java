@@ -26,7 +26,6 @@ import com.baihui.hxtd.soa.system.entity.User;
  * @date 2014-5-26 上午11:16:20
  */
 @Service
-@Transactional
 public class MemoirService {
 	
 	//private Logger logger = LoggerFactory.getLogger(MemoirService.class);
@@ -42,6 +41,7 @@ public class MemoirService {
 	  * @param page 分页数据集
 	  * @throws
 	 */
+	@Transactional(readOnly = true)
 	public void findPage(Long moduleId, Long moduleType, HibernatePage<Memoir> page){
 		DetachedCriteria criteria = DetachedCriteria.forClass(Memoir.class);
 		criteria.setFetchMode("employee", FetchMode.JOIN);
@@ -55,11 +55,13 @@ public class MemoirService {
         memoirDao.findPage(page, criteria);
 	}
 	
+	@Transactional
 	public void add(Memoir memoir, User user, AuditLog auditLog){
 		memoirDao.save(memoir);
 		auditLog.setRecordId(memoir.getId());
 	}
 	
+	@Transactional
 	public void modify(Memoir memoir, User user, AuditLog auditLog){
 		memoirDao.save(memoir);
 		auditLog.setRecordId(memoir.getId());
@@ -69,11 +71,13 @@ public class MemoirService {
      * @param id 联系纪要主键ID
      * @return MarketActivity 联系纪要实体
      */
+	@Transactional(readOnly = true)
     public Memoir get(Long id) {
     	String hql = "select memoir from Memoir memoir where memoir.id = ?";
         return memoirDao.findUnique(hql, id);
     }
     
+	@Transactional(readOnly = true)
     public String getSummaryById(Long id){
  	   return memoirDao.get(id).getSummary();
     }
@@ -82,12 +86,13 @@ public class MemoirService {
      * @Description: 根据联系纪要主键ID删除记录
      * @param id 联系纪要主键ID
     */
-   public void delete(User user, Long... id) {
-	   memoirDao.delete(id);
-   }
+	@Transactional
+	public void delete(User user, Long... id) {
+		memoirDao.delete(id);
+	}
 	
+	@Transactional(readOnly = true)
 	public Memoir view(Long id){
 		return memoirDao.get(id);
 	}
-	
 }

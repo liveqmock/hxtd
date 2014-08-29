@@ -43,10 +43,6 @@ public class UserService {
     @Resource
     private OrganizationDao organizationDao;
 
-    //    @Value("${export.counts}")
-    private Integer exportCounts = 3000;
-
-
     @Resource
     private UserDao userDao;
 
@@ -180,22 +176,14 @@ public class UserService {
         return page;
     }
 
-    /**
-     * 
-     * @param searchParams
-     * @param page
-     * @param organizationId
-     * @return
-     * @throws NoSuchFieldException
-     */
     @Transactional(readOnly = true)
     public HibernatePage<User> findPageByRoleCode(HibernatePage<User> page, String roleCode) throws NoSuchFieldException {
         logger.info("根据角色查找用户");
-        List<User> users= userDao.findByRoleCode(roleCode);
+        List<User> users = userDao.findByRoleCode(roleCode);
         page.setResult(users);
         return page;
     }
-    
+
 
     /**
      * 查找
@@ -219,7 +207,7 @@ public class UserService {
         Search.buildCriteria(filters, detachedCriteria, User.class);
 
         detachedCriteria.addOrder(Order.asc("name"));
-        return userDao.find(detachedCriteria, exportCounts);
+        return userDao.find(detachedCriteria, Constant.EXPORT_MAX_COUNT);
     }
 
     /**
@@ -240,7 +228,7 @@ public class UserService {
         detachedCriteria.add(Restrictions.between("org.order", organizationOrder, organizationOrder + tierSerial.getIncrease() - 1));
         detachedCriteria.add(Restrictions.eq("isDeleted", false));
 
-        return userDao.find(detachedCriteria, exportCounts);
+        return userDao.find(detachedCriteria, Constant.EXPORT_MAX_COUNT);
     }
 
 
@@ -298,6 +286,12 @@ public class UserService {
     @Transactional(readOnly = true)
     public User getByName(String name) {
         return userDao.getByName(name);
+    }
+
+    /** 获取超级管理员 */
+    @Transactional(readOnly = true)
+    public User findSupermanager() {
+        return userDao.findSupermanager();
     }
 
     /**
@@ -379,17 +373,18 @@ public class UserService {
     public String getNameById(Long id) {
         return userDao.get(id).getRealName();
     }
-    
+
     /**
      * 根据组织ID找到用户
+     *
      * @param orgId
      * @return
      */
     @Transactional
-	public List<User> findUserByOrgId(Long orgId) {
-    	 String hql = "select user from User user inner join user.organization org where org.id=? and user.isDeleted=false";
-         List<User> users = userDao.find(hql, orgId);
-         return users;
+    public List<User> findUserByOrgId(Long orgId) {
+        String hql = "select user from User user inner join user.organization org where org.id=? and user.isDeleted=false";
+        List<User> users = userDao.find(hql, orgId);
+        return users;
 
-	}
+    }
 }

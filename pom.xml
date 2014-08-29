@@ -339,13 +339,11 @@
             <version>1.0.1</version>
         </dependency>
 
-        <!--
         <dependency>
               <groupId>com.baihui.commons</groupId>
               <artifactId>baihui-commons-util</artifactId>
               <version>1.0</version>
           </dependency>
-          -->
 
     </dependencies>
 

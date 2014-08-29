@@ -221,7 +221,7 @@ public class FlowInstanceService {
         String flowValue = idFlowable.getFlowNode().getFlow().getKey();
         String title = String.format("%s-%s(%s)", flowValue, idFlowable.getFlowNode().getName(), idFlowable.getSketch());
         message.setTitle(title);
-        String url = String.format("<a href='../..%s/toStartApprovePage.do?id=%s'>审批链接</a>", flowInstance.getModule().getUrl(), flowInstance.getRecordId());
+        String url = String.format("<a href=\"../..%s/toStartApprovePage.do?id=%s\">审批链接</a>", flowInstance.getModule().getUrl(), flowInstance.getRecordId());
         String personName = flowInstance.getApprover().getRealName();
         message.setContent(String.format("%s于%s启动%s，特发此系统消息提醒您及时进行审批！%s", personName, format.format(flowInstance.getApproveTime()), message.getTitle(), url));
         message.setCreator(flowInstance.getApprover());
@@ -313,7 +313,7 @@ public class FlowInstanceService {
             String personName = flowInstance.getApprover().getRealName();
             String timeStr = format.format(flowInstance.getApproveTime());
             String isPassed = flowInstance.getIsPassed() ? "审核通过" : "审核未通过";
-            String url = String.format("<a href='../..%s/toExecuteApprovePage.do?id=%s'>审批链接</a>", flowInstance.getModule().getUrl(), flowInstance.getRecordId());
+            String url = String.format("<a href=\"../..%s/toExecuteApprovePage.do?id=%s\">审批链接</a>", flowInstance.getModule().getUrl(), flowInstance.getRecordId());
             message.setContent(String.format("%s于%s执行%s，%s，特发此系统消息提醒您及时进行审批！%s", personName, timeStr, message.getTitle(), isPassed, url));
             message.setCreator(flowInstance.getApprover());
             message.setCreatedTime(flowInstance.getApproveTime());

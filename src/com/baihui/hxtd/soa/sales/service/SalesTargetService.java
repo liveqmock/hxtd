@@ -26,7 +26,6 @@ import com.baihui.hxtd.soa.system.entity.User;
 import com.baihui.hxtd.soa.system.service.DataShift;
 
 @Service
-@Transactional
 public class SalesTargetService {
 	
 	private Logger logger = LoggerFactory.getLogger(this.getClass());
@@ -67,6 +66,7 @@ public class SalesTargetService {
      * @return HibernatePage<Component>    返回类型
      * @throws
      */
+    @Transactional(readOnly = true)
     public SalesTarget get(Long id) {
         logger.info("查询单个供应商信息{}", id);
         String hql = "select entity from SalesTarget entity  " +
@@ -74,6 +74,7 @@ public class SalesTargetService {
         return salesTargetDao.findUnique(hql,id);
     }
 	
+    @Transactional
 	public void add(SalesTarget entity,String[] owners,AuditLog [] auditLogArr){
 		setDBTime(entity);
 		SalesTarget salesTmp = null;
@@ -86,11 +87,13 @@ public class SalesTargetService {
 		}
 	}
 	
+    @Transactional
 	public void modify(SalesTarget entity,AuditLog auditLog){
 		setDBTime(entity);
 		salesTargetDao.save(entity);
 	}
 	
+    @Transactional
 	public void delete(Long[] id,AuditLog[] auditLogArr){
 		salesTargetDao.delete(id);
 	}

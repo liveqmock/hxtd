@@ -14,17 +14,14 @@ import com.baihui.hxtd.soa.customer.entity.Customer;
 import com.baihui.hxtd.soa.customer.entity.CustomerDTO;
 import com.baihui.hxtd.soa.util.Tools;
 @Service
-@Transactional
 public class ImportCustomerService extends ImportServiceAbstract<CustomerDTO,Customer> {
-
-	
-	
 	/**
 	 * 根据"实体类,主键列表"判断是否在数据库中有重复数据,在根据"重复类型"处理重复数据
 	 * Map<Integer,Lead>
 	 * 其中Integer有两个值1:新增,2:修改
 	 */
 	@Override
+	@Transactional
 	public Map<Integer, Customer> isAddOrUpdate(CustomerDTO customerDTO, List<String> uniqueString, String duplicateType) {
 		if(uniqueString==null || uniqueString.size()==0){
 			uniqueString = new ArrayList<String>();

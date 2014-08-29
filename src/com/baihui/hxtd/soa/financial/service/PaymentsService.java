@@ -41,7 +41,6 @@ import com.baihui.hxtd.soa.system.service.DataShift;
  */
 
 @Service
-@Transactional(readOnly = true)
 public class PaymentsService {
 
 	private Logger logger = LoggerFactory.getLogger(this.getClass());
@@ -69,6 +68,7 @@ public class PaymentsService {
 	 * @return HibernatePage<Payments>
 	 * @throws NoSuchFieldException
 	 */
+	@Transactional(readOnly = true)
 	public HibernatePage<Payments> findPage(Map<String, Object> searchParams,
 			HibernatePage<Payments> page, DataShift dataShift) throws NoSuchFieldException {
 		logger.info("分页查找");
@@ -93,7 +93,7 @@ public class PaymentsService {
 		return criteria;
 	}
 
-	@Transactional(readOnly = false)
+	@Transactional
 	public void add(Payments payments, AuditLog auditLog) {
 		payments.setCreatedTime(paymentsDao.getDBNow());
 		payments.setModifiedTime(payments.getCreatedTime());
@@ -115,6 +115,7 @@ public class PaymentsService {
 	 * @return
 	 * @throws ParseException
 	 */
+	@Transactional(readOnly = true)
 	public Payments getById(Long id) throws ParseException {
 		String hql = "from Payments payments "
 				+ " left join fetch payments.order "
@@ -135,7 +136,7 @@ public class PaymentsService {
 	 * @return
 	 * @throws ParseException
 	 */
-	@Transactional(readOnly = false)
+	@Transactional
 	public void modify(Payments payments, AuditLog auditLog) {
 		if (payments.getActual() == null) {
 			payments.setStatus(false);
@@ -158,7 +159,7 @@ public class PaymentsService {
 	 * @param id
 	 * @param auditLogArr
 	 */
-	@Transactional(readOnly = false)
+	@Transactional
 	public void delete(Long[] id, AuditLog[] auditLogArr) {
 		paymentsDao.logicalDelete(id);
 	}
@@ -168,6 +169,7 @@ public class PaymentsService {
 	 * @return
 	 */
 	@SuppressWarnings("unchecked")
+	@Transactional(readOnly = true)
 	public List<Payments> find() {
 		logger.info("查找");
         DetachedCriteria detachedCriteria = DetachedCriteria.forClass(Payments.class);
@@ -189,6 +191,7 @@ public class PaymentsService {
 	 * 分页导出查找所有应收款
 	 * @return
 	 */
+	@Transactional(readOnly = true)
 	public List<Payments>  find(Map<String, Object> searchParams) throws NoSuchFieldException {
 		logger.info("分页查找");
         DetachedCriteria detachedCriteria = DetachedCriteria.forClass(Payments.class);
@@ -204,5 +207,4 @@ public class PaymentsService {
         Search.buildCriteria(filters, detachedCriteria, Payments.class);
         return paymentsDao.find(detachedCriteria, exportCounts);
 	}
-	
 }

@@ -27,7 +27,6 @@ import com.baihui.hxtd.soa.base.utils.ImportExport;
 import com.baihui.hxtd.soa.base.utils.Search;
 import com.baihui.hxtd.soa.base.utils.mapper.HibernateAwareObjectMapper;
 import com.baihui.hxtd.soa.common.controller.CommonController;
-import com.baihui.hxtd.soa.customer.entity.Customer;
 import com.baihui.hxtd.soa.customer.entity.Lead;
 import com.baihui.hxtd.soa.customer.service.LeadService;
 import com.baihui.hxtd.soa.system.DictionaryConstant;

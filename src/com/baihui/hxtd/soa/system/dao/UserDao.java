@@ -65,9 +65,9 @@ public class UserDao extends HibernateDAOImpl<User, Long> {
      * 2.下级组织
      */
     public DetachedCriteria priviData(DetachedCriteria criteria, DataShift dataShift) {
-        
-    	//系统管理员或系统数据管理员不做权限限制
-        if (dataShift.getIsSysDataManager()||dataShift.getIsSysManager()) {
+
+        //系统管理员或系统数据管理员不做权限限制
+        if (dataShift.getIsSysDataManager() || dataShift.getIsSysManager()) {
             return criteria;
         }
         //组织数据管理员的权限设置，自己所在组和下级组织
@@ -135,6 +135,13 @@ public class UserDao extends HibernateDAOImpl<User, Long> {
                 " inner join fetch user.organization" +
                 " where user.name=?";
         return findUnique(hql, name);
+    }
+
+    /** 获取超级管理员 */
+    public User findSupermanager() {
+        String hql = "select user from User user where user.isManager=true";
+        List<User> users = find(hql);
+        return users.size() > 0 ? users.get(0) : null;
     }
 
     /**

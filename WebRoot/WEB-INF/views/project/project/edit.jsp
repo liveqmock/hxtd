@@ -1,6 +1,7 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
+<%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions" %>
 <c:set var="ctx" value="${pageContext.request.contextPath}"/>
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
 <html>
@@ -73,7 +74,7 @@ function clearInputVal(obj){//清除
 				<td align="left"><input type="text" name="name" value="${project.name}" class="text_input3 required" maxlength="30"></td>
 				<td align="right" width="15%">项目编号：</td>
 				<td align="left"><input type="text" name="code" value="${project.code}" maxlength="30" 
-					class="text_input3 required {unique:['Project','${project.code}']}"></td>
+					class="text_input3 required {unique:['Project','${fn:replace(project.code,"'","\\'")}']}"></td>
 			</tr>
 			<tr>
 				<td align="right">融资额度（万）：</td>

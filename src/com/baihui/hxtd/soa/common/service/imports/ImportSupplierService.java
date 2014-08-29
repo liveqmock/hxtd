@@ -14,17 +14,14 @@ import com.baihui.hxtd.soa.project.entity.Supplier;
 import com.baihui.hxtd.soa.project.entity.SupplierDTO;
 import com.baihui.hxtd.soa.util.Tools;
 @Service
-@Transactional
 public class ImportSupplierService extends ImportServiceAbstract<SupplierDTO,Supplier> {
-
-	
-	
 	/**
 	 * 根据"实体类,主键列表"判断是否在数据库中有重复数据,在根据"重复类型"处理重复数据
 	 * Map<Integer,Product>
 	 * 其中Integer有两个值1:新增,2:修改
 	 */
 	@Override
+	@Transactional
 	public Map<Integer, Supplier> isAddOrUpdate(SupplierDTO supplierDTO, List<String> uniqueString, String duplicateType) {
 		if(uniqueString==null || uniqueString.size()==0){
 			uniqueString = new ArrayList<String>();
@@ -221,8 +218,6 @@ public class ImportSupplierService extends ImportServiceAbstract<SupplierDTO,Sup
 		return supplier;
 	}
 
-	
-	
 	public static void main(String[] args){
 		//集合的主键
 		/*List<String> type=new ArrayList<String>();
@@ -253,8 +248,4 @@ public class ImportSupplierService extends ImportServiceAbstract<SupplierDTO,Sup
 		supplier1.setId(supplier2.getId());
 		return supplier1;
 	}
-
-
-
-	
 }

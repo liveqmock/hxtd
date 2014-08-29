@@ -32,7 +32,6 @@ import com.baihui.hxtd.soa.system.entity.User;
  * @date 2014-5-16 下午04:48:19
  */
 @Service
-@Transactional
 public class ProductService {
 	//private Logger logger = LoggerFactory.getLogger(this.getClass());
 
@@ -74,6 +73,7 @@ public class ProductService {
      * @param dataShift 数据筛选
      * @return List<Product> 返回数据
     */
+   @Transactional(readOnly = true)
    public List<Product> export() {
    		DetachedCriteria criteria = DetachedCriteria.forClass(Product.class);
    		criteria.add(Restrictions.eq("isDeleted", false));
@@ -109,6 +109,7 @@ public class ProductService {
      * @param id 主键ID
      * @return Product 产品实体
      */
+    @Transactional(readOnly = true)
     public Product get(Long id) {
         String hql = "select product from Product product " +
         				"left join fetch product.project " +
@@ -126,6 +127,7 @@ public class ProductService {
      * @param id
      * @return String
     */
+   @Transactional(readOnly = true)
    public String getNameById(Long id){
 	   return productDao.get(id).getName();
    }
@@ -136,6 +138,7 @@ public class ProductService {
      * @param user 操作用户
      * @param auditLog 审计日志
      */
+    @Transactional
     public void add(Product entity, User user, AuditLog auditLog) {
         productDao.save(entity);
         auditLog.setRecordId(entity.getId());
@@ -147,6 +150,7 @@ public class ProductService {
      * @param user 操作用户
      * @param auditLog 审计日志
      */
+    @Transactional
     public void modify(Product entity, User user, AuditLog auditLog) {
         productDao.save(entity);
     }
@@ -155,6 +159,7 @@ public class ProductService {
      * delete(根据产品主键ID删除记录，支持批量删除)
      * @param id 产品主键IDS
     */
+   @Transactional
    public boolean delete(User user, Long[] ids, AuditLog[] auditLog) {
 	   if(productDao.getOrdersCount(ids) == 0){
 		   productDao.logicalDelete(ids);
@@ -165,6 +170,7 @@ public class ProductService {
 	   
    }
    
+   @Transactional(readOnly = true)
    public List<Product> findProductByProject(Project project) {
 		DetachedCriteria criteria = DetachedCriteria.forClass(Product.class);
   		criteria.add(Restrictions.eq("isDeleted", false));
@@ -172,11 +178,12 @@ public class ProductService {
 		return productDao.find(criteria);
 	}
 
-
+   @Transactional(readOnly = true)
    public Date getDBNow(){
 	   return productDao.getDBNow();
    }
    
+   @Transactional(readOnly = true)
    public Date getDBNowDate(){
 	   return productDao.getDBNowDate();
    }

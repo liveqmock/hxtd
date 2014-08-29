@@ -117,41 +117,34 @@ $(function () {
                 <td align="left">
                     <c:choose>
                         <c:when test="${VS_HAS_FUNCTIONS.messageView}">
-                            <a href="${ctx}/system/message/toViewPage.do?id={$T.row.id}&userName={$T.row.message.creator.name}">{$T.row.message.title}
-                                <div class="none w240">
-                                    <div class="w240 pr">
-                                       <i class="block globle_img pa tan_leftjian"></i>
-                                       <b class="bb1"></b>
-                                       <b class="bb2"></b>
-                                       <b class="bb3"></b>
-                                       <b class="bb4"></b>
-                                       <b class="bb5"></b>
-                                       <b class="bb5"></b>
-                                       <b class="bb5"></b>
-                                       <b class="bb5"></b>
-      									<span class="block" style="background-color:#fff; 
-     												 width:238px; height:100%; border-left:1px solid #666666; border-right:1px solid #666666;">
-       									<span class=" block ml10 mr10">
-    								    <h1>名称：</h1>
-    									<p class="fbnone">{$T.row.message.title}</p>
-       									<h1>内容：</h1>
-       									<p class="fbnone">{$T.row.message.content}</p>
-       									<h1>接收时间：</h1>
-      										<p class="fbnone"> {$T.row.createdTime}</p>
-       									<p></p>
-       									</span>
-      									</span>
-                                       <b class="bb6"></b>
-                                       <b class="bb6"></b>
-                                       <b class="bb6"></b>
-                                       <b class="bb6"></b>
-                                       <b class="bb7"></b>
-                                       <b class="bb8"></b>
-                                       <b class="bb9"></b>
-                                       <b class="bb0"></b>
-                                    </div>
-                                </div>
-                            </a>
+                        <div class="pr">
+							<a href="${ctx}/system/message/toViewPage.do?id={$T.row.id}">{$T.row.message.title.decodeHTML()}</a>
+                                <span class="none w240" id="test1">     
+									<i class="block globle_img pa tan_leftjian"></i>
+									<b class="bb1"></b>
+									<b class="bb2"></b>
+									<b class="bb3"></b>
+									<b class="bb4"></b>
+									<b class="bb5"></b>
+									<b class="bb5"></b>
+									<div style="background-color:#fff;width:238px; height:100%; border-left:1px solid #666666; border-right:1px solid #666666;">
+									<h1>名称：</h1>
+									<p class="fbnone">{$T.row.message.title.decodeHTML()}</p>
+									<h1>内容：</h1>
+									<p class="fbnone">{$T.row.message.content.decodeHTML()} </p>
+									<h1>接收时间：</h1>
+									<p class="fbnone"> {$T.row.createdTime}</p>
+									</div>
+									<b class="bb6"></b>
+									<b class="bb6"></b>
+									<b class="bb6"></b>
+									<b class="bb6"></b>
+									<b class="bb7"></b>
+									<b class="bb8"></b>
+									<b class="bb9"></b>
+									<b class="bb0"></b>
+                                </span>
+                            </div>
                         </c:when>
                         <c:otherwise>{$T.row.message.title}</c:otherwise>
                     </c:choose>
@@ -221,40 +214,34 @@ $(function () {
                 <td>
                     <c:choose>
                     <c:when test="${VS_HAS_FUNCTIONS.messageView}">
-                    <a class="toviewpage" href="${ctx}/system/message/toViewPage.do?id={$T.row.id}&userName={$T.row.message.creator.realName}">{$T.row.message.title}
-                        <div class="none w240">
-                            <div class="w240 pr">
-                                <i class="block globle_img pa tan_leftjian"></i>
-                                <b class="bb1"></b>
-                                <b class="bb2"></b>
-                                <b class="bb3"></b>
-                                <b class="bb4"></b>
-                                <b class="bb5"></b>
-                                <b class="bb5"></b>
-                                <b class="bb5"></b>
-                                <b class="bb5"></b>
-								<span class="block" style="background-color:#f5f5f6; 
-										 width:238px; height:100%; border-left:1px solid #666666; border-right:1px solid #666666;">
-								<span class=" block ml10 mr10">
-								 <h1>名称：</h1>
-								<p class="fbnone">{$T.row.message.title}</p>
+                        <div class="pr">
+                        	<a href="${ctx}/system/message/toViewPage.do?id={$T.row.id}">{$T.row.message.title.decodeHTML()}</a>
+							<span class="none w240" id="test1">     
+								<i class="block globle_img pa tan_leftjian"></i>
+								<b class="bb1"></b>
+								<b class="bb2"></b>
+								<b class="bb3"></b>
+								<b class="bb4"></b>
+								<b class="bb5"></b>
+								<b class="bb5"></b>
+								<div style="background-color:#fff;width:238px; height:100%; border-left:1px solid #666666; border-right:1px solid #666666;">
+								<h1>名称：</h1>
+								<p class="fbnone">{$T.row.message.title.decodeHTML()}</p>
 								<h1>内容：</h1>
-								<p class="fbnone">{$T.row.message.content}</p>
+								<p class="fbnone">{$T.row.message.content.decodeHTML()} </p>
 								<h1>发送时间：</h1>
 								<p class="fbnone"> {$T.row.createdTime}</p>
-								<p></p>
-								</span>
-								</span>
-                                <b class="bb6"></b>
-                                <b class="bb6"></b>
-                                <b class="bb6"></b>
-                                <b class="bb6"></b>
-                                <b class="bb7"></b>
-                                <b class="bb8"></b>
-                                <b class="bb9"></b>
-                                <b class="bb0"></b>
-                            </div>
-                        </div>
+								</div>
+								<b class="bb6"></b>
+								<b class="bb6"></b>
+								<b class="bb6"></b>
+								<b class="bb6"></b>
+								<b class="bb7"></b>
+								<b class="bb8"></b>
+								<b class="bb9"></b>
+								<b class="bb0"></b>
+							</span>
+                          </div>
                         </c:when>
                         <c:otherwise>{$T.row.message.title}</c:otherwise>
                         </c:choose>

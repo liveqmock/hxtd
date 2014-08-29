@@ -45,7 +45,6 @@ import com.baihui.hxtd.soa.system.service.DictionaryService;
  * @date 2014-5-13 下午07:28:30
  */
 @Service
-@Transactional
 public class LeadService {
 	private Logger logger = LoggerFactory.getLogger(this.getClass());
 
@@ -72,6 +71,7 @@ public class LeadService {
 	/**
 	 * 根据id查询Lead对象
 	 */
+	@Transactional(readOnly = true)
 	public Lead get(Long id) {
 		String hql = " select  lead from Lead lead "
 				+ " left join fetch lead.source "
@@ -90,6 +90,7 @@ public class LeadService {
 	/**
 	 * 根据id查询Lead对象
 	 */
+	@Transactional(readOnly = true)
 	public List<Lead> get(List<Long> ids) {
 		return leadDao.get(ids);
 	}
@@ -99,11 +100,13 @@ public class LeadService {
 	 * 
 	 * @param lead
 	 */
+	@Transactional
 	public void modify(Lead lead) {
 		logger.info("修改用户");
 		leadDao.update(lead);
 	}
 
+	@Transactional
 	public void add(Lead lead,AuditLog auditLog) {
 		logger.info("保存线索信息{}", lead);
 		Date now = leadDao.getDBNow();
@@ -116,6 +119,7 @@ public class LeadService {
 		auditLog.setRecordId(lead.getId());
 	}
 	
+	@Transactional
 	public void modify(Lead lead, AuditLog auditLog) {
 		logger.info("保存线索信息{}", lead);
 		Date now = leadDao.getDBNow();
@@ -147,13 +151,13 @@ public class LeadService {
 	  * @return List<Lead>    返回类型
 	  * @throws
 	 */
+	@Transactional(readOnly = true)
 	public List<Lead> export(Map<String, Object> searchParams,DataShift dataShift,AuditLog auditLog)
 			throws NoSuchFieldException {
 		DetachedCriteria criteria = biuldQuery(searchParams,dataShift,Lead.class);
 		return leadDao.find(criteria, 3000);
 	}
 
-	
 	@SuppressWarnings("unchecked")
 	private DetachedCriteria biuldQuery(Map<String, Object> searchParams,DataShift dataShift,Class entityClass) throws NoSuchFieldException{
 		DetachedCriteria criteria = DetachedCriteria.forClass(entityClass);
@@ -173,6 +177,7 @@ public class LeadService {
 	 * delete(删除线索AuditLog auditLog * 
 	 * @param id
 	 */
+	@Transactional
 	public void delete(Long[] id,AuditLog [] auditLogArr) {
 		leadDao.logicalDelete(id);
 	}
@@ -185,6 +190,7 @@ public class LeadService {
 	  * @return void    返回类型
 	  * @throws
 	 */
+	@Transactional
 	public void modifyLeadConverter(Long id,AuditLog auditLog){
 		logger.info("线索转换开始，ID={}",id);
 		Lead lead = this.get(id);
@@ -227,6 +233,7 @@ public class LeadService {
 	  * @return int    返回类型
 	  * @throws
 	 */
+	@Transactional
 	public int modifyOwner( Long ownerId, Long[] ids,AuditLog [] auditLogArr) {
 		return leadDao.modifyOwner(ownerId, ids);
 
@@ -239,24 +246,8 @@ public class LeadService {
 	  * @return Date    返回类型
 	  * @throws
 	 */
+	@Transactional(readOnly = true)
 	public Date getDBNow(){
 		return leadDao.getDBNow();
 	}
-	
-	public LeadDao getLeadDao() {
-		return leadDao;
-	}
-
-	public void setLeadDao(LeadDao leadDao) {
-		this.leadDao = leadDao;
-	}
-
-	public UserDao getUserDao() {
-		return userDao;
-	}
-
-	public void setUserDao(UserDao userDao) {
-		this.userDao = userDao;
-	}
-
 }

@@ -1,41 +1,37 @@
 package com.baihui.hxtd.soa.common.service.imports;
 
-import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import com.baihui.hxtd.soa.base.DBDateServiceInjecter;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.baihui.hxtd.soa.base.DBDateServiceInjecter;
 import com.baihui.hxtd.soa.common.imports.ImportMessage;
 import com.baihui.hxtd.soa.system.entity.RecycleBin;
 import com.baihui.hxtd.soa.system.entity.RecyclebinDTO;
 import com.baihui.hxtd.soa.util.Tools;
 @Service
-@Transactional
 public class ImportRecyclebinService extends ImportServiceAbstract<RecyclebinDTO,RecycleBin> {
-
-	
-	
 	/**
 	 * 根据"实体类,主键列表"判断是否在数据库中有重复数据,在根据"重复类型"处理重复数据
 	 * Map<Integer,Lead>
 	 * 其中Integer有两个值1:新增,2:修改
 	 */
 	@Override
+	@Transactional
 	public Map<Integer, RecycleBin> isAddOrUpdate(RecyclebinDTO RecyclebinDTO, List<String> uniqueString, String duplicateType) {
-		String hqlParam = "";
-		String value = "";
+		//String hqlParam = "";
+		//String value = "";
 		/*
 		 * 返回的集合.key是1或者2
 		 * 1:新增
 		 * 2:修改
 		 */
 		Map<Integer, RecycleBin> entityMap = new HashMap<Integer, RecycleBin>();
-//		value = value.substring(0,value.lastIndexOf(","));
-//		String[] values = value.split(","); 
+		/*value = value.substring(0,value.lastIndexOf(","));
+		String[] values = value.split(","); */
 		//将RecyclebinDTO对象转换成RecycleBin类型的对象
 		RecycleBin recycleBinFromExcel = convertT2E(RecyclebinDTO);
 		
@@ -94,8 +90,6 @@ public class ImportRecyclebinService extends ImportServiceAbstract<RecyclebinDTO
 		return recycleBin;
 	}
 
-	
-
 	/**
 	 * RecycleBin1:来自excel,所以没有id
 	 * RecycleBin2:来自DB,有id
@@ -105,9 +99,5 @@ public class ImportRecyclebinService extends ImportServiceAbstract<RecyclebinDTO
 	public RecycleBin setId(RecycleBin recycleBin1,RecycleBin recycleBin2) {
 		recycleBin1.setId(recycleBin2.getId());
 		return recycleBin1;
-	}
-
-
-
-	
+	}	
 }

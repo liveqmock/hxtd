@@ -41,7 +41,9 @@ ${VR_JS_GLOBALINFO};</script>
 
 <script type="text/javascript" src="${ctx}/static/js/js-util.js?v=1"></script>
 <script type="text/javascript" src="${ctx}/static/js/commonAjax.js?v=${now}"></script>
-    <script type="text/javascript"></script>
+<script type="text/javascript">
+//    $(function(){$(":input:not(:disabled)").addClass("specialChar");});
+</script>
 <sitemesh:head/>
 </head>
 <body style="min-width: 1100px;">

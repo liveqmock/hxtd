@@ -166,7 +166,7 @@
                         </tr>
                         <tr>
                             <td align="right" width="15%">菜单名称：</td>
-                            <td align="left"><input type="text" name="name" class="{required:true,unique:['Menu','${menu.name}']} text_input3" value="${menu.name}"/></td>
+                            <td align="left"><input type="text" name="name" class="{required:true,unique:['Menu','${fn:replace(menu.name,"'","\\'")}']} text_input3" value="${menu.name}"/></td>
                             <td align="right" width="15%" class="required">调用入口：</td>
                             <td align="left"><input type="text" name="url" class="text_input3 required ruleUrl {uniqueUrl:['Menu','Function']}" value="${menu.url}"/></td>
                         </tr>

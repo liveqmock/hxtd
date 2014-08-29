@@ -42,7 +42,6 @@ import com.baihui.hxtd.soa.system.service.DataShift;
 		portName = "CustomerSoapPort",
 		endpointInterface = "com.baihui.hxtd.soa.customer.service.CustomerService")
 @Service
-@Transactional
 public class CustomerServiceImpl implements CustomerService{
 
 	private Logger logger = LoggerFactory.getLogger(CustomerService.class);
@@ -98,6 +97,7 @@ public class CustomerServiceImpl implements CustomerService{
     /**
 	 * 根据id查询Customer对象
 	 */
+    @Transactional(readOnly = true)
 	public Customer get(Long id) {
 		return customerDao.get(id);
 	}
@@ -106,6 +106,7 @@ public class CustomerServiceImpl implements CustomerService{
      * 保存客户信息
      * @param customer
      */
+	@Transactional(readOnly = false)
 	public void add(Customer entity,User user,AuditLog auditLog) {
 		logger.info("保存客户信息{}", entity);
 		entity.setCreatedTime(customerDao.getDBNow());
@@ -119,6 +120,7 @@ public class CustomerServiceImpl implements CustomerService{
      * 修改客户信息
      * @param customer
      */
+	@Transactional(readOnly = false)
 	public void modify(Customer customer,User user, AuditLog auditLog) {
 		logger.info("保存客户信息{}", customer);
 		customer.setModifiedTime(customerDao.getDBNow());
@@ -132,6 +134,7 @@ public class CustomerServiceImpl implements CustomerService{
      * delete(删除客户信息)
      * @param id
      */
+	@Transactional(readOnly = false)
     public String delete(User user, Long[] id,AuditLog [] auditLog) {
     	if(contactDao.getCount(id,"customer")>0){
     		return "联系人";
@@ -151,6 +154,7 @@ public class CustomerServiceImpl implements CustomerService{
      * @param ownerId
      * @param id
      */
+	@Transactional(readOnly = false)
     public void modifyOwner(Long ownerId, Long[] id,AuditLog [] auditLogArr ) {
     	customerDao.updateOwner(ownerId,id);
 		
@@ -163,11 +167,12 @@ public class CustomerServiceImpl implements CustomerService{
      * @param id
      * @return Customer
      */
+	@Transactional(readOnly = true)
 	public Customer getById(Long id) {
 		return customerDao.getById(id);
 	}
 
-
+	@Transactional(readOnly = true)
 	public List<Customer>  find(Map<String, Object> searchParams) throws NoSuchFieldException {
 		logger.info("分页查找客户");
         DetachedCriteria detachedCriteria = DetachedCriteria.forClass(Customer.class);
@@ -184,7 +189,6 @@ public class CustomerServiceImpl implements CustomerService{
         return customerDao.find(detachedCriteria, exportCounts);
 	}
 
-
 	/**
       * getNameById
       * @Title: getNameById
@@ -192,10 +196,12 @@ public class CustomerServiceImpl implements CustomerService{
       * @param id
       * @return String
      */
+	@Transactional(readOnly = true)
     public String getNameById(Long id){
     	return customerDao.get(id).getName();
     }
 	
+	@Transactional(readOnly = true)
     public Customer getByName(String name){
     	String hql ="select customer from Customer customer where customer.name=?";
     	return contactDao.findUnique(hql,name);

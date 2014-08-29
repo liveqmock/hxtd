@@ -2,6 +2,7 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
 <%@taglib prefix="tag" tagdir="/WEB-INF/tags" %>
+<%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions" %>
 <c:set var="ctx" value="${pageContext.request.contextPath}"/>
 <html>
 <head>
@@ -103,7 +104,7 @@ function clearInputVal(){//清除
 				<td align="right" width="15%"><span class="w_red">*&nbsp;</span>合同编号：</td>
 				<td align="left">
 					<input type="text" name="code" id="txt_contract" value="${contract.code}" 
-						class="text_input3 {required:true,maxlength:30,unique:['Contract','${contract.code}']}"/>
+						class="text_input3 {required:true,maxlength:30,unique:['Contract','${fn:replace(contract.code,"'","\\'")}']}"/>
 				</td>
 			</tr>
 			<tr>

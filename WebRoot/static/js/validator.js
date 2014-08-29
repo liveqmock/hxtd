@@ -82,6 +82,11 @@ jQuery.validator.addMethod("amount", function (val, element) {
     return this.optional(element) || (reg.test(val));
 }, "*只能输入整数或小数");
 
+jQuery.validator.addMethod("specialChar", function (val, element) {
+    var reg = /'|"|<|>/;
+    return this.optional(element) || (reg.test(val) == false);
+}, "不能输入特殊字符 " + ["'", '"', "<", ">"].join("、"));
+
 /**
  * 唯一性验证
  * 1.param=[实体类名,原始值]

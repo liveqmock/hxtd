@@ -12,7 +12,6 @@ import com.baihui.hxtd.soa.common.dao.PCASDao;
 import com.baihui.hxtd.soa.common.entity.PCAS;
 
 @Service
-@Transactional
 public class PCASService {
 	@Resource
 	private PCASDao pcasDao;
@@ -26,6 +25,7 @@ public class PCASService {
 	  * @return List<PCAS>    返回类型
 	  * @throws
 	 */
+	@Transactional(readOnly = true)
 	public List<PCAS> getRoot(){
 		return pcasDao.getChildren(0l);
 	}
@@ -40,10 +40,12 @@ public class PCASService {
 	  * @return List<PCAS>    返回类型
 	  * @throws
 	 */
+	@Transactional(readOnly = true)
 	public List<PCAS> getChildren(Long pid){
 		return pcasDao.getChildren(pid);
 	}
 
+	@Transactional(readOnly = true)
 	public PCAS getByName(String name,Long pid){
 		return pcasDao.getByName(name,pid);
 	}

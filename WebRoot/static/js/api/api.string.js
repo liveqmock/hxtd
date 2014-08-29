@@ -67,15 +67,37 @@ String.prototype.endWith = function (suf) {
         });
     }
 
-    String.prototype.translateTextFromHtml = function (str) {
-        str = this;
-        return  (str && str.length > 0) ? str.replace(/&3D;/g, "=").replace(/&lt;/g, "<").replace(/&gt;/g, ">").replace(/&apos;/g, "'").replace(/&quot;/g, "\"").replace(/&amp;/g, "&") : str;
+    //&#39;
+    /**HTML特殊字符*/
+    String.HTMLSpecialChars = {
+        "<": "&lt;",
+        ">": "&gt;",
+        "&": "&amp;",
+        "\"": "&quot;"
+    }
+
+    /**编码HTML特殊字符*/
+    String.prototype.encodeHTML = function () {
+        if (this.length == 0)
+            return this;
+        var str = this;
+        for (var attr in String.HTMLSpecialChars) {
+            var value = String.HTMLSpecialChars[attr];
+            str = str.replace(new RegExp(attr, "g"), value);
+        }
+        return str;
     };
 
-    String.prototype.translateTextFromJson = function (str) {
-        str = this;
-        return (str && str.length > 0) ? str.replace(/&apos;/g, "'").replace(/&quot;/g, "\"").replace(/&0D;/g, "\r").replace(/&0A;/g, "\n").replace(/&amp;/g, "&") : str;
+    /**解码HTML特殊字符*/
+    String.prototype.decodeHTML = function () {
+        if (this.length == 0)
+            return this;
+        var str = this;
+        for (var attr in String.HTMLSpecialChars) {
+            var value = String.HTMLSpecialChars[attr];
+            str = str.replace(new RegExp(value, "g"), attr);
+        }
+        return str;
     };
-
 
 })();

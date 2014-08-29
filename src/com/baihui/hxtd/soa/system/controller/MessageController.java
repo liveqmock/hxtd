@@ -12,6 +12,7 @@ import javax.servlet.ServletContext;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import com.baihui.hxtd.soa.base.DBDateServiceInjecter;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -179,9 +180,10 @@ public class MessageController {
 		logger.info("MessageController.modify修改系统消息回复信息");
 		User user = (User)modelMap.get(Constant.VS_USER);
 		logger.info("获得当前操作用户{}", user.getName());
-		message.setCreatedTime(new Date());
+        Date now = DBDateServiceInjecter.nowTime();
+        message.setCreatedTime(now);
 		message.setModifier(user);
-		message.setModifiedTime(new Date());
+		message.setModifiedTime(now);
 		message.setCreator(user);
 		message=messageService.addMessage(message);
 		User users=userService.getById(userId);

@@ -35,7 +35,6 @@ import com.baihui.hxtd.soa.system.service.DataShift;
  * @date 2014-5-16 下午04:48:19
  */
 @Service
-@Transactional
 public class SupplierService {
 	
 	private Logger logger = LoggerFactory.getLogger(this.getClass());
@@ -87,6 +86,7 @@ public class SupplierService {
      * @return HibernatePage<Component>    返回类型
      * @throws
      */
+    @Transactional(readOnly = true)
     public Supplier get(Long id) {
         logger.info("查询单个供应商信息{}", id);
         String hql = "select supplier from Supplier supplier  " +
@@ -107,6 +107,7 @@ public class SupplierService {
      * @throws
      * @Title: save
      */
+    @Transactional
     public void add(Supplier entity,AuditLog auditLog) {
         logger.info("保存供应商信息{}", entity);
         supplierDao.save(entity);
@@ -121,6 +122,7 @@ public class SupplierService {
       * @return void    返回类型
       * @throws
      */
+    @Transactional
     public void modify(Supplier entity,AuditLog auditLog) {
         logger.info("保存供应商信息{}", entity);
         supplierDao.save(entity);
@@ -133,6 +135,7 @@ public class SupplierService {
      * @throws
      * @Title: delete
      */
+    @Transactional
     public boolean delete(Long[] id,AuditLog[] auditLogArr) {
     	if(projectDao.getCount(id)==0&&contactDao.getCount(id, "supplier")==0){
     		supplierDao.logicalDelete(id);
@@ -141,6 +144,7 @@ public class SupplierService {
     	return false;
     }
 
+    @Transactional(readOnly = true)
     public List<Supplier> export(Map<String, Object> searchParams,DataShift dataShift) throws NoSuchFieldException {
     	DetachedCriteria criteria = DetachedCriteria.forClass(Supplier.class);
         criteria.setFetchMode("creator", FetchMode.JOIN);
@@ -155,21 +159,4 @@ public class SupplierService {
         Search.buildCriteria(filters, criteria, Supplier.class);
         return supplierDao.find(criteria,3000);
     }
-
-	public Logger getLogger() {
-		return logger;
-	}
-
-	public void setLogger(Logger logger) {
-		this.logger = logger;
-	}
-
-	public SupplierDao getSupplierDao() {
-		return supplierDao;
-	}
-
-	public void setSupplierDao(SupplierDao supplierDao) {
-		this.supplierDao = supplierDao;
-	}
-
 }

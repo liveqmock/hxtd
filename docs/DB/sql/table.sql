@@ -664,7 +664,7 @@ CREATE TABLE `sm_message` (
   KEY `INDEX_MODIFIED_TIME` (`MODIFIED_TIME`) USING BTREE,
   KEY `INDEX_CREATOR_ID` (`CREATOR_ID`) USING BTREE,
   KEY `INDEX_MODIFIER_ID` (`MODIFIER_ID`) USING BTREE
-) ENGINE=InnoDB AUTO_INCREMENT=54 DEFAULT CHARSET=utf8 COMMENT='系统消息'
+) ENGINE=InnoDB AUTO_INCREMENT=54 DEFAULT CHARSET=utf8 COMMENT='系统消息';
 
 -- ----------------------------
 -- Table structure for `sm_module`
@@ -1035,47 +1035,3 @@ CREATE TABLE `wf_task` (
   `MODIFIED_TIME` timestamp NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '最后修改时间',
   PRIMARY KEY (`ID`)
 ) ENGINE=InnoDB AUTO_INCREMENT=406 DEFAULT CHARSET=utf8 COMMENT='流程任务表';
-
--- ----------------------------
--- Procedure structure for `proc_marketactivity_sendmsg`
--- ----------------------------
-DROP PROCEDURE IF EXISTS `proc_marketactivity_sendmsg`;
-DELIMITER ;;
-CREATE DEFINER=`bhdc001admin`@`%` PROCEDURE `proc_marketactivity_sendmsg`()
-begin
-		/****************申明临时表*****************/
-		create temporary table tmp_msg(id int auto_increment primary key, `ma_id` int(10), `userid` int(10), `title` varchar(100), 
-				`content` varchar(500), `creatorid` int(10), `createtime` datetime, `modifierid` int(10));
-		
-		insert into tmp_msg(ma_id, userid, title, content, creatorid, createtime, modifierid)
-		select id, bosshead, '系统提醒信息', concat(`NAME`,'，该市场活动已到举办时间，发送提醒消息！'), '0', sysdate(), '0'  
-			from market_activity where begin_date=date_format(sysdate(),'%Y-%m-%d') and is_deleted = 0 and is_send = 0;
-
-		/****************获取当前消息最大主键值*****/
-		select @num:=ifnull(max(id),0) from sysmessage;
-
-		/****************新增提示信息***************/
-		insert into sysmessage(id, title, content, creator_id, created_time, modifier_id)
-		select id+@num, title, content, creatorid, createtime, modifierid
-			from tmp_msg;
-
-		/****************发送给负责人***************/
-		insert into user_message(message_id, user_id, `status`, type, is_deleted, created_time) 
-			select id+@num, userid, '0', '1', '0', sysdate() from tmp_msg;
-
-		/****************更新活动已发消息***********/
-		update market_activity set is_send = 1 where id in (select ma_id from tmp_msg);
-
-		drop table tmp_msg;
-end
-;;
-DELIMITER ;
-
--- ----------------------------
--- Event structure for `msg_task`
--- ----------------------------
-DROP EVENT IF EXISTS `msg_task`;
-DELIMITER ;;
-CREATE DEFINER=`bhdc001admin`@`%` EVENT `msg_task` ON SCHEDULE EVERY 60 SECOND STARTS '2014-07-24 21:06:48' ON COMPLETION PRESERVE ENABLE DO call proc_marketactivity_sendmsg()
-;;
-DELIMITER ;

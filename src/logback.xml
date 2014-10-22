@@ -7,7 +7,7 @@
     <!--<property name="contextPath" value="E:/project/company/hxtd"/>-->
     <property name="contextPath" value="/home/logs/hxtd"/>
     <property name="logPath" value="${contextPath}"/>
-    <property name="maxHistory" value="30"/>
+    <property name="maxHistory" value="90"/>
 
     <appender name="rootConsole" class="ch.qos.logback.core.ConsoleAppender">
         <encoder>
@@ -121,25 +121,26 @@
             <charset>UTF-8</charset>
         </encoder>
     </appender>
-
-    <root level="DEBUG">
-        <appender-ref ref="rootRollingAll"/>
+    
+    <root level="INFO">
         <appender-ref ref="rootRollingInfo"/>
         <appender-ref ref="rootRollingWarn"/>
         <appender-ref ref="rootRollingError"/>
     </root>
-
+<!-- 
+        <appender-ref ref="rootRollingAll"/>
+ -->
+ 
     <!--log4jdbc -->
-    <logger name="jdbc.sqlonly" level="DEBUG">
+    <logger name="jdbc.sqlonly" level="INFO">
             <appender-ref ref="rootConsole"/>
     
         <appender-ref ref="rootRollingSql"/>
         <appender-ref ref="businessSqlRollingSql"/>
     </logger>
 
-    <logger name="com.baihui" level="DEBUG">
-            <appender-ref ref="rootConsole"/>
-    
+    <logger name="com.baihui" level="INFO">
+		<appender-ref ref="rootConsole"/>
         <appender-ref ref="businessRollingSql"/>
         <appender-ref ref="businessSqlRollingSql"/>
     </logger>

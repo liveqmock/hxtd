@@ -10,6 +10,7 @@
 <title>华兴控股-登录</title>
 <link href="${ctx}/static/css/stressing/login.css" rel="stylesheet" type="text/css" />
 <script type="text/javascript" src="${ctx}/static/js/jquery.min.js"></script>
+<script type="text/javascript" src="${ctx}/static/js/api/api.string.js"></script>
 <script type="text/javascript">
 $(function(){
 	$("#loginId").focus();

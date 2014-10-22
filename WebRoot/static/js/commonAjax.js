@@ -3,7 +3,7 @@ var RcmsAjax = {};
 RcmsAjax.global = {
 	timer: 0,
 	pointDiv : '',
-	showTime : 2000
+	showTime : 1500
 }
 // 通过ready函数缓冲加载
 $(function(){
@@ -258,7 +258,7 @@ function _hide(_excuteMsgFlag,speed){
 	$('#point4AjaxPMDiv', window.top.document).hide();
 	return function(){
 		if(!speed){
-			speed = 'normal';
+			speed = 'fast';
 		}
 		RcmsAjax.global.pointDiv.slideUp(speed);
 	}

@@ -175,8 +175,10 @@ function getParam(){
 						<c:if test="${VS_HAS_FUNCTIONS.customerQuery}"><option value="customer">客户</option></c:if>
 						<c:if test="${VS_HAS_FUNCTIONS.contactQuery}"><option value="contact">联系人</option></c:if>
 						<c:if test="${VS_HAS_FUNCTIONS.supplierQuery}"><option value="supplier">供应商</option></c:if>
+						<!-- 
 						<c:if test="${VS_HAS_FUNCTIONS.projectQuery}"><option value="project">项目</option></c:if>
 						<c:if test="${VS_HAS_FUNCTIONS.productQuery}"><option value="product">产品</option></c:if>
+						 -->
 						<c:if test="${VS_HAS_FUNCTIONS.orderQuery}"><option value="order">订单</option></c:if>
 						<c:if test="${VS_HAS_FUNCTIONS.noticeQuery}"><option value="notice">系统公告</option></c:if>
 						<c:if test="${VS_HAS_FUNCTIONS.messageView}"><option value="message">系统消息</option></c:if>

@@ -1,5 +1,30 @@
 package com.baihui.hxtd.soa.common.controller;
 
+import java.lang.reflect.Field;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Calendar;
+import java.util.Date;
+import java.util.List;
+import java.util.Map;
+
+import javax.annotation.Resource;
+import javax.servlet.http.HttpServletRequest;
+
+import org.apache.commons.lang3.ArrayUtils;
+import org.apache.commons.lang3.StringUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.stereotype.Controller;
+import org.springframework.ui.ModelMap;
+import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.SessionAttributes;
+import org.springside.modules.persistence.SearchFilter;
+import org.springside.modules.web.Servlets;
+
 import com.baihui.hxtd.soa.base.Constant;
 import com.baihui.hxtd.soa.base.FieldInfoParser;
 import com.baihui.hxtd.soa.base.InitApplicationConstant;
@@ -11,29 +36,23 @@ import com.baihui.hxtd.soa.base.utils.report.ChartModel;
 import com.baihui.hxtd.soa.common.entity.Module;
 import com.baihui.hxtd.soa.common.entity.ModuleField;
 import com.baihui.hxtd.soa.common.entity.Report;
-import com.baihui.hxtd.soa.common.service.*;
+import com.baihui.hxtd.soa.common.service.CommonService;
+import com.baihui.hxtd.soa.common.service.ModuleService;
+import com.baihui.hxtd.soa.common.service.ModuleTypeService;
+import com.baihui.hxtd.soa.common.service.ModuleUtil;
+import com.baihui.hxtd.soa.common.service.ReportService;
 import com.baihui.hxtd.soa.system.DictionaryConstant;
 import com.baihui.hxtd.soa.system.entity.AuditLog;
 import com.baihui.hxtd.soa.system.entity.Dictionary;
 import com.baihui.hxtd.soa.system.entity.User;
 import com.baihui.hxtd.soa.system.service.DataShift;
 import com.baihui.hxtd.soa.system.service.DictionaryService;
-import com.baihui.hxtd.soa.util.*;
+import com.baihui.hxtd.soa.util.BusinessResult;
+import com.baihui.hxtd.soa.util.CommonCalendar;
+import com.baihui.hxtd.soa.util.EnumModule;
+import com.baihui.hxtd.soa.util.EnumOperationType;
+import com.baihui.hxtd.soa.util.JsonDto;
 import com.fasterxml.jackson.core.JsonProcessingException;
-import org.apache.commons.lang3.ArrayUtils;
-import org.apache.commons.lang3.StringUtils;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import org.springframework.stereotype.Controller;
-import org.springframework.ui.ModelMap;
-import org.springframework.web.bind.annotation.*;
-import org.springside.modules.persistence.SearchFilter;
-import org.springside.modules.web.Servlets;
-
-import javax.annotation.Resource;
-import javax.servlet.http.HttpServletRequest;
-import java.lang.reflect.Field;
-import java.util.*;
 
 /**
  * 报表控制类
@@ -203,11 +222,6 @@ public class ReportController {
         return JsonDto.add(report.getId()).toString();
     }
 
-    /**
-     * 转至查看用户页面
-     * 1.从用户列表页点击详情
-     * 2.从个人设置->账号信息点击进入，此时id=session.user.id
-     */
     @RequestMapping(value = "/toViewPage.do", method = RequestMethod.GET)
     public String toViewPage(Long id, ModelMap modelMap) {
         logger.info("转至查看页面");
@@ -222,7 +236,7 @@ public class ReportController {
     }
 
     /**
-     * 转至修改用户页面
+     * 转至修改报表页面
      */
     @RequestMapping(value = "/toModifyPage.do", method = RequestMethod.GET)
     public String toModifyPage(Long id, ModelMap modelMap) {
@@ -251,12 +265,12 @@ public class ReportController {
     }
 
     /**
-     * 修改用户
+     * 修改报表
      */
     @ResponseBody
     @RequestMapping(value = "/modify.do", method = RequestMethod.POST)
     public String modify(Report report, ModelMap modelMap) {
-        logger.info("修改用户");
+        logger.info("修改报表");
 
         if (commonService.isInitialized(Report.class, report.getId())) {
             return new JsonDto("系统初始化数据不允许修改！").toString();
@@ -271,20 +285,20 @@ public class ReportController {
     }
 
     /**
-     * 删除用户
+     * 删除报表
      */
     @ResponseBody
     @RequestMapping(value = "/delete.do")
     public String delete(Long[] id, @ModelAttribute(Constant.VS_USER_ID) Long sessionId) {
-        logger.info("删除用户");
+        logger.info("删除报表");
 
-        if (commonService.isInitialized(User.class, id)) {
+        if (commonService.isInitialized(Report.class, id)) {
             return new JsonDto("系统初始化数据不允许删除！").toString();
         }
 
-        logger.info("检查是否包含当前用户");
+        logger.info("检查是否包含当前报表");
         if (ArrayUtils.contains(id, sessionId)) {
-            return new JsonDto("不允许删除当前操作用户").toString();
+            return new JsonDto("不允许删除当前操作报表").toString();
         }
 
 
